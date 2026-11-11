@@ -1,3 +1,5 @@
+import type { Tramo } from './study-types';
+
 export type Area = 'ing' | 'handyx' | 'eclipse' | 'salud' | 'rutina' | 'economia';
 
 /** A qué motor lleva "Entrar en foco". Estudio y entreno tienen sesión propia (olas 2 y 5). */
@@ -56,6 +58,12 @@ export interface FocusEntry {
   at: string;
 }
 
+export interface StudyLog {
+  front: string;
+  activityId: string;
+  min: number;
+}
+
 export interface DayLog {
   date: string;
   wake: string;
@@ -63,6 +71,10 @@ export interface DayLog {
   blocks: Block[];
   notes: string[];
   focus: FocusEntry[];
+  /** Minutos de estudio por frente (para el gráfico de la semana). */
+  study?: StudyLog[];
+  /** Pasos de estudio hechos hoy (rev:…, learn:…, test:…). */
+  studyDone?: string[];
 }
 
 export interface Preset {
@@ -102,4 +114,8 @@ export interface FocusState {
   /** Epoch ms en que empezó el tramo actual (corrido por las pausas). */
   segStart: number;
   pausedAt: number | null;
+  /** Sesión de estudio: un tramo por segmento, con su paso y su referencia. */
+  tramos?: Tramo[];
+  /** Actividad de la sesión de estudio, o 'repaso' para el repaso del día. */
+  activityId?: string;
 }

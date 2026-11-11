@@ -129,3 +129,13 @@ describe('mejora y JSON del día', () => {
     expect(j.mejora).toEqual({ hoy: 0.25, ayer: 0.125, acumulado: 0.38 });
   });
 });
+
+import { parseCorrection } from './study';
+describe('corrección de Claude', () => {
+  it('lee el puntaje y el tipo de cada error', () => {
+    const r = parseCorrection('17/20\n4: descuido\n11: técnica\nEj. 17 - descuido', 20);
+    expect(r.score).toBe(17);
+    expect(r.errors).toEqual({ concepto: 0, tecnica: 1, descuido: 2, enunciado: 0 });
+    expect(r.perEx[3]).toBe('descuido');
+  });
+});
