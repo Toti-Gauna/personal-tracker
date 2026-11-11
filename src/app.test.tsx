@@ -1,13 +1,18 @@
 import { render, screen } from '@testing-library/react';
 import { BottomBar } from './components/BottomBar';
 import { MiniPlayer } from './components/MiniPlayer';
-import { leerHash } from './lib/routes';
+import { leerHash, leerRuta } from './lib/routes';
 
 describe('ruteo', () => {
   it('lee la sección del hash y cae en Hoy por defecto', () => {
     expect(leerHash('#/estudio')).toBe('estudio');
     expect(leerHash('#/nada')).toBe('hoy');
     expect(leerHash('')).toBe('hoy');
+  });
+
+  it('las pantallas de foco quedan bajo Hoy en la barra', () => {
+    expect(leerRuta('#/elegir/prog')).toEqual({ pantalla: 'elegir', seccion: 'hoy', param: 'prog' });
+    expect(leerRuta('#/foco').seccion).toBe('hoy');
   });
 });
 
