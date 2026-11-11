@@ -1,4 +1,5 @@
-import { BIMESTER_NAMES, WEEKS_PER_BIMESTER } from './defaults';
+import { bimesterAt } from './bimesters';
+import { WEEKS_PER_BIMESTER } from './defaults';
 import { acumulado, mejoraDia } from './mejora';
 import { addDays, daysBetween } from './time';
 import type { DayLog } from './types';
@@ -6,11 +7,11 @@ import type { DayLog } from './types';
 /** Día número N desde que instalaste (el día de la instalación es el 0). */
 export const dayNumber = (startDate: string, date: string) => Math.max(0, daysBetween(startDate, date));
 
-export function bimester(startDate: string, date: string) {
-  const d = dayNumber(startDate, date);
-  const n = Math.floor(d / (WEEKS_PER_BIMESTER * 7)) + 1;
-  const week = Math.floor((d % (WEEKS_PER_BIMESTER * 7)) / 7) + 1;
-  return { n, name: BIMESTER_NAMES[n - 1] ?? `Bimestre ${n}`, week, weeks: WEEKS_PER_BIMESTER };
+export function bimester(_startDate: string, date: string, names: Record<number, string> = {}) {
+  const b = bimesterAt(date);
+  const d = Math.max(0, daysBetween(b.start, date));
+  const week = Math.min(WEEKS_PER_BIMESTER, Math.floor(d / 7) + 1);
+  return { n: b.n, name: names[b.n]?.trim() || b.name, week, weeks: WEEKS_PER_BIMESTER };
 }
 
 /** Mejora de ayer (el último día registrado antes de hoy). */

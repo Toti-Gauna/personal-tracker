@@ -3,8 +3,8 @@ import { blockDone, mejoraDia, round } from './mejora';
 import type { DayLog, Settings } from './types';
 
 /** JSON del día: lo que se pega y se commitea en data/days/AAAA-MM-DD.json. */
-export function dayJson(day: DayLog, settings: Settings, days: Record<string, DayLog>) {
-  const b = bimester(settings.startDate, day.date);
+export function dayJson(day: DayLog, settings: Settings, days: Record<string, DayLog>, names: Record<number, string> = {}) {
+  const b = bimester(settings.startDate, day.date, names);
   return {
     date: day.date,
     day: dayNumber(settings.startDate, day.date),
