@@ -7,6 +7,7 @@ import { fmtDur, nowMin, toHHMM } from '../data/time';
 import { ir } from '../lib/routes';
 import { carryPending, getState, logFocus, setFocus } from '../state/store';
 import { showModal, toast } from './avisos';
+import { avisoTramo, finSesion, onTramosEnded } from './estudio-acciones';
 
 /** Corre el foco en segundo plano: avanza tramos, avisa y frena al terminar el bloque. */
 export function useFocusRunner() {
@@ -17,6 +18,18 @@ export function useFocusRunner() {
       if (!f) return;
       const r = tick(f, Date.now());
       if (!r.ended.length) return;
+      if (f.tramos) {
+        const idx = Array.from({ length: (r.finished ? f.segs.length : r.state.i) - f.i }, (_, k) => f.i + k);
+        onTramosEnded(f, idx);
+        if (r.finished) {
+          setFocus(null);
+          finSesion(f);
+        } else {
+          setFocus(r.state);
+          avisoTramo(r.state, r.state.i);
+        }
+        return;
+      }
       const day = s.days[f.date];
       const block = day?.blocks.find((b) => b.key === f.key);
       const color = block ? AREAS[block.area].css : undefined;

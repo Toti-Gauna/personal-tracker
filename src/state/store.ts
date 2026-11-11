@@ -2,6 +2,8 @@ import { useSyncExternalStore } from 'react';
 import { DEFAULT_BLOCK_PRESETS, DEFAULT_PRESETS } from '../data/defaults';
 import { buildBlocks, newId, planDay } from '../data/schedule';
 import { addDays, dateKey } from '../data/time';
+import { emptyStudy } from '../data/study-catalog';
+import type { StudyState } from '../data/study-types';
 import type { Block, DayLog, FocusEntry, FocusState, Preset, RoutineId, Settings } from '../data/types';
 
 export interface State {
@@ -10,17 +12,22 @@ export interface State {
   focus: FocusState | null;
   /** Tareas que pasaron a otro día: fecha → key del bloque → textos. */
   carry: Record<string, Record<string, string[]>>;
+  study: StudyState;
 }
 
 const KEY = 'trazo.v1';
-const empty: State = { settings: null, days: {}, focus: null, carry: {} };
+const empty = (): State => ({ settings: null, days: {}, focus: null, carry: {}, study: emptyStudy() });
 
 function load(): State {
   try {
     const raw = localStorage.getItem(KEY);
-    if (raw) return { ...empty, ...JSON.parse(raw) };
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      // Migración: los datos de la ola 1 no tenían estudio.
+      return { ...empty(), ...parsed, study: parsed.study ?? emptyStudy() };
+    }
   } catch { /* sin storage o JSON roto */ }
-  return empty;
+  return empty();
 }
 
 let state: State = load();
@@ -35,7 +42,7 @@ export function setState(fn: (s: State) => State) {
 }
 
 /** Solo para tests. */
-export function resetState(s: State = empty) {
+export function resetState(s: State = empty()) {
   state = s;
   subs.forEach((f) => f());
 }
@@ -72,7 +79,7 @@ export function startDay(routine: RoutineId, wake: string, date = dateKey()) {
   });
 }
 
-function updateDay(date: string, fn: (d: DayLog) => DayLog) {
+export function updateDay(date: string, fn: (d: DayLog) => DayLog) {
   setState((s) => (s.days[date] ? { ...s, days: { ...s.days, [date]: fn(s.days[date]) } } : s));
 }
 

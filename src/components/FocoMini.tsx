@@ -18,14 +18,14 @@ export function FocoMini() {
   return (
     <MiniPlayer
       foco={{
-        bloque: block.title.split(' · ')[0] + (seg.type === 'rest' ? ' · descanso' : ''),
-        detalle: `${focus.plan} · ${n} de ${m}`,
+        bloque: focus.tramos ? focus.tramos[focus.i].title : block.title.split(' · ')[0] + (seg.type === 'rest' ? ' · descanso' : ''),
+        detalle: focus.tramos ? `Sesión de estudio · tramo ${focus.i + 1} de ${focus.tramos.length}` : `${focus.plan} · ${n} de ${m}`,
         restante: fmtClock(segRemaining(focus, now)),
         avance: segProgress(focus, now),
         color: AREAS[block.area].css,
         pausado,
       }}
-      onVolver={() => ir('foco')}
+      onVolver={() => ir(focus.tramos ? `sesion/${focus.activityId}` : 'foco')}
       onPausar={() => setFocus(pausado ? resume(focus, Date.now()) : pause(focus, Date.now()))}
     />
   );
