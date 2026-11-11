@@ -75,3 +75,25 @@ export function focusIndex(s: FocusState) {
   const n = focus.filter(([, i]) => i <= s.i).length;
   return { n: Math.max(1, n), m: focus.length };
 }
+
+/** "Hecho": cierra el tramo actual con lo que llevás y pasa al siguiente. */
+export function advance(s: FocusState, now: number): { state: FocusState; usedMin: number; finished: boolean } {
+  const usedMin = Math.max(0, Math.round((at(s, now) - s.segStart) / MS));
+  const segs = s.segs.map((x) => ({ ...x }));
+  const tramos = s.tramos?.map((x) => ({ ...x }));
+  segs[s.i].min = Math.max(1, usedMin);
+  if (tramos) tramos[s.i].min = segs[s.i].min;
+  if (s.i >= s.segs.length - 1) return { state: { ...s, segs, tramos }, usedMin, finished: true };
+  return { state: { ...s, segs, tramos, i: s.i + 1, segStart: now, pausedAt: null }, usedMin, finished: false };
+}
+
+/** "+5 min" al tramo actual. */
+export function addMinutes(s: FocusState, min: number): FocusState {
+  const segs = s.segs.map((x, i) => (i === s.i ? { ...x, min: x.min + min } : x));
+  const tramos = s.tramos?.map((x, i) => (i === s.i ? { ...x, min: x.min + min } : x));
+  return { ...s, segs, tramos };
+}
+
+/** Índice del último tramo de "aprender" con foco (al terminarlo, la unidad queda aprendida). */
+export const lastLearnIndex = (s: FocusState) =>
+  s.tramos ? s.tramos.map((t) => t.kind).lastIndexOf('capitulo') : -1;
