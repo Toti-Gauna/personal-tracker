@@ -5,7 +5,7 @@ Tracker personal de Toti: el día en horas, el estudio con su propio motor de re
 - **Diseño:** [canvas de Trazo](https://claude.ai/artifact/6Cc2E6aW2ViU5ikovpsRTy)
 - **Roadmap de estudio:** [ruta ML + DevSecOps](https://claude.ai/artifact/9PEokku7mBLZdCFJr1zqXP)
 - **Pantallas:** presentación `Trazo-pantallas.pptx` y su ZIP de imágenes (44 pantallas, 8 flujos).
-- **Estado:** ola 1 (Hoy y foco) en revisión. Este archivo es la fuente de verdad.
+- **Estado:** ola 2 (Estudio) en revisión. Este archivo es la fuente de verdad.
 
 ---
 
@@ -208,11 +208,13 @@ Aplica a Hoy y a cualquier vista que muestre la lista de metas del día (Escrito
 | Cuándo | Qué | Dónde aparece |
 |---|---|---|
 | 0 (día que aprendés) | Aprender + test completo | Sesión del día: Repasar → Aprender → Comprobar → Cerrar |
-| +1 | Cold recall | Repaso del día |
-| +3 | **Tesis** | Repaso de ese día, a continuación del cold recall |
-| +7 | Repaso | Repaso del día |
-| +21 | Repaso | Repaso del día |
-| +60 | Repaso | Repaso del día |
+| +1 | Cold recall (5 min) | Repaso del día |
+| +3 | **Tesis** (15 min) | Repaso de ese día, a continuación del cold recall |
+| +7 | Ejercicios mixtos (10 min) | Repaso del día |
+| +21 | Ejercicios mixtos (8 min) | Repaso del día |
+| +60 | Examen corto (12 min) | Repaso del día |
+
+En total, unos 50 min de repaso por capítulo repartidos en dos meses. Si el test no se aprueba, hay re-test a +2 y la tesis se agenda recién al aprobar.
 
 La escalera no cambia (0 → +1 → +3 → +7 → +21 → +60); solo la tesis deja de ser un paso del día en que se aprende. Lo que olvidás en un cold recall vuelve al día siguiente como tarjeta y el motor agenda la relectura de esas páginas. Si no vence nada, ese día no hay repaso.
 
@@ -306,6 +308,27 @@ En el día a día alcanza con **Haiku 5.5 · bajo**: pegás el JSON del cierre y
 - Avisos: toasts arriba (4 s, campana sintetizada y vibración) al terminar un tramo o cumplir una meta; modales con alternativa.
 - Hasta que existan las sesiones propias (estudio en la ola 2, entreno en la ola 5), **Entrar en foco** de cualquier meta lleva a Elegir pomodoro.
 - Quedan para su ola: "Sumar a la semana" en Hoy (ola 4, contadores de Metas), el nivel junto a la racha (ola 6, XP) y la elección de sonido (ola 6).
+
+**Ola 2 · lo que quedó y decisiones**
+
+- Estudio (2.1), Sesión de estudio (2.2), Cómo funciona (2.3), Actividad (2.4), Test en la app y en papel (2.5 y 2.6), Tesis (2.7) y Unidades y tests (2.8).
+- Modelo en `src/data/study*.ts` y acciones en `src/state/study.ts`. Los datos de la ola 1 se migran solos: si no hay estudio guardado, se cargan los frentes y actividades por defecto.
+- Frentes: Matemática, Programación, Lectura e Inglés, y se pueden sumar más desde Actividad.
+- Actividades por defecto:
+  - CONAMAT · Aritmética: 11 capítulos con su test y el examen final, de L a S en el bloque de matemática, test en papel.
+  - Python y FastAPI: las 7 unidades del B1 según la ruta (Python Tutorial, Fluent Python, FastAPI y AI Engineering), de L a S en el bloque de programación, test en la app.
+  - Make It Stick: 20 págs, L, X y V en el bloque de cierre.
+- Sesión de un contenido: Repasar (lo de esa actividad que vence hoy) → Aprender (el resto del bloque, con el pomodoro del bloque) → Comprobar (el test de la unidad). La suma de los tramos es el total del botón y, con unidades, la duración del bloque.
+- Al terminar Aprender, la unidad queda aprendida y el cold recall se agenda para +1. Al guardar el test aprobado se agenda la tesis a +3 y los repasos a +7, +21 y +60. Si no se aprueba, re-test a +2.
+- Aprobación: 85 % o más, o por debajo si todos los errores fueron de descuido (regla de la ruta).
+- Repaso del día: tope de 20 min, en orden cold recall → tesis → ejercicios, con los más atrasados primero. Lo que no entra queda en "Hoy no toca" y vuelve mañana.
+- La tesis se abre desde el paso de Repasar del día en que vence. Las líneas con `::` o `[[ ]]` se vuelven tarjetas, que se guardan en `cards` y se repasan desde la ola 3.
+- Test en papel: la app da la consigna y la cantidad de ejercicios, y se cargan solo los resultados en una grilla. Los enunciados de cada ejercicio no están cargados: se usan los del libro.
+- "Pegar la corrección de Claude" entiende `17/20` y una línea por error, como `4: descuido`.
+- Hoy: la meta de matemática y la de programación abren su sesión de estudio.
+- Gráfico de la semana: minutos por día apilados por frente, con la meta diaria punteada (24 h por semana: 4 h por día, 6 días). El orden de apilado es Ingeniería, Eclipse, Salud y Handyx, validado para que dos colores vecinos se distingan. Tiene leyenda, tooltip y tabla para lectores de pantalla.
+- El contador de Estudio en la barra muestra los repasos pendientes de hoy; con la ola 3 pasa a contar tarjetas.
+- El tercer número de Estudio muestra "tarjetas creadas" hasta que la ola 3 tenga retención ("tarjetas que recordás").
 
 **Infraestructura (ola 0)**
 
@@ -404,4 +427,12 @@ En el día a día alcanza con **Haiku 5.5 · bajo**: pegás el JSON del cierre y
 - Hoy con la fila de meta de §3 bis: checkbox en la línea de tiempo · número · título · hora (Geist Mono, `--sub`, 12 px, a 11 px del título) · contador. Revisado a 390 px en claro y oscuro.
 - Buen día, Instalar, Elegir pomodoro, Foco, Pomodoros a medida, mini reproductor, avisos y JSON del día.
 - Día corto ajustado a rutina 20 min para que entre justo antes de Abi.
+
+**2026-11-11 · ola 2**
+
+- Estudio con el nuevo orden: Repasar → Aprender → Comprobar → Cerrar. Ningún paso del día muestra la tesis del capítulo nuevo.
+- Tesis diferida a +3 días, a continuación del cold recall, con el capítulo en el texto.
+- Test completo del capítulo, en la app o en papel, con tipo de error y corrección de Claude pegada.
+- Sesión de estudio con timer por tramo, cuyas duraciones suman lo que dice el botón de foco.
+- CONAMAT B1 y la programación del B1 con sus unidades y tests, actividades libres y gráfico semanal.
 
