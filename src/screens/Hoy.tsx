@@ -9,9 +9,11 @@ import type { Block, DayLog } from '../data/types';
 import { ir } from '../lib/routes';
 import { useStore } from '../state/store';
 import { Marca } from '../ui/Marca';
+import { SumarSemana } from '../ui/SumarSemana';
 import { Tareas } from '../ui/Tareas';
 import { useNow } from '../ui/useNow';
 import '../styles/hoy.css';
+import '../styles/metas.css';
 
 const cap = (s: string) => s[0].toUpperCase() + s.slice(1);
 
@@ -48,7 +50,8 @@ export function Hoy({ day }: { day: DayLog }) {
   const tareas = day.blocks.flatMap((b) => b.tasks);
   const hechas = tareas.filter((t) => t.done).length;
   const pct = tareas.length ? Math.round((hechas / tareas.length) * 100) : 0;
-  const bim = bimester(settings.startDate, day.date);
+  const names = useStore((s) => s.goals.bimesterNames);
+  const bim = bimester(settings.startDate, day.date, names);
   const n = dayNumber(settings.startDate, day.date);
   const mejora = mejoraDia(day);
   const ayer = mejoraAyer(days, day.date);
@@ -120,6 +123,8 @@ export function Hoy({ day }: { day: DayLog }) {
           );
         })}
       </ol>
+
+      <SumarSemana date={day.date} />
 
       <nav className="hoy-links" aria-label="Más">
         <a href="#/pomodoros">Pomodoros a medida <span aria-hidden="true">→</span></a>
