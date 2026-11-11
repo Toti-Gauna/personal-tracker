@@ -12,6 +12,7 @@ import '../styles/estudio.css';
 import '../styles/foco.css';
 
 const TRAMO_COLOR: Record<string, string> = {
+  tarjetas: 'var(--ing)', releer: 'var(--economia)',
   cold: 'var(--economia)', tesis: 'var(--economia)', ejercicios: 'var(--economia)', examen: 'var(--economia)',
   capitulo: 'var(--c)', descanso: 'var(--linea)', test: 'var(--eclipse)',
 };
@@ -57,13 +58,15 @@ export function SesionEstudio({ day, id }: { day: DayLog; id?: string }) {
 
   const accion = () => {
     if (t.kind === 'tesis') return ir(`tesis/${t.ref.slice(4)}`);
+    if (t.kind === 'cold') return ir(`recall/${t.ref.slice(4)}`);
+    if (t.kind === 'tarjetas') return ir(`tarjetas/${t.ref.slice(6)}`);
     if (t.kind === 'test') {
       const [, act, n] = t.ref.split(':');
       return ir(`test/${act}/${n}`);
     }
     tramoHecho(activa);
   };
-  const accionLabel = t.kind === 'tesis' ? 'Abrir tesis' : t.kind === 'test' ? 'Registrar test' : t.kind === 'descanso' ? 'Seguir ahora' : 'Hecho';
+  const accionLabel = t.kind === 'tesis' ? 'Abrir tesis' : t.kind === 'cold' ? 'Escribir' : t.kind === 'tarjetas' ? 'Abrir tarjetas' : t.kind === 'test' ? 'Registrar test' : t.kind === 'descanso' ? 'Seguir ahora' : 'Hecho';
 
   return (
     <main className="pantalla sesion" style={{ ['--c' as string]: color }}>
@@ -93,7 +96,7 @@ export function SesionEstudio({ day, id }: { day: DayLog; id?: string }) {
           <button className="btn-borde" onClick={() => setFocus(addMinutes(activa, 5))}>+5 min</button>
           <button className="btn-principal" onClick={accion}>{accionLabel}</button>
         </div>
-        {(t.kind === 'tesis' || t.kind === 'test') && (
+        {(t.kind === 'tesis' || t.kind === 'test' || t.kind === 'cold' || t.kind === 'tarjetas') && (
           <button className="terminar-foco" onClick={() => tramoHecho(activa)}>Pasar al siguiente tramo</button>
         )}
       </div>

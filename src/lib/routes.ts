@@ -7,7 +7,8 @@ export const ETIQUETAS: Record<Seccion, string> = {
   hoy: 'Hoy', estudio: 'Estudio', metas: 'Metas', entreno: 'Entreno', perfil: 'Perfil',
 };
 
-export type Pantalla = Seccion | 'elegir' | 'foco' | 'pomodoros' | 'json' | 'sesion' | 'como' | 'actividad' | 'test' | 'tesis' | 'unidades';
+export type Pantalla = Seccion | 'elegir' | 'foco' | 'pomodoros' | 'json' | 'sesion' | 'como' | 'actividad' | 'test' | 'tesis' | 'unidades'
+  | 'repaso' | 'recall' | 'tarjetas' | 'tarjeta-nueva' | 'motor';
 
 export interface Ruta {
   pantalla: Pantalla;
@@ -19,6 +20,7 @@ export interface Ruta {
 const SUB: Record<string, Seccion> = {
   elegir: 'hoy', foco: 'hoy', pomodoros: 'hoy', json: 'hoy',
   sesion: 'estudio', como: 'estudio', actividad: 'estudio', test: 'estudio', tesis: 'estudio', unidades: 'estudio',
+  repaso: 'estudio', recall: 'estudio', tarjetas: 'estudio', 'tarjeta-nueva': 'estudio', motor: 'estudio',
 };
 
 export function leerRuta(hash: string): Ruta {

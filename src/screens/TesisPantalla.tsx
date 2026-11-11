@@ -92,7 +92,7 @@ export function TesisPantalla({ day, itemId }: { day: DayLog; itemId?: string })
           </button>
         </>
       )}
-      <p className="nota">También podés pegar un bloque que te arme Claude. Importar de Anki llega con el motor de repaso.</p>
+      <p className="nota">También podés <a className="subrayado" href="#/motor/importar">pegar un bloque que te arme Claude o importar un mazo de Anki</a>.</p>
     </main>
   );
 }

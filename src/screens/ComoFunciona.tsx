@@ -61,7 +61,7 @@ export function ComoFunciona() {
         <li><span className="dia">+60</span><span>Examen corto<small>Si sale bien, el capítulo queda maduro</small></span><span className="mono sub">{LADDER.e60.min} min</span></li>
       </ol>
       <p className="sub">En todo el capítulo repasás unos {fmtDur(total)} repartidos en dos meses. Si algún día sale menos de 70 %, se agrega una relectura corta y el próximo repaso llega antes.</p>
-      <p className="nota">Las reglas del motor (tope, retención y nuevas por día) se ajustan en la ola 3.</p>
+      <a className="fila-link" href="#/motor">Ajustar el motor: tope, retención, nuevas por día <span aria-hidden="true">→</span></a>
     </main>
   );
 }
