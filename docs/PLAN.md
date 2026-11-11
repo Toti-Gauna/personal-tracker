@@ -5,7 +5,7 @@ Tracker personal de Toti: el día en horas, el estudio con su propio motor de re
 - **Diseño:** [canvas de Trazo](https://claude.ai/artifact/6Cc2E6aW2ViU5ikovpsRTy)
 - **Roadmap de estudio:** [ruta ML + DevSecOps](https://claude.ai/artifact/9PEokku7mBLZdCFJr1zqXP)
 - **Pantallas:** presentación `Trazo-pantallas.pptx` y su ZIP de imágenes (44 pantallas, 8 flujos).
-- **Estado:** ola 0 en curso. Este archivo es la fuente de verdad.
+- **Estado:** ola 1 (Hoy y foco) en revisión. Este archivo es la fuente de verdad.
 
 ---
 
@@ -294,6 +294,19 @@ En el día a día alcanza con **Haiku 5.5 · bajo**: pegás el JSON del cierre y
 4. Al mergear a `main`, Actions publica en GitHub Pages y actualizo este archivo.
 5. Al cerrar cada ola indico el modelo y el esfuerzo de la siguiente.
 
+**Ola 1 · lo que quedó y decisiones**
+
+- Modelo de datos en `src/data/` (bloques, rutinas, presets, foco, mejora, export) y estado local en `src/state/store.ts` (`localStorage`, clave `trazo.v1`).
+- Instalar (nombre propio y de Abi, una sola vez), Buen día (04:00, 05:00 u otra hora entre 03:00 y 06:45, de a 10 min), Hoy, Elegir pomodoro, Foco, Pomodoros a medida, mini reproductor y JSON del día (copiar o descargar).
+- Día corto: rutina 20 min, matemática 1 h 30 y programación 1 h 40, así programación termina justo a las 08:30 con Abi fijo.
+- "Otra hora" parte del día completo y reparte el recorte entre rutina, matemática y programación según lo que cada uno puede ceder (mínimos: 15, 45 y 45 min).
+- Las tareas por defecto de cada bloque son un punto de partida; se editan en Ajustes (ola 6). Suman 18, como en el diseño.
+- El foco sobrevive a cerrar la app: guarda la hora de inicio y al volver pone al día los tramos vencidos.
+- Al terminar el plan del bloque aparece el modal "Fin del bloque": pasar lo pendiente a mañana o hacerlo ahora (+10 min). Lo pasado a mañana se suma a ese bloque al empezar el día siguiente.
+- Avisos: toasts arriba (4 s, campana sintetizada y vibración) al terminar un tramo o cumplir una meta; modales con alternativa.
+- Hasta que existan las sesiones propias (estudio en la ola 2, entreno en la ola 5), **Entrar en foco** de cualquier meta lleva a Elegir pomodoro.
+- Quedan para su ola: "Sumar a la semana" en Hoy (ola 4, contadores de Metas), el nivel junto a la racha (ola 6, XP) y la elección de sonido (ola 6).
+
 **Infraestructura (ola 0)**
 
 - Vite + React + TypeScript; ruteo por hash (`#/hoy`, `#/estudio`…) para que Pages no dé 404 al recargar.
@@ -385,3 +398,10 @@ En el día a día alcanza con **Haiku 5.5 · bajo**: pegás el JSON del cierre y
 - La tesis del capítulo nuevo se programa para +3 días y entra en el repaso de ese día, a continuación del cold recall, con el capítulo en el texto.
 - Un solo test, completo, del capítulo recién estudiado (app o papel).
 - Actualizar en su ola: Estudio (2.1), Sesión de estudio (2.2), Cómo funciona (2.3), Tesis (2.7), Motor de repaso (3.5) y Hoy. La escalera no cambia.
+
+**2026-11-11 · ola 1**
+
+- Hoy con la fila de meta de §3 bis: checkbox en la línea de tiempo · número · título · hora (Geist Mono, `--sub`, 12 px, a 11 px del título) · contador. Revisado a 390 px en claro y oscuro.
+- Buen día, Instalar, Elegir pomodoro, Foco, Pomodoros a medida, mini reproductor, avisos y JSON del día.
+- Día corto ajustado a rutina 20 min para que entre justo antes de Abi.
+
