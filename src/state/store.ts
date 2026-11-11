@@ -23,8 +23,10 @@ function load(): State {
     const raw = localStorage.getItem(KEY);
     if (raw) {
       const parsed = JSON.parse(raw);
-      // Migración: los datos de la ola 1 no tenían estudio.
-      return { ...empty(), ...parsed, study: parsed.study ?? emptyStudy() };
+      // Migración: la ola 1 no tenía estudio y la ola 2 no tenía reglas, registro ni puntos.
+      const base = emptyStudy();
+      const study = parsed.study ? { ...base, ...parsed.study, rules: { ...base.rules, ...parsed.study.rules } } : base;
+      return { ...empty(), ...parsed, study };
     }
   } catch { /* sin storage o JSON roto */ }
   return empty();

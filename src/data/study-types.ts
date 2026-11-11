@@ -1,3 +1,4 @@
+import type { Srs } from './fsrs';
 import type { Area } from './types';
 
 export interface Front {
@@ -62,7 +63,7 @@ export interface UnitState {
 }
 
 /** Lo que vuelve en el repaso: escalera 0 → +1 cold recall → +3 tesis → +7 → +21 → +60. */
-export type ReviewKind = 'cold' | 'tesis' | 'ejercicios' | 'examen' | 'retest';
+export type ReviewKind = 'cold' | 'tesis' | 'ejercicios' | 'examen' | 'retest' | 'releer';
 
 export interface ReviewItem {
   id: string;
@@ -73,12 +74,18 @@ export interface ReviewItem {
   min: number;
   label: string;
   doneOn?: string;
+  /** Cold recall: % de puntos recordados. */
+  score?: number;
+  /** Ejercicios: salieron perfectos. */
+  perfect?: boolean;
 }
+
+export type CardKind = 'pregunta' | 'completar' | 'explicar' | 'ejercicio' | 'inversa';
 
 export interface CardDraft {
   front: string;
   back: string;
-  kind: 'pregunta' | 'completar';
+  kind: CardKind;
 }
 
 export interface Card extends CardDraft {
@@ -86,6 +93,38 @@ export interface Card extends CardDraft {
   deck: string;
   source: string;
   createdOn: string;
+  /** Frente (id) al que pertenece; las de la ola 2 se resuelven por el nombre del mazo. */
+  frontId?: string;
+  /** Unidad de origen, para agendar la relectura. */
+  activityId?: string;
+  unit?: number;
+  /** Estado FSRS; sin valor, es nueva. */
+  srs?: Srs;
+  /** Día del primer repaso (para el tope de nuevas por día). */
+  firstOn?: string;
+  /** No entra antes de este día (lo olvidado en un cold recall vuelve mañana). */
+  dueFrom?: string;
+}
+
+export interface CardLog {
+  cardId: string;
+  date: string;
+  grade: 1 | 2 | 3 | 4;
+}
+
+/** Reglas del motor, ajustables en Motor de repaso. */
+export interface Rules {
+  /** Tope de repaso por día, en minutos. */
+  cap: number;
+  /** Retención buscada (FSRS). */
+  retention: number;
+  newPerDay: number;
+  /** Releer si el cold recall da menos de esto (0..1). */
+  rereadBelow: number;
+  /** Si el cold recall da esto o más, no hay relectura ni tarjetas de lo olvidado. */
+  coldSkipAt: number;
+  /** Ejercicios espaciados más cortos si el anterior salió perfecto. */
+  shortenIfPerfect: boolean;
 }
 
 export interface Tesis {
@@ -105,11 +144,15 @@ export interface StudyState {
   reviews: ReviewItem[];
   tesis: Tesis[];
   cards: Card[];
+  rules: Rules;
+  log: CardLog[];
+  /** Puntos clave por unidad (act:n), para comparar el cold recall. */
+  points: Record<string, string[]>;
 }
 
 /** Paso de la sesión de estudio: Repasar → Aprender → Comprobar (y al final, Cerrar). */
 export type Step = 'repasar' | 'aprender' | 'comprobar';
-export type TramoKind = 'cold' | 'tesis' | 'ejercicios' | 'examen' | 'capitulo' | 'descanso' | 'test';
+export type TramoKind = 'cold' | 'tesis' | 'ejercicios' | 'examen' | 'releer' | 'tarjetas' | 'capitulo' | 'descanso' | 'test';
 
 export interface Tramo {
   step: Step;

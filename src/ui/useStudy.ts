@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { BLOCKS } from '../data/defaults';
-import { activitiesFor, dueReview, groupSteps, planActivity, planReview, sumMin, type PlanStep } from '../data/study';
+import { activitiesFor, dailyReview, groupSteps, planActivity, planReview, sumMin, type PlanStep } from '../data/study';
 import type { Activity, ReviewItem, Tramo } from '../data/study-types';
 import type { DayLog } from '../data/types';
 import { useStore } from '../state/store';
@@ -27,13 +27,15 @@ export function useStudyPlan(day: DayLog) {
   const settings = useStore((s) => s.settings)!;
   return useMemo(() => {
     const date = day.date;
-    const { today: review, skipped } = dueReview(study.reviews, date);
+    const daily = dailyReview(study, date);
+    const { today: review, skipped, groups } = daily;
     const doneRefs = new Set(day.studyDone ?? []);
-    const isDone = (s: PlanStep) => doneRefs.has(s.ref);
+    const cardsDone = new Set(groups.filter((g) => g.pending.length === 0).map((g) => `cards:${g.frontId}`));
+    const isDone = (s: PlanStep) => doneRefs.has(s.ref) || cardsDone.has(s.ref);
     const frontOf = (id: string) => study.fronts.find((f) => f.id === id);
     const contenidos: Contenido[] = [];
-    if (review.length) {
-      const tramos = planReview(review, study);
+    if (review.length || groups.length) {
+      const tramos = planReview(review, study, groups);
       const steps = groupSteps(tramos);
       contenidos.push({
         id: 'repaso', title: 'Repaso del día', front: 'Repaso · todos', color: 'economia', blockKey: blockOfReview(review, study.activities),
@@ -43,7 +45,7 @@ export function useStudyPlan(day: DayLog) {
     for (const a of activitiesFor(study, date)) {
       const block = day.blocks.find((b) => b.key === a.block) ?? BLOCKS.find((b) => b.key === a.block);
       const blockMin = block && 'min' in block ? block.min : 60;
-      const tramos = planActivity(a, { study, date, blockMin, presets: settings.presets, blockPresets: settings.blockPresets, review });
+      const tramos = planActivity(a, { study, date, blockMin, presets: settings.presets, blockPresets: settings.blockPresets, review, groups });
       const steps = groupSteps(tramos);
       const f = frontOf(a.front);
       const start = day.blocks.find((b) => b.key === a.block)?.start;
@@ -61,6 +63,7 @@ export function useStudyPlan(day: DayLog) {
       contenidos,
       review,
       skipped,
+      daily,
       stepsTotal: all.length,
       stepsDone: all.filter(isDone).length,
       falta: sumMin(all.filter((s) => !isDone(s))),
@@ -79,8 +82,11 @@ function blockOfReview(review: ReviewItem[], acts: Activity[]) {
   return acts.find((a) => a.id === review[0]?.activityId)?.block ?? 'math';
 }
 
-/** Tarjetas/repasos pendientes de hoy, para el contador de la barra. */
+/** Tarjetas y repasos pendientes de hoy, para el contador de la barra. */
 export function usePendientes(date: string) {
-  const reviews = useStore((s) => s.study.reviews);
-  return useMemo(() => dueReview(reviews, date).today.filter((r) => r.doneOn !== date).length, [reviews, date]);
+  const study = useStore((s) => s.study);
+  return useMemo(() => {
+    const d = dailyReview(study, date);
+    return d.groups.reduce((s, g) => s + g.pending.length, 0) + d.today.filter((r) => r.doneOn !== date).length;
+  }, [study, date]);
 }
