@@ -7,7 +7,7 @@ export const ETIQUETAS: Record<Seccion, string> = {
   hoy: 'Hoy', estudio: 'Estudio', metas: 'Metas', entreno: 'Entreno', perfil: 'Perfil',
 };
 
-export type Pantalla = Seccion | 'elegir' | 'foco' | 'pomodoros' | 'json';
+export type Pantalla = Seccion | 'elegir' | 'foco' | 'pomodoros' | 'json' | 'sesion' | 'como' | 'actividad' | 'test' | 'tesis' | 'unidades';
 
 export interface Ruta {
   pantalla: Pantalla;
@@ -16,10 +16,14 @@ export interface Ruta {
   param?: string;
 }
 
-const SUB: Record<string, Seccion> = { elegir: 'hoy', foco: 'hoy', pomodoros: 'hoy', json: 'hoy' };
+const SUB: Record<string, Seccion> = {
+  elegir: 'hoy', foco: 'hoy', pomodoros: 'hoy', json: 'hoy',
+  sesion: 'estudio', como: 'estudio', actividad: 'estudio', test: 'estudio', tesis: 'estudio', unidades: 'estudio',
+};
 
 export function leerRuta(hash: string): Ruta {
-  const [a, b] = hash.replace(/^#\/?/, '').split('/');
+  const [a, ...rest] = hash.replace(/^#\/?/, '').split('/');
+  const b = rest.join('/');
   if ((SECCIONES as readonly string[]).includes(a)) return { pantalla: a as Seccion, seccion: a as Seccion };
   if (a in SUB) return { pantalla: a as Pantalla, seccion: SUB[a], param: b ? decodeURIComponent(b) : undefined };
   return { pantalla: 'hoy', seccion: 'hoy' };
