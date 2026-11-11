@@ -1,4 +1,4 @@
-import type { Activity, Front, StudyState, Unit } from './study-types';
+import type { Activity, Front, Rules, StudyState, Unit } from './study-types';
 
 export const FRONTS: Front[] = [
   { id: 'math', name: 'Matemática', color: 'ing' },
@@ -64,6 +64,9 @@ export const emptyStudy = (): StudyState => ({
   reviews: [],
   tesis: [],
   cards: [],
+  rules: DEFAULT_RULES,
+  log: [],
+  points: {},
 });
 
 /** Duraciones de la escalera (min). El capítulo completo se repasa en ~50 min en dos meses. */
@@ -77,6 +80,19 @@ export const LADDER = {
 };
 
 export const REVIEW_CAP = 20;
+
+export const DEFAULT_RULES: Rules = {
+  cap: REVIEW_CAP,
+  retention: 0.9,
+  newPerDay: 15,
+  rereadBelow: 0.7,
+  coldSkipAt: 0.85,
+  shortenIfPerfect: true,
+};
+
+/** Segundos estimados por tarjeta (14 tarjetas ≈ 7 min). */
+export const CARD_SEC = 30;
+export const RELEER_MIN = 5;
 export const PASS = 0.85;
 /** Meta semanal de estudio: matemática 2 h + programación 2 h, 6 días. */
 export const WEEK_GOAL_MIN = 24 * 60;

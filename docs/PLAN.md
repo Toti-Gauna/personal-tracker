@@ -5,7 +5,7 @@ Tracker personal de Toti: el día en horas, el estudio con su propio motor de re
 - **Diseño:** [canvas de Trazo](https://claude.ai/artifact/6Cc2E6aW2ViU5ikovpsRTy)
 - **Roadmap de estudio:** [ruta ML + DevSecOps](https://claude.ai/artifact/9PEokku7mBLZdCFJr1zqXP)
 - **Pantallas:** presentación `Trazo-pantallas.pptx` y su ZIP de imágenes (44 pantallas, 8 flujos).
-- **Estado:** ola 2 (Estudio) en revisión. Este archivo es la fuente de verdad.
+- **Estado:** ola 3 (Motor de repaso) en revisión. Este archivo es la fuente de verdad.
 
 ---
 
@@ -330,6 +330,30 @@ En el día a día alcanza con **Haiku 5.5 · bajo**: pegás el JSON del cierre y
 - El contador de Estudio en la barra muestra los repasos pendientes de hoy; con la ola 3 pasa a contar tarjetas.
 - El tercer número de Estudio muestra "tarjetas creadas" hasta que la ola 3 tenga retención ("tarjetas que recordás").
 
+**Ola 3 · lo que quedó y decisiones**
+
+- Repaso de hoy (3.1), Cold recall (3.2), Tarjetas con active recall (3.3), Nueva tarjeta (3.4) y Motor (3.5).
+- FSRS-5 con los parámetros por defecto (`src/data/fsrs.ts`): "Otra vez" vuelve en 10 min y las demás calificaciones se programan para cuando la probabilidad de recordar baja a la retención buscada (90 %).
+- Un solo tope diario (20 min) para todo el repaso. Se llena en este orden: cold recall → releer → tesis → ejercicios; las tarjetas usan lo que queda, las más olvidadas primero y hasta 15 nuevas por día (30 s cada una). Lo que no entra queda en "Hoy no toca" y pasa a mañana.
+- Las tarjetas de un frente entran en el Repasar de la primera actividad del día de ese frente (por ejemplo, las de Matemática en CONAMAT), y todas juntas en el Repaso del día.
+- **Cold recall.** Se compara contra tus puntos clave. Como la tesis ahora llega a +3, el cold recall de +1 todavía no tiene tesis. Los puntos salen, en orden:
+  - de los ya guardados para esa unidad;
+  - si no hay, de la tesis;
+  - si no hay, de las tarjetas de la unidad;
+  - si no hay ninguno, los anotás mirando el libro y quedan guardados.
+- **Después del cold recall:**
+  - con 85 % o más, no hay relectura ni tarjetas de lo olvidado;
+  - por debajo, lo olvidado vuelve mañana como tarjeta;
+  - con menos de 70 %, además se agenda "Releer" para mañana.
+  - **La tesis sigue a +3 siempre:** la regla anterior de "el tema no vuelve hasta +7" se interpretó sin saltear la tesis, que es un paso fijo.
+- Una tarjeta fallada 2 veces seguidas agenda "Releer" de su fuente para el día siguiente.
+- Active recall: en modo Escribir, Trazo marca las palabras clave del dorso que no aparecieron y sugiere la calificación: "Otra vez" con menos de la mitad, "Difícil" si faltó algo y "Bien" si estuvo todo. En Decir y Pensar, calificás vos.
+- Ejercicios espaciados: "Hecho" o "Perfecto". Con "Saltear lo que ya sabés", el próximo de esa unidad dura un 40 % menos.
+- Importar de Anki: lee el .txt de "Notas en texto plano" (tab, HTML y cloze) y trae frente y dorso. El historial de repasos de Anki no viaja en ese formato, así que esas tarjetas arrancan como nuevas.
+- Pegar un bloque: una tarjeta por línea con `::` o `[[ ]]`.
+- Retención por mazo: tarjetas recordadas (todo menos "Otra vez") en los últimos 30 días. Estudio muestra "tarjetas que recordás" cuando ya hay repasos.
+- El contador de Estudio en la barra cuenta tarjetas y repasos pendientes de hoy.
+
 **Infraestructura (ola 0)**
 
 - Vite + React + TypeScript; ruteo por hash (`#/hoy`, `#/estudio`…) para que Pages no dé 404 al recargar.
@@ -435,4 +459,9 @@ En el día a día alcanza con **Haiku 5.5 · bajo**: pegás el JSON del cierre y
 - Test completo del capítulo, en la app o en papel, con tipo de error y corrección de Claude pegada.
 - Sesión de estudio con timer por tramo, cuyas duraciones suman lo que dice el botón de foco.
 - CONAMAT B1 y la programación del B1 con sus unidades y tests, actividades libres y gráfico semanal.
+
+**2026-11-11 · ola 3**
+
+- Motor de repaso propio con FSRS, tope diario compartido, cold recall con puntos clave, active recall con sugerencia de calificación, nueva tarjeta en cinco tipos, reglas ajustables e importación de Anki o bloques.
+- La tesis sigue fija a +3, después del cold recall.
 

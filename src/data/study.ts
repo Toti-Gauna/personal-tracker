@@ -1,8 +1,9 @@
 import { BUILTIN_PRESETS } from './defaults';
 import { fitPreset } from './pomodoro';
-import { LADDER, PASS, REVIEW_CAP, minutesFor } from './study-catalog';
-import type { Activity, ErrType, ReviewItem, ReviewKind, Step, StudyState, Tramo, Unit, UnitState } from './study-types';
-import { addDays, parseDate } from './time';
+import { CARD_SEC, LADDER, PASS, REVIEW_CAP, minutesFor } from './study-catalog';
+import { DAY, retrievability } from './fsrs';
+import type { Activity, Card, ErrType, ReviewItem, ReviewKind, Step, StudyState, Tramo, Unit, UnitState } from './study-types';
+import { addDays, dateKey, parseDate } from './time';
 import type { Preset } from './types';
 
 /** 0 = lunes … 6 = domingo. */
@@ -67,7 +68,7 @@ export function scheduleApproved(a: Activity, unit: Unit, date: string): ReviewI
 export const scheduleRetest = (a: Activity, unit: Unit, date: string): ReviewItem =>
   item(a, unit.n, 'retest', addDays(date, LADDER.retest.days), unit.test.min, `Re-test · ${unitName(a, unit)}`);
 
-const PRIORITY: Record<ReviewKind, number> = { cold: 0, tesis: 1, ejercicios: 2, examen: 2, retest: 9 };
+const PRIORITY: Record<ReviewKind, number> = { cold: 0, releer: 1, tesis: 2, ejercicios: 4, examen: 4, retest: 9 };
 
 /**
  * El repaso del día: solo lo que vence, con tope de 20 min. Primero el cold recall, después
@@ -91,6 +92,7 @@ export function dueReview(reviews: ReviewItem[], date: string, cap = REVIEW_CAP)
 
 const SUB: Record<ReviewKind, string> = {
   cold: 'Repasar · sin mirar',
+  releer: 'Repasar · relectura corta de lo que faltó',
   tesis: 'Repasar · explicarlo con tus palabras',
   ejercicios: 'Repasar · ejercicios mixtos sin mirar',
   examen: 'Repasar · examen corto',
@@ -120,6 +122,8 @@ export interface PlanCtx {
   blockPresets: Record<string, string>;
   /** Repaso de hoy (de todas las actividades). */
   review: ReviewItem[];
+  /** Tarjetas de hoy por frente (motor FSRS). */
+  groups?: CardGroup[];
 }
 
 /**
@@ -131,8 +135,13 @@ export function planActivity(a: Activity, ctx: PlanCtx): Tramo[] {
   const { study, date } = ctx;
   const out: Tramo[] = [];
 
-  // 1 · Repasar: solo lo de esta actividad que vence hoy.
-  for (const r of ctx.review.filter((x) => x.activityId === a.id)) out.push(reviewTramo(r, a.testMode === 'papel'));
+  // 1 · Repasar: solo lo de esta actividad que vence hoy, y las tarjetas de su frente
+  // (en la primera actividad del día de ese frente, para no repetirlas).
+  const mine = ctx.review.filter((x) => x.activityId === a.id).map((r) => reviewTramo(r, a.testMode === 'papel'));
+  const firstOfFront = activitiesFor(study, date).find((x) => x.front === a.front)?.id === a.id;
+  const group = firstOfFront ? ctx.groups?.find((g) => g.frontId === a.front) : undefined;
+  if (group) mine.push(cardsTramo(group));
+  out.push(...sortRepasar(mine));
   const rep = out.reduce((s, t) => s + t.min, 0);
 
   // 3 · Comprobar (se calcula antes para saber cuánto queda para aprender).
@@ -192,8 +201,89 @@ export function planActivity(a: Activity, ctx: PlanCtx): Tramo[] {
 }
 
 /** La sesión de "Repaso del día": todo lo que vence, de todos los frentes. */
-export const planReview = (review: ReviewItem[], study: StudyState): Tramo[] =>
-  review.map((r) => reviewTramo(r, study.activities.find((a) => a.id === r.activityId)?.testMode === 'papel'));
+export const planReview = (review: ReviewItem[], study: StudyState, groups: CardGroup[] = []): Tramo[] =>
+  sortRepasar([
+    ...review.map((r) => reviewTramo(r, study.activities.find((a) => a.id === r.activityId)?.testMode === 'papel')),
+    ...groups.map(cardsTramo),
+  ]);
+
+const TRAMO_ORDER: Partial<Record<Tramo['kind'], number>> = { cold: 0, releer: 1, tesis: 2, tarjetas: 3, ejercicios: 4, examen: 4 };
+const sortRepasar = (ts: Tramo[]) => [...ts].sort((x, y) => (TRAMO_ORDER[x.kind] ?? 9) - (TRAMO_ORDER[y.kind] ?? 9));
+
+export const cardsTramo = (g: CardGroup): Tramo => ({
+  step: 'repasar',
+  kind: 'tarjetas',
+  title: `${g.cards.length} ${g.cards.length === 1 ? 'tarjeta' : 'tarjetas'} de ${g.name}`,
+  sub: 'Repasar · escribí antes de ver',
+  min: g.min,
+  ref: `cards:${g.frontId}`,
+  activityId: g.activityId ?? 'repaso',
+});
+
+// ——— Tarjetas (FSRS) ———
+
+export interface CardGroup {
+  frontId: string;
+  name: string;
+  /** Actividad de ese frente (para el color y el minutero). */
+  activityId?: string;
+  cards: Card[];
+  /** Las que todavía faltan hoy. */
+  pending: Card[];
+  min: number;
+}
+
+export const cardFront = (c: Card, fronts: StudyState['fronts']) =>
+  c.frontId ?? fronts.find((f) => f.name === c.deck)?.id ?? 'otros';
+
+const endOfDay = (date: string) => parseDate(addDays(date, 1)).getTime();
+const reviewedOn = (c: Card, date: string) => c.srs?.last != null && dateKey(new Date(c.srs.last)) === date;
+
+export const cardsMin = (n: number) => Math.ceil((n * CARD_SEC) / 60);
+
+/**
+ * Tarjetas de hoy: las que vencen (las más olvidadas primero) y hasta N nuevas,
+ * dentro de lo que queda del tope después de cold recall, tesis y ejercicios.
+ */
+export function cardsForDay(study: StudyState, date: string, budgetMin: number) {
+  const eod = endOfDay(date);
+  const now = Math.min(Date.now(), eod - 1);
+  const seen = study.cards.filter((c) => reviewedOn(c, date));
+  const introduced = study.cards.filter((c) => c.firstOn === date).length;
+  const due = study.cards
+    .filter((c) => c.srs && c.srs.state !== 'new' && c.srs.due < eod && !reviewedOn(c, date))
+    .sort((x, y) => retrievability((now - (x.srs!.last ?? now)) / DAY, x.srs!.s) - retrievability((now - (y.srs!.last ?? now)) / DAY, y.srs!.s));
+  const nuevas = study.cards
+    .filter((c) => !c.srs || c.srs.state === 'new')
+    .filter((c) => !c.dueFrom || c.dueFrom <= date)
+    .sort((x, y) => x.createdOn.localeCompare(y.createdOn))
+    .slice(0, Math.max(0, study.rules.newPerDay - introduced));
+  const max = Math.max(0, Math.floor((budgetMin * 60) / CARD_SEC));
+  const chosen = [...seen, ...due, ...nuevas].slice(0, Math.max(max, seen.length));
+  const skipped = due.length + nuevas.length - (chosen.length - seen.length);
+  const pendingOf = (c: Card) => !reviewedOn(c, date) || (c.srs?.due ?? 0) < eod;
+  const byFront = new Map<string, Card[]>();
+  for (const c of chosen) {
+    const f = cardFront(c, study.fronts);
+    byFront.set(f, [...(byFront.get(f) ?? []), c]);
+  }
+  const groups: CardGroup[] = [...byFront.entries()].map(([frontId, cards]) => ({
+    frontId,
+    name: study.fronts.find((f) => f.id === frontId)?.name ?? 'Otros',
+    activityId: study.activities.find((a) => a.front === frontId)?.id,
+    cards,
+    pending: cards.filter(pendingOf),
+    min: cardsMin(cards.length),
+  }));
+  return { groups, skipped: Math.max(0, skipped), min: groups.reduce((s, g) => s + g.min, 0) };
+}
+
+/** Todo el repaso del día: ítems de la escalera y tarjetas, con un solo tope. */
+export function dailyReview(study: StudyState, date: string) {
+  const items = dueReview(study.reviews, date, study.rules.cap);
+  const cards = cardsForDay(study, date, study.rules.cap - items.min);
+  return { ...items, groups: cards.groups, skippedCards: cards.skipped, min: items.min + cards.min };
+}
 
 export interface PlanStep {
   step: Step;
@@ -224,7 +314,7 @@ export const sumMin = (xs: { min: number }[]) => xs.reduce((s, x) => s + x.min, 
 
 export const STEP_LABEL: Record<Step, string> = { repasar: 'Repasar', aprender: 'Aprender', comprobar: 'Comprobar' };
 export const KIND_LABEL: Record<Tramo['kind'], string> = {
-  cold: 'Cold recall', tesis: 'Tesis +3', ejercicios: 'Ejercicios', examen: 'Examen corto',
+  cold: 'Cold recall', tesis: 'Tesis +3', ejercicios: 'Ejercicios', examen: 'Examen corto', releer: 'Releer', tarjetas: 'Tarjetas',
   capitulo: 'Capítulo', descanso: 'Descanso', test: 'Test',
 };
 
@@ -281,4 +371,42 @@ export function unitStatus(a: Activity, st: StudyState, n: number, date: string)
   const cur = focusUnit(a, st, date);
   if (cur?.n === n && a.days.includes(weekday(date))) return { label: 'aprender hoy', tone: 'hoy' };
   return { label: '—', tone: '' };
+}
+
+/** Importa un .txt exportado de Anki ("frente<TAB>dorso", con o sin HTML) o un bloque con :: y [[ ]]. */
+export function parseCardsText(text: string) {
+  const strip = (s: string) =>
+    s.replace(/<br\s*\/?>/gi, ' ').replace(/<[^>]+>/g, '').replace(/&nbsp;/g, ' ').replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/\s+/g, ' ').trim();
+  const out: { front: string; back: string; kind: 'pregunta' | 'completar' }[] = [];
+  const rest: string[] = [];
+  for (const line of text.split(/\r?\n/)) {
+    if (!line.trim() || line.startsWith('#')) continue;
+    if (line.includes('\t')) {
+      const [f, b] = line.split('\t');
+      const front = strip(f.replace(/^"|"$/g, ''));
+      const back = strip((b ?? '').replace(/^"|"$/g, ''));
+      const cloze = front.match(/\{\{c\d+::(.+?)(::.*?)?\}\}/);
+      if (cloze) out.push({ front: front.replace(/\{\{c\d+::(.+?)(::.*?)?\}\}/g, '___'), back: cloze[1], kind: 'completar' });
+      else if (front && back) out.push({ front, back, kind: 'pregunta' });
+    } else rest.push(line);
+  }
+  return [...out, ...cardsFromText(rest.join('\n'))];
+}
+
+/** Minutos de repaso de los próximos días (estimado con lo agendado hoy). */
+export function forecast(study: StudyState, date: string, days = 7) {
+  const out: { date: string; min: number }[] = [];
+  for (let i = 0; i < days; i++) {
+    const d = addDays(date, i);
+    if (i === 0) {
+      out.push({ date: d, min: dailyReview(study, d).min });
+      continue;
+    }
+    const items = study.reviews.filter((r) => r.kind !== 'retest' && !r.doneOn && r.due === d).reduce((s, r) => s + r.min, 0);
+    const eod = endOfDay(d);
+    const sod = endOfDay(addDays(d, -1));
+    const cards = study.cards.filter((c) => c.srs && c.srs.state !== 'new' && c.srs.due < eod && c.srs.due >= sod).length;
+    out.push({ date: d, min: Math.min(study.rules.cap, items + cardsMin(cards)) });
+  }
+  return out;
 }

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { AREAS } from '../data/defaults';
 import { KIND_LABEL, STEP_LABEL, type PlanStep } from '../data/study';
-import { fmtDur } from '../data/time';
+import { addDays, fmtDur } from '../data/time';
 import type { ReviewItem } from '../data/study-types';
 import type { DayLog } from '../data/types';
 import { ir } from '../lib/routes';
@@ -16,8 +16,10 @@ import '../styles/estudio.css';
 /** Qué pasa al tocar la casilla de un paso. */
 function tocar(date: string, s: PlanStep, done: boolean) {
   const [tipo, a, b] = s.ref.split(':');
+  if (tipo === 'cards') return ir(`tarjetas/${a}`);
   if (tipo === 'rev') {
     if (s.kind === 'tesis') return ir(`tesis/${a}`);
+    if (s.kind === 'cold' && !done) return ir(`recall/${a}`);
     return done ? uncompleteReview(date, a) : completeReview(date, a);
   }
   if (tipo === 'learn' && !done) return completeLearn(date, a, b ? Number(b) : undefined);
@@ -57,6 +59,7 @@ function Panel({ c, day, skipped }: { c: Contenido; day: DayLog; skipped: Review
           {skipped.map((r) => <p key={r.id}>{r.label} <span className="sub">· vuelve mañana</span></p>)}
         </div>
       )}
+      {c.id === 'repaso' && <a className="fila-link" href="#/repaso">Ver el repaso de hoy <span aria-hidden="true">→</span></a>}
       {c.falta === 0 ? (
         <p className="listo">Listo por hoy.</p>
       ) : (
@@ -84,6 +87,8 @@ export function Estudio({ day }: { day: DayLog }) {
   const aprobados = conamat?.units?.filter((u) => study.units.conamat?.[u.n]?.approvedOn).length ?? 0;
   const tests = Object.values(study.units).flatMap((u) => Object.values(u).flatMap((x) => x.tests));
   const prom = tests.length ? Math.round((tests.reduce((s, t) => s + t.score / t.total, 0) / tests.length) * 100) : null;
+  const log30 = study.log.filter((l) => l.date >= addDays(day.date, -30));
+  const recordas = log30.length ? Math.round((log30.filter((l) => l.grade > 1).length / log30.length) * 100) : null;
 
   return (
     <main className="pantalla estudio">
@@ -118,9 +123,13 @@ export function Estudio({ day }: { day: DayLog }) {
       <div className="numeros">
         <div><b className="mono">{aprobados}/{conamat?.units?.length ?? 11}</b><span>capítulos de Aritmética</span></div>
         <div><b className="mono">{prom == null ? '—' : `${prom} %`}</b><span>promedio de tests</span></div>
-        <div><b className="mono">{study.cards.length}</b><span>tarjetas creadas</span></div>
+        <div><b className="mono">{recordas == null ? study.cards.length : `${recordas} %`}</b><span>{recordas == null ? 'tarjetas creadas' : 'tarjetas que recordás'}</span></div>
       </div>
 
+      <div className="dos-botones">
+        <a className="btn-borde" href="#/repaso">Repaso de hoy</a>
+        <a className="btn-borde" href="#/motor">Motor de repaso</a>
+      </div>
       <div className="dos-botones">
         <a className="btn-borde" href="#/como">Cómo funciona</a>
         <a className="btn-borde" href="#/unidades">Plan del bimestre</a>

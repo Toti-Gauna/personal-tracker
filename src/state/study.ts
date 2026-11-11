@@ -1,5 +1,8 @@
 import { scheduleApproved, scheduleLearned, scheduleRetest, approves, unitState } from '../data/study';
-import type { Activity, CardDraft, ErrType, StudyState, Tesis, Tramo } from '../data/study-types';
+import { newSrs, review as fsrsReview, type Grade } from '../data/fsrs';
+import { RELEER_MIN } from '../data/study-catalog';
+import type { Activity, Card, CardDraft, ErrType, ReviewItem, Rules, StudyState, Tesis, Tramo } from '../data/study-types';
+import { addDays } from '../data/time';
 import { newId } from '../data/schedule';
 import { getState, setState, updateDay } from './store';
 
@@ -86,7 +89,7 @@ export function saveTesis(date: string, itemId: string, t: Omit<Tesis, 'itemId' 
   updateStudy((st) => ({
     ...st,
     tesis: [...st.tesis.filter((x) => x.itemId !== itemId), { ...t, itemId, activityId: item.activityId, unit: item.unit, savedOn: date }],
-    cards: [...st.cards, ...cards.map((c) => ({ ...c, id: `c${newId()}`, deck, source: item.label.replace(/^Tesis · /, ''), createdOn: date }))],
+    cards: [...st.cards, ...cards.map((c) => ({ ...c, id: `c${newId()}`, deck, frontId: a?.front, activityId: item.activityId, unit: item.unit, source: item.label.replace(/^Tesis · /, ''), createdOn: date }))],
   }));
   completeReview(date, itemId);
 }
@@ -110,9 +113,112 @@ export function addFront(name: string, color: StudyState['fronts'][number]['colo
 
 /** Efecto de terminar un tramo de la sesión. */
 export function tramoDone(date: string, t: Tramo, isLastLearn: boolean) {
-  if (t.ref.startsWith('rev:') && t.kind !== 'tesis') completeReview(date, t.ref.slice(4));
+  // El cold recall y la tesis se cierran en su pantalla; las tarjetas, al calificarlas.
+  if (t.ref.startsWith('rev:') && t.kind !== 'tesis' && t.kind !== 'cold') completeReview(date, t.ref.slice(4));
   if (t.kind === 'capitulo' && isLastLearn) {
     const [, act, n] = t.ref.split(':');
     completeLearn(date, act, n ? Number(n) : undefined);
   }
+}
+
+// ——— Motor de repaso (ola 3) ———
+
+/** Califica una tarjeta con FSRS y registra el repaso. Si falla 2 veces seguidas, agenda releer. */
+export function gradeCard(date: string, cardId: string, grade: Grade, now = Date.now()) {
+  const st = getState().study;
+  const card = st.cards.find((c) => c.id === cardId);
+  if (!card) return;
+  const srs = fsrsReview(card.srs ?? newSrs(now), grade, now, st.rules.retention);
+  const releer = srs.fails >= 2 && (card.srs?.fails ?? 0) < 2 ? rereadItem(card, date) : null;
+  updateStudy((s) => ({
+    ...s,
+    cards: s.cards.map((c) => (c.id === cardId ? { ...c, srs, firstOn: c.firstOn ?? date } : c)),
+    log: [...s.log, { cardId, date, grade }],
+    reviews: releer && !s.reviews.some((r) => r.kind === 'releer' && r.label === releer.label && !r.doneOn) ? [...s.reviews, releer] : s.reviews,
+  }));
+}
+
+function rereadItem(card: Card, date: string): ReviewItem {
+  return {
+    id: `r${newId()}`,
+    activityId: card.activityId ?? 'repaso',
+    unit: card.unit,
+    kind: 'releer',
+    due: addDays(date, 1),
+    min: RELEER_MIN,
+    label: `Releer · ${card.source || card.deck}`,
+  };
+}
+
+/**
+ * Cold recall: lo comparás punto por punto. Lo que olvidaste vuelve mañana como tarjeta y,
+ * con menos del 70 %, el motor agenda releer. Con 85 % o más no hace falta nada más.
+ */
+export function saveColdRecall(date: string, itemId: string, points: string[], recalled: boolean[]) {
+  const st = getState().study;
+  const item = st.reviews.find((r) => r.id === itemId);
+  if (!item) return 0;
+  const a = st.activities.find((x) => x.id === item.activityId);
+  const score = points.length ? recalled.filter(Boolean).length / points.length : 1;
+  const what = item.label.replace(/^Cold recall · /, '');
+  const forgotten = score >= st.rules.coldSkipAt ? [] : points.filter((_, i) => !recalled[i]);
+  const tomorrow = addDays(date, 1);
+  const cards: Card[] = forgotten.map((p) => {
+    const [front, back] = p.includes('::') ? p.split('::').map((x) => x.trim()) : [`¿Qué recordás de «${p}»?`, p];
+    return {
+      id: `c${newId()}`, front, back, kind: 'pregunta', deck: st.fronts.find((f) => f.id === a?.front)?.name ?? 'General',
+      frontId: a?.front, source: what, createdOn: date, activityId: item.activityId, unit: item.unit, dueFrom: tomorrow,
+    };
+  });
+  const releer: ReviewItem[] = score < st.rules.rereadBelow
+    ? [{ id: `r${newId()}`, activityId: item.activityId, unit: item.unit, kind: 'releer', due: tomorrow, min: RELEER_MIN, label: `Releer · ${what}` }]
+    : [];
+  updateStudy((s) => ({
+    ...s,
+    points: item.unit != null ? { ...s.points, [`${item.activityId}:${item.unit}`]: points } : s.points,
+    reviews: [...s.reviews.map((r) => (r.id === itemId ? { ...r, doneOn: date, score } : r)), ...releer],
+    cards: [...s.cards, ...cards],
+  }));
+  markStep(date, `rev:${itemId}`);
+  return score;
+}
+
+/** Ejercicios hechos; si salieron perfectos, el próximo de esa unidad es más corto. */
+export function completeExercises(date: string, itemId: string, perfect: boolean) {
+  const st = getState().study;
+  const item = st.reviews.find((r) => r.id === itemId);
+  if (!item) return;
+  updateStudy((s) => {
+    let shortened = false;
+    const reviews = [...s.reviews]
+      .sort((x, y) => x.due.localeCompare(y.due))
+      .map((r) => {
+        if (r.id === itemId) return { ...r, doneOn: date, perfect };
+        if (perfect && s.rules.shortenIfPerfect && !shortened && !r.doneOn && r.activityId === item.activityId && r.unit === item.unit && (r.kind === 'ejercicios' || r.kind === 'examen') && r.due > item.due) {
+          shortened = true;
+          return { ...r, min: Math.max(5, Math.round(r.min * 0.6)) };
+        }
+        return r;
+      });
+    return { ...s, reviews };
+  });
+  markStep(date, `rev:${itemId}`);
+}
+
+export function addCards(date: string, drafts: (CardDraft & { deck: string; frontId?: string; source: string })[]) {
+  const cards: Card[] = drafts.map((d) => ({ ...d, id: `c${newId()}`, createdOn: date }));
+  updateStudy((s) => ({ ...s, cards: [...s.cards, ...cards] }));
+  return cards.length;
+}
+
+export function updateCard(id: string, patch: Partial<Pick<Card, 'front' | 'back'>>) {
+  updateStudy((s) => ({ ...s, cards: s.cards.map((c) => (c.id === id ? { ...c, ...patch } : c)) }));
+}
+
+export function setRules(patch: Partial<Rules>) {
+  updateStudy((s) => ({ ...s, rules: { ...s.rules, ...patch } }));
+}
+
+export function savePoints(key: string, points: string[]) {
+  updateStudy((s) => ({ ...s, points: { ...s.points, [key]: points } }));
 }
