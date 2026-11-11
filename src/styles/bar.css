@@ -76,7 +76,7 @@
 .mini .t small { display: block; font-family: var(--font-mono); font-size: 11.5px; color: var(--sub); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .mini .tiempo { font-family: var(--font-mono); font-size: 22px; }
 .mini .pausa { width: 52px; border-left: 1px solid var(--linea); display: grid; place-items: center; }
-.mini .avance { position: absolute; left: 0; bottom: 0; height: 2px; background: var(--c, var(--ing)); }
+.mini .avance { position: absolute; z-index: 1; left: 0; bottom: 0; height: 2px; background: var(--c, var(--ing)); }
 
 .splash {
   position: fixed; inset: 0; z-index: 50;
