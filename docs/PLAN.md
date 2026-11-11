@@ -5,7 +5,7 @@ Tracker personal de Toti: el día en horas, el estudio con su propio motor de re
 - **Diseño:** [canvas de Trazo](https://claude.ai/artifact/6Cc2E6aW2ViU5ikovpsRTy)
 - **Roadmap de estudio:** [ruta ML + DevSecOps](https://claude.ai/artifact/9PEokku7mBLZdCFJr1zqXP)
 - **Pantallas:** presentación `Trazo-pantallas.pptx` y su ZIP de imágenes (44 pantallas, 8 flujos).
-- **Estado:** ola 3 (Motor de repaso) en revisión. Este archivo es la fuente de verdad.
+- **Estado:** ola 4 (Metas) en revisión. Este archivo es la fuente de verdad.
 
 ---
 
@@ -354,6 +354,20 @@ En el día a día alcanza con **Haiku 5.5 · bajo**: pegás el JSON del cierre y
 - Retención por mazo: tarjetas recordadas (todo menos "Otra vez") en los últimos 30 días. Estudio muestra "tarjetas que recordás" cuando ya hay repasos.
 - El contador de Estudio en la barra cuenta tarjetas y repasos pendientes de hoy.
 
+**Ola 4 · lo que quedó y decisiones**
+
+- Metas con las cuatro pestañas (Semana, Mes, Bimestre, Año) en `#/metas/<pestaña>`, y Nueva meta (4.5) con horizonte (día, semana, mes, bimestre o año), área y tipo (tarea, contador o número).
+- Modelo en `src/data/goals*.ts` y acciones en `src/state/goals.ts`. Cada meta guarda su avance por período (el lunes de la semana, el mes, el bimestre o el año). Las de día, semana y mes se repiten y arrancan de cero; las de bimestre y año cuentan solo para su período.
+- Las metas de partida son las del diseño: Eclipse, Handyx, Salud y Trabajo nuevo en la semana, seis metas del mes, tres del bimestre y las cinco grandes del año. Se pueden borrar ("Borrar metas") y se suman otras desde Nueva meta.
+- Lo que sale solo del estudio, y se marca "auto": tests aprobados del mes, horas de programación y las páginas de Make It Stick. Lo demás se suma a mano con el botón +. Entrenar, Correr y el peso se vinculan con el entreno en la ola 5.
+- **Semana:** el porcentaje es el promedio de avance de las metas semanales, y la tira de días muestra qué porcentaje de las tareas de cada día se cumplió (el mejor día va resaltado). La semana no muestra la lista de metas del día, así que la regla de la hora a la derecha del título (§3 bis) no aplica ahí: se revisó y queda solo para Hoy, Escritorio y Tablet.
+- **Mes:** calendario donde cada día se llena según las tareas cumplidas (resaltado desde 85 %).
+- **Bimestre:** los 9 bimestres reales de la ruta (del 16 de un mes al 15 dos meses después), con su industria y su producto, la tira de 9 semanas (4 de estudio, 4 de producto y 1 de cierre), los carriles de matemática, programación y producto, y las metas del bimestre. **Los nombres se renombran con el lápiz** y el cambio se ve en Hoy, Unidades y el JSON del día. Vacío vuelve al nombre de fábrica.
+- **Año:** los 6 bimestres del año 1, el promedio por mes (con el objetivo de 85 %) y las metas grandes.
+- El bimestre y la semana de Hoy ahora salen de las fechas reales de la ruta, no de bloques de 63 días: el 11 de nov todavía es el B1, semana 1.
+- Hoy suma el bloque "Sumar a la semana", con botones para las metas marcadas "Mostrar en Hoy": Entrené, CV enviados, Venta Foody y Usuario Handyx.
+- Pendiente a propósito: el peso (88,4 kg) y la meta de bajar de peso se conectan con el entreno en la ola 5. Hasta entonces se suman a mano.
+
 **Infraestructura (ola 0)**
 
 - Vite + React + TypeScript; ruteo por hash (`#/hoy`, `#/estudio`…) para que Pages no dé 404 al recargar.
@@ -464,4 +478,10 @@ En el día a día alcanza con **Haiku 5.5 · bajo**: pegás el JSON del cierre y
 
 - Motor de repaso propio con FSRS, tope diario compartido, cold recall con puntos clave, active recall con sugerencia de calificación, nueva tarjeta en cinco tipos, reglas ajustables e importación de Anki o bloques.
 - La tesis sigue fija a +3, después del cold recall.
+
+**2026-11-11 · ola 4**
+
+- Metas con Semana, Mes, Bimestre y Año, Nueva meta y bimestres renombrables.
+- Hoy con "Sumar a la semana".
+- Semana no lista las metas del día, así que no lleva la hora a la derecha del título.
 
