@@ -1,0 +1,49 @@
+:root,
+:root[data-theme='dark'] {
+  color-scheme: dark;
+  --papel: #0e0f10;
+  --tinta: #EDEDE8;
+  --sub: #9a9d98;
+  --linea: #2c2e2d;
+  --campo: #18191a;
+  --hl-alpha: 38%;
+
+  --ing: #6cc4ee;
+  --handyx: #b3a4ff;
+  --eclipse: #ff9f62;
+  --salud: #7fd69a;
+  --rutina: #ff8e8e;
+  --economia: #f0d45c;
+
+  --dot: rgba(237, 237, 232, 0.07);
+}
+
+:root[data-theme='light'] {
+  color-scheme: light;
+  --papel: #f2f3ef;
+  --tinta: #141515;
+  --sub: #585c59;
+  --linea: #c9ccc6;
+  --campo: #e7e9e4;
+  --hl-alpha: 60%;
+
+  --ing: #1c7fb0;
+  --handyx: #5f4bcf;
+  --eclipse: #c2560f;
+  --salud: #24854a;
+  --rutina: #c23a3a;
+  --economia: #8a6c00;
+
+  --dot: rgba(20, 21, 21, 0.1);
+}
+
+:root {
+  --font-title: 'Archivo Variable', system-ui, sans-serif;
+  --font-text: 'Geist Variable', system-ui, sans-serif;
+  --font-mono: 'Geist Mono Variable', ui-monospace, monospace;
+
+  --gutter: 16px;
+  --radius: 6px;
+  --bar-h: 60px;
+  --safe-b: env(safe-area-inset-bottom, 0px);
+}
