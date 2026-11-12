@@ -1,4 +1,4 @@
-import type { Area } from './types';
+import type { Area, RoadmapLink } from './types';
 
 export type Horizon = 'dia' | 'semana' | 'mes' | 'bim' | 'anio';
 export type GoalType = 'tarea' | 'contador' | 'numero';
@@ -11,7 +11,8 @@ export type AutoSource =
   | { kind: 'entreno' }
   | { kind: 'peso' };
 
-export interface Goal {
+/** Meta de la semana (o de otro horizonte). Con `ref` y `part` queda atada a un ítem del roadmap. */
+export interface Goal extends RoadmapLink {
   id: string;
   title: string;
   area: Area;

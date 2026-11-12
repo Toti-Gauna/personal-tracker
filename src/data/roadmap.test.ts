@@ -168,3 +168,19 @@ describe('docs/ROADMAP.md', () => {
     expect(salida).toContain('al día');
   });
 });
+
+describe('metas atadas al roadmap', () => {
+  it('una meta del día o de la semana puede llevar ref y part, y sin ellas sigue valiendo', async () => {
+    const { emptyGoals, defaultGoals } = await import('./goals-catalog');
+    const sinRef = defaultGoals('2026-11-16', {})[0];
+    expect(sinRef.ref).toBeUndefined();
+    const conRef: import('./goals-types').Goal = { ...sinRef, ref: 'b1-conamat-arit-03', part: 'test' };
+    expect(items.some((i) => i.id === conRef.ref)).toBe(true);
+    expect(emptyGoals().goals).toEqual([]);
+    const bloque: import('./types').Block = {
+      key: 'math', n: 2, title: 'Matemática', short: 'matemática', area: 'ing', kind: 'estudio', start: '04:30', min: 120, fixed: false, tasks: [],
+      ref: 'b1-conamat-arit-03', part: 'learn',
+    };
+    expect(bloque.part).toBe('learn');
+  });
+});

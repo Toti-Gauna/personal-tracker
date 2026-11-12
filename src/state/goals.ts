@@ -7,7 +7,7 @@ function update(fn: (goals: Goal[]) => Goal[]) {
   setState((s) => ({ ...s, goals: { ...s.goals, goals: fn(s.goals.goals) } }));
 }
 
-export type GoalDraft = Pick<Goal, 'title' | 'area' | 'horizon' | 'type' | 'target'> & Partial<Pick<Goal, 'unit' | 'step' | 'note' | 'group' | 'quick'>>;
+export type GoalDraft = Pick<Goal, 'title' | 'area' | 'horizon' | 'type' | 'target'> & Partial<Pick<Goal, 'unit' | 'step' | 'note' | 'group' | 'quick' | 'ref' | 'part'>>;
 
 /** Meta nueva: empieza en el período actual y se repite si es del día, la semana o el mes. */
 export function addGoal(d: GoalDraft, today: string) {
