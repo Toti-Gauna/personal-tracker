@@ -7,18 +7,47 @@ export const ETIQUETAS: Record<Seccion, string> = {
   hoy: 'Hoy', estudio: 'Estudio', metas: 'Metas', entreno: 'Entreno', perfil: 'Perfil',
 };
 
-export function leerHash(hash: string): Seccion {
-  const s = hash.replace(/^#\/?/, '') as Seccion;
-  return SECCIONES.includes(s) ? s : 'hoy';
+export type Pantalla = Seccion | 'elegir' | 'foco' | 'pomodoros' | 'json' | 'sesion' | 'como' | 'actividad' | 'test' | 'tesis' | 'unidades'
+  | 'repaso' | 'recall' | 'tarjetas' | 'tarjeta-nueva' | 'motor' | 'meta-nueva';
+
+export interface Ruta {
+  pantalla: Pantalla;
+  /** Sección que queda marcada en la barra. */
+  seccion: Seccion;
+  param?: string;
 }
 
+const SUB: Record<string, Seccion> = {
+  elegir: 'hoy', foco: 'hoy', pomodoros: 'hoy', json: 'hoy',
+  sesion: 'estudio', como: 'estudio', actividad: 'estudio', test: 'estudio', tesis: 'estudio', unidades: 'estudio',
+  'meta-nueva': 'metas', repaso: 'estudio', recall: 'estudio', tarjetas: 'estudio', 'tarjeta-nueva': 'estudio', motor: 'estudio',
+};
+
+export function leerRuta(hash: string): Ruta {
+  const [a, ...rest] = hash.replace(/^#\/?/, '').split('/');
+  const b = rest.join('/');
+  if ((SECCIONES as readonly string[]).includes(a)) return { pantalla: a as Seccion, seccion: a as Seccion, param: b || undefined };
+  if (a in SUB) return { pantalla: a as Pantalla, seccion: SUB[a], param: b ? decodeURIComponent(b) : undefined };
+  return { pantalla: 'hoy', seccion: 'hoy' };
+}
+
+/** Compatibilidad: sección de la barra para un hash. */
+export const leerHash = (hash: string): Seccion => leerRuta(hash).seccion;
+
+export const ir = (path: string) => {
+  window.location.hash = `#/${path}`;
+};
+
 /** Ruteo por hash: funciona en GitHub Pages sin 404 al recargar. */
-export function useSeccion(): Seccion {
-  const [s, setS] = useState<Seccion>(() => leerHash(window.location.hash));
+export function useRuta(): Ruta {
+  const [r, setR] = useState<Ruta>(() => leerRuta(window.location.hash));
   useEffect(() => {
-    const on = () => setS(leerHash(window.location.hash));
+    const on = () => {
+      setR(leerRuta(window.location.hash));
+      window.scrollTo(0, 0);
+    };
     window.addEventListener('hashchange', on);
     return () => window.removeEventListener('hashchange', on);
   }, []);
-  return s;
+  return r;
 }
