@@ -160,3 +160,11 @@ describe('CONAMAT: un ítem por capítulo', () => {
     expect(bims[9].items.filter((i) => i.lane === 'math').map((i) => i.title)).toEqual(['Stewart 12–14', 'Blitzstein 6–7']);
   });
 });
+
+describe('docs/ROADMAP.md', () => {
+  it('es lo que genera npm run roadmap:md desde el JSON (si no, el CI falla)', async () => {
+    const { execFileSync } = await import('node:child_process');
+    const salida = execFileSync('node', ['scripts/roadmap-md.mjs', '--check'], { encoding: 'utf8' });
+    expect(salida).toContain('al día');
+  });
+});
