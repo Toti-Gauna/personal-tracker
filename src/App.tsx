@@ -19,7 +19,12 @@ import { Peso } from './screens/Peso';
 import { ResumenEntreno } from './screens/ResumenEntreno';
 import { SesionEntreno } from './screens/SesionEntreno';
 import { NuevaMeta } from './screens/NuevaMeta';
+import { Ajustes } from './screens/Ajustes';
+import { AjustesCompanera, AjustesDatos, AjustesRutinas } from './screens/AjustesExtra';
+import { Cierre } from './screens/Cierre';
+import { Logro } from './screens/Logro';
 import { Perfil } from './screens/Perfil';
+import { Sonidos } from './screens/Sonidos';
 import { Pomodoros } from './screens/Pomodoros';
 import { Actividad } from './screens/Actividad';
 import { ComoFunciona } from './screens/ComoFunciona';
@@ -38,6 +43,7 @@ import { PantallaPendiente } from './screens/Seccion';
 import { useStore } from './state/store';
 import { Avisos } from './ui/avisos';
 import { useFocusRunner } from './ui/useFocusRunner';
+import { useSealSync } from './ui/useSealSync';
 import { useNow } from './ui/useNow';
 
 export function App() {
@@ -49,6 +55,7 @@ export function App() {
   const day = useStore((s) => s.days[today]);
   const hayFoco = useStore((s) => !!s.focus);
   useFocusRunner();
+  useSealSync(today, !!settings && !!day);
   const pendientes = usePendientes(today);
 
   let contenido: React.ReactNode;
@@ -87,7 +94,14 @@ export function App() {
       case 'entreno-resumen': contenido = <ResumenEntreno day={day} id={ruta.param} />; break;
       case 'entreno-peso': contenido = <Peso day={day} />; break;
       case 'entreno-motor': contenido = <MotorEntreno day={day} />; break;
-      case 'perfil': contenido = <Perfil />; break;
+      case 'perfil': contenido = <Perfil day={day} />; break;
+      case 'cierre': contenido = <Cierre day={day} />; break;
+      case 'logro': contenido = <Logro id={ruta.param} />; break;
+      case 'ajustes': contenido = <Ajustes />; break;
+      case 'ajustes-rutinas': contenido = <AjustesRutinas />; break;
+      case 'ajustes-companera': contenido = <AjustesCompanera />; break;
+      case 'ajustes-datos': contenido = <AjustesDatos today={today} />; break;
+      case 'sonidos': contenido = <Sonidos today={today} />; break;
     }
   }
 

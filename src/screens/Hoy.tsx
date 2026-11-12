@@ -134,6 +134,11 @@ export function Hoy({ day }: { day: DayLog }) {
 
       <SumarSemana date={day.date} />
 
+      <a className={`cierre-link${day.closed ? ' cerrado' : ''}`} href="#/cierre">
+        <span><b>{day.closed ? 'Día cerrado' : 'Cerrar el día'}</b><small>{day.closed ? `A las ${day.closed.at} · +${day.closed.xp} XP` : 'Mejora, pendientes y el JSON de hoy'}</small></span>
+        <span aria-hidden="true">→</span>
+      </a>
+
       <nav className="hoy-links" aria-label="Más">
         <a href="#/pomodoros">Pomodoros a medida <span aria-hidden="true">→</span></a>
         <a href="#/json">JSON del día <span aria-hidden="true">→</span></a>

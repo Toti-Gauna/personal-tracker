@@ -9,6 +9,7 @@ export const ETIQUETAS: Record<Seccion, string> = {
 
 export type Pantalla = Seccion | 'elegir' | 'foco' | 'pomodoros' | 'json' | 'sesion' | 'como' | 'actividad' | 'test' | 'tesis' | 'unidades'
   | 'repaso' | 'recall' | 'tarjetas' | 'tarjeta-nueva' | 'motor' | 'meta-nueva'
+  | 'cierre' | 'logro' | 'ajustes' | 'ajustes-rutinas' | 'ajustes-companera' | 'ajustes-datos' | 'sonidos'
   | 'entreno-semana' | 'entreno-rutina' | 'entreno-sesion' | 'entreno-resumen' | 'entreno-peso' | 'entreno-motor';
 
 export interface Ruta {
@@ -21,6 +22,7 @@ export interface Ruta {
 const SUB: Record<string, Seccion> = {
   elegir: 'hoy', foco: 'hoy', pomodoros: 'hoy', json: 'hoy',
   sesion: 'estudio', como: 'estudio', actividad: 'estudio', test: 'estudio', tesis: 'estudio', unidades: 'estudio',
+  cierre: 'hoy', logro: 'perfil', ajustes: 'perfil', 'ajustes-rutinas': 'perfil', 'ajustes-companera': 'perfil', 'ajustes-datos': 'perfil', sonidos: 'perfil',
   'meta-nueva': 'metas',
   'entreno-semana': 'entreno', 'entreno-rutina': 'entreno', 'entreno-sesion': 'entreno', 'entreno-resumen': 'entreno', 'entreno-peso': 'entreno', 'entreno-motor': 'entreno', repaso: 'estudio', recall: 'estudio', tarjetas: 'estudio', 'tarjeta-nueva': 'estudio', motor: 'estudio',
 };
