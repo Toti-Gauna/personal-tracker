@@ -1,0 +1,67 @@
+/* Avance: todo el progreso en una pantalla. En escritorio y tablet es la vista principal. */
+.app.ancha { --max: 1480px; }
+.avance { width: 100%; max-width: 1480px; margin: 0 auto; padding: 24px var(--gutter) calc(var(--bar-h) + var(--safe-b) + 32px); }
+.avance h1 { font-size: clamp(40px, 8vw, 64px); }
+.avance-cab { display: grid; gap: 16px; margin-bottom: 22px; }
+.avance-cab p { margin: 10px 0 0; color: var(--sub); max-width: 62ch; }
+.avance-acc { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+.avance-acc .segmentado { margin: 0; flex: 1 1 220px; }
+.avance-acc .btn-principal, .avance-acc .btn-borde { width: auto; min-height: 48px; padding: 0 20px; margin: 0; display: inline-grid; place-items: center; text-decoration: none; }
+.avance-acc .btn-borde { color: var(--tinta); }
+
+.avance-stats { display: grid; grid-template-columns: repeat(2, 1fr); border: 1px solid var(--linea); margin-bottom: 18px; }
+.avance-stats > div { padding: 16px 18px; display: grid; gap: 4px; border-left: 1px solid var(--linea); border-top: 1px solid var(--linea); min-width: 0; align-content: start; }
+.avance-stats > div:nth-child(-n+2) { border-top: 0; }
+.avance-stats > div:nth-child(odd) { border-left: 0; }
+.avance-stats b { font-size: clamp(24px, 6vw, 40px); font-weight: 400; line-height: 1.1; white-space: nowrap; }
+.avance-stats small { color: var(--sub); font-size: 14px; }
+
+.avance-fila { display: grid; gap: 18px; margin-bottom: 18px; }
+.tarjeta-av { border: 1px solid var(--linea); border-radius: 12px; padding: 18px; min-width: 0; }
+.tarjeta-av .semana { margin: 0; }
+.tarjeta-av .grafico { height: 190px; }
+.av-metas { list-style: none; margin: 10px 0 0; padding: 0; }
+.av-metas li { padding: 10px 0; border-bottom: 1px solid var(--linea); display: grid; gap: 8px; }
+.av-metas li > div { display: grid; grid-template-columns: 10px minmax(0, 1fr) auto; gap: 10px; align-items: baseline; }
+.av-metas i { width: 9px; height: 9px; background: var(--c); display: block; }
+.av-metas .mono { font-size: 15px; }
+.av-sellos { list-style: none; margin: 14px 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 14px; }
+.peso-mini { width: 100%; height: auto; display: block; margin-top: 12px; }
+.peso-mini .meta { stroke: var(--salud); stroke-dasharray: 3 4; stroke-width: 1.2; }
+.peso-mini .meta-t { fill: var(--salud); font: 10px var(--font-mono); }
+.peso-mini .curva { fill: none; stroke: var(--tinta); stroke-width: 1.6; }
+.peso-mini .punto { fill: var(--papel); stroke: var(--tinta); stroke-width: 1.5; }
+.peso-mini .ultimo { fill: var(--salud); }
+.peso-mini .eje { fill: var(--sub); font: 11px var(--font-mono); }
+.avance .calendario { margin-top: 12px; }
+
+/* Tablet: dos columnas. */
+@media (min-width: 720px) {
+  .avance { padding: 32px 32px 48px; }
+  .avance-cab { grid-template-columns: 1fr auto; align-items: start; }
+  .avance-stats { grid-template-columns: repeat(var(--n, 4), 1fr); }
+  .avance-stats b { font-size: clamp(22px, 3.3vw, 40px); }
+  .avance-stats > div { border-top: 0 !important; border-left: 1px solid var(--linea) !important; }
+  .avance-stats > div:first-child { border-left: 0 !important; }
+  .avance-fila.tres { grid-template-columns: 1fr 1fr; }
+  .avance-fila.tres > :last-child:nth-child(odd) { grid-column: 1 / -1; }
+  .avance-acc .segmentado { flex: 0 0 auto; min-width: 240px; }
+}
+
+/* Escritorio: el gráfico de estudio ocupa dos tercios y los de abajo van de a tres. */
+@media (min-width: 1100px) {
+  .avance { padding: 40px 48px 56px; }
+  .avance-fila.uno { grid-template-columns: 2fr 1fr; }
+  .avance-fila.tres { grid-template-columns: repeat(var(--n, 3), 1fr); }
+  .avance-fila.tres > :last-child:nth-child(odd) { grid-column: auto; }
+  .tarjeta-av .grafico { height: 230px; }
+}
+
+/* Modo presentación: nada de navegación y todo más grande. */
+.avance.presentacion { max-width: none; padding-top: 32px; }
+.avance.presentacion h1 { font-size: clamp(48px, 7vw, 96px); }
+.avance.presentacion .avance-stats b { font-size: clamp(30px, 4vw, 64px); }
+.avance.presentacion .avance-stats small, .avance.presentacion .av-metas li > div { font-size: clamp(15px, 1.5vw, 22px); }
+.avance.presentacion .tarjeta-av { padding: 26px; }
+.avance.presentacion .tarjeta-av .grafico { height: clamp(200px, 26vh, 340px); }
+@media (min-width: 720px) { .app.presentacion { padding-left: 0; } .app.presentacion .avance { padding: 40px clamp(32px, 5vw, 96px); } }

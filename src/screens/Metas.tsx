@@ -4,11 +4,12 @@ import { BIMESTERS, WEEK_KINDS, WEEK_KIND_LABEL, bimesterAt } from '../data/bime
 import { bimester } from '../data/derive';
 import { appliesTo, averagePct, dayPct, monthLabel, periodKey, periodRange, ratio, valueOf, yearMonths } from '../data/goals';
 import type { Goal, Horizon } from '../data/goals-types';
-import { fmtFecha, addDays, daysBetween, parseDate } from '../data/time';
+import { addDays, daysBetween, parseDate } from '../data/time';
 import { activitiesFor, focusUnit, unitName, weekday } from '../data/study';
 import type { DayLog } from '../data/types';
 import { useStore } from '../state/store';
 import { addProgress, deleteGoal, renameBimester, stepOf } from '../state/goals';
+import { Calendario } from '../ui/Calendario';
 import { GoalRow } from '../ui/GoalRow';
 import '../styles/metas.css';
 
@@ -136,8 +137,6 @@ function Mes({ date, list, days, editar }: { date: string; list: Goal[]; days: R
   const [from, to] = periodRange('mes', date);
   const total = daysBetween(from, to) + 1;
   const offset = weekday(from);
-  const celdas = Array.from({ length: total }, (_, i) => addDays(from, i));
-  const nivel = (p: number | null) => (p == null ? 0 : p >= 0.85 ? 4 : p >= 0.5 ? 3 : p > 0 ? 2 : 1);
   const semana = Math.floor((parseDate(date).getDate() - 1 + offset) / 7) + 1;
   const semanas = Math.ceil((total + offset) / 7);
   return (
@@ -146,20 +145,7 @@ function Mes({ date, list, days, editar }: { date: string; list: Goal[]; days: R
         <h2>{monthLabel(date)}</h2>
         <span className="mono sub">semana {semana} de {semanas}</span>
       </div>
-      <div className="calendario" role="grid" aria-label={`Calendario de ${monthLabel(date)}`}>
-        {DIAS.map((d) => <span key={d} className="cal-dia mono" role="columnheader">{d}</span>)}
-        {Array.from({ length: offset }, (_, i) => <span key={`v${i}`} />)}
-        {celdas.map((d) => {
-          const p = dayPct(days[d]);
-          const n = nivel(p);
-          return (
-            <span key={d} role="gridcell" className={`cal-celda n${n}${d === date ? ' hoy' : ''}`} aria-label={`${parseDate(d).getDate()}: ${p == null ? 'sin datos' : Math.round(p * 100) + ' %'}`}>
-              <span className="mono">{parseDate(d).getDate()}</span>
-            </span>
-          );
-        })}
-      </div>
-      <div className="cal-leyenda mono sub" aria-hidden="true"><span>menos</span><i className="n1" /><i className="n2" /><i className="n3" /><i className="n4" /><span>85 % o más</span></div>
+      <Calendario date={date} days={days} />
       <div className="etiqueta mg-t">Metas de {monthLabel(date).toLowerCase()}</div>
       <Lista list={list} date={date} plano editar={editar} />
     </>
