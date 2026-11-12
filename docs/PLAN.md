@@ -5,7 +5,7 @@ Tracker personal de Toti: el día en horas, el estudio con su propio motor de re
 - **Diseño:** [canvas de Trazo](https://claude.ai/artifact/6Cc2E6aW2ViU5ikovpsRTy)
 - **Roadmap de estudio:** [ruta ML + DevSecOps](https://claude.ai/artifact/9PEokku7mBLZdCFJr1zqXP)
 - **Pantallas:** presentación `Trazo-pantallas.pptx` y su ZIP de imágenes (44 pantallas, 8 flujos).
-- **Estado:** ola 6 (Cierre y sellos) en revisión. Este archivo es la fuente de verdad.
+- **Estado:** ola 7 (Escritorio y tablet) en revisión. Este archivo es la fuente de verdad.
 
 ---
 
@@ -401,6 +401,15 @@ En el día a día alcanza con **Haiku 5.5 · bajo**: pegás el JSON del cierre y
 - **Sonidos:** cinco sonidos sintetizados (campana de bronce, madera suave, 3 pitidos, trazo de marcador y sello de goma) para cinco avisos (pomodoro, descanso, descanso de entreno, marcar una tarea y sello nuevo), con volumen y vibración. Cada aviso suena con el que elegiste.
 - **Alarmas:** cuatro alarmas por defecto (04:00, 04:30, 18:00 y 21:00), con hora editable. Una app web no puede sonar con el teléfono bloqueado, así que se descarga un archivo `.ics` con un evento diario por alarma y aviso a la hora exacta; al abrirlo, el teléfono las agrega al calendario.
 
+**Ola 7 · lo que quedó y decisiones**
+
+- **Tres tamaños, una sola app:** teléfono (menos de 720 px) con la barra inferior; **tablet** (720 a 1099 px) con un riel de íconos a la izquierda; **escritorio** (1100 px o más) con una barra lateral. El riel y la barra lateral son el mismo componente: Avance, Hoy, Estudio, Metas, Entreno y Perfil, con el resaltador que se desliza (Flip, 280 ms) y el contador de Estudio. El foco que corre aparece abajo del riel o de la barra lateral, y vuelve a la sesión al tocarlo; en el teléfono sigue siendo el mini reproductor sobre la barra.
+- **Avance** (`#/avance`, también desde el teléfono vía Perfil): racha y nivel, mejora acumulada, estudio y peso; el gráfico de estudio con selector **Semana · Mes · Año** (días, semanas del mes o meses del año, con su meta punteada); las metas del año; el calendario del mes; los frentes de estudio; la curva de peso con la meta; y los sellos ganados. En tablet va a una o dos columnas; en escritorio, el gráfico ocupa dos tercios y abajo van de a tres.
+- **Modo presentación** (`#/avance/presentacion`, o el botón): sin navegación, en pantalla completa, con todo más grande y **sin lo privado**: se esconden el peso y los montos (USD y kg de las metas del año). Se sale con Esc o con "Salir".
+- **Hoy en escritorio:** dos columnas: a la izquierda el avance, la mejora, "Sumar a la semana" y el cierre; a la derecha la lista de metas del día.
+- **Hora a la derecha del título (§3 bis), revisada a 390, 834 y 1440 px, en claro y oscuro:** en las 8 filas la hora queda en la misma línea, a 11 px del título y antes del contador; el checkbox y el número se alinean entre filas. Semana de Metas y Avance no listan las metas del día, así que no aplica ahí.
+- **Pulido de movimiento (GSAP):** cada pantalla entra subiendo 8 px en 280 ms (fundido de 150 ms con movimiento reducido); las filas de Hoy aparecen escalonadas (0,035 s) y la regla de horas baja hasta su lugar en 0,7 s; la tarjeta gira en 3D al darla vuelta (0,5 s); y el recuadro del descanso de entreno late en los últimos 3 segundos (escala 1 a 1,03, 5 veces).
+
 **Infraestructura (ola 0)**
 
 - Vite + React + TypeScript; ruteo por hash (`#/hoy`, `#/estudio`…) para que Pages no dé 404 al recargar.
@@ -528,4 +537,11 @@ En el día a día alcanza con **Haiku 5.5 · bajo**: pegás el JSON del cierre y
 - Cierre del día, XP y niveles, 24 sellos con pantalla de logro, perfil con hitos e historial.
 - Ajustes con tema, nombres de bimestres y áreas, rutinas del día, copia de seguridad e instalación.
 - Sonidos configurables y alarmas al calendario con `.ics`.
+
+**2026-11-11 · ola 7**
+
+- Barra lateral en escritorio y riel de íconos en tablet, con el foco que corre abajo.
+- Vista Avance con selector de período y modo presentación sin peso ni montos.
+- Hoy en dos columnas en escritorio; la hora queda a la derecha del título en teléfono, tablet y escritorio.
+- Pulido de movimiento: entrada de pantallas, filas escalonadas, regla de horas, giro de tarjeta y latido del descanso.
 
