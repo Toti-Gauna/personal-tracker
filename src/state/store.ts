@@ -7,6 +7,7 @@ import { defaultGoals, emptyGoals } from '../data/goals-catalog';
 import type { Goal, GoalsState } from '../data/goals-types';
 import { periodKey } from '../data/goals';
 import { emptyTrain } from '../data/train-catalog';
+import { applySettings } from './apply';
 import type { TrainState } from '../data/train-types';
 import type { StudyState } from '../data/study-types';
 import type { Block, DayLog, FocusEntry, FocusState, Preset, RoutineId, Settings } from '../data/types';
@@ -20,10 +21,12 @@ export interface State {
   study: StudyState;
   goals: GoalsState;
   train: TrainState;
+  /** Sellos ganados: id → fecha. */
+  profile: { seals: Record<string, string>; /** Sellos cuya pantalla de logro ya viste. */ seen: string[] };
 }
 
 const KEY = 'trazo.v1';
-const empty = (): State => ({ settings: null, days: {}, focus: null, carry: {}, study: emptyStudy(), goals: emptyGoals(), train: emptyTrain() });
+const empty = (): State => ({ settings: null, days: {}, focus: null, carry: {}, study: emptyStudy(), goals: emptyGoals(), train: emptyTrain(), profile: { seals: {}, seen: [] } });
 
 function load(): State {
   try {
@@ -35,19 +38,22 @@ function load(): State {
       const study = parsed.study ? { ...base, ...parsed.study, rules: { ...base.rules, ...parsed.study.rules } } : base;
       const goals = parsed.goals ? { ...emptyGoals(), ...parsed.goals } : null;
       const train = parsed.train ? { ...emptyTrain(), ...parsed.train } : emptyTrain();
-      return { ...empty(), ...parsed, study, train, goals: migrateGoals(goals ?? seedGoals(parsed.settings?.startDate ?? dateKey())) };
+      return { ...empty(), ...parsed, study, train, profile: { seals: {}, seen: Object.keys(parsed.profile?.seals ?? {}), ...(parsed.profile ?? {}) }, goals: migrateGoals(goals ?? seedGoals(parsed.settings?.startDate ?? dateKey())) };
     }
   } catch { /* sin storage o JSON roto */ }
   return empty();
 }
 
 let state: State = load();
+applySettings(state.settings);
 const subs = new Set<() => void>();
 
 export const getState = () => state;
 
 export function setState(fn: (s: State) => State) {
+  const prev = state.settings;
   state = fn(state);
+  if (state.settings !== prev) applySettings(state.settings);
   try { localStorage.setItem(KEY, JSON.stringify(state)); } catch { /* sin storage */ }
   subs.forEach((f) => f());
 }
@@ -55,6 +61,7 @@ export function setState(fn: (s: State) => State) {
 /** Solo para tests. */
 export function resetState(s: State = empty()) {
   state = s;
+  applySettings(s.settings);
   subs.forEach((f) => f());
 }
 
