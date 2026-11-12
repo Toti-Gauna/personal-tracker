@@ -87,7 +87,7 @@ export function SesionEntreno() {
     const total = e.rest * 1000;
     const hechas = setsFor(a, key, e.id).length;
     return (
-      <div className={`rest-card${activo ? ' activo' : ''}`} key={key}>
+      <div className={`rest-card${activo ? ' activo' : ''}${activo && restante <= 3000 ? ' late' : ''}`} key={key}>
         <div className="rest-cab"><b>{names[key]}</b><span className="sub">{activo ? 'descansa' : doneWith(a, e, key) ? 'listo' : `en la serie ${hechas + 1}`}</span></div>
         <div className={`mono rest-t${activo ? '' : ' mudo'}`}>{clock(activo ? ms(restante) : e.rest)}</div>
         <div className="rest-barra"><span style={{ width: `${activo ? (1 - restante / (rt as RestTimer).total) * 100 : 0}%` }} /></div>
