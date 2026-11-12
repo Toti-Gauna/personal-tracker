@@ -11,7 +11,8 @@ const fmt = (n: number) => String(n).replace('.', ',');
 export function GoalRow({ g, date, editar }: { g: Goal; date: string; editar?: boolean }) {
   const study = useStore((s) => s.study);
   const days = useStore((s) => s.days);
-  const v = valueOf(g, date, { study, days });
+  const train = useStore((s) => s.train);
+  const v = valueOf(g, date, { study, days, train });
   const manual = !g.auto;
   const done = v >= g.target;
   return (

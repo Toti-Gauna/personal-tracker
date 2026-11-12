@@ -7,7 +7,9 @@ export type GoalType = 'tarea' | 'contador' | 'numero';
 export type AutoSource =
   | { kind: 'tests' }
   | { kind: 'horas'; front: string }
-  | { kind: 'actividad'; id: string };
+  | { kind: 'actividad'; id: string }
+  | { kind: 'entreno' }
+  | { kind: 'peso' };
 
 export interface Goal {
   id: string;

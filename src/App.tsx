@@ -10,7 +10,14 @@ import { ElegirFoco } from './screens/ElegirFoco';
 import { Foco } from './screens/Foco';
 import { Hoy } from './screens/Hoy';
 import { Instalar } from './screens/Instalar';
+import { EditarRutina } from './screens/EditarRutina';
+import { Entreno } from './screens/Entreno';
+import { EntrenoSemana } from './screens/EntrenoSemana';
 import { Metas } from './screens/Metas';
+import { MotorEntreno } from './screens/MotorEntreno';
+import { Peso } from './screens/Peso';
+import { ResumenEntreno } from './screens/ResumenEntreno';
+import { SesionEntreno } from './screens/SesionEntreno';
 import { NuevaMeta } from './screens/NuevaMeta';
 import { Perfil } from './screens/Perfil';
 import { Pomodoros } from './screens/Pomodoros';
@@ -73,7 +80,13 @@ export function App() {
       case 'motor': contenido = <Motor day={day} seccion={ruta.param} />; break;
       case 'metas': contenido = <Metas day={day} tab={ruta.param} />; break;
       case 'meta-nueva': contenido = <NuevaMeta today={today} horizon={ruta.param} />; break;
-      case 'entreno': contenido = <PantallaPendiente titulo="Entreno" linea="Rutinas en pareja y sobrecarga progresiva." ola="ola 5" />; break;
+      case 'entreno': contenido = <Entreno day={day} />; break;
+      case 'entreno-semana': contenido = <EntrenoSemana day={day} />; break;
+      case 'entreno-rutina': contenido = <EditarRutina key={ruta.param} id={ruta.param && ruta.param !== 'nueva' ? ruta.param : undefined} />; break;
+      case 'entreno-sesion': contenido = <SesionEntreno />; break;
+      case 'entreno-resumen': contenido = <ResumenEntreno day={day} id={ruta.param} />; break;
+      case 'entreno-peso': contenido = <Peso day={day} />; break;
+      case 'entreno-motor': contenido = <MotorEntreno day={day} />; break;
       case 'perfil': contenido = <Perfil />; break;
     }
   }

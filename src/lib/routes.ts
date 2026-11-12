@@ -8,7 +8,8 @@ export const ETIQUETAS: Record<Seccion, string> = {
 };
 
 export type Pantalla = Seccion | 'elegir' | 'foco' | 'pomodoros' | 'json' | 'sesion' | 'como' | 'actividad' | 'test' | 'tesis' | 'unidades'
-  | 'repaso' | 'recall' | 'tarjetas' | 'tarjeta-nueva' | 'motor' | 'meta-nueva';
+  | 'repaso' | 'recall' | 'tarjetas' | 'tarjeta-nueva' | 'motor' | 'meta-nueva'
+  | 'entreno-semana' | 'entreno-rutina' | 'entreno-sesion' | 'entreno-resumen' | 'entreno-peso' | 'entreno-motor';
 
 export interface Ruta {
   pantalla: Pantalla;
@@ -20,7 +21,8 @@ export interface Ruta {
 const SUB: Record<string, Seccion> = {
   elegir: 'hoy', foco: 'hoy', pomodoros: 'hoy', json: 'hoy',
   sesion: 'estudio', como: 'estudio', actividad: 'estudio', test: 'estudio', tesis: 'estudio', unidades: 'estudio',
-  'meta-nueva': 'metas', repaso: 'estudio', recall: 'estudio', tarjetas: 'estudio', 'tarjeta-nueva': 'estudio', motor: 'estudio',
+  'meta-nueva': 'metas',
+  'entreno-semana': 'entreno', 'entreno-rutina': 'entreno', 'entreno-sesion': 'entreno', 'entreno-resumen': 'entreno', 'entreno-peso': 'entreno', 'entreno-motor': 'entreno', repaso: 'estudio', recall: 'estudio', tarjetas: 'estudio', 'tarjeta-nueva': 'estudio', motor: 'estudio',
 };
 
 export function leerRuta(hash: string): Ruta {
