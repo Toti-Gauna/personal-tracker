@@ -1,0 +1,3524 @@
+{
+ "version": 3,
+ "route": {
+  "start": "2026-11-16",
+  "end": "2029-11-15",
+  "bimesters": 18,
+  "years": [
+   {
+    "year": 1,
+    "profile": "AI Engineer con seguridad",
+    "bimesters": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6
+    ]
+   },
+   {
+    "year": 2,
+    "profile": "ML Engineer completo",
+    "bimesters": [
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ]
+   },
+   {
+    "year": 3,
+    "profile": "Secure AI Engineer",
+    "bimesters": [
+     13,
+     14,
+     15,
+     16,
+     17,
+     18
+    ]
+   }
+  ]
+ },
+ "cycle": {
+  "study": [
+   1,
+   4
+  ],
+  "product": [
+   5,
+   8
+  ],
+  "close": [
+   9,
+   9
+  ],
+  "closeParts": [
+   "Métrica contra baseline",
+   "Aporte abierto",
+   "Tráiler",
+   "README",
+   "Caso de estudio"
+  ],
+  "pilot": "Piloto desde las cold calls de Eclipse."
+ },
+ "threads": [
+  {
+   "id": "algoritmos",
+   "title": "Algoritmos",
+   "from": 7,
+   "perWeek": 3,
+   "source": "NeetCode 150"
+  },
+  {
+   "id": "diseno-sistemas",
+   "title": "Diseño de sistemas",
+   "from": 7
+  },
+  {
+   "id": "nucleo-eclipse",
+   "title": "Núcleo de Eclipse, reutilizado en todos los productos",
+   "from": "all"
+  }
+ ],
+ "optional": [
+  {
+   "id": "y4-fisica-mecanica",
+   "title": "Física, ingeniería mecánica, termofluidos y aeroespacial (M7–M10)",
+   "year": 4,
+   "items": [
+    "M7",
+    "M8",
+    "M9",
+    "M10"
+   ]
+  },
+  {
+   "id": "y5-oscp-cks",
+   "title": "OSCP y CKA → CKS",
+   "year": 5,
+   "items": [
+    "OSCP",
+    "CKA",
+    "CKS"
+   ]
+  }
+ ],
+ "bimesters": [
+  {
+   "n": 1,
+   "year": 1,
+   "start": "2026-11-16",
+   "end": "2027-01-15",
+   "product": {
+    "name": "Complia Pro",
+    "industry": "compliance",
+    "pitch": "normas nuevas → cambios por empresa"
+   },
+   "summary": {
+    "math": "CONAMAT Aritmética 1–11",
+    "prog": "Python, FastAPI, RAG evaluado, OWASP LLM"
+   },
+   "items": [
+    {
+     "id": "b1-conamat-arit-01",
+     "lane": "math",
+     "title": "CONAMAT · Aritmética cap. 1 · Números reales",
+     "weeks": [
+      1,
+      1
+     ],
+     "parts": [
+      "learn",
+      "test"
+     ],
+     "source": "CONAMAT"
+    },
+    {
+     "id": "b1-conamat-arit-02",
+     "lane": "math",
+     "title": "CONAMAT · Aritmética cap. 2 · Números enteros",
+     "weeks": [
+      1,
+      1
+     ],
+     "parts": [
+      "learn",
+      "test"
+     ],
+     "source": "CONAMAT"
+    },
+    {
+     "id": "b1-conamat-arit-03",
+     "lane": "math",
+     "title": "CONAMAT · Aritmética cap. 3 · Teoría de números",
+     "weeks": [
+      2,
+      2
+     ],
+     "parts": [
+      "learn",
+      "test"
+     ],
+     "source": "CONAMAT"
+    },
+    {
+     "id": "b1-conamat-arit-04",
+     "lane": "math",
+     "title": "CONAMAT · Aritmética cap. 4 · Números racionales",
+     "weeks": [
+      3,
+      3
+     ],
+     "parts": [
+      "learn",
+      "test"
+     ],
+     "source": "CONAMAT"
+    },
+    {
+     "id": "b1-conamat-arit-05",
+     "lane": "math",
+     "title": "CONAMAT · Aritmética cap. 5 · Números decimales",
+     "weeks": [
+      3,
+      3
+     ],
+     "parts": [
+      "learn",
+      "test"
+     ],
+     "source": "CONAMAT"
+    },
+    {
+     "id": "b1-conamat-arit-06",
+     "lane": "math",
+     "title": "CONAMAT · Aritmética cap. 6 · Potenciación y radicación",
+     "weeks": [
+      4,
+      4
+     ],
+     "parts": [
+      "learn",
+      "test"
+     ],
+     "source": "CONAMAT"
+    },
+    {
+     "id": "b1-conamat-arit-07",
+     "lane": "math",
+     "title": "CONAMAT · Aritmética cap. 7 · Notación científica y logaritmos",
+     "weeks": [
+      5,
+      5
+     ],
+     "parts": [
+      "learn",
+      "test"
+     ],
+     "source": "CONAMAT"
+    },
+    {
+     "id": "b1-conamat-arit-08",
+     "lane": "math",
+     "title": "CONAMAT · Aritmética cap. 8 · Razones y proporciones",
+     "weeks": [
+      6,
+      6
+     ],
+     "parts": [
+      "learn",
+      "test"
+     ],
+     "source": "CONAMAT"
+    },
+    {
+     "id": "b1-conamat-arit-09",
+     "lane": "math",
+     "title": "CONAMAT · Aritmética cap. 9 · Sistemas de numeración",
+     "weeks": [
+      6,
+      6
+     ],
+     "parts": [
+      "learn",
+      "test"
+     ],
+     "source": "CONAMAT"
+    },
+    {
+     "id": "b1-conamat-arit-10",
+     "lane": "math",
+     "title": "CONAMAT · Aritmética cap. 10 · Sistema métrico decimal",
+     "weeks": [
+      7,
+      7
+     ],
+     "parts": [
+      "learn",
+      "test"
+     ],
+     "source": "CONAMAT"
+    },
+    {
+     "id": "b1-conamat-arit-11",
+     "lane": "math",
+     "title": "CONAMAT · Aritmética cap. 11 · Razonamiento aritmético",
+     "weeks": [
+      8,
+      8
+     ],
+     "parts": [
+      "learn",
+      "test"
+     ],
+     "source": "CONAMAT"
+    },
+    {
+     "id": "b1-prog-python",
+     "lane": "prog",
+     "title": "Python",
+     "weeks": [
+      1,
+      1
+     ],
+     "parts": [
+      "learn",
+      "build"
+     ]
+    },
+    {
+     "id": "b1-prog-fastapi",
+     "lane": "prog",
+     "title": "FastAPI",
+     "weeks": [
+      2,
+      2
+     ],
+     "parts": [
+      "learn",
+      "build"
+     ]
+    },
+    {
+     "id": "b1-prog-rag-evaluado",
+     "lane": "prog",
+     "title": "RAG evaluado",
+     "weeks": [
+      3,
+      3
+     ],
+     "parts": [
+      "learn",
+      "build"
+     ]
+    },
+    {
+     "id": "b1-prog-owasp-llm",
+     "lane": "prog",
+     "title": "OWASP LLM",
+     "weeks": [
+      4,
+      4
+     ],
+     "parts": [
+      "learn",
+      "build"
+     ]
+    },
+    {
+     "id": "b1-pieza",
+     "lane": "product",
+     "title": "Complia Pro · pieza desde cero",
+     "weeks": [
+      1,
+      4
+     ],
+     "parts": [
+      "build"
+     ]
+    },
+    {
+     "id": "b1-producto",
+     "lane": "product",
+     "title": "Complia Pro · producto",
+     "weeks": [
+      5,
+      8
+     ],
+     "parts": [
+      "build"
+     ]
+    },
+    {
+     "id": "b1-cierre",
+     "lane": "product",
+     "title": "Complia Pro · cierre",
+     "weeks": [
+      9,
+      9
+     ],
+     "parts": [
+      "close"
+     ]
+    }
+   ],
+   "gates": [
+    {
+     "id": "b1-g-math",
+     "item": "b1-conamat-arit-11",
+     "rule": "Test aprobado con 85 % o más",
+     "min": 0.85
+    },
+    {
+     "id": "b1-g-pieza",
+     "item": "b1-pieza",
+     "rule": "La pieza desde cero funciona antes de empezar el producto"
+    },
+    {
+     "id": "b1-g-cierre",
+     "item": "b1-cierre",
+     "rule": "Métrica contra baseline, aporte abierto, tráiler, README y caso de estudio"
+    }
+   ]
+  },
+  {
+   "n": 2,
+   "year": 1,
+   "start": "2027-01-16",
+   "end": "2027-03-15",
+   "product": {
+    "name": "Faro",
+    "industry": "pesca",
+    "pitch": "flota oscura, evidencia firmada"
+   },
+   "summary": {
+    "math": "CONAMAT Álgebra 1–12",
+    "prog": "ML clásico, SQL, geodatos"
+   },
+   "items": [
+    {
+     "id": "b2-conamat-alg-01",
+     "lane": "math",
+     "title": "CONAMAT · Álgebra cap. 1 · Conjuntos y lógica",
+     "weeks": [
+      1,
+      1
+     ],
+     "parts": [
+      "learn",
+      "test"
+     ],
+     "source": "CONAMAT"
+    },
+    {
+     "id": "b2-conamat-alg-02",
+     "lane": "math",
+     "title": "CONAMAT · Álgebra cap. 2 · Conceptos básicos",
+     "weeks": [
+      1,
+      1
+     ],
+     "parts": [
+      "learn",
+      "test"
+     ],
+     "source": "CONAMAT"
+    },
+    {
+     "id": "b2-conamat-alg-03",
+     "lane": "math",
+     "title": "CONAMAT · Álgebra cap. 3 · Productos notables",
+     "weeks": [
+      2,
+      2
+     ],
+     "parts": [
+      "learn",
+      "test"
+     ],
+     "source": "CONAMAT"
+    },
+    {
+     "id": "b2-conamat-alg-04",
+     "lane": "math",
+     "title": "CONAMAT · Álgebra cap. 4 · Factorización",
+     "weeks": [
+      3,
+      3
+     ],
+     "parts": [
+      "learn",
+      "test"
+     ],
+     "source": "CONAMAT"
+    },
+    {
+     "id": "b2-conamat-alg-05",
+     "lane": "math",
+     "title": "CONAMAT · Álgebra cap. 5 · Fracciones algebraicas",
+     "weeks": [
+      3,
+      3
+     ],
+     "parts": [
+      "learn",
+      "test"
+     ],
+     "source": "CONAMAT"
+    },
+    {
+     "id": "b2-conamat-alg-06",
+     "lane": "math",
+     "title": "CONAMAT · Álgebra cap. 6 · Ecuaciones de primer grado",
+     "weeks": [
+      4,
+      4
+     ],
+     "parts": [
+      "learn",
+      "test"
+     ],
+     "source": "CONAMAT"
+    },
+    {
+     "id": "b2-conamat-alg-07",
+     "lane": "math",
+     "title": "CONAMAT · Álgebra cap. 7 · Función lineal",
+     "weeks": [
+      5,
+      5
+     ],
+     "parts": [
+      "learn",
+      "test"
+     ],
+     "source": "CONAMAT"
+    },
+    {
+     "id": "b2-conamat-alg-08",
+     "lane": "math",
+     "title": "CONAMAT · Álgebra cap. 8 · Sistemas de ecuaciones",
+     "weeks": [
+      5,
+      5
+     ],
+     "parts": [
+      "learn",
+      "test"
+     ],
+     "source": "CONAMAT"
+    },
+    {
+     "id": "b2-conamat-alg-09",
+     "lane": "math",
+     "title": "CONAMAT · Álgebra cap. 9 · Potenciación",
+     "weeks": [
+      6,
+      6
+     ],
+     "parts": [
+      "learn",
+      "test"
+     ],
+     "source": "CONAMAT"
+    },
+    {
+     "id": "b2-conamat-alg-10",
+     "lane": "math",
+     "title": "CONAMAT · Álgebra cap. 10 · Radicación",
+     "weeks": [
+      7,
+      7
+     ],
+     "parts": [
+      "learn",
+      "test"
+     ],
+     "source": "CONAMAT"
+    },
+    {
+     "id": "b2-conamat-alg-11",
+     "lane": "math",
+     "title": "CONAMAT · Álgebra cap. 11 · Números complejos",
+     "weeks": [
+      7,
+      7
+     ],
+     "parts": [
+      "learn",
+      "test"
+     ],
+     "source": "CONAMAT"
+    },
+    {
+     "id": "b2-conamat-alg-12",
+     "lane": "math",
+     "title": "CONAMAT · Álgebra cap. 12 · Ecuaciones de segundo grado",
+     "weeks": [
+      8,
+      8
+     ],
+     "parts": [
+      "learn",
+      "test"
+     ],
+     "source": "CONAMAT"
+    },
+    {
+     "id": "b2-prog-ml-clasico",
+     "lane": "prog",
+     "title": "ML clásico",
+     "weeks": [
+      1,
+      1
+     ],
+     "parts": [
+      "learn",
+      "build"
+     ]
+    },
+    {
+     "id": "b2-prog-sql",
+     "lane": "prog",
+     "title": "SQL",
+     "weeks": [
+      2,
+      2
+     ],
+     "parts": [
+      "learn",
+      "build"
+     ]
+    },
+    {
+     "id": "b2-prog-geodatos",
+     "lane": "prog",
+     "title": "geodatos",
+     "weeks": [
+      3,
+      4
+     ],
+     "parts": [
+      "learn",
+      "build"
+     ]
+    },
+    {
+     "id": "b2-pieza",
+     "lane": "product",
+     "title": "Faro · pieza desde cero",
+     "weeks": [
+      1,
+      4
+     ],
+     "parts": [
+      "build"
+     ]
+    },
+    {
+     "id": "b2-producto",
+     "lane": "product",
+     "title": "Faro · producto",
+     "weeks": [
+      5,
+      8
+     ],
+     "parts": [
+      "build"
+     ]
+    },
+    {
+     "id": "b2-cierre",
+     "lane": "product",
+     "title": "Faro · cierre",
+     "weeks": [
+      9,
+      9
+     ],
+     "parts": [
+      "close"
+     ]
+    }
+   ],
+   "gates": [
+    {
+     "id": "b2-g-math",
+     "item": "b2-conamat-alg-12",
+     "rule": "Test aprobado con 85 % o más",
+     "min": 0.85
+    },
+    {
+     "id": "b2-g-pieza",
+     "item": "b2-pieza",
+     "rule": "La pieza desde cero funciona antes de empezar el producto"
+    },
+    {
+     "id": "b2-g-cierre",
+     "item": "b2-cierre",
+     "rule": "Métrica contra baseline, aporte abierto, tráiler, README y caso de estudio"
+    }
+   ]
+  },
+  {
+   "n": 3,
+   "year": 1,
+   "start": "2027-03-16",
+   "end": "2027-05-15",
+   "product": {
+    "name": "Lupa",
+    "industry": "salud",
+    "pitch": "Papanicolaou con celular"
+   },
+   "summary": {
+    "math": "Álgebra 13–17, Geometría y trig. 1–10",
+    "prog": "Autograd, CNN, visión médica"
+   },
+   "items": [
+    {
+     "id": "b3-conamat-alg-13",
+     "lane": "math",
+     "title": "CONAMAT · Álgebra cap. 13 · Desigualdades",
+     "weeks": [
+      1,
+      1
+     ],
+     "parts": [
+      "learn",
+      "test"
+     ],
+     "source": "CONAMAT"
+    },
+    {
+     "id": "b3-conamat-alg-14",
+     "lane": "math",
+     "title": "CONAMAT · Álgebra cap. 14 · Logaritmos",
+     "weeks": [
+      1,
+      1
+     ],
+     "parts": [
+      "learn",
+      "test"
+     ],
+     "source": "CONAMAT"
+    },
+    {
+     "id": "b3-conamat-alg-15",
+     "lane": "math",
+     "title": "CONAMAT · Álgebra cap. 15 · Progresiones",
+     "weeks": [
+      2,
+      2
+     ],
+     "parts": [
+      "learn",
+      "test"
+     ],
+     "source": "CONAMAT"
+    },
+    {
+     "id": "b3-conamat-alg-16",
+     "lane": "math",
+     "title": "CONAMAT · Álgebra cap. 16 · Matrices",
+     "weeks": [
+      2,
+      2
+     ],
+     "parts": [
+      "learn",
+      "test"
+     ],
+     "source": "CONAMAT"
+    },
+    {
+     "id": "b3-conamat-alg-17",
+     "lane": "math",
+     "title": "CONAMAT · Álgebra cap. 17 · Raíces de un polinomio",
+     "weeks": [
+      3,
+      3
+     ],
+     "parts": [
+      "learn",
+      "test"
+     ],
+     "source": "CONAMAT"
+    },
+    {
+     "id": "b3-conamat-geo-01",
+     "lane": "math",
+     "title": "CONAMAT · Geometría y trigonometría cap. 1 · Conceptos básicos",
+     "weeks": [
+      3,
+      3
+     ],
+     "parts": [
+      "learn",
+      "test"
+     ],
+     "source": "CONAMAT"
+    },
+    {
+     "id": "b3-conamat-geo-02",
+     "lane": "math",
+     "title": "CONAMAT · Geometría y trigonometría cap. 2 · Ángulos",
+     "weeks": [
+      4,
+      4
+     ],
+     "parts": [
+      "learn",
+      "test"
+     ],
+     "source": "CONAMAT"
+    },
+    {
+     "id": "b3-conamat-geo-03",
+     "lane": "math",
+     "title": "CONAMAT · Geometría y trigonometría cap. 3 · Paralelas y perpendiculares",
+     "weeks": [
+      4,
+      4
+     ],
+     "parts": [
+      "learn",
+      "test"
+     ],
+     "source": "CONAMAT"
+    },
+    {
+     "id": "b3-conamat-geo-04",
+     "lane": "math",
+     "title": "CONAMAT · Geometría y trigonometría cap. 4 · Triángulos",
+     "weeks": [
+      5,
+      5
+     ],
+     "parts": [
+      "learn",
+      "test"
+     ],
+     "source": "CONAMAT"
+    },
+    {
+     "id": "b3-conamat-geo-05",
+     "lane": "math",
+     "title": "CONAMAT · Geometría y trigonometría cap. 5 · Cuadriláteros",
+     "weeks": [
+      5,
+      5
+     ],
+     "parts": [
+      "learn",
+      "test"
+     ],
+     "source": "CONAMAT"
+    },
+    {
+     "id": "b3-conamat-geo-06",
+     "lane": "math",
+     "title": "CONAMAT · Geometría y trigonometría cap. 6 · Polígonos",
+     "weeks": [
+      6,
+      6
+     ],
+     "parts": [
+      "learn",
+      "test"
+     ],
+     "source": "CONAMAT"
+    },
+    {
+     "id": "b3-conamat-geo-07",
+     "lane": "math",
+     "title": "CONAMAT · Geometría y trigonometría cap. 7 · Transformaciones",
+     "weeks": [
+      6,
+      6
+     ],
+     "parts": [
+      "learn",
+      "test"
+     ],
+     "source": "CONAMAT"
+    },
+    {
+     "id": "b3-conamat-geo-08",
+     "lane": "math",
+     "title": "CONAMAT · Geometría y trigonometría cap. 8 · Circunferencia",
+     "weeks": [
+      7,
+      7
+     ],
+     "parts": [
+      "learn",
+      "test"
+     ],
+     "source": "CONAMAT"
+    },
+    {
+     "id": "b3-conamat-geo-09",
+     "lane": "math",
+     "title": "CONAMAT · Geometría y trigonometría cap. 9 · Perímetros y superficies",
+     "weeks": [
+      7,
+      7
+     ],
+     "parts": [
+      "learn",
+      "test"
+     ],
+     "source": "CONAMAT"
+    },
+    {
+     "id": "b3-conamat-geo-10",
+     "lane": "math",
+     "title": "CONAMAT · Geometría y trigonometría cap. 10 · Cuerpos geométricos",
+     "weeks": [
+      8,
+      8
+     ],
+     "parts": [
+      "learn",
+      "test"
+     ],
+     "source": "CONAMAT"
+    },
+    {
+     "id": "b3-prog-autograd",
+     "lane": "prog",
+     "title": "Autograd",
+     "weeks": [
+      1,
+      1
+     ],
+     "parts": [
+      "learn",
+      "build"
+     ]
+    },
+    {
+     "id": "b3-prog-cnn",
+     "lane": "prog",
+     "title": "CNN",
+     "weeks": [
+      2,
+      2
+     ],
+     "parts": [
+      "learn",
+      "build"
+     ]
+    },
+    {
+     "id": "b3-prog-vision-medica",
+     "lane": "prog",
+     "title": "visión médica",
+     "weeks": [
+      3,
+      4
+     ],
+     "parts": [
+      "learn",
+      "build"
+     ]
+    },
+    {
+     "id": "b3-pieza",
+     "lane": "product",
+     "title": "Lupa · pieza desde cero",
+     "weeks": [
+      1,
+      4
+     ],
+     "parts": [
+      "build"
+     ]
+    },
+    {
+     "id": "b3-producto",
+     "lane": "product",
+     "title": "Lupa · producto",
+     "weeks": [
+      5,
+      8
+     ],
+     "parts": [
+      "build"
+     ]
+    },
+    {
+     "id": "b3-cierre",
+     "lane": "product",
+     "title": "Lupa · cierre",
+     "weeks": [
+      9,
+      9
+     ],
+     "parts": [
+      "close"
+     ]
+    }
+   ],
+   "gates": [
+    {
+     "id": "b3-g-math",
+     "item": "b3-conamat-geo-10",
+     "rule": "Test aprobado con 85 % o más",
+     "min": 0.85
+    },
+    {
+     "id": "b3-g-pieza",
+     "item": "b3-pieza",
+     "rule": "La pieza desde cero funciona antes de empezar el producto"
+    },
+    {
+     "id": "b3-g-cierre",
+     "item": "b3-cierre",
+     "rule": "Métrica contra baseline, aporte abierto, tráiler, README y caso de estudio"
+    }
+   ]
+  },
+  {
+   "n": 4,
+   "year": 1,
+   "start": "2027-05-16",
+   "end": "2027-07-15",
+   "product": {
+    "name": "Talud",
+    "industry": "minería",
+    "pitch": "InSAR y alerta de diques"
+   },
+   "summary": {
+    "math": "Geom. y trig. 11–17, Analítica 1–7",
+    "prog": "Docker, redes, OWASP, AWS, InSAR"
+   },
+   "items": [
+    {
+     "id": "b4-conamat-geo-11",
+     "lane": "math",
+     "title": "CONAMAT · Geometría y trigonometría cap. 11 · Funciones trigonométricas",
+     "weeks": [
+      1,
+      1
+     ],
+     "parts": [
+      "learn",
+      "test"
+     ],
+     "source": "CONAMAT"
+    },
+    {
+     "id": "b4-conamat-geo-12",
+     "lane": "math",
+     "title": "CONAMAT · Geometría y trigonometría cap. 12 · Ángulos notables",
+     "weeks": [
+      1,
+      1
+     ],
+     "parts": [
+      "learn",
+      "test"
+     ],
+     "source": "CONAMAT"
+    },
+    {
+     "id": "b4-conamat-geo-13",
+     "lane": "math",
+     "title": "CONAMAT · Geometría y trigonometría cap. 13 · Gráficas",
+     "weeks": [
+      2,
+      2
+     ],
+     "parts": [
+      "learn",
+      "test"
+     ],
+     "source": "CONAMAT"
+    },
+    {
+     "id": "b4-conamat-geo-14",
+     "lane": "math",
+     "title": "CONAMAT · Geometría y trigonometría cap. 14 · Identidades y ecuaciones",
+     "weeks": [
+      2,
+      2
+     ],
+     "parts": [
+      "learn",
+      "test"
+     ],
+     "source": "CONAMAT"
+    },
+    {
+     "id": "b4-conamat-geo-15",
+     "lane": "math",
+     "title": "CONAMAT · Geometría y trigonometría cap. 15 · Triángulos rectángulos",
+     "weeks": [
+      3,
+      3
+     ],
+     "parts": [
+      "learn",
+      "test"
+     ],
+     "source": "CONAMAT"
+    },
+    {
+     "id": "b4-conamat-geo-16",
+     "lane": "math",
+     "title": "CONAMAT · Geometría y trigonometría cap. 16 · Triángulos oblicuángulos",
+     "weeks": [
+      3,
+      3
+     ],
+     "parts": [
+      "learn",
+      "test"
+     ],
+     "source": "CONAMAT"
+    },
+    {
+     "id": "b4-conamat-geo-17",
+     "lane": "math",
+     "title": "CONAMAT · Geometría y trigonometría cap. 17 · Forma trigonométrica de los complejos",
+     "weeks": [
+      4,
+      4
+     ],
+     "parts": [
+      "learn",
+      "test"
+     ],
+     "source": "CONAMAT"
+    },
+    {
+     "id": "b4-conamat-anal-01",
+     "lane": "math",
+     "title": "CONAMAT · Geometría analítica cap. 1 · Unidimensional",
+     "weeks": [
+      5,
+      5
+     ],
+     "parts": [
+      "learn",
+      "test"
+     ],
+     "source": "CONAMAT"
+    },
+    {
+     "id": "b4-conamat-anal-02",
+     "lane": "math",
+     "title": "CONAMAT · Geometría analítica cap. 2 · Bidimensional",
+     "weeks": [
+      5,
+      5
+     ],
+     "parts": [
+      "learn",
+      "test"
+     ],
+     "source": "CONAMAT"
+    },
+    {
+     "id": "b4-conamat-anal-03",
+     "lane": "math",
+     "title": "CONAMAT · Geometría analítica cap. 3 · Pendiente",
+     "weeks": [
+      6,
+      6
+     ],
+     "parts": [
+      "learn",
+      "test"
+     ],
+     "source": "CONAMAT"
+    },
+    {
+     "id": "b4-conamat-anal-04",
+     "lane": "math",
+     "title": "CONAMAT · Geometría analítica cap. 4 · Lugar geométrico",
+     "weeks": [
+      6,
+      6
+     ],
+     "parts": [
+      "learn",
+      "test"
+     ],
+     "source": "CONAMAT"
+    },
+    {
+     "id": "b4-conamat-anal-05",
+     "lane": "math",
+     "title": "CONAMAT · Geometría analítica cap. 5 · Línea recta",
+     "weeks": [
+      7,
+      7
+     ],
+     "parts": [
+      "learn",
+      "test"
+     ],
+     "source": "CONAMAT"
+    },
+    {
+     "id": "b4-conamat-anal-06",
+     "lane": "math",
+     "title": "CONAMAT · Geometría analítica cap. 6 · Circunferencia",
+     "weeks": [
+      7,
+      7
+     ],
+     "parts": [
+      "learn",
+      "test"
+     ],
+     "source": "CONAMAT"
+    },
+    {
+     "id": "b4-conamat-anal-07",
+     "lane": "math",
+     "title": "CONAMAT · Geometría analítica cap. 7 · Transformación de coordenadas",
+     "weeks": [
+      8,
+      8
+     ],
+     "parts": [
+      "learn",
+      "test"
+     ],
+     "source": "CONAMAT"
+    },
+    {
+     "id": "b4-prog-docker",
+     "lane": "prog",
+     "title": "Docker",
+     "weeks": [
+      1,
+      1
+     ],
+     "parts": [
+      "learn",
+      "build"
+     ]
+    },
+    {
+     "id": "b4-prog-redes",
+     "lane": "prog",
+     "title": "redes",
+     "weeks": [
+      1,
+      1
+     ],
+     "parts": [
+      "learn",
+      "build"
+     ]
+    },
+    {
+     "id": "b4-prog-owasp",
+     "lane": "prog",
+     "title": "OWASP",
+     "weeks": [
+      2,
+      2
+     ],
+     "parts": [
+      "learn",
+      "build"
+     ]
+    },
+    {
+     "id": "b4-prog-aws",
+     "lane": "prog",
+     "title": "AWS",
+     "weeks": [
+      3,
+      3
+     ],
+     "parts": [
+      "learn",
+      "build"
+     ]
+    },
+    {
+     "id": "b4-prog-insar",
+     "lane": "prog",
+     "title": "InSAR",
+     "weeks": [
+      4,
+      4
+     ],
+     "parts": [
+      "learn",
+      "build"
+     ]
+    },
+    {
+     "id": "b4-pieza",
+     "lane": "product",
+     "title": "Talud · pieza desde cero",
+     "weeks": [
+      1,
+      4
+     ],
+     "parts": [
+      "build"
+     ]
+    },
+    {
+     "id": "b4-producto",
+     "lane": "product",
+     "title": "Talud · producto",
+     "weeks": [
+      5,
+      8
+     ],
+     "parts": [
+      "build"
+     ]
+    },
+    {
+     "id": "b4-cierre",
+     "lane": "product",
+     "title": "Talud · cierre",
+     "weeks": [
+      9,
+      9
+     ],
+     "parts": [
+      "close"
+     ]
+    },
+    {
+     "id": "b4-cert-aws-saa",
+     "lane": "cert",
+     "title": "AWS SAA",
+     "weeks": [
+      5,
+      8
+     ],
+     "parts": [
+      "learn",
+      "test"
+     ],
+     "hours": 40
+    }
+   ],
+   "gates": [
+    {
+     "id": "b4-g-math",
+     "item": "b4-conamat-anal-07",
+     "rule": "Test aprobado con 85 % o más",
+     "min": 0.85
+    },
+    {
+     "id": "b4-g-pieza",
+     "item": "b4-pieza",
+     "rule": "La pieza desde cero funciona antes de empezar el producto"
+    },
+    {
+     "id": "b4-g-cierre",
+     "item": "b4-cierre",
+     "rule": "Métrica contra baseline, aporte abierto, tráiler, README y caso de estudio"
+    },
+    {
+     "id": "b4-g-cert",
+     "item": "b4-cert-aws-saa",
+     "rule": "Aprobar el examen"
+    }
+   ],
+   "cert": {
+    "name": "AWS SAA",
+    "hours": 40,
+    "optional": false,
+    "item": "b4-cert-aws-saa"
+   }
+  },
+  {
+   "n": 5,
+   "year": 1,
+   "start": "2027-07-16",
+   "end": "2027-09-15",
+   "product": {
+    "name": "Despacho",
+    "industry": "emergencias",
+    "pitch": "copiloto del 911"
+   },
+   "summary": {
+    "math": "Analítica 8–13, Cálculo diferencial 1–5",
+    "prog": "Agentes en tiempo real, MCP, voz"
+   },
+   "items": [
+    {
+     "id": "b5-conamat-anal-08",
+     "lane": "math",
+     "title": "CONAMAT · Geometría analítica cap. 8 · Parábola",
+     "weeks": [
+      1,
+      1
+     ],
+     "parts": [
+      "learn",
+      "test"
+     ],
+     "source": "CONAMAT"
+    },
+    {
+     "id": "b5-conamat-anal-09",
+     "lane": "math",
+     "title": "CONAMAT · Geometría analítica cap. 9 · Elipse",
+     "weeks": [
+      1,
+      1
+     ],
+     "parts": [
+      "learn",
+      "test"
+     ],
+     "source": "CONAMAT"
+    },
+    {
+     "id": "b5-conamat-anal-10",
+     "lane": "math",
+     "title": "CONAMAT · Geometría analítica cap. 10 · Hipérbola",
+     "weeks": [
+      2,
+      2
+     ],
+     "parts": [
+      "learn",
+      "test"
+     ],
+     "source": "CONAMAT"
+    },
+    {
+     "id": "b5-conamat-anal-11",
+     "lane": "math",
+     "title": "CONAMAT · Geometría analítica cap. 11 · Ecuación general de cónicas",
+     "weeks": [
+      3,
+      3
+     ],
+     "parts": [
+      "learn",
+      "test"
+     ],
+     "source": "CONAMAT"
+    },
+    {
+     "id": "b5-conamat-anal-12",
+     "lane": "math",
+     "title": "CONAMAT · Geometría analítica cap. 12 · Coordenadas polares",
+     "weeks": [
+      3,
+      3
+     ],
+     "parts": [
+      "learn",
+      "test"
+     ],
+     "source": "CONAMAT"
+    },
+    {
+     "id": "b5-conamat-anal-13",
+     "lane": "math",
+     "title": "CONAMAT · Geometría analítica cap. 13 · Ecuaciones paramétricas",
+     "weeks": [
+      4,
+      4
+     ],
+     "parts": [
+      "learn",
+      "test"
+     ],
+     "source": "CONAMAT"
+    },
+    {
+     "id": "b5-conamat-cd-01",
+     "lane": "math",
+     "title": "CONAMAT · Cálculo diferencial cap. 1 · Relaciones y funciones",
+     "weeks": [
+      5,
+      5
+     ],
+     "parts": [
+      "learn",
+      "test"
+     ],
+     "source": "CONAMAT"
+    },
+    {
+     "id": "b5-conamat-cd-02",
+     "lane": "math",
+     "title": "CONAMAT · Cálculo diferencial cap. 2 · Límites",
+     "weeks": [
+      6,
+      6
+     ],
+     "parts": [
+      "learn",
+      "test"
+     ],
+     "source": "CONAMAT"
+    },
+    {
+     "id": "b5-conamat-cd-03",
+     "lane": "math",
+     "title": "CONAMAT · Cálculo diferencial cap. 3 · Continuidad",
+     "weeks": [
+      6,
+      6
+     ],
+     "parts": [
+      "learn",
+      "test"
+     ],
+     "source": "CONAMAT"
+    },
+    {
+     "id": "b5-conamat-cd-04",
+     "lane": "math",
+     "title": "CONAMAT · Cálculo diferencial cap. 4 · La derivada",
+     "weeks": [
+      7,
+      7
+     ],
+     "parts": [
+      "learn",
+      "test"
+     ],
+     "source": "CONAMAT"
+    },
+    {
+     "id": "b5-conamat-cd-05",
+     "lane": "math",
+     "title": "CONAMAT · Cálculo diferencial cap. 5 · Aplicaciones de la derivada",
+     "weeks": [
+      8,
+      8
+     ],
+     "parts": [
+      "learn",
+      "test"
+     ],
+     "source": "CONAMAT"
+    },
+    {
+     "id": "b5-prog-agentes-en-tiempo-real",
+     "lane": "prog",
+     "title": "Agentes en tiempo real",
+     "weeks": [
+      1,
+      1
+     ],
+     "parts": [
+      "learn",
+      "build"
+     ]
+    },
+    {
+     "id": "b5-prog-mcp",
+     "lane": "prog",
+     "title": "MCP",
+     "weeks": [
+      2,
+      2
+     ],
+     "parts": [
+      "learn",
+      "build"
+     ]
+    },
+    {
+     "id": "b5-prog-voz",
+     "lane": "prog",
+     "title": "voz",
+     "weeks": [
+      3,
+      4
+     ],
+     "parts": [
+      "learn",
+      "build"
+     ]
+    },
+    {
+     "id": "b5-pieza",
+     "lane": "product",
+     "title": "Despacho · pieza desde cero",
+     "weeks": [
+      1,
+      4
+     ],
+     "parts": [
+      "build"
+     ]
+    },
+    {
+     "id": "b5-producto",
+     "lane": "product",
+     "title": "Despacho · producto",
+     "weeks": [
+      5,
+      8
+     ],
+     "parts": [
+      "build"
+     ]
+    },
+    {
+     "id": "b5-cierre",
+     "lane": "product",
+     "title": "Despacho · cierre",
+     "weeks": [
+      9,
+      9
+     ],
+     "parts": [
+      "close"
+     ]
+    }
+   ],
+   "gates": [
+    {
+     "id": "b5-g-math",
+     "item": "b5-conamat-cd-05",
+     "rule": "Test aprobado con 85 % o más",
+     "min": 0.85
+    },
+    {
+     "id": "b5-g-pieza",
+     "item": "b5-pieza",
+     "rule": "La pieza desde cero funciona antes de empezar el producto"
+    },
+    {
+     "id": "b5-g-cierre",
+     "item": "b5-cierre",
+     "rule": "Métrica contra baseline, aporte abierto, tráiler, README y caso de estudio"
+    }
+   ]
+  },
+  {
+   "n": 6,
+   "year": 1,
+   "start": "2027-09-16",
+   "end": "2027-11-15",
+   "product": {
+    "name": "Guardia",
+    "industry": "ciberseguridad",
+    "pitch": "sensor de red"
+   },
+   "summary": {
+    "math": "Cálculo integral 1–6, MIT 18.01SC",
+    "prog": "Security+, Zeek, Suricata"
+   },
+   "items": [
+    {
+     "id": "b6-conamat-ci-01",
+     "lane": "math",
+     "title": "CONAMAT · Cálculo integral cap. 1 · Sumas",
+     "weeks": [
+      1,
+      1
+     ],
+     "parts": [
+      "learn",
+      "test"
+     ],
+     "source": "CONAMAT"
+    },
+    {
+     "id": "b6-conamat-ci-02",
+     "lane": "math",
+     "title": "CONAMAT · Cálculo integral cap. 2 · Integrales inmediatas",
+     "weeks": [
+      2,
+      2
+     ],
+     "parts": [
+      "learn",
+      "test"
+     ],
+     "source": "CONAMAT"
+    },
+    {
+     "id": "b6-conamat-ci-03",
+     "lane": "math",
+     "title": "CONAMAT · Cálculo integral cap. 3 · Integrales trigonométricas",
+     "weeks": [
+      3,
+      3
+     ],
+     "parts": [
+      "learn",
+      "test"
+     ],
+     "source": "CONAMAT"
+    },
+    {
+     "id": "b6-conamat-ci-04",
+     "lane": "math",
+     "title": "CONAMAT · Cálculo integral cap. 4 · Métodos de integración",
+     "weeks": [
+      4,
+      4
+     ],
+     "parts": [
+      "learn",
+      "test"
+     ],
+     "source": "CONAMAT"
+    },
+    {
+     "id": "b6-conamat-ci-05",
+     "lane": "math",
+     "title": "CONAMAT · Cálculo integral cap. 5 · Aplicaciones de la integral",
+     "weeks": [
+      5,
+      5
+     ],
+     "parts": [
+      "learn",
+      "test"
+     ],
+     "source": "CONAMAT"
+    },
+    {
+     "id": "b6-conamat-ci-06",
+     "lane": "math",
+     "title": "CONAMAT · Cálculo integral cap. 6 · Ecuaciones diferenciales",
+     "weeks": [
+      6,
+      6
+     ],
+     "parts": [
+      "learn",
+      "test"
+     ],
+     "source": "CONAMAT"
+    },
+    {
+     "id": "b6-mit-18-01sc",
+     "lane": "math",
+     "title": "MIT 18.01SC",
+     "weeks": [
+      7,
+      8
+     ],
+     "parts": [
+      "learn",
+      "test"
+     ],
+     "source": "MIT 18.01SC"
+    },
+    {
+     "id": "b6-prog-security",
+     "lane": "prog",
+     "title": "Security+",
+     "weeks": [
+      1,
+      1
+     ],
+     "parts": [
+      "learn",
+      "build"
+     ]
+    },
+    {
+     "id": "b6-prog-zeek",
+     "lane": "prog",
+     "title": "Zeek",
+     "weeks": [
+      2,
+      2
+     ],
+     "parts": [
+      "learn",
+      "build"
+     ]
+    },
+    {
+     "id": "b6-prog-suricata",
+     "lane": "prog",
+     "title": "Suricata",
+     "weeks": [
+      3,
+      4
+     ],
+     "parts": [
+      "learn",
+      "build"
+     ]
+    },
+    {
+     "id": "b6-pieza",
+     "lane": "product",
+     "title": "Guardia · pieza desde cero",
+     "weeks": [
+      1,
+      4
+     ],
+     "parts": [
+      "build"
+     ]
+    },
+    {
+     "id": "b6-producto",
+     "lane": "product",
+     "title": "Guardia · producto",
+     "weeks": [
+      5,
+      8
+     ],
+     "parts": [
+      "build"
+     ]
+    },
+    {
+     "id": "b6-cierre",
+     "lane": "product",
+     "title": "Guardia · cierre",
+     "weeks": [
+      9,
+      9
+     ],
+     "parts": [
+      "close"
+     ]
+    },
+    {
+     "id": "b6-cert-security",
+     "lane": "cert",
+     "title": "Security+",
+     "weeks": [
+      5,
+      8
+     ],
+     "parts": [
+      "learn",
+      "test"
+     ],
+     "hours": 50
+    }
+   ],
+   "gates": [
+    {
+     "id": "b6-g-math",
+     "item": "b6-mit-18-01sc",
+     "rule": "Test aprobado con 85 % o más",
+     "min": 0.85
+    },
+    {
+     "id": "b6-g-pieza",
+     "item": "b6-pieza",
+     "rule": "La pieza desde cero funciona antes de empezar el producto"
+    },
+    {
+     "id": "b6-g-cierre",
+     "item": "b6-cierre",
+     "rule": "Métrica contra baseline, aporte abierto, tráiler, README y caso de estudio"
+    },
+    {
+     "id": "b6-g-cert",
+     "item": "b6-cert-security",
+     "rule": "Aprobar el examen"
+    }
+   ],
+   "cert": {
+    "name": "Security+",
+    "hours": 50,
+    "optional": false,
+    "item": "b6-cert-security"
+   }
+  },
+  {
+   "n": 7,
+   "year": 2,
+   "start": "2027-11-16",
+   "end": "2028-01-15",
+   "product": {
+    "name": "Humo",
+    "industry": "incendios",
+    "pitch": "cámaras y satélite"
+   },
+   "summary": {
+    "math": "Strang 1–4",
+    "prog": "Terraform, pronóstico, diseño de sistemas"
+   },
+   "items": [
+    {
+     "id": "b7-strang-1-4",
+     "lane": "math",
+     "title": "Strang 1–4",
+     "weeks": [
+      1,
+      8
+     ],
+     "parts": [
+      "learn",
+      "test"
+     ],
+     "source": "Strang 1–4"
+    },
+    {
+     "id": "b7-prog-terraform",
+     "lane": "prog",
+     "title": "Terraform",
+     "weeks": [
+      1,
+      1
+     ],
+     "parts": [
+      "learn",
+      "build"
+     ]
+    },
+    {
+     "id": "b7-prog-pronostico",
+     "lane": "prog",
+     "title": "pronóstico",
+     "weeks": [
+      2,
+      2
+     ],
+     "parts": [
+      "learn",
+      "build"
+     ]
+    },
+    {
+     "id": "b7-prog-diseno-de-sistemas",
+     "lane": "prog",
+     "title": "diseño de sistemas",
+     "weeks": [
+      3,
+      4
+     ],
+     "parts": [
+      "learn",
+      "build"
+     ]
+    },
+    {
+     "id": "b7-pieza",
+     "lane": "product",
+     "title": "Humo · pieza desde cero",
+     "weeks": [
+      1,
+      4
+     ],
+     "parts": [
+      "build"
+     ]
+    },
+    {
+     "id": "b7-producto",
+     "lane": "product",
+     "title": "Humo · producto",
+     "weeks": [
+      5,
+      8
+     ],
+     "parts": [
+      "build"
+     ]
+    },
+    {
+     "id": "b7-cierre",
+     "lane": "product",
+     "title": "Humo · cierre",
+     "weeks": [
+      9,
+      9
+     ],
+     "parts": [
+      "close"
+     ]
+    },
+    {
+     "id": "b7-cert-terraform",
+     "lane": "cert",
+     "title": "Terraform",
+     "weeks": [
+      5,
+      8
+     ],
+     "parts": [
+      "learn",
+      "test"
+     ],
+     "hours": 15
+    }
+   ],
+   "gates": [
+    {
+     "id": "b7-g-math",
+     "item": "b7-strang-1-4",
+     "rule": "Test aprobado con 85 % o más",
+     "min": 0.85
+    },
+    {
+     "id": "b7-g-pieza",
+     "item": "b7-pieza",
+     "rule": "La pieza desde cero funciona antes de empezar el producto"
+    },
+    {
+     "id": "b7-g-cierre",
+     "item": "b7-cierre",
+     "rule": "Métrica contra baseline, aporte abierto, tráiler, README y caso de estudio"
+    },
+    {
+     "id": "b7-g-cert",
+     "item": "b7-cert-terraform",
+     "rule": "Aprobar el examen (opcional)"
+    }
+   ],
+   "cert": {
+    "name": "Terraform",
+    "hours": 15,
+    "optional": true,
+    "item": "b7-cert-terraform"
+   }
+  },
+  {
+   "n": 8,
+   "year": 2,
+   "start": "2028-01-16",
+   "end": "2028-03-15",
+   "product": {
+    "name": "Fuga",
+    "industry": "gas",
+    "pitch": "metano con IR, dron y satélite"
+   },
+   "summary": {
+    "math": "Strang 5–7",
+    "prog": "MLOps, video infrarrojo"
+   },
+   "items": [
+    {
+     "id": "b8-strang-5-7",
+     "lane": "math",
+     "title": "Strang 5–7",
+     "weeks": [
+      1,
+      8
+     ],
+     "parts": [
+      "learn",
+      "test"
+     ],
+     "source": "Strang 5–7"
+    },
+    {
+     "id": "b8-prog-mlops",
+     "lane": "prog",
+     "title": "MLOps",
+     "weeks": [
+      1,
+      2
+     ],
+     "parts": [
+      "learn",
+      "build"
+     ]
+    },
+    {
+     "id": "b8-prog-video-infrarrojo",
+     "lane": "prog",
+     "title": "video infrarrojo",
+     "weeks": [
+      3,
+      4
+     ],
+     "parts": [
+      "learn",
+      "build"
+     ]
+    },
+    {
+     "id": "b8-pieza",
+     "lane": "product",
+     "title": "Fuga · pieza desde cero",
+     "weeks": [
+      1,
+      4
+     ],
+     "parts": [
+      "build"
+     ]
+    },
+    {
+     "id": "b8-producto",
+     "lane": "product",
+     "title": "Fuga · producto",
+     "weeks": [
+      5,
+      8
+     ],
+     "parts": [
+      "build"
+     ]
+    },
+    {
+     "id": "b8-cierre",
+     "lane": "product",
+     "title": "Fuga · cierre",
+     "weeks": [
+      9,
+      9
+     ],
+     "parts": [
+      "close"
+     ]
+    }
+   ],
+   "gates": [
+    {
+     "id": "b8-g-math",
+     "item": "b8-strang-5-7",
+     "rule": "Test aprobado con 85 % o más",
+     "min": 0.85
+    },
+    {
+     "id": "b8-g-pieza",
+     "item": "b8-pieza",
+     "rule": "La pieza desde cero funciona antes de empezar el producto"
+    },
+    {
+     "id": "b8-g-cierre",
+     "item": "b8-cierre",
+     "rule": "Métrica contra baseline, aporte abierto, tráiler, README y caso de estudio"
+    }
+   ]
+  },
+  {
+   "n": 9,
+   "year": 2,
+   "start": "2028-03-16",
+   "end": "2028-05-15",
+   "product": {
+    "name": "Arreo",
+    "industry": "ganadería",
+    "pitch": "dron autónomo"
+   },
+   "summary": {
+    "math": "Blitzstein 1–5",
+    "prog": "SageMaker, PX4, seguimiento"
+   },
+   "items": [
+    {
+     "id": "b9-blitzstein-1-5",
+     "lane": "math",
+     "title": "Blitzstein 1–5",
+     "weeks": [
+      1,
+      8
+     ],
+     "parts": [
+      "learn",
+      "test"
+     ],
+     "source": "Blitzstein 1–5"
+    },
+    {
+     "id": "b9-prog-sagemaker",
+     "lane": "prog",
+     "title": "SageMaker",
+     "weeks": [
+      1,
+      1
+     ],
+     "parts": [
+      "learn",
+      "build"
+     ]
+    },
+    {
+     "id": "b9-prog-px4",
+     "lane": "prog",
+     "title": "PX4",
+     "weeks": [
+      2,
+      2
+     ],
+     "parts": [
+      "learn",
+      "build"
+     ]
+    },
+    {
+     "id": "b9-prog-seguimiento",
+     "lane": "prog",
+     "title": "seguimiento",
+     "weeks": [
+      3,
+      4
+     ],
+     "parts": [
+      "learn",
+      "build"
+     ]
+    },
+    {
+     "id": "b9-pieza",
+     "lane": "product",
+     "title": "Arreo · pieza desde cero",
+     "weeks": [
+      1,
+      4
+     ],
+     "parts": [
+      "build"
+     ]
+    },
+    {
+     "id": "b9-producto",
+     "lane": "product",
+     "title": "Arreo · producto",
+     "weeks": [
+      5,
+      8
+     ],
+     "parts": [
+      "build"
+     ]
+    },
+    {
+     "id": "b9-cierre",
+     "lane": "product",
+     "title": "Arreo · cierre",
+     "weeks": [
+      9,
+      9
+     ],
+     "parts": [
+      "close"
+     ]
+    },
+    {
+     "id": "b9-cert-aws-mla",
+     "lane": "cert",
+     "title": "AWS MLA",
+     "weeks": [
+      5,
+      8
+     ],
+     "parts": [
+      "learn",
+      "test"
+     ],
+     "hours": 40
+    }
+   ],
+   "gates": [
+    {
+     "id": "b9-g-math",
+     "item": "b9-blitzstein-1-5",
+     "rule": "Test aprobado con 85 % o más",
+     "min": 0.85
+    },
+    {
+     "id": "b9-g-pieza",
+     "item": "b9-pieza",
+     "rule": "La pieza desde cero funciona antes de empezar el producto"
+    },
+    {
+     "id": "b9-g-cierre",
+     "item": "b9-cierre",
+     "rule": "Métrica contra baseline, aporte abierto, tráiler, README y caso de estudio"
+    },
+    {
+     "id": "b9-g-cert",
+     "item": "b9-cert-aws-mla",
+     "rule": "Aprobar el examen"
+    }
+   ],
+   "cert": {
+    "name": "AWS MLA",
+    "hours": 40,
+    "optional": false,
+    "item": "b9-cert-aws-mla"
+   }
+  },
+  {
+   "n": 10,
+   "year": 2,
+   "start": "2028-05-16",
+   "end": "2028-07-15",
+   "product": {
+    "name": "Escudo",
+    "industry": "seguridad de apps con IA",
+    "pitch": ""
+   },
+   "summary": {
+    "math": "Stewart 12–14, Blitzstein 6–7",
+    "prog": "PortSwigger, ataques a LLMs"
+   },
+   "items": [
+    {
+     "id": "b10-stewart-12-14",
+     "lane": "math",
+     "title": "Stewart 12–14",
+     "weeks": [
+      1,
+      4
+     ],
+     "parts": [
+      "learn",
+      "test"
+     ],
+     "source": "Stewart 12–14"
+    },
+    {
+     "id": "b10-blitzstein-6-7",
+     "lane": "math",
+     "title": "Blitzstein 6–7",
+     "weeks": [
+      5,
+      8
+     ],
+     "parts": [
+      "learn",
+      "test"
+     ],
+     "source": "Blitzstein 6–7"
+    },
+    {
+     "id": "b10-prog-portswigger",
+     "lane": "prog",
+     "title": "PortSwigger",
+     "weeks": [
+      1,
+      2
+     ],
+     "parts": [
+      "learn",
+      "build"
+     ]
+    },
+    {
+     "id": "b10-prog-ataques-a-llms",
+     "lane": "prog",
+     "title": "ataques a LLMs",
+     "weeks": [
+      3,
+      4
+     ],
+     "parts": [
+      "learn",
+      "build"
+     ]
+    },
+    {
+     "id": "b10-pieza",
+     "lane": "product",
+     "title": "Escudo · pieza desde cero",
+     "weeks": [
+      1,
+      4
+     ],
+     "parts": [
+      "build"
+     ]
+    },
+    {
+     "id": "b10-producto",
+     "lane": "product",
+     "title": "Escudo · producto",
+     "weeks": [
+      5,
+      8
+     ],
+     "parts": [
+      "build"
+     ]
+    },
+    {
+     "id": "b10-cierre",
+     "lane": "product",
+     "title": "Escudo · cierre",
+     "weeks": [
+      9,
+      9
+     ],
+     "parts": [
+      "close"
+     ]
+    },
+    {
+     "id": "b10-cert-bscp",
+     "lane": "cert",
+     "title": "BSCP",
+     "weeks": [
+      5,
+      8
+     ],
+     "parts": [
+      "learn",
+      "test"
+     ],
+     "hours": 90
+    }
+   ],
+   "gates": [
+    {
+     "id": "b10-g-math",
+     "item": "b10-blitzstein-6-7",
+     "rule": "Test aprobado con 85 % o más",
+     "min": 0.85
+    },
+    {
+     "id": "b10-g-pieza",
+     "item": "b10-pieza",
+     "rule": "La pieza desde cero funciona antes de empezar el producto"
+    },
+    {
+     "id": "b10-g-cierre",
+     "item": "b10-cierre",
+     "rule": "Métrica contra baseline, aporte abierto, tráiler, README y caso de estudio"
+    },
+    {
+     "id": "b10-g-cert",
+     "item": "b10-cert-bscp",
+     "rule": "Aprobar el examen"
+    }
+   ],
+   "cert": {
+    "name": "BSCP",
+    "hours": 90,
+    "optional": false,
+    "item": "b10-cert-bscp"
+   }
+  },
+  {
+   "n": 11,
+   "year": 2,
+   "start": "2028-07-16",
+   "end": "2028-09-15",
+   "product": {
+    "name": "Seña",
+    "industry": "Lengua de Señas Argentina",
+    "pitch": "en vivo"
+   },
+   "summary": {
+    "math": "ISL, Blitzstein 8–10, Kohavi",
+    "prog": "Transformers, pose, fine-tuning"
+   },
+   "items": [
+    {
+     "id": "b11-isl",
+     "lane": "math",
+     "title": "ISL",
+     "weeks": [
+      1,
+      2
+     ],
+     "parts": [
+      "learn",
+      "test"
+     ],
+     "source": "ISL"
+    },
+    {
+     "id": "b11-blitzstein-8-10",
+     "lane": "math",
+     "title": "Blitzstein 8–10",
+     "weeks": [
+      3,
+      5
+     ],
+     "parts": [
+      "learn",
+      "test"
+     ],
+     "source": "Blitzstein 8–10"
+    },
+    {
+     "id": "b11-kohavi",
+     "lane": "math",
+     "title": "Kohavi",
+     "weeks": [
+      6,
+      8
+     ],
+     "parts": [
+      "learn",
+      "test"
+     ],
+     "source": "Kohavi"
+    },
+    {
+     "id": "b11-prog-transformers",
+     "lane": "prog",
+     "title": "Transformers",
+     "weeks": [
+      1,
+      1
+     ],
+     "parts": [
+      "learn",
+      "build"
+     ]
+    },
+    {
+     "id": "b11-prog-pose",
+     "lane": "prog",
+     "title": "pose",
+     "weeks": [
+      2,
+      2
+     ],
+     "parts": [
+      "learn",
+      "build"
+     ]
+    },
+    {
+     "id": "b11-prog-fine-tuning",
+     "lane": "prog",
+     "title": "fine-tuning",
+     "weeks": [
+      3,
+      4
+     ],
+     "parts": [
+      "learn",
+      "build"
+     ]
+    },
+    {
+     "id": "b11-pieza",
+     "lane": "product",
+     "title": "Seña · pieza desde cero",
+     "weeks": [
+      1,
+      4
+     ],
+     "parts": [
+      "build"
+     ]
+    },
+    {
+     "id": "b11-producto",
+     "lane": "product",
+     "title": "Seña · producto",
+     "weeks": [
+      5,
+      8
+     ],
+     "parts": [
+      "build"
+     ]
+    },
+    {
+     "id": "b11-cierre",
+     "lane": "product",
+     "title": "Seña · cierre",
+     "weeks": [
+      9,
+      9
+     ],
+     "parts": [
+      "close"
+     ]
+    }
+   ],
+   "gates": [
+    {
+     "id": "b11-g-math",
+     "item": "b11-kohavi",
+     "rule": "Test aprobado con 85 % o más",
+     "min": 0.85
+    },
+    {
+     "id": "b11-g-pieza",
+     "item": "b11-pieza",
+     "rule": "La pieza desde cero funciona antes de empezar el producto"
+    },
+    {
+     "id": "b11-g-cierre",
+     "item": "b11-cierre",
+     "rule": "Métrica contra baseline, aporte abierto, tráiler, README y caso de estudio"
+    }
+   ]
+  },
+  {
+   "n": 12,
+   "year": 2,
+   "start": "2028-09-16",
+   "end": "2028-11-15",
+   "product": {
+    "name": "Cruce",
+    "industry": "seguridad vial",
+    "pitch": "cuasi-accidentes"
+   },
+   "summary": {
+    "math": "MML",
+    "prog": "Jetson, TensorRT, DeepStream"
+   },
+   "items": [
+    {
+     "id": "b12-mml",
+     "lane": "math",
+     "title": "MML",
+     "weeks": [
+      1,
+      8
+     ],
+     "parts": [
+      "learn",
+      "test"
+     ],
+     "source": "MML"
+    },
+    {
+     "id": "b12-prog-jetson",
+     "lane": "prog",
+     "title": "Jetson",
+     "weeks": [
+      1,
+      1
+     ],
+     "parts": [
+      "learn",
+      "build"
+     ]
+    },
+    {
+     "id": "b12-prog-tensorrt",
+     "lane": "prog",
+     "title": "TensorRT",
+     "weeks": [
+      2,
+      2
+     ],
+     "parts": [
+      "learn",
+      "build"
+     ]
+    },
+    {
+     "id": "b12-prog-deepstream",
+     "lane": "prog",
+     "title": "DeepStream",
+     "weeks": [
+      3,
+      4
+     ],
+     "parts": [
+      "learn",
+      "build"
+     ]
+    },
+    {
+     "id": "b12-pieza",
+     "lane": "product",
+     "title": "Cruce · pieza desde cero",
+     "weeks": [
+      1,
+      4
+     ],
+     "parts": [
+      "build"
+     ]
+    },
+    {
+     "id": "b12-producto",
+     "lane": "product",
+     "title": "Cruce · producto",
+     "weeks": [
+      5,
+      8
+     ],
+     "parts": [
+      "build"
+     ]
+    },
+    {
+     "id": "b12-cierre",
+     "lane": "product",
+     "title": "Cruce · cierre",
+     "weeks": [
+      9,
+      9
+     ],
+     "parts": [
+      "close"
+     ]
+    }
+   ],
+   "gates": [
+    {
+     "id": "b12-g-math",
+     "item": "b12-mml",
+     "rule": "Test aprobado con 85 % o más",
+     "min": 0.85
+    },
+    {
+     "id": "b12-g-pieza",
+     "item": "b12-pieza",
+     "rule": "La pieza desde cero funciona antes de empezar el producto"
+    },
+    {
+     "id": "b12-g-cierre",
+     "item": "b12-cierre",
+     "rule": "Métrica contra baseline, aporte abierto, tráiler, README y caso de estudio"
+    }
+   ]
+  },
+  {
+   "n": 13,
+   "year": 3,
+   "start": "2028-11-16",
+   "end": "2029-01-15",
+   "product": {
+    "name": "Rastro",
+    "industry": "cripto",
+    "pitch": "rastreo de fondos"
+   },
+   "summary": {
+    "math": "Simmons EDOs, matemática discreta (MCS)",
+    "prog": "Blockchain, grafos, criptografía"
+   },
+   "items": [
+    {
+     "id": "b13-simmons-edos",
+     "lane": "math",
+     "title": "Simmons EDOs",
+     "weeks": [
+      1,
+      4
+     ],
+     "parts": [
+      "learn",
+      "test"
+     ],
+     "source": "Simmons EDOs"
+    },
+    {
+     "id": "b13-matematica-discreta-mcs",
+     "lane": "math",
+     "title": "Matemática discreta (MCS)",
+     "weeks": [
+      5,
+      8
+     ],
+     "parts": [
+      "learn",
+      "test"
+     ],
+     "source": "Matemática discreta (MCS)"
+    },
+    {
+     "id": "b13-prog-blockchain",
+     "lane": "prog",
+     "title": "Blockchain",
+     "weeks": [
+      1,
+      1
+     ],
+     "parts": [
+      "learn",
+      "build"
+     ]
+    },
+    {
+     "id": "b13-prog-grafos",
+     "lane": "prog",
+     "title": "grafos",
+     "weeks": [
+      2,
+      2
+     ],
+     "parts": [
+      "learn",
+      "build"
+     ]
+    },
+    {
+     "id": "b13-prog-criptografia",
+     "lane": "prog",
+     "title": "criptografía",
+     "weeks": [
+      3,
+      4
+     ],
+     "parts": [
+      "learn",
+      "build"
+     ]
+    },
+    {
+     "id": "b13-pieza",
+     "lane": "product",
+     "title": "Rastro · pieza desde cero",
+     "weeks": [
+      1,
+      4
+     ],
+     "parts": [
+      "build"
+     ]
+    },
+    {
+     "id": "b13-producto",
+     "lane": "product",
+     "title": "Rastro · producto",
+     "weeks": [
+      5,
+      8
+     ],
+     "parts": [
+      "build"
+     ]
+    },
+    {
+     "id": "b13-cierre",
+     "lane": "product",
+     "title": "Rastro · cierre",
+     "weeks": [
+      9,
+      9
+     ],
+     "parts": [
+      "close"
+     ]
+    },
+    {
+     "id": "b13-cert-ejpt",
+     "lane": "cert",
+     "title": "eJPT",
+     "weeks": [
+      5,
+      8
+     ],
+     "parts": [
+      "learn",
+      "test"
+     ],
+     "hours": 35
+    }
+   ],
+   "gates": [
+    {
+     "id": "b13-g-math",
+     "item": "b13-matematica-discreta-mcs",
+     "rule": "Test aprobado con 85 % o más",
+     "min": 0.85
+    },
+    {
+     "id": "b13-g-pieza",
+     "item": "b13-pieza",
+     "rule": "La pieza desde cero funciona antes de empezar el producto"
+    },
+    {
+     "id": "b13-g-cierre",
+     "item": "b13-cierre",
+     "rule": "Métrica contra baseline, aporte abierto, tráiler, README y caso de estudio"
+    },
+    {
+     "id": "b13-g-cert",
+     "item": "b13-cert-ejpt",
+     "rule": "Aprobar el examen"
+    }
+   ],
+   "cert": {
+    "name": "eJPT",
+    "hours": 35,
+    "optional": false,
+    "item": "b13-cert-ejpt"
+   }
+  },
+  {
+   "n": 14,
+   "year": 3,
+   "start": "2029-01-16",
+   "end": "2029-03-15",
+   "product": {
+    "name": "Vivo",
+    "industry": "fintech",
+    "pitch": "deepfakes y prueba de vida"
+   },
+   "summary": {
+    "math": "Chapra métodos numéricos",
+    "prog": "ML adversario, ISO 30107-3"
+   },
+   "items": [
+    {
+     "id": "b14-chapra-metodos-numericos",
+     "lane": "math",
+     "title": "Chapra métodos numéricos",
+     "weeks": [
+      1,
+      8
+     ],
+     "parts": [
+      "learn",
+      "test"
+     ],
+     "source": "Chapra métodos numéricos"
+    },
+    {
+     "id": "b14-prog-ml-adversario",
+     "lane": "prog",
+     "title": "ML adversario",
+     "weeks": [
+      1,
+      2
+     ],
+     "parts": [
+      "learn",
+      "build"
+     ]
+    },
+    {
+     "id": "b14-prog-iso-30107-3",
+     "lane": "prog",
+     "title": "ISO 30107-3",
+     "weeks": [
+      3,
+      4
+     ],
+     "parts": [
+      "learn",
+      "build"
+     ]
+    },
+    {
+     "id": "b14-pieza",
+     "lane": "product",
+     "title": "Vivo · pieza desde cero",
+     "weeks": [
+      1,
+      4
+     ],
+     "parts": [
+      "build"
+     ]
+    },
+    {
+     "id": "b14-producto",
+     "lane": "product",
+     "title": "Vivo · producto",
+     "weeks": [
+      5,
+      8
+     ],
+     "parts": [
+      "build"
+     ]
+    },
+    {
+     "id": "b14-cierre",
+     "lane": "product",
+     "title": "Vivo · cierre",
+     "weeks": [
+      9,
+      9
+     ],
+     "parts": [
+      "close"
+     ]
+    }
+   ],
+   "gates": [
+    {
+     "id": "b14-g-math",
+     "item": "b14-chapra-metodos-numericos",
+     "rule": "Test aprobado con 85 % o más",
+     "min": 0.85
+    },
+    {
+     "id": "b14-g-pieza",
+     "item": "b14-pieza",
+     "rule": "La pieza desde cero funciona antes de empezar el producto"
+    },
+    {
+     "id": "b14-g-cierre",
+     "item": "b14-cierre",
+     "rule": "Métrica contra baseline, aporte abierto, tráiler, README y caso de estudio"
+    }
+   ]
+  },
+  {
+   "n": 15,
+   "year": 3,
+   "start": "2029-03-16",
+   "end": "2029-05-15",
+   "product": {
+    "name": "Acequia",
+    "industry": "agua",
+    "pitch": "riego en Cuyo"
+   },
+   "summary": {
+    "math": "Kreyszig señales, Think DSP",
+    "prog": "Kubernetes, MQTT, FAO-56"
+   },
+   "items": [
+    {
+     "id": "b15-kreyszig-senales",
+     "lane": "math",
+     "title": "Kreyszig señales",
+     "weeks": [
+      1,
+      4
+     ],
+     "parts": [
+      "learn",
+      "test"
+     ],
+     "source": "Kreyszig señales"
+    },
+    {
+     "id": "b15-think-dsp",
+     "lane": "math",
+     "title": "Think DSP",
+     "weeks": [
+      5,
+      8
+     ],
+     "parts": [
+      "learn",
+      "test"
+     ],
+     "source": "Think DSP"
+    },
+    {
+     "id": "b15-prog-kubernetes",
+     "lane": "prog",
+     "title": "Kubernetes",
+     "weeks": [
+      1,
+      1
+     ],
+     "parts": [
+      "learn",
+      "build"
+     ]
+    },
+    {
+     "id": "b15-prog-mqtt",
+     "lane": "prog",
+     "title": "MQTT",
+     "weeks": [
+      2,
+      2
+     ],
+     "parts": [
+      "learn",
+      "build"
+     ]
+    },
+    {
+     "id": "b15-prog-fao-56",
+     "lane": "prog",
+     "title": "FAO-56",
+     "weeks": [
+      3,
+      4
+     ],
+     "parts": [
+      "learn",
+      "build"
+     ]
+    },
+    {
+     "id": "b15-pieza",
+     "lane": "product",
+     "title": "Acequia · pieza desde cero",
+     "weeks": [
+      1,
+      4
+     ],
+     "parts": [
+      "build"
+     ]
+    },
+    {
+     "id": "b15-producto",
+     "lane": "product",
+     "title": "Acequia · producto",
+     "weeks": [
+      5,
+      8
+     ],
+     "parts": [
+      "build"
+     ]
+    },
+    {
+     "id": "b15-cierre",
+     "lane": "product",
+     "title": "Acequia · cierre",
+     "weeks": [
+      9,
+      9
+     ],
+     "parts": [
+      "close"
+     ]
+    },
+    {
+     "id": "b15-cert-ckad",
+     "lane": "cert",
+     "title": "CKAD",
+     "weeks": [
+      5,
+      8
+     ],
+     "parts": [
+      "learn",
+      "test"
+     ],
+     "hours": 40
+    }
+   ],
+   "gates": [
+    {
+     "id": "b15-g-math",
+     "item": "b15-think-dsp",
+     "rule": "Test aprobado con 85 % o más",
+     "min": 0.85
+    },
+    {
+     "id": "b15-g-pieza",
+     "item": "b15-pieza",
+     "rule": "La pieza desde cero funciona antes de empezar el producto"
+    },
+    {
+     "id": "b15-g-cierre",
+     "item": "b15-cierre",
+     "rule": "Métrica contra baseline, aporte abierto, tráiler, README y caso de estudio"
+    },
+    {
+     "id": "b15-g-cert",
+     "item": "b15-cert-ckad",
+     "rule": "Aprobar el examen"
+    }
+   ],
+   "cert": {
+    "name": "CKAD",
+    "hours": 40,
+    "optional": false,
+    "item": "b15-cert-ckad"
+   }
+  },
+  {
+   "n": 16,
+   "year": 3,
+   "start": "2029-05-16",
+   "end": "2029-07-15",
+   "product": {
+    "name": "Sextante",
+    "industry": "navegación",
+    "pitch": "interferencia de GPS"
+   },
+   "summary": {
+    "math": "Kalman (Labbe), Nise",
+    "prog": "KiCad, ESP32, GNSS-SDR"
+   },
+   "items": [
+    {
+     "id": "b16-kalman-labbe",
+     "lane": "math",
+     "title": "Kalman (Labbe)",
+     "weeks": [
+      1,
+      4
+     ],
+     "parts": [
+      "learn",
+      "test"
+     ],
+     "source": "Kalman (Labbe)"
+    },
+    {
+     "id": "b16-nise",
+     "lane": "math",
+     "title": "Nise",
+     "weeks": [
+      5,
+      8
+     ],
+     "parts": [
+      "learn",
+      "test"
+     ],
+     "source": "Nise"
+    },
+    {
+     "id": "b16-prog-kicad",
+     "lane": "prog",
+     "title": "KiCad",
+     "weeks": [
+      1,
+      1
+     ],
+     "parts": [
+      "learn",
+      "build"
+     ]
+    },
+    {
+     "id": "b16-prog-esp32",
+     "lane": "prog",
+     "title": "ESP32",
+     "weeks": [
+      2,
+      2
+     ],
+     "parts": [
+      "learn",
+      "build"
+     ]
+    },
+    {
+     "id": "b16-prog-gnss-sdr",
+     "lane": "prog",
+     "title": "GNSS-SDR",
+     "weeks": [
+      3,
+      4
+     ],
+     "parts": [
+      "learn",
+      "build"
+     ]
+    },
+    {
+     "id": "b16-pieza",
+     "lane": "product",
+     "title": "Sextante · pieza desde cero",
+     "weeks": [
+      1,
+      4
+     ],
+     "parts": [
+      "build"
+     ]
+    },
+    {
+     "id": "b16-producto",
+     "lane": "product",
+     "title": "Sextante · producto",
+     "weeks": [
+      5,
+      8
+     ],
+     "parts": [
+      "build"
+     ]
+    },
+    {
+     "id": "b16-cierre",
+     "lane": "product",
+     "title": "Sextante · cierre",
+     "weeks": [
+      9,
+      9
+     ],
+     "parts": [
+      "close"
+     ]
+    }
+   ],
+   "gates": [
+    {
+     "id": "b16-g-math",
+     "item": "b16-nise",
+     "rule": "Test aprobado con 85 % o más",
+     "min": 0.85
+    },
+    {
+     "id": "b16-g-pieza",
+     "item": "b16-pieza",
+     "rule": "La pieza desde cero funciona antes de empezar el producto"
+    },
+    {
+     "id": "b16-g-cierre",
+     "item": "b16-cierre",
+     "rule": "Métrica contra baseline, aporte abierto, tráiler, README y caso de estudio"
+    }
+   ]
+  },
+  {
+   "n": 17,
+   "year": 3,
+   "start": "2029-07-16",
+   "end": "2029-09-15",
+   "product": {
+    "name": "Lente",
+    "industry": "video inteligente en GPU",
+    "pitch": ""
+   },
+   "summary": {
+    "math": "Understanding Deep Learning",
+    "prog": "Triton, DeepStream, vLLM"
+   },
+   "items": [
+    {
+     "id": "b17-understanding-deep-learning",
+     "lane": "math",
+     "title": "Understanding Deep Learning",
+     "weeks": [
+      1,
+      8
+     ],
+     "parts": [
+      "learn",
+      "test"
+     ],
+     "source": "Understanding Deep Learning"
+    },
+    {
+     "id": "b17-prog-triton",
+     "lane": "prog",
+     "title": "Triton",
+     "weeks": [
+      1,
+      1
+     ],
+     "parts": [
+      "learn",
+      "build"
+     ]
+    },
+    {
+     "id": "b17-prog-deepstream",
+     "lane": "prog",
+     "title": "DeepStream",
+     "weeks": [
+      2,
+      2
+     ],
+     "parts": [
+      "learn",
+      "build"
+     ]
+    },
+    {
+     "id": "b17-prog-vllm",
+     "lane": "prog",
+     "title": "vLLM",
+     "weeks": [
+      3,
+      4
+     ],
+     "parts": [
+      "learn",
+      "build"
+     ]
+    },
+    {
+     "id": "b17-pieza",
+     "lane": "product",
+     "title": "Lente · pieza desde cero",
+     "weeks": [
+      1,
+      4
+     ],
+     "parts": [
+      "build"
+     ]
+    },
+    {
+     "id": "b17-producto",
+     "lane": "product",
+     "title": "Lente · producto",
+     "weeks": [
+      5,
+      8
+     ],
+     "parts": [
+      "build"
+     ]
+    },
+    {
+     "id": "b17-cierre",
+     "lane": "product",
+     "title": "Lente · cierre",
+     "weeks": [
+      9,
+      9
+     ],
+     "parts": [
+      "close"
+     ]
+    },
+    {
+     "id": "b17-cert-aws-security-specialty",
+     "lane": "cert",
+     "title": "AWS Security – Specialty",
+     "weeks": [
+      5,
+      8
+     ],
+     "parts": [
+      "learn",
+      "test"
+     ],
+     "hours": 70
+    }
+   ],
+   "gates": [
+    {
+     "id": "b17-g-math",
+     "item": "b17-understanding-deep-learning",
+     "rule": "Test aprobado con 85 % o más",
+     "min": 0.85
+    },
+    {
+     "id": "b17-g-pieza",
+     "item": "b17-pieza",
+     "rule": "La pieza desde cero funciona antes de empezar el producto"
+    },
+    {
+     "id": "b17-g-cierre",
+     "item": "b17-cierre",
+     "rule": "Métrica contra baseline, aporte abierto, tráiler, README y caso de estudio"
+    },
+    {
+     "id": "b17-g-cert",
+     "item": "b17-cert-aws-security-specialty",
+     "rule": "Aprobar el examen"
+    }
+   ],
+   "cert": {
+    "name": "AWS Security – Specialty",
+    "hours": 70,
+    "optional": false,
+    "item": "b17-cert-aws-security-specialty"
+   }
+  },
+  {
+   "n": 18,
+   "year": 3,
+   "start": "2029-09-16",
+   "end": "2029-11-15",
+   "product": {
+    "name": "Halcón",
+    "industry": "drones autónomos para infraestructura",
+    "pitch": ""
+   },
+   "summary": {
+    "math": "Boyd optimización convexa",
+    "prog": "PX4, ROS 2, seguridad industrial"
+   },
+   "items": [
+    {
+     "id": "b18-boyd-optimizacion-convexa",
+     "lane": "math",
+     "title": "Boyd optimización convexa",
+     "weeks": [
+      1,
+      8
+     ],
+     "parts": [
+      "learn",
+      "test"
+     ],
+     "source": "Boyd optimización convexa"
+    },
+    {
+     "id": "b18-prog-px4",
+     "lane": "prog",
+     "title": "PX4",
+     "weeks": [
+      1,
+      1
+     ],
+     "parts": [
+      "learn",
+      "build"
+     ]
+    },
+    {
+     "id": "b18-prog-ros-2",
+     "lane": "prog",
+     "title": "ROS 2",
+     "weeks": [
+      2,
+      2
+     ],
+     "parts": [
+      "learn",
+      "build"
+     ]
+    },
+    {
+     "id": "b18-prog-seguridad-industrial",
+     "lane": "prog",
+     "title": "seguridad industrial",
+     "weeks": [
+      3,
+      4
+     ],
+     "parts": [
+      "learn",
+      "build"
+     ]
+    },
+    {
+     "id": "b18-pieza",
+     "lane": "product",
+     "title": "Halcón · pieza desde cero",
+     "weeks": [
+      1,
+      4
+     ],
+     "parts": [
+      "build"
+     ]
+    },
+    {
+     "id": "b18-producto",
+     "lane": "product",
+     "title": "Halcón · producto",
+     "weeks": [
+      5,
+      8
+     ],
+     "parts": [
+      "build"
+     ]
+    },
+    {
+     "id": "b18-cierre",
+     "lane": "product",
+     "title": "Halcón · cierre",
+     "weeks": [
+      9,
+      9
+     ],
+     "parts": [
+      "close"
+     ]
+    }
+   ],
+   "gates": [
+    {
+     "id": "b18-g-math",
+     "item": "b18-boyd-optimizacion-convexa",
+     "rule": "Test aprobado con 85 % o más",
+     "min": 0.85
+    },
+    {
+     "id": "b18-g-pieza",
+     "item": "b18-pieza",
+     "rule": "La pieza desde cero funciona antes de empezar el producto"
+    },
+    {
+     "id": "b18-g-cierre",
+     "item": "b18-cierre",
+     "rule": "Métrica contra baseline, aporte abierto, tráiler, README y caso de estudio"
+    }
+   ]
+  }
+ ]
+}
