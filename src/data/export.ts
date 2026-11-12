@@ -22,6 +22,7 @@ export function dayJson(day: DayLog, settings: Settings, days: Record<string, Da
     })),
     focus: day.focus.map((f) => ({ block: f.key, plan: f.plan, min: f.focusMin, at: f.at })),
     notes: day.notes,
+    ...(day.closed ? { cierre: { at: day.closed.at, score: round(day.closed.score), xp: day.closed.xp, victoria: day.closed.victoria, manana: day.closed.manana } } : {}),
     mejora: {
       hoy: round(mejoraDia(day)),
       ayer: round(mejoraAyer(days, day.date)),
