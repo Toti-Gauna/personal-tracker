@@ -1,6 +1,7 @@
 import type { Seccion } from '../lib/routes';
 
-const P: Record<Seccion, React.ReactNode> = {
+const P: Record<Seccion | 'avance', React.ReactNode> = {
+  avance: (<><path d="M3.5 20.5h17" /><path d="M6.5 20.5v-6M10.5 20.5V8M14.5 20.5v-9M18.5 20.5v-13" /></>),
   hoy: (<><path d="M3 18h18" /><path d="M6.5 18a5.5 5.5 0 0 1 11 0" /><path d="M12 5v3M4.6 9.6l1.8 1.8M19.4 9.6l-1.8 1.8" /></>),
   estudio: (<><path d="M12 6.5v12" /><path d="M12 6.5C10.5 5 7.5 4.5 3.5 5v12.5c4-.5 7 0 8.5 1.5" /><path d="M12 6.5c1.5-1.5 4.5-2 8.5-1.5v12.5c-4-.5-7 0-8.5 1.5" /></>),
   metas: (<><path d="M5 21V3.5" /><path d="M5 4.5h12l-2.5 3.5L17 11.5H5" /></>),
@@ -8,6 +9,6 @@ const P: Record<Seccion, React.ReactNode> = {
   perfil: (<><circle cx="12" cy="9.5" r="5" /><path d="M9 14l-1.5 7L12 18.5 16.5 21 15 14" /></>),
 };
 
-export function NavIcon({ id }: { id: Seccion }) {
+export function NavIcon({ id }: { id: Seccion | 'avance' }) {
   return <svg viewBox="0 0 24 24" aria-hidden="true">{P[id]}</svg>;
 }
