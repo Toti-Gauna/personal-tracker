@@ -1,5 +1,6 @@
 import { useEffect, useSyncExternalStore } from 'react';
-import { bell } from './sound';
+import type { SoundEvent } from '../data/types';
+import { play } from './sound';
 import '../styles/ui.css';
 
 export interface Toast {
@@ -8,6 +9,8 @@ export interface Toast {
   sub?: string;
   color?: string;
   action?: { label: string; run: () => void };
+  /** Qué sonido suena; sin valor, el de fin de pomodoro. */
+  evento?: SoundEvent;
 }
 
 export interface ModalSpec {
@@ -34,7 +37,7 @@ export function toast(t: Omit<Toast, 'id'>, sound = true) {
   const id = ++seq;
   toasts = [...toasts, { ...t, id }];
   emit();
-  if (sound) bell();
+  if (sound) play(t.evento ?? 'pomodoro');
   setTimeout(() => dismiss(id), 4000);
 }
 
@@ -47,7 +50,7 @@ export function dismiss(id: number) {
 export function showModal(m: ModalSpec, sound = true) {
   modal = m;
   emit();
-  if (sound) bell();
+  if (sound) play('pomodoro');
 }
 
 export function closeModal() {

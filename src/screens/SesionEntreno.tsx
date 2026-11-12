@@ -37,7 +37,7 @@ export function SesionEntreno() {
         const id = `${key}${rt.endsAt}`;
         if (!avisados.current.has(id)) {
           avisados.current.add(id);
-          toast({ title: lbl, sub: `${e.name}${key !== 'shared' ? ` · terminó su descanso` : ''}`, color: SALUD }, true);
+          toast({ title: lbl, sub: `${e.name}${key !== 'shared' ? ` · terminó su descanso` : ''}`, color: SALUD, evento: 'entreno' }, true);
         }
       }
     }

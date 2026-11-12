@@ -1,6 +1,6 @@
 import type { Area, BlockTemplate, DayRoutine, Preset } from './types';
 
-export const AREAS: Record<Area, { name: string; css: string }> = {
+const AREA_DEFAULTS: Record<Area, { name: string; css: string }> = {
   ing: { name: 'Ingeniería', css: 'var(--ing)' },
   handyx: { name: 'Handyx', css: 'var(--handyx)' },
   eclipse: { name: 'Eclipse', css: 'var(--eclipse)' },
@@ -8,6 +8,18 @@ export const AREAS: Record<Area, { name: string; css: string }> = {
   rutina: { name: 'Rutina', css: 'var(--rutina)' },
   economia: { name: 'Economía', css: 'var(--economia)' },
 };
+
+/** Nombres propios de las áreas (Ajustes). */
+export const areaNameOverrides: Partial<Record<Area, string>> = {};
+
+/** El nombre sale de los ajustes si lo renombraste; el color no cambia. */
+export const AREAS = Object.fromEntries(
+  (Object.keys(AREA_DEFAULTS) as Area[]).map((k) => [
+    k,
+    { get name() { return areaNameOverrides[k]?.trim() || AREA_DEFAULTS[k].name; }, css: AREA_DEFAULTS[k].css },
+  ]),
+) as Record<Area, { readonly name: string; css: string }>;
+export const areaDefaultName = (a: Area) => AREA_DEFAULTS[a].name;
 
 /** Las 8 metas del día, en orden. Las de la mañana se encadenan desde que te levantás. */
 export const BLOCKS: BlockTemplate[] = [
