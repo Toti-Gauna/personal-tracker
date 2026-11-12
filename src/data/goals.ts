@@ -2,6 +2,7 @@ import { bimesterAt, BIMESTERS } from './bimesters';
 import { approves } from './study';
 import type { Goal, Horizon } from './goals-types';
 import type { StudyState } from './study-types';
+import type { TrainState } from './train-types';
 import { addDays, dateKey, parseDate } from './time';
 import type { DayLog } from './types';
 import { weekday } from './study';
@@ -51,7 +52,7 @@ export function appliesTo(g: Goal, h: Horizon, date: string) {
 }
 
 /** Avance de una meta en el período de `date`: automático o el sumado a mano. */
-export function valueOf(g: Goal, date: string, ctx: { study: StudyState; days: Record<string, DayLog> }): number {
+export function valueOf(g: Goal, date: string, ctx: { study: StudyState; days: Record<string, DayLog>; train?: TrainState }): number {
   const key = periodKey(g.horizon, date);
   if (!g.auto) return g.progress[key] ?? 0;
   const [from, to] = periodRange(g.horizon, date);
@@ -65,6 +66,12 @@ export function valueOf(g: Goal, date: string, ctx: { study: StudyState; days: R
       const min = Object.entries(ctx.days).filter(([d]) => inRange(d))
         .flatMap(([, day]) => day.study ?? []).filter((l) => l.front === front).reduce((s, l) => s + l.min, 0);
       return Math.round((min / 60) * 10) / 10;
+    }
+    case 'entreno':
+      return ctx.train ? ctx.train.sessions.filter((s) => inRange(s.date)).length : 0;
+    case 'peso': {
+      const w = ctx.train?.weights.filter((x) => x.date <= date).sort((a, b) => a.date.localeCompare(b.date)).pop();
+      return w?.kg ?? 0;
     }
     case 'actividad': {
       const id = g.auto.id;

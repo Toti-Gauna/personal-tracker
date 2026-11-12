@@ -43,6 +43,7 @@ export function useFocusRunner() {
           sub: `Sigue: ${next.type === 'focus' ? 'foco' : 'descanso'} de ${fmtDur(next.min)}`,
           color,
           action: { label: 'Ver', run: () => ir('foco') },
+          evento: last.type === 'focus' ? 'pomodoro' : 'descanso',
         });
         return;
       }

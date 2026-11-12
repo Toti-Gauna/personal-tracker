@@ -37,10 +37,11 @@ export function Metas({ day, tab }: { day: DayLog; tab?: string }) {
   const days = useStore((s) => s.days);
   const study = useStore((s) => s.study);
   const goals = useStore((s) => s.goals.goals);
+  const train = useStore((s) => s.train);
   const date = day.date;
   const bim = bimester(settings.startDate, date, names);
   const list = useMemo(() => goals.filter((g) => appliesTo(g, HORIZON[actual], date)), [goals, actual, date]);
-  const ctx = { study, days };
+  const ctx = { study, days, train };
   const [editar, setEditar] = useState(false);
 
   // Línea de resumen de cada pestaña.
@@ -102,8 +103,9 @@ function Lista({ list, date, plano, editar }: { list: Goal[]; date: string; plan
 function Semana({ date, list, days, week, editar }: { date: string; list: Goal[]; days: Record<string, DayLog>; week: number; editar: boolean }) {
   const lunes = periodKey('semana', date);
   const domingo = addDays(lunes, 6);
-  const { study } = { study: useStore((s) => s.study) };
-  const ctx = { study, days };
+  const study = useStore((s) => s.study);
+  const train = useStore((s) => s.train);
+  const ctx = { study, days, train };
   const avg = list.length ? list.reduce((s, g) => s + ratio(valueOf(g, date, ctx), g.target), 0) / list.length : 0;
   const por = DIAS.map((_, i) => ({ key: addDays(lunes, i), p: dayPct(days[addDays(lunes, i)]) }));
   const mejor = Math.max(0, ...por.map((d) => d.p ?? 0));
@@ -280,7 +282,8 @@ function Anio({ date, list, editar }: { date: string; list: Goal[]; editar: bool
 function AnioMeta({ g, date, editar }: { g: Goal; date: string; editar: boolean }) {
   const study = useStore((s) => s.study);
   const days = useStore((s) => s.days);
-  const v = valueOf(g, date, { study, days });
+  const train = useStore((s) => s.train);
+  const v = valueOf(g, date, { study, days, train });
   const fmt = (n: number) => String(n).replace('.', ',');
   return (
     <li style={{ ['--c' as string]: AREAS[g.area].css }}>

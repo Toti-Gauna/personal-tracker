@@ -5,7 +5,7 @@ Tracker personal de Toti: el día en horas, el estudio con su propio motor de re
 - **Diseño:** [canvas de Trazo](https://claude.ai/artifact/6Cc2E6aW2ViU5ikovpsRTy)
 - **Roadmap de estudio:** [ruta ML + DevSecOps](https://claude.ai/artifact/9PEokku7mBLZdCFJr1zqXP)
 - **Pantallas:** presentación `Trazo-pantallas.pptx` y su ZIP de imágenes (44 pantallas, 8 flujos).
-- **Estado:** ola 4 (Metas) en revisión. Este archivo es la fuente de verdad.
+- **Estado:** ola 6 (Cierre y sellos) en revisión. Este archivo es la fuente de verdad.
 
 ---
 
@@ -368,6 +368,39 @@ En el día a día alcanza con **Haiku 5.5 · bajo**: pegás el JSON del cierre y
 - Hoy suma el bloque "Sumar a la semana", con botones para las metas marcadas "Mostrar en Hoy": Entrené, CV enviados, Venta Foody y Usuario Handyx.
 - Pendiente a propósito: el peso (88,4 kg) y la meta de bajar de peso se conectan con el entreno en la ola 5. Hasta entonces se suman a mano.
 
+**Ola 5 · lo que quedó y decisiones**
+
+- Entreno (5.1), Semana de entrenamiento (5.2), Editar rutina (5.3), Sesión en pareja (5.4), Motor de entreno (5.5), Se terminó el tiempo (5.6), Resumen (5.7) y Peso (5.8).
+- Motor en `src/data/train*.ts` (doble progresión, descarga, récords) y acciones en `src/state/train.ts`.
+- **Rutinas de partida:** Push, Pull, Piernas, Upper, Lower y Full body, cada una con caminata 30 + movilidad 5 antes y estirar 10 + ducha 15 después. Los ejercicios, series, rangos y descansos de Piernas son los del diseño; los de las otras rutinas los armé yo como punto de partida y se editan en Editar rutina.
+- **Plantillas de la semana:** PPL + UL (L Push, M Pull, X Piernas, J Upper, V Lower, S Full opcional, D descanso activo), Full body ×3 (L, X y V) y Propia. Cualquier cambio manual pasa la plantilla a Propia.
+- **Aviso de ajuste:** si pasó un día de entreno sin hacerse, ofrece pasar a Full body el primero y el último de los días que quedan (jueves y sábado en PPL + UL), para dejar descanso en el medio.
+- **Doble progresión.** Cada uno tiene su rango, su peso y su historial:
+  - la próxima vez se pide lo último con +1 repetición en la serie más baja, sin pasar el tope;
+  - cuando todas las series llegan al tope, sube el peso (+5 kg piernas, +2,5 kg torso, +1 kg aislamiento) y vuelve al mínimo;
+  - 2 sesiones iguales con el mismo peso: se mantiene; 3: baja un 10 % y vuelve a subir.
+- **Semana de descarga** cada 6 semanas desde el primer entreno: mismo peso y la mitad de las series. No cuenta en el historial ni en los récords.
+- **Lo que no se llegó a hacer** no cuenta como falla: pasa al principio de la próxima sesión de esa rutina y no cambia el cálculo.
+- **Primera vez en un ejercicio:** no hay historial, así que se elige el peso en la primera serie; desde ahí el motor calcula.
+- **Tiempo del bloque:** lo de los ejercicios redondeado a 5 min (70 min en Piernas, ~2 h 10 con antes y después). Al cumplirse aparece "Hora de ir a casa": terminar y guardar, +10 min o seguir sin límite.
+- **Descanso:** compartido (arranca cuando los dos marcan la serie) o cada uno (arranca al marcar la propia), con +15 s y Saltar. Al terminar suena la campana y avisa quién sigue.
+- **Récords:** más peso, o más repeticiones con el mismo peso, contra todo lo anterior de esa persona.
+- **Conexiones:** terminar el entreno marca como hechas las tareas de la meta 7 de Hoy. Las metas "Entrenar" (semana), "Entrenamientos" (mes) y "Llegar a 95 kg" (año) pasan a salir solas del entreno y del peso; el botón "Entrené" de Hoy se reemplaza.
+- **Peso:** un pesaje por día, con la curva, la meta (95 kg, editable), el ritmo por semana y las semanas que faltan al ritmo actual. Se recomienda pesarse los domingos, pero se puede cargar cualquier día.
+- Los números del diseño (100 kg de sentadilla, 88,4 kg) eran un ejemplo: arrancás de cero.
+
+**Ola 6 · lo que quedó y decisiones**
+
+- Cierre (6.1), Logro (6.2), Perfil y logros (6.3), Ajustes (6.4) y Sonidos y alarmas (6.5), con subpantallas para rutinas del día, compañera y copia de seguridad.
+- **Cierre del día** (`#/cierre`, con un acceso en Hoy): la mejora primero ("Hoy mejoraste +0,75 % de 1 % posible") y la comparación con ayer, las metas cumplidas, los últimos días, lo acumulado desde el día 0, tareas y XP, avance por área, lo que pasa a mañana (se elige tarea por tarea), la pequeña victoria, lo primero de mañana y el JSON. Cerrar copia el JSON y guarda el cierre; se puede reabrir. El JSON del día suma un bloque `cierre`.
+- **XP:** 4 por cada tarea hecha y 10 por cada meta cumplida, más 50 por cada sello. Subir del nivel n al n+1 cuesta 300 XP más 100 por cada nivel (300, 400, 500…). El nivel aparece también arriba de Hoy.
+- **24 sellos en 4 grupos de 6** (constancia, cuerpo, estudio y trabajo), cada uno con su condición. Se ganan solos, con aviso, cuando se cumplen; la pantalla de logro sale al cerrar el día. Dos sellos se marcan a mano desde su detalle: "MVP de Handyx" y "Trabajo nuevo". "CONAMAT completo" pide los 69 capítulos y se desbloquea a medida que lleguen los bimestres 2 a 6. "Madrugador" es levantarse a las 4:30 o antes 3 días seguidos.
+- **Próximos hitos:** los sellos bloqueados con algún avance, el más cercano primero (por ejemplo, Madrugador 1/3 o Pesar 90 kg).
+- **Historial:** un renglón por día cerrado, con el porcentaje de tareas y los sellos que ganó ese día.
+- **Ajustes:** tema (oscuro, claro o sistema), nombres de los 9 bimestres, nombre de las áreas (se renombran; el color no), rutinas del día (hora de levantarse y duración de los bloques de la mañana), nombres tuyo y de tu compañera, importar de Anki, copia de seguridad (descargar y restaurar un archivo con todo) e instalar la app. No se pueden agregar áreas nuevas: llevan un color del cuaderno y el sistema trae seis.
+- **Sonidos:** cinco sonidos sintetizados (campana de bronce, madera suave, 3 pitidos, trazo de marcador y sello de goma) para cinco avisos (pomodoro, descanso, descanso de entreno, marcar una tarea y sello nuevo), con volumen y vibración. Cada aviso suena con el que elegiste.
+- **Alarmas:** cuatro alarmas por defecto (04:00, 04:30, 18:00 y 21:00), con hora editable. Una app web no puede sonar con el teléfono bloqueado, así que se descarga un archivo `.ics` con un evento diario por alarma y aviso a la hora exacta; al abrirlo, el teléfono las agrega al calendario.
+
 **Infraestructura (ola 0)**
 
 - Vite + React + TypeScript; ruteo por hash (`#/hoy`, `#/estudio`…) para que Pages no dé 404 al recargar.
@@ -484,4 +517,15 @@ En el día a día alcanza con **Haiku 5.5 · bajo**: pegás el JSON del cierre y
 - Metas con Semana, Mes, Bimestre y Año, Nueva meta y bimestres renombrables.
 - Hoy con "Sumar a la semana".
 - Semana no lista las metas del día, así que no lleva la hora a la derecha del título.
+
+**2026-11-11 · ola 5**
+
+- Entreno con rutinas, semana, editor, sesión en pareja con descanso compartido o por persona, motor de sobrecarga progresiva, semana de descarga, resumen con récords y peso.
+- Las metas de entreno y de peso salen solas del entreno.
+
+**2026-11-11 · ola 6**
+
+- Cierre del día, XP y niveles, 24 sellos con pantalla de logro, perfil con hitos e historial.
+- Ajustes con tema, nombres de bimestres y áreas, rutinas del día, copia de seguridad e instalación.
+- Sonidos configurables y alarmas al calendario con `.ics`.
 

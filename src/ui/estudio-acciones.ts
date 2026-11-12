@@ -44,6 +44,7 @@ export function avisoTramo(f: FocusState, next: number) {
     sub: `Sigue: ${n.title} · ${fmtDur(n.min)}`,
     color: colorOf(f.activityId === 'repaso' ? n.activityId : f.activityId),
     action: { label: 'Seguir', run: () => ir(`sesion/${f.activityId}`) },
+    evento: t.kind === 'descanso' ? 'descanso' : 'pomodoro',
   });
 }
 

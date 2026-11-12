@@ -75,6 +75,8 @@ export interface DayLog {
   study?: StudyLog[];
   /** Pasos de estudio hechos hoy (rev:…, learn:…, test:…). */
   studyDone?: string[];
+  /** El cierre del día. */
+  closed?: { at: string; xp: number; score: number; victoria: string; manana: string };
 }
 
 export interface Preset {
@@ -91,8 +93,33 @@ export interface Preset {
   desc?: string;
 }
 
+export type SoundEvent = 'pomodoro' | 'descanso' | 'entreno' | 'tarea' | 'sello';
+export type SoundId = 'campana' | 'madera' | 'pitidos' | 'marcador' | 'goma';
+
+export interface SoundSettings {
+  events: Record<SoundEvent, SoundId>;
+  /** 0 a 100. */
+  volume: number;
+  vibrate: boolean;
+}
+
+export interface Alarm {
+  id: string;
+  time: string;
+  title: string;
+  on: boolean;
+}
+
 export interface Settings {
   names: { me: string; partner: string };
+  sounds?: SoundSettings;
+  alarms?: Alarm[];
+  /** Nombres propios de las áreas. */
+  areaNames?: Partial<Record<Area, string>>;
+  /** Rutinas del día editadas: hora de levantarse y duraciones. */
+  dayRoutines?: Partial<Record<'completo' | 'corto', { wake: string; durations: Record<string, number> }>>;
+  /** Último respaldo descargado (fecha). */
+  lastBackup?: string;
   startDate: string;
   presets: Preset[];
   /** Preset por bloque: key del bloque → id del preset. */
