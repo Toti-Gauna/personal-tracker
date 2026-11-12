@@ -12,6 +12,7 @@
       try {
         var t = localStorage.getItem('trazo.theme');
         if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t;
+        else if (t === 'system' && window.matchMedia('(prefers-color-scheme: light)').matches) document.documentElement.dataset.theme = 'light';
       } catch (e) {}
     </script>
   </head>
