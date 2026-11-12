@@ -1,0 +1,185 @@
+{
+ "version": 3,
+ "bimesters": [
+  {
+   "n": 1,
+   "year": 1,
+   "start": "2026-11-16",
+   "end": "2027-01-15",
+   "name": "Complia Pro",
+   "product": "Complia Pro",
+   "industry": "compliance",
+   "profile": "AI Engineer con seguridad"
+  },
+  {
+   "n": 2,
+   "year": 1,
+   "start": "2027-01-16",
+   "end": "2027-03-15",
+   "name": "Faro",
+   "product": "Faro",
+   "industry": "pesca",
+   "profile": "AI Engineer con seguridad"
+  },
+  {
+   "n": 3,
+   "year": 1,
+   "start": "2027-03-16",
+   "end": "2027-05-15",
+   "name": "Lupa",
+   "product": "Lupa",
+   "industry": "salud",
+   "profile": "AI Engineer con seguridad"
+  },
+  {
+   "n": 4,
+   "year": 1,
+   "start": "2027-05-16",
+   "end": "2027-07-15",
+   "name": "Talud",
+   "product": "Talud",
+   "industry": "minería",
+   "profile": "AI Engineer con seguridad"
+  },
+  {
+   "n": 5,
+   "year": 1,
+   "start": "2027-07-16",
+   "end": "2027-09-15",
+   "name": "Despacho",
+   "product": "Despacho",
+   "industry": "emergencias",
+   "profile": "AI Engineer con seguridad"
+  },
+  {
+   "n": 6,
+   "year": 1,
+   "start": "2027-09-16",
+   "end": "2027-11-15",
+   "name": "Guardia",
+   "product": "Guardia",
+   "industry": "ciberseguridad",
+   "profile": "AI Engineer con seguridad"
+  },
+  {
+   "n": 7,
+   "year": 2,
+   "start": "2027-11-16",
+   "end": "2028-01-15",
+   "name": "Humo",
+   "product": "Humo",
+   "industry": "incendios",
+   "profile": "ML Engineer completo"
+  },
+  {
+   "n": 8,
+   "year": 2,
+   "start": "2028-01-16",
+   "end": "2028-03-15",
+   "name": "Fuga",
+   "product": "Fuga",
+   "industry": "gas",
+   "profile": "ML Engineer completo"
+  },
+  {
+   "n": 9,
+   "year": 2,
+   "start": "2028-03-16",
+   "end": "2028-05-15",
+   "name": "Arreo",
+   "product": "Arreo",
+   "industry": "ganadería",
+   "profile": "ML Engineer completo"
+  },
+  {
+   "n": 10,
+   "year": 2,
+   "start": "2028-05-16",
+   "end": "2028-07-15",
+   "name": "Escudo",
+   "product": "Escudo",
+   "industry": "seguridad de apps con IA",
+   "profile": "ML Engineer completo"
+  },
+  {
+   "n": 11,
+   "year": 2,
+   "start": "2028-07-16",
+   "end": "2028-09-15",
+   "name": "Seña",
+   "product": "Seña",
+   "industry": "Lengua de Señas Argentina",
+   "profile": "ML Engineer completo"
+  },
+  {
+   "n": 12,
+   "year": 2,
+   "start": "2028-09-16",
+   "end": "2028-11-15",
+   "name": "Cruce",
+   "product": "Cruce",
+   "industry": "seguridad vial",
+   "profile": "ML Engineer completo"
+  },
+  {
+   "n": 13,
+   "year": 3,
+   "start": "2028-11-16",
+   "end": "2029-01-15",
+   "name": "Rastro",
+   "product": "Rastro",
+   "industry": "cripto",
+   "profile": "Secure AI Engineer"
+  },
+  {
+   "n": 14,
+   "year": 3,
+   "start": "2029-01-16",
+   "end": "2029-03-15",
+   "name": "Vivo",
+   "product": "Vivo",
+   "industry": "fintech",
+   "profile": "Secure AI Engineer"
+  },
+  {
+   "n": 15,
+   "year": 3,
+   "start": "2029-03-16",
+   "end": "2029-05-15",
+   "name": "Acequia",
+   "product": "Acequia",
+   "industry": "agua",
+   "profile": "Secure AI Engineer"
+  },
+  {
+   "n": 16,
+   "year": 3,
+   "start": "2029-05-16",
+   "end": "2029-07-15",
+   "name": "Sextante",
+   "product": "Sextante",
+   "industry": "navegación",
+   "profile": "Secure AI Engineer"
+  },
+  {
+   "n": 17,
+   "year": 3,
+   "start": "2029-07-16",
+   "end": "2029-09-15",
+   "name": "Lente",
+   "product": "Lente",
+   "industry": "video inteligente en GPU",
+   "profile": "Secure AI Engineer"
+  },
+  {
+   "n": 18,
+   "year": 3,
+   "start": "2029-09-16",
+   "end": "2029-11-15",
+   "name": "Halcón",
+   "product": "Halcón",
+   "industry": "drones autónomos para infraestructura",
+   "profile": "Secure AI Engineer"
+  }
+ ]
+}

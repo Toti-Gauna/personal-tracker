@@ -1,3 +1,4 @@
+import type { RoadmapPart } from './roadmap.schema';
 import type { Tramo } from './study-types';
 
 export type Area = 'ing' | 'handyx' | 'eclipse' | 'salud' | 'rutina' | 'economia';
@@ -38,7 +39,16 @@ export interface DayRoutine {
   durations: Record<string, number>;
 }
 
-export interface Block {
+/** Vínculo opcional con un ítem del roadmap (data/roadmap.json). */
+export interface RoadmapLink {
+  /** Id del ítem, por ejemplo "b1-conamat-arit-03". */
+  ref?: string;
+  /** Qué parte del ítem es: aprender, test, construir o cerrar. */
+  part?: RoadmapPart;
+}
+
+/** Meta del día. Con `ref` y `part` queda atada a un ítem del roadmap. */
+export interface Block extends RoadmapLink {
   key: string;
   n: number;
   title: string;
