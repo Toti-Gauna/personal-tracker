@@ -5,7 +5,7 @@ Tracker personal de Toti: el día en horas, el estudio con su propio motor de re
 - **Diseño:** [canvas de Trazo](https://claude.ai/artifact/6Cc2E6aW2ViU5ikovpsRTy)
 - **Roadmap de estudio:** [ruta ML + DevSecOps](https://claude.ai/artifact/9PEokku7mBLZdCFJr1zqXP)
 - **Pantallas:** presentación `Trazo-pantallas.pptx` y su ZIP de imágenes (44 pantallas, 8 flujos).
-- **Estado:** ola 5 (Entreno) en revisión. Este archivo es la fuente de verdad.
+- **Estado:** ola 6 (Cierre y sellos) en revisión. Este archivo es la fuente de verdad.
 
 ---
 
@@ -389,6 +389,18 @@ En el día a día alcanza con **Haiku 5.5 · bajo**: pegás el JSON del cierre y
 - **Peso:** un pesaje por día, con la curva, la meta (95 kg, editable), el ritmo por semana y las semanas que faltan al ritmo actual. Se recomienda pesarse los domingos, pero se puede cargar cualquier día.
 - Los números del diseño (100 kg de sentadilla, 88,4 kg) eran un ejemplo: arrancás de cero.
 
+**Ola 6 · lo que quedó y decisiones**
+
+- Cierre (6.1), Logro (6.2), Perfil y logros (6.3), Ajustes (6.4) y Sonidos y alarmas (6.5), con subpantallas para rutinas del día, compañera y copia de seguridad.
+- **Cierre del día** (`#/cierre`, con un acceso en Hoy): la mejora primero ("Hoy mejoraste +0,75 % de 1 % posible") y la comparación con ayer, las metas cumplidas, los últimos días, lo acumulado desde el día 0, tareas y XP, avance por área, lo que pasa a mañana (se elige tarea por tarea), la pequeña victoria, lo primero de mañana y el JSON. Cerrar copia el JSON y guarda el cierre; se puede reabrir. El JSON del día suma un bloque `cierre`.
+- **XP:** 4 por cada tarea hecha y 10 por cada meta cumplida, más 50 por cada sello. Subir del nivel n al n+1 cuesta 300 XP más 100 por cada nivel (300, 400, 500…). El nivel aparece también arriba de Hoy.
+- **24 sellos en 4 grupos de 6** (constancia, cuerpo, estudio y trabajo), cada uno con su condición. Se ganan solos, con aviso, cuando se cumplen; la pantalla de logro sale al cerrar el día. Dos sellos se marcan a mano desde su detalle: "MVP de Handyx" y "Trabajo nuevo". "CONAMAT completo" pide los 69 capítulos y se desbloquea a medida que lleguen los bimestres 2 a 6. "Madrugador" es levantarse a las 4:30 o antes 3 días seguidos.
+- **Próximos hitos:** los sellos bloqueados con algún avance, el más cercano primero (por ejemplo, Madrugador 1/3 o Pesar 90 kg).
+- **Historial:** un renglón por día cerrado, con el porcentaje de tareas y los sellos que ganó ese día.
+- **Ajustes:** tema (oscuro, claro o sistema), nombres de los 9 bimestres, nombre de las áreas (se renombran; el color no), rutinas del día (hora de levantarse y duración de los bloques de la mañana), nombres tuyo y de tu compañera, importar de Anki, copia de seguridad (descargar y restaurar un archivo con todo) e instalar la app. No se pueden agregar áreas nuevas: llevan un color del cuaderno y el sistema trae seis.
+- **Sonidos:** cinco sonidos sintetizados (campana de bronce, madera suave, 3 pitidos, trazo de marcador y sello de goma) para cinco avisos (pomodoro, descanso, descanso de entreno, marcar una tarea y sello nuevo), con volumen y vibración. Cada aviso suena con el que elegiste.
+- **Alarmas:** cuatro alarmas por defecto (04:00, 04:30, 18:00 y 21:00), con hora editable. Una app web no puede sonar con el teléfono bloqueado, así que se descarga un archivo `.ics` con un evento diario por alarma y aviso a la hora exacta; al abrirlo, el teléfono las agrega al calendario.
+
 **Infraestructura (ola 0)**
 
 - Vite + React + TypeScript; ruteo por hash (`#/hoy`, `#/estudio`…) para que Pages no dé 404 al recargar.
@@ -510,4 +522,10 @@ En el día a día alcanza con **Haiku 5.5 · bajo**: pegás el JSON del cierre y
 
 - Entreno con rutinas, semana, editor, sesión en pareja con descanso compartido o por persona, motor de sobrecarga progresiva, semana de descarga, resumen con récords y peso.
 - Las metas de entreno y de peso salen solas del entreno.
+
+**2026-11-11 · ola 6**
+
+- Cierre del día, XP y niveles, 24 sellos con pantalla de logro, perfil con hitos e historial.
+- Ajustes con tema, nombres de bimestres y áreas, rutinas del día, copia de seguridad e instalación.
+- Sonidos configurables y alarmas al calendario con `.ics`.
 
