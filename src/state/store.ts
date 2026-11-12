@@ -6,6 +6,8 @@ import { emptyStudy } from '../data/study-catalog';
 import { defaultGoals, emptyGoals } from '../data/goals-catalog';
 import type { Goal, GoalsState } from '../data/goals-types';
 import { periodKey } from '../data/goals';
+import { emptyTrain } from '../data/train-catalog';
+import type { TrainState } from '../data/train-types';
 import type { StudyState } from '../data/study-types';
 import type { Block, DayLog, FocusEntry, FocusState, Preset, RoutineId, Settings } from '../data/types';
 
@@ -17,10 +19,11 @@ export interface State {
   carry: Record<string, Record<string, string[]>>;
   study: StudyState;
   goals: GoalsState;
+  train: TrainState;
 }
 
 const KEY = 'trazo.v1';
-const empty = (): State => ({ settings: null, days: {}, focus: null, carry: {}, study: emptyStudy(), goals: emptyGoals() });
+const empty = (): State => ({ settings: null, days: {}, focus: null, carry: {}, study: emptyStudy(), goals: emptyGoals(), train: emptyTrain() });
 
 function load(): State {
   try {
@@ -31,7 +34,8 @@ function load(): State {
       const base = emptyStudy();
       const study = parsed.study ? { ...base, ...parsed.study, rules: { ...base.rules, ...parsed.study.rules } } : base;
       const goals = parsed.goals ? { ...emptyGoals(), ...parsed.goals } : null;
-      return { ...empty(), ...parsed, study, goals: goals ?? seedGoals(parsed.settings?.startDate ?? dateKey()) };
+      const train = parsed.train ? { ...emptyTrain(), ...parsed.train } : emptyTrain();
+      return { ...empty(), ...parsed, study, train, goals: migrateGoals(goals ?? seedGoals(parsed.settings?.startDate ?? dateKey())) };
     }
   } catch { /* sin storage o JSON roto */ }
   return empty();
@@ -61,6 +65,20 @@ const subscribe = (f: () => void) => {
 
 export function useStore<T>(sel: (s: State) => T): T {
   return useSyncExternalStore(subscribe, () => sel(state), () => sel(state));
+}
+
+/** Ola 5: Entrenar, Entrenamientos y el peso pasan a salir solos del entreno. */
+function migrateGoals(g: GoalsState): GoalsState {
+  return {
+    ...g,
+    goals: g.goals.map((x) => {
+      if (x.auto) return x;
+      if (x.title === 'Entrenar' && x.horizon === 'semana') return { ...x, auto: { kind: 'entreno' }, quick: false };
+      if (x.title === 'Entrenamientos' && x.horizon === 'mes') return { ...x, auto: { kind: 'entreno' } };
+      if (x.title === 'Llegar a 95 kg entrenando 6 días' && x.horizon === 'anio') return { ...x, auto: { kind: 'peso' } };
+      return x;
+    }),
+  };
 }
 
 export function seedGoals(today: string): GoalsState {

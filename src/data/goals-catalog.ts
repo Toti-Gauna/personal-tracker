@@ -8,7 +8,7 @@ const WEEK: Seed[] = [
   { title: 'Demos terminadas', area: 'eclipse', group: 'Eclipse', horizon: 'semana', type: 'numero', target: 12, unit: 'demos' },
   { title: 'Especialistas', area: 'handyx', group: 'Handyx', horizon: 'semana', type: 'numero', target: 56, unit: 'especialistas' },
   { title: 'Usuarios', area: 'handyx', group: 'Handyx', horizon: 'semana', type: 'numero', target: 100, unit: 'usuarios', quick: true, quickLabel: 'Usuario Handyx' },
-  { title: 'Entrenar', area: 'salud', group: 'Salud', horizon: 'semana', type: 'contador', target: 7, unit: 'veces', quick: true, quickLabel: 'Entrené' },
+  { title: 'Entrenar', area: 'salud', group: 'Salud', horizon: 'semana', type: 'contador', target: 7, unit: 'veces', auto: { kind: 'entreno' } },
   { title: 'Correr', area: 'salud', group: 'Salud', horizon: 'semana', type: 'contador', target: 7, unit: 'veces' },
   { title: 'Comer sano', area: 'salud', group: 'Salud', horizon: 'semana', type: 'contador', target: 7, unit: 'días' },
   { title: 'CV enviados', area: 'rutina', group: 'Trabajo nuevo', horizon: 'semana', type: 'numero', target: 70, unit: 'CV', step: 10, quick: true },
@@ -21,7 +21,7 @@ const MONTH: Seed[] = [
   { title: 'Leer Make It Stick', area: 'handyx', horizon: 'mes', type: 'numero', target: 313, unit: 'págs', auto: { kind: 'actividad', id: 'make-it-stick' } },
   { title: 'Ventas de Eclipse', area: 'eclipse', horizon: 'mes', type: 'numero', target: 10, unit: 'ventas' },
   { title: 'CV enviados', area: 'rutina', horizon: 'mes', type: 'numero', target: 300, unit: 'CV', step: 10 },
-  { title: 'Entrenamientos', area: 'salud', horizon: 'mes', type: 'numero', target: 26, unit: 'veces' },
+  { title: 'Entrenamientos', area: 'salud', horizon: 'mes', type: 'numero', target: 26, unit: 'veces', auto: { kind: 'entreno' } },
 ];
 
 const BIM: Seed[] = [
@@ -34,7 +34,7 @@ const YEAR: Seed[] = [
   { title: 'Primer trabajo remoto como AI/ML engineer', area: 'rutina', group: 'Trabajo nuevo', horizon: 'anio', type: 'numero', target: 6, unit: 'bim.', note: 'Roadmap, portfolio de 6 productos y búsqueda activa desde el bimestre 4' },
   { title: 'USD 3.000 por mes en ventas', area: 'eclipse', horizon: 'anio', type: 'numero', target: 3000, unit: 'USD', step: 100, note: 'Un producto nuevo por bimestre para vender' },
   { title: '100 usuarios y 56 especialistas', area: 'handyx', horizon: 'anio', type: 'numero', target: 100, unit: 'usuarios', note: 'Lanzar el MVP y sumar la primera ciudad' },
-  { title: 'Llegar a 95 kg entrenando 6 días', area: 'salud', horizon: 'anio', type: 'numero', target: 95, unit: 'kg', note: 'Peso cada domingo, entreno con Abi' },
+  { title: 'Llegar a 95 kg entrenando 6 días', area: 'salud', horizon: 'anio', type: 'numero', target: 95, unit: 'kg', note: 'Peso cada domingo, entreno con Abi', auto: { kind: 'peso' } },
   { title: 'Terminar la matemática de los 6 bimestres', area: 'ing', horizon: 'anio', type: 'numero', target: 6, unit: 'bim.', note: 'CONAMAT, álgebra lineal, cálculo y probabilidad' },
 ];
 
