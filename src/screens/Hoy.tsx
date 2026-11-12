@@ -3,6 +3,7 @@ import { AREAS } from '../data/defaults';
 import { bimester, dayNumber, mejoraAyer } from '../data/derive';
 import { blockDone, fmtPct, mejoraDia } from '../data/mejora';
 import { activitiesFor } from '../data/study';
+import { plannedFor } from '../data/train';
 import { blockEnd, currentBlock, remainingMin } from '../data/schedule';
 import { addDays, fmtDur, fmtFecha, nowMin, toHHMM, toMin } from '../data/time';
 import type { Block, DayLog } from '../data/types';
@@ -42,6 +43,7 @@ export function Hoy({ day }: { day: DayLog }) {
   const days = useStore((s) => s.days);
   const focus = useStore((s) => s.focus);
   const study = useStore((s) => s.study);
+  const train = useStore((s) => s.train);
   const now = nowMin(new Date(useNow(30000)));
   const cur = currentBlock(day.blocks, now);
   const upcoming = day.blocks.find((b) => toMin(b.start) > now);
@@ -94,7 +96,12 @@ export function Hoy({ day }: { day: DayLog }) {
           const enFoco = focus?.key === b.key && focus.date === day.date;
           // Una meta de estudio abre su sesión de estudio; el resto, elegir pomodoro.
           const act = b.kind === 'estudio' ? activitiesFor(study, day.date).find((a) => a.block === b.key) : undefined;
-          const destino = enFoco ? (focus?.tramos ? `sesion/${focus.activityId}` : 'foco') : act ? `sesion/${act.id}` : `elegir/${b.key}`;
+          // La meta de entreno abre la sesión de entreno (o Entreno, si hoy no hay rutina).
+          const hoyRut = b.kind === 'entreno' ? plannedFor(train, day.date).routine : null;
+          const entrenando = b.kind === 'entreno' && train.active?.date === day.date;
+          const destino = b.kind === 'entreno'
+            ? (entrenando && train.active ? `entreno-sesion/${train.active.routineId}` : 'entreno')
+            : enFoco ? (focus?.tramos ? `sesion/${focus.activityId}` : 'foco') : act ? `sesion/${act.id}` : `elegir/${b.key}`;
           return (
             <li
               key={b.key}
@@ -115,7 +122,7 @@ export function Hoy({ day }: { day: DayLog }) {
                   <div className="kicker">{estado(b, now)}</div>
                   <Tareas date={day.date} block={b} />
                   <button className="btn-foco" onClick={() => ir(destino)}>
-                    {enFoco ? 'Volver al foco' : act ? 'Entrar en foco · sesión de estudio' : 'Entrar en foco'}
+                    {b.kind === 'entreno' ? (entrenando ? 'Volver al entreno' : hoyRut ? `Entrar en foco · ${hoyRut.name}` : 'Entrar en foco · entreno') : enFoco ? 'Volver al foco' : act ? 'Entrar en foco · sesión de estudio' : 'Entrar en foco'}
                   </button>
                 </div>
               )}
