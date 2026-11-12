@@ -105,3 +105,58 @@ describe('data/roadmap.json', () => {
     expect(roadmap.optional.map((o) => o.year)).toEqual([4, 5]);
   });
 });
+
+/** Tabla "4 ter" del PLAN: capítulos de CONAMAT por bimestre. */
+const CONAMAT_POR_BIMESTRE: Record<number, Record<string, [number, number]>> = {
+  1: { arit: [1, 11] },
+  2: { alg: [1, 12] },
+  3: { alg: [13, 17], geo: [1, 10] },
+  4: { geo: [11, 17], anal: [1, 7] },
+  5: { anal: [8, 13], cd: [1, 5] },
+  6: { ci: [1, 6] },
+};
+
+describe('CONAMAT: un ítem por capítulo', () => {
+  const conamat = (n: number) => bims[n - 1].items.filter((i) => i.id.startsWith(`b${n}-conamat-`));
+
+  it('son 69 capítulos en los bimestres 1 a 6, y ninguno después', () => {
+    expect(bims.slice(0, 6).reduce((s, b) => s + conamat(b.n).length, 0)).toBe(69);
+    expect(bims.slice(6).flatMap((b) => b.items).filter((i) => i.id.includes('conamat'))).toHaveLength(0);
+  });
+
+  it('cada bimestre trae los capítulos de la tabla, en orden y sin repetir', () => {
+    for (const [n, partes] of Object.entries(CONAMAT_POR_BIMESTRE)) {
+      const esperados = Object.entries(partes).flatMap(([k, [a, z]]) => Array.from({ length: z - a + 1 }, (_, i) => `b${n}-conamat-${k}-${String(a + i).padStart(2, '0')}`));
+      expect(conamat(Number(n)).map((i) => i.id), `B${n}`).toEqual(esperados);
+    }
+  });
+
+  it('todos van para aprender y comprobar, repartidos en las semanas 1 a 8', () => {
+    for (const b of bims.slice(0, 6)) {
+      const cs = conamat(b.n);
+      for (const c of cs) {
+        expect(c.lane).toBe('math');
+        expect(c.parts).toEqual(['learn', 'test']);
+        expect(c.weeks[0]).toBeGreaterThanOrEqual(1);
+        expect(c.weeks[1]).toBeLessThanOrEqual(8);
+      }
+      // La matemática del bimestre (los capítulos y, en B6, MIT 18.01SC) va en orden y cubre las semanas 1 a 8.
+      const mate = b.items.filter((i) => i.lane === 'math');
+      const semanas = mate.map((c) => c.weeks[0]);
+      expect([...semanas].sort((a, z) => a - z)).toEqual(semanas);
+      expect(semanas[0]).toBe(1);
+      expect(Math.max(...mate.map((c) => c.weeks[1]))).toBe(8);
+      for (let w = 1; w <= 8; w++) expect(mate.some((c) => w >= c.weeks[0] && w <= c.weeks[1]), `B${b.n} semana ${w}`).toBe(true);
+      expect(cs.length).toBeGreaterThan(0);
+    }
+  });
+
+  it('la compuerta de matemática apunta al último capítulo de CONAMAT o a la última fuente', () => {
+    const b1 = bims[0];
+    expect(b1.gates.find((g) => g.id === 'b1-g-math')).toMatchObject({ item: 'b1-conamat-arit-11', min: 0.85 });
+    // En B6 la matemática cierra con MIT 18.01SC, que viene después de los 6 capítulos.
+    expect(bims[5].items.filter((i) => i.lane === 'math').map((i) => i.title).pop()).toBe('MIT 18.01SC');
+    // B7 en adelante: un ítem por fuente nombrada en la tabla.
+    expect(bims[9].items.filter((i) => i.lane === 'math').map((i) => i.title)).toEqual(['Stewart 12–14', 'Blitzstein 6–7']);
+  });
+});
