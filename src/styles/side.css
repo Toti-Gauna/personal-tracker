@@ -1,0 +1,72 @@
+/* Barra lateral (escritorio) y riel de íconos (tablet). En el teléfono no se ve. */
+.lateral { display: none; }
+
+@media (min-width: 720px) {
+  :root { --lat-w: 96px; }
+  .app .barra, .app .mini { display: none; }
+  .lateral {
+    position: fixed; inset: 0 auto 0 0; width: var(--lat-w); z-index: 10;
+    display: flex; flex-direction: column; gap: 8px;
+    padding: 16px 8px; background: var(--papel); border-right: 1px solid var(--linea);
+  }
+  .lateral-logo { display: flex; align-items: center; justify-content: center; gap: 12px; min-height: 52px; color: var(--tinta); text-decoration: none; margin-bottom: 12px; }
+  .lateral-logo span { display: none; font-size: 22px; letter-spacing: -0.03em; }
+  .lateral ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; }
+  .lateral li a {
+    position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px;
+    min-height: 72px; padding: 6px 4px; color: var(--sub); text-decoration: none; font-size: 13px;
+  }
+  .lateral li a[aria-current='page'] { color: var(--tinta); font-weight: 600; }
+  .lateral svg { width: 26px; height: 26px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; position: relative; }
+  .lateral .txt { position: relative; }
+  .lateral .marca {
+    position: absolute; inset: 2px 2px; pointer-events: none;
+    background: color-mix(in srgb, var(--economia) var(--hl-alpha), transparent);
+    clip-path: polygon(10px 0, 100% 0, calc(100% - 10px) 100%, 0 100%);
+  }
+  .lateral .contador {
+    position: absolute; top: 6px; left: calc(50% + 6px); min-width: 22px; height: 22px; padding: 0 6px; border-radius: 11px;
+    background: var(--tinta); color: var(--papel); font-family: var(--font-mono); font-size: 12px; font-weight: 700; display: grid; place-items: center;
+  }
+  /* El foco en el riel: solo el tiempo. */
+  .foco-side { margin-top: auto; position: relative; display: grid; gap: 2px; padding: 8px 4px; border: 1px solid var(--linea); border-radius: 10px; color: var(--tinta); text-decoration: none; text-align: center; overflow: hidden; }
+  .foco-side b, .foco-side small { display: none; }
+  .foco-side .t { font-size: 16px; }
+  .foco-side i { position: absolute; left: 0; bottom: 0; height: 2px; background: var(--c, var(--ing)); }
+
+  /* Contenido: a la derecha del riel, con más aire. */
+  .app { padding-left: var(--lat-w); }
+  .pantalla { max-width: 760px; padding-bottom: 48px; padding-inline: 32px; }
+  .app.con-mini .pantalla { padding-bottom: 48px; }
+  .app .toasts { left: calc(var(--lat-w) + var(--gutter)); }
+  .app .modal-fondo { padding-bottom: var(--gutter); padding-left: calc(var(--lat-w) + var(--gutter)); }
+  .app .hoja-fondo { padding-left: var(--lat-w); }
+  .app .hoja { max-width: 560px; }
+}
+
+@media (min-width: 1100px) {
+  :root { --lat-w: 272px; }
+  .lateral { padding: 20px 16px; }
+  .lateral-logo { justify-content: flex-start; padding: 0 8px; margin-bottom: 20px; }
+  .lateral-logo span { display: inline; }
+  .lateral li a { flex-direction: row; justify-content: flex-start; gap: 16px; min-height: 52px; padding: 0 16px; font-size: 17px; }
+  .lateral .marca { inset: 0; clip-path: polygon(14px 0, 100% 0, calc(100% - 14px) 100%, 0 100%); }
+  .lateral .contador { position: static; margin-left: auto; }
+  .foco-side { text-align: left; padding: 14px 16px; gap: 4px; }
+  .foco-side b, .foco-side small { display: block; }
+  .foco-side b { font-weight: 600; font-size: 15px; }
+  .foco-side .t { font-size: 32px; }
+  .foco-side small { font-size: 12px; color: var(--sub); }
+}
+
+/* Modo presentación: sin navegación, todo más grande. */
+.app.presentacion { padding-left: 0; }
+.app.presentacion .lateral, .app.presentacion .barra, .app.presentacion .mini { display: none; }
+
+/* Hoy en escritorio: lo de arriba a la izquierda y la lista de metas del día a la derecha. */
+@media (min-width: 1100px) {
+  .pantalla.hoy { max-width: 1120px; display: grid; grid-template-columns: minmax(300px, 380px) minmax(0, 1fr); column-gap: 48px; align-content: start; }
+  .pantalla.hoy > * { grid-column: 1; }
+  .pantalla.hoy > .metas { grid-column: 2; grid-row: 1 / span 12; }
+  .pantalla.hoy > .hoy-links { margin-top: 24px; }
+}

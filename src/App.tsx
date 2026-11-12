@@ -1,5 +1,6 @@
 import { useCallback, useState } from 'react';
 import { BottomBar } from './components/BottomBar';
+import { SideNav } from './components/SideNav';
 import { FocoMini } from './components/FocoMini';
 import { Splash } from './components/Splash';
 import { dateKey } from './data/time';
@@ -20,6 +21,7 @@ import { ResumenEntreno } from './screens/ResumenEntreno';
 import { SesionEntreno } from './screens/SesionEntreno';
 import { NuevaMeta } from './screens/NuevaMeta';
 import { Ajustes } from './screens/Ajustes';
+import { Avance } from './screens/Avance';
 import { AjustesCompanera, AjustesDatos, AjustesRutinas } from './screens/AjustesExtra';
 import { Cierre } from './screens/Cierre';
 import { Logro } from './screens/Logro';
@@ -45,6 +47,7 @@ import { Avisos } from './ui/avisos';
 import { useFocusRunner } from './ui/useFocusRunner';
 import { useSealSync } from './ui/useSealSync';
 import { useNow } from './ui/useNow';
+import { useEntrada } from './ui/useEntrada';
 
 export function App() {
   const ruta = useRuta();
@@ -55,6 +58,7 @@ export function App() {
   const day = useStore((s) => s.days[today]);
   const hayFoco = useStore((s) => !!s.focus);
   useFocusRunner();
+  const entrada = useEntrada(`${ruta.pantalla}/${ruta.param ?? ''}`, !cargando);
   useSealSync(today, !!settings && !!day);
   const pendientes = usePendientes(today);
 
@@ -94,6 +98,7 @@ export function App() {
       case 'entreno-resumen': contenido = <ResumenEntreno day={day} id={ruta.param} />; break;
       case 'entreno-peso': contenido = <Peso day={day} />; break;
       case 'entreno-motor': contenido = <MotorEntreno day={day} />; break;
+      case 'avance': contenido = <Avance day={day} presentacion={ruta.param === 'presentacion'} />; break;
       case 'perfil': contenido = <Perfil day={day} />; break;
       case 'cierre': contenido = <Cierre day={day} />; break;
       case 'logro': contenido = <Logro id={ruta.param} />; break;
@@ -105,11 +110,17 @@ export function App() {
     }
   }
 
+  const presentacion = ruta.pantalla === 'avance' && ruta.param === 'presentacion';
+  const sinMini = ruta.pantalla === 'foco' || ruta.pantalla === 'sesion' || presentacion;
+  // En el teléfono, Avance se cuelga de Perfil; la barra ancha lo trae como destino propio.
+  const activaBarra = ruta.seccion === 'avance' ? 'perfil' : ruta.seccion;
+
   return (
-    <div className={`app${hayFoco && conBarra && ruta.pantalla !== 'foco' && ruta.pantalla !== 'sesion' ? ' con-mini' : ''}`}>
-      {contenido}
-      {conBarra && ruta.pantalla !== 'foco' && ruta.pantalla !== 'sesion' && <FocoMini />}
-      {conBarra && <BottomBar activa={ruta.seccion} pendientes={pendientes} />}
+    <div className={`app${hayFoco && conBarra && !sinMini ? ' con-mini' : ''}${presentacion ? ' presentacion' : ''}${ruta.pantalla === 'avance' ? ' ancha' : ''}`}>
+      <div className="envoltura" ref={entrada}>{contenido}</div>
+      {conBarra && !sinMini && <FocoMini />}
+      {conBarra && !presentacion && <SideNav activa={ruta.seccion} pendientes={pendientes} />}
+      {conBarra && !presentacion && <BottomBar activa={activaBarra} pendientes={pendientes} />}
       <Avisos />
       {cargando && <Splash onFin={fin} />}
     </div>

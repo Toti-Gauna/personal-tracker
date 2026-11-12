@@ -1,4 +1,6 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import gsap from 'gsap';
+import { reducedMotion } from '../lib/motion';
 import { compareAnswer } from '../data/compare';
 import { AREAS } from '../data/defaults';
 import { DAY, fmtInterval, newSrs, preview, type Grade } from '../data/fsrs';
@@ -37,6 +39,16 @@ export function Tarjetas({ day, frontId }: { day: DayLog; frontId?: string }) {
   const [editando, setEditando] = useState<string | null>(null);
 
   const card = study.cards.find((c) => c.id === cola[0]);
+  const hoja = useRef<HTMLElement>(null);
+  // Al dar vuelta, la tarjeta gira en 3D (0,5 s); con movimiento reducido, un fundido.
+  useEffect(() => {
+    const el = hoja.current;
+    if (!el || !vuelta) return;
+    const t = reducedMotion()
+      ? gsap.fromTo(el, { opacity: 0.4 }, { opacity: 1, duration: 0.15, clearProps: 'opacity' })
+      : gsap.fromTo(el, { rotateY: 90, transformPerspective: 900 }, { rotateY: 0, duration: 0.5, ease: 'power2.inOut', clearProps: 'transform' });
+    return () => { t.kill(); };
+  }, [vuelta, card?.id]);
   // La hora se fija junto con la vista previa, así "1 día" no se lee como "1440 min".
   const { now, opciones } = useMemo(() => {
     const t = Date.now();
@@ -93,7 +105,7 @@ export function Tarjetas({ day, frontId }: { day: DayLog; frontId?: string }) {
         {MODOS.map(([m, t]) => <button key={m} role="radio" aria-checked={modo === m} onClick={() => cambiarModo(m)}>{t}</button>)}
       </div>
 
-      <article className="tarjeta">
+      <article className="tarjeta" ref={hoja}>
         <div className="tarjeta-cab mono">
           <span>{front?.name ?? card.deck}{card.source ? ` · ${card.source.split(' · ')[0]}` : ''}</span>
           <span>{srs && srs.state !== 'new' ? `repaso ${srs.reps + 1}${intervalo ? ` · ${intervalo} ${intervalo === 1 ? 'día' : 'días'}` : ''}` : 'nueva'}</span>

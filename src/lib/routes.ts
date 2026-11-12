@@ -1,13 +1,15 @@
 import { useEffect, useState } from 'react';
 
 export const SECCIONES = ['hoy', 'estudio', 'metas', 'entreno', 'perfil'] as const;
+/** En escritorio y tablet, Avance se suma a la navegación. */
+export const NAV_ANCHA = ['avance', ...SECCIONES] as const;
 export type Seccion = (typeof SECCIONES)[number];
 
-export const ETIQUETAS: Record<Seccion, string> = {
-  hoy: 'Hoy', estudio: 'Estudio', metas: 'Metas', entreno: 'Entreno', perfil: 'Perfil',
+export const ETIQUETAS: Record<Seccion | 'avance', string> = {
+  avance: 'Avance', hoy: 'Hoy', estudio: 'Estudio', metas: 'Metas', entreno: 'Entreno', perfil: 'Perfil',
 };
 
-export type Pantalla = Seccion | 'elegir' | 'foco' | 'pomodoros' | 'json' | 'sesion' | 'como' | 'actividad' | 'test' | 'tesis' | 'unidades'
+export type Pantalla = Seccion | 'avance' | 'elegir' | 'foco' | 'pomodoros' | 'json' | 'sesion' | 'como' | 'actividad' | 'test' | 'tesis' | 'unidades'
   | 'repaso' | 'recall' | 'tarjetas' | 'tarjeta-nueva' | 'motor' | 'meta-nueva'
   | 'cierre' | 'logro' | 'ajustes' | 'ajustes-rutinas' | 'ajustes-companera' | 'ajustes-datos' | 'sonidos'
   | 'entreno-semana' | 'entreno-rutina' | 'entreno-sesion' | 'entreno-resumen' | 'entreno-peso' | 'entreno-motor';
@@ -15,7 +17,7 @@ export type Pantalla = Seccion | 'elegir' | 'foco' | 'pomodoros' | 'json' | 'ses
 export interface Ruta {
   pantalla: Pantalla;
   /** Sección que queda marcada en la barra. */
-  seccion: Seccion;
+  seccion: Seccion | 'avance';
   param?: string;
 }
 
@@ -30,13 +32,14 @@ const SUB: Record<string, Seccion> = {
 export function leerRuta(hash: string): Ruta {
   const [a, ...rest] = hash.replace(/^#\/?/, '').split('/');
   const b = rest.join('/');
+  if (a === 'avance') return { pantalla: 'avance', seccion: 'avance', param: b || undefined };
   if ((SECCIONES as readonly string[]).includes(a)) return { pantalla: a as Seccion, seccion: a as Seccion, param: b || undefined };
   if (a in SUB) return { pantalla: a as Pantalla, seccion: SUB[a], param: b ? decodeURIComponent(b) : undefined };
   return { pantalla: 'hoy', seccion: 'hoy' };
 }
 
 /** Compatibilidad: sección de la barra para un hash. */
-export const leerHash = (hash: string): Seccion => leerRuta(hash).seccion;
+export const leerHash = (hash: string): Seccion | 'avance' => leerRuta(hash).seccion;
 
 export const ir = (path: string) => {
   window.location.hash = `#/${path}`;

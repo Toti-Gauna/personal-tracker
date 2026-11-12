@@ -1,43 +1,17 @@
-import { useLayoutEffect, useRef } from 'react';
-import gsap from 'gsap';
-import { Flip } from 'gsap/Flip';
 import { ETIQUETAS, SECCIONES, type Seccion } from '../lib/routes';
-import { DUR, reducedMotion } from '../lib/motion';
 import { NavIcon } from './NavIcons';
+import { useMarca } from './useMarca';
 import '../styles/bar.css';
 
-gsap.registerPlugin(Flip);
-
 interface Props {
-  activa: Seccion;
+  activa: Seccion | 'avance';
   /** Tarjetas de repaso pendientes; 0 oculta el contador. */
   pendientes?: number;
 }
 
+/** Barra inferior del teléfono: 5 destinos de un quinto del ancho. */
 export function BottomBar({ activa, pendientes = 0 }: Props) {
-  const nav = useRef<HTMLElement>(null);
-  const estado = useRef<Flip.FlipState | null>(null);
-  const anterior = useRef<Seccion>(activa);
-
-  // Captura la posición de la marca antes de que React la mueva.
-  if (anterior.current !== activa) {
-    const marca = nav.current?.querySelector('.marca');
-    if (marca) estado.current = Flip.getState(marca);
-    anterior.current = activa;
-  }
-
-  useLayoutEffect(() => {
-    const marca = nav.current?.querySelector('.marca');
-    if (!marca || !estado.current) return;
-    const st = estado.current;
-    estado.current = null;
-    if (reducedMotion()) {
-      gsap.fromTo(marca, { opacity: 0 }, { opacity: 1, duration: DUR.fade });
-    } else {
-      Flip.from(st, { duration: DUR.flip, ease: 'power2.inOut' });
-    }
-  }, [activa]);
-
+  const nav = useMarca<HTMLElement>(activa);
   return (
     <nav className="barra" aria-label="Secciones" ref={nav}>
       <ul>
@@ -50,9 +24,7 @@ export function BottomBar({ activa, pendientes = 0 }: Props) {
                 {esActiva && <span className="marca" data-flip-id="marca" />}
                 <NavIcon id={id} />
                 <span className="txt">{ETIQUETAS[id]}</span>
-                {mostrarContador && (
-                  <span className="contador" aria-label={`${pendientes} tarjetas pendientes`}>{pendientes}</span>
-                )}
+                {mostrarContador && <span className="contador" aria-label={`${pendientes} tarjetas pendientes`}>{pendientes}</span>}
               </a>
             </li>
           );

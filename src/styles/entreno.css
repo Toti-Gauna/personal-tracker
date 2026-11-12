@@ -190,3 +190,8 @@
 .proxima-tabla .fila b { font-weight: 500; overflow-wrap: anywhere; }
 .proxima-tabla small { display: block; color: var(--sub); font-size: 12px; font-family: var(--font-text); }
 .proxima-tabla .fila > .mono { font-size: 14px; overflow-wrap: anywhere; }
+
+/* Descanso: en los últimos 3 segundos el recuadro late (escala 1 a 1,03, 5 veces). */
+.rest-card.late { animation: late 0.6s ease-in-out 5 alternate; }
+@keyframes late { from { transform: scale(1); } to { transform: scale(1.03); } }
+@media (prefers-reduced-motion: reduce) { .rest-card.late { animation: none; } }

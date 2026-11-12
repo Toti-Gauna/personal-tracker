@@ -5,6 +5,8 @@ import '@fontsource-variable/geist';
 import '@fontsource-variable/geist-mono';
 import './styles/tokens.css';
 import './styles/global.css';
+import './styles/avance.css';
+import './styles/side.css';
 import { App } from './App';
 import { applyTheme, getThemePref } from './lib/theme';
 
