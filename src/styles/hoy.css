@@ -28,9 +28,9 @@
 
 /* Metas del día: checkbox en la línea de tiempo · número · título · hora · contador */
 .metas { list-style: none; margin: 0; padding: 0; position: relative; }
-.metas::before {
-  content: ''; position: absolute; left: 8.5px; top: 10px; bottom: 10px;
-  width: 1px; background: var(--linea);
+.regla-horas {
+  position: absolute; left: 8.5px; top: 10px; bottom: 10px; width: 1px; background: var(--linea);
+  list-style: none; pointer-events: none;
 }
 .meta { position: relative; }
 .meta-fila {

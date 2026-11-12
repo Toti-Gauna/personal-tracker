@@ -1,4 +1,6 @@
-import { useState } from 'react';
+import { useLayoutEffect, useRef, useState } from 'react';
+import gsap from 'gsap';
+import { reducedMotion } from '../lib/motion';
 import { AREAS } from '../data/defaults';
 import { bimester, dayNumber, mejoraAyer } from '../data/derive';
 import { blockDone, fmtPct, mejoraDia } from '../data/mejora';
@@ -47,6 +49,21 @@ export function Hoy({ day }: { day: DayLog }) {
   const now = nowMin(new Date(useNow(30000)));
   const cur = currentBlock(day.blocks, now);
   const upcoming = day.blocks.find((b) => toMin(b.start) > now);
+  const lista = useRef<HTMLOListElement>(null);
+  // Entrada: las filas aparecen escalonadas y la regla de horas baja hasta su lugar.
+  useLayoutEffect(() => {
+    const el = lista.current;
+    if (!el) return;
+    if (reducedMotion()) {
+      const t = gsap.fromTo(el, { opacity: 0 }, { opacity: 1, duration: 0.15, clearProps: 'opacity' });
+      return () => { t.kill(); };
+    }
+    const ctx = gsap.context(() => {
+      gsap.from('.meta', { y: 12, opacity: 0, duration: 0.4, stagger: 0.035, ease: 'power2.out', clearProps: 'opacity,transform' });
+      gsap.from('.regla-horas', { scaleY: 0, transformOrigin: 'top', duration: 0.7, ease: 'power3.out' });
+    }, el);
+    return () => ctx.revert();
+  }, []);
   const [abierta, setAbierta] = useState<string | null>(() => (cur ?? upcoming)?.key ?? null);
 
   const tareas = day.blocks.flatMap((b) => b.tasks);
@@ -88,7 +105,8 @@ export function Hoy({ day }: { day: DayLog }) {
         <span className="mejora-n mono">+{fmtPct(mejora)} %</span>
       </section>
 
-      <ol className="metas">
+      <ol className="metas" ref={lista}>
+        <li className="regla-horas" aria-hidden="true" />
         {day.blocks.map((b) => {
           const done = b.tasks.filter((t) => t.done).length;
           const abiertaEsta = abierta === b.key;
