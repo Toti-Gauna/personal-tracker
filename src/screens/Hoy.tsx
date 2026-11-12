@@ -99,6 +99,7 @@ export function Hoy({ day }: { day: DayLog }) {
           // La meta de entreno abre la sesión de entreno (o Entreno, si hoy no hay rutina).
           const hoyRut = b.kind === 'entreno' ? plannedFor(train, day.date).routine : null;
           const entrenando = b.kind === 'entreno' && train.active?.date === day.date;
+          const entrenado = b.kind === 'entreno' && !entrenando && train.sessions.some((s) => s.date === day.date);
           const destino = b.kind === 'entreno'
             ? (entrenando && train.active ? `entreno-sesion/${train.active.routineId}` : 'entreno')
             : enFoco ? (focus?.tramos ? `sesion/${focus.activityId}` : 'foco') : act ? `sesion/${act.id}` : `elegir/${b.key}`;
@@ -122,7 +123,7 @@ export function Hoy({ day }: { day: DayLog }) {
                   <div className="kicker">{estado(b, now)}</div>
                   <Tareas date={day.date} block={b} />
                   <button className="btn-foco" onClick={() => ir(destino)}>
-                    {b.kind === 'entreno' ? (entrenando ? 'Volver al entreno' : hoyRut ? `Entrar en foco · ${hoyRut.name}` : 'Entrar en foco · entreno') : enFoco ? 'Volver al foco' : act ? 'Entrar en foco · sesión de estudio' : 'Entrar en foco'}
+                    {b.kind === 'entreno' ? (entrenando ? 'Volver al entreno' : entrenado ? 'Ver el entreno de hoy' : hoyRut ? `Entrar en foco · ${hoyRut.name}` : 'Entrar en foco · entreno') : enFoco ? 'Volver al foco' : act ? 'Entrar en foco · sesión de estudio' : 'Entrar en foco'}
                   </button>
                 </div>
               )}
