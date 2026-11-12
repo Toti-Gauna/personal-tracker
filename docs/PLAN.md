@@ -261,10 +261,25 @@ data/
   cards.json             ← tarjetas + estado FSRS
   activities.json        ← frentes y actividades de estudio
   routines.json          ← rutinas de entreno y rutinas del día (04:00 / 05:00)
-  bimesters.json         ← nombres y fechas de los 9 bimestres
+  bimesters.json         ← nombre, fechas, producto y perfil de los 18 bimestres (existe)
+  roadmap.json           ← la ruta completa: ítems por semana, compuertas, certificaciones (existe)
 ```
 
+`data/roadmap.json` es la fuente de `docs/ROADMAP.md` (`npm run roadmap:md`; el CI falla si está desactualizado). `goals.json`, `cards.json`, `activities.json` y `routines.json` todavía no se generan: hoy esos datos viven en el teléfono.
+
 El repo es público y está bien así para estos datos.
+
+## 5 bis. Roadmap v3: 18 bimestres
+
+- **Ruta:** del 16-11-2026 al 15-11-2029, 18 bimestres de 2 meses (el B1 empieza el 16-11-2026). Antes eran 9; los **años 4 y 5 son opcionales**: física, ingeniería mecánica, termofluidos y aeroespacial (M7 a M10), y OSCP y CKA → CKS.
+- **Perfiles:** año 1, AI Engineer con seguridad (B1 a B6); año 2, ML Engineer completo (B7 a B12); año 3, Secure AI Engineer (B13 a B18).
+- **Cada bimestre:** semanas 1 a 4 de estudio y pieza desde cero, 5 a 8 de producto y 9 de cierre (métrica contra baseline, aporte abierto, tráiler, README y caso de estudio). El piloto sale de las cold calls de Eclipse.
+- **Hilos:** algoritmos (3 por semana desde B7, NeetCode 150), diseño de sistemas desde B7 y el núcleo de Eclipse reutilizado en todos.
+- **Matemática de B1 a B6:** un ítem por capítulo de CONAMAT (69, tabla "4 ter"), repartidos en las semanas 1 a 8, con las partes aprender y test.
+- **Metas atadas al roadmap:** las metas del día (`Block`) y de la semana (`Goal`) pueden llevar `ref` (id del ítem) y `part` (learn, test, build o close).
+- **Datos de los gráficos** (`src/data/roadmap-charts.ts`, sin pantallas): serie diaria de mejora con promedio móvil de 7 días, horas por mes y carril, avance ponderado por horas, ritmo esperado contra real (con tolerancia de 5 puntos) y puntaje de competencias por eje.
+- Pendiente de cargar en `roadmap.json`: "qué existe" y "nuestro ángulo" de cada bimestre (los campos existen, están vacíos) y las horas de los ítems que no son certificaciones.
+- Las pantallas siguen leyendo `src/data/bimesters.ts` (los 9 bimestres anteriores): no se tocaron. Pasarlas a los 18 es trabajo de una ola siguiente.
 
 ## 6. Olas de desarrollo (un PR por ola, un modelo por ola)
 
@@ -544,4 +559,12 @@ En el día a día alcanza con **Haiku 5.5 · bajo**: pegás el JSON del cierre y
 - Vista Avance con selector de período y modo presentación sin peso ni montos.
 - Hoy en dos columnas en escritorio; la hora queda a la derecha del título en teléfono, tablet y escritorio.
 - Pulido de movimiento: entrada de pantallas, filas escalonadas, regla de horas, giro de tarjeta y latido del descanso.
+
+**2026-11-12 · roadmap v3**
+
+- La ruta pasa de 9 a 18 bimestres (16-11-2026 a 15-11-2029), con años 4 y 5 opcionales.
+- `data/roadmap.json` y `data/bimesters.json` con los 18 bimestres; `docs/ROADMAP.md` se genera desde el JSON y el CI lo verifica.
+- Matemática de B1 a B6 en un ítem por capítulo de CONAMAT (69).
+- `ref` y `part` opcionales en las metas del día y de la semana.
+- Modelo de datos de los gráficos del roadmap, con funciones puras y tests. No se tocó ninguna pantalla.
 

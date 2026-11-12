@@ -184,3 +184,18 @@ describe('metas atadas al roadmap', () => {
     expect(bloque.part).toBe('learn');
   });
 });
+
+describe('data/bimesters.json', () => {
+  it('trae los 18 bimestres y coincide con roadmap.json', async () => {
+    const { default: bj } = await import('../../data/bimesters.json');
+    const lista = (bj as unknown as { bimesters: { n: number; start: string; end: string; name: string; product: string; industry: string; year: number; profile: string }[] }).bimesters;
+    expect(lista).toHaveLength(18);
+    lista.forEach((x, i) => {
+      const b = bims[i];
+      expect(x).toMatchObject({ n: b.n, start: b.start, end: b.end, product: b.product.name, industry: b.product.industry, year: b.year });
+      expect(x.profile).toBe(roadmap.route.years[b.year - 1].profile);
+      expect(x.name.length).toBeGreaterThan(0);
+    });
+    expect(new Set(lista.map((x) => x.n)).size).toBe(18);
+  });
+});
