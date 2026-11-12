@@ -51,6 +51,4 @@ export const DEFAULT_PRESETS: Preset[] = [
 
 export const DEFAULT_BLOCK_PRESETS: Record<string, string> = { math: 'p-math', prog: 'p-prog' };
 
-/** Nombres de los bimestres hasta que se puedan renombrar (ola 4). */
-export const BIMESTER_NAMES = ['El despegue'];
 export const WEEKS_PER_BIMESTER = 9;

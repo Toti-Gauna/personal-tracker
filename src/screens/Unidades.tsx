@@ -13,7 +13,8 @@ export function Unidades({ day }: { day: DayLog }) {
   const conUnidades = study.activities.filter((a) => a.units?.length);
   const [tab, setTab] = useState(conUnidades[0]?.id);
   const a = conUnidades.find((x) => x.id === tab) ?? conUnidades[0];
-  const bim = bimester(settings.startDate, day.date);
+  const names = useStore((s) => s.goals.bimesterNames);
+  const bim = bimester(settings.startDate, day.date, names);
   const front = study.fronts.find((f) => f.id === a?.front);
 
   return (

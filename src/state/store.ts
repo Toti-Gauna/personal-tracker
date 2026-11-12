@@ -3,6 +3,9 @@ import { DEFAULT_BLOCK_PRESETS, DEFAULT_PRESETS } from '../data/defaults';
 import { buildBlocks, newId, planDay } from '../data/schedule';
 import { addDays, dateKey } from '../data/time';
 import { emptyStudy } from '../data/study-catalog';
+import { defaultGoals, emptyGoals } from '../data/goals-catalog';
+import type { Goal, GoalsState } from '../data/goals-types';
+import { periodKey } from '../data/goals';
 import type { StudyState } from '../data/study-types';
 import type { Block, DayLog, FocusEntry, FocusState, Preset, RoutineId, Settings } from '../data/types';
 
@@ -13,10 +16,11 @@ export interface State {
   /** Tareas que pasaron a otro día: fecha → key del bloque → textos. */
   carry: Record<string, Record<string, string[]>>;
   study: StudyState;
+  goals: GoalsState;
 }
 
 const KEY = 'trazo.v1';
-const empty = (): State => ({ settings: null, days: {}, focus: null, carry: {}, study: emptyStudy() });
+const empty = (): State => ({ settings: null, days: {}, focus: null, carry: {}, study: emptyStudy(), goals: emptyGoals() });
 
 function load(): State {
   try {
@@ -26,7 +30,8 @@ function load(): State {
       // Migración: la ola 1 no tenía estudio y la ola 2 no tenía reglas, registro ni puntos.
       const base = emptyStudy();
       const study = parsed.study ? { ...base, ...parsed.study, rules: { ...base.rules, ...parsed.study.rules } } : base;
-      return { ...empty(), ...parsed, study };
+      const goals = parsed.goals ? { ...emptyGoals(), ...parsed.goals } : null;
+      return { ...empty(), ...parsed, study, goals: goals ?? seedGoals(parsed.settings?.startDate ?? dateKey()) };
     }
   } catch { /* sin storage o JSON roto */ }
   return empty();
@@ -58,11 +63,17 @@ export function useStore<T>(sel: (s: State) => T): T {
   return useSyncExternalStore(subscribe, () => sel(state), () => sel(state));
 }
 
+export function seedGoals(today: string): GoalsState {
+  const keys = Object.fromEntries((['dia', 'semana', 'mes', 'bim', 'anio'] as const).map((h) => [h, periodKey(h, today)]));
+  return { goals: defaultGoals(today, keys), bimesterNames: {} };
+}
+
 // ——— acciones ———
 
 export function register(me: string, partner: string, today = dateKey()) {
   setState((s) => ({
     ...s,
+    goals: seedGoals(today),
     settings: {
       names: { me: me.trim() || 'Toti', partner: partner.trim() || 'Abi' },
       startDate: today,

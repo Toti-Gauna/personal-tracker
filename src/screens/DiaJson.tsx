@@ -8,7 +8,8 @@ import '../styles/foco.css';
 export function DiaJson({ day }: { day: DayLog }) {
   const settings = useStore((s) => s.settings)!;
   const days = useStore((s) => s.days);
-  const texto = JSON.stringify(dayJson(day, settings, days), null, 2);
+  const names = useStore((s) => s.goals.bimesterNames);
+  const texto = JSON.stringify(dayJson(day, settings, days, names), null, 2);
   const archivo = `${day.date}.json`;
 
   const copiar = async () => {

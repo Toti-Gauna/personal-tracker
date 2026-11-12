@@ -10,6 +10,8 @@ import { ElegirFoco } from './screens/ElegirFoco';
 import { Foco } from './screens/Foco';
 import { Hoy } from './screens/Hoy';
 import { Instalar } from './screens/Instalar';
+import { Metas } from './screens/Metas';
+import { NuevaMeta } from './screens/NuevaMeta';
 import { Perfil } from './screens/Perfil';
 import { Pomodoros } from './screens/Pomodoros';
 import { Actividad } from './screens/Actividad';
@@ -69,7 +71,8 @@ export function App() {
       case 'tarjetas': contenido = <Tarjetas key={ruta.param ?? 'todas'} day={day} frontId={ruta.param || undefined} />; break;
       case 'tarjeta-nueva': contenido = <NuevaTarjeta day={day} />; break;
       case 'motor': contenido = <Motor day={day} seccion={ruta.param} />; break;
-      case 'metas': contenido = <PantallaPendiente titulo="Metas" linea="De la semana al año." ola="ola 4" />; break;
+      case 'metas': contenido = <Metas day={day} tab={ruta.param} />; break;
+      case 'meta-nueva': contenido = <NuevaMeta today={today} horizon={ruta.param} />; break;
       case 'entreno': contenido = <PantallaPendiente titulo="Entreno" linea="Rutinas en pareja y sobrecarga progresiva." ola="ola 5" />; break;
       case 'perfil': contenido = <Perfil />; break;
     }
