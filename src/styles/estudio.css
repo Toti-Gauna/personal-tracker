@@ -16,9 +16,15 @@
 .contenido .mono { font-size: 13px; }
 
 .plan { border: 1px solid var(--linea); border-top: 3px solid var(--c); border-radius: 10px; padding: 16px; margin-bottom: 28px; }
-.plan-cab { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; flex-wrap: wrap; }
-.plan-cab h2 { margin: 0; font-size: 21px; }
-.plan-cab .mono { font-size: 13px; color: var(--sub); }
+.plan-cab { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; }
+.plan-cab h2 { margin: 0; font-size: 19px; min-width: 0; }
+.plan-cab .mono { font-size: 13px; color: var(--sub); white-space: nowrap; }
+.plan-cab h2 a { color: inherit; text-decoration: none; }
+.fases { list-style: none; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px; margin: 14px 0 12px; padding: 0; }
+.fases li { border: 1px solid var(--linea); border-radius: 8px; padding: 6px 7px 5px; display: grid; gap: 1px; min-width: 0; }
+.fases li[aria-current='step'] { border-color: var(--tinta); border-width: 1.5px; padding: 5.5px 6.5px 4.5px; }
+.fases small { font-family: var(--font-mono); font-size: 11px; color: var(--sub); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.fases b { font-size: 15px; font-weight: 600; letter-spacing: -0.01em; overflow: hidden; text-overflow: ellipsis; }
 .pasos-plan { list-style: none; margin: 10px 0 14px; padding: 0; }
 .pasos-plan li { display: grid; grid-template-columns: 24px minmax(0, 1fr) auto; gap: 12px; align-items: center; padding: 12px 0; border-top: 1px solid var(--linea); }
 .paso-t { min-width: 0; display: grid; gap: 2px; }

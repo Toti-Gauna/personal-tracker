@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { AREAS } from '../data/defaults';
-import { KIND_LABEL, STEP_LABEL, type PlanStep } from '../data/study';
+import { KIND_LABEL, STEP_LABEL, unitPhases, type PlanStep } from '../data/study';
 import { addDays, fmtDur } from '../data/time';
 import type { ReviewItem } from '../data/study-types';
 import type { DayLog } from '../data/types';
@@ -28,13 +28,25 @@ function tocar(date: string, s: PlanStep, done: boolean) {
 
 function Panel({ c, day, skipped }: { c: Contenido; day: DayLog; skipped: ReviewItem[] }) {
   const focus = useStore((s) => s.focus);
+  const study = useStore((s) => s.study);
   const enSesion = focus?.activityId === c.id && focus.date === day.date;
+  const fases = c.activity ? unitPhases(c.activity, study, day.date) : null;
   return (
     <section className="plan" style={{ ['--c' as string]: AREAS[c.color as keyof typeof AREAS].css }} aria-labelledby="plan-t">
       <div className="plan-cab">
-        <h2 id="plan-t">{c.title}</h2>
+        <h2 id="plan-t">{c.activity ? <a href={`#/actividad/${c.id}`}>{c.title}</a> : c.title}</h2>
         {c.start && <span className="mono">{c.start} – {c.end}</span>}
       </div>
+      {fases && (
+        <ol className="fases" aria-label={`${fases.unit.title}: en qué fase estás`}>
+          {fases.fases.map((f, i) => (
+            <li key={f.name} aria-current={i === fases.actual ? 'step' : undefined}>
+              <small>{f.when}</small>
+              <b>{f.name}</b>
+            </li>
+          ))}
+        </ol>
+      )}
       <ul className="pasos-plan">
         {c.steps.map((s) => {
           const done = c.done(s);
@@ -46,7 +58,7 @@ function Panel({ c, day, skipped }: { c: Contenido; day: DayLog; skipped: Review
                 <span className="paso-nombre">{s.title}</span>
               </div>
               <div className="paso-min">
-                <span className="mono">{fmtDur(s.min)}</span>
+                <span className="mono">{fmtDur(s.ver)}</span>
                 {s.paper != null && <span className="chip-papel">{s.paper ? 'en papel' : 'en la app'}</span>}
               </div>
             </li>
@@ -67,7 +79,7 @@ function Panel({ c, day, skipped }: { c: Contenido; day: DayLog; skipped: Review
           className="btn-principal"
           onClick={() => (enSesion ? ir(`sesion/${c.id}`) : startStudy(day.date, c.id, c.blockKey, c.tramos))}
         >
-          {enSesion ? 'Volver a la sesión' : `Entrar en foco · ${fmtDur(c.total)}`}
+          {enSesion ? 'Volver a la sesión' : `Entrar en foco · ${fmtDur(c.falta)}`}
         </button>
       )}
     </section>
@@ -127,21 +139,8 @@ export function Estudio({ day }: { day: DayLog }) {
       </div>
 
       <div className="dos-botones">
-        <a className="btn-borde" href="#/repaso">Repaso de hoy</a>
-        <a className="btn-borde" href="#/motor">Motor de repaso</a>
-      </div>
-      <div className="dos-botones">
         <a className="btn-borde" href="#/como">Cómo funciona</a>
         <a className="btn-borde" href="#/unidades">Plan del bimestre</a>
-      </div>
-
-      <div className="actividades">
-        <span className="etiqueta">Tus actividades</span>
-        {study.activities.map((a) => (
-          <a key={a.id} href={`#/actividad/${a.id}`} className="fila-link">
-            <span>{a.title}</span><span aria-hidden="true">→</span>
-          </a>
-        ))}
       </div>
       <a className="sumar" href="#/actividad">+ Sumar algo de estudio a hoy</a>
     </main>

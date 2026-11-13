@@ -343,7 +343,10 @@ export interface PlanStep {
   kind: Tramo['kind'];
   title: string;
   sub: string;
+  /** Minutos del paso, descansos incluidos (lo que suma al "falta"). */
   min: number;
+  /** Minutos que se muestran: el capítulo, sin sus descansos. */
+  ver: number;
   ref: string;
   paper?: boolean;
   activityId: string;
@@ -356,9 +359,10 @@ export function groupSteps(tramos: Tramo[]): PlanStep[] {
     const last = out[out.length - 1];
     if (t.step === 'estudiar' && last?.step === 'estudiar' && last.ref === t.ref) {
       last.min += t.min;
+      if (t.kind !== 'descanso') last.ver += t.min;
       continue;
     }
-    out.push({ step: t.step, kind: t.kind === 'descanso' ? 'capitulo' : t.kind, title: t.paso ?? t.title, sub: t.sub, min: t.min, ref: t.ref, paper: t.paper, activityId: t.activityId });
+    out.push({ step: t.step, kind: t.kind === 'descanso' ? 'capitulo' : t.kind, title: t.paso ?? t.title, sub: t.sub, min: t.min, ver: t.kind === 'descanso' ? 0 : t.min, ref: t.ref, paper: t.paper, activityId: t.activityId });
   }
   return out;
 }
