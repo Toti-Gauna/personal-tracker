@@ -94,17 +94,6 @@ export function setAlarms(alarms: Alarm[]) {
   updateSettings((s) => ({ ...s, alarms }));
 }
 
-export function setDayRoutine(id: 'completo' | 'corto', patch: { wake?: string; durations?: Record<string, number> }) {
-  updateSettings((s) => {
-    const cur = s.dayRoutines?.[id];
-    return { ...s, dayRoutines: { ...(s.dayRoutines ?? {}), [id]: { wake: patch.wake ?? cur?.wake ?? '', durations: { ...(cur?.durations ?? {}), ...(patch.durations ?? {}) } } } };
-  });
-}
-
-export function resetDayRoutines() {
-  updateSettings((s) => ({ ...s, dayRoutines: undefined }));
-}
-
 export function markBackup(date: string) {
   updateSettings((s) => ({ ...s, lastBackup: date }));
 }

@@ -4,7 +4,7 @@ import { dayJson } from './export';
 import { extend, focusIndex, pause, restNow, resume, segRemaining, startFocus, tick } from './focus';
 import { acumulado, mejoraDia } from './mejora';
 import { fitPreset, focusMinutes, planLabel, totalMinutes } from './pomodoro';
-import { buildBlocks, currentBlock, fitChained, planDay, remainingMin, wakeRange } from './schedule';
+import { buildBlocks, currentBlock, planDay, remainingMin } from './schedule';
 import { fmtDur, toMin } from './time';
 import type { DayLog, Settings } from './types';
 
@@ -37,36 +37,15 @@ describe('pomodoros que entran justos', () => {
   });
 });
 
-describe('rutinas del día', () => {
-  it('04:00 arma el día completo y 05:00 el corto, con Abi fijo a las 08:30', () => {
-    const completo = planDay('completo', '04:00');
-    expect(completo.map((p) => p.start).slice(0, 4)).toEqual(['04:00', '04:30', '06:30', '08:30']);
-    const corto = planDay('corto', '05:00');
-    expect(corto.slice(0, 4).map((p) => [p.start, p.min])).toEqual([['05:00', 20], ['05:20', 90], ['06:50', 100], ['08:30', 90]]);
-  });
-
-  it('"Otra hora" corre los bloques y acorta los flexibles hasta el primer fijo', () => {
-    for (let w = wakeRange().min; w <= wakeRange().max; w += 10) {
-      const d = fitChained(w);
-      expect(d.rutina + d.math + d.prog).toBeLessThanOrEqual(toMin('08:30') - w);
-      if (w >= toMin('04:00')) expect(d.rutina + d.math + d.prog).toBe(toMin('08:30') - w);
-      expect(d.math).toBeGreaterThanOrEqual(45);
-      expect(d.prog).toBeGreaterThanOrEqual(45);
-      expect(d.rutina).toBeGreaterThanOrEqual(15);
-    }
-    const plan = planDay('otra', '04:40');
-    expect(plan[3].start).toBe('08:30');
-    expect(plan[2].start).not.toBe('08:30');
-  });
-
-  it('8 metas y 18 tareas, con lo que quedó de ayer sumado a su bloque', () => {
-    const blocks = buildBlocks(planDay('completo', '04:00'), { prog: ['Commit de lo avanzado'] });
+describe('metas del día', () => {
+  it('8 metas de lunes a viernes, con lo que quedó de ayer sumado a su bloque', () => {
+    const blocks = buildBlocks(planDay('2026-11-11', 'completo'), { prog: ['Commit de lo avanzado'] });
     expect(blocks.map((b) => b.n)).toEqual([1, 2, 3, 4, 5, 6, 7, 8]);
-    expect(blocks.flatMap((b) => b.tasks)).toHaveLength(19);
+    expect(blocks.find((b) => b.key === 'prog')!.tasks).toHaveLength(4);
   });
 
   it('bloque en curso y lo que le queda', () => {
-    const blocks = buildBlocks(planDay('completo', '04:00'));
+    const blocks = buildBlocks(planDay('2026-11-11', 'completo'));
     const cur = currentBlock(blocks, toMin('07:00'))!;
     expect(cur.key).toBe('prog');
     expect(fmtDur(remainingMin(cur, toMin('07:00')))).toBe('1 h 30');
@@ -107,7 +86,7 @@ describe('motor del foco', () => {
 });
 
 describe('mejora y JSON del día', () => {
-  const blocks = buildBlocks(planDay('completo', '04:00'));
+  const blocks = buildBlocks(planDay('2026-11-11', 'completo'));
   blocks[0].tasks.forEach((t) => (t.done = true));
   blocks[1].tasks.forEach((t) => (t.done = true));
   const day: DayLog = { date: '2026-11-11', wake: '04:00', routine: 'completo', blocks, notes: ['idea'], focus: [] };
@@ -118,14 +97,14 @@ describe('mejora y JSON del día', () => {
   });
 
   it('exporta el día con la mejora comparada con ayer', () => {
-    const ayer: DayLog = { ...day, date: '2026-11-10', blocks: buildBlocks(planDay('completo', '04:00')) };
+    const ayer: DayLog = { ...day, date: '2026-11-10', blocks: buildBlocks(planDay('2026-11-11', 'completo')) };
     ayer.blocks[0].tasks.forEach((t) => (t.done = true));
     const settings: Settings = { names: { me: 'T', partner: 'A' }, startDate: '2026-11-08', presets: [], blockPresets: {} };
     const j = dayJson(day, settings, { [day.date]: day, [ayer.date]: ayer });
     expect(j.day).toBe(3);
     expect(j.bimester).toEqual({ n: 1, name: 'El despegue', week: 1 });
     expect(j.blocks).toHaveLength(8);
-    expect(j.blocks[0]).toMatchObject({ n: 1, id: 'rutina', area: 'rutina', start: '04:00', done: true });
+    expect(j.blocks[0]).toMatchObject({ n: 1, id: 'math', area: 'ing', start: '04:30', done: true });
     expect(j.mejora).toEqual({ hoy: 0.25, ayer: 0.125, acumulado: 0.38 });
   });
 });

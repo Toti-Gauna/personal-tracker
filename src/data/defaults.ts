@@ -1,4 +1,5 @@
-import type { Area, BlockTemplate, DayRoutine, Preset } from './types';
+import { metasOf, toTemplate } from './routines';
+import type { Area, BlockTemplate, Preset } from './types';
 
 const AREA_DEFAULTS: Record<Area, { name: string; css: string }> = {
   ing: { name: 'Ingeniería', css: 'var(--ing)' },
@@ -21,30 +22,11 @@ export const AREAS = Object.fromEntries(
 ) as Record<Area, { readonly name: string; css: string }>;
 export const areaDefaultName = (a: Area) => AREA_DEFAULTS[a].name;
 
-/** Las 8 metas del día, en orden. Las de la mañana se encadenan desde que te levantás. */
-export const BLOCKS: BlockTemplate[] = [
-  { key: 'rutina', title: 'Rutina de la mañana', short: 'la rutina', area: 'rutina', kind: 'pomodoro', min: 30, minMin: 15,
-    tasks: ['Agua y cama hecha', 'Movilidad 10 min'] },
-  { key: 'math', title: 'Matemática · CONAMAT', short: 'matemática', area: 'ing', kind: 'estudio', min: 120, minMin: 45,
-    tasks: ['Repaso de tarjetas', 'Capítulo del día', 'Test del capítulo'] },
-  { key: 'prog', title: 'Programación · Python', short: 'programación', area: 'ing', kind: 'estudio', min: 120, minMin: 45,
-    tasks: ['Repaso de tarjetas', 'Python Tutorial, secciones 5 y 6', 'Commit de lo avanzado'] },
-  { key: 'abi', title: 'Acompañar a Abi y correr', short: 'Abi', area: 'salud', kind: 'pomodoro', min: 90, fixed: '08:30',
-    tasks: ['Correr'] },
-  { key: 'handyx', title: 'Handyx', short: 'Handyx', area: 'handyx', kind: 'pomodoro', min: 300, fixed: '10:00',
-    tasks: ['Revisar pendientes', 'Tarea principal', 'Hablar con un usuario'] },
-  { key: 'eclipse', title: 'Eclipse · 10 cold calls', short: 'Eclipse', area: 'eclipse', kind: 'pomodoro', min: 180, fixed: '15:00',
-    tasks: ['10 cold calls', 'Anotar resultados'] },
-  { key: 'entreno', title: 'Entrenamiento', short: 'el entreno', area: 'salud', kind: 'entreno', min: 90, fixed: '18:00',
-    tasks: ['Caminata y movilidad', 'Rutina del día'] },
-  { key: 'cierre', title: 'Cerrar y preparar mañana', short: 'el cierre', area: 'rutina', kind: 'pomodoro', min: 30, fixed: '21:00',
-    tasks: ['Cerrar el día', 'Preparar mañana'] },
-];
-
-export const ROUTINES: DayRoutine[] = [
-  { id: 'completo', name: 'Día completo', wake: '04:00', durations: { rutina: 30, math: 120, prog: 120 } },
-  { id: 'corto', name: 'Día corto', wake: '05:00', durations: { rutina: 20, math: 90, prog: 100 } },
-];
+/**
+ * Las metas de lunes a viernes, como plantillas (para elegir el bloque de una actividad de
+ * estudio). Salen de data/routines.json: acá no hay horarios.
+ */
+export const BLOCKS: BlockTemplate[] = metasOf('weekday').map((b) => toTemplate(b));
 
 /** Formas base de trabajar un bloque: se ajustan al tiempo que queda. */
 export const BUILTIN_PRESETS: Preset[] = [

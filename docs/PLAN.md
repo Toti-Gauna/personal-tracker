@@ -84,11 +84,13 @@ Tracker personal de Toti: el día en horas, el estudio con su propio motor de re
 **1 · Empezar el día**
 
 1. **Instalar.** Agregás Trazo a inicio y cargás tu nombre y el de Abi. Queda guardado y no se vuelve a pedir.
-2. **Buen día.** La primera apertura de cada día pregunta a qué hora te levantaste:
-   - 04:00 arma el día completo, con matemática 2 h y programación 2 h.
-   - 05:00 arma el día corto, con matemática 1 h 30 y programación 1 h 40. Lo de Abi queda fijo.
-   - Con "Otra hora" el día corre los bloques y acorta los flexibles.
-3. **Hoy.** El encabezado, el avance del día (11 de 18) y la regla de horas con las metas numeradas del 1 al 8. **Entrar en foco** te lleva al motor de esa meta:
+2. **Buen día.** La primera apertura de cada día pregunta a qué hora te levantaste. La rutina se elige sola por el día de la semana (hora de Buenos Aires): de lunes a viernes, "weekday" (8 metas); sábado y domingo, "weekend" (5 metas). No hay selector manual.
+   - 04:00 arma el día completo de la rutina que corresponda.
+   - 05:00 arma el día corto: las metas flexibles de la mañana se acortan (de lunes a viernes, matemática 1 h 30 y programación 1 h 30; el finde, matemática 3 h). Los bloques fijos no se tocan.
+   - Con "Otra hora" el día corre los bloques y acorta los flexibles, nunca a menos de 15 min.
+   - **Fijos** (no se acortan ni se mueven): correr y acompañar a Abi (08:30–10:00), trabajo, entrenamiento y sueño. **Flexibles:** matemática, programación, Handyx, Eclipse y búsqueda laboral. Solo se acortan los flexibles de antes del primer fijo; los de la tarde quedan en su hora.
+   - La ducha va adentro de correr, del almuerzo y del estudio; no es un bloque aparte. Despertar, comidas, descanso, desconexión y sueño no cuentan como meta.
+3. **Hoy.** El encabezado, el avance del día y la regla de horas con las metas numeradas (del 1 al 8 de lunes a viernes, del 1 al 5 el finde; mismo diseño). **Entrar en foco** te lleva al motor de esa meta:
    - una meta de estudio abre su sesión de estudio;
    - la de entreno abre la sesión de entreno;
    - el resto va a elegir pomodoro.
@@ -232,7 +234,7 @@ Más las tarjetas que vencen, dentro del mismo tope de 20 min. Los días 8, 22 y
 
 ## 4 bis. Mejora diaria (1 % por día)
 
-- Cada día podés mejorar hasta un 1 %, repartido en partes iguales entre las metas del día (los bloques, no las tareas de adentro). Con 8 metas, cada una vale 0,125 %.
+- Cada día podés mejorar hasta un 1 %, repartido en partes iguales entre las metas del día (los bloques, no las tareas de adentro). Con 8 metas (lunes a viernes), cada una vale 0,125 %; con 5 (fin de semana), 0,2 %.
 - Hoy muestra la mejora en curso; el Cierre la muestra primero y siempre compara con ayer: "Hoy avanzaste 0,13 más que ayer".
 - El acumulado se compone día a día (1,01 × 1,01 × …) y aparece en Cierre y en la vista Avance.
 - En el JSON del día: `"mejora": { "hoy": 0.75, "ayer": 0.625, "acumulado": 2.27 }`.
@@ -285,14 +287,14 @@ data/
   goals.json             ← metas por horizonte
   cards.json             ← tarjetas + estado FSRS
   activities.json        ← frentes y actividades de estudio
-  routines.json          ← rutinas de entreno y rutinas del día (04:00 / 05:00)
+  routines.json          ← rutinas del día: "dayRoutines" weekday y weekend, zona horaria y horas de 04:00 / 05:00 (existe)
   reviews.json           ← cada intento: tema, tipo (cold recall, tarjeta o ejercicio), resultado, fecha y cuánto creías recordar
   tests.json             ← cada test: capítulo, puntaje y el tipo de cada error
   bimesters.json         ← nombre, fechas, producto y perfil de los 18 bimestres (existe)
   roadmap.json           ← la ruta completa: ítems por semana, compuertas, certificaciones (existe)
 ```
 
-`data/roadmap.json` es la fuente de `docs/ROADMAP.md` (`npm run roadmap:md`; el CI falla si está desactualizado). `goals.json`, `cards.json`, `activities.json` y `routines.json` todavía no se generan: hoy esos datos viven en el teléfono. `reviews.json` y `tests.json` se descargan desde Copia de seguridad.
+`data/roadmap.json` es la fuente de `docs/ROADMAP.md` (`npm run roadmap:md`; el CI falla si está desactualizado). `data/routines.json` es la fuente de verdad de las rutinas del día: cada bloque lleva id, label, start, end, area, kind ("fixed" o "flex") y focus, más meta (false si no cuenta) y tasks. Se valida al cargar; Ajustes las muestra y se cambian en el JSON. `goals.json`, `cards.json` y `activities.json` todavía no se generan: hoy esos datos viven en el teléfono. `reviews.json` y `tests.json` se descargan desde Copia de seguridad.
 
 El repo es público y está bien así para estos datos.
 
@@ -632,3 +634,9 @@ En el día a día alcanza con **Haiku 5.5 · bajo**: pegás el JSON del cierre y
 - Fuerza por tema (40 % cold recall, 30 % tarjetas, 30 % test), temas flojos, sanguijuelas, calibración y cuán listo estás para el final.
 - "Dónde estás flojo" en Estudio, creías contra recordaste en el Recall y "Lo más flojo va primero" en el Repaso.
 - Priorizar lo flojo cambia el motor cuando no entra todo en 20 min.
+
+**2026-11-13 · rutinas del día por día de la semana**
+
+- data/routines.json con "dayRoutines": lunes a viernes (8 metas) y fin de semana (5 metas), validado al cargar. Nada de horarios en el código.
+- Buen día y Hoy usan la rutina del día de la semana (hora de Buenos Aires); 04:00, 05:00 y "Otra hora" se mantienen. Fijos que no se mueven y flexibles que se acortan.
+- Ajustes → Rutinas del día muestra las dos rutinas con sus bloques (ya no se editan en la app).

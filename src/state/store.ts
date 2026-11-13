@@ -1,6 +1,7 @@
 import { useSyncExternalStore } from 'react';
 import { DEFAULT_BLOCK_PRESETS, DEFAULT_PRESETS } from '../data/defaults';
 import { buildBlocks, newId, planDay } from '../data/schedule';
+import { dayTypeOf } from '../data/routines';
 import { addDays, dateKey } from '../data/time';
 import { emptyStudy } from '../data/study-catalog';
 import { defaultGoals, emptyGoals } from '../data/goals-catalog';
@@ -117,8 +118,9 @@ export function startDay(routine: RoutineId, wake: string, date = dateKey()) {
     const { [date]: _, ...restCarry } = s.carry;
     // Las metas que empujan la ruta llevan su etiqueta (ref y part) desde que empieza el día.
     const refs = refsForDay(s.ruta, date);
-    const blocks = buildBlocks(planDay(routine, wake), carry).map((b) => (refs[b.key] ? { ...b, ...refs[b.key] } : b));
-    const day: DayLog = { date, wake, routine, blocks, notes: [], focus: [] };
+    const dayType = dayTypeOf(date);
+    const blocks = buildBlocks(planDay(date, routine, wake, dayType), carry).map((b) => (refs[b.key] ? { ...b, ...refs[b.key] } : b));
+    const day: DayLog = { date, wake, routine, dayType, blocks, notes: [], focus: [] };
     return { ...s, days: { ...s.days, [date]: day }, carry: restCarry };
   });
 }
