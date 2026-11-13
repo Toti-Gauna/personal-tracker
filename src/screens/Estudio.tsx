@@ -31,6 +31,8 @@ function Panel({ c, day, skipped }: { c: Contenido; day: DayLog; skipped: Review
   const study = useStore((s) => s.study);
   const enSesion = focus?.activityId === c.id && focus.date === day.date;
   const fases = c.activity ? unitPhases(c.activity, study, day.date) : null;
+  // La fase en la que estás: la del primer paso que falta, en el orden de la sesión.
+  const ahora = c.steps.find((s) => !c.done(s))?.step;
   return (
     <section className="plan" style={{ ['--c' as string]: AREAS[c.color as keyof typeof AREAS].css }} aria-labelledby="plan-t">
       <div className="plan-cab">
@@ -38,9 +40,9 @@ function Panel({ c, day, skipped }: { c: Contenido; day: DayLog; skipped: Review
         {c.start && <span className="mono">{c.start} – {c.end}</span>}
       </div>
       {fases && (
-        <ol className="fases" aria-label={`${fases.unit.title}: en qué fase estás`}>
-          {fases.fases.map((f, i) => (
-            <li key={f.name} aria-current={i === fases.actual ? 'step' : undefined}>
+        <ol className="fases" aria-label="Qué capítulo toca hoy en cada fase">
+          {fases.map((f) => (
+            <li key={f.name} aria-current={f.step === ahora ? 'step' : undefined} className={f.when === '—' ? 'nada' : ''}>
               <small>{f.when}</small>
               <b>{f.name}</b>
             </li>
