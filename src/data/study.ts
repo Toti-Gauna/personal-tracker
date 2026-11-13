@@ -152,6 +152,21 @@ export function studySegs(p: Preset, avail: number): Seg[] {
   return out;
 }
 
+/**
+ * Cambia el pomodoro del capítulo en una sesión ya armada: rehace los tramos de estudiar con lo
+ * que dejan libre los demás (`avail`). Devuelve null si ya empezaste a estudiar (índice `from`).
+ */
+export function rePomodoro(tramos: Tramo[], from: number, p: Preset, avail: number): Tramo[] | null {
+  const i0 = tramos.findIndex((t) => t.step === 'estudiar');
+  if (i0 < 0 || from > i0) return null;
+  const base = tramos[i0];
+  const rest = tramos.filter((t) => t.step !== 'estudiar');
+  const sub = base.sub.replace(/, pomodoro .+$/, '') + `, pomodoro ${presetName(p)}`;
+  const nuevos = studySegs(p, avail).map((sg): Tramo =>
+    sg.type === 'focus' ? { ...base, kind: 'capitulo', sub, min: sg.min } : { ...base, kind: 'descanso', title: 'Descanso', paso: undefined, sub: 'Pararse, agua, nada de pantalla', min: sg.min });
+  return [...rest.filter((t) => t.step === 'repetir'), ...nuevos, ...rest.filter((t) => t.step !== 'repetir')];
+}
+
 export interface PlanCtx {
   study: StudyState;
   date: string;
