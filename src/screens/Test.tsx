@@ -9,7 +9,7 @@ import type { DayLog } from '../data/types';
 import { useStore } from '../state/store';
 import { saveTest } from '../state/study';
 import { toast } from '../ui/avisos';
-import { LADDER } from '../data/study-catalog';
+import { LADDER, MAX_TRIES } from '../data/study-catalog';
 import '../styles/estudio.css';
 
 const ERR: Record<ErrType, [string, string]> = {
@@ -37,7 +37,7 @@ export function Test({ day, param }: { day: DayLog; param?: string }) {
   const [errors, setErrors] = useState(zero);
   const [perEx, setPerEx] = useState<(ErrType | null)[]>(() => Array.from({ length: total }, () => null));
   const [pegar, setPegar] = useState<string | null>(null);
-  const [guardado, setGuardado] = useState<boolean | null>(null);
+  const [guardado, setGuardado] = useState<{ approved: boolean; flojo: boolean } | null>(null);
   const focus = useStore((s) => s.focus);
   const intento = unit ? (study.units[actId]?.[unit.n]?.tests.length ?? 0) : 0;
   const ex = useMemo(() => (unit && t ? testExercises(actId, unit.n, t.nuevos, t.prev, intento) : []), [actId, unit, t?.nuevos, t?.prev, intento]); // eslint-disable-line react-hooks/exhaustive-deps
@@ -68,9 +68,13 @@ export function Test({ day, param }: { day: DayLog; param?: string }) {
   const ok = approves(sc, total);
   const fallados = total - sc;
   const cargados = ERR_TYPES.reduce((s, k) => s + er[k], 0);
-  const tesis = fecha(addDays(day.date, LADDER.tesis.days));
   const reTest = fecha(addDays(day.date, LADDER.retest.days));
   const prev = study.units[a.id]?.[unit.n]?.tests.length ?? 0;
+  // A la tercera vez sin aprobar, el tema queda marcado como flojo y sigue a la tesis.
+  const ultimo = prev + 1 >= MAX_TRIES;
+  const reprobado = ultimo
+    ? 'Tercera vez sin aprobar: el tema queda marcado como flojo. Mañana va la tesis y vuelve en los repasos.'
+    : `Mañana releés lo que falló y el ${reTest} hacés el re-test (intento ${prev + 2} de ${MAX_TRIES}), con ejercicios nuevos.`;
   const cap = unitShort(a, unit.n).toLowerCase();
   const que = `${t!.nuevos} ${t!.nuevos === 1 ? 'ejercicio nuevo' : 'ejercicios nuevos'} del ${cap}${t!.prev ? ` y ${t!.prev} ${anteriores(unit.n)}` : ''}`;
   const graves = (['tecnica', 'concepto', 'enunciado'] as ErrType[]).filter((k) => er[k] > 0);
@@ -83,7 +87,11 @@ export function Test({ day, param }: { day: DayLog; param?: string }) {
     const per = papel ? (conEj ? bien.map((b, i) => (b === false ? tipoDe(i) : null)) : perEx) : undefined;
     const r = saveTest(day.date, a.id, unit.n, { score: sc, total, errors: er, mode: modo, perEx: per, wrong });
     setGuardado(r);
-    toast({ title: r ? `Aprobado · ${pct} %` : `${pct} % · re-test el ${reTest}`, sub: r ? `La tesis queda para el ${tesis} (+3)` : 'Releé lo que falló antes del re-test', color }, false);
+    toast({
+      title: r.approved ? `Aprobado · ${pct} %` : r.flojo ? `${pct} % · tema flojo` : `${pct} % · re-test el ${reTest}`,
+      sub: r.approved ? 'La tesis queda para mañana' : r.flojo ? 'Mañana, la tesis; vuelve en los repasos' : 'Mañana releés lo que falló',
+      color,
+    }, false);
   };
 
   // Bien → descuido → técnica → concepto → enunciado → bien.
@@ -114,7 +122,7 @@ export function Test({ day, param }: { day: DayLog; param?: string }) {
         </>
       ) : (
         <>
-          <div className="kicker">{prev ? `Re-test · intento ${prev + 1} · ejercicios nuevos` : 'Test · día 0 · al terminar el capítulo'}</div>
+          <div className="kicker">{prev ? `Re-test · intento ${prev + 1} de ${MAX_TRIES} · ejercicios nuevos` : 'Test · día 2 · después del cold recall'}</div>
           <h1 className="titulo">{unitName(a, unit)}</h1>
           <p className="sub">Un solo test completo: {que}. Sin apuntes, {t!.min} minutos.</p>
         </>
@@ -192,7 +200,7 @@ export function Test({ day, param }: { day: DayLog; param?: string }) {
               )}
               {(cargadas || claude) && (
                 <div className="resultado-test" role="status">
-                  <b>{ok ? `Aprobado. La tesis del ${cap} queda para el ${dia(addDays(day.date, LADDER.tesis.days))} (+${LADDER.tesis.days}).` : `No llegaste al ${Math.round(PASS * 100)} %. Releés lo que falló y el re-test es el ${dia(addDays(day.date, LADDER.retest.days))} (+${LADDER.retest.days}).`}</b>
+                  <b>{ok ? `Aprobado. La tesis del ${cap} queda para mañana (${dia(addDays(day.date, LADDER.tesis.days))}).` : `No llegaste al ${Math.round(PASS * 100)} %. ${reprobado}`}</b>
                   <p className="sub">{mal.length ? `${mal.length === 1 ? 'El error vuelve como tarjeta' : `Los ${mal.length} errores vuelven como tarjetas`} mañana.` : 'Sin errores.'}</p>
                 </div>
               )}
@@ -227,8 +235,8 @@ export function Test({ day, param }: { day: DayLog; param?: string }) {
 
       {(!papel || !conEj) && <p className="resumen">
         {ok
-          ? <>{cargados ? `${!er.concepto && !er.enunciado ? 'Solo ' : 'Con '}${y(tipos)}` : 'Sin errores'}: avanzás. La tesis queda agendada para el <b>{tesis}</b>{nGraves ? ` y ${nGraves === 1 ? 'el error' : 'los errores'} de ${y(graves.map((k) => ERR[k][0].toLowerCase()))} ${nGraves === 1 ? 'entra' : 'entran'} en tus próximos repasos` : ''}.</>
-          : <>Con menos de {Math.round(PASS * 100)} %: releés solo lo que falló y repetís el test el <b>{reTest}</b>, con ejercicios nuevos.</>}
+          ? <>{cargados ? `${!er.concepto && !er.enunciado ? 'Solo ' : 'Con '}${y(tipos)}` : 'Sin errores'}: aprobado. La tesis queda para <b>mañana</b> y arranca por esos errores{nGraves ? `; ${nGraves === 1 ? 'el error' : 'los errores'} de ${y(graves.map((k) => ERR[k][0].toLowerCase()))} ${nGraves === 1 ? 'entra' : 'entran'} en tus próximos repasos` : ''}.</>
+          : <>Con menos de {Math.round(PASS * 100)} %: {reprobado}</>}
       </p>}
       {guardado == null ? (
         <button className="btn-principal guardar-test" onClick={guardar}>{papel ? 'Guardar test' : 'Guardar resultado'}</button>
