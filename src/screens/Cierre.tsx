@@ -4,6 +4,7 @@ import { bimester, dayNumber, mejoraAcumulada, mejoraAyer } from '../data/derive
 import { dayJson } from '../data/export';
 import { blockDone, fmtPct, mejoraDia, valorMeta } from '../data/mejora';
 import { dayXp } from '../data/profile';
+import { cierreSugerido } from '../data/study';
 import { racha } from '../data/derive';
 import { addDays, fmtFecha, toHHMM, nowMin } from '../data/time';
 import type { Area, DayLog } from '../data/types';
@@ -36,8 +37,10 @@ export function Cierre({ day }: { day: DayLog }) {
   const max = Math.max(1, ...ultimos.map((x) => x.m));
   const pendientes = day.blocks.flatMap((b) => b.tasks.filter((t) => !t.done).map((t) => ({ ...t, block: b.title })));
   const [pasar, setPasar] = useState<Set<string>>(() => new Set(pendientes.map((t) => t.id)));
-  const [victoria, setVictoria] = useState(day.closed?.victoria ?? '');
-  const [manana, setManana] = useState(day.closed?.manana ?? '');
+  // Del estudio salen la victoria (un test aprobado hoy) y lo primero de mañana (lo que vence).
+  const [sug] = useState(() => cierreSugerido(getState().study, day.date));
+  const [victoria, setVictoria] = useState(day.closed?.victoria ?? sug.victoria);
+  const [manana, setManana] = useState(day.closed?.manana ?? sug.manana);
 
   const porArea = useMemo(() => {
     const m = new Map<Area, { h: number; t: number }>();
@@ -130,9 +133,9 @@ export function Cierre({ day }: { day: DayLog }) {
       )}
 
       <label className="campo-doble"><span className="sub">Pequeña victoria</span>
-        <input className="campo-linea" value={victoria} onChange={(e) => setVictoria(e.target.value)} placeholder="Aprobé el test del cap. 3" readOnly={cerrado} /></label>
+        <input className="campo-linea" value={victoria} onChange={(e) => setVictoria(e.target.value)} placeholder={sug.victoria || 'Aprobé el test del cap. 3'} readOnly={cerrado} /></label>
       <label className="campo-doble"><span className="sub">Mañana, lo primero</span>
-        <input className="campo-linea" value={manana} onChange={(e) => setManana(e.target.value)} placeholder="Tesis del cap. 2" readOnly={cerrado} /></label>
+        <input className="campo-linea" value={manana} onChange={(e) => setManana(e.target.value)} placeholder={sug.manana || 'Cold recall del cap. 3'} readOnly={cerrado} /></label>
 
       <div className="json-cab"><b className="mono">{day.date}.json</b><span className="mono sub">{(new Blob([json]).size / 1024).toFixed(1).replace('.', ',')} KB</span></div>
       <pre className="json-pre corto" tabIndex={0}>{json}</pre>

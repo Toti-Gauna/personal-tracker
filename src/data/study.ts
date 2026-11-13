@@ -459,7 +459,8 @@ export function cierreSugerido(st: StudyState, date: string) {
     }
   }
   const manana = addDays(date, 1);
-  const first = dueReview(st.reviews, manana).today.find((r) => r.due === manana) ?? dueReview(st.reviews, manana).tesis[0];
+  const vence = dueReview(st.reviews, manana);
+  const first = vence.today[0] ?? vence.tesis[0];
   const a = first && st.activities.find((x) => x.id === first.activityId);
   const short = first && a && first.unit != null ? lower1(unitShort(a, first.unit)) : first?.label.replace(/^[^·]+ · /, '');
   const qué = first ? { cold: 'Cold recall', tesis: 'Tesis', releer: 'Releer', ejercicios: 'Ejercicios', examen: 'Examen corto', retest: 'Re-test' }[first.kind] : '';
