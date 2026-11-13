@@ -28,6 +28,7 @@ export function Ranking({ st, max = 5, compacto = false }: { st: StudyState; max
     <section className={`deb-rank${compacto ? ' compacto' : ''}`} aria-labelledby="deb-rank-t">
       <div className="deb-cab"><h2 id="deb-rank-t">Lo más flojo ahora</h2><span className="sub">fuerza 0 a 100</span></div>
       {!r.length && <Vacio>Todavía no hay temas por debajo de 85: hacen falta cold recalls, tarjetas o tests.</Vacio>}
+      {r.length > 0 && st.attempts.length + st.log.length < 30 && <Vacio>Con pocos intentos la fuerza todavía se mueve mucho.</Vacio>}
       <ol>
         {r.map((t, i) => (
           <li key={t.id}>
