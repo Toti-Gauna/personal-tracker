@@ -31,6 +31,8 @@ export function ColdRecall({ day, itemId }: { day: DayLog; itemId?: string }) {
   const item = study.reviews.find((r) => r.id === itemId && r.kind === 'cold');
   const pendientes = study.reviews.filter((r) => r.kind === 'cold' && (r.doneOn === day.date || (!r.doneOn && r.due <= day.date)));
   const [texto, setTexto] = useState('');
+  // Cuánto creés que recordás, antes de comparar: alimenta la calibración (creías contra recordaste).
+  const [creia, setCreia] = useState(80);
   const [fase, setFase] = useState<'escribir' | 'comparar'>('escribir');
   const [inicio] = useState(() => Date.now());
   const [ahora, setAhora] = useState(() => Date.now());
@@ -76,7 +78,7 @@ export function ColdRecall({ day, itemId }: { day: DayLog; itemId?: string }) {
     setNuevos('');
   };
   const guardar = () => {
-    const s = saveColdRecall(day.date, item.id, puntos, marcas);
+    const s = saveColdRecall(day.date, item.id, puntos, marcas, creia / 100);
     toast({ title: `Cold recall · ${Math.round(s * 100)} %`, sub: s >= rules.coldSkipAt ? 'Lo tenés: no hace falta releer' : s < rules.rereadBelow ? 'Mañana: lo olvidado como tarjeta y una relectura corta' : 'Lo olvidado vuelve mañana como tarjeta', color: 'var(--economia)' }, false);
     if (enSesion) history.length > 1 ? history.back() : (location.hash = '#/estudio');
     else if (grupoHoy) location.hash = `#/tarjetas/${grupoHoy.frontId}`;
@@ -99,7 +101,17 @@ export function ColdRecall({ day, itemId }: { day: DayLog; itemId?: string }) {
       <div className="fila-t sub"><span>{Math.floor(seg / 60)} min {seg % 60} s</span><span>dictar con el teclado también vale</span></div>
 
       {fase === 'escribir' ? (
-        <button className="btn-principal" disabled={!texto.trim()} onClick={comparar}>Comparar</button>
+        <>
+          <div className="regla creia">
+            <span><b>¿Cuánto creés que recordás?</b><small>Antes de comparar. Sirve para ver si la sensación de saber te engaña.</small></span>
+            <span className="stepper chico">
+              <button aria-label="Menos" onClick={() => setCreia((v) => Math.max(0, v - 5))}>−</button>
+              <output aria-label="Cuánto creés que recordás">{creia} %</output>
+              <button aria-label="Más" onClick={() => setCreia((v) => Math.min(100, v + 5))}>+</button>
+            </span>
+          </div>
+          <button className="btn-principal" disabled={!texto.trim()} onClick={comparar}>Comparar</button>
+        </>
       ) : (
         <>
           <div className="fila-t rep-t">
@@ -127,12 +139,20 @@ export function ColdRecall({ day, itemId }: { day: DayLog; itemId?: string }) {
             <button className="sumar-punto" onClick={() => setSumar(true)}>+ Agregar un punto que falta</button>
           )}
           {puntos.length > 0 && (
+            <div className="calib-recall" role="group" aria-label="Creías contra recordaste">
+              <div><b className="mono">{creia} %</b><span>creías recordar</span></div>
+              <div><b className="mono" style={{ color: pct * 100 < 70 ? 'var(--rutina)' : pct * 100 < 85 ? 'var(--economia)' : undefined }}>{Math.round(pct * 100)} %</b><span>recordaste</span></div>
+              <div><b className="mono">{creia - Math.round(pct * 100) > 0 ? '−' : creia - Math.round(pct * 100) < 0 ? '+' : ''}{Math.abs(creia - Math.round(pct * 100))}</b><span>{creia > Math.round(pct * 100) ? 'te sobreestimaste' : creia < Math.round(pct * 100) ? 'te subestimaste' : 'justo'}</span></div>
+            </div>
+          )}
+          {puntos.length > 0 && (
             <div className="aviso-recall">
               {pct >= rules.coldSkipAt
                 ? `Llegaste al ${Math.round(rules.coldSkipAt * 100)} %: no hace falta releer. Seguí con el test.`
                 : pct < rules.rereadBelow
                   ? `Quedó debajo del ${Math.round(rules.rereadBelow * 100)} %: lo que olvidaste vuelve mañana como tarjeta y el motor te agenda releer esas partes del capítulo.`
                   : 'Lo que olvidaste vuelve mañana como tarjeta.'}
+              {' '}<a className="subrayado" href={`#/flojo/${encodeURIComponent(item.unit != null ? `${item.activityId}:${item.unit}` : '')}`}>Ver qué más se te olvida</a>
             </div>
           )}
           <button className="btn-principal" disabled={!puntos.length} onClick={guardar}>{tarjetasHoy ? 'Seguir con las tarjetas' : item.unit != null ? 'Seguir con el test' : 'Guardar y seguir'}</button>
