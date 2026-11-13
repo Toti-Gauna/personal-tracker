@@ -281,6 +281,17 @@ El repo es público y está bien así para estos datos.
 - Pendiente de cargar en `roadmap.json`: "qué existe" y "nuestro ángulo" de cada bimestre (los campos existen, están vacíos) y las horas de los ítems que no son certificaciones.
 - Las pantallas siguen leyendo `src/data/bimesters.ts` (los 9 bimestres anteriores): no se tocaron. Pasarlas a los 18 es trabajo de una ola siguiente.
 
+## 5 ter. Ruta del roadmap en la app (ola 4 · ruta)
+
+- **Metas abre en Ruta**, con las sub-pestañas Ruta · Semana · Mes · Bim. · Año. Pantallas: Ruta (7.1), Bimestre (`#/metas/bim/N`, 7.2), De la ruta a tu día (`#/metas/semana-ruta`, 7.3), El mapa (`#/metas/mapa`, 7.4), Tu evolución (`#/metas/evolucion`, 7.5) y Ruta en escritorio (1200 px o más, 7.6). Referencias en `docs/design/ruta/` y comparación en `docs/design/ruta/comparacion/`.
+- **Carriles en pantalla:** Matemática (`ing`), Programación (`salud`), Desde cero (`handyx`, la pieza), Producto (`eclipse`), Piloto (`economia`) y Certificación (`rutina`).
+- **Avance por ítem** (`src/data/ruta.ts`, puro): un registro de avances (`ruta.log`) del que sale todo. Aprender y comprobar valen la mitad de un ítem; construir (pieza y producto) se reparte en 3 sesiones por semana de su tramo; el cierre son 5 casillas a mano (métrica, aporte, tráiler, README y caso de estudio).
+- **De la ruta a tu día:** al empezar el día, matemática lleva el próximo capítulo pendiente (`ref` y `part`), programación el próximo tema (semanas 1 a 4: estudio y pieza; 5 a 8: producto) y Eclipse el piloto. Al cumplir la meta en Hoy se registra el paso (y se deshace si se desmarca). Aprender o aprobar un capítulo de CONAMAT en Estudio también lo registra. Una llamada por meta de Eclipse cumplida; el embudo (interesados, demo, piloto) se ajusta a mano.
+- **Propuesta semanal:** por carril, los ítems que empiezan hasta esa semana y no están completos (lo pendiente pasa solo a la semana siguiente), 10 llamadas para el piloto y los hilos (núcleo de Eclipse; desde B7, algoritmos y diseño de sistemas). Se guarda sola la primera vez que se abre la semana y se puede editar.
+- **Ritmo:** `paceVsPlan` con tolerancia de 5 puntos; los carriles comparan ítems hechos contra los que el plan esperaba a la fecha.
+- **Competencias:** cada ítem suma a un eje (Matemática; Seguridad, Cloud y Hardware por palabras clave; Producto; el resto, ML), ponderado por horas. La meta del año 1 es todo hecho hasta el B6; la del año 3, hasta el B18.
+- **Constancia:** el martes sin registro no cuenta como falta. Los gráficos con pocos días muestran el tramo que hay y avisan que se completan con el uso.
+
 ## 6. Olas de desarrollo (un PR por ola, un modelo por ola)
 
 | Ola | Qué sale | Modelo · esfuerzo |
@@ -567,4 +578,10 @@ En el día a día alcanza con **Haiku 5.5 · bajo**: pegás el JSON del cierre y
 - Matemática de B1 a B6 en un ítem por capítulo de CONAMAT (69).
 - `ref` y `part` opcionales en las metas del día y de la semana.
 - Modelo de datos de los gráficos del roadmap, con funciones puras y tests. No se tocó ninguna pantalla.
+
+**2026-11-13 · ruta del roadmap**
+
+- Metas abre en Ruta: bimestre con anillo y real contra plan, carriles con tendencia, tu evolución, compuertas y los 18 bimestres.
+- Bimestre en detalle, de la ruta a tu día (propuesta semanal editable y metas de Hoy con su etiqueta), el mapa, tu evolución con seis gráficos y la versión de escritorio.
+- Marcar una meta con ruta suma a la mejora, avanza la meta semanal, mueve el carril y recalcula el ritmo.
 

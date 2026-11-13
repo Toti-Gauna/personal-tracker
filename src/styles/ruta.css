@@ -5,6 +5,8 @@
 .r-card-cab h2 { margin: 0; font-size: 20px; font-weight: 700; }
 .r-card-cab .sub { font-size: 14px; text-align: right; text-decoration: none; }
 .r-sec { margin: 26px 0 8px; }
+.r-sec .etiqueta { font-size: 11px; }
+.r-sec a { white-space: nowrap; }
 .r-nota { font-size: 14px; margin: 10px 0 0; }
 .r-vacio { font-size: 14px; margin: 10px 0 0; }
 .amarillo { color: var(--economia); }
@@ -68,7 +70,7 @@
 .r-bim-txt p { margin: 6px 0 0; color: var(--sub); }
 .r-bim-txt .mono { font-size: 14px; }
 .r-bim-nombre { text-decoration: none; color: var(--tinta); }
-.r-bim-nombre h2 { font-size: clamp(24px, 6.6vw, 34px); line-height: 1.05; margin: 0; display: inline-block; padding: 0 4px; }
+.r-bim-nombre h2 { font-size: clamp(22px, 6vw, 30px); line-height: 1.05; white-space: nowrap; margin: 0; display: inline-block; padding: 0 4px; }
 .r-plan-cab { display: flex; justify-content: space-between; align-items: center; gap: 10px; margin: 16px 0 6px; flex-wrap: wrap; }
 .r-plan-cab .ch-leyenda { margin: 0; }
 .r-meta { font-size: 13px; color: var(--sub); letter-spacing: 0.08em; text-transform: uppercase; }
