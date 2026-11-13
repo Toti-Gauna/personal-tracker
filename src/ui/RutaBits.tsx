@@ -1,5 +1,5 @@
 import { AREAS } from '../data/defaults';
-import { BIMS, ROADMAP, laneById, type LaneId } from '../data/ruta';
+import { BIMS, PILOT_WEEKLY, ROADMAP, laneById, laneOfItem, pilotOf, weekOf, weekStart, type LaneId, type RutaState } from '../data/ruta';
 import type { RoadmapBimester, RoadmapItem } from '../data/roadmap.schema';
 
 /** Casilla de tres estados: vacía, a medias (mitad izquierda llena) o hecha. */
@@ -57,3 +57,20 @@ export function GrillaAnios({ actual, avance }: { actual: number; avance: number
 }
 
 export const areaColor = (a: keyof typeof AREAS) => AREAS[a].css;
+
+/** El chip de una meta de Hoy con ruta: carril, bimestre y qué empuja. */
+export function chipDe(ref: string, ruta: RutaState, date: string): { lane: LaneId; texto: string } | null {
+  if (ref.endsWith('-piloto')) {
+    const n = Number(ref.slice(1, ref.indexOf('-')));
+    const b = BIMS[n - 1];
+    const lunes = weekStart(b, weekOf(b, date));
+    const calls = pilotOf(ruta, b, lunes, date).calls;
+    return { lane: 'piloto', texto: `B${n} · Piloto · ${calls} de ${PILOT_WEEKLY}` };
+  }
+  const b = BIMS.find((x) => x.items.some((i) => i.id === ref));
+  const i = b?.items.find((x) => x.id === ref);
+  if (!b || !i) return null;
+  const lane = laneOfItem(i);
+  const cap = i.title.match(/cap\. (\d+)/);
+  return { lane, texto: `B${b.n} · ${laneById(lane).name}${cap ? ` · cap. ${cap[1]}` : lane === 'prog' ? ` · ${i.title}` : ''}` };
+}

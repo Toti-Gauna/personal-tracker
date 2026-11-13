@@ -259,6 +259,7 @@ export const allDoneUntil = (hasta: number) => Object.fromEntries(BIMS.filter((b
 
 // ——— La propuesta de la semana ———
 
+const cap = (s: string) => s[0].toUpperCase() + s.slice(1);
 const shortMath = (titles: RoadmapItem[]) => {
   const conamat = titles.filter((t) => t.id.includes('-conamat-'));
   if (conamat.length === titles.length && conamat.length) {
@@ -280,7 +281,7 @@ export function proposeWeek(b: RoadmapBimester, week: number, p: Record<string, 
     goals.push({
       id: `${b.n}-${week}-${lane}`,
       lane,
-      title: lane === 'math' ? shortMath(items) : items.map((i) => i.title.replace(`${b.product.name} · `, '')).join(' y '),
+      title: cap(lane === 'math' ? shortMath(items) : items.map((i) => i.title.replace(`${b.product.name} · `, '')).join(' y ')),
       refs: items.map((i) => i.id),
       target: items.length,
       carried: items.some((i) => i.weeks[1] < week),

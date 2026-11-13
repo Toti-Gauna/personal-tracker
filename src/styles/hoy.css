@@ -111,3 +111,10 @@
 .manana li { display: grid; grid-template-columns: 56px minmax(0, 1fr) auto; gap: 10px; align-items: center; min-height: 48px; border-bottom: 1px solid var(--linea); }
 .manana-n { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .sub { color: var(--sub); }
+
+/* Meta con etiqueta de ruta: el chip va debajo del título, alineado con él. */
+.meta.con-ruta:not(.abierta) .meta-fila::after { display: none; }
+.meta.con-ruta .meta-fila { min-height: 48px; }
+.meta-ruta { display: block; padding: 0 0 12px 60px; margin-top: -8px; text-decoration: none; position: relative; }
+.meta.con-ruta:not(.abierta) .meta-ruta::after { content: ''; position: absolute; left: 30px; right: 0; bottom: 0; height: 1px; background: var(--linea); }
+.meta-ruta .chip-ruta { margin-top: 0; }
