@@ -44,10 +44,11 @@ export function Repaso({ day }: { day: DayLog }) {
 
   // Número de cada sección, en orden y sin contar las que no aparecen.
   const orden = [daily.groups.length > 0 && 'tarjetas', releer.length > 0 && 'releer', ejercicios.length > 0 && 'ejercicios'].filter(Boolean) as string[];
-  const aparte = [
+  const todas = [
     ...coldHoy.map((r) => `el cold recall y el test del ${corto(r)}`),
     ...tesis.map((r) => `la tesis del ${corto(r)}`),
   ];
+  const aparte = todas.length > 3 ? [...todas.slice(0, 2), `${todas.length - 2} más`] : todas;
   const Seccion = ({ id, titulo, desc, min, children }: { id: string; titulo: string; desc: string; min: number; children: React.ReactNode }) => {
     const paso = orden.indexOf(id) + 1;
     return (
@@ -73,6 +74,7 @@ export function Repaso({ day }: { day: DayLog }) {
         <p>
           {daily.min ? `${daily.min} minutos: solo lo que vence hoy. Lo que ya sabés quedó afuera.` : 'Hoy no vence nada: no hay repaso.'}
           {aparte.length > 0 && ` ${aparte.length > 1 ? `${aparte.slice(0, -1).join(', ')} y ${aparte[aparte.length - 1]}` : aparte[0]} van en tu sesión, fuera del tope.`.replace(/^ (.)/, (_, c: string) => ` ${c.toUpperCase()}`)}
+          {' '}<a className="subrayado" href="#/flojo">{study.rules.priorizarFlojo ? 'Lo más flojo va primero' : 'Ver lo más flojo'}</a>.
         </p>
       </header>
 
