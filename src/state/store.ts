@@ -37,7 +37,7 @@ function load(): State {
       const parsed = JSON.parse(raw);
       // Migración: la ola 1 no tenía estudio y la ola 2 no tenía reglas, registro ni puntos.
       const base = emptyStudy();
-      const study = parsed.study ? { ...base, ...parsed.study, rules: { ...base.rules, ...parsed.study.rules } } : base;
+      const study = parsed.study ? { ...base, ...parsed.study, attempts: parsed.study.attempts ?? [], rules: { ...base.rules, ...parsed.study.rules, pesos: { ...base.rules.pesos, ...parsed.study.rules?.pesos } } } : base;
       const goals = parsed.goals ? { ...emptyGoals(), ...parsed.goals } : null;
       const train = parsed.train ? { ...emptyTrain(), ...parsed.train } : emptyTrain();
       const ruta = { ...emptyRuta(), ...(parsed.ruta ?? {}) };

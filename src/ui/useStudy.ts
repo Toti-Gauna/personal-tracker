@@ -1,5 +1,6 @@
 import { useMemo } from 'react';
 import { BLOCKS } from '../data/defaults';
+import { weakSet } from '../data/debiles';
 import { activitiesFor, dailyReview, groupSteps, planActivity, planReview, sumMin, type PlanStep } from '../data/study';
 import type { Activity, ReviewItem, Tramo } from '../data/study-types';
 import type { DayLog } from '../data/types';
@@ -27,7 +28,7 @@ export function useStudyPlan(day: DayLog) {
   const settings = useStore((s) => s.settings)!;
   return useMemo(() => {
     const date = day.date;
-    const daily = dailyReview(study, date);
+    const daily = dailyReview(study, date, study.rules.priorizarFlojo ? weakSet(study) : undefined);
     const { today: review, skipped, groups } = daily;
     const doneRefs = new Set(day.studyDone ?? []);
     const cardsDone = new Set(groups.filter((g) => g.pending.length === 0).map((g) => `cards:${g.frontId}`));

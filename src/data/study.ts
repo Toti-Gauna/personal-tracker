@@ -103,10 +103,13 @@ const vence = (r: ReviewItem, date: string) => r.doneOn === date || (!r.doneOn &
  * entra queda en "Hoy no toca". El cold recall (calentamiento del test) y la tesis van aparte,
  * con su contenido y fuera del tope.
  */
-export function dueReview(reviews: ReviewItem[], date: string, cap = REVIEW_CAP) {
-  const cands = reviews
+export function dueReview(reviews: ReviewItem[], date: string, cap = REVIEW_CAP, weak?: Set<string>) {
+  let cands = reviews
     .filter((r) => CAPPED.includes(r.kind) && vence(r, date))
     .sort((x, y) => PRIORITY[x.kind] - PRIORITY[y.kind] || x.due.localeCompare(y.due));
+  // Priorizar lo flojo: si no entra todo, primero los temas flojos.
+  const flojo = (r: ReviewItem) => (weak?.has(`${r.activityId}:${r.unit}`) ? 0 : 1);
+  if (weak?.size && cands.reduce((s, r) => s + r.min, 0) > cap) cands = [...cands].sort((x, y) => flojo(x) - flojo(y));
   const today: ReviewItem[] = [];
   const skipped: ReviewItem[] = [];
   let used = 0;
@@ -325,7 +328,7 @@ export const cardsMin = (n: number) => Math.ceil((n * CARD_SEC) / 60);
  * Tarjetas de hoy: las que vencen (las más olvidadas primero) y hasta N nuevas,
  * dentro de lo que queda del tope después del cold recall y los ejercicios.
  */
-export function cardsForDay(study: StudyState, date: string, budgetMin: number) {
+export function cardsForDay(study: StudyState, date: string, budgetMin: number, weak?: Set<string>) {
   const eod = endOfDay(date);
   const now = Math.min(Date.now(), eod - 1);
   const seen = study.cards.filter((c) => reviewedOn(c, date));
@@ -333,6 +336,9 @@ export function cardsForDay(study: StudyState, date: string, budgetMin: number) 
   const due = study.cards
     .filter((c) => c.srs && c.srs.state !== 'new' && c.srs.due < eod && !reviewedOn(c, date))
     .sort((x, y) => retrievability((now - (x.srs!.last ?? now)) / DAY, x.srs!.s) - retrievability((now - (y.srs!.last ?? now)) / DAY, y.srs!.s));
+  // Priorizar lo flojo: las tarjetas de temas flojos van primero (las más olvidadas, dentro de cada grupo).
+  const temaDe = (c: Card) => (c.activityId && c.unit != null ? `${c.activityId}:${c.unit}` : `mazo:${cardFront(c, study.fronts)}`);
+  if (weak?.size) due.sort((x, y) => (weak.has(temaDe(x)) ? 0 : 1) - (weak.has(temaDe(y)) ? 0 : 1));
   const nuevas = study.cards
     .filter((c) => !c.srs || c.srs.state === 'new')
     .filter((c) => !c.dueFrom || c.dueFrom <= date)
@@ -359,9 +365,10 @@ export function cardsForDay(study: StudyState, date: string, budgetMin: number) 
 }
 
 /** Todo el repaso del día: lo que vence para repetir y las tarjetas, con un solo tope. Cold recall y tesis, aparte. */
-export function dailyReview(study: StudyState, date: string) {
-  const items = dueReview(study.reviews, date, study.rules.cap);
-  const cards = cardsForDay(study, date, study.rules.cap - items.min);
+export function dailyReview(study: StudyState, date: string, weak?: Set<string>) {
+  const w = study.rules.priorizarFlojo ? weak : undefined;
+  const items = dueReview(study.reviews, date, study.rules.cap, w);
+  const cards = cardsForDay(study, date, study.rules.cap - items.min, w);
   return { ...items, groups: cards.groups, skippedCards: cards.skipped, min: items.min + cards.min };
 }
 

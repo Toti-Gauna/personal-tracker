@@ -128,6 +128,15 @@ Cada capítulo hace el mismo camino: **día 1 Estudiar → día 2 Test → día 
 4. **Nueva tarjeta (3.4).** Hay cinco tipos: pregunta, completar, explicar, ejercicio e inversa. Cada tarjeta lleva mazo y fuente, se ve la vista previa y está el botón "Guardar y otra".
 5. **Motor (3.5).** La escalera en días del capítulo (1 Estudiar → 2 Cold recall + test → 3 Tesis → 8 Repetir → 22 Repetir → 61 Examen), las reglas ajustables, el estado de las tarjetas, la retención por mazo, la importación de Anki y la opción de pegar bloques.
 
+**8 · Puntos débiles** (se entra desde Estudio, el Recall y el Repaso)
+
+1. **Puntos débiles (8.1).** Filtro Todo, Recall o Exámenes. Temas flojos, recall de la semana y tarjetas sanguijuela. Lo más flojo ahora (qué falla y minutos para arreglarlo), el mapa de fortaleza por capítulo (cold recall, tarjetas, test y día 8, en rojo, amarillo y verde), cómo fallás con el consejo de cada tipo de error, tu recall semana a semana contra el 85 %, creías contra recordaste y las tarjetas sanguijuela (Reescribir, Dividir en dos, Releer la fuente). Al final, "Priorizar lo flojo" y el Refuerzo de hoy.
+2. **Un tema en detalle (8.2).** Fuerza, lo que olvidás idea por idea con sus intentos, el recuerdo con los días, cómo te fue (línea de tiempo del capítulo), los errores del test y cómo arreglarlo, con minutos.
+3. **Exámenes (8.3).** Cuán listo estás para el final, promedio, aprobados al primer intento, re-test pendientes, puntaje de cada test contra el corte, errores por test, lo que fallás seguido y el simulacro dirigido.
+4. **Escritorio (8.4).** Desde 1200 px, todo en una vista.
+
+Con pocos datos, cada bloque muestra lo que hay y dice que se completa con el uso.
+
 **4 · Metas**
 
 Hay cuatro pestañas:
@@ -256,6 +265,18 @@ Cada capítulo recorre:
 
 Pantallas: Estudio (2.1), Sesión (2.2), Cómo funciona (2.3), Test en papel (2.5), Registrar test (2.6), Tesis (2.7), Plan del bimestre (2.8), Repaso (3.1), Cold recall (3.2), Motor (3.5) y Cierre (6.1). Los bloques de Puntos débiles de Estudio, Recall y Repaso van en otro PR.
 
+## 4 quinquies. Puntos débiles: cálculos
+
+- **Fuerza de un tema** (0 a 100) = 40 % cold recall + 30 % tarjetas + 30 % test. Si falta una fuente, su peso se reparte entre las otras. Los pesos se ajustan en el Motor. El cold recall y las tarjetas son el promedio de sus intentos; el test, el último.
+- **Tema:** un capítulo ("conamat:2") o, para tarjetas sin capítulo, su mazo ("mazo:ingles").
+- **Tema flojo:** fuerza menor a 70. Bandas: rojo menos de 70, amarillo de 70 a 84, verde desde 85.
+- **Tarjeta sanguijuela:** 4 fallos o más ("Otra vez").
+- **Calibración por frente:** lo que creías recordar menos lo que recordaste, en los cold recalls. Positivo: te sobreestimás.
+- **Listo para el final:** promedio de la fuerza de cada capítulo ponderado por sus ejercicios en el examen (40). Lo no estudiado cuenta 0.
+- **Simulacro dirigido:** los 40 ejercicios con más peso en lo flojo: ejercicios del examen × (1 + lo que le falta para 100 / 50).
+- **Cómo arreglarlo:** releer lo olvidado (3 min por idea, hasta 9), las tarjetas nuevas y las falladas, y 5 ejercicios de lo que falló en el test (8 min).
+- **Priorizar lo flojo** (encendido de fábrica): si vence más de lo que entra en el tope de 20 min, entran primero los temas flojos y sus tarjetas.
+
 ## 5. Datos
 
 ```
@@ -265,11 +286,13 @@ data/
   cards.json             ← tarjetas + estado FSRS
   activities.json        ← frentes y actividades de estudio
   routines.json          ← rutinas de entreno y rutinas del día (04:00 / 05:00)
+  reviews.json           ← cada intento: tema, tipo (cold recall, tarjeta o ejercicio), resultado, fecha y cuánto creías recordar
+  tests.json             ← cada test: capítulo, puntaje y el tipo de cada error
   bimesters.json         ← nombre, fechas, producto y perfil de los 18 bimestres (existe)
   roadmap.json           ← la ruta completa: ítems por semana, compuertas, certificaciones (existe)
 ```
 
-`data/roadmap.json` es la fuente de `docs/ROADMAP.md` (`npm run roadmap:md`; el CI falla si está desactualizado). `goals.json`, `cards.json`, `activities.json` y `routines.json` todavía no se generan: hoy esos datos viven en el teléfono.
+`data/roadmap.json` es la fuente de `docs/ROADMAP.md` (`npm run roadmap:md`; el CI falla si está desactualizado). `goals.json`, `cards.json`, `activities.json` y `routines.json` todavía no se generan: hoy esos datos viven en el teléfono. `reviews.json` y `tests.json` se descargan desde Copia de seguridad.
 
 El repo es público y está bien así para estos datos.
 
@@ -602,3 +625,10 @@ En el día a día alcanza con **Haiku 5.5 · bajo**: pegás el JSON del cierre y
 - Ya no hay cold recall suelto a +1: es el calentamiento del test y compara contra el capítulo.
 - Reprobado: releer al día siguiente y re-test al otro; a la tercera vez, el tema queda flojo.
 - Cada día, un capítulo distinto en cada fase. Orden de la sesión: cold recall, tarjetas, test, descanso, tesis, capítulo nuevo.
+
+**2026-11-13 · puntos débiles**
+
+- Puntos débiles, un tema en detalle, exámenes y la vista de escritorio.
+- Fuerza por tema (40 % cold recall, 30 % tarjetas, 30 % test), temas flojos, sanguijuelas, calibración y cuán listo estás para el final.
+- "Dónde estás flojo" en Estudio, creías contra recordaste en el Recall y "Lo más flojo va primero" en el Repaso.
+- Priorizar lo flojo cambia el motor cuando no entra todo en 20 min.

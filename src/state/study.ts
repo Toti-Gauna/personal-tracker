@@ -1,7 +1,7 @@
 import { approves, scheduleApproved, scheduleFailed, scheduleLearned, unitName, unitState } from '../data/study';
 import { newSrs, review as fsrsReview, type Grade } from '../data/fsrs';
 import { MAX_TRIES, RELEER_MIN } from '../data/study-catalog';
-import type { Activity, Card, CardDraft, ErrType, ReviewItem, Rules, StudyState, Tesis, Tramo } from '../data/study-types';
+import type { Activity, Attempt, Card, CardDraft, ErrType, ReviewItem, Rules, StudyState, Tesis, Tramo } from '../data/study-types';
 import { addDays } from '../data/time';
 import { newId } from '../data/schedule';
 import { getState, setState, updateDay } from './store';
@@ -67,7 +67,7 @@ export function completeLearn(date: string, activityId: string, n?: number) {
  * aprobar, el tema queda marcado como flojo y sigue igual a la tesis y los repasos.
  * Los ejercicios que fallaste vuelven mañana como tarjetas.
  */
-export function saveTest(date: string, activityId: string, n: number, data: { score: number; total: number; errors: Record<ErrType, number>; mode: 'app' | 'papel'; perEx?: (ErrType | null)[]; wrong?: { q: string; a: string; type: ErrType }[] }) {
+export function saveTest(date: string, activityId: string, n: number, data: { score: number; total: number; errors: Record<ErrType, number>; mode: 'app' | 'papel'; perEx?: (ErrType | null)[]; wrong?: { q: string; a: string; type: ErrType; tema?: string }[] }) {
   const a = findAct(activityId);
   const unit = a?.units?.find((u) => u.n === n);
   if (!a || !unit) return { approved: false, flojo: false };
@@ -174,7 +174,7 @@ function rereadItem(card: Card, date: string): ReviewItem {
  * Cold recall: lo comparás punto por punto. Lo que olvidaste vuelve mañana como tarjeta y,
  * con menos del 70 %, el motor agenda releer. Con 85 % o más no hace falta nada más.
  */
-export function saveColdRecall(date: string, itemId: string, points: string[], recalled: boolean[]) {
+export function saveColdRecall(date: string, itemId: string, points: string[], recalled: boolean[], creia?: number) {
   const st = getState().study;
   const item = st.reviews.find((r) => r.id === itemId);
   if (!item) return 0;
@@ -194,8 +194,13 @@ export function saveColdRecall(date: string, itemId: string, points: string[], r
   const releer: ReviewItem[] = score < st.rules.rereadBelow
     ? [{ id: `r${newId()}`, activityId: item.activityId, unit: item.unit, kind: 'releer', due: tomorrow, min: RELEER_MIN, label: `Releer · ${what}` }]
     : [];
+  const attempt: Attempt = {
+    tema: item.unit != null ? `${item.activityId}:${item.unit}` : `mazo:${a?.front ?? 'otros'}`, frontId: a?.front ?? 'otros', kind: 'cold', date, ok: score,
+    ...(creia != null ? { creia } : {}), ideas: points.map((p, i) => ({ idea: p.split('::')[0].trim(), ok: !!recalled[i] })),
+  };
   updateStudy((s) => ({
     ...s,
+    attempts: [...s.attempts.filter((x) => !(x.kind === 'cold' && x.date === date && x.tema === attempt.tema)), attempt],
     points: item.unit != null ? { ...s.points, [`${item.activityId}:${item.unit}`]: points } : s.points,
     reviews: [...s.reviews.map((r) => (r.id === itemId ? { ...r, doneOn: date, score } : r)), ...releer],
     cards: [...s.cards, ...cards],
@@ -207,11 +212,19 @@ export function saveColdRecall(date: string, itemId: string, points: string[], r
 /** Ejercicios más cortos si el anterior salió perfecto: 2/3 del tiempo (15 → 10 min). */
 export const shorter = (min: number) => Math.max(5, Math.round((min * 2) / 3));
 
-/** Ejercicios hechos; si salieron perfectos, el próximo de esa unidad es más corto. */
-export function completeExercises(date: string, itemId: string, perfect: boolean) {
+/**
+ * Ejercicios hechos (cuántos bien de cuántos, si se sabe); si salieron perfectos, el próximo
+ * de esa unidad es más corto. Queda el intento para los puntos débiles.
+ */
+export function completeExercises(date: string, itemId: string, perfect: boolean, de?: [number, number]) {
   const st = getState().study;
   const item = st.reviews.find((r) => r.id === itemId);
   if (!item) return;
+  const a = st.activities.find((x) => x.id === item.activityId);
+  const attempt: Attempt | null = de && (item.kind === 'ejercicios' || item.kind === 'examen')
+    ? { tema: item.unit != null ? `${item.activityId}:${item.unit}` : `mazo:${a?.front ?? 'otros'}`, frontId: a?.front ?? 'otros', kind: 'ejercicio', date, ok: de[1] ? de[0] / de[1] : 0, de }
+    : null;
+  if (attempt) updateStudy((s) => ({ ...s, attempts: [...s.attempts, attempt] }));
   updateStudy((s) => {
     let shortened = false;
     const reviews = [...s.reviews]

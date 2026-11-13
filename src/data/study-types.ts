@@ -56,8 +56,8 @@ export interface TestResult {
   approved: boolean;
   /** Por ejercicio, en papel: null = bien, o el tipo de error. */
   perEx?: (ErrType | null)[];
-  /** Los ejercicios que fallaste (con su consigna y respuesta): la tesis arranca por acá. */
-  wrong?: { q: string; a: string; type: ErrType }[];
+  /** Los ejercicios que fallaste (con su consigna, respuesta y qué practica): la tesis arranca por acá. */
+  wrong?: { q: string; a: string; type: ErrType; tema?: string }[];
 }
 
 export interface UnitState {
@@ -134,6 +134,30 @@ export interface Rules {
   coldSkipAt: number;
   /** Ejercicios espaciados más cortos si el anterior salió perfecto. */
   shortenIfPerfect: boolean;
+  /** Si vence más de lo que entra en el tope, entran primero los temas flojos. */
+  priorizarFlojo: boolean;
+  /** Pesos de la fuerza de un tema (suman 1). */
+  pesos: { cold: number; tarjetas: number; test: number };
+}
+
+/**
+ * Un intento de recordar algo: un cold recall (con sus ideas y cuánto creías recordar) o los
+ * ejercicios espaciados. Los de tarjetas salen del registro de calificaciones (`log`).
+ */
+export interface Attempt {
+  /** Tema: "actividad:unidad" (un capítulo) o "mazo:frente". */
+  tema: string;
+  frontId: string;
+  kind: 'cold' | 'ejercicio';
+  date: string;
+  /** Resultado, 0..1. */
+  ok: number;
+  /** Cuánto creías recordar antes de comparar, 0..1 (cold recall). */
+  creia?: number;
+  /** Ideas del cold recall, cada una recordada o no. */
+  ideas?: { idea: string; ok: boolean }[];
+  /** Ejercicios: bien de cuántos. */
+  de?: [number, number];
 }
 
 export interface Tesis {
@@ -157,6 +181,8 @@ export interface StudyState {
   log: CardLog[];
   /** Puntos clave por unidad (act:n), para comparar el cold recall. */
   points: Record<string, string[]>;
+  /** Intentos de cold recall y ejercicios: alimentan los puntos débiles. */
+  attempts: Attempt[];
 }
 
 /**

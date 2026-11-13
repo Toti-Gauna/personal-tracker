@@ -13,6 +13,8 @@ export interface Exercise {
   cmp?: 'num' | 'txt';
   /** Capítulo del que sale (los 5 de repaso vienen de capítulos anteriores). */
   cap?: number;
+  /** Qué practica ("Signos de agrupación"): agrupa lo que fallás seguido. */
+  tema?: string;
 }
 
 type Rng = () => number;
@@ -164,13 +166,31 @@ const CAPS: Record<number, Gen[]> = {
   ],
 };
 
+/** Qué practica cada plantilla, en el mismo orden que CAPS. */
+export const TEMAS: Record<number, string[]> = {
+  1: ['Valor absoluto de una resta', 'Clasificar números', 'Orden en la recta', 'Valor absoluto', 'Opuesto'],
+  2: ['Signos de agrupación', 'Ley de signos', 'Signos de agrupación', 'Signos de agrupación con resta', 'División de enteros'],
+  3: ['Descomponer en primos', 'MCD', 'MCM', 'Criterios de divisibilidad', 'Cantidad de divisores', 'MCM en problemas', 'Números primos'],
+  4: ['Suma de fracciones', 'Resta de fracciones', 'Producto de fracciones', 'División de fracciones', 'Simplificar fracciones'],
+  5: ['Suma de decimales', 'Producto de decimales', 'Fracción a decimal', 'Decimal a fracción', 'Decimales periódicos'],
+  6: ['Leyes de exponentes', 'Potencia de una potencia', 'Exponente negativo', 'Simplificar raíces', 'Raíz cúbica'],
+  7: ['Notación científica', 'Notación científica', 'Logaritmos', 'Propiedades de logaritmos', 'Operar en notación científica'],
+  8: ['Regla de tres directa', 'Regla de tres inversa', 'Porcentajes', 'Interés simple', 'Proporciones'],
+  9: ['Decimal a binario', 'Binario a decimal', 'Decimal a hexadecimal', 'Hexadecimal a decimal', 'Decimal a octal', 'Suma en base 2'],
+  10: ['Longitud', 'Masa', 'Superficie', 'Volumen y capacidad', 'Longitud', 'Capacidad'],
+  11: ['Problemas de dinero', 'Velocidad', 'Repartos proporcionales', 'Edades', 'Promedios'],
+};
+
 /** Los ejercicios de un capítulo: se van alternando las plantillas para cubrir todo el tema. */
 export function chapterExercises(cap: number, count: number, seed: string): Exercise[] {
   const gens = CAPS[cap];
   if (!gens) return [];
   const r = rngFrom(seed);
   const order = gens.map((_, i) => i).sort(() => r() - 0.5);
-  return Array.from({ length: count }, (_, i) => ({ cap, ...gens[order[i % gens.length]](r) }));
+  return Array.from({ length: count }, (_, i) => {
+    const k = order[i % gens.length];
+    return { cap, tema: TEMAS[cap]?.[k], ...gens[k](r) };
+  });
 }
 
 /** Hay banco de ejercicios para esta actividad (CONAMAT · Aritmética). */

@@ -85,6 +85,7 @@ export const emptyStudy = (): StudyState => ({
   rules: DEFAULT_RULES,
   log: [],
   points: {},
+  attempts: [],
 });
 
 /**
@@ -123,6 +124,8 @@ export const DEFAULT_RULES: Rules = {
   rereadBelow: 0.7,
   coldSkipAt: 0.85,
   shortenIfPerfect: true,
+  priorizarFlojo: true,
+  pesos: { cold: 0.4, tarjetas: 0.3, test: 0.3 },
 };
 
 /** Segundos estimados por tarjeta (14 tarjetas ≈ 7 min). */

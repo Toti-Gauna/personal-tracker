@@ -83,7 +83,7 @@ export function Test({ day, param }: { day: DayLog; param?: string }) {
 
   const guardar = () => {
     const papel = modo === 'papel';
-    const wrong = papel && conEj ? mal.map((i) => ({ q: ex[i].q, a: ex[i].a, type: tipoDe(i) })) : undefined;
+    const wrong = papel && conEj ? mal.map((i) => ({ q: ex[i].q, a: ex[i].a, type: tipoDe(i), ...(ex[i].tema ? { tema: ex[i].tema } : {}) })) : undefined;
     const per = papel ? (conEj ? bien.map((b, i) => (b === false ? tipoDe(i) : null)) : perEx) : undefined;
     const r = saveTest(day.date, a.id, unit.n, { score: sc, total, errors: er, mode: modo, perEx: per, wrong });
     setGuardado(r);
