@@ -3,6 +3,8 @@ import type { DayLog } from '../data/types';
 import { ir } from '../lib/routes';
 import { useStore } from '../state/store';
 import { Calibracion, ComoFallas, Mapa, Priorizar, Ranking, RecallSemanal, Sanguijuelas } from '../ui/Debiles';
+import { useMedia } from '../ui/useMedia';
+import { PuntosEscritorio } from './PuntosEscritorio';
 import '../styles/estudio.css';
 import '../styles/ruta.css';
 import '../styles/debiles.css';
@@ -32,8 +34,10 @@ export function Filtro({ actual }: { actual: string }) {
 /** 8.1 Puntos débiles: lo que más se te olvida, según tus cold recalls, tus tarjetas y tus tests. */
 export function PuntosDebiles({ day, filtro = '' }: { day: DayLog; filtro?: string }) {
   const { st, flojos, recall, sang } = useResumenFlojo(day.date);
+  const ancho = useMedia('(min-width: 1200px)');
   const conamat = st.activities.find((a) => a.id === 'conamat') ?? st.activities.find((a) => a.units?.length);
   const todo = filtro !== 'recall';
+  if (ancho) return <main className="pantalla debiles es-esc"><PuntosEscritorio day={day} filtro={filtro} /></main>;
   return (
     <main className="pantalla debiles">
       <div className="topbar"><a className="volver" href="#/estudio">Estudio</a></div>

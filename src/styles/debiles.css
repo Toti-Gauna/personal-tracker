@@ -85,6 +85,7 @@
 .deb-prio .btn-principal { margin: 0; }
 .prio-lista { list-style: none; margin: 0; padding: 0; }
 .prio-lista li { display: flex; justify-content: space-between; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--linea); }
+.prio-lista li .mono { white-space: nowrap; }
 
 /* Exámenes */
 .err-test { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
@@ -143,3 +144,19 @@
 .retest-pend p { margin: 6px 0 0; }
 .hoja-sim .btn-principal { margin-top: 18px; }
 @media print { .barra, .side, .topbar, .hoja-sim .btn-principal, .hoja-sim .nota, .mini-foco { display: none !important; } }
+
+/* Escritorio (1200 px o más) */
+@media (min-width: 1200px) {
+  .pantalla.debiles.es-esc { max-width: 1480px; }
+}
+.deb-esc-cab { display: grid; grid-template-columns: minmax(0, 1fr) auto auto; align-items: end; gap: 24px; margin-bottom: 22px; }
+.deb-esc-cab h1 { font-size: clamp(28px, 2.4vw, 40px); margin: 4px 0 0; white-space: nowrap; }
+.deb-esc-cab .deb-filtro { margin: 0; min-width: 300px; }
+.deb-esc-stats { grid-template-columns: repeat(4, auto); }
+.deb-esc-grilla { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 18px; align-items: start; }
+.deb-esc-grilla .col { display: grid; gap: 18px; }
+.deb-esc-grilla .col > * { margin-bottom: 0; }
+.deb-esc-grilla.abajo { margin-top: 18px; }
+.deb-esc-grilla .r-card .deb-rank { margin: 0; }
+.deb-esc-grilla .r-card .deb-prio { border: 0; padding: 0; margin: 0; }
+.deb-rank.compacto .deb-cab h2 { font-size: 19px; }
