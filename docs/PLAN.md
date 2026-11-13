@@ -106,27 +106,27 @@ Tracker personal de Toti: el día en horas, el estudio con su propio motor de re
 
 **2 · Estudiar (cualquier frente)**
 
-Cada capítulo hace el mismo camino: **Estudiar → Test → Tesis → Repetir** (ver §4 quater). En el día va primero lo que vence (cold recall, tarjetas y tesis), después el capítulo nuevo y al final el test.
+Cada capítulo hace el mismo camino: **día 1 Estudiar → día 2 Test → día 3 Tesis → días 8, 22 y 61 Repetir** (ver §4 quater). Cada día toca algo distinto: repetir, el test del capítulo de ayer, la tesis del de antes de ayer y estudiar el capítulo nuevo.
 
-1. **Estudio (2.1).** Los contenidos de hoy con su categoría (Repaso, CONAMAT, Python, la lectura) y "1 de 9 hecho · falta 2 h 42". Tocás uno y ves:
-   - las cuatro fases del capítulo en curso (hoy Estudiar · hoy Test · sáb · +3 Tesis · +7 → +60 Repetir), marcada la que estás haciendo;
-   - los pasos de hoy con su fase: "Repetir · cold recall +1", "Repetir · tarjetas", "Repetir · tesis +3", "Estudiar · capítulo" y "Test · completo", cada uno con sus minutos y si va en papel;
+1. **Estudio (2.1).** Los contenidos de hoy con su categoría (Repaso, CONAMAT, Python, la lectura) y cuánto falta. Tocás uno y ves:
+   - las cuatro fases con el capítulo que toca hoy en cada una (Estudiar cap. 3 · Test cap. 2 · Tesis cap. 1 · Repetir), marcada la del primer paso que falta;
+   - los pasos de hoy en el orden de la sesión, con su fase y sus minutos, y si van en papel;
    - **Entrar en foco** con el tiempo que falta. Al final, la semana, tres números y los accesos a Cómo funciona y Plan del bimestre.
-2. **Sesión de estudio (2.2).** El timer propio de cada meta de estudio: los tramos en orden (cold recall, tarjetas, tesis si vence, el capítulo en pomodoros 50/10 y el test), con un aviso al terminar cada uno ("Terminó el cold recall · Sigue: 9 tarjetas de Aritmética · 4 min"). Entra en el bloque en pomodoros enteros: "1 h 54 de 2 h". El pomodoro del capítulo se cambia desde la sesión.
-3. **Cómo funciona (2.3).** Las cuatro fases con sus reglas y un ejemplo de un capítulo en dos meses (unos 65 min de repetir después del test).
+2. **Sesión de estudio (2.2).** El timer propio de cada meta de estudio, con los tramos en este orden: cold recall, tarjetas (y lo que vence para repetir), test, descanso, tesis y capítulo nuevo en pomodoros 50/10. Avisa al terminar cada tramo. Entra en el bloque en pomodoros enteros. El pomodoro del capítulo se cambia desde la sesión.
+3. **Cómo funciona (2.3).** Las cuatro fases con sus reglas, un día cualquiera (cada fase, un capítulo distinto) y un capítulo en dos meses.
 4. **Actividad de estudio (2.4).** Libro, curso, práctica, video u otra, con su frente, su ritmo, los días, el bloque y si pasa por el motor de repaso.
-5. **Test en papel (2.5).** La app te da los ejercicios (15 del capítulo y 5 de los anteriores), los resolvés en el cuaderno y cargás solo los resultados: la app los corrige y marcás el tipo de cada error. Si preferís, le mandás la foto a Claude y pegás su corrección.
-6. **Registrar test (2.6).** Puntaje y tipo de error: descuido, técnica, concepto o enunciado.
-7. **Tesis (2.7).** Se abre el día que vence (+3 del test aprobado) y arranca mostrando los errores del test. Va en la app o en papel. En la app, las líneas con `::` o `[[ ]]` se vuelven tarjetas. En papel, sacás una foto y se la mandás a Claude, que te devuelve el texto y las tarjetas.
-8. **CONAMAT · unidades y tests (2.8).** Las 11 unidades de Aritmética del B1, qué incluye cada test, qué toca hoy en cada una (tesis, recall, estudio y test) y el examen final de 40 ejercicios al 85 %.
+5. **Test en papel (2.5).** El día 2, después del cold recall. La app te da los ejercicios (15 del capítulo y 5 de los anteriores), los resolvés en el cuaderno y cargás solo los resultados: la app los corrige y marcás el tipo de cada error. Si preferís, le mandás la foto a Claude y pegás su corrección.
+6. **Registrar test (2.6).** Puntaje y tipo de error: descuido, técnica, concepto o enunciado. Dice qué sigue: la tesis mañana, o releer y re-test (intento 2 o 3 de 3).
+7. **Tesis (2.7).** El día 3, al día siguiente de aprobar el test, y arranca mostrando sus errores. Va en la app o en papel. En la app, las líneas con `::` o `[[ ]]` se vuelven tarjetas. En papel, sacás una foto y se la mandás a Claude, que te devuelve el texto y las tarjetas.
+8. **CONAMAT · unidades y tests (2.8).** Las 11 unidades de Aritmética del B1, qué incluye cada test, qué toca hoy en cada una (estudio, cold recall y test, releer, re-test, tesis, repetir), cuáles quedaron flojas y el examen final de 40 ejercicios al 85 %.
 
 **3 · Motor de repaso**
 
-1. **Repaso de hoy (3.1).** Tope de 20 minutos y solo lo que vence: cold recall, tarjetas y ejercicios espaciados. La tesis va aparte, fuera del tope ("La tesis del cap. 1 (+3, 20 min) va aparte"). "Hoy no toca" muestra qué se salteó y cuándo vuelve, y abajo los minutos de los próximos 7 días.
-2. **Cold recall (3.2).** Escribís sin mirar lo que estudiaste ayer y lo comparás punto por punto con el capítulo y el test (no con la tesis, que todavía no existe).
+1. **Repaso de hoy (3.1).** Tope de 20 minutos y solo lo que vence: tarjetas, releer lo que falló y los repasos de los días 8, 22 y 61. El cold recall y el test, y la tesis, van en la sesión de su contenido, fuera del tope. "Hoy no toca" muestra qué se salteó y cuándo vuelve, y abajo los minutos de los próximos 7 días.
+2. **Cold recall (3.2).** El día 2, antes del test: escribís sin mirar lo que estudiaste ayer y lo comparás punto por punto con el capítulo.
 3. **Tarjetas con active recall (3.3).** Elegís escribir, decirlo en voz alta o pensarlo antes de dar vuelta la tarjeta. Trazo marca lo que faltó y sugiere la calificación.
 4. **Nueva tarjeta (3.4).** Hay cinco tipos: pregunta, completar, explicar, ejercicio e inversa. Cada tarjeta lleva mazo y fuente, se ve la vista previa y está el botón "Guardar y otra".
-5. **Motor (3.5).** La escalera (0 Estudio + test → +1 Cold recall → +3 Tesis → +7 Repetir → +21 Repetir → +60 Examen), las reglas ajustables, el estado de las tarjetas, la retención por mazo, la importación de Anki y la opción de pegar bloques.
+5. **Motor (3.5).** La escalera en días del capítulo (1 Estudiar → 2 Cold recall + test → 3 Tesis → 8 Repetir → 22 Repetir → 61 Examen), las reglas ajustables, el estado de las tarjetas, la retención por mazo, la importación de Anki y la opción de pegar bloques.
 
 **4 · Metas**
 
@@ -193,32 +193,33 @@ Aplica a Hoy y a cualquier vista que muestre la lista de metas del día (Escrito
 
 | Regla | Valor inicial |
 |---|---|
-| Tope de repaso por día; si vence más, entran las más olvidadas | 20 min |
-| Cold recall al día siguiente, solo de lo nuevo; si da 85 % o más, el tema no vuelve hasta +7 | si es nuevo |
+| Tope de repaso por día (tarjetas, releer y días 8, 22 y 61); si vence más, entran las más olvidadas | 20 min |
+| Cold recall antes del test, contra el capítulo | día 2, 5 min |
+| Intentos del test antes de marcar el tema como flojo | 3 |
 | Ejercicios espaciados más cortos si el anterior salió perfecto | sí |
 | Releer si el cold recall da menos de… o si una tarjeta falla 2 veces | 70 % |
 | Retención buscada (FSRS) | 90 % |
 | Tarjetas nuevas por día | 15 |
 | Corte de aprobación de tests | 85 % |
 
-**Escalera de estudio**
+**Escalera de estudio** (en días del capítulo)
 
-| Cuándo | Qué | Dónde aparece |
+| Día | Qué | Dónde aparece |
 |---|---|---|
-| 0 (día que estudiás) | Estudiar de corrido (pomodoro 50/10) + test completo (25 min) | Sesión del día: lo que vence → capítulo → test |
-| +1 | Cold recall (5 min) y tarjetas | Repaso del día (tope 20 min) |
-| +3 | **Tesis** (20 min) | Sesión de ese día, después de lo que vence; fuera del tope |
-| +7 | Estudio de lo flojo + ejercicios mixtos (15 min) | Repaso del día |
-| +21 | Ejercicios mixtos (15 min; 10 si el +7 salió perfecto) | Repaso del día |
-| +60 | Examen corto (15 min) | Repaso del día |
+| 1 | Estudiar de corrido (pomodoro 50/10) | Al final de la sesión del día |
+| 2 | Cold recall (5 min, contra el capítulo) y test completo (25 min) | En la sesión, después de las tarjetas |
+| 3 | **Tesis** (20 min), al día siguiente de aprobar | En la sesión, después del test; fuera del tope |
+| 8 | Estudio de lo flojo + ejercicios mixtos (15 min) | Repaso del día (tope 20 min) |
+| 22 | Ejercicios mixtos (15 min; 10 si el día 8 salió perfecto) | Repaso del día |
+| 61 | Examen corto (15 min) | Repaso del día |
 
-Después del test, un capítulo se repite en unos 65 minutos repartidos en dos meses.
+Más las tarjetas que vencen, dentro del mismo tope de 20 min. Los días 8, 22 y 61 se cuentan desde el día 1; si el test se atrasó, ningún repaso cae antes del día después de la tesis.
 
-- **Test completo:** 15 ejercicios nuevos del capítulo y, desde el cap. 2, 5 de los anteriores; 25 min, sin apuntes. El corte es 85 %.
-- **Con 85 % o más:** pasás al capítulo siguiente y la tesis queda agendada a +3. Nunca va el mismo día que el test.
-- **Con menos de 85 %:** releés lo que falló y repetís el test a los 2 días, con ejercicios nuevos. La tesis se agenda recién al aprobar.
-- Los ejercicios que fallaste en el test en papel vuelven al día siguiente como tarjetas.
-- Lo que olvidás en un cold recall vuelve al día siguiente como tarjeta; con menos de 70 % el motor agenda releer. Si no vence nada, ese día no hay repaso.
+- **Test completo:** 15 ejercicios del capítulo y, desde el cap. 2, 5 de los anteriores; 25 min, sin apuntes. El corte es 85 %.
+- **Con 85 % o más:** la tesis al día siguiente.
+- **Con menos de 85 %:** al día siguiente releés lo que falló y al otro hacés el re-test, con ejercicios nuevos. La tesis llega el día después de aprobar.
+- **A la tercera vez sin aprobar,** el tema queda marcado como flojo y sigue igual a la tesis y los repasos.
+- Los ejercicios que fallaste en el test en papel vuelven al día siguiente como tarjetas. Lo que olvidás en el cold recall también; con menos de 70 % se agenda releer. Si no vence nada, ese día no hay repaso.
 
 ## 4 bis. Mejora diaria (1 % por día)
 
@@ -242,18 +243,18 @@ CONAMAT es el primer libro y se hace entero, sus 69 capítulos y en orden:
 
 Después siguen Strang, Blitzstein, ISL y MML en inglés (B7 a B9). Stewart queda de consulta: no se descarta ningún libro.
 
-## 4 quater. Sistema de estudio: estudiar, test, tesis y repetir
+## 4 quater. Sistema de estudio: un capítulo por día, cuatro fases en paralelo
 
-Cada capítulo recorre, en orden:
+Cada capítulo recorre:
 
-1. **Estudiar de corrido.** El capítulo entero en pomodoros 50/10, sin ejercicios en el medio: anotás lo que no entendés y seguís. Entra en el bloque en ciclos enteros; lo que sobra (menos de un ciclo) no se usa.
-2. **Test completo.** Apenas terminás: 15 nuevos + 5 de capítulos anteriores, 25 min, corte 85 %. Errores por tipo: descuido, técnica, concepto o enunciado.
-3. **Tesis a los 3 días.** Arranca mostrando los errores del test. 20 min, en la app o en papel; las líneas con `::` o `[[ ]]` se vuelven tarjetas. Va fuera del tope de 20 min de repaso y nunca el mismo día que su test.
-4. **Repetir.** Cold recall a +1 (contra el capítulo y el test), tarjetas cuando vencen, y +7, +21 y +60 con estudio de lo flojo y ejercicios mixtos.
+1. **Día 1 · Estudiar de corrido.** El capítulo entero en pomodoros 50/10, sin ejercicios en el medio: anotás lo que no entendés y seguís. Entra en el bloque en pomodoros enteros; lo que sobra no se usa.
+2. **Día 2 · Test.** Primero 5 min de cold recall (contra el capítulo) para calentar y después el test completo: 15 + 5 de capítulos anteriores, 25 min, corte 85 %. Errores por tipo: descuido, técnica, concepto o enunciado.
+3. **Día 3 · Tesis.** Al día siguiente de aprobar, 20 min, arrancando por los errores del test. Fuera del tope de repaso. Si reprobaste: releer al día siguiente, re-test al otro, y la tesis el día después de aprobar; a la tercera vez sin aprobar, el tema queda flojo y sigue a la tesis.
+4. **Días 8, 22 y 61 · Repetir.** Estudio de lo flojo y 3 a 5 ejercicios mixtos, más tarjetas, con tope de 20 min.
 
-**Orden del día:** primero lo que vence (cold recall, tarjetas, tesis), después el capítulo nuevo y al final el test. El botón **Entrar en foco** muestra lo que falta de todo eso.
+**Cada día toca algo distinto:** repetir, el test del capítulo de ayer, la tesis del de antes de ayer y estudiar el capítulo nuevo. **Orden de la sesión:** cold recall, tarjetas, test, descanso, tesis y capítulo nuevo. El botón **Entrar en foco** muestra lo que falta.
 
-Pantallas: Estudio (2.1), Sesión (2.2), Cómo funciona (2.3), Test en papel (2.5), Registrar test (2.6), Tesis (2.7), Plan del bimestre (2.8), Repaso (3.1), Cold recall (3.2), Motor (3.5) y Cierre (6.1, que sugiere la victoria del día y lo primero de mañana). Referencias en `docs/design/estudio/`. Los bloques de Puntos débiles de Estudio, Recall y Repaso van en otro PR.
+Pantallas: Estudio (2.1), Sesión (2.2), Cómo funciona (2.3), Test en papel (2.5), Registrar test (2.6), Tesis (2.7), Plan del bimestre (2.8), Repaso (3.1), Cold recall (3.2), Motor (3.5) y Cierre (6.1). Los bloques de Puntos débiles de Estudio, Recall y Repaso van en otro PR.
 
 ## 5. Datos
 
@@ -594,3 +595,10 @@ En el día a día alcanza con **Haiku 5.5 · bajo**: pegás el JSON del cierre y
 - Orden del día: lo que vence, el capítulo nuevo y el test. La tesis arranca por los errores del test y nunca va el mismo día.
 - Test en papel con ejercicios de verdad de cada capítulo de Aritmética: la app corrige lo que cargás y lo fallado vuelve como tarjeta.
 - Cold recall contra el capítulo y el test. Rehechas Estudio, Sesión, Cómo funciona, Test, Tesis, Plan del bimestre, Repaso, Recall, Motor y Cierre.
+
+**2026-11-13 · corrección del sistema de estudio**
+
+- Día 1 estudiar, día 2 cold recall y test, día 3 tesis (al día siguiente de aprobar), días 8, 22 y 61 repetir. La escalera pasa a 1 → 2 → 3 → 8 → 22 → 61.
+- Ya no hay cold recall suelto a +1: es el calentamiento del test y compara contra el capítulo.
+- Reprobado: releer al día siguiente y re-test al otro; a la tercera vez, el tema queda flojo.
+- Cada día, un capítulo distinto en cada fase. Orden de la sesión: cold recall, tarjetas, test, descanso, tesis, capítulo nuevo.

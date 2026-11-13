@@ -88,17 +88,27 @@ export const emptyStudy = (): StudyState => ({
 });
 
 /**
- * Escalera 0 → +1 → +3 → +7 → +21 → +60 (min). Después del test, un capítulo se repite en
- * unos 65 min repartidos en dos meses. La tesis dura 20 min y va fuera del tope de repaso.
+ * Escalera del motor, en días del capítulo: 1 estudiar → 2 cold recall y test → 3 tesis →
+ * 8 → 22 → 61 repetir. `days` cuenta desde el día en que estudiaste (cold recall, repetir) o
+ * desde el test (tesis al día siguiente de aprobar; releer y re-test después de reprobar).
  */
 export const LADDER = {
   cold: { days: 1, min: 5 },
-  tesis: { days: 3, min: 20 },
-  e7: { days: 7, min: 15 },
-  e21: { days: 21, min: 15 },
-  e60: { days: 60, min: 15 },
+  tesis: { days: 1, min: 20 },
+  releer: { days: 1, min: 15 },
   retest: { days: 2, min: 25 },
+  e8: { days: 7, min: 15 },
+  e22: { days: 21, min: 15 },
+  e61: { days: 60, min: 15 },
 };
+
+/** Día del capítulo en que toca cada cosa (para mostrarlo: "día 2", "día 61"). */
+export const DIA = { estudiar: 1, test: 2, tesis: 3, e8: 8, e22: 22, e61: 61 } as const;
+
+/** A la tercera vez sin aprobar, el tema queda marcado como flojo. */
+export const MAX_TRIES = 3;
+/** Descanso entre el test y la tesis. */
+export const REST_TEST = 10;
 
 /** Test completo: los ejercicios nuevos del capítulo y 5 de los anteriores, 25 min. */
 export const TEST_PREV = 5;

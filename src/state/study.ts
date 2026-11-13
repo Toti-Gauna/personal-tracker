@@ -1,6 +1,6 @@
-import { approves, scheduleApproved, scheduleLearned, scheduleRetest, unitName, unitState } from '../data/study';
+import { approves, scheduleApproved, scheduleFailed, scheduleLearned, unitName, unitState } from '../data/study';
 import { newSrs, review as fsrsReview, type Grade } from '../data/fsrs';
-import { RELEER_MIN } from '../data/study-catalog';
+import { MAX_TRIES, RELEER_MIN } from '../data/study-catalog';
 import type { Activity, Card, CardDraft, ErrType, ReviewItem, Rules, StudyState, Tesis, Tramo } from '../data/study-types';
 import { addDays } from '../data/time';
 import { newId } from '../data/schedule';
@@ -29,7 +29,7 @@ export function logStudy(date: string, activityId: string, min: number) {
   updateDay(date, (d) => ({ ...d, study: [...(d.study ?? []), { front, activityId, min }] }));
 }
 
-/** Repaso hecho (cold recall, ejercicios, examen corto o tesis). */
+/** Repaso hecho (releer, ejercicios, examen corto, cold recall o tesis). */
 export function completeReview(date: string, itemId: string) {
   updateStudy((st) => ({ ...st, reviews: st.reviews.map((r) => (r.id === itemId ? { ...r, doneOn: date } : r)) }));
   markStep(date, `rev:${itemId}`);
@@ -40,7 +40,7 @@ export function uncompleteReview(date: string, itemId: string) {
   unmarkStep(date, `rev:${itemId}`);
 }
 
-/** Estudiar hecho: la unidad queda estudiada hoy y el cold recall se agenda para mañana. */
+/** Estudiar hecho (día 1): la unidad queda estudiada hoy y mañana van el cold recall y el test. */
 export function completeLearn(date: string, activityId: string, n?: number) {
   const a = findAct(activityId);
   if (!a) return;
@@ -62,14 +62,19 @@ export function completeLearn(date: string, activityId: string, n?: number) {
 }
 
 /**
- * Guarda un test. Con 85 % o más: la tesis a +3 y repetir a +7, +21, +60. Con menos: releer lo
- * que falló y re-test a +2. Los ejercicios que fallaste vuelven mañana como tarjetas.
+ * Guarda un test (día 2). Con 85 % o más: la tesis al día siguiente y repetir los días 8, 22
+ * y 61. Con menos: releer lo que falló al día siguiente y re-test al otro. A la tercera vez sin
+ * aprobar, el tema queda marcado como flojo y sigue igual a la tesis y los repasos.
+ * Los ejercicios que fallaste vuelven mañana como tarjetas.
  */
 export function saveTest(date: string, activityId: string, n: number, data: { score: number; total: number; errors: Record<ErrType, number>; mode: 'app' | 'papel'; perEx?: (ErrType | null)[]; wrong?: { q: string; a: string; type: ErrType }[] }) {
   const a = findAct(activityId);
   const unit = a?.units?.find((u) => u.n === n);
-  if (!a || !unit) return false;
+  if (!a || !unit) return { approved: false, flojo: false };
   const approved = approves(data.score, data.total);
+  const prev = unitState(getState().study, a.id, n);
+  const tries = prev.tests.length + 1;
+  const flojo = !approved && !prev.approvedOn && !prev.flojo && tries >= MAX_TRIES;
   const deck = getState().study.fronts.find((f) => f.id === a.front)?.name ?? 'General';
   const tomorrow = addDays(date, 1);
   const errCards: Card[] = (data.wrong ?? []).map((w) => ({
@@ -78,19 +83,21 @@ export function saveTest(date: string, activityId: string, n: number, data: { sc
   }));
   updateStudy((st) => {
     const cur = st.units[a.id]?.[n] ?? { tests: [] };
-    const next = { ...cur, learnedOn: cur.learnedOn ?? date, tests: [...cur.tests, { ...data, date, approved }], approvedOn: cur.approvedOn ?? (approved ? date : undefined) };
-    const reviews = st.reviews.map((r) => (r.activityId === a.id && r.unit === n && r.kind === 'retest' && !r.doneOn ? { ...r, doneOn: date } : r));
-    const added = approved
-      ? (cur.approvedOn ? [] : scheduleApproved(a, unit, date))
-      : [scheduleRetest(a, unit, date)];
-    const cold = cur.learnedOn ? [] : scheduleLearned(a, unit, date);
-    return { ...st, units: { ...st.units, [a.id]: { ...st.units[a.id], [n]: next } }, reviews: [...reviews, ...added, ...cold], cards: [...st.cards, ...errCards] };
+    const learnedOn = cur.learnedOn ?? date;
+    const next = {
+      ...cur, learnedOn, tests: [...cur.tests, { ...data, date, approved }],
+      approvedOn: cur.approvedOn ?? (approved ? date : undefined), flojo: cur.flojo ?? (flojo ? date : undefined),
+    };
+    // Se cierran el re-test pendiente y lo que quedó sin hacer antes del test (cold recall, releer).
+    const reviews = st.reviews.map((r) => (r.activityId === a.id && r.unit === n && (r.kind === 'retest' || r.kind === 'cold' || r.kind === 'releer') && !r.doneOn ? { ...r, doneOn: date } : r));
+    const yaSigue = cur.approvedOn || cur.flojo;
+    const added = yaSigue ? [] : approved || flojo ? scheduleApproved(a, unit, date, learnedOn) : scheduleFailed(a, unit, date);
+    return { ...st, units: { ...st.units, [a.id]: { ...st.units[a.id], [n]: next } }, reviews: [...reviews, ...added], cards: [...st.cards, ...errCards] };
   });
   markStep(date, `test:${a.id}:${n}`);
-  markStep(date, `learn:${a.id}:${n}`);
   rutaFromStudy(date, a.id, n, 'learn');
   if (approved) rutaFromStudy(date, a.id, n, 'test');
-  return approved;
+  return { approved, flojo };
 }
 
 /** Guarda la tesis (se abre desde el repaso del día en que vence) y sus tarjetas. */
@@ -183,6 +190,7 @@ export function saveColdRecall(date: string, itemId: string, points: string[], r
       frontId: a?.front, source: what, createdOn: date, activityId: item.activityId, unit: item.unit, dueFrom: tomorrow,
     };
   });
+  // Con menos del 70 %, releer esas partes del capítulo mañana (además del test de hoy).
   const releer: ReviewItem[] = score < st.rules.rereadBelow
     ? [{ id: `r${newId()}`, activityId: item.activityId, unit: item.unit, kind: 'releer', due: tomorrow, min: RELEER_MIN, label: `Releer · ${what}` }]
     : [];

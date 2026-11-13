@@ -63,10 +63,15 @@ export interface TestResult {
 export interface UnitState {
   learnedOn?: string;
   approvedOn?: string;
+  /** A la tercera vez sin aprobar el tema queda marcado como flojo (fecha) y sigue igual a la tesis. */
+  flojo?: string;
   tests: TestResult[];
 }
 
-/** Lo que vuelve en el repaso: escalera 0 → +1 cold recall → +3 tesis → +7 → +21 → +60. */
+/**
+ * Lo que vuelve: día 2 cold recall (antes del test), día 3 tesis, días 8, 22 y 61 repetir.
+ * Con el test reprobado: releer al día siguiente y re-test el otro.
+ */
 export type ReviewKind = 'cold' | 'tesis' | 'ejercicios' | 'examen' | 'retest' | 'releer';
 
 export interface ReviewItem {
@@ -155,10 +160,11 @@ export interface StudyState {
 }
 
 /**
- * Fase de un capítulo: Estudiar (de corrido) → Test (completo) → Tesis (+3) → Repetir (+1 → +60).
- * En el día va primero lo que vence (repetir y tesis), después estudiar y al final el test.
+ * Fase de un capítulo: día 1 Estudiar → día 2 Test (con el cold recall de calentamiento) →
+ * día 3 Tesis → días 8, 22 y 61 Repetir. Cada día toca algo distinto, en este orden:
+ * repetir, el test del capítulo de ayer, la tesis del de antes de ayer y estudiar el nuevo.
  */
-export type Step = 'repetir' | 'estudiar' | 'test';
+export type Step = 'repetir' | 'test' | 'tesis' | 'estudiar';
 export type TramoKind = 'cold' | 'tesis' | 'ejercicios' | 'examen' | 'releer' | 'tarjetas' | 'capitulo' | 'descanso' | 'test';
 
 export interface Tramo {
