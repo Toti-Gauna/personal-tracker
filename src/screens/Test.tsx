@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { AREAS } from '../data/defaults';
-import { approves, parseCorrection, unitName } from '../data/study';
+import { approves, parseCorrection, testOf, unitName, unitShort } from '../data/study';
 import { PASS } from '../data/study-catalog';
 import { ERR_TYPES, type ErrType } from '../data/study-types';
 import { addDays, fmtFecha } from '../data/time';
@@ -18,6 +18,10 @@ const ERR: Record<ErrType, [string, string]> = {
   enunciado: ['Enunciado', 'Leí mal lo que pedía'],
 };
 const zero = (): Record<ErrType, number> => ({ concepto: 0, tecnica: 0, descuido: 0, enunciado: 0 });
+const y = (xs: string[]) => (xs.length > 1 ? `${xs.slice(0, -1).join(', ')} y ${xs[xs.length - 1]}` : xs[0] ?? '');
+/** "Caps. 1 y 2", "cap. 1". */
+const anteriores = (n: number) => (n === 2 ? 'del cap. 1' : `de los caps. ${y(Array.from({ length: n - 1 }, (_, i) => String(i + 1)))}`);
+const fecha = (d: string) => fmtFecha(d).split(' ').slice(0, 2).join(' ').toLowerCase();
 
 /** 2.5 y 2.6 · Comprobar: el test completo del capítulo recién estudiado, en la app o en papel. */
 export function Test({ day, param }: { day: DayLog; param?: string }) {
@@ -26,7 +30,8 @@ export function Test({ day, param }: { day: DayLog; param?: string }) {
   const a = study.activities.find((x) => x.id === actId);
   const unit = a?.units?.find((u) => u.n === Number(nStr));
   const [modo, setModo] = useState<'app' | 'papel'>(a?.testMode ?? 'app');
-  const total = unit?.test.count ?? 0;
+  const t = unit ? testOf(unit) : null;
+  const total = t?.total ?? 0;
   const [score, setScore] = useState(total);
   const [errors, setErrors] = useState(zero);
   const [perEx, setPerEx] = useState<(ErrType | null)[]>(() => Array.from({ length: total }, () => null));
@@ -48,14 +53,19 @@ export function Test({ day, param }: { day: DayLog; param?: string }) {
   const ok = approves(sc, total);
   const fallados = total - sc;
   const cargados = ERR_TYPES.reduce((s, k) => s + er[k], 0);
-  const tesis = fmtFecha(addDays(day.date, LADDER.tesis.days));
-  const reTest = fmtFecha(addDays(day.date, LADDER.retest.days));
+  const tesis = fecha(addDays(day.date, LADDER.tesis.days));
+  const reTest = fecha(addDays(day.date, LADDER.retest.days));
   const prev = study.units[a.id]?.[unit.n]?.tests.length ?? 0;
+  const cap = unitShort(a, unit.n).toLowerCase();
+  const que = `${t!.nuevos} ${t!.nuevos === 1 ? 'ejercicio nuevo' : 'ejercicios nuevos'} del ${cap}${t!.prev ? ` y ${t!.prev} ${anteriores(unit.n)}` : ''}`;
+  const graves = (['tecnica', 'concepto', 'enunciado'] as ErrType[]).filter((k) => er[k] > 0);
+  const nGraves = graves.reduce((s2, k) => s2 + er[k], 0);
+  const tipos = (['descuido', 'tecnica', 'concepto', 'enunciado'] as ErrType[]).filter((k) => er[k] > 0).map((k) => (k === 'descuido' ? (er[k] > 1 ? 'descuidos' : 'un descuido') : ERR[k][0].toLowerCase()));
 
   const guardar = () => {
     const r = saveTest(day.date, a.id, unit.n, { score: sc, total, errors: er, mode: modo, perEx: modo === 'papel' ? perEx : undefined });
     setGuardado(r);
-    toast({ title: r ? `Aprobado · ${pct} %` : `${pct} % · re-test el ${reTest.toLowerCase()}`, sub: r ? `La tesis queda para el ${tesis.toLowerCase()} (+3)` : 'Repasá lo que fallaste antes del re-test', color }, false);
+    toast({ title: r ? `Aprobado · ${pct} %` : `${pct} % · re-test el ${reTest}`, sub: r ? `La tesis queda para el ${tesis} (+3)` : 'Releé lo que falló antes del re-test', color }, false);
   };
 
   // Bien → descuido → técnica → concepto → enunciado → bien.
@@ -67,11 +77,10 @@ export function Test({ day, param }: { day: DayLog; param?: string }) {
     <main className="pantalla test" style={{ ['--c' as string]: color }}>
       <div className="topbar">
         <a className="volver" href="#/estudio">Estudio</a>
-        <span className="mono">{unit.test.min}:00</span>
       </div>
-      <div className="kicker">Comprobar · {front?.name} · día 0{prev ? ` · intento ${prev + 1}` : ''}</div>
+      <div className="kicker">{prev ? `Re-test · intento ${prev + 1} · ejercicios nuevos` : 'Test · día 0 · al terminar el capítulo'}</div>
       <h1 className="titulo">{unitName(a, unit)}</h1>
-      <p className="sub">{unit.test.desc} Sin apuntes, {unit.test.min} minutos. Aprobás con {Math.round(PASS * 100)} %. Es el cierre de lo que aprendiste hoy.</p>
+      <p className="sub">Un solo test completo: {que}. Sin apuntes, {t!.min} minutos.</p>
 
       <div className="segmentado" role="radiogroup" aria-label="Dónde lo hacés">
         <button role="radio" aria-checked={modo === 'app'} onClick={() => setModo('app')}>En la app</button>
@@ -80,16 +89,16 @@ export function Test({ day, param }: { day: DayLog; param?: string }) {
 
       {modo === 'app' ? (
         <>
-          <div className="etiqueta bloque-t">Ejercicios bien resueltos</div>
+          <p className="sub bloque-t">Ejercicios bien resueltos</p>
           <div className="puntaje">
             <button className="btn-cuadro" aria-label="Uno menos" onClick={() => setScore((v) => Math.max(0, v - 1))}>−</button>
             <output className="mono" aria-live="polite"><b>{score}</b> <span>/ {total}</span></output>
             <button className="btn-cuadro" aria-label="Uno más" onClick={() => setScore((v) => Math.min(total, v + 1))}>+</button>
           </div>
           <div className="pct">
-            <span className="mono">{pct} %</span>
+            <span className="mono">{pct}%</span>
             <span className={`trazo on ${ok ? '' : 'mal'}`} style={{ ['--c' as string]: ok ? 'var(--salud)' : 'var(--rutina)' }}>
-              {ok ? 'Aprobado' : 'No aprobado'} · el corte es {Math.round(PASS * 100)} %
+              {ok ? 'Aprobado' : 'No aprobado'} · el corte es {Math.round(PASS * 100)}%
             </span>
           </div>
           {fallados > 0 && (
@@ -98,7 +107,7 @@ export function Test({ day, param }: { day: DayLog; param?: string }) {
               {ERR_TYPES.map((k) => (
                 <div className="paso err" key={k}>
                   <span><b>{ERR[k][0]}</b><small>{ERR[k][1]}</small></span>
-                  <div className="stepper">
+                  <div className="stepper cajas">
                     <button aria-label={`Menos ${ERR[k][0]}`} onClick={() => setErrors((e) => ({ ...e, [k]: Math.max(0, e[k] - 1) }))}>−</button>
                     <output aria-label={ERR[k][0]}>{errors[k]}</output>
                     <button aria-label={`Más ${ERR[k][0]}`} onClick={() => setErrors((e) => ({ ...e, [k]: Math.min(fallados, e[k] + 1) }))}>+</button>
@@ -139,8 +148,8 @@ export function Test({ day, param }: { day: DayLog; param?: string }) {
 
       <p className="resumen">
         {ok
-          ? <>Aprobado: avanzás. La tesis de este capítulo queda para el <b>{tesis.toLowerCase()}</b> (+3) y entra en el repaso de ese día{cargados ? '; los errores quedan anotados' : ''}.</>
-          : <>Con menos de {Math.round(PASS * 100)} % (y errores que no son solo de descuido) repasás lo que fallaste y hacés un re-test el <b>{reTest.toLowerCase()}</b>.</>}
+          ? <>{cargados ? `${!er.concepto && !er.enunciado ? 'Solo ' : 'Con '}${y(tipos)}` : 'Sin errores'}: avanzás. La tesis queda agendada para el <b>{tesis}</b>{nGraves ? ` y ${nGraves === 1 ? 'el error' : 'los errores'} de ${y(graves.map((k) => ERR[k][0].toLowerCase()))} ${nGraves === 1 ? 'entra' : 'entran'} en tus próximos repasos` : ''}.</>
+          : <>Con menos de {Math.round(PASS * 100)} %: releés solo lo que falló y repetís el test el <b>{reTest}</b>, con ejercicios nuevos.</>}
       </p>
       {guardado == null ? (
         <button className="btn-principal" onClick={guardar}>Guardar resultado</button>
