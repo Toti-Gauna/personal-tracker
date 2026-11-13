@@ -40,7 +40,7 @@ export function uncompleteReview(date: string, itemId: string) {
   unmarkStep(date, `rev:${itemId}`);
 }
 
-/** Aprender hecho: la unidad queda aprendida hoy y el cold recall se agenda para mañana. */
+/** Estudiar hecho: la unidad queda estudiada hoy y el cold recall se agenda para mañana. */
 export function completeLearn(date: string, activityId: string, n?: number) {
   const a = findAct(activityId);
   if (!a) return;
