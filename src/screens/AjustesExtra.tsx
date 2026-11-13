@@ -1,50 +1,54 @@
 import { useRef, useState } from 'react';
-import { ROUTINES } from '../data/defaults';
-import { fmtDur, toHHMM, toMin } from '../data/time';
+import { AREAS } from '../data/defaults';
+import { fmtPct } from '../data/mejora';
+import { DAY_ROUTINES, DAY_TYPES, WAKE, blockMin, isMeta, metasOf } from '../data/routines';
+import { fmtDur } from '../data/time';
 import { getState, resetState, setState, useStore } from '../state/store';
-import { markBackup, resetDayRoutines, setDayRoutine, setNames } from '../state/profile';
+import { markBackup, setNames } from '../state/profile';
 import { reviewsJson, testsJson } from '../data/debiles';
 import { toast } from '../ui/avisos';
 import '../styles/perfil.css';
 
-const BLOQUES: [string, string][] = [['rutina', 'Rutina de la mañana'], ['math', 'Matemática'], ['prog', 'Programación']];
+const ISO = ['', 'lun', 'mar', 'mié', 'jue', 'vie', 'sáb', 'dom'];
 
-function Paso({ label, value, min, max, step, fmt, onChange }: { label: string; value: number; min: number; max: number; step: number; fmt: (v: number) => string; onChange: (v: number) => void }) {
-  return (
-    <div className="regla">
-      <span><b>{label}</b></span>
-      <span className="stepper chico">
-        <button aria-label={`Menos: ${label}`} onClick={() => onChange(Math.max(min, value - step))}>−</button>
-        <output aria-label={label}>{fmt(value)}</output>
-        <button aria-label={`Más: ${label}`} onClick={() => onChange(Math.min(max, value + step))}>+</button>
-      </span>
-    </div>
-  );
-}
-
-/** Rutinas del día: a qué hora te levantás y cuánto dura cada bloque de la mañana. */
+/**
+ * Rutinas del día: lunes a viernes y fin de semana, con sus bloques. Se eligen solas por el día
+ * de la semana. Salen de data/routines.json y se cambian ahí.
+ */
 export function AjustesRutinas() {
-  useStore((s) => s.settings);
   return (
     <main className="pantalla ajustes">
       <div className="topbar"><a className="volver" href="#/ajustes">Ajustes</a></div>
       <h1 className="titulo">Rutinas del día</h1>
-      <p className="sub">Las dos que te ofrece Buen día. Lo de Abi, el entreno y la tarde son horas fijas. Con "Otra hora" los bloques de la mañana se acortan solos.</p>
-      {ROUTINES.map((r) => {
-        const sum = Object.values(r.durations).reduce((a, b) => a + b, 0);
-        const fin = toMin(r.wake) + sum;
+      <p className="sub">
+        Cada día usa la suya: de lunes a viernes, la de la semana; sábado y domingo, la del fin de semana. En Buen día, {WAKE.completo} arma el día completo,
+        {' '}{WAKE.corto} el corto (se acortan las metas flexibles de la mañana) y "Otra hora" corre los bloques. Los fijos no se mueven. El 1 % del día se reparte entre las metas.
+      </p>
+      {DAY_TYPES.map((t) => {
+        const r = DAY_ROUTINES[t];
+        const metas = metasOf(t);
+        let n = 0;
         return (
-          <section key={r.id} className="rutina-aj">
-            <div className="fila-t"><h2 className="titulo">{r.name}</h2><span className="mono sub">{r.wake} → {toHHMM(fin)}</span></div>
-            <Paso label="Te levantás" value={toMin(r.wake)} min={toMin('03:00')} max={toMin('07:00')} step={10} fmt={(v) => toHHMM(v)} onChange={(v) => setDayRoutine(r.id, { wake: toHHMM(v) })} />
-            {BLOQUES.map(([k, n]) => (
-              <Paso key={k} label={n} value={r.durations[k]} min={15} max={240} step={5} fmt={fmtDur} onChange={(v) => setDayRoutine(r.id, { durations: { [k]: v } })} />
-            ))}
-            {fin > toMin('08:30') && <p className="aviso-rojo">Termina después de las 08:30, cuando empieza lo de Abi. Acortá algún bloque.</p>}
+          <section key={t} className="rutina-aj" aria-labelledby={`rut-${t}`}>
+            <div className="fila-t"><h2 id={`rut-${t}`} className="titulo">{r.label}</h2><span className="mono sub">{r.days.map((d) => ISO[d]).join(' ')}</span></div>
+            <p className="sub rd-res">{metas.length} metas · cada una vale {fmtPct(1 / metas.length, 3).replace(/,?0+$/, '')} %</p>
+            <ol className="rd-bloques">
+              {r.blocks.map((b) => {
+                const meta = isMeta(b);
+                if (meta) n++;
+                return (
+                  <li key={b.id} className={meta ? '' : 'no-meta'} style={{ ['--c' as string]: AREAS[b.area].css }}>
+                    <span className="mono">{b.start}–{b.end}</span>
+                    <span className="mono rd-n">{meta ? n : ''}</span>
+                    <span className="rd-t"><b>{b.label}</b><small className="sub">{meta ? `${fmtDur(blockMin(b))} · ${b.kind === 'fixed' ? 'fijo' : 'flexible'}${b.focus ? '' : ' · sin foco'}` : 'no cuenta como meta'}</small></span>
+                  </li>
+                );
+              })}
+            </ol>
           </section>
         );
       })}
-      <button className="btn-borde" onClick={() => { resetDayRoutines(); toast({ title: 'Rutinas de fábrica', color: 'var(--economia)' }, false); }}>Volver a las de fábrica</button>
+      <p className="sub nota-izq">Para cambiar horarios o bloques, se edita data/routines.json en el repo.</p>
     </main>
   );
 }

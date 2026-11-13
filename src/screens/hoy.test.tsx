@@ -17,21 +17,21 @@ describe('Hoy', () => {
     render(<Hoy day={getState().days['2026-11-11']} />);
     const filas = screen.getAllByRole('button', { expanded: false }).concat(screen.getAllByRole('button', { expanded: true }));
     expect(filas).toHaveLength(8);
-    const fila = filas.find((f) => f.textContent?.includes('Acompañar a Abi'))!;
+    const fila = filas.find((f) => f.textContent?.includes('acompañar a Abi'))!;
     const partes = Array.from(fila.children).map((c) => c.className);
     expect(partes).toEqual(['meta-check', 'meta-n mono', 'meta-tit', 'meta-cont mono']);
     const tit = fila.querySelector('.meta-tit')!;
-    expect(tit.children[0]).toHaveTextContent('Acompañar a Abi y correr');
+    expect(tit.children[0]).toHaveTextContent('Correr y acompañar a Abi');
     expect(tit.children[1]).toHaveTextContent('08:30');
-    expect(fila.querySelector('.meta-cont')).toHaveTextContent('0/1');
+    expect(fila.querySelector('.meta-cont')).toHaveTextContent('0/2');
   });
 
   it('abre la meta en curso con "AHORA · 07:00 · QUEDAN 1 H 30"', () => {
     render(<Hoy day={getState().days['2026-11-11']} />);
     const abierta = screen.getByRole('button', { expanded: true });
-    expect(abierta).toHaveTextContent('Programación · Python');
+    expect(abierta).toHaveTextContent('Programación');
     expect(screen.getByText(/Ahora · 07:00 · quedan 1 h 30/)).toBeInTheDocument();
-    expect(screen.getByText(/Ahora toca programación; después, Abi y Handyx\./)).toBeInTheDocument();
+    expect(screen.getByText(/Ahora toca programación; después, Abi y el trabajo\./)).toBeInTheDocument();
   });
 
   it('marcar todas las tareas cumple la meta y suma 0,125 %', () => {

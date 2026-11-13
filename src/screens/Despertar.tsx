@@ -1,7 +1,6 @@
 import { useMemo, useState } from 'react';
-import { ROUTINES } from '../data/defaults';
 import { dayNumber } from '../data/derive';
-import { planDay, wakeRange } from '../data/schedule';
+import { DAY_ROUTINES, WAKE, dayTypeOf, isMeta, planRoutine, wakeRange, type DayType } from '../data/routines';
 import { fmtDur, fmtFecha, nowMin, toHHMM, toMin } from '../data/time';
 import type { RoutineId } from '../data/types';
 import { startDay, useStore } from '../state/store';
@@ -10,30 +9,40 @@ import '../styles/hoy.css';
 
 const STEP = 10;
 
-function defaultChoice(now: number): { r: RoutineId; otra: number } {
-  const { min, max } = wakeRange();
-  if (now <= toMin('04:30')) return { r: 'completo', otra: toMin('04:40') };
-  if (now <= toMin('05:30')) return { r: 'corto', otra: toMin('04:40') };
+const MODOS = [['completo', 'Día completo'], ['corto', 'Día corto']] as const;
+
+function defaultChoice(now: number, t: DayType): { r: RoutineId; otra: number } {
+  const { min, max } = wakeRange(t);
+  const otra = toMin(WAKE.completo) + 40;
+  if (now <= toMin(WAKE.completo) + 30) return { r: 'completo', otra };
+  if (now <= toMin(WAKE.corto) + 30) return { r: 'corto', otra };
   const rounded = Math.floor(now / STEP) * STEP;
   return { r: 'otra', otra: Math.min(max, Math.max(min, rounded)) };
 }
 
-/** 1.2 Buen día: la primera apertura de cada día pregunta a qué hora te levantaste. */
+/**
+ * 1.2 Buen día: la primera apertura de cada día pregunta a qué hora te levantaste. La rutina
+ * (lunes a viernes o fin de semana) sale sola del día de la semana.
+ */
 export function Despertar({ date }: { date: string }) {
   const settings = useStore((s) => s.settings)!;
   const now = nowMin();
-  const init = useMemo(() => defaultChoice(now), []); // eslint-disable-line react-hooks/exhaustive-deps
+  const tipo = dayTypeOf(date);
+  const rutina = DAY_ROUTINES[tipo];
+  const init = useMemo(() => defaultChoice(now, tipo), []); // eslint-disable-line react-hooks/exhaustive-deps
   const [choice, setChoice] = useState<RoutineId>(init.r);
   const [otra, setOtra] = useState(init.otra);
-  const range = wakeRange();
+  const range = wakeRange(tipo);
 
-  const wake = choice === 'otra' ? toHHMM(otra) : ROUTINES.find((r) => r.id === choice)!.wake;
-  const plan = planDay(choice, wake);
-  const firstFixed = plan.findIndex((p) => p.tpl.fixed);
+  const wake = choice === 'otra' ? toHHMM(otra) : WAKE[choice];
+  const plan = planRoutine(tipo, choice, wake);
+  const firstFixed = plan.findIndex((p) => p.block.kind === 'fixed');
   const manana = plan.slice(0, firstFixed + 1);
+  const metas = plan.filter((p) => isMeta(p.block)).length;
   const desc = (id: 'completo' | 'corto') => {
-    const d = ROUTINES.find((r) => r.id === id)!.durations;
-    return `Matemática ${fmtDur(d.math)} y programación ${fmtDur(d.prog)}`;
+    const m = planRoutine(tipo, id).slice(0, firstFixed).filter((p) => isMeta(p.block));
+    const txt = m.map((p) => `${p.block.short ?? p.block.label.toLowerCase()} ${fmtDur(p.min)}`).join(' y ');
+    return txt[0].toUpperCase() + txt.slice(1);
   };
   const n = dayNumber(settings.startDate, date);
 
@@ -51,17 +60,17 @@ export function Despertar({ date }: { date: string }) {
           <h1 id="desp-t" className="titulo desp-t">¿A qué hora te levantaste?</h1>
 
           <div className="rutinas" role="radiogroup" aria-label="Rutina del día">
-            {ROUTINES.map((r) => (
+            {MODOS.map(([id, name]) => (
               <button
-                key={r.id}
+                key={id}
                 role="radio"
-                aria-checked={choice === r.id}
+                aria-checked={choice === id}
                 className="rutina-op"
-                onClick={() => setChoice(r.id)}
+                onClick={() => setChoice(id)}
               >
-                <span className={`rutina-hora mono${choice === r.id ? ' resaltado' : ''}`} style={{ ['--c' as string]: 'var(--economia)' }}>{r.wake}</span>
-                <b>{r.name}</b>
-                <span className="sub">{desc(r.id)}</span>
+                <span className={`rutina-hora mono${choice === id ? ' resaltado' : ''}`} style={{ ['--c' as string]: 'var(--economia)' }}>{WAKE[id]}</span>
+                <b>{name}</b>
+                <span className="sub">{desc(id)}</span>
               </button>
             ))}
           </div>
@@ -78,19 +87,19 @@ export function Despertar({ date }: { date: string }) {
             </div>
           </div>
 
-          <div className="etiqueta manana-t">Así queda tu mañana</div>
+          <div className="etiqueta manana-t">Así queda tu mañana · {rutina.label.toLowerCase()}, {metas} metas</div>
           <ul className="manana">
             {manana.map((p) => (
-              <li key={p.tpl.key}>
+              <li key={p.block.id}>
                 <span className="mono">{p.start}</span>
-                <span className="manana-n">{p.tpl.title}</span>
-                <span className="mono sub">{p.tpl.fixed ? 'fijo' : fmtDur(p.min)}</span>
+                <span className="manana-n">{p.block.label}</span>
+                <span className="mono sub">{p.block.kind === 'fixed' ? 'fijo' : fmtDur(p.min)}</span>
               </li>
             ))}
           </ul>
 
           <button className="btn-principal" onClick={() => startDay(choice, wake, date)}>Empezar el día</button>
-          <p className="nota">Te lo pregunta una vez por día, la primera vez que abrís Trazo.<br />Las dos rutinas se editan en Ajustes.</p>
+          <p className="nota">Te lo pregunta una vez por día, la primera vez que abrís Trazo.<br />Hoy toca la de {rutina.label.toLowerCase()}; las dos se ven en Ajustes.</p>
         </section>
       </div>
     </div>
