@@ -1,9 +1,11 @@
 .repaso h1 { font-size: 40px; }
 .tope { margin-bottom: 22px; }
-.tope .fila-t { flex-wrap: wrap; }
+.tope .fila-t { flex-wrap: wrap; gap: 4px 12px; font-size: 13px; }
 .tope-barra { display: flex; gap: 2px; height: 22px; border: 1px solid var(--linea); padding: 3px; }
 .tope-barra span { display: block; height: 100%; }
-.rep-paso { display: grid; grid-template-columns: 40px minmax(0, 1fr); gap: 14px; margin-bottom: 22px; }
+.rep-paso { display: grid; grid-template-columns: 40px minmax(0, 1fr); gap: 14px; padding-bottom: 22px; position: relative; }
+.rep-paso::before { content: ''; position: absolute; left: 17px; top: 44px; bottom: 0; border-left: 1px solid var(--linea); }
+.rep-paso:last-of-type::before { bottom: 18px; }
 .rep-n { width: 36px; height: 36px; border-radius: 50%; border: 1.5px solid var(--sub); display: grid; place-items: center; font-size: 14px; }
 .rep-n.on { background: var(--tinta); color: var(--papel); border-color: var(--tinta); }
 .rep-cab { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; }
