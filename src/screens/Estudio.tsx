@@ -10,6 +10,7 @@ import { completeLearn, completeReview, uncompleteReview } from '../state/study'
 import { Casilla } from '../ui/Casilla';
 import { startStudy } from '../ui/estudio-acciones';
 import { useStudyPlan, type Contenido } from '../ui/useStudy';
+import { BANDA_COLOR, banda, detalle, qFalla, ranking } from '../data/debiles';
 import { WeekChart } from '../ui/WeekChart';
 import '../styles/estudio.css';
 
@@ -140,11 +141,43 @@ export function Estudio({ day }: { day: DayLog }) {
         <div><b className="mono">{recordas == null ? study.cards.length : `${recordas} %`}</b><span>{recordas == null ? 'tarjetas creadas' : 'tarjetas que recordás'}</span></div>
       </div>
 
+      <DondeFlojo date={day.date} />
+
       <div className="dos-botones">
         <a className="btn-borde" href="#/como">Cómo funciona</a>
         <a className="btn-borde" href="#/unidades">Plan del bimestre</a>
       </div>
       <a className="sumar" href="#/actividad">+ Sumar algo de estudio a hoy</a>
     </main>
+  );
+}
+
+/** Dónde estás flojo: los 3 temas más débiles, con de dónde sale y su fuerza. */
+function DondeFlojo({ date }: { date: string }) {
+  const st = useStore((s) => s.study);
+  const r = ranking(st, 3);
+  return (
+    <section className="donde-flojo" aria-labelledby="df-t">
+      <div className="fila-t"><span className="etiqueta" id="df-t">Dónde estás flojo</span><a className="subrayado" href="#/flojo">Ver todo</a></div>
+      {!r.length ? (
+        <p className="sub">Todavía no hay temas flojos. Se completa con el uso: cold recalls, tarjetas y tests.</p>
+      ) : (
+        <ul>
+          {r.map((t) => {
+            const falla = qFalla(st, t.id);
+            const c = BANDA_COLOR[banda(t.fuerza!)];
+            return (
+              <li key={t.id}>
+                <a href={`#/flojo/${encodeURIComponent(t.id)}`}>
+                  <span className="df-t"><b>{t.unit != null ? `Cap. ${t.unit}` : t.nombre} · {t.unit != null ? falla : falla.startsWith('una tarjeta') ? 'tarjetas' : falla}</b><span className="mono" style={{ color: c }}>{t.fuerza} %</span></span>
+                  <small className="sub">{detalle(st, t.id, date)}</small>
+                  <span className="deb-barra"><span style={{ width: `${t.fuerza}%`, background: c }} /></span>
+                </a>
+              </li>
+            );
+          })}
+        </ul>
+      )}
+    </section>
   );
 }

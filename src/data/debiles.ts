@@ -367,3 +367,18 @@ export function testsJson(st: StudyState) {
     errores: t.wrong?.length ? t.wrong.map((w) => ({ tipo: w.type, ejercicio: w.q, ...(w.tema ? { tema: w.tema } : {}) })) : ERR_ORDEN.flatMap((k) => Array(t.errors[k]).fill({ tipo: k })),
   }));
 }
+
+/** Una línea con de dónde sale lo flojo: el último cold recall, una tarjeta o el mazo. */
+export function detalle(st: StudyState, tema: string, date: string) {
+  const c = st.attempts.filter((a) => a.tema === tema && a.kind === 'cold').at(-1);
+  if (c?.ideas?.some((i) => !i.ok)) {
+    const cuando = c.date === date ? 'de hoy' : c.date === addDays(date, -1) ? 'de ayer' : `del ${c.date.slice(8, 10)}/${c.date.slice(5, 7)}`;
+    return `cold recall ${cuando}: ${c.ideas.filter((i) => !i.ok).length} de ${c.ideas.length} olvidados`;
+  }
+  const sang = leeches(st.cards.filter((x) => temaDeCarta(x, st.fronts) === tema), st.log)[0];
+  if (sang) return `tarjeta fallada ${sang.fallos} veces`;
+  const f = sources(st, tema);
+  if (f.tarjetas != null && f.test == null) return `retención del mazo ${f.tarjetas} %`;
+  if (f.test != null) return `test ${f.test} %`;
+  return 'pocos datos todavía';
+}

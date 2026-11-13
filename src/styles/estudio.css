@@ -224,3 +224,15 @@ label.celda { cursor: text; align-content: start; gap: 2px; }
 .dos-campos { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 .dos-campos label { display: grid; gap: 6px; color: var(--sub); font-size: 15px; }
 .actividad .etiqueta { display: block; margin: 22px 0 10px; }
+
+/* Dónde estás flojo (entrada a Puntos débiles) */
+.donde-flojo { margin: 6px 0 22px; }
+.donde-flojo ul { list-style: none; margin: 0; padding: 0; }
+.donde-flojo li { border-top: 1px solid var(--linea); }
+.donde-flojo a { display: grid; grid-template-columns: minmax(0, 1fr); gap: 2px; padding: 12px 0 10px; color: inherit; text-decoration: none; }
+.df-t { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+.df-t b { font-weight: 500; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.df-t .mono { font-size: 15px; white-space: nowrap; }
+.donde-flojo small { font-size: 14px; }
+.donde-flojo .deb-barra { display: block; height: 4px; background: var(--linea); margin-top: 6px; }
+.donde-flojo .deb-barra > span { display: block; height: 100%; }
