@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { BottomBar } from './components/BottomBar';
 import { SideNav } from './components/SideNav';
 import { FocoMini } from './components/FocoMini';
@@ -46,6 +46,7 @@ import { useStore } from './state/store';
 import { Avisos } from './ui/avisos';
 import { useFocusRunner } from './ui/useFocusRunner';
 import { useSealSync } from './ui/useSealSync';
+import { ensureDayRefs, ensureWeek } from './state/ruta';
 import { useNow } from './ui/useNow';
 import { useEntrada } from './ui/useEntrada';
 
@@ -60,6 +61,8 @@ export function App() {
   useFocusRunner();
   const entrada = useEntrada(`${ruta.pantalla}/${ruta.param ?? ''}`, !cargando);
   useSealSync(today, !!settings && !!day);
+  // La ruta: las metas de hoy con su etiqueta y la propuesta de la semana guardada.
+  useEffect(() => { if (settings && day) { ensureDayRefs(today); ensureWeek(today); } }, [settings, !!day, today]); // eslint-disable-line react-hooks/exhaustive-deps
   const pendientes = usePendientes(today);
 
   let contenido: React.ReactNode;

@@ -7,6 +7,7 @@ import { defaultGoals, emptyGoals } from '../data/goals-catalog';
 import type { Goal, GoalsState } from '../data/goals-types';
 import { periodKey } from '../data/goals';
 import { emptyTrain } from '../data/train-catalog';
+import { emptyRuta, refsForDay, type RutaState } from '../data/ruta';
 import { applySettings } from './apply';
 import type { TrainState } from '../data/train-types';
 import type { StudyState } from '../data/study-types';
@@ -21,12 +22,13 @@ export interface State {
   study: StudyState;
   goals: GoalsState;
   train: TrainState;
+  ruta: RutaState;
   /** Sellos ganados: id → fecha. */
   profile: { seals: Record<string, string>; /** Sellos cuya pantalla de logro ya viste. */ seen: string[] };
 }
 
 const KEY = 'trazo.v1';
-const empty = (): State => ({ settings: null, days: {}, focus: null, carry: {}, study: emptyStudy(), goals: emptyGoals(), train: emptyTrain(), profile: { seals: {}, seen: [] } });
+const empty = (): State => ({ settings: null, days: {}, focus: null, carry: {}, study: emptyStudy(), goals: emptyGoals(), train: emptyTrain(), ruta: emptyRuta(), profile: { seals: {}, seen: [] } });
 
 function load(): State {
   try {
@@ -38,7 +40,8 @@ function load(): State {
       const study = parsed.study ? { ...base, ...parsed.study, rules: { ...base.rules, ...parsed.study.rules } } : base;
       const goals = parsed.goals ? { ...emptyGoals(), ...parsed.goals } : null;
       const train = parsed.train ? { ...emptyTrain(), ...parsed.train } : emptyTrain();
-      return { ...empty(), ...parsed, study, train, profile: { seals: {}, seen: Object.keys(parsed.profile?.seals ?? {}), ...(parsed.profile ?? {}) }, goals: migrateGoals(goals ?? seedGoals(parsed.settings?.startDate ?? dateKey())) };
+      const ruta = { ...emptyRuta(), ...(parsed.ruta ?? {}) };
+      return { ...empty(), ...parsed, study, train, ruta, profile: { seals: {}, seen: Object.keys(parsed.profile?.seals ?? {}), ...(parsed.profile ?? {}) }, goals: migrateGoals(goals ?? seedGoals(parsed.settings?.startDate ?? dateKey())) };
     }
   } catch { /* sin storage o JSON roto */ }
   return empty();
@@ -112,7 +115,10 @@ export function startDay(routine: RoutineId, wake: string, date = dateKey()) {
   setState((s) => {
     const carry = s.carry[date] ?? {};
     const { [date]: _, ...restCarry } = s.carry;
-    const day: DayLog = { date, wake, routine, blocks: buildBlocks(planDay(routine, wake), carry), notes: [], focus: [] };
+    // Las metas que empujan la ruta llevan su etiqueta (ref y part) desde que empieza el día.
+    const refs = refsForDay(s.ruta, date);
+    const blocks = buildBlocks(planDay(routine, wake), carry).map((b) => (refs[b.key] ? { ...b, ...refs[b.key] } : b));
+    const day: DayLog = { date, wake, routine, blocks, notes: [], focus: [] };
     return { ...s, days: { ...s.days, [date]: day }, carry: restCarry };
   });
 }

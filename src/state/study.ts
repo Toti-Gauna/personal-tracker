@@ -5,6 +5,7 @@ import type { Activity, Card, CardDraft, ErrType, ReviewItem, Rules, StudyState,
 import { addDays } from '../data/time';
 import { newId } from '../data/schedule';
 import { getState, setState, updateDay } from './store';
+import { logFromStudy } from './ruta';
 
 function updateStudy(fn: (st: StudyState) => StudyState) {
   setState((s) => ({ ...s, study: fn(s.study) }));
@@ -57,6 +58,7 @@ export function completeLearn(date: string, activityId: string, n?: number) {
     return { ...st, units, activities, reviews: first ? [...st.reviews, ...scheduleLearned(a, unit, date)] : st.reviews };
   });
   markStep(date, ref);
+  if (unit) rutaFromStudy(date, a.id, unit.n, 'learn');
 }
 
 /** Guarda un test. Aprobado: tesis a +3 y repasos a +7, +21, +60. Si no, re-test en 2 días. */
@@ -77,6 +79,8 @@ export function saveTest(date: string, activityId: string, n: number, data: { sc
   });
   markStep(date, `test:${a.id}:${n}`);
   markStep(date, `learn:${a.id}:${n}`);
+  rutaFromStudy(date, a.id, n, 'learn');
+  if (approved) rutaFromStudy(date, a.id, n, 'test');
   return approved;
 }
 
@@ -221,4 +225,10 @@ export function setRules(patch: Partial<Rules>) {
 
 export function savePoints(key: string, points: string[]) {
   updateStudy((s) => ({ ...s, points: { ...s.points, [key]: points } }));
+}
+
+/** CONAMAT · Aritmética (unidades 1 a 11) es el B1 de la ruta: aprender y aprobar cada capítulo empuja su ítem. */
+function rutaFromStudy(date: string, activityId: string, n: number, part: 'learn' | 'test') {
+  if (activityId !== 'conamat') return;
+  logFromStudy(date, `b1-conamat-arit-${String(n).padStart(2, '0')}`, 0.5, `study:${part}:${activityId}:${n}`);
 }

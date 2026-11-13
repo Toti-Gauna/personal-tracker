@@ -12,6 +12,8 @@ import type { Block, DayLog } from '../data/types';
 import { ir } from '../lib/routes';
 import { useStore } from '../state/store';
 import { Marca } from '../ui/Marca';
+import { ChipRuta, chipDe } from '../ui/RutaBits';
+import '../styles/ruta.css';
 import { SumarSemana } from '../ui/SumarSemana';
 import { Tareas } from '../ui/Tareas';
 import { useNow } from '../ui/useNow';
@@ -46,6 +48,7 @@ export function Hoy({ day }: { day: DayLog }) {
   const focus = useStore((s) => s.focus);
   const study = useStore((s) => s.study);
   const train = useStore((s) => s.train);
+  const ruta = useStore((s) => s.ruta);
   const now = nowMin(new Date(useNow(30000)));
   const cur = currentBlock(day.blocks, now);
   const upcoming = day.blocks.find((b) => toMin(b.start) > now);
@@ -112,6 +115,8 @@ export function Hoy({ day }: { day: DayLog }) {
           const abiertaEsta = abierta === b.key;
           const activa = cur?.key === b.key;
           const enFoco = focus?.key === b.key && focus.date === day.date;
+          // La etiqueta de ruta: a qué carril empuja esta meta.
+          const chip = b.ref ? chipDe(b.ref, ruta, day.date) : null;
           // Una meta de estudio abre su sesión de estudio; el resto, elegir pomodoro.
           const act = b.kind === 'estudio' ? activitiesFor(study, day.date).find((a) => a.block === b.key) : undefined;
           // La meta de entreno abre la sesión de entreno (o Entreno, si hoy no hay rutina).
@@ -124,7 +129,7 @@ export function Hoy({ day }: { day: DayLog }) {
           return (
             <li
               key={b.key}
-              className={`meta${abiertaEsta ? ' abierta' : ''}${blockDone(b) ? ' hecha' : ''}${activa ? ' activa' : ''}`}
+              className={`meta${abiertaEsta ? ' abierta' : ''}${blockDone(b) ? ' hecha' : ''}${activa ? ' activa' : ''}${chip ? ' con-ruta' : ''}`}
               style={{ ['--c' as string]: AREAS[b.area].css }}
             >
               <button className="meta-fila" aria-expanded={abiertaEsta} onClick={() => setAbierta(abiertaEsta ? null : b.key)}>
@@ -136,6 +141,7 @@ export function Hoy({ day }: { day: DayLog }) {
                 </span>
                 <span className="meta-cont mono" aria-label={`${done} de ${b.tasks.length} tareas`}>{done}/{b.tasks.length}</span>
               </button>
+              {chip && <a className="meta-ruta" href="#/metas/semana-ruta" aria-label={`Ruta: ${chip.texto}`}><ChipRuta lane={chip.lane} texto={chip.texto} /></a>}
               {abiertaEsta && (
                 <div className="meta-det">
                   <div className="kicker">{estado(b, now)}</div>
