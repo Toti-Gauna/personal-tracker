@@ -158,9 +158,16 @@ label.celda { cursor: text; align-content: start; gap: 2px; }
   line-height: 34px; font: inherit; line-height: 34px; color: var(--tinta); resize: vertical;
 }
 .detectadas { margin: 14px 0; }
+.detectadas .tarjeta-t b { font-weight: 500; font-size: 17px; }
+.detectadas .tarjeta-t small { font-size: 15px; }
 .tarjeta-t { display: grid; min-width: 0; padding: 6px 0; }
 .tarjeta-t small { color: var(--sub); }
 .tesis .btn-principal { margin-top: 14px; }
+.tesis .segmentado { margin-bottom: 10px; }
+.nota-papel { font-size: 15px; margin: 0 0 18px; }
+.empeza { border: 1px solid var(--linea); border-radius: 10px; padding: 14px 16px; margin-bottom: 8px; }
+.empeza p { margin: 6px 0 0; }
+.tesis .nota a { color: inherit; text-decoration: none; }
 
 /* Unidades */
 .unidades h1 { font-size: clamp(32px, 9.5vw, 44px); }
