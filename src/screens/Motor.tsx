@@ -5,28 +5,32 @@ import type { Rules } from '../data/study-types';
 import type { DayLog } from '../data/types';
 import { useStore } from '../state/store';
 import { addCards, setRules } from '../state/study';
+import { DIA, MAX_TRIES } from '../data/study-catalog';
 import { toast } from '../ui/avisos';
 import { addDays } from '../data/time';
 import '../styles/estudio.css';
 import '../styles/repaso.css';
 
+/** Días del capítulo: 1 → 2 → 3 → 8 → 22 → 61. */
 const ESCALERA: [string, string, string][] = [
-  ['0', 'Estudiás', 'var(--tinta)'], ['+1', 'Cold recall', 'var(--economia)'], ['+3', 'Tesis', 'var(--economia)'],
-  ['+7', 'Mixtos', 'var(--ing)'], ['+21', 'Mixtos', 'var(--ing)'], ['+60', 'Examen', 'var(--salud)'],
+  [String(DIA.estudiar), 'Estudiar', 'var(--tinta)'], [String(DIA.test), 'Cold recall + test', 'var(--economia)'], [String(DIA.tesis), 'Tesis', 'var(--economia)'],
+  [String(DIA.e8), 'Repetir', 'var(--ing)'], [String(DIA.e22), 'Repetir', 'var(--ing)'], [String(DIA.e61), 'Examen', 'var(--salud)'],
 ];
 
-function Ajuste({ label, desc, value, onMinus, onPlus }: { label: string; desc: string; value: string; onMinus?: () => void; onPlus?: () => void }) {
+/** Una regla con su valor en caja; tocarlo pasa al siguiente valor posible. */
+function Ajuste<T>({ label, desc, value, opciones, fmt, onChange }: { label: string; desc: string; value: T; opciones?: T[]; fmt: (v: T) => string; onChange?: (v: T) => void }) {
+  const sig = () => {
+    if (!opciones || !onChange) return;
+    const i = opciones.findIndex((o) => o === value);
+    onChange(opciones[(i + 1) % opciones.length]);
+  };
   return (
     <div className="regla">
       <span><b>{label}</b><small>{desc}</small></span>
-      {onMinus ? (
-        <span className="stepper chico">
-          <button aria-label={`Menos: ${label}`} onClick={onMinus}>−</button>
-          <output aria-label={label}>{value}</output>
-          <button aria-label={`Más: ${label}`} onClick={onPlus}>+</button>
-        </span>
+      {opciones ? (
+        <button className="valor mono" onClick={sig} aria-label={`${label}: ${fmt(value)}. Tocá para cambiar`}>{fmt(value)}</button>
       ) : (
-        <span className="valor mono">{value}</span>
+        <span className="valor mono">{fmt(value)}</span>
       )}
     </div>
   );
@@ -41,6 +45,7 @@ export function Motor({ day, seccion }: { day: DayLog; seccion?: string }) {
   const [mazo, setMazo] = useState(study.fronts[0]?.id ?? '');
   const [fuente, setFuente] = useState('');
   const detectadas = parseCardsText(bloque);
+  const [pegarAbierto, setPegarAbierto] = useState(seccion === 'importar');
 
   useEffect(() => {
     if (seccion === 'importar') document.getElementById('importar')?.scrollIntoView();
@@ -89,19 +94,17 @@ export function Motor({ day, seccion }: { day: DayLog; seccion?: string }) {
       </ol>
 
       <div className="etiqueta rep-t">Reglas</div>
-      <Ajuste label="Cold recall al día siguiente" desc={`Solo de lo nuevo de ayer; con ${Math.round(r.coldSkipAt * 100)} % o más no hay relectura ni tarjetas de lo olvidado. La tesis sigue a los +3.`} value="si es nuevo" />
-      <Ajuste label="Releer cuando falla" desc="Cold recall por debajo de este número o tarjeta fallada 2 veces" value={`< ${Math.round(r.rereadBelow * 100)} %`}
-        onMinus={() => set({ rereadBelow: Math.max(0.5, +(r.rereadBelow - 0.05).toFixed(2)) })} onPlus={() => set({ rereadBelow: Math.min(0.9, +(r.rereadBelow + 0.05).toFixed(2)) })} />
-      <Ajuste label="Retención buscada" desc="Cuánto querés recordar; más alto, más repasos" value={`${Math.round(r.retention * 100)} %`}
-        onMinus={() => set({ retention: Math.max(0.8, +(r.retention - 0.01).toFixed(2)) })} onPlus={() => set({ retention: Math.min(0.97, +(r.retention + 0.01).toFixed(2)) })} />
-      <Ajuste label="Tarjetas nuevas por día" desc="El resto espera al día siguiente" value={String(r.newPerDay)}
-        onMinus={() => set({ newPerDay: Math.max(0, r.newPerDay - 5) })} onPlus={() => set({ newPerDay: Math.min(50, r.newPerDay + 5) })} />
-      <Ajuste label="Tope de repaso por día" desc="Si vence más, entran primero las más olvidadas y el resto pasa a mañana" value={`${r.cap} min`}
-        onMinus={() => set({ cap: Math.max(5, r.cap - 5) })} onPlus={() => set({ cap: Math.min(60, r.cap + 5) })} />
-      <div className="regla">
-        <span><b>Saltear lo que ya sabés</b><small>Ejercicios espaciados más cortos si el anterior salió perfecto</small></span>
-        <button role="switch" className="switch" aria-checked={r.shortenIfPerfect} aria-label="Saltear lo que ya sabés" onClick={() => set({ shortenIfPerfect: !r.shortenIfPerfect })} />
-      </div>
+      <Ajuste label="Cold recall antes del test" desc={`El día ${DIA.test}, 5 min contra el capítulo; con ${Math.round(r.coldSkipAt * 100)} % o más no hace falta releer`} value="día 2" fmt={(v) => v} />
+      <Ajuste label="Test sin aprobar" desc={`Releer al día siguiente y re-test al otro; a la ${MAX_TRIES === 3 ? 'tercera' : `${MAX_TRIES}.ª`} vez, el tema queda flojo`} value={`${MAX_TRIES} veces`} fmt={(v) => v} />
+      <Ajuste label="Releer cuando falla" desc="Cold recall por debajo de este número o tarjeta fallada 2 veces" value={r.rereadBelow} opciones={[0.6, 0.65, 0.7, 0.75, 0.8]}
+        fmt={(v) => `< ${Math.round(v * 100)} %`} onChange={(v) => set({ rereadBelow: v })} />
+      <Ajuste label="Retención buscada" desc="Cuánto querés recordar; más alto, más repasos" value={r.retention} opciones={[0.85, 0.88, 0.9, 0.92, 0.95]}
+        fmt={(v) => `${Math.round(v * 100)} %`} onChange={(v) => set({ retention: v })} />
+      <Ajuste label="Tarjetas nuevas por día" desc="El resto espera al día siguiente" value={r.newPerDay} opciones={[5, 10, 15, 20, 30]} fmt={String} onChange={(v) => set({ newPerDay: v })} />
+      <Ajuste label="Tope de repaso por día" desc="Si vence más, entran primero las más olvidadas y el resto pasa a mañana" value={r.cap} opciones={[10, 15, 20, 25, 30]}
+        fmt={(v) => `${v} min`} onChange={(v) => set({ cap: v })} />
+      <Ajuste label="Saltear lo que ya sabés" desc="Ejercicios espaciados más cortos si el anterior salió perfecto" value={r.shortenIfPerfect} opciones={[true, false]}
+        fmt={(v) => (v ? 'sí' : 'no')} onChange={(v) => set({ shortenIfPerfect: v })} />
 
       <div className="fila-t rep-t"><span className="etiqueta">Tus {cards.length} tarjetas</span><span className="mono sub">retención {total == null ? '—' : `${total} %`}</span></div>
       {cards.length > 0 && (
@@ -112,7 +115,7 @@ export function Motor({ day, seccion }: { day: DayLog; seccion?: string }) {
             {enRepaso > 0 && <span style={{ flexGrow: enRepaso, background: 'var(--ing)' }} />}
             {maduras > 0 && <span style={{ flexGrow: maduras, background: 'var(--salud)' }} />}
           </div>
-          <div className="estado-leyenda mono sub">
+          <div className="estado-leyenda sub">
             <span>{nuevas} nuevas</span><span>{aprendiendo} aprendiendo</span><span>{enRepaso} en repaso</span><span>{maduras} maduras</span>
           </div>
         </>
@@ -130,30 +133,33 @@ export function Motor({ day, seccion }: { day: DayLog; seccion?: string }) {
           );
         })}
       </ul>
-      <p className="sub nota-izq">Retención: las que recordaste en los últimos 30 días (todo menos «Otra vez»).</p>
 
       <div id="importar" className="etiqueta rep-t">Traer tarjetas</div>
-      <div className="mazo-fuente">
-        <label><span className="sub">Mazo</span>
-          <select className="select-plano" value={mazo} onChange={(e) => setMazo(e.target.value)}>
-            {study.fronts.map((f) => <option key={f.id} value={f.id}>{f.name}</option>)}
-          </select>
-        </label>
-        <label><span className="sub">Fuente</span><input className="select-plano" value={fuente} onChange={(e) => setFuente(e.target.value)} placeholder="Opcional" /></label>
-      </div>
       <label className="fila-link archivo">
-        <span>Importar de Anki<small>Archivo de texto exportado (Notas en texto plano). Trae frente y dorso; el historial de Anki no viaja en ese formato y arranca de cero acá.</small></span>
+        <span>Importar de Anki<small>Archivo de texto exportado · frente y dorso, al mazo {frente?.name ?? 'elegido'}</small></span>
         <span aria-hidden="true">→</span>
         <input type="file" accept=".txt,.tsv,.csv,text/plain" onChange={(e) => archivo(e.target.files?.[0])} />
       </label>
-      <div className="pegar">
-        <b>Pegar un bloque</b>
-        <small className="sub">Una tarjeta por línea con :: o [[ ]]. Sirve para lo que te arme Claude.</small>
-        <textarea className="campo-texto" rows={5} value={bloque} onChange={(e) => setBloque(e.target.value)} aria-label="Bloque de tarjetas" placeholder={'Menos por menos :: da positivo.\nRestar un número es sumar su [[opuesto]].'} />
-        <button className="btn-principal" disabled={!detectadas.length} onClick={() => importar(bloque, 'Bloque pegado')}>
-          {detectadas.length ? `Agregar ${detectadas.length} ${detectadas.length === 1 ? 'tarjeta' : 'tarjetas'}` : 'Agregar tarjetas'}
-        </button>
-      </div>
+      <button className="fila-link fila-boton" aria-expanded={pegarAbierto} onClick={() => setPegarAbierto((v) => !v)}>
+        <span>Pegar un bloque<small>Una tarjeta por línea con :: o [[ ]]</small></span>
+        <span aria-hidden="true">{pegarAbierto ? '↓' : '→'}</span>
+      </button>
+      {pegarAbierto && (
+        <div className="pegar">
+          <div className="mazo-fuente">
+            <label><span className="sub">Mazo</span>
+              <select className="select-plano" value={mazo} onChange={(e) => setMazo(e.target.value)}>
+                {study.fronts.map((f) => <option key={f.id} value={f.id}>{f.name}</option>)}
+              </select>
+            </label>
+            <label><span className="sub">Fuente</span><input className="select-plano" value={fuente} onChange={(e) => setFuente(e.target.value)} placeholder="Opcional" /></label>
+          </div>
+          <textarea className="campo-texto" rows={5} value={bloque} onChange={(e) => setBloque(e.target.value)} aria-label="Bloque de tarjetas" placeholder={'Menos por menos :: da positivo.\nRestar un número es sumar su [[opuesto]].'} />
+          <button className="btn-principal" disabled={!detectadas.length} onClick={() => importar(bloque, 'Bloque pegado')}>
+            {detectadas.length ? `Agregar ${detectadas.length} ${detectadas.length === 1 ? 'tarjeta' : 'tarjetas'}` : 'Agregar tarjetas'}
+          </button>
+        </div>
+      )}
     </main>
   );
 }

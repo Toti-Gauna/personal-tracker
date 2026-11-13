@@ -6,7 +6,7 @@ import type { DayLog } from '../data/types';
 import { useStore } from '../state/store';
 import '../styles/estudio.css';
 
-/** 2.8 Unidades y tests del bimestre: CONAMAT completo y la programación del B1. */
+/** 2.8 Unidades y tests del bimestre: qué incluye cada test y qué toca hoy en cada unidad (tesis, recall, estudio y test). */
 export function Unidades({ day }: { day: DayLog }) {
   const study = useStore((s) => s.study);
   const settings = useStore((s) => s.settings)!;
@@ -39,7 +39,7 @@ export function Unidades({ day }: { day: DayLog }) {
                   <span className="mono">{String(u.n).padStart(2, '0')}</span>
                   <a href={`#/test/${a.id}/${u.n}`}>
                     <b>{u.title}</b>
-                    <small>Test: {u.test.desc}</small>
+                    <small>Test: {u.test.desc[0].toLowerCase() + u.test.desc.slice(1)}</small>
                   </a>
                   <span className={`estado ${st.tone}`}>{st.label}</span>
                 </li>

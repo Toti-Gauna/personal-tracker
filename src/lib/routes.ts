@@ -10,7 +10,7 @@ export const ETIQUETAS: Record<Seccion | 'avance', string> = {
 };
 
 export type Pantalla = Seccion | 'avance' | 'elegir' | 'foco' | 'pomodoros' | 'json' | 'sesion' | 'como' | 'actividad' | 'test' | 'tesis' | 'unidades'
-  | 'repaso' | 'recall' | 'tarjetas' | 'tarjeta-nueva' | 'motor' | 'meta-nueva'
+  | 'repaso' | 'recall' | 'tarjetas' | 'tarjeta-nueva' | 'motor' | 'meta-nueva' | 'flojo'
   | 'cierre' | 'logro' | 'ajustes' | 'ajustes-rutinas' | 'ajustes-companera' | 'ajustes-datos' | 'sonidos'
   | 'entreno-semana' | 'entreno-rutina' | 'entreno-sesion' | 'entreno-resumen' | 'entreno-peso' | 'entreno-motor';
 
@@ -26,7 +26,7 @@ const SUB: Record<string, Seccion> = {
   sesion: 'estudio', como: 'estudio', actividad: 'estudio', test: 'estudio', tesis: 'estudio', unidades: 'estudio',
   cierre: 'hoy', logro: 'perfil', ajustes: 'perfil', 'ajustes-rutinas': 'perfil', 'ajustes-companera': 'perfil', 'ajustes-datos': 'perfil', sonidos: 'perfil',
   'meta-nueva': 'metas',
-  'entreno-semana': 'entreno', 'entreno-rutina': 'entreno', 'entreno-sesion': 'entreno', 'entreno-resumen': 'entreno', 'entreno-peso': 'entreno', 'entreno-motor': 'entreno', repaso: 'estudio', recall: 'estudio', tarjetas: 'estudio', 'tarjeta-nueva': 'estudio', motor: 'estudio',
+  'entreno-semana': 'entreno', 'entreno-rutina': 'entreno', 'entreno-sesion': 'entreno', 'entreno-resumen': 'entreno', 'entreno-peso': 'entreno', 'entreno-motor': 'entreno', repaso: 'estudio', flojo: 'estudio', recall: 'estudio', tarjetas: 'estudio', 'tarjeta-nueva': 'estudio', motor: 'estudio',
 };
 
 export function leerRuta(hash: string): Ruta {

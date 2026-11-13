@@ -1,8 +1,7 @@
 import { AREAS } from '../data/defaults';
-import { forecast } from '../data/study';
+import { forecast, unitShort } from '../data/study';
 import { fmtDur, fmtFecha, parseDate } from '../data/time';
 import type { DayLog } from '../data/types';
-import { ir } from '../lib/routes';
 import { useStore } from '../state/store';
 import { completeExercises } from '../state/study';
 import { startStudy } from '../ui/estudio-acciones';
@@ -12,7 +11,7 @@ import '../styles/repaso.css';
 
 const DIAS = ['D', 'L', 'M', 'X', 'J', 'V', 'S'];
 
-/** 3.1 Repaso de hoy: solo lo que vence, con tope. Lo que no toca, y cuándo vuelve. */
+/** 3.1 Repaso de hoy: tarjetas y lo que vence para repetir, con tope. Lo que no toca, y cuándo vuelve. */
 export function Repaso({ day }: { day: DayLog }) {
   const study = useStore((s) => s.study);
   const plan = useStudyPlan(day);
@@ -22,24 +21,36 @@ export function Repaso({ day }: { day: DayLog }) {
   const colorOf = (frontId?: string) => AREAS[study.fronts.find((f) => f.id === frontId)?.color ?? 'ing'].css;
   const frontOfAct = (id: string) => study.activities.find((a) => a.id === id)?.front;
 
-  const cold = daily.today.filter((r) => r.kind === 'cold' || r.kind === 'releer');
-  const tesis = daily.today.filter((r) => r.kind === 'tesis');
+  // El cold recall (con el test del día 2) y la tesis (día 3) van con su contenido, fuera del tope.
+  const releer = daily.today.filter((r) => r.kind === 'releer');
+  const tesis = daily.tesis.filter((r) => !r.doneOn);
+  const coldHoy = daily.cold.filter((r) => !r.doneOn && r.unit != null);
+  const actOf = (id: string) => study.activities.find((a) => a.id === id);
+  const corto = (r: { activityId: string; unit?: number; label: string }) => {
+    const a = actOf(r.activityId);
+    return a && r.unit != null ? unitShort(a, r.unit).toLowerCase() : r.label.replace(/^[^·]+ · /, '');
+  };
   const ejercicios = daily.today.filter((r) => r.kind === 'ejercicios' || r.kind === 'examen');
   const cardsMin = daily.groups.reduce((s, g) => s + g.min, 0);
   const cardsN = daily.groups.reduce((s, g) => s + g.cards.length, 0);
   const sumOf = (xs: { min: number }[]) => xs.reduce((s, x) => s + x.min, 0);
 
-  // Hoy no toca: lo que no entró en el tope, los cold recall de ayer que salieron bien y lo próximo.
-  const ayer = study.reviews.filter((r) => r.kind === 'cold' && r.doneOn && r.doneOn < day.date && (r.score ?? 0) >= study.rules.coldSkipAt);
+  // Hoy no toca: lo que no entró en el tope y lo próximo.
   const proxEj = study.reviews.filter((r) => (r.kind === 'ejercicios' || r.kind === 'examen') && !r.doneOn && r.due > day.date).sort((a, b) => a.due.localeCompare(b.due))[0];
   const releerPend = study.reviews.some((r) => r.kind === 'releer' && !r.doneOn);
   const fc = forecast(study, day.date);
   const max = Math.max(cap, ...fc.map((f) => f.min));
   const done = (ref: string) => (day.studyDone ?? []).includes(ref);
 
-  let paso = 0;
-  const Seccion = ({ titulo, desc, min, children }: { titulo: string; desc: string; min: number; children: React.ReactNode }) => {
-    paso++;
+  // Número de cada sección, en orden y sin contar las que no aparecen.
+  const orden = [daily.groups.length > 0 && 'tarjetas', releer.length > 0 && 'releer', ejercicios.length > 0 && 'ejercicios'].filter(Boolean) as string[];
+  const todas = [
+    ...coldHoy.map((r) => `el cold recall y el test del ${corto(r)}`),
+    ...tesis.map((r) => `la tesis del ${corto(r)}`),
+  ];
+  const aparte = todas.length > 3 ? [...todas.slice(0, 2), `${todas.length - 2} más`] : todas;
+  const Seccion = ({ id, titulo, desc, min, children }: { id: string; titulo: string; desc: string; min: number; children: React.ReactNode }) => {
+    const paso = orden.indexOf(id) + 1;
     return (
       <section className="rep-paso">
         <span className={`rep-n mono${paso === 1 ? ' on' : ''}`}>{paso}</span>
@@ -60,69 +71,59 @@ export function Repaso({ day }: { day: DayLog }) {
       </div>
       <header>
         <h1 className="titulo">Repaso de hoy</h1>
-        <p>{daily.min ? `${daily.min} minutos: solo lo que vence hoy. Lo que ya sabés quedó afuera.` : 'Hoy no vence nada: no hay repaso.'}</p>
+        <p>
+          {daily.min ? `${daily.min} minutos: solo lo que vence hoy. Lo que ya sabés quedó afuera.` : 'Hoy no vence nada: no hay repaso.'}
+          {aparte.length > 0 && ` ${aparte.length > 1 ? `${aparte.slice(0, -1).join(', ')} y ${aparte[aparte.length - 1]}` : aparte[0]} van en tu sesión, fuera del tope.`.replace(/^ (.)/, (_, c: string) => ` ${c.toUpperCase()}`)}
+          {' '}<a className="subrayado" href="#/flojo">{study.rules.priorizarFlojo ? 'Lo más flojo va primero' : 'Ver lo más flojo'}</a>.
+        </p>
       </header>
 
       <div className="tope">
         <div className="tope-barra" role="img" aria-label={`${daily.min} de ${cap} minutos del tope`}>
-          {sumOf(cold) > 0 && <span style={{ width: `${(sumOf(cold) / cap) * 100}%`, background: 'var(--economia)' }} />}
-          {sumOf(tesis) > 0 && <span style={{ width: `${(sumOf(tesis) / cap) * 100}%`, background: 'var(--eclipse)' }} />}
           {cardsMin > 0 && <span style={{ width: `${(cardsMin / cap) * 100}%`, background: 'var(--ing)' }} />}
+          {sumOf(releer) > 0 && <span style={{ width: `${(sumOf(releer) / cap) * 100}%`, background: 'var(--economia)' }} />}
           {sumOf(ejercicios) > 0 && <span style={{ width: `${(sumOf(ejercicios) / cap) * 100}%`, background: 'var(--handyx)' }} />}
         </div>
-        <div className="fila-t mono sub"><span>{daily.min} de {cap} min de tope</span><span>{[cold.length && 'cold recall', tesis.length && 'tesis', cardsN && 'tarjetas', ejercicios.length && 'ejercicios'].filter(Boolean).join(' · ')}</span></div>
+        <div className="fila-t mono sub"><span>{daily.min} de {cap} min de tope</span><span>{[cardsN && 'tarjetas', releer.length && 'releer', ejercicios.length && 'ejercicios'].filter(Boolean).join(' · ')}</span></div>
       </div>
 
-      {cold.length > 0 && (
-        <Seccion titulo="Cold recall" desc="Lo nuevo de ayer, sin mirar. Escribís lo que recuerdes y lo comparás punto por punto." min={sumOf(cold)}>
-          {cold.map((r) => (
-            <li key={r.id} className={done(`rev:${r.id}`) ? 'hecho' : ''}>
-              <a href={r.kind === 'cold' ? `#/recall/${r.id}` : '#/estudio'}>
-                <i style={{ background: colorOf(frontOfAct(r.activityId)) }} />
-                <span><b>{r.label.replace(/^Cold recall · /, '')}</b><small>{r.kind === 'releer' ? 'Relectura corta de lo que faltó' : done(`rev:${r.id}`) ? `Hecho · ${Math.round((r.score ?? 0) * 100)} %` : 'Ayer: capítulo nuevo'}</small></span>
-                <span className="mono">{r.min} min</span>
-              </a>
-            </li>
-          ))}
-        </Seccion>
-      )}
-      {tesis.length > 0 && (
-        <Seccion titulo="Tesis" desc="Llega a los 3 días del capítulo: lo explicás con tus palabras y salen tarjetas." min={sumOf(tesis)}>
-          {tesis.map((r) => (
-            <li key={r.id} className={done(`rev:${r.id}`) ? 'hecho' : ''}>
-              <a href={`#/tesis/${r.id}`}>
-                <i style={{ background: colorOf(frontOfAct(r.activityId)) }} />
-                <span><b>{r.label}</b><small>{done(`rev:${r.id}`) ? 'Hecha' : 'Día +3 · primer repaso'}</small></span>
-                <span className="mono">{r.min} min</span>
-              </a>
-            </li>
-          ))}
-        </Seccion>
-      )}
       {daily.groups.length > 0 && (
-        <Seccion titulo="Tarjetas" desc={`Escribís la respuesta antes de darla vuelta. Solo las ${cardsN} que tocan hoy.`} min={cardsMin}>
+        <Seccion id="tarjetas" titulo="Tarjetas" desc={`Escribís la respuesta antes de darla vuelta. Solo las ${cardsN} que vencen hoy.`} min={cardsMin}>
           {daily.groups.map((g) => (
             <li key={g.frontId} className={g.pending.length ? '' : 'hecho'}>
               <a href={`#/tarjetas/${g.frontId}`}>
                 <i style={{ background: colorOf(g.frontId) }} />
-                <span><b>{g.name}</b><small>{g.pending.length ? `${g.pending.length} de ${g.cards.length} tarjetas` : `${g.cards.length} tarjetas · listo`}</small></span>
+                <span><b>{g.name}</b><small>{g.pending.length === g.cards.length ? `${g.cards.length} tarjetas` : g.pending.length ? `${g.pending.length} de ${g.cards.length} tarjetas` : `${g.cards.length} tarjetas · listo`}</small></span>
                 <span className="mono">{g.min} min</span>
               </a>
             </li>
           ))}
         </Seccion>
       )}
+      {releer.length > 0 && (
+        <Seccion id="releer" titulo="Releer" desc="Lo que falló en el test de ayer, antes del re-test de mañana; o lo que se te olvidó." min={sumOf(releer)}>
+          {releer.map((r) => (
+            <li key={r.id} className={done(`rev:${r.id}`) ? 'hecho' : ''}>
+              <div className="rep-ej">
+                <i style={{ background: colorOf(frontOfAct(r.activityId)) }} />
+                <span><b>{r.label.replace(/^[^·]+ · /, '')}</b><small>{done(`rev:${r.id}`) ? 'Hecho' : r.label.split(' · ')[0]}</small></span>
+                {!done(`rev:${r.id}`) && <span className="rep-botones"><button onClick={() => completeExercises(day.date, r.id, false)}>Hecho</button></span>}
+              </div>
+            </li>
+          ))}
+        </Seccion>
+      )}
       {ejercicios.length > 0 && (
-        <Seccion titulo="Ejercicios espaciados" desc="3 a 5 ejercicios mixtos sin mirar. Si salen perfectos, el próximo es más corto." min={sumOf(ejercicios)}>
+        <Seccion id="ejercicios" titulo="Repetir" desc="Días 8, 22 y 61: estudiás lo flojo y hacés 3 a 5 ejercicios mixtos sin mirar. Si salen perfectos, el próximo es más corto." min={sumOf(ejercicios)}>
           {ejercicios.map((r) => (
             <li key={r.id} className={done(`rev:${r.id}`) ? 'hecho' : ''}>
               <div className="rep-ej">
                 <i style={{ background: colorOf(frontOfAct(r.activityId)) }} />
-                <span><b>{r.label}</b><small>{done(`rev:${r.id}`) ? (r.perfect ? 'Perfecto' : 'Hecho') : `${r.min} min`}</small></span>
+                <span><b>{r.label}</b><small>{done(`rev:${r.id}`) ? (r.perfect ? 'Perfecto' : 'Hecho') : `${r.min} min · cargá cuántos salieron bien`}</small></span>
                 {!done(`rev:${r.id}`) && (
-                  <span className="rep-botones">
-                    <button onClick={() => completeExercises(day.date, r.id, false)}>Hecho</button>
-                    <button onClick={() => completeExercises(day.date, r.id, true)}>Perfecto</button>
+                  <span className="rep-botones de5" role="group" aria-label="Cuántos bien de 5">
+                    <small className="sub">bien de 5</small>
+                    {[0, 1, 2, 3, 4, 5].map((n) => <button key={n} aria-label={`${n} bien de 5`} onClick={() => completeExercises(day.date, r.id, n === 5, [n, 5])}>{n}</button>)}
                   </span>
                 )}
               </div>
@@ -135,13 +136,10 @@ export function Repaso({ day }: { day: DayLog }) {
       <ul className="no-toca-lista">
         {daily.skipped.map((r) => <li key={r.id}><span>{r.label}<small>No entró en el tope de {cap} min</small></span><span className="mono">mañana</span></li>)}
         {daily.skippedCards > 0 && <li><span>{daily.skippedCards} tarjetas<small>Las menos olvidadas esperan</small></span><span className="mono">mañana</span></li>}
-        {ayer.slice(-3).map((r) => (
-          <li key={r.id}><span>{r.label}<small>Sacaste {Math.round((r.score ?? 0) * 100)} %</small></span><span className="mono">{nextOf(study.reviews, r)}</span></li>
-        ))}
         {!ejercicios.length && (
-          <li><span>Ejercicios espaciados<small>Ningún capítulo cumple +7, +21 o +60 hoy</small></span><span className="mono">{proxEj ? `${fmtFecha(proxEj.due).split(' ').slice(0, 2).join(' ').toLowerCase()}` : '—'}</span></li>
+          <li><span>Repetir<small>Ningún capítulo cumple el día 8, 22 o 61 hoy</small></span><span className="mono">{proxEj ? `${corto(proxEj)} el ${fmtFecha(proxEj.due).split(' ')[0].toLowerCase()}` : '—'}</span></li>
         )}
-        {!releerPend && <li><span>Releer<small>No quedó nada por debajo del {Math.round(study.rules.rereadBelow * 100)} %</small></span><span className="mono">—</span></li>}
+        {!releerPend && <li><span>Releer<small>Ningún test reprobado ni nada por debajo del {Math.round(study.rules.rereadBelow * 100)} %</small></span><span className="mono">—</span></li>}
       </ul>
 
       <div className="fila-t rep-t"><span className="etiqueta">Minutos de repaso que vienen</span><span className="mono sub">tope {cap}</span></div>
@@ -163,17 +161,6 @@ export function Repaso({ day }: { day: DayLog }) {
       ) : (
         <p className="listo">{daily.min ? 'Repaso de hoy, listo.' : 'Nada para repasar hoy.'}</p>
       )}
-      <div className="dos-botones" style={{ marginTop: 16 }}>
-        <a className="btn-borde" href="#/tarjeta-nueva">Nueva tarjeta</a>
-        <a className="btn-borde" href="#/motor">Motor</a>
-      </div>
-      <button className="terminar-foco" onClick={() => ir('estudio')}>Volver a Estudio</button>
     </main>
   );
 }
-
-function nextOf(reviews: { activityId: string; unit?: number; due: string; doneOn?: string; kind: string }[], r: { activityId: string; unit?: number }) {
-  const n = reviews.filter((x) => x.activityId === r.activityId && x.unit === r.unit && !x.doneOn && x.kind !== 'retest').sort((a, b) => a.due.localeCompare(b.due))[0];
-  return n ? `vuelve el ${fmtFecha(n.due).split(' ').slice(1).join(' ')}` : 'al día';
-}
-

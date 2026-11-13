@@ -1,0 +1,16 @@
+Trazo · sistema de estudio nuevo (oscuro, 2x)
+Prompt A: descomprimir en docs/design/estudio/
+
+11_f2_Estudio.png  ·  2.1 Estudio · contenidos de hoy
+12_f2_ComoFunciona.png  ·  2.3 Cómo funciona
+13_f2_Test.png  ·  2.6 Registrar test en la app
+14_f2_Tesis.png  ·  2.7 Tesis, en la app o en papel
+15_f2_PlanBimestre.png  ·  2.8 CONAMAT · unidades y tests
+17_f2_SesionEstudio.png  ·  2.2 Sesión de estudio
+18_f2_TestPapel.png  ·  2.5 Test en papel
+20_f6_Repaso.png  ·  3.1 Repaso de hoy
+21_f6_Recall.png  ·  3.2 Cold recall
+23_f6_Motor.png  ·  3.5 Motor de repaso
+37_f5_Cierre.png  ·  6.1 Cierre del día
+
+Estudio, Recall y Repaso también llevan los bloques de Puntos débiles (prompt B): "Dónde estás flojo", "creías contra recordaste" y "Lo más flojo va primero". El prompt A los ignora.

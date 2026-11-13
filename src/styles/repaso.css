@@ -1,9 +1,11 @@
 .repaso h1 { font-size: 40px; }
 .tope { margin-bottom: 22px; }
-.tope .fila-t { flex-wrap: wrap; }
+.tope .fila-t { flex-wrap: wrap; gap: 4px 12px; font-size: 13px; }
 .tope-barra { display: flex; gap: 2px; height: 22px; border: 1px solid var(--linea); padding: 3px; }
 .tope-barra span { display: block; height: 100%; }
-.rep-paso { display: grid; grid-template-columns: 40px minmax(0, 1fr); gap: 14px; margin-bottom: 22px; }
+.rep-paso { display: grid; grid-template-columns: 40px minmax(0, 1fr); gap: 14px; padding-bottom: 22px; position: relative; }
+.rep-paso::before { content: ''; position: absolute; left: 17px; top: 44px; bottom: 0; border-left: 1px solid var(--linea); }
+.rep-paso:last-of-type::before { bottom: 18px; }
 .rep-n { width: 36px; height: 36px; border-radius: 50%; border: 1.5px solid var(--sub); display: grid; place-items: center; font-size: 14px; }
 .rep-n.on { background: var(--tinta); color: var(--papel); border-color: var(--tinta); }
 .rep-cab { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; }
@@ -41,6 +43,11 @@
 .recall h1 { font-size: clamp(30px, 9vw, 40px); margin-bottom: 10px; overflow-wrap: break-word; }
 .recall .btn-principal { margin-top: 16px; }
 .agregar-puntos { display: grid; gap: 4px; margin-top: 8px; }
+.puntos li.no .casilla { border-color: var(--rutina); color: var(--rutina); }
+.puntos li.no .casilla::after { content: '×'; font-size: 17px; line-height: 1; font-weight: 600; }
+.puntos .tarjeta-t b { font-weight: 500; font-size: 17px; justify-self: start; }
+.puntos .tarjeta-t small { font-size: 15px; }
+.sumar-punto { color: var(--sub); font-size: 15px; min-height: 40px; margin-top: 4px; }
 .aviso-recall { border: 1px dashed var(--linea); border-radius: 10px; padding: 14px 16px; margin-top: 16px; }
 .tarj-segs { display: flex; gap: 3px; height: 8px; }
 .tarj-segs span { flex: 1; background: var(--linea); }
@@ -112,3 +119,17 @@
 .archivo small { display: block; color: var(--sub); font-size: 14px; }
 .archivo input { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
 .pegar { display: grid; gap: 8px; margin-top: 16px; }
+
+.regla button.valor { min-height: 40px; cursor: pointer; }
+.motor .fila-boton small, .motor .archivo small { display: block; color: var(--sub); font-size: 15px; }
+
+.regla.creia { margin: 14px 0 4px; }
+.calib-recall { display: grid; grid-template-columns: repeat(3, 1fr); border: 1px solid var(--linea); border-radius: 10px; margin-top: 16px; }
+.calib-recall > div { padding: 12px 14px; display: grid; gap: 2px; border-left: 1px solid var(--linea); }
+.calib-recall > div:first-child { border-left: 0; }
+.calib-recall b { font-size: 22px; font-weight: 400; }
+.calib-recall span { color: var(--sub); font-size: 14px; line-height: 1.25; }
+
+.rep-botones.de5 { display: flex; flex-wrap: wrap; align-items: center; gap: 4px; grid-column: 1 / -1; }
+.rep-botones.de5 small { margin-right: 4px; font-size: 13px; }
+.rep-botones.de5 button { min-width: 32px; min-height: 32px; padding: 0; font-family: var(--font-mono); }

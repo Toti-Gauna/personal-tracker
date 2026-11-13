@@ -3,6 +3,7 @@ import { ROUTINES } from '../data/defaults';
 import { fmtDur, toHHMM, toMin } from '../data/time';
 import { getState, resetState, setState, useStore } from '../state/store';
 import { markBackup, resetDayRoutines, setDayRoutine, setNames } from '../state/profile';
+import { reviewsJson, testsJson } from '../data/debiles';
 import { toast } from '../ui/avisos';
 import '../styles/perfil.css';
 
@@ -83,6 +84,16 @@ export function AjustesDatos({ today }: { today: string }) {
     toast({ title: 'Copia descargada', sub: `trazo-copia-${today}.json`, color: 'var(--economia)' }, false);
   };
 
+  const bajarDatos = () => {
+    const st = getState().study;
+    for (const [nombre, datos] of [['reviews.json', reviewsJson(st)], ['tests.json', testsJson(st)]] as const) {
+      const url = URL.createObjectURL(new Blob([JSON.stringify(datos, null, 1)], { type: 'application/json' }));
+      Object.assign(document.createElement('a'), { href: url, download: nombre }).click();
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
+    }
+    toast({ title: 'reviews.json y tests.json', sub: 'Tus intentos y tus tests, para el repo', color: 'var(--economia)' }, false);
+  };
+
   const restaurar = (f?: File) => {
     if (!f) return;
     const rd = new FileReader();
@@ -115,6 +126,7 @@ export function AjustesDatos({ today }: { today: string }) {
       <p className="sub">{settings.lastBackup ? `Última copia: ${settings.lastBackup}.` : 'Todavía no hiciste ninguna copia.'}</p>
       <button className="btn-principal" onClick={bajar}>Descargar copia</button>
       <button className="btn-borde" onClick={() => input.current?.click()}>Restaurar desde un archivo</button>
+      <button className="btn-borde" onClick={bajarDatos}>Descargar reviews.json y tests.json</button>
       <input ref={input} type="file" accept="application/json,.json" hidden onChange={(e) => restaurar(e.target.files?.[0])} />
     </main>
   );

@@ -13,6 +13,8 @@ export type ActType = 'lectura' | 'curso' | 'practica' | 'video' | 'otra';
 export interface Unit {
   n: number;
   title: string;
+  /** Nombre corto para tablas ("Potenciación"). */
+  corto?: string;
   test: { count: number; desc: string; min: number };
 }
 
@@ -40,6 +42,8 @@ export interface Activity {
   /** Examen final del bimestre. */
   final?: { title: string; desc: string };
   testMode: 'app' | 'papel';
+  /** Pomodoro para estudiar el capítulo (id de preset). Sin valor, 50/10. */
+  pomodoro?: string;
 }
 
 export type ErrType = 'concepto' | 'tecnica' | 'descuido' | 'enunciado';
@@ -54,15 +58,22 @@ export interface TestResult {
   approved: boolean;
   /** Por ejercicio, en papel: null = bien, o el tipo de error. */
   perEx?: (ErrType | null)[];
+  /** Los ejercicios que fallaste (con su consigna, respuesta y qué practica): la tesis arranca por acá. */
+  wrong?: { q: string; a: string; type: ErrType; tema?: string }[];
 }
 
 export interface UnitState {
   learnedOn?: string;
   approvedOn?: string;
+  /** A la tercera vez sin aprobar el tema queda marcado como flojo (fecha) y sigue igual a la tesis. */
+  flojo?: string;
   tests: TestResult[];
 }
 
-/** Lo que vuelve en el repaso: escalera 0 → +1 cold recall → +3 tesis → +7 → +21 → +60. */
+/**
+ * Lo que vuelve: día 2 cold recall (antes del test), día 3 tesis, días 8, 22 y 61 repetir.
+ * Con el test reprobado: releer al día siguiente y re-test el otro.
+ */
 export type ReviewKind = 'cold' | 'tesis' | 'ejercicios' | 'examen' | 'retest' | 'releer';
 
 export interface ReviewItem {
@@ -125,6 +136,30 @@ export interface Rules {
   coldSkipAt: number;
   /** Ejercicios espaciados más cortos si el anterior salió perfecto. */
   shortenIfPerfect: boolean;
+  /** Si vence más de lo que entra en el tope, entran primero los temas flojos. */
+  priorizarFlojo: boolean;
+  /** Pesos de la fuerza de un tema (suman 1). */
+  pesos: { cold: number; tarjetas: number; test: number };
+}
+
+/**
+ * Un intento de recordar algo: un cold recall (con sus ideas y cuánto creías recordar) o los
+ * ejercicios espaciados. Los de tarjetas salen del registro de calificaciones (`log`).
+ */
+export interface Attempt {
+  /** Tema: "actividad:unidad" (un capítulo) o "mazo:frente". */
+  tema: string;
+  frontId: string;
+  kind: 'cold' | 'ejercicio';
+  date: string;
+  /** Resultado, 0..1. */
+  ok: number;
+  /** Cuánto creías recordar antes de comparar, 0..1 (cold recall). */
+  creia?: number;
+  /** Ideas del cold recall, cada una recordada o no. */
+  ideas?: { idea: string; ok: boolean }[];
+  /** Ejercicios: bien de cuántos. */
+  de?: [number, number];
 }
 
 export interface Tesis {
@@ -148,10 +183,16 @@ export interface StudyState {
   log: CardLog[];
   /** Puntos clave por unidad (act:n), para comparar el cold recall. */
   points: Record<string, string[]>;
+  /** Intentos de cold recall y ejercicios: alimentan los puntos débiles. */
+  attempts: Attempt[];
 }
 
-/** Paso de la sesión de estudio: Repasar → Aprender → Comprobar (y al final, Cerrar). */
-export type Step = 'repasar' | 'aprender' | 'comprobar';
+/**
+ * Fase de un capítulo: día 1 Estudiar → día 2 Test (con el cold recall de calentamiento) →
+ * día 3 Tesis → días 8, 22 y 61 Repetir. Cada día toca algo distinto, en este orden:
+ * repetir, el test del capítulo de ayer, la tesis del de antes de ayer y estudiar el nuevo.
+ */
+export type Step = 'repetir' | 'test' | 'tesis' | 'estudiar';
 export type TramoKind = 'cold' | 'tesis' | 'ejercicios' | 'examen' | 'releer' | 'tarjetas' | 'capitulo' | 'descanso' | 'test';
 
 export interface Tramo {
@@ -159,6 +200,8 @@ export interface Tramo {
   kind: TramoKind;
   title: string;
   sub: string;
+  /** Cómo se nombra en la lista de Estudio (si difiere del título de la sesión). */
+  paso?: string;
   min: number;
   /** Referencia para marcarlo hecho: rev:<id>, learn:<act>:<n>, test:<act>:<n>. */
   ref: string;

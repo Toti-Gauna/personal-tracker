@@ -1,0 +1,162 @@
+/* Puntos débiles (8.1 a 8.4) y sus entradas en Estudio, Recall y Repaso */
+.debiles h1 { font-size: clamp(34px, 10vw, 46px); }
+.debiles .r-card { background: color-mix(in srgb, var(--tinta) 3%, var(--papel)); }
+.debiles .r-card-cab h2 { font-size: 19px; letter-spacing: -0.01em; white-space: nowrap; }
+.debiles .r-card-cab .sub { font-size: 13px; text-align: right; }
+.deb-filtro { margin: 22px 0 18px; padding: 4px; gap: 4px; border-radius: 10px; }
+.deb-filtro button { border: 0 !important; border-radius: 7px; min-height: 40px; color: var(--sub); }
+.deb-filtro button[aria-checked='true'] { color: var(--papel); }
+.deb-nums { border-radius: 12px; margin-bottom: 26px; }
+.deb-nums b { font-size: 22px; }
+.deb-cab { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; margin-bottom: 8px; }
+.deb-cab h2 { margin: 0; font-size: 21px; }
+.deb-cab .sub { font-size: 15px; }
+.deb-vacio { margin: 4px 0 8px; font-size: 15px; }
+.deb-nota { font-size: 15px; margin: 12px 0 0; }
+.ch-meta { stroke: var(--tinta); stroke-width: 1.2; stroke-dasharray: 5 4; }
+.ch-txt { fill: var(--tinta); font-size: 11px; }
+.ch-ejes { display: grid; grid-template-columns: repeat(6, 1fr); text-align: center; font-size: 12px; margin-top: 6px; }
+.ch-ejes .hoy { color: var(--tinta); font-weight: 700; }
+
+/* Ranking */
+.deb-rank { margin-bottom: 26px; }
+.deb-rank ol { list-style: none; margin: 0; padding: 0; }
+.deb-rank li { display: grid; grid-template-columns: 34px minmax(0, 1fr); padding: 14px 0; border-top: 1px solid var(--linea); }
+.deb-rank li > .mono { padding-top: 8px; font-size: 13px; }
+.deb-rank-t { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; }
+.deb-rank-t b { font-size: 16px; font-weight: 600; display: flex; align-items: baseline; gap: 8px; min-width: 0; }
+.deb-rank-t b i { width: 9px; height: 9px; flex: none; transform: translateY(-1px); }
+.deb-rank-t .mono { font-size: 22px; }
+.deb-rank small { display: block; font-size: 14px; }
+.deb-barra { display: block; height: 5px; background: var(--linea); margin: 6px 0 8px; }
+.deb-barra > span { display: block; height: 100%; }
+.deb-rank-pie { display: flex; justify-content: space-between; gap: 12px; align-items: baseline; }
+.deb-rank-pie a { color: var(--tinta); text-decoration: none; font-size: 13px; white-space: nowrap; }
+
+/* Mapa de fortaleza */
+.mapa { display: grid; gap: 7px; }
+.mapa-f { display: grid; grid-template-columns: minmax(0, 1fr) repeat(4, minmax(44px, 50px)); gap: 6px; align-items: center; color: inherit; text-decoration: none; }
+.mapa-f > span:first-child { font-size: 14px; line-height: 1.25; }
+.mapa-f.cab span { font-size: 12px; color: var(--sub); text-align: center; }
+.mapa-c { display: grid; place-items: center; height: 34px; border-radius: 6px; font-size: 14px; background: color-mix(in srgb, var(--c) 24%, var(--papel)); color: var(--tinta); }
+.mapa-c.vacia { border: 1px dashed var(--linea); background: none; color: var(--sub); }
+.deb-ley { display: flex; flex-wrap: wrap; gap: 6px 16px; font-size: 14px; margin-top: 12px; }
+.deb-ley span { display: inline-flex; align-items: center; gap: 7px; }
+.deb-ley i { width: 16px; height: 9px; }
+
+/* Cómo fallás */
+.fallas-barra { display: flex; gap: 3px; height: 14px; margin: 4px 0 6px; }
+.fallas { list-style: none; margin: 0; padding: 0; }
+.fallas li { display: grid; grid-template-columns: 14px minmax(0, 1fr) auto; gap: 10px; align-items: start; padding: 12px 0; border-top: 1px solid var(--linea); }
+.fallas li > i { width: 9px; height: 9px; margin-top: 7px; }
+.fallas b { display: block; font-weight: 600; }
+.fallas small { display: block; font-size: 14px; }
+.fallas .mono { font-size: 14px; white-space: nowrap; }
+
+/* Calibración */
+.calib { list-style: none; margin: 0; padding: 0; }
+.calib li { display: grid; grid-template-columns: minmax(0, 1fr) minmax(90px, 1.3fr) 44px; gap: 12px; align-items: center; padding: 12px 0; border-top: 1px solid var(--linea); }
+.calib-barras { display: grid; gap: 3px; }
+.calib-barras > span { display: block; height: 7px; background: var(--linea); }
+.calib-barras > span i { display: block; height: 100%; background: var(--c); }
+.calib-barras .creia { background: none; border: 1px solid var(--c); }
+.calib-barras .creia i { background: color-mix(in srgb, var(--c) 40%, transparent); }
+.calib li .mono { text-align: right; font-size: 15px; }
+
+/* Sanguijuelas y lo que se repite */
+.sang { list-style: none; margin: 0; padding: 0; }
+.sang li { padding: 12px 0; border-top: 1px solid var(--linea); }
+.sang-t { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+.sang-t span:first-child { display: grid; min-width: 0; }
+.sang-t b { font-weight: 500; }
+.sang-t small { font-size: 14px; }
+.chip-x { border: 1px solid var(--rutina); color: var(--rutina); border-radius: 5px; padding: 1px 8px; font-size: 13px; flex: none; }
+.sang-bot { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+.sang-bot { flex-wrap: nowrap; gap: 6px; }
+.sang-bot button { border: 1px solid var(--linea); border-radius: 6px; padding: 6px 8px; font-size: 14px; min-height: 36px; flex: 1 1 auto; white-space: nowrap; }
+.sang-bot .btn-principal, .sang-bot .btn-borde { margin: 0; flex: 1; }
+.sang-edit { display: grid; gap: 6px; margin-top: 8px; }
+
+/* Priorizar y refuerzo */
+.deb-prio { border: 1.5px solid var(--tinta); border-radius: 12px; padding: 16px; margin-bottom: 18px; display: grid; gap: 14px; }
+.prio-fila { display: flex; justify-content: space-between; align-items: center; gap: 14px; }
+.prio-fila b { display: block; font-size: 17px; }
+.prio-fila small { display: block; font-size: 15px; }
+.deb-prio .btn-principal { margin: 0; }
+.prio-lista { list-style: none; margin: 0; padding: 0; }
+.prio-lista li { display: flex; justify-content: space-between; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--linea); }
+.prio-lista li .mono { white-space: nowrap; }
+
+/* Exámenes */
+.err-test { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+.err-test li { display: grid; grid-template-columns: 34px minmax(0, 1fr) 24px; gap: 10px; align-items: center; }
+.err-segs { display: flex; gap: 3px; height: 10px; }
+.err-segs i { display: block; height: 100%; }
+.err-test li > .mono:last-child { text-align: right; }
+.simul { list-style: none; margin: 10px 0 14px; padding: 0; display: grid; gap: 10px; }
+.simul li { display: grid; grid-template-columns: minmax(0, 1fr) minmax(90px, 1.1fr) 26px; gap: 12px; align-items: center; }
+.simul .deb-barra { margin: 0; height: 7px; }
+.simul .mono { text-align: right; }
+.deb-simul .btn-principal { margin-top: 0; }
+
+/* Un tema en detalle */
+.tema-deb h1 { font-size: clamp(32px, 9.5vw, 44px); margin-bottom: 14px; }
+.tema-cab { display: grid; grid-template-columns: 112px minmax(0, 1fr); gap: 18px; align-items: center; margin-bottom: 22px; }
+.tema-cab .anillo { width: 112px; height: 112px; }
+.tema-cab p { margin: 0 0 6px; font-size: 17px; }
+.tema-cab small { font-size: 14px; }
+.ideas-cab { display: grid; grid-template-columns: minmax(0, 1fr) repeat(4, 16px); gap: 0 8px; font-size: 11px; text-align: center; margin-bottom: 4px; }
+.ideas { list-style: none; margin: 0; padding: 0; }
+.ideas li { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 10px; align-items: center; padding: 12px 0; border-top: 1px solid var(--linea); }
+.ideas li > span:first-child { justify-self: start; }
+.puntitos { display: grid; grid-template-columns: repeat(4, 16px); gap: 8px; }
+.puntitos i { width: 11px; height: 11px; border-radius: 50%; justify-self: center; }
+.puntitos i.si { background: var(--salud); }
+.puntitos i.no { border: 1.5px solid var(--rutina); }
+.puntitos i.nada { border: 1px dashed var(--linea); }
+.ch-futuro { fill: color-mix(in srgb, var(--tinta) 4%, transparent); }
+.ch-aro { fill: var(--papel); stroke-width: 2; }
+.sub-txt { fill: var(--sub); }
+.linea-tiempo { list-style: none; margin: 0; padding: 0; }
+.linea-tiempo li { display: grid; grid-template-columns: 56px 14px minmax(0, 1fr); gap: 12px; position: relative; padding-bottom: 16px; }
+.linea-tiempo li > .mono { font-size: 13px; padding-top: 3px; }
+.linea-tiempo li > i { width: 12px; height: 12px; border-radius: 50%; background: var(--c); margin-top: 6px; position: relative; z-index: 1; }
+.linea-tiempo li > i.hueco { background: var(--papel); border: 1.5px solid var(--sub); }
+.linea-tiempo li:not(:last-child)::before { content: ''; position: absolute; left: 74px; top: 20px; bottom: -4px; border-left: 1px solid var(--linea); }
+.lt-t { display: flex; justify-content: space-between; gap: 10px; align-items: baseline; }
+.lt-t .mono { font-size: 13px; white-space: nowrap; }
+.linea-tiempo small { display: block; font-size: 14px; }
+.err-lista { list-style: none; margin: 0; padding: 0; }
+.err-lista li { display: grid; grid-template-columns: 40px minmax(0, 1fr) auto; gap: 10px; align-items: center; padding: 12px 0; border-top: 1px solid var(--linea); }
+.chip-err { border: 1px solid var(--c); color: var(--c); border-radius: 5px; padding: 1px 8px; font-size: 14px; }
+.arreglo-lista { list-style: none; margin: 0; padding: 0; }
+.arreglo-lista li { display: grid; grid-template-columns: 24px minmax(0, 1fr) auto; gap: 12px; align-items: center; padding: 10px 0; border-top: 1px solid var(--linea); }
+.arreglo .nota { text-align: center; margin: 0; }
+
+/* Exámenes */
+.listo-final { display: grid; grid-template-columns: 116px minmax(0, 1fr); gap: 18px; align-items: center; }
+.listo-final .anillo { width: 116px; height: 116px; }
+.listo-final b { font-size: 18px; font-weight: 700; line-height: 1.3; }
+.listo-final p { margin: 6px 0 8px; font-size: 15px; }
+.listo-final .mono { font-size: 13px; }
+.retest-pend { border: 1px solid var(--linea); border-left: 3px solid var(--rutina); border-radius: 12px; padding: 16px; margin-bottom: 18px; }
+.retest-pend b { font-size: 17px; }
+.retest-pend p { margin: 6px 0 0; }
+.hoja-sim .btn-principal { margin-top: 18px; }
+@media print { .barra, .side, .topbar, .hoja-sim .btn-principal, .hoja-sim .nota, .mini-foco { display: none !important; } }
+
+/* Escritorio (1200 px o más) */
+@media (min-width: 1200px) {
+  .pantalla.debiles.es-esc { max-width: 1480px; }
+}
+.deb-esc-cab { display: grid; grid-template-columns: minmax(0, 1fr) auto auto; align-items: end; gap: 24px; margin-bottom: 22px; }
+.deb-esc-cab h1 { font-size: clamp(28px, 2.4vw, 40px); margin: 4px 0 0; white-space: nowrap; }
+.deb-esc-cab .deb-filtro { margin: 0; min-width: 300px; }
+.deb-esc-stats { grid-template-columns: repeat(4, auto); }
+.deb-esc-grilla { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 18px; align-items: start; }
+.deb-esc-grilla .col { display: grid; gap: 18px; }
+.deb-esc-grilla .col > * { margin-bottom: 0; }
+.deb-esc-grilla.abajo { margin-top: 18px; }
+.deb-esc-grilla .r-card .deb-rank { margin: 0; }
+.deb-esc-grilla .r-card .deb-prio { border: 0; padding: 0; margin: 0; }
+.deb-rank.compacto .deb-cab h2 { font-size: 19px; }

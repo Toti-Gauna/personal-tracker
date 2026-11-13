@@ -1,16 +1,17 @@
 import { BUILTIN_PRESETS } from './defaults';
-import { fitPreset } from './pomodoro';
-import { CARD_SEC, LADDER, PASS, REVIEW_CAP, minutesFor } from './study-catalog';
+import { CARD_SEC, DIA, LADDER, PASS, REST_TEST, REVIEW_CAP, TEST_MIN, TEST_PREV, minutesFor } from './study-catalog';
 import { DAY, retrievability } from './fsrs';
-import type { Activity, Card, ErrType, ReviewItem, ReviewKind, Step, StudyState, Tramo, Unit, UnitState } from './study-types';
+import type { Activity, Card, ErrType, ReviewItem, ReviewKind, Step, StudyState, TestResult, Tramo, Unit, UnitState } from './study-types';
 import { addDays, dateKey, parseDate } from './time';
-import type { Preset } from './types';
+import type { Preset, Seg } from './types';
 
 /** 0 = lunes … 6 = domingo. */
 export const weekday = (date: string) => (parseDate(date).getDay() + 6) % 7;
 
 export const unitName = (a: Activity, u: Unit) => `${a.unitLabel ?? 'Unidad'} ${u.n} · ${u.title}`;
 export const unitShort = (a: Activity, n: number) => `${a.unitLabel ?? 'Unidad'} ${n}`;
+/** "Aritmética" de "CONAMAT · Aritmética". */
+export const actShort = (a: Activity) => a.title.split(' · ').pop()!.trim();
 
 export const unitState = (st: StudyState, actId: string, n: number): UnitState =>
   st.units[actId]?.[n] ?? { tests: [] };
@@ -20,23 +21,38 @@ export const activitiesFor = (st: StudyState, date: string) =>
   st.activities.filter((a) => a.days.includes(weekday(date)));
 
 /**
- * La unidad en la que se trabaja hoy: la que aprendiste o testeaste hoy (para que el
- * plan no cambie al aprobar), si no, la primera sin aprobar.
+ * La unidad que se estudia hoy: la que estudiaste hoy (para que el plan no cambie al
+ * terminarla), si no, la primera que todavía no estudiaste. Cada día, un capítulo nuevo.
  */
 export function focusUnit(a: Activity, st: StudyState, date: string): Unit | undefined {
   if (!a.units) return undefined;
-  const today = a.units.find((u) => {
-    const s = unitState(st, a.id, u.n);
-    return s.learnedOn === date || s.tests.some((t) => t.date === date);
-  });
-  return today ?? a.units.find((u) => !unitState(st, a.id, u.n).approvedOn);
+  return a.units.find((u) => unitState(st, a.id, u.n).learnedOn === date) ?? a.units.find((u) => !unitState(st, a.id, u.n).learnedOn);
 }
 
-/** Aprobado con 85 %, o por debajo si todos los errores fueron de descuido. */
-export function approves(score: number, total: number, errors: Record<ErrType, number>) {
-  if (total <= 0) return false;
-  if (score / total >= PASS - 1e-9) return true;
-  return errors.concepto + errors.tecnica + errors.enunciado === 0 && errors.descuido > 0;
+/**
+ * ¿Toca hoy el test de esta unidad? El día 2 (o después, si quedó atrasado) si nunca lo
+ * hiciste, el día del re-test si reprobaste, y el día que lo hiciste (para que siga en el plan).
+ */
+export function testDue(st: StudyState, actId: string, n: number, date: string) {
+  const s = unitState(st, actId, n);
+  if (s.tests.some((t) => t.date === date)) return true;
+  if (!s.learnedOn || s.learnedOn >= date || s.approvedOn || s.flojo) return false;
+  if (!s.tests.length) return true;
+  return st.reviews.some((r) => r.activityId === actId && r.unit === n && r.kind === 'retest' && !r.doneOn && r.due <= date);
+}
+
+/**
+ * El test completo de una unidad: los ejercicios nuevos del capítulo y, desde la segunda,
+ * 5 de las anteriores (solo en tests de ejercicios, no en los de construir algo). 25 min.
+ */
+export function testOf(u: Unit) {
+  const prev = u.n > 1 && u.test.count >= 10 ? TEST_PREV : 0;
+  return { nuevos: u.test.count, prev, total: u.test.count + prev, min: u.test.count >= 10 ? TEST_MIN : u.test.min };
+}
+
+/** El corte es 85 %: con eso o más, la tesis al día siguiente; con menos, releer y re-test. */
+export function approves(score: number, total: number) {
+  return total > 0 && score / total >= PASS - 1e-9;
 }
 
 let seq = 0;
@@ -46,38 +62,54 @@ const item = (a: Activity, unit: number | undefined, kind: ReviewKind, due: stri
   id: rid(), activityId: a.id, unit, kind, due, min, label,
 });
 
-/** Día 0: lo aprendido vuelve al día siguiente como cold recall (si pasa por el motor). */
+/** Día 1: lo estudiado vuelve el día 2 como cold recall, el calentamiento del test. */
 export function scheduleLearned(a: Activity, unit: Unit | undefined, date: string): ReviewItem[] {
   if (!a.engine) return [];
   const what = unit ? unitName(a, unit) : a.title;
   return [item(a, unit?.n, 'cold', addDays(date, LADDER.cold.days), LADDER.cold.min, `Cold recall · ${what}`)];
 }
 
-/** Test aprobado: la tesis a +3 y los repasos de ejercicios a +7, +21 y +60. */
-export function scheduleApproved(a: Activity, unit: Unit, date: string): ReviewItem[] {
+/**
+ * Test aprobado (o el tema marcado como flojo): la tesis al día siguiente y repetir los días
+ * 8, 22 y 61 del capítulo (estudio de lo flojo y ejercicios mixtos). Si el test se atrasó,
+ * ningún repaso cae antes del día después de la tesis.
+ */
+export function scheduleApproved(a: Activity, unit: Unit, date: string, learnedOn = date): ReviewItem[] {
   const n = unitName(a, unit);
+  const min = addDays(date, LADDER.tesis.days + 1);
+  const at = (d: number) => (addDays(learnedOn, d) < min ? min : addDays(learnedOn, d));
   return [
     item(a, unit.n, 'tesis', addDays(date, LADDER.tesis.days), LADDER.tesis.min, `Tesis · ${n}`),
-    item(a, unit.n, 'ejercicios', addDays(date, LADDER.e7.days), LADDER.e7.min, `Ejercicios mixtos · ${n}`),
-    item(a, unit.n, 'ejercicios', addDays(date, LADDER.e21.days), LADDER.e21.min, `Ejercicios mixtos · ${n}`),
-    item(a, unit.n, 'examen', addDays(date, LADDER.e60.days), LADDER.e60.min, `Examen corto · ${n}`),
+    item(a, unit.n, 'ejercicios', at(LADDER.e8.days), LADDER.e8.min, `Estudio + ejercicios · ${n}`),
+    item(a, unit.n, 'ejercicios', at(LADDER.e22.days), LADDER.e22.min, `Ejercicios mixtos · ${n}`),
+    item(a, unit.n, 'examen', at(LADDER.e61.days), LADDER.e61.min, `Examen corto · ${n}`),
   ];
 }
 
-/** Test no aprobado: re-test con preguntas nuevas en 2 días. */
-export const scheduleRetest = (a: Activity, unit: Unit, date: string): ReviewItem =>
-  item(a, unit.n, 'retest', addDays(date, LADDER.retest.days), unit.test.min, `Re-test · ${unitName(a, unit)}`);
+/** Test reprobado: al día siguiente releés lo que falló y al otro, el re-test con ejercicios nuevos. */
+export const scheduleFailed = (a: Activity, unit: Unit, date: string): ReviewItem[] => [
+  item(a, unit.n, 'releer', addDays(date, LADDER.releer.days), LADDER.releer.min, `Releer lo que falló · ${unitName(a, unit)}`),
+  item(a, unit.n, 'retest', addDays(date, LADDER.retest.days), testOf(unit).min, `Re-test · ${unitName(a, unit)}`),
+];
 
-const PRIORITY: Record<ReviewKind, number> = { cold: 0, releer: 1, tesis: 2, ejercicios: 4, examen: 4, retest: 9 };
+/** Lo que entra en el tope de repaso: releer y los ejercicios espaciados (las tarjetas, aparte). */
+const PRIORITY: Record<ReviewKind, number> = { releer: 0, ejercicios: 1, examen: 1, cold: 8, tesis: 8, retest: 9 };
+const CAPPED: ReviewKind[] = ['releer', 'ejercicios', 'examen'];
+
+const vence = (r: ReviewItem, date: string) => r.doneOn === date || (!r.doneOn && r.due <= date);
 
 /**
- * El repaso del día: solo lo que vence, con tope de 20 min. Primero el cold recall, después
- * la tesis y los ejercicios (los más atrasados antes). Lo que no entra queda en "Hoy no toca".
+ * El repaso del día: solo lo que vence, con tope de 20 min junto con las tarjetas. Lo que no
+ * entra queda en "Hoy no toca". El cold recall (calentamiento del test) y la tesis van aparte,
+ * con su contenido y fuera del tope.
  */
-export function dueReview(reviews: ReviewItem[], date: string, cap = REVIEW_CAP) {
-  const cands = reviews
-    .filter((r) => r.kind !== 'retest' && (r.doneOn === date || (!r.doneOn && r.due <= date)))
+export function dueReview(reviews: ReviewItem[], date: string, cap = REVIEW_CAP, weak?: Set<string>) {
+  let cands = reviews
+    .filter((r) => CAPPED.includes(r.kind) && vence(r, date))
     .sort((x, y) => PRIORITY[x.kind] - PRIORITY[y.kind] || x.due.localeCompare(y.due));
+  // Priorizar lo flojo: si no entra todo, primero los temas flojos.
+  const flojo = (r: ReviewItem) => (weak?.has(`${r.activityId}:${r.unit}`) ? 0 : 1);
+  if (weak?.size && cands.reduce((s, r) => s + r.min, 0) > cap) cands = [...cands].sort((x, y) => flojo(x) - flojo(y));
   const today: ReviewItem[] = [];
   const skipped: ReviewItem[] = [];
   let used = 0;
@@ -87,31 +119,73 @@ export function dueReview(reviews: ReviewItem[], date: string, cap = REVIEW_CAP)
       used += r.min;
     } else skipped.push(r);
   }
-  return { today, skipped, min: used };
+  const of = (k: ReviewKind) => reviews.filter((r) => r.kind === k && vence(r, date)).sort((x, y) => x.due.localeCompare(y.due));
+  return { today, skipped, min: used, tesis: of('tesis'), cold: of('cold') };
 }
 
-const SUB: Record<ReviewKind, string> = {
-  cold: 'Repasar · sin mirar',
-  releer: 'Repasar · relectura corta de lo que faltó',
-  tesis: 'Repasar · explicarlo con tus palabras',
-  ejercicios: 'Repasar · ejercicios mixtos sin mirar',
-  examen: 'Repasar · examen corto',
-  retest: 'Comprobar',
-};
+const lower1 = (s: string) => s[0].toLowerCase() + s.slice(1);
 
-export const reviewTramo = (r: ReviewItem, paper: boolean): Tramo => ({
-  step: 'repasar',
-  kind: r.kind === 'retest' ? 'test' : r.kind,
-  title: r.label,
-  sub: SUB[r.kind] + (r.kind === 'tesis' ? (paper ? ' · en papel' : ' · en la app') : ''),
-  min: r.min,
-  ref: `rev:${r.id}`,
-  activityId: r.activityId,
-  paper: r.kind === 'tesis' ? paper : undefined,
-});
+/** Cómo se llama un ítem en la sesión ("Cold recall · cap. 2") y en Estudio ("Cap. 2 · Números enteros, sin mirar"). */
+export function reviewTramo(r: ReviewItem, paper: boolean, a?: Activity): Tramo {
+  const u = r.unit != null ? a?.units?.find((x) => x.n === r.unit) : undefined;
+  const what = u && a ? unitName(a, u) : r.label.replace(/^[^·]+ · /, '');
+  const short = u && a ? lower1(unitShort(a, u.n)) : what;
+  const base = { min: r.min, ref: `rev:${r.id}`, activityId: r.activityId };
+  switch (r.kind) {
+    case 'cold':
+      return { ...base, step: u ? 'test' : 'repetir', kind: 'cold', title: `Cold recall · ${short}`, paso: `${what}, sin mirar`, sub: u ? 'Test · calentamiento, sin mirar' : 'Repetir · sin mirar' };
+    case 'tesis':
+      return { ...base, step: 'tesis', kind: 'tesis', title: `Tesis · ${short}`, paso: `${what}, con tus palabras`, sub: 'Tesis · empieza por los errores del test', paper };
+    case 'releer':
+      return { ...base, step: 'repetir', kind: 'releer', title: `Releer · ${short}`, paso: `${what}, lo que falló`, sub: u ? 'Repetir · releer lo que falló en el test' : 'Repetir · relectura corta de lo que faltó' };
+    case 'examen':
+      return { ...base, step: 'repetir', kind: 'examen', title: `Examen corto · ${short}`, paso: `${what}, examen corto`, sub: 'Repetir · día 61, sin mirar' };
+    default:
+      return { ...base, step: 'repetir', kind: 'ejercicios', title: `${r.label.split(' · ')[0]} · ${short}`, paso: `${what}, lo flojo y ejercicios mixtos`, sub: 'Repetir · estudio de lo flojo y 3 a 5 ejercicios mixtos' };
+  }
+}
 
 const presetById = (presets: Preset[], id?: string) =>
   presets.find((p) => p.id === id) ?? BUILTIN_PRESETS.find((p) => p.id === id) ?? BUILTIN_PRESETS[0];
+
+/** El pomodoro con que se estudia el capítulo: el de la actividad o 50/10. */
+export const studyPreset = (a: Activity, presets: Preset[]) => presetById(presets, a.pomodoro ?? 'b-50-10');
+export const presetName = (p: Preset) => (p.straight ? 'corrido' : `${p.focus}/${p.rest}`);
+
+/**
+ * Estudiar de corrido, en pomodoros enteros: foco, descanso, foco… mientras entren (el
+ * capítulo va al final del día, así que no termina en descanso). Si no entra ni un foco, va
+ * todo de corrido. Lo que sobra y no llega a otro pomodoro no se usa.
+ */
+export function studySegs(p: Preset, avail: number): Seg[] {
+  if (avail <= 0) return [];
+  if (p.straight || p.focus <= 0 || avail < p.focus) return [{ type: 'focus', min: avail }];
+  const k = Math.floor((avail + p.rest) / (p.focus + p.rest));
+  const out: Seg[] = [];
+  for (let i = 0; i < k; i++) {
+    if (i && p.rest) out.push({ type: 'rest', min: p.rest });
+    out.push({ type: 'focus', min: p.focus });
+  }
+  const left = avail - k * p.focus - (k - 1) * p.rest;
+  if (p.rest && left >= p.rest + Math.max(20, p.focus / 2)) out.push({ type: 'rest', min: p.rest }, { type: 'focus', min: left - p.rest });
+  return out;
+}
+
+/**
+ * Cambia el pomodoro del capítulo en una sesión ya armada: rehace los tramos de estudiar con lo
+ * que dejan libre los demás (`avail`). Devuelve null si ya empezaste a estudiar (índice `from`).
+ */
+export function rePomodoro(tramos: Tramo[], from: number, p: Preset, avail: number): Tramo[] | null {
+  const i0 = tramos.findIndex((t) => t.step === 'estudiar');
+  if (i0 < 0 || from > i0) return null;
+  let i1 = i0;
+  while (i1 + 1 < tramos.length && tramos[i1 + 1].step === 'estudiar') i1++;
+  const base = tramos[i0];
+  const sub = base.sub.replace(/, pomodoro .+$/, '') + `, pomodoro ${presetName(p)}`;
+  const nuevos = studySegs(p, avail).map((sg): Tramo =>
+    sg.type === 'focus' ? { ...base, kind: 'capitulo', sub, min: sg.min } : { ...base, kind: 'descanso', title: 'Descanso', paso: undefined, sub: 'Pararse, agua, nada de pantalla', min: sg.min });
+  return [...tramos.slice(0, i0), ...nuevos, ...tramos.slice(i1 + 1)];
+}
 
 export interface PlanCtx {
   study: StudyState;
@@ -120,101 +194,110 @@ export interface PlanCtx {
   blockMin: number;
   presets: Preset[];
   blockPresets: Record<string, string>;
-  /** Repaso de hoy (de todas las actividades). */
+  /** Repaso de hoy (de todas las actividades), con tope. */
   review: ReviewItem[];
   /** Tarjetas de hoy por frente (motor FSRS). */
   groups?: CardGroup[];
 }
 
 /**
- * La sesión de un contenido: Repasar → Aprender → Comprobar. La tesis del capítulo
- * nuevo no entra: se agenda a +3 y aparece en el Repasar de ese día.
- * Las duraciones suman exactamente el total del botón de foco.
+ * El día de un contenido. Cada día toca algo distinto de cada capítulo, en este orden:
+ * cold recall, tarjetas (y lo que vence para repetir), el test del capítulo de ayer, un
+ * descanso, la tesis del de antes de ayer y estudiar el capítulo nuevo, en pomodoros enteros.
  */
 export function planActivity(a: Activity, ctx: PlanCtx): Tramo[] {
   const { study, date } = ctx;
-  const out: Tramo[] = [];
+  const paper = a.testMode === 'papel';
+  const due = dueReview(study.reviews, date);
+  const units = a.units ?? [];
+  const tr = (r: ReviewItem) => reviewTramo(r, paper, a);
 
-  // 1 · Repasar: solo lo de esta actividad que vence hoy, y las tarjetas de su frente
-  // (en la primera actividad del día de ese frente, para no repetirlas).
-  const mine = ctx.review.filter((x) => x.activityId === a.id).map((r) => reviewTramo(r, a.testMode === 'papel'));
+  // Cold recall: el calentamiento del test de hoy (o el de un libro sin unidades).
+  const testHoy = units.filter((u) => testDue(study, a.id, u.n, date));
+  const cold = due.cold.filter((r) => r.activityId === a.id && (r.unit == null || testHoy.some((u) => u.n === r.unit))).map(tr);
+
+  // Repetir: las tarjetas de su frente (en la primera actividad del día de ese frente) y lo
+  // de esta actividad que entra en el tope.
+  const rep: Tramo[] = [];
   const firstOfFront = activitiesFor(study, date).find((x) => x.front === a.front)?.id === a.id;
   const group = firstOfFront ? ctx.groups?.find((g) => g.frontId === a.front) : undefined;
-  if (group) mine.push(cardsTramo(group));
-  out.push(...sortRepasar(mine));
-  const rep = out.reduce((s, t) => s + t.min, 0);
+  if (group) rep.push(cardsTramo(group, a.units ? actShort(a) : undefined));
+  rep.push(...ctx.review.filter((x) => x.activityId === a.id).map(tr));
 
-  // 3 · Comprobar (se calcula antes para saber cuánto queda para aprender).
-  let comp: Tramo | null = null;
+  // Test: el del capítulo de ayer (o el re-test que vence), y un descanso antes de seguir.
+  const tests: Tramo[] = testHoy.map((u) => {
+    const s = unitState(study, a.id, u.n);
+    const re = s.tests.some((t) => t.date < date);
+    const t = testOf(u);
+    const ej = `${t.total} ${t.total === 1 ? 'ejercicio' : 'ejercicios'}`;
+    return {
+      step: 'test', kind: 'test', title: `${re ? 'Re-test' : 'Test completo'} · ${lower1(unitShort(a, u.n))}`,
+      paso: `${unitShort(a, u.n)} · ${ej}, ${Math.round(PASS * 100)} % para pasar`, sub: `Test · ${ej}, ${paper ? 'en papel' : 'en la app'}`,
+      min: t.min, ref: `test:${a.id}:${u.n}`, activityId: a.id, paper,
+    };
+  });
   const unit = focusUnit(a, study, date);
-  let learnTitle = a.title;
-  let learnSub = 'Aprender';
-  let learnRef = `learn:${a.id}:`;
+  if (a.units && !unit && a.final && !testHoy.length && a.units.every((u) => unitState(study, a.id, u.n).approvedOn || unitState(study, a.id, u.n).flojo)) {
+    tests.push({ step: 'test', kind: 'test', title: a.final.title, paso: a.final.title, sub: `Test · ${a.final.desc}`, min: 60, ref: `test:${a.id}:final`, activityId: a.id, paper });
+  }
+
+  // Tesis: la del capítulo que aprobaste ayer, fuera del tope.
+  const tesis = due.tesis.filter((r) => r.activityId === a.id).map(tr);
+
+  const out: Tramo[] = [...cold, ...rep, ...tests];
+  if (tests.length && (tesis.length || a.units)) {
+    const last = tests[tests.length - 1];
+    out.push({ step: 'test', kind: 'descanso', title: 'Descanso', sub: 'Pararse, agua, nada de pantalla', min: REST_TEST, ref: last.ref, activityId: a.id });
+  }
+  out.push(...tesis);
+
+  // Estudiar: el capítulo nuevo con lo que queda del bloque, en pomodoros enteros; sin
+  // unidades, lo que pide la sesión (páginas, secciones o minutos).
+  const usado = sumMin(out);
+  let title = a.title;
+  let paso = `${a.title}, de corrido`;
+  let ref = `learn:${a.id}:`;
   if (a.units) {
-    if (!unit) {
-      learnTitle = 'Repaso general';
-      learnSub = 'Aprender · repasar todo antes del examen';
-      if (a.final) comp = { step: 'comprobar', kind: 'test', title: a.final.title, sub: `Comprobar · ${a.final.desc}`, min: 60, ref: `test:${a.id}:final`, activityId: a.id, paper: a.testMode === 'papel' };
+    if (unit) {
+      title = unitName(a, unit);
+      paso = `${title}, de corrido`;
+      ref = `learn:${a.id}:${unit.n}`;
     } else {
-      const s = unitState(study, a.id, unit.n);
-      const failed = s.tests.some((t) => !t.approved);
-      const retest = study.reviews.find((r) => r.activityId === a.id && r.unit === unit.n && r.kind === 'retest' && !r.doneOn);
-      const learnedBefore = !!s.learnedOn && s.learnedOn < date;
-      const testedToday = s.tests.some((t) => t.date === date);
-      learnRef = `learn:${a.id}:${unit.n}`;
-      learnTitle = unitName(a, unit);
-      learnSub = learnedBefore ? (failed ? 'Aprender · repasar lo que fallaste' : 'Aprender · terminar y repasar') : 'Aprender · teoría y ejercicios';
-      const retestDue = retest && retest.due <= date;
-      if (testedToday || !failed || retestDue) {
-        const re = s.tests.some((t) => t.date < date && !t.approved);
-        comp = {
-          step: 'comprobar',
-          kind: 'test',
-          title: `${re ? 'Re-test' : 'Test'} ${unitShort(a, unit.n).toLowerCase()} · ${unit.test.count} ${unit.test.count === 1 ? 'ejercicio' : 'ejercicios'}`,
-          sub: `Comprobar · ${a.testMode === 'papel' ? 'en papel' : 'en la app'}`,
-          min: unit.test.min,
-          ref: `test:${a.id}:${unit.n}`,
-          activityId: a.id,
-          paper: a.testMode === 'papel',
-        };
-      }
+      title = 'Repaso general';
+      paso = 'Repaso general antes del examen';
     }
   }
-  const compMin = comp?.min ?? 0;
-
-  // 2 · Aprender: con unidades llena el bloque; si no, lo que pide la sesión.
-  const learnMin = a.units
-    ? Math.max(15, ctx.blockMin - rep - compMin)
-    : Math.max(5, Math.min(minutesFor(a), ctx.blockMin - rep || minutesFor(a)));
-  const preset = presetById(ctx.presets, ctx.blockPresets[a.block]);
-  const segs = fitPreset(preset, learnMin);
-  const nombre = preset.straight ? 'corrido' : `${preset.focus}/${preset.rest}`;
+  const avail = a.units
+    ? Math.max(15, ctx.blockMin - usado)
+    : Math.max(5, Math.min(minutesFor(a), ctx.blockMin - usado || minutesFor(a)));
+  const preset = studyPreset(a, ctx.presets);
+  const segs = a.units ? studySegs(preset, avail) : [{ type: 'focus' as const, min: avail }];
+  const sub = a.units ? `Estudiar · de corrido, pomodoro ${presetName(preset)}` : 'Estudiar · de corrido';
   for (const sg of segs) {
     out.push(
       sg.type === 'focus'
-        ? { step: 'aprender', kind: 'capitulo', title: learnTitle, sub: `${learnSub} · pomodoro ${nombre}`, min: sg.min, ref: learnRef, activityId: a.id }
-        : { step: 'aprender', kind: 'descanso', title: 'Descanso', sub: 'Pararse, agua, nada de pantalla', min: sg.min, ref: learnRef, activityId: a.id },
+        ? { step: 'estudiar', kind: 'capitulo', title, paso, sub, min: sg.min, ref, activityId: a.id }
+        : { step: 'estudiar', kind: 'descanso', title: 'Descanso', sub: 'Pararse, agua, nada de pantalla', min: sg.min, ref, activityId: a.id },
     );
   }
-  if (comp) out.push(comp);
   return out;
 }
 
-/** La sesión de "Repaso del día": todo lo que vence, de todos los frentes. */
-export const planReview = (review: ReviewItem[], study: StudyState, groups: CardGroup[] = []): Tramo[] =>
-  sortRepasar([
-    ...review.map((r) => reviewTramo(r, study.activities.find((a) => a.id === r.activityId)?.testMode === 'papel')),
-    ...groups.map(cardsTramo),
-  ]);
+/** La sesión de "Repaso del día": las tarjetas y lo que vence para repetir, con tope, de todos los frentes. */
+export const planReview = (review: ReviewItem[], study: StudyState, groups: CardGroup[] = []): Tramo[] => [
+  ...groups.map((g) => cardsTramo(g)),
+  ...review.filter((r) => CAPPED.includes(r.kind)).map((r) => {
+    const a = study.activities.find((x) => x.id === r.activityId);
+    return reviewTramo(r, a?.testMode === 'papel', a);
+  }),
+];
 
-const TRAMO_ORDER: Partial<Record<Tramo['kind'], number>> = { cold: 0, releer: 1, tesis: 2, tarjetas: 3, ejercicios: 4, examen: 4 };
-const sortRepasar = (ts: Tramo[]) => [...ts].sort((x, y) => (TRAMO_ORDER[x.kind] ?? 9) - (TRAMO_ORDER[y.kind] ?? 9));
-
-export const cardsTramo = (g: CardGroup): Tramo => ({
-  step: 'repasar',
+/** Tarjetas de un frente; dentro de una actividad se nombran por ella ("9 tarjetas de Aritmética"). */
+export const cardsTramo = (g: CardGroup, name = g.name): Tramo => ({
+  step: 'repetir',
   kind: 'tarjetas',
-  title: `${g.cards.length} ${g.cards.length === 1 ? 'tarjeta' : 'tarjetas'} de ${g.name}`,
-  sub: 'Repasar · escribí antes de ver',
+  title: `${g.cards.length} ${g.cards.length === 1 ? 'tarjeta' : 'tarjetas'} de ${name}`,
+  sub: 'Repetir · escribí antes de ver',
   min: g.min,
   ref: `cards:${g.frontId}`,
   activityId: g.activityId ?? 'repaso',
@@ -243,9 +326,9 @@ export const cardsMin = (n: number) => Math.ceil((n * CARD_SEC) / 60);
 
 /**
  * Tarjetas de hoy: las que vencen (las más olvidadas primero) y hasta N nuevas,
- * dentro de lo que queda del tope después de cold recall, tesis y ejercicios.
+ * dentro de lo que queda del tope después del cold recall y los ejercicios.
  */
-export function cardsForDay(study: StudyState, date: string, budgetMin: number) {
+export function cardsForDay(study: StudyState, date: string, budgetMin: number, weak?: Set<string>) {
   const eod = endOfDay(date);
   const now = Math.min(Date.now(), eod - 1);
   const seen = study.cards.filter((c) => reviewedOn(c, date));
@@ -253,6 +336,9 @@ export function cardsForDay(study: StudyState, date: string, budgetMin: number) 
   const due = study.cards
     .filter((c) => c.srs && c.srs.state !== 'new' && c.srs.due < eod && !reviewedOn(c, date))
     .sort((x, y) => retrievability((now - (x.srs!.last ?? now)) / DAY, x.srs!.s) - retrievability((now - (y.srs!.last ?? now)) / DAY, y.srs!.s));
+  // Priorizar lo flojo: las tarjetas de temas flojos van primero (las más olvidadas, dentro de cada grupo).
+  const temaDe = (c: Card) => (c.activityId && c.unit != null ? `${c.activityId}:${c.unit}` : `mazo:${cardFront(c, study.fronts)}`);
+  if (weak?.size) due.sort((x, y) => (weak.has(temaDe(x)) ? 0 : 1) - (weak.has(temaDe(y)) ? 0 : 1));
   const nuevas = study.cards
     .filter((c) => !c.srs || c.srs.state === 'new')
     .filter((c) => !c.dueFrom || c.dueFrom <= date)
@@ -278,10 +364,11 @@ export function cardsForDay(study: StudyState, date: string, budgetMin: number) 
   return { groups, skipped: Math.max(0, skipped), min: groups.reduce((s, g) => s + g.min, 0) };
 }
 
-/** Todo el repaso del día: ítems de la escalera y tarjetas, con un solo tope. */
-export function dailyReview(study: StudyState, date: string) {
-  const items = dueReview(study.reviews, date, study.rules.cap);
-  const cards = cardsForDay(study, date, study.rules.cap - items.min);
+/** Todo el repaso del día: lo que vence para repetir y las tarjetas, con un solo tope. Cold recall y tesis, aparte. */
+export function dailyReview(study: StudyState, date: string, weak?: Set<string>) {
+  const w = study.rules.priorizarFlojo ? weak : undefined;
+  const items = dueReview(study.reviews, date, study.rules.cap, w);
+  const cards = cardsForDay(study, date, study.rules.cap - items.min, w);
   return { ...items, groups: cards.groups, skippedCards: cards.skipped, min: items.min + cards.min };
 }
 
@@ -290,33 +377,110 @@ export interface PlanStep {
   kind: Tramo['kind'];
   title: string;
   sub: string;
+  /** Minutos del paso, descansos incluidos (lo que suma al "falta"). */
   min: number;
+  /** Minutos que se muestran: el capítulo, sin sus descansos. */
+  ver: number;
   ref: string;
   paper?: boolean;
   activityId: string;
 }
 
-/** Pasos para la lista de Estudio: el aprender (focos y descansos) va junto. */
+/** Pasos para la lista de Estudio: el capítulo con sus pomodoros va junto, y el test con su descanso. */
 export function groupSteps(tramos: Tramo[]): PlanStep[] {
   const out: PlanStep[] = [];
   for (const t of tramos) {
     const last = out[out.length - 1];
-    if (t.step === 'aprender' && last?.step === 'aprender' && last.ref === t.ref) {
+    if (last && last.ref === t.ref && (t.step === 'estudiar' || t.kind === 'descanso')) {
       last.min += t.min;
+      if (t.kind !== 'descanso') last.ver += t.min;
       continue;
     }
-    out.push({ step: t.step, kind: t.kind === 'descanso' ? 'capitulo' : t.kind, title: t.title, sub: t.sub, min: t.min, ref: t.ref, paper: t.paper, activityId: t.activityId });
+    out.push({ step: t.step, kind: t.kind === 'descanso' ? 'capitulo' : t.kind, title: t.paso ?? t.title, sub: t.sub, min: t.min, ver: t.kind === 'descanso' ? 0 : t.min, ref: t.ref, paper: t.paper, activityId: t.activityId });
   }
   return out;
 }
 
 export const sumMin = (xs: { min: number }[]) => xs.reduce((s, x) => s + x.min, 0);
 
-export const STEP_LABEL: Record<Step, string> = { repasar: 'Repasar', aprender: 'Aprender', comprobar: 'Comprobar' };
+export const STEP_LABEL: Record<Step, string> = { repetir: 'Repetir', test: 'Test', tesis: 'Tesis', estudiar: 'Estudiar' };
 export const KIND_LABEL: Record<Tramo['kind'], string> = {
-  cold: 'Cold recall', tesis: 'Tesis +3', ejercicios: 'Ejercicios', examen: 'Examen corto', releer: 'Releer', tarjetas: 'Tarjetas',
-  capitulo: 'Capítulo', descanso: 'Descanso', test: 'Test',
+  cold: 'Cold recall', tesis: 'Día 3', ejercicios: 'Estudio y ejercicios', examen: 'Examen corto', releer: 'Releer', tarjetas: 'Tarjetas',
+  capitulo: 'Capítulo nuevo', descanso: 'Descanso', test: 'Completo',
 };
+
+/**
+ * Las cuatro fases de hoy, en el orden del capítulo (día 1 Estudiar, día 2 Test, día 3 Tesis,
+ * días 8 a 61 Repetir), con el capítulo que toca en cada una: cada día es uno distinto.
+ */
+export function unitPhases(a: Activity, st: StudyState, date: string) {
+  if (!a.units) return null;
+  const cap = (n?: number) => (n == null ? '—' : lower1(unitShort(a, n)));
+  const due = dueReview(st.reviews, date);
+  const estudia = focusUnit(a, st, date);
+  const test = a.units.find((u) => testDue(st, a.id, u.n, date));
+  const tesis = due.tesis.find((r) => r.activityId === a.id);
+  const rep = st.reviews.filter((r) => r.activityId === a.id && CAPPED.includes(r.kind) && vence(r, date));
+  return [
+    { step: 'estudiar' as Step, name: 'Estudiar', when: cap(estudia?.n) },
+    { step: 'test' as Step, name: 'Test', when: cap(test?.n) },
+    { step: 'tesis' as Step, name: 'Tesis', when: cap(tesis?.unit) },
+    { step: 'repetir' as Step, name: 'Repetir', when: rep.length ? (rep.length === 1 ? cap(rep[0].unit) : `${rep.length} temas`) : `${DIA.e8} → ${DIA.e61}` },
+  ];
+}
+
+
+const ERR_NOMBRE: Record<ErrType, [string, string]> = {
+  concepto: ['error de concepto', 'errores de concepto'],
+  tecnica: ['error de técnica', 'errores de técnica'],
+  descuido: ['descuido', 'descuidos'],
+  enunciado: ['error de enunciado', 'errores de enunciado'],
+};
+const NUM = ['', 'Un', 'Dos', 'Tres', 'Cuatro', 'Cinco', 'Seis'];
+
+/**
+ * Con qué arranca la tesis: el último test de la unidad y sus errores, empezando por los que
+ * más pesan (concepto, técnica, enunciado, descuido).
+ */
+export function tesisStart(t: TestResult | undefined) {
+  if (!t) return null;
+  const orden: ErrType[] = ['concepto', 'tecnica', 'enunciado', 'descuido'];
+  const partes = orden.filter((k) => t.errors[k] > 0).map((k) => {
+    const n = t.errors[k];
+    const ej = t.wrong?.find((w) => w.type === k);
+    const txt = `${n < NUM.length ? NUM[n] : n} ${ERR_NOMBRE[k][n === 1 ? 0 : 1]}`;
+    return ej ? `${txt} (${lower1(ej.q.replace(/\.$/, ''))})` : txt;
+  });
+  const lista = partes.length > 1 ? `${partes.slice(0, -1).join(', ')} y ${lower1(partes[partes.length - 1])}` : partes[0];
+  const primero = orden.find((k) => t.errors[k] > 0);
+  const CIERRE: Record<ErrType, string> = {
+    concepto: 'Explicá primero la idea que no te salió.',
+    tecnica: 'Explicá primero el procedimiento que fallaste.',
+    enunciado: 'Explicá primero qué pedía el enunciado.',
+    descuido: 'Explicá primero dónde te apuraste.',
+  };
+  const cierre = primero ? CIERRE[primero] : 'Sin errores: explicá el capítulo de punta a punta.';
+  return `En el test sacaste ${t.score} de ${t.total}.${lista ? ` ${lista}.` : ''} ${cierre}`;
+}
+
+/** Para el cierre: la victoria de hoy (un test aprobado) y lo primero de mañana en el orden de la sesión. */
+export function cierreSugerido(st: StudyState, date: string) {
+  let victoria = '';
+  for (const a of st.activities) {
+    for (const u of a.units ?? []) {
+      const t = unitState(st, a.id, u.n).tests.find((x) => x.date === date && x.approved);
+      if (t) victoria = `Aprobé el test del ${lower1(unitShort(a, u.n))}`;
+    }
+  }
+  const manana = addDays(date, 1);
+  const v = dueReview(st.reviews, manana);
+  const retest = st.reviews.find((r) => r.kind === 'retest' && !r.doneOn && r.due <= manana);
+  const first = v.cold.find((r) => !r.doneOn) ?? retest ?? v.today[0] ?? v.tesis[0];
+  const a = first && st.activities.find((x) => x.id === first.activityId);
+  const short = first && a && first.unit != null ? lower1(unitShort(a, first.unit)) : first?.label.replace(/^[^·]+ · /, '');
+  const qué = first ? { cold: 'Cold recall y test', tesis: 'Tesis', releer: 'Releer lo que falló', ejercicios: 'Repetir', examen: 'Examen corto', retest: 'Re-test' }[first.kind] : '';
+  return { victoria, manana: first ? `${qué} del ${short}` : '' };
+}
 
 /** Parsea la corrección que devuelve Claude: "17/20" y líneas "4: descuido". */
 export function parseCorrection(text: string, total: number) {
@@ -358,18 +522,21 @@ export function cardsFromText(text: string) {
 
 const ddmm = (d: string) => `${d.slice(8, 10)}/${d.slice(5, 7)}`;
 
-/** Estado de una unidad para "Unidades y tests". */
-export function unitStatus(a: Activity, st: StudyState, n: number, date: string): { label: string; tone: '' | 'on' | 'hoy' } {
+/** Estado de una unidad para "Unidades y tests": qué toca hoy, o cuándo vuelve. */
+export function unitStatus(a: Activity, st: StudyState, n: number, date: string): { label: string; tone: '' | 'on' | 'hoy' | 'flojo' } {
   const s = unitState(st, a.id, n);
-  const tesis = st.reviews.find((r) => r.activityId === a.id && r.unit === n && r.kind === 'tesis');
-  const retest = st.reviews.find((r) => r.activityId === a.id && r.unit === n && r.kind === 'retest' && !r.doneOn);
-  if (tesis?.doneOn) return { label: 'tesis ✓', tone: 'on' };
-  if (tesis && tesis.due <= date) return { label: 'tesis hoy', tone: 'hoy' };
-  if (s.approvedOn) return { label: `tesis ${tesis ? ddmm(tesis.due) : ''}`.trim(), tone: 'on' };
-  if (retest) return { label: retest.due <= date ? 're-test hoy' : `re-test ${ddmm(retest.due)}`, tone: 'hoy' };
-  if (s.learnedOn) return { label: 'test hoy', tone: 'hoy' };
-  const cur = focusUnit(a, st, date);
-  if (cur?.n === n && a.days.includes(weekday(date))) return { label: 'aprender hoy', tone: 'hoy' };
+  const of = (k: ReviewKind) => st.reviews.filter((r) => r.activityId === a.id && r.unit === n && r.kind === k);
+  const hoy = (k: ReviewKind) => of(k).find((r) => !r.doneOn && r.due <= date);
+  if (hoy('tesis')) return { label: 'tesis hoy', tone: 'on' };
+  if (testDue(st, a.id, n, date) && !s.tests.some((t) => t.date === date)) return { label: s.tests.length ? 're-test hoy' : 'cold recall y test hoy', tone: 'hoy' };
+  if (hoy('releer')) return { label: 'releer hoy', tone: 'hoy' };
+  const retest = of('retest').find((r) => !r.doneOn);
+  if (retest) return { label: `re-test ${ddmm(retest.due)}`, tone: 'hoy' };
+  if (s.learnedOn === date || (!s.learnedOn && focusUnit(a, st, date)?.n === n && a.days.includes(weekday(date)))) return { label: 'estudio hoy', tone: 'hoy' };
+  if (s.learnedOn && !s.tests.length) return { label: `test ${ddmm(addDays(s.learnedOn, 1))}`, tone: 'hoy' };
+  const next = st.reviews.filter((r) => r.activityId === a.id && r.unit === n && !r.doneOn && r.kind !== 'retest').sort((x, y) => x.due.localeCompare(y.due))[0];
+  if (s.flojo) return { label: next && next.due <= date ? 'flojo · repetir hoy' : 'flojo', tone: 'flojo' };
+  if (s.approvedOn) return next ? { label: next.due <= date ? 'repetir hoy' : `${next.kind === 'tesis' ? 'tesis' : 'repetir'} ${ddmm(next.due)}`, tone: next.due <= date ? 'on' : '' } : { label: '✓', tone: 'on' };
   return { label: '—', tone: '' };
 }
 
@@ -393,7 +560,7 @@ export function parseCardsText(text: string) {
   return [...out, ...cardsFromText(rest.join('\n'))];
 }
 
-/** Minutos de repaso de los próximos días (estimado con lo agendado hoy). */
+/** Minutos de repaso de los próximos días (estimado con lo agendado hoy; cold recall y tesis van aparte). */
 export function forecast(study: StudyState, date: string, days = 7) {
   const out: { date: string; min: number }[] = [];
   for (let i = 0; i < days; i++) {
@@ -402,7 +569,7 @@ export function forecast(study: StudyState, date: string, days = 7) {
       out.push({ date: d, min: dailyReview(study, d).min });
       continue;
     }
-    const items = study.reviews.filter((r) => r.kind !== 'retest' && !r.doneOn && r.due === d).reduce((s, r) => s + r.min, 0);
+    const items = study.reviews.filter((r) => CAPPED.includes(r.kind) && !r.doneOn && r.due === d).reduce((s, r) => s + r.min, 0);
     const eod = endOfDay(d);
     const sod = endOfDay(addDays(d, -1));
     const cards = study.cards.filter((c) => c.srs && c.srs.state !== 'new' && c.srs.due < eod && c.srs.due >= sod).length;
