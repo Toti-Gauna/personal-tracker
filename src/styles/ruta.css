@@ -240,3 +240,6 @@
   .ga-b b { font-size: 12px; }
   .r-bim-top { grid-template-columns: 100px minmax(0, 1fr); }
 }
+.mapa-item { color: var(--tinta); text-decoration: none; display: block; min-width: 0; }
+.r-pant .segmentado { margin: 8px 0 14px; }
+.nueva-sem { display: grid; gap: 8px; margin-top: 12px; justify-items: start; }
