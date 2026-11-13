@@ -87,6 +87,6 @@ export function usePendientes(date: string) {
   const study = useStore((s) => s.study);
   return useMemo(() => {
     const d = dailyReview(study, date);
-    return d.groups.reduce((s, g) => s + g.pending.length, 0) + d.today.filter((r) => r.doneOn !== date).length;
+    return d.groups.reduce((s, g) => s + g.pending.length, 0) + [...d.today, ...d.tesis].filter((r) => r.doneOn !== date).length;
   }, [study, date]);
 }

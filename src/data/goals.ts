@@ -1,5 +1,4 @@
 import { bimesterAt, BIMESTERS } from './bimesters';
-import { approves } from './study';
 import type { Goal, Horizon } from './goals-types';
 import type { StudyState } from './study-types';
 import type { TrainState } from './train-types';
@@ -60,7 +59,7 @@ export function valueOf(g: Goal, date: string, ctx: { study: StudyState; days: R
   switch (g.auto.kind) {
     case 'tests':
       return Object.values(ctx.study.units).flatMap((u) => Object.values(u)).flatMap((s) => s.tests)
-        .filter((t) => inRange(t.date) && approves(t.score, t.total, t.errors)).length;
+        .filter((t) => inRange(t.date) && t.approved).length;
     case 'horas': {
       const front = g.auto.front;
       const min = Object.entries(ctx.days).filter(([d]) => inRange(d))

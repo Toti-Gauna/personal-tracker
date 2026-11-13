@@ -40,6 +40,8 @@ export interface Activity {
   /** Examen final del bimestre. */
   final?: { title: string; desc: string };
   testMode: 'app' | 'papel';
+  /** Pomodoro para estudiar el capítulo (id de preset). Sin valor, 50/10. */
+  pomodoro?: string;
 }
 
 export type ErrType = 'concepto' | 'tecnica' | 'descuido' | 'enunciado';
@@ -54,6 +56,8 @@ export interface TestResult {
   approved: boolean;
   /** Por ejercicio, en papel: null = bien, o el tipo de error. */
   perEx?: (ErrType | null)[];
+  /** Los ejercicios que fallaste (con su consigna y respuesta): la tesis arranca por acá. */
+  wrong?: { q: string; a: string; type: ErrType }[];
 }
 
 export interface UnitState {
@@ -150,8 +154,11 @@ export interface StudyState {
   points: Record<string, string[]>;
 }
 
-/** Paso de la sesión de estudio: Repasar → Aprender → Comprobar (y al final, Cerrar). */
-export type Step = 'repasar' | 'aprender' | 'comprobar';
+/**
+ * Fase de un capítulo: Estudiar (de corrido) → Test (completo) → Tesis (+3) → Repetir (+1 → +60).
+ * En el día va primero lo que vence (repetir y tesis), después estudiar y al final el test.
+ */
+export type Step = 'repetir' | 'estudiar' | 'test';
 export type TramoKind = 'cold' | 'tesis' | 'ejercicios' | 'examen' | 'releer' | 'tarjetas' | 'capitulo' | 'descanso' | 'test';
 
 export interface Tramo {
@@ -159,6 +166,8 @@ export interface Tramo {
   kind: TramoKind;
   title: string;
   sub: string;
+  /** Cómo se nombra en la lista de Estudio (si difiere del título de la sesión). */
+  paso?: string;
   min: number;
   /** Referencia para marcarlo hecho: rev:<id>, learn:<act>:<n>, test:<act>:<n>. */
   ref: string;

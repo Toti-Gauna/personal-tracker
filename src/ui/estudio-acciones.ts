@@ -1,6 +1,6 @@
 import { AREAS } from '../data/defaults';
 import { advance, lastLearnIndex, startFocus } from '../data/focus';
-import { STEP_LABEL, sumMin } from '../data/study';
+import { sumMin } from '../data/study';
 import type { Tramo } from '../data/study-types';
 import { fmtDur } from '../data/time';
 import type { FocusState } from '../data/types';
@@ -51,15 +51,15 @@ export function avisoTramo(f: FocusState, next: number) {
 /** Cerrar: el último paso de la sesión. */
 export function finSesion(f: FocusState) {
   const tr = f.tramos ?? [];
-  const rep = sumMin(tr.filter((t) => t.step === 'repasar'));
+  const rep = sumMin(tr.filter((t) => t.step === 'repetir'));
   const learn = tr.find((t) => t.kind === 'capitulo');
-  const test = tr.find((t) => t.step === 'comprobar');
-  const partes = [rep ? `Repasaste ${rep} min` : '', learn ? `avanzaste ${learn.title}` : ''].filter(Boolean);
+  const test = tr.find((t) => t.step === 'test');
+  const partes = [rep ? `Repetiste ${rep} min` : '', learn ? `estudiaste ${learn.title}` : ''].filter(Boolean);
   showModal({
     kicker: 'Fin de la sesión',
     color: colorOf(f.activityId === 'repaso' ? tr[0]?.activityId : f.activityId),
     title: 'Estudio de hoy, listo.',
-    body: `${partes.join(' y ') || 'Sesión cerrada'}.${test ? ` ${STEP_LABEL.comprobar}: cargá el resultado del test si no lo hiciste.` : ''}`,
+    body: `${partes.join(' y ') || 'Sesión cerrada'}.${test ? ' Cargá el resultado del test si no lo hiciste.' : ''}`,
     primary: { label: 'Volver a Hoy', run: () => ir('hoy') },
     secondary: test
       ? { label: 'Registrar el test', run: () => ir(`test/${test.ref.split(':')[1]}/${test.ref.split(':')[2]}`) }

@@ -9,20 +9,38 @@ export const FRONTS: Front[] = [
 
 const t = (count: number, desc: string, min = 25) => ({ count, desc, min });
 
-/** CONAMAT · Aritmética, caps. 1 a 11 (B1). */
+/**
+ * CONAMAT · Aritmética, caps. 1 a 11 (B1). `count` son los ejercicios nuevos del capítulo;
+ * desde el cap. 2 el test suma 5 de los anteriores (ver `testOf`). Todos duran 25 min.
+ */
 export const CONAMAT_B1: Unit[] = [
-  { n: 1, title: 'Números reales', test: t(15, '15 ejercicios de clasificar, ordenar y valor absoluto.', 20) },
-  { n: 2, title: 'Números enteros', test: t(20, '20 operaciones combinadas con signos de agrupación.') },
-  { n: 3, title: 'Teoría de números', test: t(20, 'Divisibilidad, primos, MCD y MCM, más 25 % de los caps. 1 y 2.') },
-  { n: 4, title: 'Números racionales', test: t(20, 'Fracciones equivalentes, operaciones y fracciones complejas.') },
-  { n: 5, title: 'Números decimales', test: t(20, 'Operaciones y pasar de fracción a decimal y al revés.') },
-  { n: 6, title: 'Potenciación y radicación', test: t(20, 'Leyes de exponentes, simplificar raíces y racionalizar.') },
-  { n: 7, title: 'Notación científica y logaritmos', test: t(20, 'Convertir, operar y aplicar propiedades de logaritmos.') },
-  { n: 8, title: 'Razones y proporciones', test: t(20, 'Regla de tres, porcentajes e interés simple con problemas.') },
-  { n: 9, title: 'Sistemas de numeración', test: t(20, 'Conversiones entre bases (binario, octal, hex y otras) y operaciones en base 2.') },
-  { n: 10, title: 'Sistema métrico decimal', test: t(20, 'Conversiones de longitud, masa, capacidad, superficie y volumen.') },
+  { n: 1, title: 'Números reales', test: t(15, '15 ejercicios de clasificar, ordenar y valor absoluto.') },
+  { n: 2, title: 'Números enteros', test: t(15, '20 operaciones combinadas con signos de agrupación.') },
+  { n: 3, title: 'Teoría de números', test: t(15, 'Divisibilidad, primos, MCD y MCM, más 25 % de 01-02.') },
+  { n: 4, title: 'Números racionales', test: t(15, 'Fracciones equivalentes, operaciones y fracciones complejas.') },
+  { n: 5, title: 'Números decimales', test: t(15, 'Operaciones y pasar de fracción a decimal y al revés.') },
+  { n: 6, title: 'Potenciación y radicación', test: t(15, 'Leyes de exponentes, simplificar raíces y racionalizar.') },
+  { n: 7, title: 'Notación científica y logaritmos', test: t(15, 'Convertir, operar y aplicar propiedades de logaritmos.') },
+  { n: 8, title: 'Razones y proporciones', test: t(15, 'Regla de tres, porcentajes e interés simple con problemas.') },
+  { n: 9, title: 'Sistemas de numeración', test: t(15, 'Conversiones entre bases (binario, octal, hex y otras) y operaciones en base 2.') },
+  { n: 10, title: 'Sistema métrico decimal', test: t(15, 'Conversiones de longitud, masa, capacidad, superficie y volumen.') },
   { n: 11, title: 'Razonamiento aritmético', test: t(10, '10 problemas de enunciado mezclando todo lo anterior.') },
 ];
+
+/** Puntos clave de cada capítulo («tema :: detalle»): contra esto se compara el cold recall. */
+export const CONAMAT_PUNTOS: Record<number, string[]> = {
+  1: ['Naturales, enteros, racionales e irracionales :: cada conjunto contiene al anterior; los reales son racionales e irracionales juntos', 'Número racional :: se puede escribir como fracción de enteros', 'Número irracional :: su decimal no es finito ni periódico (√2, π)', 'Valor absoluto :: distancia al cero, nunca negativo', 'Orden en la recta :: a la izquierda, menor', 'Opuesto :: mismo valor absoluto, signo contrario'],
+  2: ['Qué son los enteros :: naturales, cero y opuestos', 'Suma con signos distintos :: restar valores absolutos, signo del mayor', 'Ley de signos del producto :: menos por menos da más', 'Restar es sumar el opuesto :: a − b = a + (−b)', 'Valor absoluto :: distancia al cero, siempre positiva', 'Orden en la recta :: −5 es menor que −2'],
+  3: ['Divisibilidad :: a es divisible entre b si la división es exacta', 'Criterios de 2, 3, 5 y 9 :: última cifra par, suma de cifras múltiplo de 3, termina en 0 o 5, suma múltiplo de 9', 'Número primo :: tiene exactamente dos divisores', 'Descomposición en primos :: todo número es producto de primos de una sola forma', 'MCD :: factores comunes con el menor exponente', 'MCM :: factores comunes y no comunes con el mayor exponente'],
+  4: ['Fracciones equivalentes :: multiplicar o dividir arriba y abajo por lo mismo', 'Simplificar :: dividir por el MCD de numerador y denominador', 'Suma con distinto denominador :: llevar al MCM de los denominadores', 'Producto de fracciones :: numerador por numerador, denominador por denominador', 'División de fracciones :: multiplicar por la inversa', 'Fracción compleja :: resolver arriba y abajo y después dividir'],
+  5: ['Suma de decimales :: alinear la coma', 'Producto de decimales :: tantas cifras decimales como sumen los factores', 'Fracción a decimal :: dividir numerador entre denominador', 'Decimal finito a fracción :: sobre 10, 100 o 1000 y simplificar', 'Decimal periódico puro :: el período sobre tantos nueves como cifras tenga', 'Redondeo :: mirar la cifra siguiente'],
+  6: ['Producto de potencias de igual base :: se suman los exponentes', 'Cociente de potencias :: se restan los exponentes', 'Potencia de una potencia :: se multiplican los exponentes', 'Exponente negativo :: a⁻ⁿ = 1/aⁿ', 'Simplificar una raíz :: sacar los factores con exponente igual al índice', 'Racionalizar :: multiplicar para sacar la raíz del denominador'],
+  7: ['Notación científica :: a × 10ⁿ con 1 ≤ a < 10', 'Producto en notación científica :: multiplicar las mantisas y sumar exponentes', 'Logaritmo :: log_b(x) = y si bʸ = x', 'Log de un producto :: suma de logaritmos', 'Log de una potencia :: el exponente pasa multiplicando', 'Cambio de base :: log_b(x) = log(x) / log(b)'],
+  8: ['Razón :: cociente entre dos cantidades', 'Proporción :: igualdad de dos razones; producto de extremos igual al de medios', 'Regla de tres directa :: si una crece, la otra crece', 'Regla de tres inversa :: si una crece, la otra decrece', 'Porcentaje :: x % de N es N · x / 100', 'Interés simple :: I = C · r · t'],
+  9: ['Base de un sistema :: cuántos símbolos usa', 'Decimal a otra base :: divisiones sucesivas, restos al revés', 'Otra base a decimal :: cada cifra por la base elevada a su posición', 'Binario a hexadecimal :: agrupar de a 4 cifras', 'Hexadecimal :: usa 0-9 y A-F', 'Suma en base 2 :: 1 + 1 = 10'],
+  10: ['Unidad de longitud :: el metro; cada escalón multiplica por 10', 'Superficie :: cada escalón multiplica por 100', 'Volumen :: cada escalón multiplica por 1000', '1 dm³ :: es 1 litro', 'Masa :: el gramo; 1 kg = 1000 g', 'Convertir :: hacia unidades más chicas se multiplica'],
+  11: ['Leer el enunciado :: qué dan y qué piden', 'Plantear :: pasar el texto a una operación', 'Repartos proporcionales :: dividir el total por la suma de las partes', 'Problemas de edades :: plantear la diferencia, que no cambia', 'Velocidad :: distancia sobre tiempo', 'Verificar :: reemplazar el resultado en el enunciado'],
+};
 
 const build = 'Construir un ejercicio chico desde cero, sin mirar el curso.';
 const book = 'Preguntas de concepto y aplicar una idea del libro en código.';
@@ -69,15 +87,22 @@ export const emptyStudy = (): StudyState => ({
   points: {},
 });
 
-/** Duraciones de la escalera (min). El capítulo completo se repasa en ~50 min en dos meses. */
+/**
+ * Escalera 0 → +1 → +3 → +7 → +21 → +60 (min). Después del test, un capítulo se repite en
+ * unos 65 min repartidos en dos meses. La tesis dura 20 min y va fuera del tope de repaso.
+ */
 export const LADDER = {
   cold: { days: 1, min: 5 },
-  tesis: { days: 3, min: 15 },
-  e7: { days: 7, min: 10 },
-  e21: { days: 21, min: 8 },
-  e60: { days: 60, min: 12 },
+  tesis: { days: 3, min: 20 },
+  e7: { days: 7, min: 15 },
+  e21: { days: 21, min: 15 },
+  e60: { days: 60, min: 15 },
   retest: { days: 2, min: 25 },
 };
+
+/** Test completo: los ejercicios nuevos del capítulo y 5 de los anteriores, 25 min. */
+export const TEST_PREV = 5;
+export const TEST_MIN = 25;
 
 export const REVIEW_CAP = 20;
 

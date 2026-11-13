@@ -31,7 +31,7 @@ describe('motor de repaso', () => {
     expect(d2.min).toBe(20);
   });
 
-  it('el tope se reparte: primero cold recall y tesis, después tarjetas', () => {
+  it('el tope se reparte: primero cold recall, después tarjetas (la tesis va aparte)', () => {
     completeLearn(D0, 'conamat', 1);
     saveTest(D0, 'conamat', 1, { score: 15, total: 15, errors: ok, mode: 'app' });
     mkCards(40);
@@ -42,14 +42,14 @@ describe('motor de repaso', () => {
     expect(d1.min).toBe(20);
   });
 
-  it('las tarjetas del frente entran en el Repasar de su actividad', () => {
+  it('las tarjetas del frente entran en el Repetir de su actividad, nombradas por ella', () => {
     mkCards(6);
     const st = getState().study;
     const a = st.activities.find((x) => x.id === 'conamat')!;
     const d = dailyReview(st, D0);
     const t = planActivity(a, { study: st, date: D0, blockMin: 120, presets: DEFAULT_PRESETS, blockPresets: DEFAULT_BLOCK_PRESETS, review: d.today, groups: d.groups });
-    expect(t[0]).toMatchObject({ step: 'repasar', kind: 'tarjetas', title: '6 tarjetas de Matemática', min: 3 });
-    expect(sumMin(t)).toBe(120);
+    expect(t[0]).toMatchObject({ step: 'repetir', kind: 'tarjetas', title: '6 tarjetas de Aritmética', min: 3 });
+    expect(sumMin(t)).toBeLessThanOrEqual(120);
   });
 
   it('calificar saca la tarjeta de pendientes; "Otra vez" la deja para hoy', () => {

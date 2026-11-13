@@ -45,7 +45,7 @@ export function Test({ day, param }: { day: DayLog; param?: string }) {
   const sc = modo === 'papel' ? total - perEx.filter(Boolean).length : score;
   const er = modo === 'papel' ? papelErr : errors;
   const pct = total ? Math.round((sc / total) * 100) : 0;
-  const ok = approves(sc, total, er);
+  const ok = approves(sc, total);
   const fallados = total - sc;
   const cargados = ERR_TYPES.reduce((s, k) => s + er[k], 0);
   const tesis = fmtFecha(addDays(day.date, LADDER.tesis.days));

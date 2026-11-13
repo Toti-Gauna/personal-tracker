@@ -1,4 +1,4 @@
-import { scheduleApproved, scheduleLearned, scheduleRetest, approves, unitState } from '../data/study';
+import { approves, scheduleApproved, scheduleLearned, scheduleRetest, unitName, unitState } from '../data/study';
 import { newSrs, review as fsrsReview, type Grade } from '../data/fsrs';
 import { RELEER_MIN } from '../data/study-catalog';
 import type { Activity, Card, CardDraft, ErrType, ReviewItem, Rules, StudyState, Tesis, Tramo } from '../data/study-types';
@@ -61,12 +61,21 @@ export function completeLearn(date: string, activityId: string, n?: number) {
   if (unit) rutaFromStudy(date, a.id, unit.n, 'learn');
 }
 
-/** Guarda un test. Aprobado: tesis a +3 y repasos a +7, +21, +60. Si no, re-test en 2 días. */
-export function saveTest(date: string, activityId: string, n: number, data: { score: number; total: number; errors: Record<ErrType, number>; mode: 'app' | 'papel'; perEx?: (ErrType | null)[] }) {
+/**
+ * Guarda un test. Con 85 % o más: la tesis a +3 y repetir a +7, +21, +60. Con menos: releer lo
+ * que falló y re-test a +2. Los ejercicios que fallaste vuelven mañana como tarjetas.
+ */
+export function saveTest(date: string, activityId: string, n: number, data: { score: number; total: number; errors: Record<ErrType, number>; mode: 'app' | 'papel'; perEx?: (ErrType | null)[]; wrong?: { q: string; a: string; type: ErrType }[] }) {
   const a = findAct(activityId);
   const unit = a?.units?.find((u) => u.n === n);
   if (!a || !unit) return false;
-  const approved = approves(data.score, data.total, data.errors);
+  const approved = approves(data.score, data.total);
+  const deck = getState().study.fronts.find((f) => f.id === a.front)?.name ?? 'General';
+  const tomorrow = addDays(date, 1);
+  const errCards: Card[] = (data.wrong ?? []).map((w) => ({
+    id: `c${newId()}`, front: w.q, back: w.a, kind: 'ejercicio', deck, frontId: a.front, source: `Test · ${unitName(a, unit)}`,
+    createdOn: date, activityId: a.id, unit: n, dueFrom: tomorrow,
+  }));
   updateStudy((st) => {
     const cur = st.units[a.id]?.[n] ?? { tests: [] };
     const next = { ...cur, learnedOn: cur.learnedOn ?? date, tests: [...cur.tests, { ...data, date, approved }], approvedOn: cur.approvedOn ?? (approved ? date : undefined) };
@@ -75,7 +84,7 @@ export function saveTest(date: string, activityId: string, n: number, data: { sc
       ? (cur.approvedOn ? [] : scheduleApproved(a, unit, date))
       : [scheduleRetest(a, unit, date)];
     const cold = cur.learnedOn ? [] : scheduleLearned(a, unit, date);
-    return { ...st, units: { ...st.units, [a.id]: { ...st.units[a.id], [n]: next } }, reviews: [...reviews, ...added, ...cold] };
+    return { ...st, units: { ...st.units, [a.id]: { ...st.units[a.id], [n]: next } }, reviews: [...reviews, ...added, ...cold], cards: [...st.cards, ...errCards] };
   });
   markStep(date, `test:${a.id}:${n}`);
   markStep(date, `learn:${a.id}:${n}`);
