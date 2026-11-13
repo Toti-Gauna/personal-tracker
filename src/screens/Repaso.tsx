@@ -119,11 +119,11 @@ export function Repaso({ day }: { day: DayLog }) {
             <li key={r.id} className={done(`rev:${r.id}`) ? 'hecho' : ''}>
               <div className="rep-ej">
                 <i style={{ background: colorOf(frontOfAct(r.activityId)) }} />
-                <span><b>{r.label}</b><small>{done(`rev:${r.id}`) ? (r.perfect ? 'Perfecto' : 'Hecho') : `${r.min} min`}</small></span>
+                <span><b>{r.label}</b><small>{done(`rev:${r.id}`) ? (r.perfect ? 'Perfecto' : 'Hecho') : `${r.min} min · cargá cuántos salieron bien`}</small></span>
                 {!done(`rev:${r.id}`) && (
-                  <span className="rep-botones">
-                    <button onClick={() => completeExercises(day.date, r.id, false)}>Hecho</button>
-                    <button onClick={() => completeExercises(day.date, r.id, true)}>Perfecto</button>
+                  <span className="rep-botones de5" role="group" aria-label="Cuántos bien de 5">
+                    <small className="sub">bien de 5</small>
+                    {[0, 1, 2, 3, 4, 5].map((n) => <button key={n} aria-label={`${n} bien de 5`} onClick={() => completeExercises(day.date, r.id, n === 5, [n, 5])}>{n}</button>)}
                   </span>
                 )}
               </div>

@@ -129,3 +129,7 @@
 .calib-recall > div:first-child { border-left: 0; }
 .calib-recall b { font-size: 22px; font-weight: 400; }
 .calib-recall span { color: var(--sub); font-size: 14px; line-height: 1.25; }
+
+.rep-botones.de5 { display: flex; flex-wrap: wrap; align-items: center; gap: 4px; grid-column: 1 / -1; }
+.rep-botones.de5 small { margin-right: 4px; font-size: 13px; }
+.rep-botones.de5 button { min-width: 32px; min-height: 32px; padding: 0; font-family: var(--font-mono); }
