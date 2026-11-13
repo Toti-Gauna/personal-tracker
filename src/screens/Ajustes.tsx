@@ -1,5 +1,6 @@
+import { DAY_ROUTINES, DAY_TYPES, metasOf } from '../data/routines';
 import { useEffect, useState } from 'react';
-import { AREAS, ROUTINES, areaDefaultName } from '../data/defaults';
+import { AREAS, areaDefaultName} from '../data/defaults';
 import { BIMESTERS } from '../data/bimesters';
 import { DEFAULT_ALARMS } from '../data/sounds';
 import type { Area } from '../data/types';
@@ -93,7 +94,7 @@ export function Ajustes() {
 
       <div className="etiqueta aj-t">Datos y app</div>
       <ul className="aj-filas">
-        <li><a href="#/ajustes-rutinas"><span><b>Rutinas del día</b><small>{ROUTINES.map((r) => `${r.wake} ${r.id === 'completo' ? 'día completo' : 'día corto'}`).join(' · ')}</small></span><span aria-hidden="true">→</span></a></li>
+        <li><a href="#/ajustes-rutinas"><span><b>Rutinas del día</b><small>{DAY_TYPES.map((t) => `${DAY_ROUTINES[t].label}: ${metasOf(t).length} metas`).join(' · ')}</small></span><span aria-hidden="true">→</span></a></li>
         <li><a href="#/sonidos"><span><b>Sonidos y alarmas</b><small>{settings.sounds ? 'Sonidos a tu gusto' : 'Campana de bronce'} · {alarmas} {alarmas === 1 ? 'alarma' : 'alarmas'} en el calendario</small></span><span aria-hidden="true">→</span></a></li>
         <li><a href="#/ajustes-companera"><span><b>Compañera de entrenamiento</b><small>{settings.names.partner} · pesos y récords propios</small></span><span aria-hidden="true">→</span></a></li>
         <li><a href="#/motor/importar"><span><b>Importar mazo de Anki</b><small>Archivo de texto exportado desde Anki</small></span><span aria-hidden="true">→</span></a></li>

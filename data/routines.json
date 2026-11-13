@@ -1,0 +1,52 @@
+{
+  "timezone": "America/Argentina/Buenos_Aires",
+  "wake": { "completo": "04:00", "corto": "05:00" },
+  "dayRoutines": {
+    "weekday": {
+      "label": "Lunes a viernes",
+      "days": [1, 2, 3, 4, 5],
+      "blocks": [
+        { "id": "despertar", "label": "Despertar y desayuno", "start": "04:00", "end": "04:30", "area": "rutina", "kind": "flex", "focus": false, "meta": false },
+        { "id": "math", "label": "Matemática", "short": "matemática", "start": "04:30", "end": "06:30", "area": "ing", "kind": "flex", "focus": true,
+          "tasks": ["Repaso de tarjetas", "Capítulo del día", "Test del capítulo"] },
+        { "id": "prog", "label": "Programación", "short": "programación", "start": "06:30", "end": "08:30", "area": "ing", "kind": "flex", "focus": true,
+          "tasks": ["Repaso de tarjetas", "Python Tutorial, secciones 5 y 6", "Commit de lo avanzado"] },
+        { "id": "abi", "label": "Correr y acompañar a Abi", "short": "Abi", "start": "08:30", "end": "10:00", "area": "salud", "kind": "fixed", "focus": false,
+          "tasks": ["Correr", "Ducha"] },
+        { "id": "trabajo", "label": "Trabajo", "short": "el trabajo", "start": "10:00", "end": "12:00", "area": "economia", "kind": "fixed", "focus": true,
+          "tasks": ["Tarea principal del trabajo"] },
+        { "id": "busqueda", "label": "Búsqueda laboral", "short": "la búsqueda", "start": "12:00", "end": "13:00", "area": "rutina", "kind": "flex", "focus": true,
+          "tasks": ["10 CV enviados", "1 mensaje a RRHH"] },
+        { "id": "handyx", "label": "Handyx", "short": "Handyx", "start": "13:00", "end": "16:00", "area": "handyx", "kind": "flex", "focus": true,
+          "tasks": ["Revisar pendientes", "Tarea principal", "Hablar con un usuario"] },
+        { "id": "eclipse", "label": "Eclipse", "short": "Eclipse", "start": "16:00", "end": "18:00", "area": "eclipse", "kind": "flex", "focus": true,
+          "tasks": ["10 cold calls", "Anotar resultados"] },
+        { "id": "comida", "label": "Comida y descanso", "start": "18:00", "end": "19:00", "area": "rutina", "kind": "fixed", "focus": false, "meta": false },
+        { "id": "entreno", "label": "Entrenamiento", "short": "el entreno", "start": "19:00", "end": "20:00", "area": "salud", "kind": "fixed", "focus": true,
+          "tasks": ["Caminata y movilidad", "Rutina del día"] },
+        { "id": "desconexion", "label": "Desconexión y preparación para dormir", "start": "20:00", "end": "21:00", "area": "rutina", "kind": "fixed", "focus": false, "meta": false },
+        { "id": "sueno", "label": "Sueño", "start": "21:00", "end": "04:00", "area": "rutina", "kind": "fixed", "focus": false, "meta": false }
+      ]
+    },
+    "weekend": {
+      "label": "Fin de semana",
+      "days": [6, 7],
+      "blocks": [
+        { "id": "despertar", "label": "Despertar y desayuno", "start": "04:00", "end": "04:30", "area": "rutina", "kind": "flex", "focus": false, "meta": false },
+        { "id": "math", "label": "Matemática", "short": "matemática", "start": "04:30", "end": "08:30", "area": "ing", "kind": "flex", "focus": true,
+          "tasks": ["Repaso de tarjetas", "Capítulo del día", "Test del capítulo"] },
+        { "id": "abi", "label": "Correr y acompañar a Abi", "short": "Abi", "start": "08:30", "end": "10:00", "area": "salud", "kind": "fixed", "focus": false,
+          "tasks": ["Correr", "Ducha"] },
+        { "id": "prog", "label": "Programación", "short": "programación", "start": "10:00", "end": "12:00", "area": "ing", "kind": "flex", "focus": true,
+          "tasks": ["Repaso de tarjetas", "Tema de la semana", "Commit de lo avanzado"] },
+        { "id": "handyx", "label": "Handyx", "short": "Handyx", "start": "12:00", "end": "17:00", "area": "handyx", "kind": "flex", "focus": true,
+          "tasks": ["Almuerzo (40 min)", "Tarea principal", "Revisar pendientes"] },
+        { "id": "prog-tarde", "label": "Programación", "short": "programación", "start": "17:00", "end": "18:00", "area": "ing", "kind": "flex", "focus": true,
+          "tasks": ["Seguir con lo de la mañana", "Commit de lo avanzado"] },
+        { "id": "descanso", "label": "Descanso y amigos", "start": "18:00", "end": "20:30", "area": "rutina", "kind": "fixed", "focus": false, "meta": false },
+        { "id": "desconexion", "label": "Desconexión", "start": "20:30", "end": "21:00", "area": "rutina", "kind": "fixed", "focus": false, "meta": false },
+        { "id": "sueno", "label": "Sueño", "start": "21:00", "end": "04:00", "area": "rutina", "kind": "fixed", "focus": false, "meta": false }
+      ]
+    }
+  }
+}

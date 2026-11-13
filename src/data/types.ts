@@ -26,18 +26,13 @@ export interface BlockTemplate {
   minMin?: number;
   /** Hora fija HH:MM; sin valor, el bloque va encadenado desde que te levantás. */
   fixed?: string;
+  /** Abre una sesión de foco (sin valor: sí). */
+  focus?: boolean;
   tasks: string[];
 }
 
 export type RoutineId = 'completo' | 'corto' | 'otra';
 
-export interface DayRoutine {
-  id: Exclude<RoutineId, 'otra'>;
-  name: string;
-  wake: string;
-  /** Duraciones de los bloques encadenados de la mañana. */
-  durations: Record<string, number>;
-}
 
 /** Vínculo opcional con un ítem del roadmap (data/roadmap.json). */
 export interface RoadmapLink {
@@ -58,6 +53,8 @@ export interface Block extends RoadmapLink {
   start: string;
   min: number;
   fixed: boolean;
+  /** Abre una sesión de foco (sin valor: sí). */
+  focus?: boolean;
   tasks: Task[];
 }
 
@@ -77,7 +74,10 @@ export interface StudyLog {
 export interface DayLog {
   date: string;
   wake: string;
+  /** Modo del modal "Buen día": 04:00 completo, 05:00 corto u otra hora. */
   routine: RoutineId;
+  /** Rutina del día de la semana: lunes a viernes o fin de semana. */
+  dayType?: 'weekday' | 'weekend';
   blocks: Block[];
   notes: string[];
   focus: FocusEntry[];
@@ -126,8 +126,6 @@ export interface Settings {
   alarms?: Alarm[];
   /** Nombres propios de las áreas. */
   areaNames?: Partial<Record<Area, string>>;
-  /** Rutinas del día editadas: hora de levantarse y duraciones. */
-  dayRoutines?: Partial<Record<'completo' | 'corto', { wake: string; durations: Record<string, number> }>>;
   /** Último respaldo descargado (fecha). */
   lastBackup?: string;
   startDate: string;

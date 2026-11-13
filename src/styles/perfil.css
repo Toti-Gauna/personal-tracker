@@ -119,3 +119,15 @@
 .alarmas { list-style: none; margin: 14px 0; padding: 0; }
 .alarmas li { display: grid; grid-template-columns: 24px 92px 1fr; gap: 14px; align-items: center; padding: 12px 0; border-bottom: 1px solid var(--linea); }
 .alarmas .hora { background: transparent; border: 0; color: var(--tinta); font-size: 18px; padding: 0; width: 100%; min-height: 36px; }
+
+/* Rutinas del día (solo lectura) */
+.rd-res { margin: 4px 0 8px; font-size: 15px; }
+.rd-bloques { list-style: none; margin: 0; padding: 0; }
+.rd-bloques li { display: grid; min-width: 0; grid-template-columns: 96px 18px minmax(0, 1fr); gap: 10px; align-items: baseline; padding: 9px 0 9px 10px; border-top: 1px solid var(--linea); border-left: 3px solid var(--c); }
+.rd-bloques li.no-meta { border-left-color: transparent; color: var(--sub); }
+.rd-bloques .mono { font-size: 13px; color: var(--sub); white-space: nowrap; }
+.rd-n { text-align: right; }
+.rd-t { display: grid; min-width: 0; overflow-wrap: anywhere; }
+.rd-t b, .rd-t small { white-space: normal; }
+.rd-t b { font-weight: 500; }
+.rd-t small { font-size: 14px; }

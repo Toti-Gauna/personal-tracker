@@ -1,10 +1,10 @@
 import { beforeEach, describe, expect, it } from 'vitest';
-import { areaNameOverrides, AREAS, ROUTINES } from '../data/defaults';
+import { areaNameOverrides, AREAS } from '../data/defaults';
 import { buildIcs } from '../data/ics';
 import { SEALS, bestStreak, dayXp, earlyStreak, hitos, levelOf, totalXp } from '../data/profile';
 import { DEFAULT_ALARMS } from '../data/sounds';
 import { getState, register, resetState, startDay } from './store';
-import { closeDay, claimSeal, markSealSeen, setAreaName, setDayRoutine, syncSeals } from './profile';
+import { closeDay, claimSeal, markSealSeen, setAreaName, syncSeals } from './profile';
 import { completeLearn, saveTest } from './study';
 import { setAlarms } from './profile';
 import { startTraining, nudge, logSet, finishTraining } from './train';
@@ -65,8 +65,8 @@ describe('cierre, sellos y ajustes', () => {
   it('las tareas elegidas pasan a mañana y las demás quedan en el día', () => {
     const pend = getState().days[D0].blocks[0].tasks;
     closeDay(D0, { victoria: '', manana: '', carry: [pend[0].id], score: 0 });
-    expect(getState().carry[addDays(D0, 1)].rutina).toEqual([pend[0].t]);
-    expect(getState().days[D0].blocks[0].tasks.map((t) => t.id)).toEqual([pend[1].id]);
+    expect(getState().carry[addDays(D0, 1)].math).toEqual([pend[0].t]);
+    expect(getState().days[D0].blocks[0].tasks.map((t) => t.id)).toEqual(pend.slice(1).map((t) => t.id));
   });
 
   it('un día con las 8 metas es "Día perfecto" y suma 1 % de mejora', () => {
@@ -128,14 +128,7 @@ describe('cierre, sellos y ajustes', () => {
     expect(AREAS.eclipse.name).toBe('Eclipse');
   });
 
-  it('editar la rutina del día cambia el plan; la de fábrica se recupera', () => {
-    setDayRoutine('corto', { wake: '05:10', durations: { prog: 90 } });
-    const corto = ROUTINES.find((r) => r.id === 'corto')!;
-    expect(corto.wake).toBe('05:10');
-    expect(corto.durations).toMatchObject({ prog: 90, math: 90 });
-    resetState();
-    expect(ROUTINES.find((r) => r.id === 'corto')!.wake).toBe('05:00');
-  });
+
 });
 
 describe('alarmas .ics', () => {

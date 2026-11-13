@@ -1,6 +1,6 @@
-import { BLOCKS, ROUTINES } from './defaults';
+import { dayTypeOf, isMeta, planRoutine, toTemplate, type DayType } from './routines';
 import type { Block, BlockTemplate, RoutineId } from './types';
-import { toHHMM, toMin } from './time';
+import { toMin } from './time';
 
 export interface PlannedBlock {
   tpl: BlockTemplate;
@@ -8,63 +8,15 @@ export interface PlannedBlock {
   min: number;
 }
 
-const chained = (blocks: BlockTemplate[]) => blocks.filter((b) => !b.fixed);
-const firstFixed = (blocks: BlockTemplate[]) => blocks.find((b) => b.fixed)!;
-
-/** Rango para "Otra hora": tiene que entrar el mínimo de cada bloque encadenado antes del primero fijo. */
-export function wakeRange(blocks = BLOCKS) {
-  const minSum = chained(blocks).reduce((s, b) => s + (b.minMin ?? b.min), 0);
-  return { min: toMin('03:00'), max: toMin(firstFixed(blocks).fixed!) - minSum };
-}
-
 /**
- * Acorta los bloques flexibles para que entren entre `wake` y el primer bloque fijo.
- * Parte del día completo; el recorte se reparte según lo que cada bloque puede ceder.
- * Redondea a 5 min y la suma da exacto.
+ * Arma las metas del día: la rutina del día de la semana (lunes a viernes o fin de semana) en
+ * el modo del modal "Buen día" (04:00 completo, 05:00 corto u otra hora). Lo que no es meta
+ * (despertar, comidas, descanso y sueño) no entra.
  */
-export function fitChained(wake: number, blocks = BLOCKS, base = ROUTINES[0].durations): Record<string, number> {
-  const list = chained(blocks);
-  const avail = toMin(firstFixed(blocks).fixed!) - wake;
-  const dur: Record<string, number> = {};
-  for (const b of list) dur[b.key] = base[b.key] ?? b.min;
-  const total = list.reduce((s, b) => s + dur[b.key], 0);
-  if (avail >= total) return dur;
-
-  const slack = (b: BlockTemplate) => Math.max(0, dur[b.key] - (b.minMin ?? dur[b.key]));
-  const totalSlack = list.reduce((s, b) => s + slack(b), 0);
-  const deficit = Math.min(total - avail, totalSlack);
-  let removed = 0;
-  for (const b of list) {
-    const cut = Math.round(((deficit * slack(b)) / (totalSlack || 1)) / 5) * 5;
-    dur[b.key] -= cut;
-    removed += cut;
-  }
-  // Ajuste del redondeo sobre el bloque que más puede ceder.
-  let diff = deficit - removed;
-  const order = [...list].sort((a, b) => dur[b.key] - (b.minMin ?? 0) - (dur[a.key] - (a.minMin ?? 0)));
-  for (const b of order) {
-    if (!diff) break;
-    const room = diff > 0 ? dur[b.key] - (b.minMin ?? dur[b.key]) : Infinity;
-    const d = diff > 0 ? Math.min(diff, room) : diff;
-    dur[b.key] -= d;
-    diff -= d;
-  }
-  return dur;
-}
-
-/** Arma el día: bloques encadenados desde que te levantás y los fijos en su hora. */
-export function planDay(routine: RoutineId, wakeHHMM: string, blocks = BLOCKS): PlannedBlock[] {
-  const wake = toMin(wakeHHMM);
-  const preset = ROUTINES.find((r) => r.id === routine);
-  const dur = preset ? preset.durations : fitChained(wake, blocks);
-  let t = wake;
-  return blocks.map((tpl) => {
-    if (tpl.fixed) return { tpl, start: tpl.fixed, min: tpl.min };
-    const start = toHHMM(t);
-    const min = dur[tpl.key] ?? tpl.min;
-    t += min;
-    return { tpl, start, min };
-  });
+export function planDay(date: string, routine: RoutineId, wake?: string, type: DayType = dayTypeOf(date)): PlannedBlock[] {
+  return planRoutine(type, routine, wake)
+    .filter((p) => isMeta(p.block))
+    .map((p) => ({ tpl: toTemplate(p.block, p.min), start: p.start, min: p.min }));
 }
 
 let uid = 0;
@@ -82,6 +34,7 @@ export function buildBlocks(plan: PlannedBlock[], carry: Record<string, string[]
     start,
     min,
     fixed: !!tpl.fixed,
+    ...(tpl.focus === false ? { focus: false } : {}),
     tasks: [...tpl.tasks, ...(carry[tpl.key] ?? [])].map((t) => ({ id: newId(), t, done: false })),
   }));
 }
