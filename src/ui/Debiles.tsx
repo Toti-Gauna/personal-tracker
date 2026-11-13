@@ -5,7 +5,7 @@
 import { useState } from 'react';
 import { AREAS } from '../data/defaults';
 import {
-  BANDA_COLOR, ERR_COLOR, ERR_CONSEJO, ERR_NOMBRE, ERR_ORDEN, banda, calibration, errorTypes, examenes, leeches, mapa, ranking, recallSemanal, refuerzo, repetidos, simulacro,
+  BANDA_COLOR, ERR_COLOR, ERR_CONSEJO, ERR_NOMBRE, ERR_ORDEN, banda, calibration, errorTypes, examenes, fixPlan, leeches, mapa, ranking, recallSemanal, refuerzo, repetidos, simulacro, temaInfo as temaInfoSafe,
   type Fuentes,
 } from '../data/debiles';
 import { fmtFecha } from '../data/time';
@@ -383,3 +383,18 @@ export function Simulacro({ st, a, fuerzas }: { st: StudyState; a?: Activity; fu
 }
 
 export const fechaCorta = (d: string) => fmtFecha(d).split(' ')[0].toLowerCase();
+
+/** Los tramos para arreglar un solo tema. */
+export function tramosDeTema(st: StudyState, temaId: string): Tramo[] {
+  const t = st.activities.length ? temaInfoSafe(st, temaId) : null;
+  if (!t) return [];
+  return fixPlan(st, temaId).map((paso, i) => ({
+    step: 'repetir',
+    kind: paso.kind === 'tarjetas' ? 'tarjetas' : paso.kind === 'releer' ? 'releer' : 'ejercicios',
+    title: `${t.corto[0].toUpperCase()}${t.corto.slice(1)} · ${paso.texto[0].toLowerCase()}${paso.texto.slice(1)}`,
+    sub: `Arreglar · ${t.nombre}`,
+    min: paso.min,
+    ref: paso.kind === 'tarjetas' ? `cards:${t.frontId}` : `fix:${t.id}:${i}`,
+    activityId: t.activity?.id ?? 'repaso',
+  }));
+}

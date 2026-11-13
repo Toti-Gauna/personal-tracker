@@ -231,7 +231,7 @@ export function fixPlan(st: StudyState, tema: string): PasoArreglo[] {
   }
   const t = lastTest(st, tema);
   const temasT = [...new Set((t?.wrong ?? []).filter((w) => w.type !== 'descuido').map((w) => w.tema).filter(Boolean) as string[])];
-  if (temasT.length) out.push({ kind: 'ejercicios', texto: `5 ejercicios de ${lower1(lista(temasT.slice(0, 2)))}`, min: 8 });
+  if (temasT.length) out.push({ kind: 'ejercicios', texto: `5 ejercicios de ${lista(temasT.slice(0, 2).map(lower1))}`, min: 8 });
   else if (t && (t.errors.tecnica || t.errors.concepto)) out.push({ kind: 'ejercicios', texto: '5 ejercicios del capítulo', min: 8 });
   if (!out.length) out.push({ kind: 'tarjetas', texto: 'Las tarjetas del tema que vencen', min: 4 });
   return out;

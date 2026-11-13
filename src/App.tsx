@@ -39,6 +39,7 @@ import { ColdRecall } from './screens/ColdRecall';
 import { Motor } from './screens/Motor';
 import { NuevaTarjeta } from './screens/NuevaTarjeta';
 import { PuntosDebiles } from './screens/PuntosDebiles';
+import { PuntoTema } from './screens/PuntoTema';
 import { Repaso } from './screens/Repaso';
 import { Tarjetas } from './screens/Tarjetas';
 import { usePendientes } from './ui/useStudy';
@@ -89,7 +90,10 @@ export function App() {
       case 'tesis': contenido = <TesisPantalla key={ruta.param} day={day} itemId={ruta.param} />; break;
       case 'unidades': contenido = <Unidades day={day} />; break;
       case 'repaso': contenido = <Repaso day={day} />; break;
-      case 'flojo': contenido = <PuntosDebiles key={ruta.param ?? ''} day={day} filtro={ruta.param === 'recall' ? 'recall' : ''} />; break;
+      case 'flojo':
+        contenido = !ruta.param || ruta.param === 'recall' ? <PuntosDebiles key={ruta.param ?? ''} day={day} filtro={ruta.param ?? ''} />
+          : <PuntoTema key={ruta.param} day={day} id={ruta.param} />;
+        break;
       case 'recall': contenido = <ColdRecall key={ruta.param} day={day} itemId={ruta.param} />; break;
       case 'tarjetas': contenido = <Tarjetas key={ruta.param ?? 'todas'} day={day} frontId={ruta.param || undefined} />; break;
       case 'tarjeta-nueva': contenido = <NuevaTarjeta day={day} />; break;
