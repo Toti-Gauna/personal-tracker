@@ -273,7 +273,7 @@ Pantallas: Estudio (2.1), Sesión (2.2), Cómo funciona (2.3), Test en papel (2.
 - **Tarjeta sanguijuela:** 4 fallos o más ("Otra vez").
 - **Calibración por frente:** lo que creías recordar menos lo que recordaste, en los cold recalls. Positivo: te sobreestimás.
 - **Listo para el final:** promedio de la fuerza de cada capítulo ponderado por sus ejercicios en el examen (40). Lo no estudiado cuenta 0.
-- **Simulacro dirigido:** los 40 ejercicios con más peso en lo flojo: ejercicios del examen × (1 + lo que le falta para 100 / 50).
+- **Simulacro dirigido:** los 40 ejercicios con más peso en lo flojo: ejercicios del examen × lo que le falta para 100 / 20 (al menos 0,3); lo no estudiado pesa 1.
 - **Cómo arreglarlo:** releer lo olvidado (3 min por idea, hasta 9), las tarjetas nuevas y las falladas, y 5 ejercicios de lo que falló en el test (8 min).
 - **Priorizar lo flojo** (encendido de fábrica): si vence más de lo que entra en el tope de 20 min, entran primero los temas flojos y sus tarjetas.
 

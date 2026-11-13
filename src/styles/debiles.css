@@ -131,3 +131,15 @@
 .arreglo-lista { list-style: none; margin: 0; padding: 0; }
 .arreglo-lista li { display: grid; grid-template-columns: 24px minmax(0, 1fr) auto; gap: 12px; align-items: center; padding: 10px 0; border-top: 1px solid var(--linea); }
 .arreglo .nota { text-align: center; margin: 0; }
+
+/* Exámenes */
+.listo-final { display: grid; grid-template-columns: 116px minmax(0, 1fr); gap: 18px; align-items: center; }
+.listo-final .anillo { width: 116px; height: 116px; }
+.listo-final b { font-size: 18px; font-weight: 700; line-height: 1.3; }
+.listo-final p { margin: 6px 0 8px; font-size: 15px; }
+.listo-final .mono { font-size: 13px; }
+.retest-pend { border: 1px solid var(--linea); border-left: 3px solid var(--rutina); border-radius: 12px; padding: 16px; margin-bottom: 18px; }
+.retest-pend b { font-size: 17px; }
+.retest-pend p { margin: 6px 0 0; }
+.hoja-sim .btn-principal { margin-top: 18px; }
+@media print { .barra, .side, .topbar, .hoja-sim .btn-principal, .hoja-sim .nota, .mini-foco { display: none !important; } }

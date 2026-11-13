@@ -363,7 +363,7 @@ export function Repetidos({ st }: { st: StudyState }) {
 /** Simulacro dirigido: cuántos ejercicios de cada capítulo, con más peso en lo flojo. */
 export function Simulacro({ st, a, fuerzas }: { st: StudyState; a?: Activity; fuerzas: Record<number, number | null> }) {
   if (!a?.units) return null;
-  const s = simulacro(fuerzas).sort((x, y) => y.n - x.n);
+  const s = simulacro(fuerzas).sort((x, y) => y.n - x.n || (x.fuerza ?? 101) - (y.fuerza ?? 101));
   const top = s.filter((x) => x.fuerza != null).slice(0, 5);
   const resto = s.filter((x) => !top.includes(x)).reduce((t, x) => t + x.n, 0);
   const max = Math.max(...s.map((x) => x.n), resto);

@@ -163,11 +163,12 @@ export function finalReadiness(fuerzas: Record<number, number | null | undefined
 
 /**
  * Simulacro dirigido: los 40 ejercicios repartidos con más peso en lo flojo y menos en lo que
- * ya dominás. Peso = ejercicios del examen × (1 + lo que le falta para 100 / 50).
+ * ya dominás. Peso = ejercicios del examen × lo que le falta para 100 / 20 (al menos 0,3).
+ * Lo que no estudiaste todavía pesa 1.
  */
 export function simulacro(fuerzas: Record<number, number | null | undefined>, total = 40, mix: Record<number, number> = FINAL_MIX) {
   const ns = Object.keys(mix).map(Number);
-  const w = ns.map((n) => mix[n] * (1 + (100 - (fuerzas[n] ?? 50)) / 50));
+  const w = ns.map((n) => mix[n] * (fuerzas[n] == null ? 1 : Math.max(0.3, (100 - fuerzas[n]!) / 20)));
   const sw = w.reduce((a, b) => a + b, 0);
   const raw = w.map((x) => (x / sw) * total);
   const out = raw.map(Math.floor);

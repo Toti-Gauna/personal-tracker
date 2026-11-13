@@ -40,6 +40,7 @@ import { Motor } from './screens/Motor';
 import { NuevaTarjeta } from './screens/NuevaTarjeta';
 import { PuntosDebiles } from './screens/PuntosDebiles';
 import { PuntoTema } from './screens/PuntoTema';
+import { HojaSimulacro, PuntosExamenes } from './screens/PuntosExamenes';
 import { Repaso } from './screens/Repaso';
 import { Tarjetas } from './screens/Tarjetas';
 import { usePendientes } from './ui/useStudy';
@@ -92,6 +93,8 @@ export function App() {
       case 'repaso': contenido = <Repaso day={day} />; break;
       case 'flojo':
         contenido = !ruta.param || ruta.param === 'recall' ? <PuntosDebiles key={ruta.param ?? ''} day={day} filtro={ruta.param ?? ''} />
+          : ruta.param === 'examenes' ? <PuntosExamenes day={day} />
+          : ruta.param === 'simulacro' ? <HojaSimulacro />
           : <PuntoTema key={ruta.param} day={day} id={ruta.param} />;
         break;
       case 'recall': contenido = <ColdRecall key={ruta.param} day={day} itemId={ruta.param} />; break;
