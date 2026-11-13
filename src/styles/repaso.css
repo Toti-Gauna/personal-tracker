@@ -43,6 +43,11 @@
 .recall h1 { font-size: clamp(30px, 9vw, 40px); margin-bottom: 10px; overflow-wrap: break-word; }
 .recall .btn-principal { margin-top: 16px; }
 .agregar-puntos { display: grid; gap: 4px; margin-top: 8px; }
+.puntos li.no .casilla { border-color: var(--rutina); color: var(--rutina); }
+.puntos li.no .casilla::after { content: '×'; font-size: 17px; line-height: 1; font-weight: 600; }
+.puntos .tarjeta-t b { font-weight: 500; font-size: 17px; justify-self: start; }
+.puntos .tarjeta-t small { font-size: 15px; }
+.sumar-punto { color: var(--sub); font-size: 15px; min-height: 40px; margin-top: 4px; }
 .aviso-recall { border: 1px dashed var(--linea); border-radius: 10px; padding: 14px 16px; margin-top: 16px; }
 .tarj-segs { display: flex; gap: 3px; height: 8px; }
 .tarj-segs span { flex: 1; background: var(--linea); }
