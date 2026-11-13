@@ -196,6 +196,9 @@ export function saveColdRecall(date: string, itemId: string, points: string[], r
   return score;
 }
 
+/** Ejercicios más cortos si el anterior salió perfecto: 2/3 del tiempo (15 → 10 min). */
+export const shorter = (min: number) => Math.max(5, Math.round((min * 2) / 3));
+
 /** Ejercicios hechos; si salieron perfectos, el próximo de esa unidad es más corto. */
 export function completeExercises(date: string, itemId: string, perfect: boolean) {
   const st = getState().study;
@@ -209,7 +212,7 @@ export function completeExercises(date: string, itemId: string, perfect: boolean
         if (r.id === itemId) return { ...r, doneOn: date, perfect };
         if (perfect && s.rules.shortenIfPerfect && !shortened && !r.doneOn && r.activityId === item.activityId && r.unit === item.unit && (r.kind === 'ejercicios' || r.kind === 'examen') && r.due > item.due) {
           shortened = true;
-          return { ...r, min: Math.max(5, Math.round(r.min * 0.6)) };
+          return { ...r, min: shorter(r.min) };
         }
         return r;
       });
