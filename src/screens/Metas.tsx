@@ -11,11 +11,16 @@ import { useStore } from '../state/store';
 import { addProgress, deleteGoal, renameBimester, stepOf } from '../state/goals';
 import { Calendario } from '../ui/Calendario';
 import { GoalRow } from '../ui/GoalRow';
+import { Ruta } from './Ruta';
+import { RutaBimestre } from './RutaBimestre';
+import { RutaEvolucion } from './RutaEvolucion';
+import { RutaMapa } from './RutaMapa';
+import { RutaSemana } from './RutaSemana';
 import '../styles/metas.css';
 
-const TABS = [['semana', 'Semana'], ['mes', 'Mes'], ['bimestre', 'Bimestre'], ['anio', 'Año']] as const;
+const TABS = [['ruta', 'Ruta'], ['semana', 'Semana'], ['mes', 'Mes'], ['bimestre', 'Bim.'], ['anio', 'Año']] as const;
 type Tab = (typeof TABS)[number][0];
-const HORIZON: Record<Tab, Horizon> = { semana: 'semana', mes: 'mes', bimestre: 'bim', anio: 'anio' };
+const HORIZON: Record<Tab, Horizon> = { ruta: 'semana', semana: 'semana', mes: 'mes', bimestre: 'bim', anio: 'anio' };
 const DIAS = ['L', 'M', 'X', 'J', 'V', 'S', 'D'];
 const MES_CORTO = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'];
 const dm = (d: string) => `${parseDate(d).getDate()} ${MES_CORTO[parseDate(d).getMonth()]}`;
@@ -32,7 +37,16 @@ function groupGoals(goals: Goal[]) {
 
 /** 4 · Metas: semana, mes, bimestre y año. */
 export function Metas({ day, tab }: { day: DayLog; tab?: string }) {
-  const actual: Tab = TABS.some(([t]) => t === tab) ? (tab as Tab) : 'semana';
+  // Las pantallas de la ruta que se abren desde la pestaña Ruta.
+  if (tab?.startsWith('bim/')) return <RutaBimestre day={day} n={Number(tab.slice(4))} />;
+  if (tab === 'semana-ruta') return <RutaSemana day={day} />;
+  if (tab === 'mapa') return <RutaMapa day={day} />;
+  if (tab === 'evolucion') return <RutaEvolucion day={day} />;
+  return <MetasTabs day={day} tab={tab} />;
+}
+
+function MetasTabs({ day, tab }: { day: DayLog; tab?: string }) {
+  const actual: Tab = TABS.some(([t]) => t === tab) ? (tab as Tab) : 'ruta';
   const settings = useStore((s) => s.settings)!;
   const names = useStore((s) => s.goals.bimesterNames);
   const days = useStore((s) => s.days);
@@ -47,7 +61,9 @@ export function Metas({ day, tab }: { day: DayLog; tab?: string }) {
 
   // Línea de resumen de cada pestaña.
   let linea = '';
-  if (actual === 'semana') {
+  if (actual === 'ruta') {
+    linea = 'La ruta completa: dónde estás, qué sigue y qué falta. Todo lo que marcás en Hoy empuja esta pantalla.';
+  } else if (actual === 'semana') {
     const gs = groupGoals(list).map(([n, xs]) => [n, xs.reduce((s, g) => s + ratio(valueOf(g, date, ctx), g.target), 0) / xs.length] as const).sort((a, b) => a[1] - b[1]);
     const avg = list.length ? list.reduce((s, g) => s + ratio(valueOf(g, date, ctx), g.target), 0) / list.length : 0;
     linea = `Semana ${bim.week} de ${bim.name}: vas ${pct(avg)}.${gs.length > 1 && avg < 1 ? ` Lo que más falta es ${gs[0][0]} y ${gs[1][0]}.` : ''}`;
@@ -62,26 +78,27 @@ export function Metas({ day, tab }: { day: DayLog; tab?: string }) {
   }
 
   return (
-    <main className="pantalla metas-pag">
+    <main className={`pantalla metas-pag${actual === 'ruta' ? ' es-ruta' : ''}`}>
       <header>
         <h1 className="titulo">Metas</h1>
         <p>{linea}</p>
       </header>
-      <div className="pestanas" role="tablist" aria-label="Horizonte" style={{ gridTemplateColumns: 'repeat(4, 1fr)' }}>
+      <div className="pestanas" role="tablist" aria-label="Horizonte" style={{ gridTemplateColumns: 'repeat(5, 1fr)' }}>
         {TABS.map(([id, nombre]) => (
           <a key={id} role="tab" aria-selected={actual === id} href={`#/metas/${id}`}>{nombre}</a>
         ))}
       </div>
 
+      {actual === 'ruta' && <Ruta day={day} />}
       {actual === 'semana' && <Semana date={date} list={list} days={days} week={bim.week} editar={editar} />}
       {actual === 'mes' && <Mes date={date} list={list} days={days} editar={editar} />}
       {actual === 'bimestre' && <Bimestre day={day} list={list} name={bim.name} editar={editar} />}
       {actual === 'anio' && <Anio date={date} list={list} editar={editar} />}
 
-      {list.length > 0 && (
+      {actual !== 'ruta' && list.length > 0 && (
         <button className="subrayado editar-metas" aria-pressed={editar} onClick={() => setEditar((v) => !v)}>{editar ? 'Listo' : 'Borrar metas'}</button>
       )}
-      <a className="nueva-meta-btn" href={`#/meta-nueva/${HORIZON[actual]}`}>+ {actual === 'mes' ? 'Meta del mes' : actual === 'anio' ? 'Meta del año' : actual === 'bimestre' ? 'Meta del bimestre' : 'Nueva meta'}</a>
+      {actual !== 'ruta' && <a className="nueva-meta-btn" href={`#/meta-nueva/${HORIZON[actual]}`}>+ {actual === 'mes' ? 'Meta del mes' : actual === 'anio' ? 'Meta del año' : actual === 'bimestre' ? 'Meta del bimestre' : 'Nueva meta'}</a>}
     </main>
   );
 }

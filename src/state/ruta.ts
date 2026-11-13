@@ -134,3 +134,9 @@ export function resetWeek(date: string) {
   });
 }
 
+
+/** La propuesta de la semana se guarda sola la primera vez que se abre la app esa semana (el lunes, normalmente). */
+export function ensureWeek(date: string) {
+  const { key, plan, saved } = weekPlan(date);
+  if (!saved) saveWeek(key, plan);
+}
