@@ -16,7 +16,7 @@ const FILAS = [
   { id: 'cert', name: 'Certificación', color: 'var(--rutina)' },
 ] as const;
 
-const cortoMath = (s: string) => s.replace(/^CONAMAT /, '').replace(/ \d.*$/, '').replace(/,.*$/, '');
+const cortoMath = (s: string) => s.replace(/^CONAMAT /, '').split(',')[0].replace(/ \d.*$/, '').split(' ').slice(0, 2).join(' ').replace(/ \(.*$/, '');
 
 /** 7.6 Ruta en escritorio: la grilla de 18 bimestres, los gráficos en dos filas, "Ahora" y "Qué falta". */
 export function RutaEscritorio({ day }: { day: DayLog }) {
@@ -66,7 +66,7 @@ export function RutaEscritorio({ day }: { day: DayLog }) {
       </header>
 
       <Card className="r-grilla">
-        <div className="rg" role="table" aria-label="Los 18 bimestres: producto, matemática, programación y certificación">
+        <div className="rg" lang="es" role="table" aria-label="Los 18 bimestres: producto, matemática, programación y certificación">
           <div className="rg-fila rg-anios" role="row">
             <span role="columnheader" />
             {ROADMAP.route.years.map((y) => <span key={y.year} role="columnheader" className="rg-anio" style={{ gridColumn: 'span 6' }}>Año {y.year} · {y.profile}</span>)}
@@ -94,7 +94,7 @@ export function RutaEscritorio({ day }: { day: DayLog }) {
       </Card>
 
       <div className="r-esc-fila tres">
-        <Card title="Mejora diaria" aside="últimos 30 días">
+        <Card title="Mejora diaria" aside={serie.titulo}>
           <div className="r-grande"><b className="mono">{num(promedio)} %</b><span className="sub">promedio</span></div>
           <MejoraChart values={serie.values} avg={serie.avg} labels={serie.labels} label="Mejora de los últimos 30 días" />
           <Leyenda items={[{ label: 'cada día', color: 'var(--economia)', kind: 'area' }, { label: 'promedio de 7 días', color: 'var(--tinta)', kind: 'linea' }]} />
