@@ -119,3 +119,6 @@
 .archivo small { display: block; color: var(--sub); font-size: 14px; }
 .archivo input { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
 .pegar { display: grid; gap: 8px; margin-top: 16px; }
+
+.regla button.valor { min-height: 40px; cursor: pointer; }
+.motor .fila-boton small, .motor .archivo small { display: block; color: var(--sub); font-size: 15px; }
