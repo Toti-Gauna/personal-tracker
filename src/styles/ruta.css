@@ -45,7 +45,7 @@
 .heat .h2 { fill: color-mix(in srgb, var(--salud) 65%, var(--linea)); }
 .heat .h3 { fill: var(--salud); }
 .heat .h-libre { fill: transparent; stroke: var(--linea); stroke-dasharray: 2 2; }
-.heat .h-fut { fill: transparent; stroke: var(--linea); opacity: 0.4; }
+.heat .h-fut { fill: color-mix(in srgb, var(--linea) 35%, transparent); }
 .radar { max-width: 320px; margin: 0 auto; }
 .rd-grid { fill: none; stroke: var(--linea); stroke-width: 1; }
 .rd-eje { fill: var(--sub); font: 13px var(--font-text); }
@@ -243,3 +243,5 @@
 .mapa-item { color: var(--tinta); text-decoration: none; display: block; min-width: 0; }
 .r-pant .segmentado { margin: 8px 0 14px; }
 .nueva-sem { display: grid; gap: 8px; margin-top: 12px; justify-items: start; }
+.heat-pie { margin-top: 10px; font-size: 14px; }
+.r-pant .r-card .r-stats3 { margin: 14px 0 0; }

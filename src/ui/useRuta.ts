@@ -92,10 +92,13 @@ const dm = (d: string) => `${Number(d.slice(8))} ${MES[Number(d.slice(5, 7)) - 1
 /** La serie de mejora según el rango: días, semanas, meses, bimestres o años (promedios). */
 export function mejoraSerie(days: Record<string, DayLog>, date: string, rango: Rango) {
   if (rango === 'dia') {
-    const s = dailyImprovementSeries(days, addDays(date, -29), date);
+    // Con pocos días, el gráfico arranca en el primer día cargado (gráfico parcial), no en 30 días de ceros.
+    const primero = Object.keys(days).sort()[0] ?? date;
+    const desde = addDays(date, -29) > primero ? addDays(date, -29) : primero < date ? primero : addDays(date, -1);
+    const s = dailyImprovementSeries(days, desde, date);
     return {
-      values: s.map((x) => x.mejora), avg: s.map((x) => x.mejora7), titulo: 'últimos 30 días',
-      labels: s.map((x, i) => (i === s.length - 1 ? 'hoy' : i % 7 === 0 ? dm(x.date) : '')),
+      values: s.map((x) => x.mejora), avg: s.map((x) => x.mejora7), titulo: s.length < 30 ? `${s.length} ${s.length === 1 ? 'día' : 'días'} desde el día 0` : 'últimos 30 días',
+      labels: s.map((x, i) => (i === s.length - 1 ? 'hoy' : i % 7 === 0 && s.length - 1 - i >= 4 ? dm(x.date) : '')),
       cargados: s.filter((x) => x.logged).length,
     };
   }
@@ -124,9 +127,10 @@ export function constancia(days: Record<string, DayLog>, date: string, weeks = 1
   return Array.from({ length: weeks * 7 }, (_, i) => {
     const d = addDays(start, i);
     const pct = dayPct(days[d]);
-    const libre = i % 7 === 1 && !days[d];
+    const primero = Object.keys(days).sort()[0] ?? date;
+    const libre = i % 7 === 1 && !days[d] && d >= primero;
     const level = pct == null ? null : pct >= 0.85 ? 3 : pct >= 0.5 ? 2 : pct > 0 ? 1 : 0;
-    return { date: d, level, libre, futuro: d > date };
+    return { date: d, level, libre, futuro: d > date || d < primero };
   });
 }
 
