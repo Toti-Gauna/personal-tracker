@@ -9,7 +9,7 @@ import { toast } from '../ui/avisos';
 import { Casilla } from '../ui/Casilla';
 import '../styles/estudio.css';
 
-/** 2.7 Tesis: se abre desde el repaso del día en que vence (+3 del capítulo). */
+/** 2.7 Tesis: el día 3, al día siguiente de aprobar el test, empezando por sus errores. */
 export function TesisPantalla({ day, itemId }: { day: DayLog; itemId?: string }) {
   const study = useStore((s) => s.study);
   const item = study.reviews.find((r) => r.id === itemId && r.kind === 'tesis');
@@ -41,9 +41,9 @@ export function TesisPantalla({ day, itemId }: { day: DayLog; itemId?: string })
   return (
     <main className="pantalla tesis" style={{ ['--c' as string]: front ? AREAS[front.color].css : 'var(--ing)' }}>
       <div className="topbar"><a className="volver" href="#/estudio">Estudio</a></div>
-      <div className="kicker" style={{ color: 'var(--economia)' }}>Tesis · día +3 · después del test</div>
+      <div className="kicker" style={{ color: 'var(--economia)' }}>Tesis · día 3 · al día siguiente del test</div>
       <h1 className="titulo">{titulo}</h1>
-      {vence && <p className="sub">Vence el {fmtFecha(item.due).toLowerCase()}: ese día aparece en tu sesión, después de lo que vence. Nunca va el mismo día que el test.</p>}
+      {vence && <p className="sub">Vence el {fmtFecha(item.due).toLowerCase()}: ese día va en tu sesión, después del test y antes del capítulo nuevo.</p>}
 
       <div className="segmentado" role="radiogroup" aria-label="Dónde la escribís">
         <button role="radio" aria-checked={modo === 'app'} onClick={() => setModo('app')}>En la app</button>
