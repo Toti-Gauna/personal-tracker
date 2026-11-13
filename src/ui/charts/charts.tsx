@@ -17,7 +17,7 @@ export function Sparkline({ values, color, label, w = 100, h = 32 }: { values: n
 }
 
 /** Anillo de avance. */
-export function Anillo({ value, label, size = 120, color = 'var(--ing)' }: { value: number; label: string; size?: number; color?: string }) {
+export function Anillo({ value, label, size = 120, color = 'var(--ing)', texto }: { value: number; label: string; size?: number; color?: string; texto?: string }) {
   const ref = useDibujo<SVGSVGElement>([value]);
   const r = 46;
   const v = Math.max(0, Math.min(1, value));
@@ -25,7 +25,7 @@ export function Anillo({ value, label, size = 120, color = 'var(--ing)' }: { val
     <svg ref={ref} className="anillo" width={size} height={size} viewBox="0 0 120 120" role="img" aria-label={`${label}: ${Math.round(v * 100)} %`} style={{ ['--c' as string]: color }}>
       <circle cx="60" cy="60" r={r} className="an-fondo" />
       {v > 0 && <path className="an-arco dibujo" d={`M60,14 A46,46 0 ${v > 0.5 ? 1 : 0} 1 ${60 + r * Math.sin(v * 2 * Math.PI - 1e-6)},${60 - r * Math.cos(v * 2 * Math.PI - 1e-6)}`} />}
-      <text x="60" y="62" textAnchor="middle" className="an-n">{Math.round(v * 100)} %</text>
+      <text x="60" y="62" textAnchor="middle" className="an-n">{texto ?? `${Math.round(v * 100)} %`}</text>
       <text x="60" y="82" textAnchor="middle" className="an-l">{label}</text>
     </svg>
   );

@@ -345,7 +345,7 @@ export function mapa(st: StudyState, a: Activity) {
     if (!s.learnedOn && !s.tests.length) return [];
     const f = sources(st, id);
     const ej = st.attempts.find((x) => x.tema === id && x.kind === 'ejercicio');
-    return [{ n: u.n, titulo: u.title, ...f, d8: ej?.de ?? null }];
+    return [{ n: u.n, titulo: u.corto ?? u.title, ...f, d8: ej?.de ?? null }];
   });
 }
 

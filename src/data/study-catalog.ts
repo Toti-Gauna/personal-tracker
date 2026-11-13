@@ -14,17 +14,17 @@ const t = (count: number, desc: string, min = 25) => ({ count, desc, min });
  * desde el cap. 2 el test suma 5 de los anteriores (ver `testOf`). Todos duran 25 min.
  */
 export const CONAMAT_B1: Unit[] = [
-  { n: 1, title: 'Números reales', test: t(15, '15 ejercicios de clasificar, ordenar y valor absoluto.') },
-  { n: 2, title: 'Números enteros', test: t(15, '20 operaciones combinadas con signos de agrupación.') },
-  { n: 3, title: 'Teoría de números', test: t(15, 'Divisibilidad, primos, MCD y MCM, más 25 % de 01-02.') },
-  { n: 4, title: 'Números racionales', test: t(15, 'Fracciones equivalentes, operaciones y fracciones complejas.') },
-  { n: 5, title: 'Números decimales', test: t(15, 'Operaciones y pasar de fracción a decimal y al revés.') },
-  { n: 6, title: 'Potenciación y radicación', test: t(15, 'Leyes de exponentes, simplificar raíces y racionalizar.') },
-  { n: 7, title: 'Notación científica y logaritmos', test: t(15, 'Convertir, operar y aplicar propiedades de logaritmos.') },
-  { n: 8, title: 'Razones y proporciones', test: t(15, 'Regla de tres, porcentajes e interés simple con problemas.') },
-  { n: 9, title: 'Sistemas de numeración', test: t(15, 'Conversiones entre bases (binario, octal, hex y otras) y operaciones en base 2.') },
-  { n: 10, title: 'Sistema métrico decimal', test: t(15, 'Conversiones de longitud, masa, capacidad, superficie y volumen.') },
-  { n: 11, title: 'Razonamiento aritmético', test: t(10, '10 problemas de enunciado mezclando todo lo anterior.') },
+  { n: 1, title: 'Números reales', corto: 'Números reales', test: t(15, '15 ejercicios de clasificar, ordenar y valor absoluto.') },
+  { n: 2, title: 'Números enteros', corto: 'Números enteros', test: t(15, '20 operaciones combinadas con signos de agrupación.') },
+  { n: 3, title: 'Teoría de números', corto: 'Teoría de números', test: t(15, 'Divisibilidad, primos, MCD y MCM, más 25 % de 01-02.') },
+  { n: 4, title: 'Números racionales', corto: 'Racionales', test: t(15, 'Fracciones equivalentes, operaciones y fracciones complejas.') },
+  { n: 5, title: 'Números decimales', corto: 'Decimales', test: t(15, 'Operaciones y pasar de fracción a decimal y al revés.') },
+  { n: 6, title: 'Potenciación y radicación', corto: 'Potenciación', test: t(15, 'Leyes de exponentes, simplificar raíces y racionalizar.') },
+  { n: 7, title: 'Notación científica y logaritmos', corto: 'Notación y logs.', test: t(15, 'Convertir, operar y aplicar propiedades de logaritmos.') },
+  { n: 8, title: 'Razones y proporciones', corto: 'Razones', test: t(15, 'Regla de tres, porcentajes e interés simple con problemas.') },
+  { n: 9, title: 'Sistemas de numeración', corto: 'Numeración', test: t(15, 'Conversiones entre bases (binario, octal, hex y otras) y operaciones en base 2.') },
+  { n: 10, title: 'Sistema métrico decimal', corto: 'Sistema métrico', test: t(15, 'Conversiones de longitud, masa, capacidad, superficie y volumen.') },
+  { n: 11, title: 'Razonamiento aritmético', corto: 'Razonamiento', test: t(10, '10 problemas de enunciado mezclando todo lo anterior.') },
 ];
 
 /** Puntos clave de cada capítulo («tema :: detalle»): contra esto se compara el cold recall. */

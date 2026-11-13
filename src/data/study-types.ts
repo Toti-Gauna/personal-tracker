@@ -13,6 +13,8 @@ export type ActType = 'lectura' | 'curso' | 'practica' | 'video' | 'otra';
 export interface Unit {
   n: number;
   title: string;
+  /** Nombre corto para tablas ("Potenciación"). */
+  corto?: string;
   test: { count: number; desc: string; min: number };
 }
 
