@@ -111,6 +111,25 @@ export function register(me: string, partner: string, today = dateKey()) {
   }));
 }
 
+/**
+ * Reinicia los días desde el día 0: hoy pasa a ser el día 0 y se borra lo que depende de los días
+ * (registro de cada día, foco, tareas pasadas a mañana, avance de la ruta, sellos y XP, y el avance
+ * de las metas). Se conservan los ajustes, las tarjetas y el estudio, los entrenos y los pesajes,
+ * y las metas con sus nombres.
+ */
+export function resetFromDayZero(today = dateKey()) {
+  setState((s) => ({
+    ...s,
+    days: {},
+    focus: null,
+    carry: {},
+    ruta: emptyRuta(),
+    profile: { seals: {}, seen: [] },
+    goals: { ...s.goals, goals: s.goals.goals.map((g) => ({ ...g, from: periodKey(g.horizon, today), progress: {} })) },
+    settings: s.settings ? { ...s.settings, startDate: today, lastBackup: s.settings.lastBackup } : s.settings,
+  }));
+}
+
 export function startDay(routine: RoutineId, wake: string, date = dateKey()) {
   setState((s) => {
     const carry = s.carry[date] ?? {};

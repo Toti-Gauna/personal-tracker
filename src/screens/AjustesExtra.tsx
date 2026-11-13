@@ -1,7 +1,8 @@
 import { useRef, useState } from 'react';
 import { ROUTINES } from '../data/defaults';
 import { fmtDur, toHHMM, toMin } from '../data/time';
-import { getState, resetState, setState, useStore } from '../state/store';
+import { ir } from '../lib/routes';
+import { getState, resetFromDayZero, resetState, setState, useStore } from '../state/store';
 import { markBackup, resetDayRoutines, setDayRoutine, setNames } from '../state/profile';
 import { toast } from '../ui/avisos';
 import '../styles/perfil.css';
@@ -73,6 +74,14 @@ export function AjustesDatos({ today }: { today: string }) {
   const tarjetas = useStore((s) => s.study.cards.length);
   const dias = useStore((s) => Object.keys(s.days).length);
   const sesiones = useStore((s) => s.train.sessions.length);
+  const [reiniciar, setReiniciar] = useState(false);
+
+  const hacerReinicio = () => {
+    resetFromDayZero(today);
+    setReiniciar(false);
+    toast({ title: 'Listo: hoy es el día 0', sub: 'Elegí a qué hora te levantaste para empezar', color: 'var(--salud)' }, false);
+    ir('hoy');
+  };
 
   const bajar = () => {
     const blob = new Blob([JSON.stringify({ trazo: 1, exportado: today, estado: getState() }, null, 1)], { type: 'application/json' });
@@ -116,6 +125,20 @@ export function AjustesDatos({ today }: { today: string }) {
       <button className="btn-principal" onClick={bajar}>Descargar copia</button>
       <button className="btn-borde" onClick={() => input.current?.click()}>Restaurar desde un archivo</button>
       <input ref={input} type="file" accept="application/json,.json" hidden onChange={(e) => restaurar(e.target.files?.[0])} />
+
+      <div className="etiqueta aj-t">Empezar de nuevo</div>
+      <p className="sub">Hoy pasa a ser el día 0. Se borran los días, las rachas, los sellos, el XP y el avance de la ruta y de las metas. Se conservan tus ajustes, las tarjetas y el estudio, los entrenos, el peso y tus metas.</p>
+      {!reiniciar ? (
+        <button className="btn-borde" onClick={() => setReiniciar(true)}>Reiniciar desde el día 0</button>
+      ) : (
+        <div className="aviso-reinicio" role="alertdialog" aria-labelledby="reinicio-t">
+          <b id="reinicio-t">¿Reiniciar desde el día 0?</b>
+          <p className="sub">Se van a borrar {dias} {dias === 1 ? 'día' : 'días'} de registro. No se puede deshacer, salvo con una copia.</p>
+          <button className="btn-principal" onClick={() => { bajar(); hacerReinicio(); }}>Descargar copia y reiniciar</button>
+          <button className="btn-borde" onClick={hacerReinicio}>Reiniciar sin copia</button>
+          <button className="terminar-foco" onClick={() => setReiniciar(false)}>Cancelar</button>
+        </div>
+      )}
     </main>
   );
 }

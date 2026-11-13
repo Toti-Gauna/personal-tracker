@@ -292,6 +292,13 @@ El repo es público y está bien así para estos datos.
 - **Competencias:** cada ítem suma a un eje (Matemática; Seguridad, Cloud y Hardware por palabras clave; Producto; el resto, ML), ponderado por horas. La meta del año 1 es todo hecho hasta el B6; la del año 3, hasta el B18.
 - **Constancia:** el martes sin registro no cuenta como falta. Los gráficos con pocos días muestran el tramo que hay y avisan que se completan con el uso.
 
+## 5 quater. Reiniciar desde el día 0
+
+- En Ajustes → Copia de seguridad → **Empezar de nuevo**, el botón "Reiniciar desde el día 0" hace que hoy sea el día 0, con una confirmación que ofrece descargar una copia antes.
+- **Se borra:** el registro de cada día, el foco, las tareas pasadas a mañana, las rachas, los sellos y el XP, el avance de la ruta y el avance de las metas.
+- **Se conserva:** los ajustes (nombres, sonidos, alarmas, rutinas del día), las tarjetas y el estudio, los entrenos y los pesajes, y las metas con sus nombres.
+- Después del reinicio la app muestra "¿A qué hora te levantaste?" y arranca el día 0.
+
 ## 6. Olas de desarrollo (un PR por ola, un modelo por ola)
 
 | Ola | Qué sale | Modelo · esfuerzo |
@@ -584,4 +591,8 @@ En el día a día alcanza con **Haiku 5.5 · bajo**: pegás el JSON del cierre y
 - Metas abre en Ruta: bimestre con anillo y real contra plan, carriles con tendencia, tu evolución, compuertas y los 18 bimestres.
 - Bimestre en detalle, de la ruta a tu día (propuesta semanal editable y metas de Hoy con su etiqueta), el mapa, tu evolución con seis gráficos y la versión de escritorio.
 - Marcar una meta con ruta suma a la mejora, avanza la meta semanal, mueve el carril y recalcula el ritmo.
+
+**2026-11-13 · reiniciar desde el día 0**
+
+- Botón en Ajustes → Copia de seguridad para reiniciar los días desde el día 0, con confirmación y copia opcional.
 
