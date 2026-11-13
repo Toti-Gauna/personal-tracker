@@ -5,14 +5,16 @@ import type { Rules } from '../data/study-types';
 import type { DayLog } from '../data/types';
 import { useStore } from '../state/store';
 import { addCards, setRules } from '../state/study';
+import { DIA, MAX_TRIES } from '../data/study-catalog';
 import { toast } from '../ui/avisos';
 import { addDays } from '../data/time';
 import '../styles/estudio.css';
 import '../styles/repaso.css';
 
+/** Días del capítulo: 1 → 2 → 3 → 8 → 22 → 61. */
 const ESCALERA: [string, string, string][] = [
-  ['0', 'Estudio + test', 'var(--tinta)'], ['+1', 'Cold recall', 'var(--economia)'], ['+3', 'Tesis', 'var(--economia)'],
-  ['+7', 'Repetir', 'var(--ing)'], ['+21', 'Repetir', 'var(--ing)'], ['+60', 'Examen', 'var(--salud)'],
+  [String(DIA.estudiar), 'Estudiar', 'var(--tinta)'], [String(DIA.test), 'Cold recall + test', 'var(--economia)'], [String(DIA.tesis), 'Tesis', 'var(--economia)'],
+  [String(DIA.e8), 'Repetir', 'var(--ing)'], [String(DIA.e22), 'Repetir', 'var(--ing)'], [String(DIA.e61), 'Examen', 'var(--salud)'],
 ];
 
 /** Una regla con su valor en caja; tocarlo pasa al siguiente valor posible. */
@@ -92,7 +94,8 @@ export function Motor({ day, seccion }: { day: DayLog; seccion?: string }) {
       </ol>
 
       <div className="etiqueta rep-t">Reglas</div>
-      <Ajuste label="Cold recall al día siguiente" desc={`Solo de lo nuevo de ayer; si da ${Math.round(r.coldSkipAt * 100)} % o más, ese tema no vuelve hasta +7`} value="si es nuevo" fmt={(v) => v} />
+      <Ajuste label="Cold recall antes del test" desc={`El día ${DIA.test}, 5 min contra el capítulo; con ${Math.round(r.coldSkipAt * 100)} % o más no hace falta releer`} value="día 2" fmt={(v) => v} />
+      <Ajuste label="Test sin aprobar" desc={`Releer al día siguiente y re-test al otro; a la ${MAX_TRIES === 3 ? 'tercera' : `${MAX_TRIES}.ª`} vez, el tema queda flojo`} value={`${MAX_TRIES} veces`} fmt={(v) => v} />
       <Ajuste label="Releer cuando falla" desc="Cold recall por debajo de este número o tarjeta fallada 2 veces" value={r.rereadBelow} opciones={[0.6, 0.65, 0.7, 0.75, 0.8]}
         fmt={(v) => `< ${Math.round(v * 100)} %`} onChange={(v) => set({ rereadBelow: v })} />
       <Ajuste label="Retención buscada" desc="Cuánto querés recordar; más alto, más repasos" value={r.retention} opciones={[0.85, 0.88, 0.9, 0.92, 0.95]}
