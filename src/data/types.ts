@@ -161,3 +161,8 @@ export interface FocusState {
   /** Actividad de la sesión de estudio, o 'repaso' para el repaso del día. */
   activityId?: string;
 }
+
+// Tipos del plan T+18 (definidos junto a sus datos en plan.ts).
+export type {
+  Capa, CorteHandyx, Entrega, Entrevista, EstadoPostulacion, EventoRama, Hito, MetaAnio, MetaBimestre, MetaGenerada, Postulacion, Proyecto, RespuestaEnsayada,
+} from './plan';
