@@ -1,7 +1,9 @@
 import { useSyncExternalStore } from 'react';
 import { DEFAULT_BLOCK_PRESETS, DEFAULT_PRESETS } from '../data/defaults';
 import { buildBlocks, newId, planDay } from '../data/schedule';
-import { dayTypeOf } from '../data/routines';
+import { routineFor } from '../data/routines';
+import { emptyPlan, DEFAULT_PLAN_SETTINGS, type PlanSettings, type PlanState } from '../data/plan-state';
+import { semanaDelPlan, ventanaW } from '../data/plan';
 import { addDays, dateKey } from '../data/time';
 import { emptyStudy } from '../data/study-catalog';
 import { defaultGoals, emptyGoals } from '../data/goals-catalog';
@@ -24,28 +26,38 @@ export interface State {
   goals: GoalsState;
   train: TrainState;
   ruta: RutaState;
+  /** Plan T+18: entrevistas, postulaciones, contadores, proyectos, Handyx, metas generadas. */
+  plan: PlanState;
   /** Sellos ganados: id → fecha. */
   profile: { seals: Record<string, string>; /** Sellos cuya pantalla de logro ya viste. */ seen: string[] };
 }
 
 const KEY = 'trazo.v1';
-const empty = (): State => ({ settings: null, days: {}, focus: null, carry: {}, study: emptyStudy(), goals: emptyGoals(), train: emptyTrain(), ruta: emptyRuta(), profile: { seals: {}, seen: [] } });
+const empty = (): State => ({ settings: null, days: {}, focus: null, carry: {}, study: emptyStudy(), goals: emptyGoals(), train: emptyTrain(), ruta: emptyRuta(), plan: emptyPlan(), profile: { seals: {}, seen: [] } });
 
 function load(): State {
   try {
     const raw = localStorage.getItem(KEY);
-    if (raw) {
-      const parsed = JSON.parse(raw);
-      // Migración: la ola 1 no tenía estudio y la ola 2 no tenía reglas, registro ni puntos.
-      const base = emptyStudy();
-      const study = parsed.study ? { ...base, ...parsed.study, attempts: parsed.study.attempts ?? [], rules: { ...base.rules, ...parsed.study.rules, pesos: { ...base.rules.pesos, ...parsed.study.rules?.pesos } } } : base;
-      const goals = parsed.goals ? { ...emptyGoals(), ...parsed.goals } : null;
-      const train = parsed.train ? { ...emptyTrain(), ...parsed.train } : emptyTrain();
-      const ruta = { ...emptyRuta(), ...(parsed.ruta ?? {}) };
-      return { ...empty(), ...parsed, study, train, ruta, profile: { seals: {}, seen: Object.keys(parsed.profile?.seals ?? {}), ...(parsed.profile ?? {}) }, goals: migrateGoals(goals ?? seedGoals(parsed.settings?.startDate ?? dateKey())) };
-    }
+    if (raw) return migrate(JSON.parse(raw));
   } catch { /* sin storage o JSON roto */ }
   return empty();
+}
+
+/**
+ * Lleva un estado guardado (trazo.v1) a la forma actual. Solo suma lo que falta: los días ya
+ * guardados quedan como estaban.
+ */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function migrate(parsed: any): State {
+  // Migración: la ola 1 no tenía estudio y la ola 2 no tenía reglas, registro ni puntos.
+  const base = emptyStudy();
+  const study = parsed.study ? { ...base, ...parsed.study, attempts: parsed.study.attempts ?? [], rules: { ...base.rules, ...parsed.study.rules, pesos: { ...base.rules.pesos, ...parsed.study.rules?.pesos } } } : base;
+  const goals = parsed.goals ? { ...emptyGoals(), ...parsed.goals } : null;
+  const train = parsed.train ? { ...emptyTrain(), ...parsed.train } : emptyTrain();
+  const ruta = { ...emptyRuta(), ...(parsed.ruta ?? {}) };
+  // Ola 8: el plan T+18 arranca vacío; los días ya guardados no cambian.
+  const plan = { ...emptyPlan(), ...(parsed.plan ?? {}) };
+  return { ...empty(), ...parsed, study, train, ruta, plan, profile: { seals: {}, seen: Object.keys(parsed.profile?.seals ?? {}), ...(parsed.profile ?? {}) }, goals: migrateGoals(goals ?? seedGoals(parsed.settings?.startDate ?? dateKey())) };
 }
 
 let state: State = load();
@@ -118,12 +130,27 @@ export function startDay(routine: RoutineId, wake: string, date = dateKey()) {
     const { [date]: _, ...restCarry } = s.carry;
     // Las metas que empujan la ruta llevan su etiqueta (ref y part) desde que empieza el día.
     const refs = refsForDay(s.ruta, date);
-    const dayType = dayTypeOf(date);
-    const blocks = buildBlocks(planDay(date, routine, wake, dayType), carry).map((b) => (refs[b.key] ? { ...b, ...refs[b.key] } : b));
-    const day: DayLog = { date, wake, routine, dayType, blocks, notes: [], focus: [] };
+    const cfg = planSettings(s.settings);
+    const dayType = routineFor(date, cfg);
+    const t0 = s.settings?.startDate;
+    const ventana = ventanaW(date, t0).ahora?.id;
+    const entrevista = entrevistaCerca(s.plan, date);
+    const blocks = buildBlocks(planDay(date, routine, wake, dayType, { ventana, entrevista }), carry).map((b) => (refs[b.key] ? { ...b, ...refs[b.key] } : b));
+    const day: DayLog = { date, wake, routine, dayType, ...(ventana ? { ventana } : {}), blocks, notes: [], focus: [] };
     return { ...s, days: { ...s.days, [date]: day }, carry: restCarry };
   });
 }
+
+/** Ajustes del plan con los valores de fábrica. */
+export const planSettings = (st: Settings | null): PlanSettings => ({ ...DEFAULT_PLAN_SETTINGS, ...(st?.plan ?? {}) });
+
+/** ¿Hay una entrevista cargada entre hoy y dentro de 3 días? */
+export function entrevistaCerca(p: PlanState, date: string) {
+  return p.entrevistas.some((e) => e.fecha >= date && e.fecha <= addDays(date, 3));
+}
+
+/** Semana del plan para una fecha, con el T0 de los ajustes. */
+export const semanaPlan = (date: string) => semanaDelPlan(date, state.settings?.startDate);
 
 export function updateDay(date: string, fn: (d: DayLog) => DayLog) {
   setState((s) => (s.days[date] ? { ...s, days: { ...s.days, [date]: fn(s.days[date]) } } : s));

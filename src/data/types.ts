@@ -35,6 +35,8 @@ export interface BlockTemplate {
   fixed?: string;
   /** Abre una sesión de foco (sin valor: sí). */
   focus?: boolean;
+  /** Rama del plan T+18 ("main" = Trazo); sin valor, fuera del plan. */
+  rama?: RamaOMain;
   tasks: string[];
 }
 
@@ -62,6 +64,8 @@ export interface Block extends RoadmapLink {
   fixed: boolean;
   /** Abre una sesión de foco (sin valor: sí). */
   focus?: boolean;
+  /** Rama del plan T+18 ("main" = Trazo); sin valor, fuera del plan. */
+  rama?: RamaOMain;
   tasks: Task[];
 }
 
@@ -83,8 +87,10 @@ export interface DayLog {
   wake: string;
   /** Modo del modal "Buen día": 04:00 completo, 05:00 corto u otra hora. */
   routine: RoutineId;
-  /** Rutina del día de la semana: lunes a viernes o fin de semana. */
-  dayType?: 'weekday' | 'weekend';
+  /** Rutina del día: lunes a viernes, fin de semana, con trabajo o día libre. */
+  dayType?: 'weekday' | 'weekend' | 'con-trabajo' | 'libre';
+  /** Ventana de matemática del plan si cayó ese día ("W1"). */
+  ventana?: string;
   blocks: Block[];
   notes: string[];
   focus: FocusEntry[];
@@ -135,6 +141,8 @@ export interface Settings {
   areaNames?: Partial<Record<Area, string>>;
   /** Último respaldo descargado (fecha). */
   lastBackup?: string;
+  /** Plan T+18: rutina activa, día libre, T+2 y umbrales de Handyx. */
+  plan?: Partial<import('./plan-state').PlanSettings>;
   startDate: string;
   presets: Preset[];
   /** Preset por bloque: key del bloque → id del preset. */

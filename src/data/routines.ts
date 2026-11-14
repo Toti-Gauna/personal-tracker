@@ -5,10 +5,18 @@
  */
 import raw from '../../data/routines.json';
 import { parseDate, toHHMM, toMin } from './time';
-import type { Area, BlockKind, BlockTemplate, RoutineId } from './types';
+import { esRama } from './ramas';
+import type { Area, BlockKind, BlockTemplate, RamaOMain, RoutineId } from './types';
 
-export type DayType = 'weekday' | 'weekend';
-export const DAY_TYPES: DayType[] = ['weekday', 'weekend'];
+/**
+ * Rutinas: lunes a viernes mientras buscás trabajo ("weekday"), fin de semana ("weekend"),
+ * lunes a viernes con trabajo nuevo ("con-trabajo", reemplaza a weekday desde T+2) y el día
+ * libre ("libre": solo repasos y un entrenamiento suave).
+ */
+export type DayType = 'weekday' | 'weekend' | 'con-trabajo' | 'libre';
+export const DAY_TYPES: DayType[] = ['weekday', 'weekend', 'con-trabajo', 'libre'];
+/** Las que reparten los días de la semana; las otras reemplazan a una o son el día libre. */
+const BASE: DayType[] = ['weekday', 'weekend'];
 
 export interface RoutineBlock {
   id: string;
@@ -27,12 +35,18 @@ export interface RoutineBlock {
   meta?: boolean;
   /** Tareas con que arranca la meta. */
   tasks?: string[];
+  /** Rama del plan T+18 ("main" = Trazo). Sin rama: fuera del plan (en gris). */
+  rama?: RamaOMain;
 }
 
 export interface DayRoutineDef {
   label: string;
-  /** Días ISO: 1 = lunes … 7 = domingo. */
-  days: number[];
+  /** Días ISO: 1 = lunes … 7 = domingo (solo weekday y weekend). */
+  days?: number[];
+  /** Rutina a la que reemplaza cuando está activa (con-trabajo → weekday). */
+  reemplaza?: DayType;
+  /** Es la del día libre. */
+  libre?: boolean;
   blocks: RoutineBlock[];
 }
 
@@ -40,6 +54,8 @@ export interface RoutinesFile {
   timezone: string;
   /** Hora de levantarse de cada modo del modal "Buen día". */
   wake: Record<'completo' | 'corto', string>;
+  /** Día libre de fábrica (ISO: 2 = martes). Se cambia en Ajustes. */
+  diaLibre: number;
   dayRoutines: Record<DayType, DayRoutineDef>;
 }
 
@@ -53,12 +69,15 @@ export function routineErrors(x: unknown): string[] {
   if (!f || typeof f !== 'object') return ['routines.json no es un objeto'];
   if (typeof f.timezone !== 'string' || !f.timezone) err.push('falta "timezone"');
   for (const k of ['completo', 'corto'] as const) if (!HHMM.test(f.wake?.[k] ?? '')) err.push(`"wake.${k}" no es HH:MM`);
+  if (!Number.isInteger(f.diaLibre) || f.diaLibre! < 1 || f.diaLibre! > 7) err.push('"diaLibre" tiene que ser un día de 1 a 7');
   const dias = new Set<number>();
   for (const t of DAY_TYPES) {
     const r = f.dayRoutines?.[t];
     if (!r) { err.push(`falta la rutina "${t}"`); continue; }
     if (!r.label) err.push(`${t}: falta "label"`);
-    for (const d of r.days ?? []) {
+    if (!BASE.includes(t) && !r.reemplaza && !r.libre) err.push(`${t}: tiene que reemplazar a otra rutina o ser la del día libre`);
+    if (BASE.includes(t) && !r.days?.length) err.push(`${t}: faltan los días`);
+    for (const d of BASE.includes(t) ? r.days ?? [] : []) {
       if (!Number.isInteger(d) || d < 1 || d > 7) err.push(`${t}: día ${d} fuera de 1 a 7`);
       if (dias.has(d)) err.push(`${t}: el día ${d} ya está en otra rutina`);
       dias.add(d);
@@ -75,6 +94,7 @@ export function routineErrors(x: unknown): string[] {
       if (!AREAS.includes(b.area)) err.push(`${at}: área "${b.area}" desconocida`);
       if (b.kind !== 'fixed' && b.kind !== 'flex') err.push(`${at}: kind tiene que ser "fixed" o "flex"`);
       if (typeof b.focus !== 'boolean') err.push(`${at}: falta "focus"`);
+      if (b.rama != null && b.rama !== 'main' && !esRama(b.rama)) err.push(`${at}: rama "${b.rama}" desconocida`);
       const ultimo = i === r.blocks.length - 1;
       if (HHMM.test(b.start) && HHMM.test(b.end) && toMin(b.end) <= toMin(b.start) && !ultimo) err.push(`${at}: termina antes de empezar`);
       const prev = r.blocks[i - 1];
@@ -107,10 +127,32 @@ export function dateKeyIn(now: Date, tz = TIMEZONE) {
 /** Día ISO de una fecha: 1 = lunes … 7 = domingo. */
 export const isoDay = (date: string) => ((parseDate(date).getDay() + 6) % 7) + 1;
 
-/** Qué rutina toca: lunes a viernes "weekday", sábado y domingo "weekend". Sin selector manual. */
+/** Lunes a viernes "weekday", sábado y domingo "weekend", según los días del JSON. */
 export function dayTypeOf(date: string, file: RoutinesFile = ROUTINES_FILE): DayType {
   const d = isoDay(date);
-  return DAY_TYPES.find((t) => file.dayRoutines[t].days.includes(d)) ?? 'weekday';
+  return BASE.find((t) => file.dayRoutines[t].days?.includes(d)) ?? 'weekday';
+}
+
+export interface RutinaCfg {
+  /** "con-trabajo" desde que se marca T+2 (se elige en Ajustes). */
+  rutina?: 'busqueda' | 'con-trabajo';
+  /** Día ISO libre (null: ninguno). Sin valor, el del JSON. */
+  diaLibre?: number | null;
+}
+
+/**
+ * Qué rutina toca un día: el día libre manda; si no, la del día de la semana, con
+ * "con-trabajo" en lugar de lunes a viernes cuando está activa. Sin selector por día.
+ */
+export function routineFor(date: string, cfg: RutinaCfg = {}, file: RoutinesFile = ROUTINES_FILE): DayType {
+  const libre = cfg.diaLibre === undefined ? file.diaLibre : cfg.diaLibre;
+  if (libre != null && isoDay(date) === libre) return 'libre';
+  const base = dayTypeOf(date, file);
+  if (cfg.rutina === 'con-trabajo') {
+    const alt = DAY_TYPES.find((t) => file.dayRoutines[t].reemplaza === base);
+    if (alt) return alt;
+  }
+  return base;
 }
 
 export const blockMin = (b: Pick<RoutineBlock, 'start' | 'end'>) => {
@@ -191,8 +233,38 @@ export function blockKind(b: RoutineBlock): BlockKind {
 export function toTemplate(b: RoutineBlock, min = blockMin(b)): BlockTemplate {
   return {
     key: b.id, title: b.label, short: b.short ?? b.label.toLowerCase(), area: b.area, kind: blockKind(b), min,
-    fixed: b.kind === 'fixed' ? b.start : undefined, focus: b.focus, tasks: b.tasks ?? [],
+    fixed: b.kind === 'fixed' ? b.start : undefined, focus: b.focus, tasks: b.tasks ?? [], ...(b.rama ? { rama: b.rama } : {}),
   };
+}
+
+export interface Ajustes {
+  /** Ventana de matemática en curso ("W1"): los bloques de programación pasan a matemática. */
+  ventana?: string;
+  /** Entrevista a 3 días o menos: la búsqueda se parte en 45 min de postulaciones y 45 de inglés. */
+  entrevista?: boolean;
+}
+
+/** Aplica la ventana W y la entrevista cercana al día ya armado. */
+export function ajustarDia(plan: PlannedRoutineBlock[], a: Ajustes): PlannedRoutineBlock[] {
+  let out = plan;
+  if (a.ventana) {
+    out = out.map((p) => (p.block.rama === 'programacion'
+      ? { ...p, block: { ...p.block, label: `Matemática · ventana ${a.ventana}`, short: 'matemática', rama: 'matematica', tasks: ['Repaso de tarjetas', `Capítulo de la ventana ${a.ventana}`, 'Ejercicios del capítulo'] } }
+      : p));
+  }
+  if (a.entrevista) {
+    out = out.flatMap((p) => {
+      if (p.block.id !== 'busqueda' || p.min < 60) return [p];
+      const mitad = Math.round(p.min / 2 / 5) * 5;
+      const hh = (m: number) => `${String(Math.floor(m / 60) % 24).padStart(2, '0')}:${String(m % 60).padStart(2, '0')}`;
+      const inicio2 = toMin(p.start) + mitad;
+      return [
+        { ...p, min: mitad, block: { ...p.block, tasks: ['5 postulaciones'] } },
+        { start: hh(inicio2), min: p.min - mitad, block: { id: 'ingles-entrevista', label: 'Inglés · modo entrevista', short: 'inglés', start: hh(inicio2), end: p.block.end, area: 'ing' as Area, kind: p.block.kind, focus: true, rama: 'ingles' as RamaOMain, tasks: ['Respuestas ensayadas en voz alta', 'Pitch de 60 s'] } },
+      ];
+    });
+  }
+  return out;
 }
 
 /** Las metas de una rutina, en orden. */

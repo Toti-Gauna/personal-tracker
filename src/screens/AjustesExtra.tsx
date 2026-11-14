@@ -30,8 +30,8 @@ export function AjustesRutinas() {
         let n = 0;
         return (
           <section key={t} className="rutina-aj" aria-labelledby={`rut-${t}`}>
-            <div className="fila-t"><h2 id={`rut-${t}`} className="titulo">{r.label}</h2><span className="mono sub">{r.days.map((d) => ISO[d]).join(' ')}</span></div>
-            <p className="sub rd-res">{metas.length} metas · cada una vale {fmtPct(1 / metas.length, 3).replace(/,?0+$/, '')} %</p>
+            <div className="fila-t"><h2 id={`rut-${t}`} className="titulo">{r.label}</h2><span className="mono sub">{r.days ? r.days.map((d) => ISO[d]).join(' ') : r.libre ? 'día libre' : 'desde T+2'}</span></div>
+            <p className="sub rd-res">{metas.length} {metas.length === 1 ? 'meta' : 'metas'} · cada una vale {fmtPct(1 / metas.length, 3).replace(/,?0+$/, '')} %</p>
             <ol className="rd-bloques">
               {r.blocks.map((b) => {
                 const meta = isMeta(b);
