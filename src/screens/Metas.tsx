@@ -11,11 +11,11 @@ import { useStore } from '../state/store';
 import { addProgress, deleteGoal, renameBimester, stepOf } from '../state/goals';
 import { Calendario } from '../ui/Calendario';
 import { GoalRow } from '../ui/GoalRow';
-import { Ruta } from './Ruta';
-import { RutaBimestre } from './RutaBimestre';
+import { PlanRuta } from './PlanRuta';
+import { usePlanVista } from '../ui/usePlan';
+import { RAMA_COLOR } from '../data/ramas';
 import { RutaEvolucion } from './RutaEvolucion';
 import { RutaMapa } from './RutaMapa';
-import { RutaSemana } from './RutaSemana';
 import '../styles/metas.css';
 
 const TABS = [['ruta', 'Ruta'], ['semana', 'Semana'], ['mes', 'Mes'], ['bimestre', 'Bim.'], ['anio', 'Año']] as const;
@@ -37,9 +37,7 @@ function groupGoals(goals: Goal[]) {
 
 /** 4 · Metas: semana, mes, bimestre y año. */
 export function Metas({ day, tab }: { day: DayLog; tab?: string }) {
-  // Las pantallas de la ruta que se abren desde la pestaña Ruta.
-  if (tab?.startsWith('bim/')) return <RutaBimestre day={day} n={Number(tab.slice(4))} />;
-  if (tab === 'semana-ruta') return <RutaSemana day={day} />;
+  // Las pantallas del plan que se abren desde la pestaña Ruta.
   if (tab === 'mapa') return <RutaMapa day={day} />;
   if (tab === 'evolucion') return <RutaEvolucion day={day} />;
   return <MetasTabs day={day} tab={tab} />;
@@ -62,7 +60,7 @@ function MetasTabs({ day, tab }: { day: DayLog; tab?: string }) {
   // Línea de resumen de cada pestaña.
   let linea = '';
   if (actual === 'ruta') {
-    linea = 'La ruta completa: dónde estás, qué sigue y qué falta. Todo lo que marcás en Hoy empuja esta pantalla.';
+    linea = 'Plan T+18: seis ramas que salen de Trazo y vuelven en mayo de 2028, con perfil senior en ML, DevSecOps y cloud.';
   } else if (actual === 'semana') {
     const gs = groupGoals(list).map(([n, xs]) => [n, xs.reduce((s, g) => s + ratio(valueOf(g, date, ctx), g.target), 0) / xs.length] as const).sort((a, b) => a[1] - b[1]);
     const avg = list.length ? list.reduce((s, g) => s + ratio(valueOf(g, date, ctx), g.target), 0) / list.length : 0;
@@ -79,6 +77,7 @@ function MetasTabs({ day, tab }: { day: DayLog; tab?: string }) {
 
   return (
     <main className={`pantalla metas-pag${actual === 'ruta' ? ' es-ruta' : ''}`}>
+      {actual === 'ruta' && <MetasTop date={date} />}
       <header>
         <h1 className="titulo">Metas</h1>
         <p>{linea}</p>
@@ -89,7 +88,7 @@ function MetasTabs({ day, tab }: { day: DayLog; tab?: string }) {
         ))}
       </div>
 
-      {actual === 'ruta' && <Ruta day={day} />}
+      {actual === 'ruta' && <PlanRuta day={day} />}
       {actual === 'semana' && <Semana date={date} list={list} days={days} week={bim.week} editar={editar} />}
       {actual === 'mes' && <Mes date={date} list={list} days={days} editar={editar} />}
       {actual === 'bimestre' && <Bimestre day={day} list={list} name={bim.name} editar={editar} />}
@@ -311,3 +310,14 @@ function AnioMeta({ g, date, editar }: { g: Goal; date: string; editar: boolean 
 }
 
 
+
+/** "trazo" y HEAD → la rama de lo que toca ahora, arriba de la Ruta. */
+function MetasTop({ date }: { date: string }) {
+  const v = usePlanVista(date);
+  return (
+    <div className="metas-top">
+      <span className="logo titulo resaltado" style={{ ['--c' as string]: 'var(--economia)' }}>trazo</span>
+      <span className="mono">HEAD → <b style={{ color: RAMA_COLOR[v.head] }}>{v.head}</b></span>
+    </div>
+  );
+}
