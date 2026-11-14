@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Plan de olas</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,500..900&amp;family=Geist:wght@400;500;600&amp;family=Geist+Mono:wght@400;500;600&amp;display=swap">
+<style>body{margin:0}</style>
+</helmet>
+<div style="width: 1280px; min-height: 2090px; box-sizing: border-box; padding: 64px; background-color: #0E0F10; background-image: radial-gradient(rgba(237,237,232,0.08) 1px, transparent 1.3px); background-size: 18px 18px; color: #EDEDE8; font-family: Geist, system-ui, sans-serif; display: flex; flex-direction: column; gap: 40px">
+
+  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 56px; align-items: end; padding-bottom: 36px; border-bottom: 1px solid #2C2E2D">
+    <div style="display: flex; flex-direction: column; gap: 14px">
+      <span style="font-family: 'Geist Mono', monospace; font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: #9A9D98">Desarrollo · 9 olas · un PR por ola · un modelo por ola</span>
+      <h1 style="margin: 0; font-family: Archivo, sans-serif; font-stretch: 125%; font-size: 72px; font-weight: 900; letter-spacing: -0.05em; line-height: 0.9">Plan de olas</h1>
+    </div>
+    <div style="display: grid; grid-template-columns: 120px 1fr; gap: 8px 16px; font-size: 14px; color: #9A9D98">
+      <span style="font-family: 'Geist Mono', monospace; color: #EDEDE8">Stack</span><span>Vite, React, TypeScript, GSAP, vite-plugin-pwa</span>
+      <span style="font-family: 'Geist Mono', monospace; color: #EDEDE8">Datos</span><span>JSON en <span style="font-family: 'Geist Mono', monospace">data/</span> del repo público + guardado local del día</span>
+      <span style="font-family: 'Geist Mono', monospace; color: #EDEDE8">Deploy</span><span>GitHub Actions a GitHub Pages en cada merge a main</span>
+      <span style="font-family: 'Geist Mono', monospace; color: #EDEDE8">Alcance</span><span>CONAMAT completo (69 caps.) repartido en B1 a B6; cada bimestre se activa al empezar</span>
+    </div>
+  </div>
+
+  <div style="display: grid; grid-template-columns: 70px 1fr 1.6fr 200px; gap: 0 24px; font-family: 'Geist Mono', monospace; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: #9A9D98; padding-bottom: 10px; border-bottom: 1px solid #EDEDE8">
+    <span>Ola</span><span>Qué sale</span><span>Commits dentro del PR</span><span>Modelo · esfuerzo</span>
+  </div>
+
+  <div style="display: flex; flex-direction: column; margin-top: -40px">
+    <sc-for list="{{ waves }}" as="w" hint-placeholder-count="9">
+      <div style="display: grid; grid-template-columns: 70px 1fr 1.6fr 200px; gap: 0 24px; padding: 22px 0; border-bottom: 1px solid #2C2E2D; align-items: start">
+        <span style="font-family: Archivo, sans-serif; font-stretch: 125%; font-size: 34px; font-weight: 900; letter-spacing: -0.04em; line-height: 1">{{ w.n }}</span>
+        <div style="display: flex; flex-direction: column; gap: 6px"><b style="font-family: Archivo, sans-serif; font-stretch: 112%; font-size: 19px; font-weight: 800">{{ w.name }}</b><span style="font-size: 13.5px; color: #9A9D98; line-height: 1.5">{{ w.out }}</span></div>
+        <div style="display: flex; flex-direction: column; gap: 8px">
+          <sc-for list="{{ w.lots }}" as="l" hint-placeholder-count="3"><span style="display: grid; grid-template-columns: 34px 1fr; gap: 8px; font-size: 14px; line-height: 1.45"><span style="font-family: 'Geist Mono', monospace; font-size: 12px; color: #F0D45C">{{ l.id }}</span><span>{{ l.t }}</span></span></sc-for>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 6px">
+          <sc-for list="{{ w.models }}" as="m" hint-placeholder-count="2"><span style="font-family: 'Geist Mono', monospace; font-size: 12.5px; line-height: 1.45">{{ m }}</span></sc-for>
+        </div>
+      </div>
+    </sc-for>
+  </div>
+
+  <div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0; border: 1px solid #2C2E2D">
+    <div style="padding: 20px; border-right: 1px solid #2C2E2D; display: flex; flex-direction: column; gap: 8px"><span style="font-family: 'Geist Mono', monospace; font-size: 12px; color: #F0D45C">01 · rama</span><span style="font-size: 14px; line-height: 1.5">Creo la rama <span style="font-family: 'Geist Mono', monospace">ola-N</span> y avanzo con un commit por cada punto de la lista.</span></div>
+    <div style="padding: 20px; border-right: 1px solid #2C2E2D; display: flex; flex-direction: column; gap: 8px"><span style="font-family: 'Geist Mono', monospace; font-size: 12px; color: #F0D45C">02 · PR</span><span style="font-size: 14px; line-height: 1.5">Subo y abro el PR solo. Actions corre tipos, tests y build en cada push.</span></div>
+    <div style="padding: 20px; border-right: 1px solid #2C2E2D; display: flex; flex-direction: column; gap: 8px"><span style="font-family: 'Geist Mono', monospace; font-size: 12px; color: #F0D45C">03 · revisión</span><span style="font-size: 14px; line-height: 1.5">Vos lo probás y das el OK; si algo no va, sigo en la misma rama.</span></div>
+    <div style="padding: 20px; display: flex; flex-direction: column; gap: 8px"><span style="font-family: 'Geist Mono', monospace; font-size: 12px; color: #F0D45C">04 · publicado</span><span style="font-size: 14px; line-height: 1.5">Al mergear a main, Actions publica en Pages y actualizo PLAN.md.</span></div>
+  </div>
+
+  <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); border-top: 1px solid #2C2E2D; border-left: 1px solid #2C2E2D">
+    <div style="padding: 22px; border-right: 1px solid #2C2E2D; border-bottom: 1px solid #2C2E2D; display: flex; flex-direction: column; gap: 8px"><b style="font-family: 'Geist Mono', monospace; font-size: 13px">Opus 5.5 · alto</b><span style="font-size: 14px; color: #9A9D98; line-height: 1.5">Olas 1, 2 y 3: modelo de datos, estudio y motor de repaso, donde un error se arrastra a todo.</span></div>
+    <div style="padding: 22px; border-right: 1px solid #2C2E2D; border-bottom: 1px solid #2C2E2D; display: flex; flex-direction: column; gap: 8px"><b style="font-family: 'Geist Mono', monospace; font-size: 13px">Sonnet 5.5 · medio</b><span style="font-size: 14px; color: #9A9D98; line-height: 1.5">Olas 0, 4, 6 y 7: pantallas, componentes y animaciones siguiendo este canvas. La 5 va en alto por el estado en pareja.</span></div>
+    <div style="padding: 22px; border-right: 1px solid #2C2E2D; border-bottom: 1px solid #2C2E2D; display: flex; flex-direction: column; gap: 8px"><b style="font-family: 'Geist Mono', monospace; font-size: 13px">Haiku 5.5 · bajo</b><span style="font-size: 14px; color: #9A9D98; line-height: 1.5">Para el día a día: pegás el JSON del cierre y queda commiteado en data/days.</span></div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1280,"height":2090}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const L = (id, t) => ({ id, t });
+    return { waves: [
+      { n: '0', name: 'Cimientos', out: 'La app instalable con tema, fuentes, ícono y barra, publicándose sola.', lots: [L('·', 'Vite + React + TS, tokens claro y oscuro, tipografías'), L('·', 'Barra inferior con íconos y mini reproductor vacío'), L('·', 'PWA: manifest, ícono Palotes, modo sin conexión'), L('·', 'Actions: CI en cada PR y deploy a Pages al mergear'), L('·', 'docs/PLAN.md con el plan y el registro de cambios')], models: ['Sonnet 5.5 · medio'] },
+      { n: '1', name: 'Hoy y foco', out: 'Tu día real: el modal de despertar, la regla de horas, el foco y el JSON del día.', lots: [L('·', 'Modelo de datos, guardado local y lectura de data/'), L('·', 'Modal de despertar: 04:00 día completo, 05:00 día corto'), L('·', 'Hoy: metas numeradas, regla de horas, contadores y mejora del día (1 %)'), L('·', 'Entrar en foco según la meta: estudio, entreno o pomodoros; mini reproductor'), L('·', 'Pomodoros a medida y exportar el JSON del día')], models: ['Opus 5.5 · alto'] },
+      { n: '2', name: 'Estudio', out: 'Estudio general con frentes, actividades libres, gráficos y el bimestre 1 cargado.', lots: [L('·', 'Contenidos de hoy seleccionables y sesión de estudio con timer por tramo'), L('·', 'Frentes, actividades libres, gráfico semanal y avance'), L('·', 'CONAMAT completo cargado por bimestre; tests del B1 y errores'), L('·', 'Tesis, test y ejercicios en la app o en papel (corrección con Claude)')], models: ['Opus 5.5 · alto'] },
+      { n: '3', name: 'Motor de repaso', out: 'El motor propio: cold recall, active recall, repetición espaciada y relectura.', lots: [L('·', 'Programación de tarjetas (FSRS) y reglas ajustables'), L('·', 'Cola adaptativa con tope de 20 min: saltea lo que ya sabés'), L('·', 'Active recall: escribir, decir o pensar antes de ver'), L('·', 'Crear tarjetas en 5 tipos, pegar bloques e importar Anki')], models: ['Opus 5.5 · alto'] },
+      { n: '4', name: 'Metas', out: 'Semana, mes, bimestre y año, con nueva meta y bimestres renombrables.', lots: [L('·', 'Semana con contadores y metas manuales'), L('·', 'Mes con calendario y año con los 6 bimestres'), L('·', 'Bimestre renombrable y nueva meta con 5 horizontes')], models: ['Sonnet 5.5 · medio'] },
+      { n: '5', name: 'Entreno', out: 'Rutinas editables, sesiones en pareja con Abi y curva de peso.', lots: [L('·', 'Rutinas precargadas, semana y editor (antes, ejercicios, después)'), L('·', 'Sesión con timer, ejercicios y objetivos por serie; descansos por persona'), L('·', 'Motor de sobrecarga progresiva, resumen con la próxima vez y peso')], models: ['Sonnet 5.5 · alto'] },
+      { n: '6', name: 'Cierre y sellos', out: 'Cierre del día, XP, sellos, ajustes, sonidos y alarmas.', lots: [L('·', 'Cierre con la mejora vs. ayer, XP, 24 sellos e hitos con progreso'), L('·', 'Ajustes, tema, rutinas del día y accesibilidad'), L('·', 'Avisos (toasts y modales), sonidos y alarmas al calendario (.ics)')], models: ['Sonnet 5.5 · medio'] },
+      { n: '7', name: 'Escritorio y tablet', out: 'La vista Avance para mostrar en compu o tablet y el resto adaptado.', lots: [L('·', 'Barra lateral en escritorio y riel en tablet'), L('·', 'Vista Avance y modo presentación'), L('·', 'Pantallas en dos y tres columnas, pulido GSAP')], models: ['Sonnet 5.5 · medio'] },
+      { n: '8', name: 'Plan T+18', out: 'Las seis ramas del plan dentro de Trazo: Ruta, mapa en ramas, metas por bimestre y la importación de JSON por rama.', lots: [L('·', 'plan.ts, rutinas nuevas, rama en cada bloque y migración'), L('·', 'Ruta, mapa en ramas, Semana, Mes, Bimestre y Año con el plan'), L('·', 'Proyecto, Búsqueda, Inglés, Handyx e Importar JSON')], models: ['Opus 5.5 · alto'] }
+    ] };
+  }
+}
+</script>
+</body>
+</html>

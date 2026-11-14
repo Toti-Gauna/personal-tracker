@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Inglés</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,500..900&amp;family=Geist:wght@400;500;600&amp;family=Geist+Mono:wght@400;500;600&amp;display=swap">
+<style>body{margin:0}</style>
+</helmet>
+<div style="{{ vars }} width: 390px; min-height: 1400px; box-sizing: border-box; background-color: var(--paper); background-image: radial-gradient(var(--dot) 1px, transparent 1.3px); background-size: 18px 18px; color: var(--ink); font-family: Geist, system-ui, sans-serif; display: flex; flex-direction: column">
+  <main style="flex: 1; padding: 18px 20px 28px; display: flex; flex-direction: column; gap: 24px">
+    <div style="display: flex; justify-content: space-between; align-items: center">
+      <a href="Ruta.dc.html" style="display: flex; align-items: center; gap: 6px; min-height: 44px; color: var(--ink); text-decoration: none; font-size: 14px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>Ruta</a>
+      <span style="font-family: 'Geist Mono', monospace; font-size: 12px; color: var(--idi)">ingles · modo entrevista</span>
+    </div>
+    <header style="display: flex; flex-direction: column; gap: 6px">
+      <h1 style="margin: 0; font-family: Archivo, sans-serif; font-stretch: 125%; font-size: 34px; font-weight: 900; letter-spacing: -0.045em; line-height: 1">Inglés</h1>
+      <p style="margin: 0; font-size: 14.5px; line-height: 1.5; color: var(--sub)">Hasta conseguir el trabajo, entrevistas. Después, 45 min por día hacia el C1 Advanced, con el examen en mayo de 2028.</p>
+    </header>
+
+    <section aria-label="Fases" style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); border-top: 1px solid var(--line); border-left: 1px solid var(--line)">
+      <sc-for list="{{ fases }}" as="f" hint-placeholder-count="3">
+        <span style="{{ f.st }}">
+          <span style="font-family: 'Geist Mono', monospace; font-size: 11px; color: var(--sub)">{{ f.when }}</span>
+          <b style="font-size: 13.5px; font-weight: 600; line-height: 1.3">{{ f.name }}</b>
+        </span>
+      </sc-for>
+    </section>
+
+    <section aria-label="Respuestas ensayadas" style="display: flex; flex-direction: column">
+      <div style="display: flex; justify-content: space-between; align-items: baseline; padding-bottom: 8px; border-bottom: 1px solid var(--line)">
+        <span style="font-family: 'Geist Mono', monospace; font-size: 11.5px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--sub)">Respuestas para el jue 17</span>
+        <span style="font-family: 'Geist Mono', monospace; font-size: 12px; color: var(--sub)">{{ doneN }} de 10</span>
+      </div>
+      <sc-for list="{{ resp }}" as="r" hint-placeholder-count="10">
+        <div style="display: flex; align-items: center; gap: 14px; min-height: 50px; border-bottom: 1px solid var(--line)">
+          <button aria-label="{{ r.aria }}" onClick="{{ r.toggle }}" style="{{ r.box }}"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg></button>
+          <span lang="en" style="{{ r.txt }}">{{ r.q }}</span>
+          <span style="font-family: 'Geist Mono', monospace; font-size: 11.5px; color: var(--sub)">{{ r.n }}</span>
+        </div>
+      </sc-for>
+      <a href="Foco.dc.html" style="margin-top: 14px; display: flex; align-items: center; justify-content: center; min-height: 52px; border-radius: 6px; background: var(--ink); color: var(--paper); text-decoration: none; font-size: 16px; font-weight: 600">Ensayar en voz alta · 45 min</a>
+    </section>
+
+    <section aria-label="Para repasar" style="display: flex; flex-direction: column; gap: 10px">
+      <span style="font-family: 'Geist Mono', monospace; font-size: 11.5px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--sub)">Lo que falló · ya es tarjeta</span>
+      <div style="border-top: 1px solid var(--line)">
+        <sc-for list="{{ fallas }}" as="f" hint-placeholder-count="3">
+          <div style="display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 10px; padding: 11px 0; border-bottom: 1px solid var(--line)">
+            <span style="font-size: 14px">{{ f.t }}</span>
+            <span style="{{ f.st }}">{{ f.tipo }}</span>
+          </div>
+        </sc-for>
+      </div>
+      <span style="font-size: 12.5px; line-height: 1.45; color: var(--sub)">Entran al mismo motor de repaso que matemática: escalera +1, +3, +7, +21, +60.</span>
+    </section>
+
+    <section style="display: flex; flex-direction: column; gap: 8px; padding: 14px; border: 1px solid var(--line); border-radius: 8px">
+      <span style="font-family: 'Geist Mono', monospace; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--sub)">Desde el trabajo nuevo · 11 ene</span>
+      <span style="font-size: 13.5px; line-height: 1.5">Bloque diario de 45 min por trimestre: Use of English y Writing, después Listening y Speaking, simulacros mensuales y examen C1.</span>
+    </section>
+  </main>
+  <nav aria-label="Secciones" style="border-top: 1px solid var(--line); background: var(--paper); padding: 10px 12px 14px">
+    <div style="display: grid; grid-template-columns: repeat(5, minmax(0, 1fr))">
+      <sc-for list="{{ nav }}" as="n" hint-placeholder-count="5">
+        <a href="{{ n.href }}" aria-current="{{ n.cur }}" style="{{ n.st }}">
+          <span style="{{ n.pill }}"><span style="{{ n.ico }}"></span></span>
+          <span>{{ n.label }}</span>
+          <sc-if value="{{ n.hasBadge }}" hint-placeholder-val="{{ false }}"><span style="position: absolute; top: 4px; left: calc(50% + 9px); min-width: 18px; height: 18px; padding: 0 5px; box-sizing: border-box; border-radius: 999px; background: var(--ink); color: var(--paper); font-family: 'Geist Mono', monospace; font-size: 10.5px; font-weight: 600; display: grid; place-items: center">{{ n.badge }}</span></sc-if>
+        </a>
+      </sc-for>
+    </div>
+  </nav>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"theme":{"editor":"enum","options":["dark","light"],"default":"dark"},"$preview":{"width":390,"height":1400}}'>
+class Component extends DCLogic {
+  constructor(p) { super(p); this.state = { done: { 0: true, 1: true, 2: true, 3: true, 4: true, 5: true } }; }
+  base(active) {
+    const T = { dark: { paper: '#0E0F10', ink: '#EDEDE8', sub: '#9A9D98', line: '#2C2E2D', soft: '#18191A', dot: 'rgba(237,237,232,0.08)', ing: '#6CC4EE', hx: '#B3A4FF', ec: '#FF9F62', sa: '#7FD69A', ru: '#FF8E8E', eco: '#F0D45C', idi: '#F49AC2', a: '38%' }, light: { paper: '#F2F3EF', ink: '#141515', sub: '#585C59', line: '#C9CCC6', soft: '#E7E9E4', dot: 'rgba(20,21,21,0.10)', ing: '#1C7FB0', hx: '#5F4BCF', ec: '#C2560F', sa: '#24854A', ru: '#C23A3A', eco: '#8A6C00', idi: '#B4316F', a: '60%' } };
+    const L = this.props.theme === 'light';
+    const t = L ? T.light : T.dark;
+    let vars = '';
+    for (const k in t) if (k !== 'a') vars += '--' + k + ':' + t[k] + ';';
+    const D = T.dark;
+    for (const k of ['ing', 'hx', 'ec', 'sa', 'ru', 'eco', 'idi']) vars += '--mk-' + k + ':color-mix(in srgb,' + D[k] + ' ' + t.a + ',transparent);';
+    vars += '--mk-nav:color-mix(in srgb,#F0D45C ' + t.a + ',transparent);';
+    const ICO = { Hoy: '<path d="M3 18.5h18M7 18.5a5 5 0 0 1 10 0M12 5v3.2M5 9.6l1.9 1.3M19 9.6l-1.9 1.3"/>', Estudio: '<path d="M12 6.8c-2.2-1.6-5.2-2-8-1.6v12.9c2.8-.4 5.8 0 8 1.6 2.2-1.6 5.2-2 8-1.6V5.2c-2.8-.4-5.8 0-8 1.6zM12 6.8v12.9"/>', Metas: '<path d="M5.5 21V3.5M5.5 4.5h12.5l-2.6 4 2.6 4H5.5"/>', Entreno: '<path d="M6.5 6.5v11M17.5 6.5v11M3.5 9.5v5M20.5 9.5v5M6.5 12h11"/>', Perfil: '<circle cx="12" cy="9.5" r="5.5"/><path d="M9 14.6 7.6 21l4.4-2.2 4.4 2.2-1.4-6.4"/>' };
+    const mask = (p) => { const u = 'url(data:image/svg+xml,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">' + p + '</svg>') + ')'; return 'width:22px;height:22px;background:currentColor;-webkit-mask:' + u + ' center / 22px 22px no-repeat;mask:' + u + ' center / 22px 22px no-repeat'; };
+    const nav = [['Hoy', 'Hoy.dc.html', ''], ['Estudio', 'Estudio.dc.html', '22'], ['Metas', 'Ruta.dc.html', ''], ['Entreno', 'Rutinas.dc.html', ''], ['Perfil', 'Logros.dc.html', '']].map(([label, href, badge]) => { const on = label === active; return { label, href, badge, hasBadge: !!badge && !on, cur: on ? 'page' : 'false', ico: mask(ICO[label]),
+      st: 'position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;min-height:60px;text-decoration:none;font-size:11.5px;letter-spacing:0.01em;color:' + (on ? 'var(--ink);font-weight:600' : 'var(--sub)'),
+      pill: 'width:54px;height:32px;display:grid;place-items:center;' + (on ? 'background:var(--mk-nav);clip-path:polygon(9% 0,100% 0,91% 100%,0 100%)' : '') }; });
+    return { vars, nav };
+  }
+  renderVals() {
+    const { vars, nav } = this.base('Metas');
+    const fases = [['ahora', 'Modo entrevista', true], ['desde 11 ene', 'Bloque diario 45 min', false], ['mayo 2028', 'Examen C1', false]].map(([when, name, on]) => ({ when, name,
+      st: 'display:flex;flex-direction:column;gap:4px;padding:10px;border-right:1px solid var(--line);border-bottom:' + (on ? '3px solid var(--idi)' : '1px solid var(--line)') }));
+    const Q = [['Tell me about yourself', '×5'], ['A project you are proud of (Faro)', '×4'], ['Explain RAG to a non-technical person', '×3'], ['Why remote, why this company', '×3'], ['A conflict with a teammate', '×2'], ['Your biggest weakness', '×2'], ['Design a RAG API that scales', '×0'], ['A time you failed', '×0'], ['Salary expectations', '×0'], ['Questions for the interviewer', '×0']];
+    const d = this.state.done;
+    const resp = Q.map(([q, n], i) => { const on = !!d[i]; return { q, n, aria: on ? 'Desmarcar' : 'Marcar',
+      toggle: () => this.setState({ done: { ...this.state.done, [i]: !this.state.done[i] } }),
+      box: 'flex:none;width:22px;height:22px;padding:0;border-radius:3px;border:1.5px solid var(--ink);display:flex;align-items:center;justify-content:center;cursor:pointer;' + (on ? 'background:var(--ink);color:var(--paper)' : 'background:transparent;color:transparent'),
+      txt: 'flex:1;min-width:0;font-size:14.5px;' + (on ? 'color:var(--sub)' : '') }; });
+    const doneN = Q.filter((_, i) => d[i]).length;
+    const fallas = [['Pausas largas al explicar arquitectura', 'fluidez'], ['Pasado de verbos irregulares (built, led)', 'gramática'], ['“Retrieval” y “latency”: pronunciación', 'pronunciación']].map(([t, tipo]) => ({ t, tipo, st: 'font-family:Geist Mono,monospace;font-size:11.5px;color:var(--idi)' }));
+    return { vars, nav, fases, resp, doneN, fallas };
+  }
+}
+</script>
+</body>
+</html>

@@ -14,6 +14,8 @@
   --salud: #7fd69a;
   --rutina: #ff8e8e;
   --economia: #f0d45c;
+  /* Inglés, rama del plan T+18. */
+  --idi: #f49ac2;
 
   --dot: rgba(237, 237, 232, 0.07);
 }
@@ -33,6 +35,7 @@
   --salud: #24854a;
   --rutina: #c23a3a;
   --economia: #8a6c00;
+  --idi: #b4316f;
 
   --dot: rgba(20, 21, 21, 0.1);
 }

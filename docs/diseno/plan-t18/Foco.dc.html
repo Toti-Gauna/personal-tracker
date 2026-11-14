@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Bloque en foco</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,500..900&amp;family=Geist:wght@400;500;600&amp;family=Geist+Mono:wght@400;500;600&amp;display=swap">
+<style>body{margin:0}</style>
+</helmet>
+<div style="{{ vars }} width: 390px; min-height: 900px; box-sizing: border-box; background-color: var(--paper); background-image: radial-gradient(var(--dot) 1px, transparent 1.3px); background-size: 18px 18px; color: var(--ink); font-family: Geist, system-ui, sans-serif; display: flex; flex-direction: column; padding: 18px 20px 28px; gap: 28px">
+
+  <div style="display: flex; justify-content: space-between; align-items: center">
+    <a href="Hoy.dc.html" style="display: flex; align-items: center; gap: 6px; min-height: 44px; color: var(--ink); text-decoration: none; font-size: 14px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>Hoy</a>
+    <span style="font-family: 'Geist Mono', monospace; font-size: 12px; color: var(--sub)">06:30 – 08:30</span>
+  </div>
+
+  <div style="display: flex; flex-direction: column; gap: 8px">
+    <span style="font-family: 'Geist Mono', monospace; font-size: 11.5px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ing)">programacion · P1 Faro v1 · semana 3 de 4</span>
+    <h1 style="margin: 0; font-family: Archivo, sans-serif; font-stretch: 125%; font-size: 40px; font-weight: 900; letter-spacing: -0.045em; line-height: 0.95">Programación</h1>
+  </div>
+
+  <section aria-label="Pomodoro" style="display: flex; flex-direction: column; gap: 14px; padding: 22px 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line)">
+    <div style="display: flex; justify-content: space-between; align-items: baseline">
+      <span style="font-size: 14px; color: var(--sub)">Concentración</span>
+      <a href="ElegirFoco.dc.html" style="font-family: 'Geist Mono', monospace; font-size: 12px; color: var(--ink); text-decoration: underline; text-underline-offset: 3px">50/10 + 30 · cambiar</a>
+    </div>
+    <b style="font-family: 'Geist Mono', monospace; font-size: 96px; font-weight: 500; letter-spacing: -0.06em; line-height: 0.9">38:12</b>
+    <div style="display: grid; grid-template-columns: repeat(50, minmax(0, 1fr)); gap: 2px" aria-hidden="true">
+      <sc-for list="{{ ticks }}" as="k" hint-placeholder-count="50"><span style="{{ k }}"></span></sc-for>
+    </div>
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 4px">
+      <button style="min-height: 48px; border-radius: 6px; border: 1px solid var(--line); background: transparent; color: var(--ink); font-family: Geist, sans-serif; font-size: 15px">Pausar</button>
+      <button style="min-height: 48px; border-radius: 6px; border: 1px solid var(--ink); background: var(--ink); color: var(--paper); font-family: Geist, sans-serif; font-size: 15px; font-weight: 600">Descanso ahora</button>
+    </div>
+  </section>
+
+  <section aria-label="Tareas del bloque" style="display: flex; flex-direction: column">
+    <sc-for list="{{ tasks }}" as="t" hint-placeholder-count="3">
+      <div style="display: flex; align-items: center; gap: 12px; min-height: 52px; border-bottom: 1px solid var(--line)">
+        <button aria-label="{{ t.aria }}" style="{{ t.box }}"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg></button>
+        <span style="{{ t.txt }}">{{ t.text }}</span>
+      </div>
+    </sc-for>
+    <button style="min-height: 48px; border: 0; background: transparent; color: var(--sub); font-family: Geist, sans-serif; font-size: 14px; text-align: left; padding: 0">+ Tarea para este bloque</button>
+  </section>
+
+  <a href="Tesis.dc.html" style="margin-top: auto; display: flex; justify-content: space-between; align-items: center; min-height: 52px; padding: 0 16px; border: 1px solid var(--line); border-radius: 6px; color: var(--ink); text-decoration: none; font-size: 14.5px"><span>Anotar algo para una tarjeta</span><span style="font-family: 'Geist Mono', monospace; color: var(--sub)">→</span></a>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"theme":{"editor":"enum","options":["dark","light"],"default":"dark"},"$preview":{"width":390,"height":900}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const T = { dark: { paper: '#0E0F10', ink: '#EDEDE8', sub: '#9A9D98', line: '#2C2E2D', dot: 'rgba(237,237,232,0.08)', ing: '#6CC4EE', a: '38%' }, light: { paper: '#F2F3EF', ink: '#141515', sub: '#585C59', line: '#C9CCC6', dot: 'rgba(20,21,21,0.10)', ing: '#1C7FB0', a: '60%' } };
+    const t = T[this.props.theme] || T.dark;
+    let vars = '';
+    for (const k in t) if (k !== 'a') vars += '--' + k + ':' + t[k] + ';';
+    vars += '--mk-ing:color-mix(in srgb,#6CC4EE ' + t.a + ',transparent);';
+    const ticks = Array.from({ length: 50 }, (_, i) => 'height:14px;background:' + (i < 12 ? 'var(--ing)' : 'var(--line)'));
+    const task = (text, done) => ({ text, aria: done ? 'Desmarcar' : 'Marcar',
+      box: 'flex:none;width:22px;height:22px;padding:0;border-radius:3px;border:1.5px solid var(--ink);display:flex;align-items:center;justify-content:center;' + (done ? 'background:var(--ink);color:var(--paper)' : 'background:transparent;color:transparent'),
+      txt: 'font-size:15.5px;width:fit-content;' + (done ? 'padding:0 3px;background:linear-gradient(98deg,transparent 1%,var(--mk-ing) 1% 98%,transparent 98%) 0 70% / 100% 52% no-repeat' : '') });
+    return { vars, ticks, tasks: [task('Repaso de tarjetas (12)', true), task('Faro v1 · evals de citas exactas', false), task('Commit de lo avanzado', false)] };
+  }
+}
+</script>
+</body>
+</html>

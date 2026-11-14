@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Tablet</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,500..900&amp;family=Geist:wght@400;500;600&amp;family=Geist+Mono:wght@400;500;600&amp;display=swap">
+<style>body{margin:0}</style>
+</helmet>
+<div style="{{ vars }} width: 834px; min-height: 1400px; box-sizing: border-box; background-color: var(--paper); background-image: radial-gradient(var(--dot) 1px, transparent 1.3px); background-size: 18px 18px; color: var(--ink); font-family: Geist, system-ui, sans-serif; display: flex">
+    <aside style="width: 84px; flex: none; border-right: 1px solid var(--line); padding: 22px 8px; display: flex; flex-direction: column; align-items: center; gap: 26px; box-sizing: border-box">
+      <span style="width: 40px; height: 40px; border-radius: 10px; overflow: hidden"><svg width="40" height="40" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><rect width="512" height="512" rx="112" fill="#0B0C0D"/><path d="M139.4 171.4 L134.0 367.4 L174.6 346.6 L180.0 150.6 Z" fill="#EDEDE8"/><path d="M197.8 155.8 L196.0 373.8 L236.2 352.2 L238.0 134.2 Z" fill="#EDEDE8"/><path d="M256.3 168.3 L259.0 364.3 L298.7 341.7 L296.0 145.7 Z" fill="#EDEDE8"/><path d="M314.5 160.4 L319.0 372.4 L358.5 349.6 L354.0 137.6 Z" fill="#EDEDE8"/><path d="M153.1 355.3 L425.5 204.0 L360.9 166.7 L88.5 318.0 Z" fill="#F0D45C" fill-opacity="0.88"/></svg></span>
+      <nav aria-label="Secciones" style="display: flex; flex-direction: column; gap: 6px; width: 100%">
+        <sc-for list="{{ side }}" as="n" hint-placeholder-count="5">
+          <a href="{{ n.href }}" style="{{ n.st }}"><span style="{{ n.ico }}"></span><span>{{ n.label }}</span></a>
+        </sc-for>
+      </nav>
+    </aside>
+    <main style="flex: 1; min-width: 0; padding: 28px 24px 32px; display: flex; flex-direction: column; gap: 22px">
+      <header style="display: flex; justify-content: space-between; align-items: flex-end; gap: 24px; flex-wrap: wrap">
+        <div style="display: flex; flex-direction: column; gap: 6px; max-width: 620px">
+          <h1 style="margin: 0; font-family: Archivo, sans-serif; font-stretch: 125%; font-size: 36px; font-weight: 900; letter-spacing: -0.05em; line-height: 1">Avance</h1>
+          <p style="margin: 0; font-size: 15px; line-height: 1.55; color: var(--sub)">Día 03 de El despegue, el primero de nueve bimestres. Todo lo que hice esta semana en estudio, metas y entreno, en una sola vista.</p>
+        </div>
+        
+      </header>
+      <div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); border-top: 1px solid var(--line); border-left: 1px solid var(--line)">
+          <sc-for list="{{ kpis }}" as="k" hint-placeholder-count="4">
+            <div style="padding: 18px 20px; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); display: flex; flex-direction: column; gap: 6px">
+              <span style="font-size: 12.5px; color: var(--sub)">{{ k.l }}</span>
+              <b style="font-family: 'Geist Mono', monospace; font-size: 28px; font-weight: 500; letter-spacing: -0.04em; line-height: 1">{{ k.v }}</b>
+              <span style="font-size: 12.5px; color: var(--sub)">{{ k.d }}</span>
+            </div>
+          </sc-for>
+        </div>
+      <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px">
+        <section style="grid-column: span 2; display: flex; flex-direction: column; gap: 14px; padding: 20px; border: 1px solid var(--line); border-radius: 10px; min-width: 0">
+          <div style="display: flex; justify-content: space-between; align-items: baseline; gap: 10px"><span style="font-family: 'Geist Mono', monospace; font-size: 11.5px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--sub)">Estudio esta semana</span><span style="font-family: 'Geist Mono', monospace; font-size: 12px; color: var(--sub)">8 h 27 de 24 h</span></div>
+          <div style="position: relative; display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 14px; height: 170px; align-items: end; border-bottom: 1px solid var(--ink)">
+            <span style="position: absolute; left: 0; right: 0; bottom: 140px; border-top: 1px dashed var(--sub)"></span>
+            <sc-for list="{{ week }}" as="w" hint-placeholder-count="7"><div style="display: flex; flex-direction: column-reverse; gap: 2px; height: 100%"><sc-for list="{{ w.segs }}" as="s" hint-placeholder-count="3"><span style="{{ s }}"></span></sc-for></div></sc-for>
+          </div>
+          <div style="display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 14px"><sc-for list="{{ week }}" as="w" hint-placeholder-count="7"><span style="font-family: 'Geist Mono', monospace; font-size: 11px; text-align: center; color: var(--sub)">{{ w.d }}</span></sc-for></div>
+          <div style="display: flex; flex-wrap: wrap; gap: 6px 16px; font-size: 12px; color: var(--sub)"><sc-for list="{{ legend }}" as="f" hint-placeholder-count="4"><span style="display: flex; align-items: center; gap: 6px"><span style="{{ f.dot }}"></span>{{ f.n }}</span></sc-for></div>
+        </section>
+        <section style="grid-column: span 1; display: flex; flex-direction: column; gap: 14px; padding: 20px; border: 1px solid var(--line); border-radius: 10px; min-width: 0">
+          <div style="display: flex; justify-content: space-between; align-items: baseline; gap: 10px"><span style="font-family: 'Geist Mono', monospace; font-size: 11.5px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--sub)">Metas del año</span><span style="font-family: 'Geist Mono', monospace; font-size: 12px; color: var(--sub)">año 1</span></div>
+          <div style="display: flex; flex-direction: column">
+            <sc-for list="{{ year }}" as="g" hint-placeholder-count="5">
+              <div style="display: flex; flex-direction: column; gap: 7px; padding: 11px 0; border-bottom: 1px solid var(--line)">
+                <span style="display: flex; justify-content: space-between; gap: 10px; font-size: 14px"><span style="display: flex; align-items: center; gap: 8px; min-width: 0"><span style="{{ g.dot }}"></span>{{ g.n }}</span><span style="font-family: 'Geist Mono', monospace; font-size: 12.5px">{{ g.v }}</span></span>
+                <span style="height: 3px; background: var(--line)"><span style="{{ g.bar }}"></span></span>
+              </div>
+            </sc-for>
+          </div>
+        </section>
+        <section style="grid-column: span 1; display: flex; flex-direction: column; gap: 14px; padding: 20px; border: 1px solid var(--line); border-radius: 10px; min-width: 0">
+          <div style="display: flex; justify-content: space-between; align-items: baseline; gap: 10px"><span style="font-family: 'Geist Mono', monospace; font-size: 11.5px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--sub)">Noviembre</span><span style="font-family: 'Geist Mono', monospace; font-size: 12px; color: var(--sub)">promedio 77 %</span></div>
+          <div style="display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 4px">
+            <sc-for list="{{ cal }}" as="c" hint-placeholder-count="35"><span style="{{ c }}"></span></sc-for>
+          </div>
+        </section>
+        <section style="grid-column: span 1; display: flex; flex-direction: column; gap: 14px; padding: 20px; border: 1px solid var(--line); border-radius: 10px; min-width: 0">
+          <div style="display: flex; justify-content: space-between; align-items: baseline; gap: 10px"><span style="font-family: 'Geist Mono', monospace; font-size: 11.5px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--sub)">Frentes de estudio</span><span style="font-family: 'Geist Mono', monospace; font-size: 12px; color: var(--sub)">bimestre 1</span></div>
+          <div style="display: flex; flex-direction: column">
+            <sc-for list="{{ fronts }}" as="g" hint-placeholder-count="5">
+              <div style="display: flex; flex-direction: column; gap: 7px; padding: 11px 0; border-bottom: 1px solid var(--line)">
+                <span style="display: flex; justify-content: space-between; gap: 10px; font-size: 14px"><span style="display: flex; align-items: center; gap: 8px; min-width: 0"><span style="{{ g.dot }}"></span>{{ g.n }}</span><span style="font-family: 'Geist Mono', monospace; font-size: 12.5px">{{ g.v }}</span></span>
+                <span style="height: 3px; background: var(--line)"><span style="{{ g.bar }}"></span></span>
+              </div>
+            </sc-for>
+          </div>
+        </section>
+        <section style="grid-column: span 1; display: flex; flex-direction: column; gap: 14px; padding: 20px; border: 1px solid var(--line); border-radius: 10px; min-width: 0">
+          <div style="display: flex; justify-content: space-between; align-items: baseline; gap: 10px"><span style="font-family: 'Geist Mono', monospace; font-size: 11.5px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--sub)">Peso</span><span style="font-family: 'Geist Mono', monospace; font-size: 12px; color: var(--sub)">meta 95 kg</span></div>
+          <svg viewBox="0 0 400 130" width="100%" height="130" role="img" aria-label="Peso: de 87,2 a 88,4 kg en cuatro semanas, meta 95">
+            <line x1="0" y1="14" x2="400" y2="14" style="stroke: var(--sa); stroke-dasharray: 4 4"/>
+            <text x="400" y="10" text-anchor="end" style="fill: var(--sub); font: 11px 'Geist Mono', monospace">meta 95 kg</text>
+            <polyline points="10,112 140,104 270,98 390,90" style="fill: none; stroke: var(--ink); stroke-width: 2"/>
+            <circle cx="390" cy="90" r="5" style="fill: var(--sa)"/>
+          </svg>
+          <div style="display: flex; justify-content: space-between; font-family: 'Geist Mono', monospace; font-size: 12px; color: var(--sub)"><span>87,2</span><span style="color: var(--ink)">88,4 kg hoy</span></div>
+        </section>
+        <section style="grid-column: span 2; display: flex; flex-direction: column; gap: 14px; padding: 20px; border: 1px solid var(--line); border-radius: 10px; min-width: 0">
+          <div style="display: flex; justify-content: space-between; align-items: baseline; gap: 10px"><span style="font-family: 'Geist Mono', monospace; font-size: 11.5px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--sub)">Sellos</span><span style="font-family: 'Geist Mono', monospace; font-size: 12px; color: var(--sub)">4 de 24</span></div>
+          <div style="display: flex; gap: 14px; flex-wrap: wrap">
+            <sc-for list="{{ stamps }}" as="b" hint-placeholder-count="4"><div style="{{ b.o }}"><div style="{{ b.i }}">{{ b.m }}</div></div></sc-for>
+          </div>
+        </section>
+      </div>
+    </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"theme":{"editor":"enum","options":["dark","light"],"default":"dark"},"$preview":{"width":834,"height":1400}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const T = { dark: { paper: '#0E0F10', ink: '#EDEDE8', sub: '#9A9D98', line: '#2C2E2D', dot: 'rgba(237,237,232,0.08)', ing: '#6CC4EE', hx: '#B3A4FF', ec: '#FF9F62', sa: '#7FD69A', ru: '#FF8E8E', eco: '#F0D45C', a: '38%' }, light: { paper: '#F2F3EF', ink: '#141515', sub: '#585C59', line: '#C9CCC6', dot: 'rgba(20,21,21,0.10)', ing: '#1C7FB0', hx: '#5F4BCF', ec: '#C2560F', sa: '#24854A', ru: '#C23A3A', eco: '#8A6C00', a: '60%' } };
+    const BR = { ing: '#6CC4EE', hx: '#B3A4FF', ec: '#FF9F62', sa: '#7FD69A', ru: '#FF8E8E', eco: '#F0D45C' };
+    const t = T[this.props.theme] || T.dark;
+    let vars = '';
+    for (const k in t) if (k !== 'a') vars += '--' + k + ':' + t[k] + ';';
+    for (const k in BR) vars += '--mk-' + k + ':color-mix(in srgb,' + BR[k] + ' ' + t.a + ',transparent);';
+    const ICO = { Hoy: '<path d="M3 18.5h18M7 18.5a5 5 0 0 1 10 0M12 5v3.2M5 9.6l1.9 1.3M19 9.6l-1.9 1.3"/>', Estudio: '<path d="M12 6.8c-2.2-1.6-5.2-2-8-1.6v12.9c2.8-.4 5.8 0 8 1.6 2.2-1.6 5.2-2 8-1.6V5.2c-2.8-.4-5.8 0-8 1.6zM12 6.8v12.9"/>', Metas: '<path d="M5.5 21V3.5M5.5 4.5h12.5l-2.6 4 2.6 4H5.5"/>', Entreno: '<path d="M6.5 6.5v11M17.5 6.5v11M3.5 9.5v5M20.5 9.5v5M6.5 12h11"/>', Perfil: '<circle cx="12" cy="9.5" r="5.5"/><path d="M9 14.6 7.6 21l4.4-2.2 4.4 2.2-1.4-6.4"/>', Avance: '<path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/>' };
+    const mask = (p) => { const u = 'url(data:image/svg+xml,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">' + p + '</svg>') + ')'; return 'flex:none;width:22px;height:22px;background:currentColor;-webkit-mask:' + u + ' center / 22px 22px no-repeat;mask:' + u + ' center / 22px 22px no-repeat'; };
+    const DESK = false;
+    const side = [['Avance', 'Escritorio.dc.html'], ['Hoy', 'Hoy.dc.html'], ['Estudio', 'Estudio.dc.html'], ['Metas', 'Semana.dc.html'], ['Entreno', 'Rutinas.dc.html'], ['Perfil', 'Logros.dc.html']].map(([label, href]) => { const on = label === 'Avance'; return { label, href, ico: mask(ICO[label]),
+      st: DESK ? 'display:flex;align-items:center;gap:12px;min-height:44px;padding:0 12px;border-radius:6px;text-decoration:none;font-size:14.5px;' + (on ? 'background:var(--mk-eco);color:var(--ink);font-weight:600' : 'color:var(--sub)')
+               : 'display:flex;flex-direction:column;align-items:center;gap:4px;min-height:58px;justify-content:center;border-radius:8px;text-decoration:none;font-size:10.5px;' + (on ? 'background:var(--mk-eco);color:var(--ink);font-weight:600' : 'color:var(--sub)') }; });
+    const kpis = [{ l: 'Racha', v: '3 días', d: 'nivel 4 · 1.240 XP' }, { l: 'Mejora', v: '+2,27 %', d: 'desde el día 0 · hoy +0,75' }, { l: 'Estudio', v: '8 h 27', d: '91 % de tarjetas recordadas' }, { l: 'Peso', v: '88,4 kg', d: '+1,2 kg en 4 semanas' }];
+    const C = { mat: 'ing', prg: 'sa', lec: 'hx', eng: 'ec' };
+    const dot = (k) => 'width:8px;height:8px;flex:none;background:var(--' + k + ')';
+    const H2 = 140 / 240;
+    const day = (d, mat, prg, lec, eng) => ({ d, segs: [['mat', mat], ['prg', prg], ['lec', lec], ['eng', eng]].filter(([, m]) => m > 0).map(([k, m]) => 'flex:none;height:' + Math.round(m * H2) + 'px;background:var(--' + C[k] + ')') });
+    const week = [day('L', 120, 100, 30, 0), day('M', 110, 90, 0, 22), day('X', 35, 0, 0, 0), day('J', 0, 0, 0, 0), day('V', 0, 0, 0, 0), day('S', 0, 0, 0, 0), day('D', 0, 0, 0, 0)];
+    const legend = [['Matemática', 'ing'], ['Programación', 'sa'], ['Lectura', 'hx'], ['Inglés', 'ec']].map(([n, k]) => ({ n, dot: dot(k) }));
+    const it = (n, k, v, p) => ({ n, v, dot: dot(k), bar: 'display:block;height:3px;background:var(--' + k + ');width:' + p + '%' });
+    const year = [it('Trabajo remoto AI/ML', 'ru', '1/6', 8), it('Eclipse USD 3.000/mes', 'ec', '180', 6), it('Handyx 100 usuarios', 'hx', '41', 41), it('Llegar a 95 kg', 'sa', '88,4', 30), it('Matemática de 6 bimestres', 'ing', '0/6', 3)];
+    const fronts = [it('Matemática · CONAMAT', 'ing', '2/10', 20), it('Programación · Faro v1', 'ing', '9/44 h', 20), it('Lectura · Make It Stick', 'hx', '62/313', 20), it('Inglés · speaking', 'ec', '3/12', 25)];
+    const vals = { 9: 92, 10: 61, 11: 78 };
+    const cal = [];
+    for (let i = 0; i < 6; i++) cal.push('aspect-ratio:1');
+    for (let d = 1; d <= 30; d++) { const v = vals[d]; cal.push('aspect-ratio:1;border-radius:2px;' + (v ? (v >= 85 ? 'background:var(--eco)' : 'background:color-mix(in srgb,var(--ink) ' + (v >= 70 ? 65 : 30) + '%,transparent)') : 'border:1px solid var(--line)')); }
+    const st = (m, c, r) => ({ m, o: 'width:74px;height:74px;border-radius:50%;display:grid;place-items:center;transform:rotate(' + r + 'deg);border:1.5px solid var(--' + c + ')', i: 'width:60px;height:60px;border-radius:50%;display:grid;place-items:center;border:1px dashed var(--' + c + ');color:var(--' + c + ');font-family:Archivo,sans-serif;font-stretch:125%;font-weight:900;font-size:15px' });
+    const stamps = [st('D0', 'ru', -8), st('04', 'eco', 6), st('C1', 'ing', -4), st('100', 'ing', 9)];
+    return { vars, side, kpis, week, legend, year, fronts, cal, stamps };
+  }
+}
+</script>
+</body>
+</html>

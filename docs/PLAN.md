@@ -40,6 +40,9 @@ Tracker personal de Toti: el día en horas, el estudio con su propio motor de re
 | Salud | `#7FD69A` | `#24854A` |
 | Rutina | `#FF8E8E` | `#C23A3A` |
 | Economía | `#F0D45C` | `#8A6C00` |
+| Inglés (`--idi`, rama del plan T+18) | `#F49AC2` | `#B4316F` |
+
+**Ramas del plan T+18:** main = Trazo, en tinta. Cada rama toma el color de un área: programación `--ing`, matemática `--economia` (el resaltador), trabajo `--rutina`, inglés `--idi` (nuevo), Handyx `--handyx` y salud `--salud`.
 
 **Resaltador:** el color del área al 38 % sobre fondo oscuro y al 60 % sobre claro, con las puntas en bisel.
 

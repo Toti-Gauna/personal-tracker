@@ -3,6 +3,13 @@ import type { Tramo } from './study-types';
 
 export type Area = 'ing' | 'handyx' | 'eclipse' | 'salud' | 'rutina' | 'economia';
 
+/**
+ * Ramas del plan T+18: seis roadmaps que salen de main (Trazo) en T0 y vuelven en T+18.
+ * "main" es Trazo mismo (rutina de la mañana, cierre).
+ */
+export type Rama = 'programacion' | 'matematica' | 'trabajo' | 'ingles' | 'handyx' | 'salud';
+export type RamaOMain = Rama | 'main';
+
 /** A qué motor lleva "Entrar en foco". Estudio y entreno tienen sesión propia (olas 2 y 5). */
 export type BlockKind = 'estudio' | 'entreno' | 'pomodoro';
 
