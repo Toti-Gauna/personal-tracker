@@ -1,7 +1,6 @@
 import { useLayoutEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 import { reducedMotion } from '../lib/motion';
-import { AREAS } from '../data/defaults';
 import { bimester, dayNumber, mejoraAyer } from '../data/derive';
 import { blockDone, fmtPct, mejoraDia } from '../data/mejora';
 import { activitiesFor } from '../data/study';
@@ -12,9 +11,8 @@ import type { Block, DayLog } from '../data/types';
 import { ir } from '../lib/routes';
 import { useStore } from '../state/store';
 import { Marca } from '../ui/Marca';
-import { ChipRuta, chipDe } from '../ui/RutaBits';
-import '../styles/ruta.css';
-import { SumarSemana } from '../ui/SumarSemana';
+import { colorDeBloque, etiquetaDeBloque, tituloDeBloque } from '../data/etiquetas';
+import { AvisosRamas, SumarPlan } from '../ui/PlanBits';
 import { Tareas } from '../ui/Tareas';
 import { useNow } from '../ui/useNow';
 import '../styles/hoy.css';
@@ -48,7 +46,7 @@ export function Hoy({ day }: { day: DayLog }) {
   const focus = useStore((s) => s.focus);
   const study = useStore((s) => s.study);
   const train = useStore((s) => s.train);
-  const ruta = useStore((s) => s.ruta);
+  const plan = useStore((s) => s.plan);
   const now = nowMin(new Date(useNow(30000)));
   const cur = currentBlock(day.blocks, now);
   const upcoming = day.blocks.find((b) => toMin(b.start) > now);
@@ -81,7 +79,7 @@ export function Hoy({ day }: { day: DayLog }) {
 
   return (
     <main className="pantalla hoy">
-      <Marca date={day.date} />
+      <Marca date={day.date} plan />
       <header>
         <h1 className="titulo">Hoy</h1>
         <p>{fmtFecha(day.date)}, día {String(n).padStart(2, '0')} de {bim.name}. {frase(day.blocks, now)}</p>
@@ -108,6 +106,8 @@ export function Hoy({ day }: { day: DayLog }) {
         <span className="mejora-n mono">+{fmtPct(mejora)} %</span>
       </section>
 
+      <AvisosRamas date={day.date} />
+
       <ol className="metas" ref={lista}>
         <li className="regla-horas" aria-hidden="true" />
         {day.blocks.map((b) => {
@@ -115,8 +115,9 @@ export function Hoy({ day }: { day: DayLog }) {
           const abiertaEsta = abierta === b.key;
           const activa = cur?.key === b.key;
           const enFoco = focus?.key === b.key && focus.date === day.date;
-          // La etiqueta de ruta: a qué carril empuja esta meta.
-          const chip = b.ref ? chipDe(b.ref, ruta, day.date) : null;
+          // La etiqueta de rama: "↳ programacion · P1 · semana 3 de 4".
+          const tag = etiquetaDeBloque(b, { day, t0: settings.startDate, plan, study });
+          const color = colorDeBloque(b, !!day.dayType);
           // Una meta de estudio abre su sesión de estudio; el resto, elegir pomodoro.
           const act = b.kind === 'estudio' ? activitiesFor(study, day.date).find((a) => a.block === b.key) : undefined;
           // La meta de entreno abre la sesión de entreno (o Entreno, si hoy no hay rutina).
@@ -129,19 +130,19 @@ export function Hoy({ day }: { day: DayLog }) {
           return (
             <li
               key={b.key}
-              className={`meta${abiertaEsta ? ' abierta' : ''}${blockDone(b) ? ' hecha' : ''}${activa ? ' activa' : ''}${chip ? ' con-ruta' : ''}`}
-              style={{ ['--c' as string]: AREAS[b.area].css }}
+              className={`meta${abiertaEsta ? ' abierta' : ''}${blockDone(b) ? ' hecha' : ''}${activa ? ' activa' : ''}${tag ? ' con-rama' : ''}`}
+              style={{ ['--c' as string]: color }}
             >
               <button className="meta-fila" aria-expanded={abiertaEsta} onClick={() => setAbierta(abiertaEsta ? null : b.key)}>
                 <span className="meta-check" aria-hidden="true" />
                 <span className="meta-n mono">{b.n}</span>
                 <span className="meta-tit">
-                  <span className="meta-nombre">{b.title}</span>
+                  <span className="meta-nombre">{tituloDeBloque(b, day.date, settings.startDate)}</span>
                   <span className="meta-hora mono">{b.start}</span>
                 </span>
                 <span className="meta-cont mono" aria-label={`${done} de ${b.tasks.length} tareas`}>{done}/{b.tasks.length}</span>
               </button>
-              {chip && <a className="meta-ruta" href="#/metas/semana-ruta" aria-label={`Ruta: ${chip.texto}`}><ChipRuta lane={chip.lane} texto={chip.texto} /></a>}
+              {tag && <span className={`meta-rama mono${b.rama ? '' : ' sin'}`}>↳ {tag}</span>}
               {abiertaEsta && (
                 <div className="meta-det">
                   <div className="kicker">{estado(b, now)}</div>
@@ -156,7 +157,8 @@ export function Hoy({ day }: { day: DayLog }) {
         })}
       </ol>
 
-      <SumarSemana date={day.date} />
+      <SumarPlan date={day.date} />
+      <a className="fila-link importar-link" href="#/importar">Importar JSON de Claude <span aria-hidden="true">→</span></a>
 
       <a className={`cierre-link${day.closed ? ' cerrado' : ''}`} href="#/cierre">
         <span><b>{day.closed ? 'Día cerrado' : 'Cerrar el día'}</b><small>{day.closed ? `A las ${day.closed.at} · +${day.closed.xp} XP` : 'Mejora, pendientes y el JSON de hoy'}</small></span>

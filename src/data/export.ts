@@ -1,3 +1,4 @@
+import { bimestreDelPlan, enPlan, etapas, semanaDelPlan } from './plan';
 import { bimester, dayNumber, mejoraAcumulada, mejoraAyer } from './derive';
 import { blockDone, mejoraDia, round } from './mejora';
 import type { DayLog, Settings } from './types';
@@ -15,6 +16,7 @@ export function dayJson(day: DayLog, settings: Settings, days: Record<string, Da
       n: x.n,
       id: x.key,
       area: x.area,
+      ...(x.rama ? { rama: x.rama } : {}),
       start: x.start,
       min: x.min,
       done: blockDone(x),
@@ -23,10 +25,24 @@ export function dayJson(day: DayLog, settings: Settings, days: Record<string, Da
     focus: day.focus.map((f) => ({ block: f.key, plan: f.plan, min: f.focusMin, at: f.at })),
     notes: day.notes,
     ...(day.closed ? { cierre: { at: day.closed.at, score: round(day.closed.score), xp: day.closed.xp, victoria: day.closed.victoria, manana: day.closed.manana } } : {}),
+    ...planDelDia(day.date, settings.startDate),
     mejora: {
       hoy: round(mejoraDia(day)),
       ayer: round(mejoraAyer(days, day.date)),
       acumulado: round(mejoraAcumulada(days, day.date), 2),
+    },
+  };
+}
+
+/** Plan T+18 en el JSON del día: semana, bimestre y la etapa de cada rama. */
+function planDelDia(date: string, t0: string) {
+  if (!enPlan(date, t0)) return {};
+  const b = bimestreDelPlan(date, t0);
+  return {
+    plan: {
+      semana: semanaDelPlan(date, t0),
+      bimestre: { n: b.n, semana: b.semana, semanas: b.semanas },
+      ramas: Object.fromEntries(etapas(date, t0).map((e) => [e.rama, { etapa: e.titulo, lado: e.lado }])),
     },
   };
 }

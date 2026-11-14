@@ -106,6 +106,10 @@ describe('mejora y JSON del día', () => {
     expect(j.blocks).toHaveLength(10);
     expect(j.blocks[0]).toMatchObject({ n: 1, id: 'rutina', area: 'rutina', start: '04:00', done: true });
     expect(j.mejora).toEqual({ hoy: 0.2, ayer: 0.1, acumulado: 0.3 });
+    expect(j.blocks[0]).toMatchObject({ rama: 'main' });
+    // Con T0 el 8 nov, el 11 nov es la semana 1 del plan.
+    expect(j.plan).toMatchObject({ semana: 1, bimestre: { n: 1, semana: 1, semanas: 9 } });
+    expect(Object.keys(j.plan!.ramas)).toEqual(['programacion', 'matematica', 'trabajo', 'ingles', 'handyx', 'salud']);
   });
 });
 
