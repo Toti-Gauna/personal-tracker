@@ -39,7 +39,7 @@
   .pantalla { max-width: 760px; padding-bottom: 48px; padding-inline: 32px; }
   .app.con-mini .pantalla { padding-bottom: 48px; }
   .app .toasts { left: calc(var(--lat-w) + var(--gutter)); }
-  .app .modal-fondo { padding-bottom: var(--gutter); padding-left: calc(var(--lat-w) + var(--gutter)); }
+  .app .modal-fondo { padding-left: var(--lat-w); }
   .app .hoja-fondo { padding-left: var(--lat-w); }
   .app .hoja { max-width: 560px; }
 }

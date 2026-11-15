@@ -381,12 +381,12 @@ Desde el lunes 16 nov 2026 la prioridad es un trabajo remoto de USD 3.000 a 5.00
 
 Salen de usar la app en el teléfono. Una rama y un PR por ola; se mergea a `main` cuando el CI está en verde.
 
-**Ola 9 · Pulido de Hoy** (Sonnet 5.5 · medio)
+**Ola 9 · Pulido de Hoy** (Sonnet 5.5 · medio) — *hecha*
 
 - **Buen día:** pantalla completa, con el contenido que fluye y "Empezar el día" fijo abajo. Ya no es una hoja sobre un fondo, que se rompía con contenido largo. *Hecho.*
 - **Meta abierta:** al abrirla no cambia de ancho ni de peso: la abierta o activa se subraya con el color del área. *Hecho.*
-- **Modales:** hoja inferior (sube desde abajo, con asa, esquinas redondeadas y botones grandes). Es un componente reusable; la ola 10 lo usa para agregar submetas.
-- **Mini reproductor:** tarjeta con el bloque, el tiempo grande, el plan ("50/10 · 1 de 2"), play/pausa y barra de avance. Sin el bloque de color que tapa el texto, y sin tapar la lista de Hoy.
+- **Modales:** hoja inferior (sube desde abajo, con asa, borde del color del área y botones grandes), en teléfono y en escritorio. *Hecho.* El componente reusable para la hoja de submetas se crea en la ola 10.
+- **Mini reproductor:** tarjeta con el estado (Concentración, Descanso o En pausa), el bloque, el tiempo grande, el plan ("50/10 · 1 de 2"), play/pausa y barra de avance. *Hecho.* El bloque azul enorme era un choque de clases: usaba `.avance`, que también es la pantalla Avance; ahora usa clases `mini-*`.
 - **Aceptación:** a 390 px sin desbordes, en claro y oscuro, y con movimiento reducido.
 
 **Ola 10 · Metas: submetas y marcar por día** (Sonnet 5.5 · alto)
