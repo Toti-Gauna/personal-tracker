@@ -1,0 +1,1371 @@
+{
+ "version": 1,
+ "roadmaps": [
+  {
+   "id": "matematica",
+   "nombre": "Matemática",
+   "frente": "math",
+   "color": "economia",
+   "descripcion": "De cero real a pre-aeroespacial: un libro que manda por fase y herramientas que se activan cuando el problema lo pide.",
+   "regla": "Libro principal → ejercicios → test → corrección → complementario solo si hace falta → proyecto → avance.",
+   "lema": "No estás armando una biblioteca: estás armando una escalera.",
+   "roles": {
+    "nucleo": {
+     "nombre": "Libro núcleo",
+     "uso": "Se estudia linealmente y marca el ritmo de la fase."
+    },
+    "complementario": {
+     "nombre": "Complementario imprescindible",
+     "uso": "Refuerza un tema, da otra explicación o sube el nivel. No se lee completo en ese momento."
+    },
+    "banco": {
+     "nombre": "Banco de ejercicios",
+     "uso": "No es teoría: se abre en el tema flojo cuando hace falta volumen."
+    },
+    "curso": {
+     "nombre": "Curso de apoyo",
+     "uso": "No reemplaza al libro: visualización, exámenes, estructura o certificación."
+    },
+    "referencia": {
+     "nombre": "Referencia avanzada",
+     "uso": "Se consulta por temas; no se lee completa durante la fase."
+    }
+   },
+   "protocolo": [
+    {
+     "paso": "Teoría",
+     "detalle": "El tema en el libro núcleo, sin abrir nada más todavía."
+    },
+    {
+     "paso": "Ejercicios",
+     "detalle": "Fáciles, medios y algunos difíciles del núcleo. Mirar soluciones no alcanza: tenés que poder resolver."
+    },
+    {
+     "paso": "Corrección",
+     "detalle": "Cada error con su tipo: concepto, técnica, descuido o enunciado."
+    },
+    {
+     "paso": "Mini test",
+     "detalle": "De 30 a 60 minutos. El semáforo decide si avanzás."
+    },
+    {
+     "paso": "Complementario",
+     "detalle": "Solo si hace falta, según el tipo de error."
+    },
+    {
+     "paso": "Proyecto",
+     "detalle": "Cuando ya entendiste el bloque, nunca antes."
+    }
+   ],
+   "semaforo": {
+    "verde": 0.8,
+    "amarillo": 0.65,
+    "textos": {
+     "verde": "Avanzás.",
+     "amarillo": "Activás un complementario según el tipo de error y retesteás.",
+     "rojo": "No avanzás: volvés al tema."
+    }
+   },
+   "activar": {
+    "concepto": {
+     "roles": [
+      "complementario",
+      "curso"
+     ],
+     "texto": "Otro libro más intuitivo, una explicación visual o Feynman."
+    },
+    "tecnica": {
+     "roles": [
+      "banco"
+     ],
+     "texto": "Banco de ejercicios en el tema equivalente."
+    },
+    "descuido": {
+     "roles": [],
+     "texto": "Más cuidado y retest; no hace falta otro material."
+    },
+    "enunciado": {
+     "roles": [
+      "banco"
+     ],
+     "texto": "Más problemas del mismo tipo hasta leerlos bien."
+    },
+    "profundidad": {
+     "roles": [
+      "referencia",
+      "complementario"
+     ],
+     "texto": "Un libro más duro o la referencia del tema."
+    }
+   },
+   "cursos": [
+    {
+     "cuando": "Antes del libro",
+     "detalle": "Solo si estás muy perdido."
+    },
+    {
+     "cuando": "Durante el libro",
+     "detalle": "Cuando necesitás visualización."
+    },
+    {
+     "cuando": "Después del libro",
+     "detalle": "Para consolidar con exámenes."
+    },
+    {
+     "cuando": "Certificación",
+     "detalle": "Después de tener base."
+    }
+   ],
+   "fases": [
+    {
+     "id": "M0",
+     "nombre": "Sistema de estudio",
+     "perfil": "Estudiante con método",
+     "meses": [
+      1,
+      1
+     ],
+     "objetivo": "Aprender a estudiar: recuperar en vez de releer, espaciar y corregirse.",
+     "materiales": [
+      {
+       "id": "make-it-stick",
+       "titulo": "Make It Stick",
+       "rol": "nucleo",
+       "uso": "Base del método: práctica de recuperación, espaciado e intercalado.",
+       "autor": "Brown, Roediger y McDaniel"
+      }
+     ],
+     "proyecto": {
+      "nombre": "Tu sistema en Trazo",
+      "modulos": [
+       "Cold recall diario",
+       "Tarjetas con repaso espaciado",
+       "Tests con tipo de error"
+      ]
+     },
+     "salida": [
+      "Usás cold recall, tarjetas y tests sin que te lo recuerden",
+      "Registrás cada error con su tipo"
+     ],
+     "actividad": "make-it-stick"
+    },
+    {
+     "id": "M1",
+     "nombre": "Base total desde cero",
+     "perfil": "Aritmético",
+     "meses": [
+      4,
+      6
+     ],
+     "objetivo": "Aritmética, álgebra básica y razonamiento elemental sin agujeros.",
+     "materiales": [
+      {
+       "id": "conamat",
+       "titulo": "CONAMAT",
+       "rol": "nucleo",
+       "uso": "Columna vertebral inicial: base, repetición y confianza.",
+       "cuando": "Primero, hasta aprobar un examen mixto de 80 % o más."
+      },
+      {
+       "id": "lang-basic",
+       "titulo": "Basic Mathematics",
+       "rol": "nucleo",
+       "uso": "Segundo pase, más preciso: razonamiento limpio, fundamentos y álgebra con más madurez.",
+       "autor": "Serge Lang",
+       "cuando": "Cuando dejás CONAMAT por dominio, no por terminar páginas."
+      },
+      {
+       "id": "baldor",
+       "titulo": "Álgebra de Baldor",
+       "rol": "banco",
+       "uso": "Gimnasio, no mapa: el tema equivalente, 20 a 50 ejercicios, corregir y retestear.",
+       "cuando": "Si fallás productos notables, factorización, ecuaciones, fracciones algebraicas o problemas clásicos."
+      },
+      {
+       "id": "humongous",
+       "titulo": "The Humongous Book of Basic Math and Pre-Algebra Problems",
+       "rol": "banco",
+       "uso": "Práctica guiada con soluciones paso a paso.",
+       "cuando": "Si entendés la teoría pero te trabás al ejecutar."
+      },
+      {
+       "id": "khan-m1",
+       "titulo": "Khan Academy",
+       "rol": "curso",
+       "uso": "El módulo del tema que fallaste, no videos en vez de resolver.",
+       "cuando": "Si un test muestra una laguna puntual."
+      }
+     ],
+     "bloques": [
+      {
+       "titulo": "CONAMAT",
+       "nucleo": "conamat",
+       "temas": [
+        "Sistema decimal y operaciones",
+        "Fracciones",
+        "Porcentajes",
+        "Potencias y raíces",
+        "Productos notables",
+        "Factorización",
+        "Ecuaciones",
+        "Geometría básica"
+       ]
+      },
+      {
+       "titulo": "Serge Lang",
+       "nucleo": "lang-basic",
+       "temas": [
+        "Razonamiento matemático limpio",
+        "Fundamentos",
+        "Álgebra básica con más madurez",
+        "Transición a precálculo"
+       ]
+      }
+     ],
+     "descartados": [
+      "Udemy: en esta fase es ruido."
+     ],
+     "proyecto": {
+      "nombre": "Basic Math Toolkit",
+      "modulos": [
+       "MCD y MCM",
+       "Simplificación de fracciones",
+       "Calculadora de porcentajes"
+      ]
+     },
+     "salida": [
+      "Resolver ejercicios mixtos sin mirar",
+      "Explicar MCM y MCD",
+      "Explicar fracciones",
+      "Resolver porcentajes",
+      "Resolver ecuaciones lineales",
+      "Factorizar expresiones básicas",
+      "Aprobar un examen mixto con 80 % o más"
+     ],
+     "actividad": "conamat"
+    },
+    {
+     "id": "M2",
+     "nombre": "Álgebra, trigonometría y precálculo serio",
+     "perfil": "Precalculista",
+     "meses": [
+      5,
+      6
+     ],
+     "objetivo": "Entrar a cálculo sin lagunas.",
+     "materiales": [
+      {
+       "id": "stewart-pre",
+       "titulo": "Precalculus",
+       "rol": "nucleo",
+       "uso": "Marca el ritmo: teoría y ejercicios de cada bloque.",
+       "autor": "Stewart, Redlin y Watson"
+      },
+      {
+       "id": "gelfand-func",
+       "titulo": "Functions and Graphs",
+       "rol": "complementario",
+       "uso": "Intuición de qué es una función y cómo se comporta, junto a cada tema de funciones.",
+       "autor": "Gelfand",
+       "cuando": "Después de ver funciones en Stewart."
+      },
+      {
+       "id": "gelfand-trig",
+       "titulo": "Trigonometry",
+       "rol": "complementario",
+       "uso": "Intuición de trigonometría.",
+       "autor": "Gelfand",
+       "cuando": "Después de la trigonometría de Stewart, si fallás por concepto."
+      },
+      {
+       "id": "sullivan",
+       "titulo": "Precalculus",
+       "rol": "banco",
+       "uso": "El capítulo equivalente y 20 a 40 ejercicios extra; después, retest.",
+       "autor": "Sullivan",
+       "cuando": "Si fallás manipulación algebraica, signos, simplificación, logaritmos o trigonometría por práctica."
+      },
+      {
+       "id": "aops-inter",
+       "titulo": "The Art of Problem Solving: Intermediate Algebra",
+       "rol": "referencia",
+       "uso": "Dificultad extra para mejorar razonamiento.",
+       "cuando": "Solo si aprobás Stewart con 85 % o más y no te retrasa."
+      },
+      {
+       "id": "khan-m2",
+       "titulo": "Khan Academy",
+       "rol": "curso",
+       "uso": "Antes de un tema si estás perdido, o después de fallar un test."
+      }
+     ],
+     "bloques": [
+      {
+       "titulo": "Funciones y gráficas",
+       "nucleo": "stewart-pre",
+       "complementos": [
+        "gelfand-func"
+       ],
+       "temas": [
+        "Concepto de función",
+        "Dominio y rango",
+        "Transformaciones",
+        "Composición",
+        "Inversas",
+        "Gráficas"
+       ]
+      },
+      {
+       "titulo": "Polinomios, racionales y factorización avanzada",
+       "nucleo": "stewart-pre",
+       "complementos": [
+        "sullivan"
+       ]
+      },
+      {
+       "titulo": "Exponenciales y logaritmos",
+       "nucleo": "stewart-pre",
+       "complementos": [
+        "sullivan",
+        "khan-m2"
+       ]
+      },
+      {
+       "titulo": "Trigonometría",
+       "nucleo": "stewart-pre",
+       "complementos": [
+        "gelfand-trig",
+        "sullivan"
+       ],
+       "temas": [
+        "Seno, coseno y tangente",
+        "Identidades",
+        "Ecuaciones",
+        "Gráficas"
+       ]
+      },
+      {
+       "titulo": "Cónicas, secuencias y números complejos",
+       "nucleo": "stewart-pre",
+       "complementos": [
+        "sullivan"
+       ]
+      }
+     ],
+     "descartados": [
+      "Udemy: Stewart, Gelfand y Sullivan alcanzan."
+     ],
+     "proyecto": {
+      "nombre": "Function Visualizer",
+      "modulos": [
+       "Graficador lineal",
+       "Graficador cuadrático",
+       "Comparador exponencial y logaritmo",
+       "Visualizador seno, coseno y tangente"
+      ]
+     },
+     "salida": [
+      "Entender funciones",
+      "Manipular álgebra",
+      "Resolver trigonometría básica",
+      "Usar logaritmos",
+      "Graficar transformaciones",
+      "Aprobar un test mixto de precálculo con 80 % o más"
+     ]
+    },
+    {
+     "id": "M3",
+     "nombre": "Cálculo I y álgebra lineal base",
+     "perfil": "Calculista",
+     "meses": [
+      5,
+      6
+     ],
+     "objetivo": "La base central para IA e ingeniería.",
+     "materiales": [
+      {
+       "id": "stewart-calc",
+       "titulo": "Calculus",
+       "rol": "nucleo",
+       "uso": "Solo Cálculo I. Se frena antes de técnicas avanzadas de integración, series, polares, paramétricas y multivariable: eso es M5.",
+       "autor": "Stewart",
+       "parte": "Cálculo I"
+      },
+      {
+       "id": "strang",
+       "titulo": "Introduction to Linear Algebra",
+       "rol": "nucleo",
+       "uso": "Capítulo por capítulo: cada concepto se vuelve dibujo, matriz y código.",
+       "autor": "Strang"
+      },
+      {
+       "id": "mit-1801",
+       "titulo": "MIT OCW 18.01SC",
+       "rol": "curso",
+       "uso": "Después de cada bloque de Stewart: la clase si hace falta, problemas y exámenes universitarios."
+      },
+      {
+       "id": "mit-1806",
+       "titulo": "MIT OCW 18.06",
+       "rol": "curso",
+       "uso": "La clase equivalente después de leer Strang, problemas y exámenes."
+      },
+      {
+       "id": "3b1b-calc",
+       "titulo": "3Blue1Brown · Essence of Calculus",
+       "rol": "curso",
+       "uso": "Intuición antes de límites, derivadas e integrales. Te da ojos; Stewart te da músculo."
+      },
+      {
+       "id": "3b1b-la",
+       "titulo": "3Blue1Brown · Essence of Linear Algebra",
+       "rol": "curso",
+       "uso": "Intuición antes de transformaciones, determinantes y autovectores."
+      },
+      {
+       "id": "spivak",
+       "titulo": "Calculus",
+       "rol": "complementario",
+       "uso": "La sección equivalente y algunos ejercicios elegidos; si se pone muy pesado, lo dejás y seguís. Primero fluidez, después rigor.",
+       "autor": "Spivak",
+       "cuando": "Después de cada tema de Stewart, nunca antes."
+      }
+     ],
+     "bloques": [
+      {
+       "titulo": "Cálculo I",
+       "nucleo": "stewart-calc",
+       "complementos": [
+        "mit-1801",
+        "3b1b-calc",
+        "spivak"
+       ],
+       "temas": [
+        "Límites",
+        "Continuidad",
+        "Derivadas y reglas",
+        "Derivación implícita",
+        "Aplicaciones y optimización",
+        "Tasas relacionadas",
+        "Integrales básicas y sumas de Riemann",
+        "Teorema fundamental"
+       ]
+      },
+      {
+       "titulo": "Álgebra lineal",
+       "nucleo": "strang",
+       "complementos": [
+        "mit-1806",
+        "3b1b-la"
+       ],
+       "temas": [
+        "Vectores y combinaciones lineales",
+        "Matrices y sistemas",
+        "Eliminación gaussiana",
+        "Espacios columna y nulo",
+        "Independencia, bases y dimensión",
+        "Transformaciones lineales",
+        "Determinantes",
+        "Autovalores y autovectores"
+       ]
+      }
+     ],
+     "proyecto": {
+      "nombre": "Math for AI Notebook",
+      "modulos": [
+       "Derivadas numéricas",
+       "Gradiente",
+       "Descenso por gradiente",
+       "Matrices y sistemas lineales",
+       "Visualización de vectores",
+       "Transformaciones lineales",
+       "Autovectores",
+       "Regresión lineal desde cero"
+      ]
+     },
+     "salida": [
+      "Derivar bien",
+      "Integrar lo básico",
+      "Resolver optimización",
+      "Resolver sistemas lineales",
+      "Explicar matrices como transformaciones",
+      "Implementar regresión lineal desde cero"
+     ]
+    },
+    {
+     "id": "M4",
+     "nombre": "Probabilidad, estadística y matemática para IA",
+     "perfil": "Probabilista para IA",
+     "meses": [
+      4,
+      5
+     ],
+     "objetivo": "Entender la matemática base detrás de machine learning.",
+     "materiales": [
+      {
+       "id": "blitzstein",
+       "titulo": "Introduction to Probability",
+       "rol": "nucleo",
+       "uso": "El libro de probabilidad: se aprende resolviendo casos y simulando en Python.",
+       "autor": "Blitzstein y Hwang"
+      },
+      {
+       "id": "isl",
+       "titulo": "An Introduction to Statistical Learning",
+       "rol": "nucleo",
+       "uso": "El puente entre estadística y ML aplicado. Después o durante la probabilidad básica, nunca antes.",
+       "autor": "James, Witten, Hastie y Tibshirani"
+      },
+      {
+       "id": "mml",
+       "titulo": "Mathematics for Machine Learning",
+       "rol": "nucleo",
+       "uso": "Conecta álgebra lineal, cálculo, probabilidad y optimización con ML. No es primer contacto: es integración.",
+       "autor": "Deisenroth, Faisal y Ong"
+      },
+      {
+       "id": "coursera-mml",
+       "titulo": "Coursera · Mathematics for Machine Learning",
+       "rol": "curso",
+       "uso": "Consolidar y certificar. No reemplaza a los libros ni a los proyectos.",
+       "cuando": "Después de Cálculo I, álgebra lineal y probabilidad inicial."
+      },
+      {
+       "id": "wasserman",
+       "titulo": "All of Statistics",
+       "rol": "referencia",
+       "uso": "Explicación formal de estimación, inferencia y tests.",
+       "autor": "Wasserman"
+      },
+      {
+       "id": "bishop",
+       "titulo": "Pattern Recognition and Machine Learning",
+       "rol": "referencia",
+       "uso": "Modelos probabilísticos y ML más matemático.",
+       "autor": "Bishop",
+       "cuando": "Después de ISL, no antes."
+      },
+      {
+       "id": "esl",
+       "titulo": "The Elements of Statistical Learning",
+       "rol": "referencia",
+       "uso": "La versión más dura de un tema que ya entendiste en ISL.",
+       "autor": "Hastie, Tibshirani y Friedman"
+      }
+     ],
+     "bloques": [
+      {
+       "titulo": "Probabilidad",
+       "nucleo": "blitzstein",
+       "temas": [
+        "Conteo",
+        "Probabilidad condicional y Bayes",
+        "Variables aleatorias y distribuciones",
+        "Esperanza y varianza",
+        "Distribuciones conjuntas",
+        "Ley de grandes números y TCL"
+       ]
+      },
+      {
+       "titulo": "Estadística y ML",
+       "nucleo": "isl",
+       "complementos": [
+        "wasserman",
+        "esl",
+        "bishop"
+       ],
+       "temas": [
+        "Regresión lineal",
+        "Clasificación",
+        "Remuestreo",
+        "Regularización",
+        "Árboles",
+        "SVM",
+        "Aprendizaje no supervisado"
+       ]
+      },
+      {
+       "titulo": "Matemática para ML",
+       "nucleo": "mml",
+       "complementos": [
+        "coursera-mml"
+       ]
+      }
+     ],
+     "descartados": [
+      "Udemy: más débil que Blitzstein, ISL, MML y el proyecto."
+     ],
+     "proyecto": {
+      "nombre": "ML from Scratch",
+      "modulos": [
+       "Regresión lineal",
+       "Descenso por gradiente",
+       "Regresión logística",
+       "k vecinos más cercanos",
+       "Naive Bayes",
+       "Métricas",
+       "Regularización básica",
+       "Frontera de decisión"
+      ]
+     },
+     "salida": [
+      "Explicar Bayes",
+      "Explicar overfitting",
+      "Explicar train y test",
+      "Explicar la función de pérdida",
+      "Implementar descenso por gradiente",
+      "Construir modelos simples desde cero"
+     ]
+    },
+    {
+     "id": "M5",
+     "nombre": "Cálculo II, multivariable y ecuaciones diferenciales",
+     "perfil": "Matemático de ingeniería",
+     "meses": [
+      5,
+      6
+     ],
+     "objetivo": "La matemática de ingeniería.",
+     "materiales": [
+      {
+       "id": "stewart-calc",
+       "titulo": "Calculus",
+       "rol": "nucleo",
+       "uso": "Se retoma para Cálculo II y multivariable: no se repite, se usa otra parte del libro.",
+       "autor": "Stewart",
+       "parte": "Cálculo II y multivariable"
+      },
+      {
+       "id": "simmons",
+       "titulo": "Differential Equations with Applications and Historical Notes",
+       "rol": "nucleo",
+       "uso": "El libro de EDOs.",
+       "autor": "Simmons"
+      },
+      {
+       "id": "kreyszig",
+       "titulo": "Advanced Engineering Mathematics",
+       "rol": "referencia",
+       "uso": "Mapa de matemática de ingeniería; no se lee completo ni dejás que te trague.",
+       "autor": "Kreyszig"
+      },
+      {
+       "id": "mit-1802",
+       "titulo": "MIT OCW 18.02SC",
+       "rol": "curso",
+       "uso": "Acompaña Stewart multivariable: ejercicios y exámenes."
+      },
+      {
+       "id": "mit-1803",
+       "titulo": "MIT OCW 18.03SC",
+       "rol": "curso",
+       "uso": "Acompaña Simmons: aplicaciones, problemas y tests."
+      },
+      {
+       "id": "schey",
+       "titulo": "Div, Grad, Curl, and All That",
+       "rol": "complementario",
+       "uso": "Intuición vectorial; muy útil antes de fluidos y electromagnetismo.",
+       "autor": "Schey",
+       "cuando": "Cuando empiezan gradiente, divergencia, rotacional y flujo."
+      },
+      {
+       "id": "marsden",
+       "titulo": "Vector Calculus",
+       "rol": "complementario",
+       "uso": "Más rigor y ejercicios de cálculo vectorial.",
+       "autor": "Marsden y Tromba",
+       "cuando": "Si Stewart te quedó corto."
+      },
+      {
+       "id": "boyce",
+       "titulo": "Elementary Differential Equations",
+       "rol": "banco",
+       "uso": "Banco y otra explicación de EDOs.",
+       "autor": "Boyce y DiPrima",
+       "cuando": "Solo si Simmons no alcanza."
+      }
+     ],
+     "bloques": [
+      {
+       "titulo": "Stewart, segunda parte",
+       "nucleo": "stewart-calc",
+       "complementos": [
+        "mit-1802",
+        "schey",
+        "marsden"
+       ],
+       "temas": [
+        "Técnicas de integración",
+        "Integrales impropias",
+        "Sucesiones y series",
+        "Taylor y Maclaurin",
+        "Polares y paramétricas",
+        "Vectores",
+        "Derivadas parciales y gradiente",
+        "Integrales dobles y triples",
+        "Campos vectoriales"
+       ]
+      },
+      {
+       "titulo": "Ecuaciones diferenciales",
+       "nucleo": "simmons",
+       "complementos": [
+        "mit-1803",
+        "boyce",
+        "kreyszig"
+       ],
+       "temas": [
+        "Primer orden",
+        "Segundo orden",
+        "Sistemas",
+        "Osciladores",
+        "Laplace"
+       ]
+      }
+     ],
+     "descartados": [
+      "Udemy: MIT, libros y simulación son superiores."
+     ],
+     "proyecto": {
+      "nombre": "Engineering Dynamics Simulator",
+      "modulos": [
+       "Masa y resorte",
+       "Con amortiguador",
+       "Péndulo simple",
+       "Péndulo amortiguado",
+       "Dos masas",
+       "Caída con rozamiento",
+       "Respuesta al escalón",
+       "Euler contra RK4",
+       "Solución analítica contra numérica"
+      ]
+     },
+     "salida": [
+      "Resolver EDOs básicas",
+      "Simular sistemas dinámicos",
+      "Usar derivadas parciales",
+      "Entender gradiente, divergencia y rotacional",
+      "Aplicar Laplace",
+      "Explicar por qué estas herramientas sirven en ingeniería"
+     ]
+    },
+    {
+     "id": "M6",
+     "nombre": "Métodos numéricos y computación científica",
+     "perfil": "Numérico",
+     "meses": [
+      3,
+      4
+     ],
+     "objetivo": "Resolver problemas que no tienen solución cerrada.",
+     "materiales": [
+      {
+       "id": "chapra",
+       "titulo": "Numerical Methods for Engineers",
+       "rol": "nucleo",
+       "uso": "Piensa como ingeniero.",
+       "autor": "Chapra y Canale"
+      },
+      {
+       "id": "burden",
+       "titulo": "Numerical Analysis",
+       "rol": "complementario",
+       "uso": "Demostraciones, error y convergencia.",
+       "autor": "Burden y Faires",
+       "cuando": "Si querés formalidad o Chapra te parece muy aplicado."
+      },
+      {
+       "id": "newman",
+       "titulo": "Computational Physics",
+       "rol": "complementario",
+       "uso": "Simulación científica con más código.",
+       "autor": "Newman"
+      },
+      {
+       "id": "trefethen",
+       "titulo": "Numerical Linear Algebra",
+       "rol": "referencia",
+       "uso": "Avanzado o para después del roadmap: matrices grandes y estabilidad numérica.",
+       "autor": "Trefethen y Bau"
+      }
+     ],
+     "bloques": [
+      {
+       "titulo": "Métodos numéricos",
+       "nucleo": "chapra",
+       "complementos": [
+        "burden",
+        "newman"
+       ],
+       "temas": [
+        "Error numérico",
+        "Raíces: bisección y Newton-Raphson",
+        "Interpolación",
+        "Diferenciación e integración numérica",
+        "Sistemas lineales",
+        "Mínimos cuadrados",
+        "Solvers de EDOs",
+        "Optimización"
+       ]
+      }
+     ],
+     "descartados": [
+      "Cursos: ninguno obligatorio, el curso es construir."
+     ],
+     "proyecto": {
+      "nombre": "Numerical Methods Engineering Toolkit",
+      "modulos": [
+       "Bisección",
+       "Newton-Raphson",
+       "Secante",
+       "Euler",
+       "RK2 y RK4",
+       "Trapecio y Simpson",
+       "Interpolación",
+       "Sistemas lineales",
+       "Mínimos cuadrados",
+       "Optimización simple"
+      ]
+     },
+     "salida": [
+      "Explicar el error",
+      "Comparar métodos",
+      "Implementar RK4",
+      "Resolver sistemas",
+      "Graficar convergencia",
+      "Usar SciPy entendiendo qué hace"
+     ]
+    },
+    {
+     "id": "M7",
+     "nombre": "Física general para ingeniería",
+     "perfil": "Físico general",
+     "meses": [
+      5,
+      6
+     ],
+     "objetivo": "Física universitaria real.",
+     "materiales": [
+      {
+       "id": "young",
+       "titulo": "University Physics",
+       "rol": "nucleo",
+       "uso": "Fase de problemas: teoría, ejemplos, ejercicios, problemas mixtos, simulación y test.",
+       "autor": "Young y Freedman"
+      },
+      {
+       "id": "mit-801",
+       "titulo": "MIT OCW 8.01SC",
+       "rol": "curso",
+       "uso": "Mecánica: problemas universitarios y exámenes."
+      },
+      {
+       "id": "mit-802",
+       "titulo": "MIT OCW 8.02",
+       "rol": "curso",
+       "uso": "Electricidad y magnetismo: campos y circuitos básicos."
+      },
+      {
+       "id": "serway",
+       "titulo": "Physics for Scientists and Engineers",
+       "rol": "banco",
+       "uso": "Más problemas u otra explicación.",
+       "autor": "Serway y Jewett",
+       "cuando": "Si Young explicó algo raro o necesitás volumen."
+      },
+      {
+       "id": "taylor",
+       "titulo": "Classical Mechanics",
+       "rol": "complementario",
+       "uso": "Profundidad en mecánica.",
+       "autor": "Taylor",
+       "cuando": "Después de dominar la mecánica básica."
+      }
+     ],
+     "bloques": [
+      {
+       "titulo": "Física general",
+       "nucleo": "young",
+       "complementos": [
+        "mit-801",
+        "mit-802",
+        "serway",
+        "taylor"
+       ],
+       "temas": [
+        "Cinemática y dinámica",
+        "Trabajo y energía",
+        "Momentum",
+        "Rotación",
+        "Oscilaciones y ondas",
+        "Temperatura y termodinámica",
+        "Electricidad",
+        "Magnetismo"
+       ]
+      }
+     ],
+     "proyecto": {
+      "nombre": "Physics Simulation Pack",
+      "modulos": [
+       "Tiro parabólico",
+       "Caída con rozamiento",
+       "Colisiones",
+       "Rotación",
+       "Oscilador armónico",
+       "Péndulo",
+       "Conservación de energía",
+       "Campo eléctrico",
+       "Partícula cargada"
+      ]
+     },
+     "salida": [
+      "Resolver problemas de mecánica",
+      "Modelar con ecuaciones",
+      "Simular",
+      "Explicar energía y momentum",
+      "Resolver rotación básica",
+      "Entender oscilaciones"
+     ]
+    },
+    {
+     "id": "M8",
+     "nombre": "Estática, dinámica y materiales",
+     "perfil": "Mecánico",
+     "meses": [
+      4,
+      5
+     ],
+     "objetivo": "Base de ingeniería mecánica para aeroespacial.",
+     "materiales": [
+      {
+       "id": "hibbeler-st",
+       "titulo": "Engineering Mechanics: Statics",
+       "rol": "nucleo",
+       "uso": "No pases a dinámica si tus diagramas de cuerpo libre son flojos.",
+       "autor": "Hibbeler"
+      },
+      {
+       "id": "hibbeler-dyn",
+       "titulo": "Engineering Mechanics: Dynamics",
+       "rol": "nucleo",
+       "uso": "Dinámica ingenieril.",
+       "autor": "Hibbeler"
+      },
+      {
+       "id": "beer-mat",
+       "titulo": "Mechanics of Materials",
+       "rol": "nucleo",
+       "uso": "Resistencia de materiales.",
+       "autor": "Beer y Johnston"
+      },
+      {
+       "id": "callister",
+       "titulo": "Materials Science and Engineering",
+       "rol": "complementario",
+       "uso": "Criterio de materiales, no solo fórmulas; no se lee entero.",
+       "autor": "Callister"
+      },
+      {
+       "id": "beer-vec",
+       "titulo": "Vector Mechanics for Engineers",
+       "rol": "banco",
+       "uso": "Más problemas u otra explicación de estática y dinámica.",
+       "autor": "Beer y Johnston",
+       "cuando": "Si Hibbeler no alcanza."
+      },
+      {
+       "id": "megson",
+       "titulo": "Aircraft Structures for Engineering Students",
+       "rol": "referencia",
+       "uso": "Puente aeroestructural.",
+       "autor": "Megson",
+       "cuando": "En M10 o después del roadmap."
+      }
+     ],
+     "bloques": [
+      {
+       "titulo": "Estática",
+       "nucleo": "hibbeler-st",
+       "complementos": [
+        "beer-vec"
+       ],
+       "temas": [
+        "Vectores de fuerza",
+        "Equilibrio",
+        "Momentos",
+        "Diagramas de cuerpo libre",
+        "Estructuras",
+        "Centroides",
+        "Momentos de inercia"
+       ]
+      },
+      {
+       "titulo": "Dinámica",
+       "nucleo": "hibbeler-dyn",
+       "complementos": [
+        "beer-vec"
+       ],
+       "temas": [
+        "Cinemática y cinética de partículas",
+        "Trabajo y energía",
+        "Impulso y momentum",
+        "Cuerpos rígidos",
+        "Vibraciones"
+       ]
+      },
+      {
+       "titulo": "Materiales",
+       "nucleo": "beer-mat",
+       "complementos": [
+        "callister"
+       ],
+       "temas": [
+        "Esfuerzo y deformación",
+        "Carga axial",
+        "Torsión",
+        "Flexión y vigas",
+        "Corte",
+        "Pandeo"
+       ]
+      }
+     ],
+     "descartados": [
+      "Cursos: ninguno obligatorio; videos puntuales si te trabás con los diagramas de cuerpo libre."
+     ],
+     "proyecto": {
+      "nombre": "Structural Mechanics Notebook",
+      "modulos": [
+       "Vigas simples",
+       "Reacciones",
+       "Diagramas de corte y momento",
+       "Esfuerzo y deformación",
+       "Torsión",
+       "Flexión",
+       "Comparación de materiales",
+       "Factor de seguridad"
+      ]
+     },
+     "salida": [
+      "Resolver equilibrio",
+      "Resolver dinámica básica",
+      "Interpretar esfuerzos",
+      "Analizar vigas simples",
+      "Explicar el factor de seguridad",
+      "Elegir material con criterio básico"
+     ]
+    },
+    {
+     "id": "M9",
+     "nombre": "Termodinámica, fluidos y transferencia de calor",
+     "perfil": "Termofluidista",
+     "meses": [
+      5,
+      6
+     ],
+     "objetivo": "Energía, gases, fluidos y calor.",
+     "materiales": [
+      {
+       "id": "cengel",
+       "titulo": "Thermodynamics: An Engineering Approach",
+       "rol": "nucleo",
+       "uso": "Termodinámica.",
+       "autor": "Çengel y Boles"
+      },
+      {
+       "id": "white-fluid",
+       "titulo": "Fluid Mechanics",
+       "rol": "nucleo",
+       "uso": "Fluidos.",
+       "autor": "Frank White"
+      },
+      {
+       "id": "incropera",
+       "titulo": "Fundamentals of Heat and Mass Transfer",
+       "rol": "nucleo",
+       "uso": "Transferencia de calor.",
+       "autor": "Incropera"
+      },
+      {
+       "id": "munson",
+       "titulo": "Fundamentals of Fluid Mechanics",
+       "rol": "banco",
+       "uso": "Más problemas u otra explicación.",
+       "autor": "Munson",
+       "cuando": "Si White se pone denso."
+      },
+      {
+       "id": "anderson-comp",
+       "titulo": "Modern Compressible Flow",
+       "rol": "referencia",
+       "uso": "Puente avanzado: Mach, choques y toberas.",
+       "autor": "Anderson",
+       "cuando": "Después de fluidos, termodinámica y aerodinámica básica."
+      },
+      {
+       "id": "white-visc",
+       "titulo": "Viscous Fluid Flow",
+       "rol": "referencia",
+       "uso": "Para después del roadmap.",
+       "autor": "Frank White"
+      }
+     ],
+     "bloques": [
+      {
+       "titulo": "Termodinámica",
+       "nucleo": "cengel",
+       "temas": [
+        "Propiedades y tablas",
+        "Sistemas cerrados",
+        "Volúmenes de control",
+        "Primera y segunda ley",
+        "Entropía",
+        "Gases ideales",
+        "Ciclos y Brayton"
+       ]
+      },
+      {
+       "titulo": "Fluidos",
+       "nucleo": "white-fluid",
+       "complementos": [
+        "munson",
+        "anderson-comp"
+       ],
+       "temas": [
+        "Estática de fluidos",
+        "Conservación de masa",
+        "Bernoulli",
+        "Momentum",
+        "Análisis dimensional",
+        "Flujo interno y externo",
+        "Capa límite"
+       ]
+      },
+      {
+       "titulo": "Transferencia de calor",
+       "nucleo": "incropera",
+       "temas": [
+        "Conducción",
+        "Convección",
+        "Radiación",
+        "Intercambiadores",
+        "Resistencia térmica"
+       ]
+      }
+     ],
+     "descartados": [
+      "Cursos: ninguno obligatorio."
+     ],
+     "proyecto": {
+      "nombre": "Thermo-Fluids Simulator",
+      "modulos": [
+       "Ciclo Otto",
+       "Ciclo Brayton",
+       "Bernoulli en conductos",
+       "Pérdida de carga",
+       "Tobera ideal",
+       "Conducción 1D",
+       "Gases ideales",
+       "Flujo compresible"
+      ]
+     },
+     "salida": [
+      "Aplicar la primera ley",
+      "Aplicar la segunda ley",
+      "Resolver gases ideales",
+      "Resolver Bernoulli",
+      "Entender continuidad y momentum",
+      "Resolver conducción 1D",
+      "Explicar flujo compresible contra incompresible"
+     ]
+    },
+    {
+     "id": "M10",
+     "nombre": "Aerodinámica, control y orbital",
+     "perfil": "Pre-aeroespacial",
+     "meses": [
+      4,
+      6
+     ],
+     "objetivo": "Entrada directa al dominio aeroespacial.",
+     "materiales": [
+      {
+       "id": "anderson-flight",
+       "titulo": "Introduction to Flight",
+       "rol": "nucleo",
+       "uso": "Va primero: puente conceptual, sin quedarse meses.",
+       "autor": "Anderson"
+      },
+      {
+       "id": "anderson-aero",
+       "titulo": "Fundamentals of Aerodynamics",
+       "rol": "nucleo",
+       "uso": "Fundamentos técnicos, sin ser especialista en CFD todavía.",
+       "autor": "Anderson"
+      },
+      {
+       "id": "nise",
+       "titulo": "Control Systems Engineering",
+       "rol": "nucleo",
+       "uso": "Control.",
+       "autor": "Nise"
+      },
+      {
+       "id": "curtis",
+       "titulo": "Orbital Mechanics for Engineering Students",
+       "rol": "nucleo",
+       "uso": "Orbital.",
+       "autor": "Curtis"
+      },
+      {
+       "id": "franklin",
+       "titulo": "Feedback Control of Dynamic Systems",
+       "rol": "complementario",
+       "uso": "Control más formal.",
+       "autor": "Franklin, Powell y Emami",
+       "cuando": "Si Nise te queda corto."
+      },
+      {
+       "id": "sutton",
+       "titulo": "Rocket Propulsion Elements",
+       "rol": "complementario",
+       "uso": "Capítulos de empuje, impulso específico y ecuación del cohete.",
+       "autor": "Sutton"
+      },
+      {
+       "id": "megson",
+       "titulo": "Aircraft Structures for Engineering Students",
+       "rol": "referencia",
+       "uso": "Aeroestructuras, después de M8.",
+       "autor": "Megson"
+      },
+      {
+       "id": "fortescue",
+       "titulo": "Spacecraft Systems Engineering",
+       "rol": "referencia",
+       "uso": "Mapa de subsistemas espaciales; no se lee entero.",
+       "autor": "Fortescue"
+      },
+      {
+       "id": "mitx-aero",
+       "titulo": "MITx · Introduction to Aerodynamics",
+       "rol": "curso",
+       "uso": "Certificación estratégica y señal pre-aero.",
+       "cuando": "Después de fluidos, cálculo, física y con Introduction to Flight empezado."
+      },
+      {
+       "id": "mathworks",
+       "titulo": "MathWorks Onramps",
+       "rol": "curso",
+       "uso": "MATLAB, Simulink y Control Design, en ese orden. Complementan a Python."
+      }
+     ],
+     "bloques": [
+      {
+       "titulo": "Vuelo y aerodinámica",
+       "nucleo": "anderson-flight",
+       "complementos": [
+        "anderson-aero",
+        "mitx-aero"
+       ],
+       "temas": [
+        "Atmósfera",
+        "Sustentación y resistencia",
+        "Performance",
+        "Estabilidad",
+        "Perfiles y alas finitas",
+        "Capa límite"
+       ]
+      },
+      {
+       "titulo": "Control",
+       "nucleo": "nise",
+       "complementos": [
+        "franklin",
+        "mathworks"
+       ],
+       "temas": [
+        "Modelado",
+        "Función de transferencia",
+        "Respuesta temporal",
+        "Estabilidad",
+        "Lugar de raíces",
+        "PID",
+        "Espacio de estados"
+       ]
+      },
+      {
+       "titulo": "Orbital y propulsión",
+       "nucleo": "curtis",
+       "complementos": [
+        "sutton",
+        "fortescue"
+       ],
+       "temas": [
+        "Dos cuerpos",
+        "Leyes de Kepler",
+        "Energía orbital",
+        "Transferencia de Hohmann",
+        "Delta-v"
+       ]
+      }
+     ],
+     "descartados": [
+      "Udemy: no obligatorio; solo para algo muy concreto como Simulink o CFD con una herramienta."
+     ],
+     "proyecto": {
+      "nombre": "Pre-Aerospace Engineering Portfolio",
+      "modulos": [
+       "Airfoil mini-analysis",
+       "PID Control Simulator",
+       "Hohmann Transfer Notebook",
+       "Rocket Nozzle Toy Model",
+       "Aircraft Performance Notebook"
+      ]
+     },
+     "salida": [
+      "Explicar sustentación y resistencia",
+      "Explicar Reynolds y Mach",
+      "Simular un PID",
+      "Calcular una transferencia de Hohmann",
+      "Explicar el impulso específico",
+      "Conectar aerodinámica, control y orbital"
+     ]
+    }
+   ],
+   "anios": [
+    {
+     "anio": 1,
+     "fases": [
+      "M0",
+      "M1",
+      "M2",
+      "M3"
+     ],
+     "objetivo": "De cero real a precálculo fuerte e inicio de cálculo."
+    },
+    {
+     "anio": 2,
+     "fases": [
+      "M3",
+      "M4",
+      "M5",
+      "M6"
+     ],
+     "objetivo": "Estudiante matemático real para IA e ingeniería."
+    },
+    {
+     "anio": 3,
+     "fases": [
+      "M6",
+      "M7",
+      "M8",
+      "M9",
+      "M10"
+     ],
+     "objetivo": "Base pre-aeroespacial aplicada."
+    }
+   ]
+  }
+ ]
+}

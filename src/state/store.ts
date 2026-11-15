@@ -17,6 +17,7 @@ import { emptyRuta, refsForDay, type RutaState } from '../data/ruta';
 import { applySettings } from './apply';
 import type { TrainState } from '../data/train-types';
 import type { StudyState } from '../data/study-types';
+import { emptyEstudioRuta, type EstudioRutaState } from '../data/study-roadmap';
 import type { Block, DayLog, FocusEntry, FocusState, Preset, RoutineId, Settings } from '../data/types';
 
 export interface State {
@@ -31,12 +32,14 @@ export interface State {
   ruta: RutaState;
   /** Plan T+18: entrevistas, postulaciones, contadores, proyectos, Handyx, metas generadas. */
   plan: PlanState;
+  /** Roadmaps de estudio (ola 12): criterios de salida y fases cerradas. */
+  estudioRuta: EstudioRutaState;
   /** Sellos ganados: id → fecha. */
   profile: { seals: Record<string, string>; /** Sellos cuya pantalla de logro ya viste. */ seen: string[] };
 }
 
 const KEY = 'trazo.v1';
-const empty = (): State => ({ settings: null, days: {}, focus: null, carry: {}, study: emptyStudy(), goals: emptyGoals(), train: emptyTrain(), ruta: emptyRuta(), plan: emptyPlan(), profile: { seals: {}, seen: [] } });
+const empty = (): State => ({ settings: null, days: {}, focus: null, carry: {}, study: emptyStudy(), goals: emptyGoals(), train: emptyTrain(), ruta: emptyRuta(), plan: emptyPlan(), estudioRuta: emptyEstudioRuta(), profile: { seals: {}, seen: [] } });
 
 function load(): State {
   try {
@@ -64,7 +67,7 @@ export function migrate(parsed: any): State {
   // (con Handyx y ventas en pausa desde T0); si ya se decidió, se respeta.
   let settings = parsed.settings ?? null;
   if (settings && settings.plan?.modo === undefined) ({ settings, plan } = aplicarIntensiva(settings, plan, settings.startDate || T0_PLAN));
-  return { ...empty(), ...parsed, settings, study, train, ruta, plan, profile: { seals: {}, seen: Object.keys(parsed.profile?.seals ?? {}), ...(parsed.profile ?? {}) }, goals: migrateGoals(goals ?? seedGoals(parsed.settings?.startDate ?? dateKey())) };
+  return { ...empty(), ...parsed, settings, study, train, ruta, plan, estudioRuta: { ...emptyEstudioRuta(), ...(parsed.estudioRuta ?? {}) }, profile: { seals: {}, seen: Object.keys(parsed.profile?.seals ?? {}), ...(parsed.profile ?? {}) }, goals: migrateGoals(goals ?? seedGoals(parsed.settings?.startDate ?? dateKey())) };
 }
 
 let state: State = load();
