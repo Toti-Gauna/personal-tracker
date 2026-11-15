@@ -349,7 +349,13 @@ Desde el lunes 16 nov 2026 la prioridad es un trabajo remoto de USD 3.000 a 5.00
 - **Clipping**: bloque sin rama, con el color de Eclipse; en el mapa tiene su propia columna.
 - **Hitos por rama** (`src/data/hitos.ts`, 10.4): commit, hito grande (rombo) o de main, con flecha desde la rama que entrega. Se guardan como días desde T0. Marcar uno como hecho lo pasa a trazo lleno y mueve HEAD; los de búsqueda que pasan sin cumplirse quedan vencidos con fecha nueva propuesta. Pestaña Trimestre del mapa; también en Semana, Mes y Bimestre.
 - **Entrevista a 3 días o menos:** el bloque de inglés pasa a simulacro de esa entrevista. **Bloque que se pasa de hora:** Hoy avisa y el siguiente se acorta; no se corre el día.
-- Prompts de los bloques: `docs/prompts/bloques.md` (5, 17, 18 y 19).
+- **Calendario comprimido (5 ter):** programación pasa de 78 a 53 semanas (19 tramos con meta y tope = meta + 1; cierra el 21 nov 2027). Matemática, inglés y salud siguen hasta T+18; de la semana 54 a la 78 queda "Margen". Si un proyecto pasa la meta usa la semana de tope; si pasa el tope, se recorta alcance, no calendario.
+- **Semanas ganadas** (Ruta): parte de 25 (78 − 53), suma lo que cada proyecto cierra antes de su meta y resta la semana de tope y los atrasos de las puertas.
+- **Puertas de matemática:** W1, W2 y W3 se aprueban con su test (85 %). Sin aprobar, P3, P6 o P8 no arrancan: la programación del día pasa a matemática pura y cada semana extra sale del colchón.
+- **Entrevista técnica dentro de cada proyecto:** documento de diseño de 2 páginas, 6 a 8 ejercicios con tests y defensa simulada de 45 min (3 sesiones de 45 min por semana). Sin los tres, el proyecto no se cierra.
+- **Portfolio agéntico:** un MCP y un agente con trazas por proyecto; Perfil muestra MCP publicados, agentes con trazas y defensas aprobadas, de 11. Meta "Mapa de proyectos del portfolio" con 4 pasos (Trazo guarda la meta; el diseño es del usuario).
+- **Revisión de mercado** (Búsqueda): ~30 ofertas la semana del 16 nov; el 22 nov se decide el orden de lo movible (Escudo, Faro v2, Estación v1 y certificaciones): 40 % o más sube, menos de 10 % baja.
+- Prompts de los bloques: `docs/prompts/bloques.md` (1 a 23; en búsqueda intensiva, 2, 3, 4, 5, 6 a 8, 16, 17 a 19, y 20 a 23 en programación).
 
 ## 6. Olas de desarrollo (un PR por ola, un modelo por ola)
 
@@ -697,3 +703,4 @@ En el día a día alcanza con **Haiku 5.5 · bajo**: pegás el JSON del cierre y
 - Pausas genéricas: fuera de Hoy, avisos, metas y contadores; mapa punteado; cortes de Handyx corridos; Handyx en modo lectura con Retomar.
 - Hitos por rama (26 iniciales), rama clipping y pestaña Trimestre del mapa; hitos hechos, vencidos y movidos.
 - Sprint de búsqueda de 14 días y "Qué cambia en la ruta"; prompts 17 a 19 para el bloque de inglés.
+- Calendario de programación comprimido a 53 semanas, 30 hitos hasta el 21 feb, puertas de matemática, entrevista técnica por proyecto, portfolio agéntico (MCP, agentes, defensas), semanas ganadas, mapa de proyectos y revisión de mercado; prompts 20 a 23.
