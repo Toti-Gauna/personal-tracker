@@ -199,3 +199,11 @@ export function marcarHito(id: string, hoy: string | null) {
 export function moverHito(id: string, fecha: string) {
   update((p) => ({ ...p, hitos: { ...p.hitos, [id]: { ...(p.hitos[id] ?? {}), fecha } } }));
 }
+
+/** Sprint de búsqueda: cambiar una meta del embudo (son supuestos) o marcar CV, LinkedIn y caso. */
+export function setMetaEmbudo(id: string, n: number) {
+  update((p) => ({ ...p, sprint: { ...(p.sprint ?? {}), metas: { ...(p.sprint?.metas ?? {}), [id]: n } } }));
+}
+export function toggleSprintCheck(id: string) {
+  update((p) => ({ ...p, sprint: { ...(p.sprint ?? {}), checks: { ...(p.sprint?.checks ?? {}), [id]: !p.sprint?.checks?.[id] } } }));
+}

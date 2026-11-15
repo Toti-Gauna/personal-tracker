@@ -13,6 +13,7 @@ import { AnioPlan, BimestrePlan, MesPlan, SemanaPlan } from './MetasPlan';
 import { PlanProyecto } from './PlanProyecto';
 import { PlanBusqueda, PlanHandyx, PlanIngles } from './PlanRamas';
 import { PlanRuta } from './PlanRuta';
+import { RutaImpacto, SprintBusqueda } from './Sprint';
 import { RutaEvolucion } from './RutaEvolucion';
 import { RutaMapa } from './RutaMapa';
 import '../styles/metas.css';
@@ -30,6 +31,8 @@ export function Metas({ day, tab }: { day: DayLog; tab?: string }) {
   // Las pantallas del plan que se abren desde la pestaña Ruta.
   if (tab === 'mapa') return <RutaMapa day={day} />;
   if (tab === 'evolucion') return <RutaEvolucion day={day} />;
+  if (tab === 'sprint') return <SprintBusqueda day={day} />;
+  if (tab === 'impacto') return <RutaImpacto day={day} />;
   if (tab === 'trabajo') return <PlanBusqueda day={day} />;
   if (tab === 'ingles') return <PlanIngles day={day} />;
   if (tab === 'handyx') return <PlanHandyx day={day} />;

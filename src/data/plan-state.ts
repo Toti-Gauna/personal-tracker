@@ -71,6 +71,8 @@ export interface PlanState {
   pausas: Pausa[];
   /** Hitos marcados como hechos o movidos de fecha: id → estado. */
   hitos: Record<string, { hecho?: string; fecha?: string }>;
+  /** Sprint de búsqueda (10.2): metas del embudo editadas y casillas de CV, LinkedIn y caso. */
+  sprint?: { metas?: Partial<Record<'aMedida' | 'mensajes' | 'respuestas' | 'recruiter' | 'tecnica' | 'oferta', number>>; checks?: Record<string, boolean> };
 }
 
 export const emptyPlan = (): PlanState => ({

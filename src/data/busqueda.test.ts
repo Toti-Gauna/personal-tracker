@@ -117,3 +117,18 @@ describe('pausas en metas, cortes y avisos', () => {
     expect(a.texto).toBe('Programación se acorta a 100 min; el resto del día no se corre.');
   });
 });
+
+describe('sprint e impacto', () => {
+  it('el sprint dura 14 días y se renueva si no hay oferta', async () => {
+    const { sprintActual } = await import('./sprint');
+    const p = { pausas: [{ id: 'p', objetivo: 'handyx', desde: '2026-11-16', motivo: 'búsqueda intensiva', guardado: {} }] };
+    expect(sprintActual('2026-11-18', p)).toMatchObject({ numero: 1, desde: '2026-11-16', hasta: '2026-11-29', dia: 3 });
+    expect(sprintActual('2026-11-30', p)).toMatchObject({ numero: 2, desde: '2026-11-30', dia: 1 });
+  });
+
+  it('horas por semana de la intensiva y el lanzamiento de Handyx según cuándo entre el trabajo', async () => {
+    const { horasSemana, escenariosHandyx } = await import('./sprint');
+    expect(horasSemana('busqueda-intensiva', 'busqueda-intensiva-finde')).toMatchObject({ Programación: 25.5, Matemática: 14, Inglés: 11.5, Búsqueda: 10.5, Clipping: 10.5, Entrenamiento: 10, Handyx: 0 });
+    expect(escenariosHandyx('2026-11-16', '2026-11-16').map((e) => e.lanza)).toEqual(['2027-03-14', '2027-04-11', '2027-05-09']);
+  });
+});

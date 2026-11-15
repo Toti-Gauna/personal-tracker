@@ -166,6 +166,7 @@ export function RutaMapa({ day }: { day: DayLog }) {
         <span style={{ ['--c' as string]: 'var(--tinta)' }}><i />main</span>
         {COLUMNAS.map((r) => <span key={r} className={enPausa.has(r) ? 'standby' : undefined} style={{ ['--c' as string]: colorMapa(r) }}><i />{r}{enPausa.has(r) ? ' · stand-by' : ''}</span>)}
       </div>
+      {foco && <p className="sub nota-izq"><a className="subrayado" href="#/metas/impacto">Qué cambia en la ruta →</a> · <a className="subrayado" href="#/metas/sprint">El sprint de búsqueda →</a></p>}
       <TablaSR caption="Mapa en ramas, de lo más nuevo a lo más viejo" head={['Cuándo', 'Rama', 'Qué']} rows={filas.filter((f) => f.tipo !== 'gap').map((f) => [etiqueta(f), f.rama, f.texto])} />
     </main>
   );

@@ -1,3 +1,5 @@
+import { sprintActual } from '../data/sprint';
+import { planSettings, useStore } from '../state/store';
 import { PLAN, SEMANAS, fechaCorta, fechaHito, hitoSemana, proximasEntregas, proyectos, finSemana, type Entrega } from '../data/plan';
 import { RAMA_COLOR } from '../data/ramas';
 import { fmtFecha } from '../data/time';
@@ -19,6 +21,9 @@ export function PlanRuta({ day }: { day: DayLog }) {
   // Entrevistas cargadas: lo que falle pasa a tarjetas de inglés.
   const extra: Entrega[] = v.ent ? [{ de: 'trabajo', a: 'ingles', fecha: v.ent.fecha, texto: `Entrevista del ${fmtFecha(v.ent.fecha).split(' ').slice(0, 2).join(' ').toLowerCase()}: lo que falle pasa a tarjetas de inglés` }] : [];
   const viene = proximasEntregas(date, 4, extra, v.t0);
+  const plan = useStore((s) => s.plan);
+  const intensiva = useStore((s) => planSettings(s.settings).modo === 'busqueda-intensiva');
+  const sprint = intensiva ? sprintActual(date, plan, v.t0) : null;
   const cerrados = proyectos().filter((p) => p.id !== 'P0' && finSemana(p.hasta, v.t0) < date).length;
   const total = proyectos().filter((p) => p.id !== 'P0').length;
   const pctPlan = Math.round((v.semana / SEMANAS) * 100);
@@ -43,6 +48,14 @@ export function PlanRuta({ day }: { day: DayLog }) {
           </div>
         ))}
       </div>
+
+      {sprint && (
+        <a className="pr-card pr-sprint" href="#/metas/sprint" style={{ ['--c' as string]: RAMA_COLOR.trabajo }}>
+          <span className="etiqueta">Búsqueda intensiva · día {sprint.dia} de 14{sprint.numero > 1 ? ` · sprint ${sprint.numero}` : ''}</span>
+          <b>Conseguir el remoto de USD 3.000 a 5.000</b>
+          <span className="sub">Handyx y ventas en stand-by hasta que entre el trabajo · ver el sprint →</span>
+        </a>
+      )}
 
       <div className="fila-t pr-t"><span className="etiqueta">Las seis ramas</span><a className="subrayado" href="#/metas/mapa">Ver el mapa →</a></div>
       <ul className="pr-ramas">
