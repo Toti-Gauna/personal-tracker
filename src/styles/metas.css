@@ -108,3 +108,32 @@
 .sumar-grid button:nth-child(odd) { border-left: 0; }
 .sumar-grid b { font-weight: 500; overflow-wrap: anywhere; }
 .sumar-grid .mono { font-size: 15px; color: var(--c); }
+
+/* Submetas y días en una meta */
+.meta-fila-g > .mg-extra { grid-column: 1 / -1; }
+.mg-subs { list-style: none; margin: 4px 0 0; padding: 0; }
+.mg-subs li { display: flex; align-items: center; gap: 14px; min-height: 48px; border-top: 1px solid var(--linea); }
+.mg-subs label { flex: 1; min-width: 0; cursor: pointer; padding: 6px 0; }
+.mg-dias { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; margin-top: 4px; }
+.mg-dias button { display: grid; justify-items: center; gap: 4px; padding: 6px 0; min-height: 56px; border: 1px solid var(--linea); border-radius: 8px; }
+.mg-dias button .mono { font-size: 12px; color: var(--sub); }
+.mg-dias button i { font-style: normal; width: 24px; height: 24px; border: 1.5px solid var(--sub); border-radius: 3px; display: grid; place-items: center; font-size: 15px; }
+.mg-dias button[aria-pressed='true'] { border-color: var(--c); }
+.mg-dias button[aria-pressed='true'] i { background: var(--c); border-color: var(--c); color: var(--papel); }
+.mg-dias button.hoy .mono { color: var(--tinta); font-weight: 700; }
+.mg-dias button:disabled { opacity: 0.4; }
+
+/* Guía de cómo se suma */
+.como-suma { margin: 14px 0 0; border: 1px solid var(--linea); border-radius: 10px; padding: 0 14px; }
+.como-suma summary { min-height: 48px; display: flex; align-items: center; cursor: pointer; font-weight: 600; list-style: none; }
+.como-suma summary::-webkit-details-marker { display: none; }
+.como-suma summary::after { content: '+'; margin-left: auto; color: var(--sub); font-size: 20px; }
+.como-suma[open] summary::after { content: '−'; }
+.como-suma ul { margin: 0; padding: 0 0 12px 18px; display: grid; gap: 8px; color: var(--sub); font-size: 15px; }
+.como-suma b { color: var(--tinta); }
+
+/* Nueva meta: submetas */
+.subs-lista { list-style: none; margin: 6px 0 0; padding: 0; }
+.subs-lista li { display: grid; grid-template-columns: 24px minmax(0, 1fr) auto; gap: 10px; align-items: center; min-height: 48px; border-bottom: 1px solid var(--linea); }
+.subs-agregar { margin-top: 12px; width: 100%; background: transparent; font: inherit; cursor: pointer; }
+.aviso-pausa { margin: 10px 0 0; padding: 10px 12px; border: 1px solid var(--eclipse); border-radius: 8px; color: var(--tinta); font-size: 14px; }

@@ -7,14 +7,21 @@ function update(fn: (goals: Goal[]) => Goal[]) {
   setState((s) => ({ ...s, goals: { ...s.goals, goals: fn(s.goals.goals) } }));
 }
 
-export type GoalDraft = Pick<Goal, 'title' | 'area' | 'horizon' | 'type' | 'target'> & Partial<Pick<Goal, 'unit' | 'step' | 'note' | 'group' | 'quick' | 'ref' | 'part' | 'rama'>>;
+export type GoalDraft = Pick<Goal, 'title' | 'area' | 'horizon' | 'type' | 'target'> & Partial<Pick<Goal, 'unit' | 'step' | 'note' | 'group' | 'quick' | 'ref' | 'part' | 'rama' | 'subs' | 'daily'>>;
 
 /** Meta nueva: empieza en el período actual y se repite si es del día, la semana o el mes. */
 export function addGoal(d: GoalDraft, today: string) {
-  const target = d.type === 'tarea' ? 1 : Math.max(1, d.target);
+  const subs = d.subs?.filter((x) => x.t.trim());
+  const conSubs = !!subs?.length;
+  // Con submetas la meta cuenta cuántas hiciste; sin ellas, lo que se pidió.
+  const type = conSubs ? 'contador' : d.type;
+  const target = conSubs ? subs!.length : d.type === 'tarea' ? 1 : Math.max(1, d.target);
   const g: Goal = {
     ...d,
+    type,
     target,
+    ...(conSubs ? { subs, unit: d.unit ?? 'pasos' } : { subs: undefined }),
+    daily: !conSubs && d.daily && d.horizon === 'semana' ? true : undefined,
     id: `g${newId()}`,
     repeat: d.horizon === 'dia' || d.horizon === 'semana' || d.horizon === 'mes',
     from: periodKey(d.horizon, today),
@@ -35,6 +42,37 @@ export function addProgress(id: string, date: string, delta: number) {
       if (g.id !== id) return g;
       const key = periodKey(g.horizon, date);
       return { ...g, progress: { ...g.progress, [key]: Math.max(0, Math.round(((g.progress[key] ?? 0) + delta) * 100) / 100) } };
+    }),
+  );
+}
+
+/** Tilda una submeta del período de `date` y deja el avance en cuántas van. */
+export function toggleSub(id: string, date: string, subId: string) {
+  update((gs) =>
+    gs.map((g) => {
+      if (g.id !== id || !g.subs) return g;
+      const key = periodKey(g.horizon, date);
+      const hechas = new Set(g.subDone?.[key] ?? []);
+      if (hechas.has(subId)) hechas.delete(subId);
+      else hechas.add(subId);
+      const ids = g.subs.map((x) => x.id).filter((x) => hechas.has(x));
+      return { ...g, subDone: { ...g.subDone, [key]: ids }, progress: { ...g.progress, [key]: ids.length } };
+    }),
+  );
+}
+
+/** Marca o desmarca un día de una meta diaria; el avance de la semana son los días marcados. */
+export function toggleMark(id: string, date: string) {
+  update((gs) =>
+    gs.map((g) => {
+      if (g.id !== id || !g.daily) return g;
+      const marks = new Set(g.marks ?? []);
+      if (marks.has(date)) marks.delete(date);
+      else marks.add(date);
+      const key = periodKey(g.horizon, date);
+      const todas = [...marks].sort();
+      const n = todas.filter((d) => periodKey(g.horizon, d) === key).length;
+      return { ...g, marks: todas, progress: { ...g.progress, [key]: n } };
     }),
   );
 }

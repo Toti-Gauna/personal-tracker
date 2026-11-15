@@ -36,6 +36,14 @@ export interface Goal extends RoadmapLink {
   /** Avance por período (clave → valor). Lo automático no se guarda. */
   progress: Record<string, number>;
   auto?: AutoSource;
+  /** Submetas: pasos que se tildan dentro de la meta. El avance es cuántas hiciste. */
+  subs?: { id: string; t: string }[];
+  /** Submetas hechas por período (clave del período → ids). */
+  subDone?: Record<string, string[]>;
+  /** Se marca día por día (una tira L a D en la semana). El avance es cuántos días marcaste. */
+  daily?: boolean;
+  /** Días marcados (fechas). */
+  marks?: string[];
   /** Aparece en Hoy como botón para sumar rápido. */
   quick?: boolean;
   /** Cómo se llama el botón de Hoy ("Entrené"); sin valor, el título. */
