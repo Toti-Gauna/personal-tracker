@@ -5,7 +5,7 @@ Tracker personal de Toti: el día en horas, el estudio con su propio motor de re
 - **Diseño:** [canvas de Trazo](https://claude.ai/artifact/6Cc2E6aW2ViU5ikovpsRTy)
 - **Roadmap de estudio:** [ruta ML + DevSecOps](https://claude.ai/artifact/9PEokku7mBLZdCFJr1zqXP)
 - **Pantallas:** presentación `Trazo-pantallas.pptx` y su ZIP de imágenes (44 pantallas, 8 flujos).
-- **Estado:** ola 8 (Plan T+18) y ola 8b (búsqueda intensiva) en revisión. Este archivo es la fuente de verdad.
+- **Estado:** olas 0 a 8b hechas y en `main`. Las olas 9 a 12 (mejoras de uso) están planificadas en §6 bis. Este archivo es la fuente de verdad.
 
 ---
 
@@ -371,6 +371,55 @@ Desde el lunes 16 nov 2026 la prioridad es un trabajo remoto de USD 3.000 a 5.00
 | 7 · Escritorio y tablet | Barra lateral, riel, vista Avance, modo presentación, pulido GSAP, **lista de metas del día con la hora a la derecha del título (§3 bis)** | Sonnet 5.5 · medio |
 | 8b · Búsqueda intensiva | Modo con dos rutinas y sin día libre, pausas (stand-by), hitos por rama, mapa con stand-by y Trimestre, sprint de 14 días y qué cambia en la ruta (§5 quinquies) | Opus 5.5 · alto |
 | 8 · Plan T+18 | Seis ramas desde T0, rutinas con trabajo y día libre, rama en cada bloque, avisos entre ramas, Ruta y mapa en ramas, Metas generadas desde el plan, Proyecto, Búsqueda, Inglés, Handyx, Importar JSON y Ajustes del plan (§5 quater) | Opus 5.5 · alto |
+| 9 · Pulido de Hoy | Buen día a pantalla completa, modales como hoja inferior, meta abierta sin salto, mini reproductor nuevo (§6 bis) | Sonnet 5.5 · medio |
+| 10 · Metas: submetas y marcar por día | Nueva meta con **+ Agregar** y hoja de submetas; en Semana, casilla, `+1` o tira de días según la meta, y cómo se suma explicado (§6 bis) | Sonnet 5.5 · alto |
+| 11 · Mapa de hitos | El mapa no se reordena al seleccionar; leyenda, filtro por rama y detalle del hito (§6 bis) | Sonnet 5.5 · medio |
+| 12a · Estudio: datos del roadmap | `data/study-roadmap.json` con las fases M0 a M10, roles de materiales, protocolo y semáforo, y cálculo de "en qué fase estás" (§6 bis) | Opus 5.5 · alto |
+| 12b · Estudio: pantallas | Estudio como cards de roadmap, timeline de fases con "Estás acá" y perfil por fase (§6 bis) | Opus 5.5 · alto |
+
+## 6 bis. Olas 9 a 12: mejoras de uso
+
+Salen de usar la app en el teléfono. Una rama y un PR por ola; se mergea a `main` cuando el CI está en verde.
+
+**Ola 9 · Pulido de Hoy** (Sonnet 5.5 · medio)
+
+- **Buen día:** pantalla completa, con el contenido que fluye y "Empezar el día" fijo abajo. Ya no es una hoja sobre un fondo, que se rompía con contenido largo. *Hecho.*
+- **Meta abierta:** al abrirla no cambia de ancho ni de peso: la abierta o activa se subraya con el color del área. *Hecho.*
+- **Modales:** hoja inferior (sube desde abajo, con asa, esquinas redondeadas y botones grandes). Es un componente reusable; la ola 10 lo usa para agregar submetas.
+- **Mini reproductor:** tarjeta con el bloque, el tiempo grande, el plan ("50/10 · 1 de 2"), play/pausa y barra de avance. Sin el bloque de color que tapa el texto, y sin tapar la lista de Hoy.
+- **Aceptación:** a 390 px sin desbordes, en claro y oscuro, y con movimiento reducido.
+
+**Ola 10 · Metas: submetas y marcar por día** (Sonnet 5.5 · alto)
+
+- **Modelo:** `Goal` suma `subs` (submetas), `subDone` (hechas por período) y `marks` (días marcados). El avance sigue guardándose por período, así que los gráficos no cambian. Migración de lo guardado y tests.
+- **Nueva meta:** sección Submetas con **+ Agregar**, que abre una hoja para escribirla. Se listan y se quitan. Con submetas, la meta pasa a contar cuántas hiciste.
+- **Semana:** cada meta se suma según su tipo: casilla en las tareas, `+1` grande en los contadores y una tira L M X J V S D donde se toca el día en las metas diarias ("comer mejor"). Las automáticas dicen "auto". Una línea arriba explica cómo se suma.
+- **Aceptación:** una meta diaria se marca desde Semana en un toque y las submetas se marcan dentro de la fila.
+
+**Ola 11 · Mapa de hitos** (Sonnet 5.5 · medio)
+
+- **Diagnóstico primero:** hoy, al seleccionar un hito, otro se mueve de lugar. El mapa es de hitos y el orden solo tiene que depender de la fecha.
+- **Claridad:** leyenda de símbolos (commit, hito grande, hito de `main`), filtro por rama, "hoy" marcado, hito seleccionado resaltado con su detalle debajo.
+- **Aceptación:** test de que el orden no cambia al seleccionar.
+
+**Ola 12a · Estudio: datos del roadmap** (Opus 5.5 · alto)
+
+- **Fuente:** `data/study-roadmap.json`, con las fases M0 a M10 del roadmap de matemáticas. Cada fase lleva libro núcleo, complementarios con su rol, cuándo activarlos, proyecto, salida de fase y duración.
+- **Roles de material:** libro núcleo, complementario imprescindible, banco de ejercicios, curso de apoyo y referencia avanzada.
+- **Protocolo por tema:** teoría del núcleo → ejercicios → corrección → mini test → complementario solo si hace falta → proyecto.
+- **Semáforo:** verde desde 80 % (avanzar), amarillo de 65 a 79 % (activar complementario según el tipo de error), rojo bajo 65 % (volver al tema).
+- **Libros que se dividen:** Stewart aparece en M3 (Cálculo I) y en M5 (Cálculo II y multivariable) con partes distintas.
+- **En qué fase estás:** se calcula desde lo que ya registra Estudio (capítulos aprendidos y tests aprobados). Las salidas de fase son criterios a confirmar a mano.
+- **Se valida al cargar y lleva tests.** Mismo patrón que `roadmap.json`.
+
+**Ola 12b · Estudio: pantallas** (Opus 5.5 · alto)
+
+- **Estudio:** cards seleccionables por roadmap (Matemática primero). Lo de hoy (Repasar → Aprender → Comprobar) queda arriba, como acceso.
+- **Detalle del roadmap:** timeline de fases con "Estás acá", el perfil de cada fase (por ejemplo "Aritmético") y el resto hasta el último.
+- **Detalle de la fase:** qué libro manda, qué complementario activar y cuándo, el proyecto y qué tenés que poder hacer para pasar.
+- **Aceptación:** se entiende en qué fase estás sin leer nada más, y sin desbordes a 390 px.
+
+**Decisiones abiertas:** nombres de los perfiles de cada fase (se derivan de la fase si no hay otros), y de dónde salen los roadmaps que no son de matemática. Si no hay más fuentes, la 12b arranca solo con matemática y deja la estructura lista.
 
 En el día a día alcanza con **Haiku 5.5 · bajo**: pegás el JSON del cierre y queda commiteado en `data/days/`.
 
