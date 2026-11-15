@@ -340,3 +340,35 @@
 .pb-v { text-align: right; font-size: 13px; color: var(--sub); }
 .pb-v.sube { color: var(--salud); }
 .pb-v.baja { color: var(--rutina); }
+
+/* Mapa: selección, detalle fijo, leyenda y filtro (ola 11) */
+.mf-boton { cursor: pointer; }
+.mapa-filas li.sel { background: color-mix(in srgb, var(--c) 12%, transparent); }
+.mapa-filas li.atenuada { opacity: 0.32; }
+.mp-sel { fill: none; stroke: var(--c); stroke-width: 2; }
+.mapa-ley-caja { margin: 22px 0 8px; display: grid; gap: 10px; }
+.mapa-ley { margin: 0; }
+.mapa-ley button { display: inline-flex; align-items: center; gap: 6px; min-height: 40px; padding: 0 12px; border: 1px solid var(--linea); border-radius: 999px; color: var(--c); font-size: 12px; }
+.mapa-ley button i { width: 9px; height: 9px; background: var(--c); flex: none; }
+.mapa-ley button[aria-pressed='true'] { border-color: var(--c); background: color-mix(in srgb, var(--c) 16%, transparent); font-weight: 700; }
+.mapa-ley button.standby { opacity: 0.7; }
+.mapa-simbolos { list-style: none; margin: 4px 0 0; padding: 0; display: grid; gap: 6px; font-size: 13px; }
+.mapa-simbolos li { display: flex; align-items: center; gap: 10px; }
+.mapa-simbolos svg { flex: none; overflow: visible; }
+.mapa-detalle {
+  position: sticky; bottom: calc(var(--bar-h) + var(--safe-b) + 10px); z-index: 8;
+  margin-top: 16px; padding: 10px 14px 12px; display: grid; gap: 4px;
+  background: var(--campo); border: 1px solid var(--tinta); border-left: 5px solid var(--c); border-radius: 12px;
+}
+.app.con-mini .mapa-detalle { bottom: calc(var(--bar-h) + var(--safe-b) + 96px); }
+.md-cab { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+.md-et { font-size: 12px; color: var(--c); }
+.md-x { width: 40px; height: 40px; margin: -10px -8px -10px 0; font-size: 24px; color: var(--sub); }
+.md-t { font-size: 17px; line-height: 1.25; }
+.md-meta { font-size: 12px; }
+.md-acc { display: grid; gap: 0; margin-top: 6px; }
+.md-acc .btn-principal, .md-acc .btn-borde { min-height: 44px; font-size: 16px; margin-top: 6px; }
+.md-acc .btn-principal { margin-top: 0; }
+@media (min-width: 720px) {
+  .mapa-detalle, .app.con-mini .mapa-detalle { bottom: 16px; }
+}

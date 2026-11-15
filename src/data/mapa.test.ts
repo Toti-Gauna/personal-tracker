@@ -46,12 +46,24 @@ describe('mapa · hitos y stand-by (Ola 8b)', () => {
     expect(f[0].hito).toBe('T+18');
   });
 
-  it('marcar un hito como hecho lo pasa a trazo lleno y mueve HEAD', () => {
+  it('marcar un hito como hecho lo pasa a trazo lleno y HEAD sigue en hoy', () => {
     const plan = { ...emptyPlan(), hitos: { 'programacion-13': { hecho: '2026-11-25' } } };
     const f = filasMapa('2026-11-25', 'trimestre', plan, emptyStudy(), '2026-11-16');
     const p0 = f.find((x) => x.hitoId === 'programacion-13')!;
     expect(p0).toMatchObject({ estado: 'hecho', futuro: false });
-    expect(f.find((x) => x.tipo === 'head')!.fecha).toBe('2026-11-29');
+    expect(f.find((x) => x.tipo === 'head')!.fecha).toBe('2026-11-25');
+  });
+
+  it('el orden de las filas no cambia al marcar o desmarcar hitos', () => {
+    const base = filasMapa('2026-11-25', 'trimestre', emptyPlan(), emptyStudy(), '2026-11-16');
+    for (const id of ['programacion-13', 'trabajo-2', 'ingles-3']) {
+      const plan = { ...emptyPlan(), hitos: { [id]: { hecho: '2026-11-25' } } };
+      const f = filasMapa('2026-11-25', 'trimestre', plan, emptyStudy(), '2026-11-16');
+      expect(f.map((x) => x.id)).toEqual(base.map((x) => x.id));
+    }
+    const mes = filasMapa('2026-11-25', 'mes', emptyPlan(), emptyStudy(), '2026-11-16').map((x) => x.id);
+    const plan = { ...emptyPlan(), hitos: { 'programacion-13': { hecho: '2026-11-25' } } };
+    expect(filasMapa('2026-11-25', 'mes', plan, emptyStudy(), '2026-11-16').map((x) => x.id)).toEqual(mes);
   });
 
   it('un hito de búsqueda que pasó sin cumplirse queda vencido con fecha nueva propuesta', () => {
