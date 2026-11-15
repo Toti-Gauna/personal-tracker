@@ -138,7 +138,7 @@ export function Hoy({ day }: { day: DayLog }) {
                 <span className="meta-n mono">{b.n}</span>
                 <span className="meta-tit">
                   <span className="meta-nombre">{tituloDeBloque(b, day.date, settings.startDate)}</span>
-                  <span className="meta-hora mono">{b.start}</span>
+                  <span className="meta-hora mono">{b.start}–{toHHMM(blockEnd(b) % (24 * 60))}</span>
                 </span>
                 <span className="meta-cont mono" aria-label={`${done} de ${b.tasks.length} tareas`}>{done}/{b.tasks.length}</span>
               </button>

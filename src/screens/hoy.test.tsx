@@ -16,13 +16,14 @@ describe('Hoy', () => {
   it('cada fila: checkbox · número · título · hora · contador, con la hora a la derecha del título', () => {
     render(<Hoy day={getState().days['2026-11-11']} />);
     const filas = screen.getAllByRole('button', { expanded: false }).concat(screen.getAllByRole('button', { expanded: true }));
-    expect(filas).toHaveLength(10);
+    // Búsqueda intensiva: rutina de la mañana + 10 metas + dormir a las 21:00.
+    expect(filas).toHaveLength(12);
     const fila = filas.find((f) => f.textContent?.includes('Acompañar a Abi'))!;
     const partes = Array.from(fila.children).map((c) => c.className);
     expect(partes).toEqual(['meta-check', 'meta-n mono', 'meta-tit', 'meta-cont mono']);
     const tit = fila.querySelector('.meta-tit')!;
     expect(tit.children[0]).toHaveTextContent('Acompañar a Abi y correr');
-    expect(tit.children[1]).toHaveTextContent('08:30');
+    expect(tit.children[1]).toHaveTextContent('08:30–10:00');
     expect(fila.querySelector('.meta-cont')).toHaveTextContent('0/1');
   });
 
@@ -34,13 +35,13 @@ describe('Hoy', () => {
     expect(screen.getByText(/Ahora toca programación; después, Abi y el trabajo\./)).toBeInTheDocument();
   });
 
-  it('marcar todas las tareas cumple la meta y suma 0,1 %', () => {
+  it('marcar todas las tareas cumple la meta y suma 1 % repartido entre las 12 metas', () => {
     const { rerender } = render(<Hoy day={getState().days['2026-11-11']} />);
     const det = document.querySelector('.meta-det') as HTMLElement;
     for (const c of within(det).getAllByRole('checkbox')) {
       act(() => fireEvent.click(c));
       rerender(<Hoy day={getState().days['2026-11-11']} />);
     }
-    expect(screen.getByText('+0,10 %')).toBeInTheDocument();
+    expect(screen.getByText('+0,08 %')).toBeInTheDocument();
   });
 });

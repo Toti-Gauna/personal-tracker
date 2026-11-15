@@ -70,7 +70,7 @@ describe('cierre, sellos y ajustes', () => {
   });
 
   it('un día con todas las metas es "Día perfecto" y suma 1 % de mejora', () => {
-    hacer(D0, 10);
+    hacer(D0, getState().days[D0].blocks.length);
     expect(syncSeals(D0)).toContain('dia-perfecto');
     expect(getState().profile.seals['dia-perfecto']).toBe(D0);
     expect(syncSeals(D0)).toEqual([]);

@@ -20,8 +20,9 @@ describe('búsqueda intensiva', () => {
   });
 
   it('las dos rutinas: 10 metas de lunes a viernes y 8 el finde, con las horas de la tabla', () => {
-    expect(metasOf('busqueda-intensiva').map((b) => b.start)).toEqual(['04:30', '06:30', '08:30', '10:00', '12:00', '13:30', '15:00', '16:30', '18:00', '20:00']);
-    expect(metasOf('busqueda-intensiva-finde')).toHaveLength(8);
+    // Las 10 de la tabla, más la rutina de la mañana (04:00) y dormir a las 21:00.
+    expect(metasOf('busqueda-intensiva').map((b) => b.start)).toEqual(['04:00', '04:30', '06:30', '08:30', '10:00', '12:00', '13:30', '15:00', '16:30', '18:00', '20:00', '21:00']);
+    expect(metasOf('busqueda-intensiva-finde')).toHaveLength(10);
     const horas = (rama: string) => {
       const m = (t: 'busqueda-intensiva' | 'busqueda-intensiva-finde') => planRoutine(t, 'completo').filter((p) => p.block.rama === rama || (rama === 'clipping' && p.block.id === 'clipping')).reduce((s, p) => s + p.min, 0);
       return (m('busqueda-intensiva') * 5 + m('busqueda-intensiva-finde') * 2) / 60;
@@ -33,17 +34,17 @@ describe('búsqueda intensiva', () => {
     expect(horas('clipping')).toBe(10.5);
   });
 
-  it('el día corto y "Otra hora" recorren solo los bloques 1 y 2', () => {
+  it('el día corto y "Otra hora" recorren solo la mañana (rutina, matemática y programación)', () => {
     const p = planRoutine('busqueda-intensiva', 'corto');
-    expect(p.slice(0, 3).map((x) => [x.start, x.min])).toEqual([['05:30', 90], ['07:00', 90], ['08:30', 90]]);
-    expect(p[3].start).toBe('10:00');
+    expect(p.slice(0, 4).map((x) => [x.start, x.min])).toEqual([['05:00', 20], ['05:20', 100], ['07:00', 90], ['08:30', 90]]);
+    expect(p[4].start).toBe('10:00');
   });
 
   it('el sábado Hoy arma la rutina de fin de semana', () => {
     startDay('completo', '04:30', '2026-11-21');
     const d = getState().days['2026-11-21'];
     expect(d.dayType).toBe('busqueda-intensiva-finde');
-    expect(d.blocks.map((b) => b.key)).toEqual(['math', 'prog', 'abi', 'caso', 'ingles', 'busqueda', 'clipping', 'cierre']);
+    expect(d.blocks.map((b) => b.key)).toEqual(['rutina', 'math', 'prog', 'abi', 'caso', 'ingles', 'busqueda', 'clipping', 'cierre', 'sueno']);
   });
 
   it('con una entrevista a 3 días, inglés pasa a simulacro de esa entrevista', () => {
