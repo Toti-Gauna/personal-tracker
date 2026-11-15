@@ -30,18 +30,19 @@ describe('mapa en ramas', () => {
 });
 
 describe('mapa · hitos y stand-by (Ola 8b)', () => {
-  it('Trimestre: los 26 hitos iniciales, ordenados por fecha, con clipping y rombos', async () => {
+  it('Trimestre: los 30 hitos iniciales, ordenados por fecha, con clipping y rombos', async () => {
     const { HITOS } = await import('./hitos');
     const f = filasMapa('2026-11-15', 'trimestre', emptyPlan(), emptyStudy(), '2026-11-16');
     const h = f.filter((x) => x.hitoId);
-    expect(h).toHaveLength(26);
-    expect(HITOS).toHaveLength(26);
+    expect(h).toHaveLength(30);
+    expect(HITOS).toHaveLength(30);
     const fechas = h.map((x) => x.fecha);
     expect([...fechas].sort().reverse()).toEqual(fechas);
     expect(h[h.length - 1]).toMatchObject({ fecha: '2026-11-16', rama: 'main', hito: 'T+0' });
-    expect(h[0]).toMatchObject({ fecha: '2027-02-15', rama: 'programacion', desde: 'matematica' });
+    expect(h[0]).toMatchObject({ fecha: '2027-02-21', rama: 'programacion', hitoTipo: 'grande' });
+    expect(h.find((x) => x.fecha === '2027-02-01')).toMatchObject({ rama: 'programacion', desde: 'matematica' });
     expect(h.filter((x) => x.rama === 'clipping')).toHaveLength(3);
-    expect(h.filter((x) => x.hitoTipo === 'grande')).toHaveLength(9);
+    expect(h.filter((x) => x.hitoTipo === 'grande')).toHaveLength(11);
     expect(f[0].hito).toBe('T+18');
   });
 

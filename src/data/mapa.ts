@@ -41,11 +41,14 @@ export const COLUMNAS: RamaMapa[] = ['ingles', 'trabajo', 'programacion', 'matem
 /** Color de una columna del mapa: clipping va con el de Eclipse. */
 export const colorMapa = (r: RamaMapa | 'main') => (r === 'clipping' ? 'var(--eclipse)' : RAMA_COLOR[r]);
 
-/** El trimestre del plan que contiene una fecha: bloques de 13 semanas desde T0. */
+/** Días de la pestaña Trimestre: 14 semanas (del 16 nov al 21 feb, el cierre de Surco v1). */
+const DIAS_TRIMESTRE = 98;
+
+/** El trimestre del plan que contiene una fecha: bloques de 14 semanas desde T0. */
 export function trimestreDe(date: string, t0 = PLAN.t0) {
   const d = Math.max(0, Math.round((new Date(date + 'T12:00').getTime() - new Date(t0 + 'T12:00').getTime()) / 864e5));
-  const k = Math.floor(d / 91);
-  return { desde: addDays(t0, k * 91), hasta: addDays(t0, (k + 1) * 91) };
+  const k = Math.floor(d / DIAS_TRIMESTRE);
+  return { desde: addDays(t0, k * DIAS_TRIMESTRE), hasta: addDays(t0, (k + 1) * DIAS_TRIMESTRE - 1) };
 }
 
 /** Una fila de hito a partir de un hito fechado. */
@@ -139,7 +142,7 @@ function filasTrimestre(date: string, head: string, hitos: ReturnType<typeof hit
   // Antes de T0 HEAD queda abajo, en T+0 ("mañana").
   return [
     { id: 'hito-T+18', rama: 'main', fecha: fin, tipo: 'hito', hito: 'T+18', texto: PLAN.hitos[3].texto, futuro: true },
-    { id: 'gap-arriba', rama: 'main', fecha: hasta, tipo: 'gap', texto: `${semanas} semanas · Surco v2, Lupa, Estación, Núcleo, 3 certificaciones y el C1`, futuro: true },
+    { id: 'gap-arriba', rama: 'main', fecha: hasta, tipo: 'gap', texto: `${semanas} semanas · P4 a P10, 3 certificaciones y el C1`, futuro: true },
     ...filas,
   ];
 }

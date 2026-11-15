@@ -25,34 +25,38 @@ export interface HitoRama {
   desde?: Rama;
 }
 
-/** Los 26 hitos iniciales, del 16 nov 2026 al 15 feb 2027. */
+/** Los 30 hitos iniciales, del 16 nov 2026 al 21 feb 2027 (con el calendario comprimido de 5 ter). */
 export const HITOS: HitoRama[] = [
   { id: 'main-0', rama: 'main', dia: 0, texto: 'T+0 · arranca, Handyx y Eclipse en stand-by', tipo: 'main' },
   { id: 'salud-0', rama: 'salud', dia: 0, texto: 'Medición inicial · rumbo a 95 kg', tipo: 'commit' },
   { id: 'handyx-0', rama: 'handyx', dia: 0, texto: 'Stand-by: backlog y cortes congelados', tipo: 'commit' },
   { id: 'matematica-1', rama: 'matematica', dia: 1, texto: 'Aritmética · test del cap. 1', tipo: 'commit' },
   { id: 'ingles-6', rama: 'ingles', dia: 6, texto: 'Primer simulacro de entrevista completo', tipo: 'commit' },
-  { id: 'programacion-13', rama: 'programacion', dia: 13, texto: 'P0 cerrado: CV, LinkedIn y caso', tipo: 'grande' },
+  { id: 'programacion-6', rama: 'programacion', dia: 6, texto: 'Portfolio con mapa 3D de proyectos y Trazo', tipo: 'commit' },
+  { id: 'trabajo-6', rama: 'trabajo', dia: 6, texto: 'Mercado revisado: orden confirmado', tipo: 'grande' },
+  { id: 'programacion-13', rama: 'programacion', dia: 13, texto: 'P0 cerrado: portfolio, Trazo, RAG y MCP', tipo: 'grande' },
   { id: 'trabajo-13', rama: 'trabajo', dia: 13, texto: 'Fin de la intensiva: 70 + 70', tipo: 'grande', desde: 'programacion' },
   { id: 'clipping-13', rama: 'clipping', dia: 13, texto: '50 clips publicados', tipo: 'commit' },
   { id: 'ingles-16', rama: 'ingles', dia: 16, texto: 'Pitch de 60 s y 6 historias STAR', tipo: 'commit' },
   { id: 'clipping-20', rama: 'clipping', dia: 20, texto: 'Primer pago cobrado', tipo: 'commit' },
   { id: 'trabajo-24', rama: 'trabajo', dia: 24, texto: 'Primera entrevista con recruiter', tipo: 'grande', desde: 'ingles' },
-  { id: 'programacion-27', rama: 'programacion', dia: 27, texto: 'Faro v1: backend, RAG y staging', tipo: 'commit' },
   { id: 'matematica-27', rama: 'matematica', dia: 27, texto: 'Aritmética · caps. 1 a 4 aprobados', tipo: 'commit' },
+  { id: 'programacion-27', rama: 'programacion', dia: 27, texto: 'Faro v1: API Spring Boot y servicio RAG conectados', tipo: 'commit' },
   { id: 'salud-27', rama: 'salud', dia: 27, texto: '4 semanas sin faltar al entreno', tipo: 'commit' },
   { id: 'clipping-28', rama: 'clipping', dia: 28, texto: 'Revisión: ¿US$ 100 cobrados?', tipo: 'grande' },
+  { id: 'programacion-34', rama: 'programacion', dia: 34, texto: 'P1 · Faro v1 cerrado con Spring Boot y MCP', tipo: 'grande' },
   { id: 'trabajo-34', rama: 'trabajo', dia: 34, texto: 'Un proceso en etapa técnica', tipo: 'grande', desde: 'programacion' },
-  { id: 'programacion-41', rama: 'programacion', dia: 41, texto: 'P1 · Faro v1 cerrado con tráiler y landing', tipo: 'grande' },
+  { id: 'programacion-42', rama: 'programacion', dia: 42, texto: 'P2 · Escudo arranca (Go)', tipo: 'commit' },
   { id: 'salud-55', rama: 'salud', dia: 55, texto: 'Control de peso y medidas', tipo: 'commit' },
   { id: 'main-56', rama: 'main', dia: 56, texto: 'T+2 · trabajo remoto de USD 3.000 a 5.000', tipo: 'main' },
   { id: 'handyx-56', rama: 'handyx', dia: 56, texto: 'Vuelve con la rutina con-trabajo (si entró el trabajo)', tipo: 'commit' },
   { id: 'ingles-62', rama: 'ingles', dia: 62, texto: 'Test de nivel: B2 sólido', tipo: 'commit' },
   { id: 'matematica-62', rama: 'matematica', dia: 62, texto: 'Aritmética completa: cierra B1', tipo: 'grande' },
-  { id: 'programacion-76', rama: 'programacion', dia: 76, texto: 'P2 · Escudo cerrado', tipo: 'grande' },
+  { id: 'programacion-62', rama: 'programacion', dia: 62, texto: 'P2 · Escudo cerrado: gateway en Go y MCP', tipo: 'grande' },
+  { id: 'matematica-76', rama: 'matematica', dia: 76, texto: 'W1 · estadística básica lista para Surco v1', tipo: 'grande' },
+  { id: 'programacion-77', rama: 'programacion', dia: 77, texto: 'P3 · Surco v1 arranca (ML clásico)', tipo: 'commit', desde: 'matematica' },
   { id: 'salud-83', rama: 'salud', dia: 83, texto: 'Control de peso y medidas', tipo: 'commit' },
-  { id: 'matematica-90', rama: 'matematica', dia: 90, texto: 'W1 · estadística básica lista para Surco v1', tipo: 'grande' },
-  { id: 'programacion-91', rama: 'programacion', dia: 91, texto: 'P3 · Surco v1 arranca', tipo: 'commit', desde: 'matematica' },
+  { id: 'programacion-97', rama: 'programacion', dia: 97, texto: 'P3 · Surco v1 cerrado con visor 3D', tipo: 'grande' },
 ];
 
 export type EstadoHito = 'hecho' | 'vencido' | 'pendiente';
