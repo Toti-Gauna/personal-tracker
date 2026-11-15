@@ -1,11 +1,14 @@
 import { DAY_ROUTINES, DAY_TYPES, metasOf } from '../data/routines';
 import { useEffect, useState } from 'react';
 import { AREAS, areaDefaultName} from '../data/defaults';
-import { BIMESTERS } from '../data/bimesters';
+import { BIMESTRES, PLAN, SEMANAS, T0_PLAN, fechaCorta } from '../data/plan';
+import { RAMA_COLOR, RAMAS } from '../data/ramas';
 import { DEFAULT_ALARMS } from '../data/sounds';
 import type { Area } from '../data/types';
 import { applyTheme, getThemePref, type ThemePref } from '../lib/theme';
-import { useStore } from '../state/store';
+import { planSettings, useStore } from '../state/store';
+import { setInicioPlan, setPlanSettings } from '../state/plan';
+import { dateKey } from '../data/time';
 import { renameBimester } from '../state/goals';
 import { setAreaName } from '../state/profile';
 import { toast } from '../ui/avisos';
@@ -19,7 +22,7 @@ if (typeof window !== 'undefined') {
   window.addEventListener('beforeinstallprompt', (e) => { e.preventDefault(); diferido = e as BeforeInstall; });
 }
 
-/** 6.4 Ajustes: tema, bimestres, áreas, rutinas del día, Abi y datos. */
+/** 6.4 Ajustes: tema, bimestres, áreas, plan T+18, rutinas del día, Abi y datos. */
 export function Ajustes() {
   const settings = useStore((s) => s.settings)!;
   const names = useStore((s) => s.goals.bimesterNames);
@@ -58,7 +61,7 @@ export function Ajustes() {
 
       <div className="fila-t aj-t"><span className="etiqueta">Nombres de los bimestres</span><span className="sub nota-der">lo que significa para vos</span></div>
       <ol className="bim-lista">
-        {BIMESTERS.map((b) => {
+        {Array.from({ length: BIMESTRES }, (_, i) => ({ n: i + 1, name: PLAN.nombresBimestre[i] ?? `B${i + 1}` })).map((b) => {
           const propio = names[b.n]?.trim();
           return (
             <li key={b.n} className={propio ? 'propio' : ''}>
@@ -92,6 +95,8 @@ export function Ajustes() {
       </div>
       <p className="sub nota-izq">Tocá un área para cambiarle el nombre. El color es el del cuaderno.</p>
 
+      <PlanT18 />
+
       <div className="etiqueta aj-t">Datos y app</div>
       <ul className="aj-filas">
         <li><a href="#/ajustes-rutinas"><span><b>Rutinas del día</b><small>{DAY_TYPES.map((t) => `${DAY_ROUTINES[t].label}: ${metasOf(t).length} metas`).join(' · ')}</small></span><span aria-hidden="true">→</span></a></li>
@@ -102,5 +107,62 @@ export function Ajustes() {
         <li><button onClick={instalar}><span><b>Instalar Trazo</b><small>{instalada ? 'Ya la estás usando como app' : 'Agregar a la pantalla de inicio'}</small></span><span aria-hidden="true">→</span></button></li>
       </ul>
     </main>
+  );
+}
+
+const DIAS_LIBRE: [number | null, string][] = [[null, 'Ninguno'], [1, 'Lunes'], [2, 'Martes'], [3, 'Miércoles'], [4, 'Jueves'], [5, 'Viernes'], [6, 'Sábado'], [7, 'Domingo']];
+
+/** Ajustes → Plan T+18: inicio, rutina activa, T+2, día libre, umbrales de Handyx y colores de las ramas. */
+function PlanT18() {
+  const settings = useStore((s) => s.settings)!;
+  const cfg = planSettings(settings);
+  const t0 = settings.startDate || T0_PLAN;
+  const [marcar, setMarcar] = useState(false);
+  const decision = PLAN.hitos.find((h) => h.id === 'T+12')!;
+  const fechaDecision = (() => { const d = new Date(t0 + 'T12:00'); d.setDate(d.getDate() + (decision.semana - 1) * 7); return dateKey(d); })();
+  return (
+    <>
+      <div className="etiqueta aj-t">Plan T+18</div>
+      <ul className="aj-plan">
+        <li>
+          <span><b>Inicio del plan</b><small>Semana 1 · {SEMANAS} semanas · {BIMESTRES} bimestres</small></span>
+          <input className="campo-texto mono" type="date" value={t0} onChange={(e) => e.target.value && setInicioPlan(e.target.value)} aria-label="Inicio del plan" />
+        </li>
+        <li>
+          <span><b>Rutina del día</b><small>Cambia al marcar T+2 (con confirmación)</small></span>
+          <div className="segmentado" role="radiogroup" aria-label="Rutina de lunes a viernes">
+            <button role="radio" aria-checked={cfg.rutina === 'busqueda'} onClick={() => setPlanSettings({ rutina: 'busqueda' })}>Búsqueda</button>
+            <button role="radio" aria-checked={cfg.rutina === 'con-trabajo'} onClick={() => setPlanSettings({ rutina: 'con-trabajo' })}>Con trabajo</button>
+          </div>
+        </li>
+        <li>
+          <span><b>T+2 · trabajo nuevo</b><small>{cfg.t2 ? `Marcado el ${fechaCorta(cfg.t2)}` : 'Cuando firmes, marcalo: Hoy te ofrece pasar a la rutina con trabajo'}</small></span>
+          {cfg.t2 ? (
+            <button className="subrayado" onClick={() => setPlanSettings({ t2: undefined })}>Desmarcar</button>
+          ) : marcar ? (
+            <span className="aj-dos"><button className="subrayado" onClick={() => setMarcar(false)}>No</button><button className="btn-borde" onClick={() => { setPlanSettings({ t2: dateKey() }); setMarcar(false); }}>Sí, hoy</button></span>
+          ) : (
+            <button className="btn-borde" onClick={() => setMarcar(true)}>Marcar T+2</button>
+          )}
+        </li>
+        <li>
+          <span><b>Día libre</b><small>Solo repasos de 20 min y entreno suave</small></span>
+          <select className="campo-texto" value={cfg.diaLibre ?? ''} onChange={(e) => setPlanSettings({ diaLibre: e.target.value ? Number(e.target.value) : null })} aria-label="Día libre">
+            {DIAS_LIBRE.map(([v, n]) => <option key={n} value={v ?? ''}>{n}</option>)}
+          </select>
+        </li>
+        <li className="aj-columna">
+          <span><b>Umbrales de Handyx</b><small>Para decidir el {fechaCorta(fechaDecision)} {fechaDecision.slice(0, 4)}. Los escribís vos: Trazo no inventa números.</small></span>
+          <div className="dos-campos">
+            <label>Ingreso mínimo por mes<input className="campo-texto" defaultValue={cfg.umbralIngreso} placeholder="[tu umbral de ingreso]" onBlur={(e) => setPlanSettings({ umbralIngreso: e.target.value.trim() })} /></label>
+            <label>Horas máximas por semana<input className="campo-texto" defaultValue={cfg.horasMaximas} placeholder="[horas máximas]" onBlur={(e) => setPlanSettings({ horasMaximas: e.target.value.trim() })} /></label>
+          </div>
+        </li>
+      </ul>
+      <div className="chips aj-ramas" aria-label="Colores de las ramas">
+        {RAMAS.map((r) => <span key={r} className="mono"><i style={{ background: RAMA_COLOR[r] }} />{r}</span>)}
+      </div>
+      <p className="sub nota-izq">Cada rama tiene su color en Hoy, Metas y el mapa; main es Trazo.</p>
+    </>
   );
 }

@@ -3,7 +3,7 @@
  * título del bloque de programación con el proyecto activo.
  */
 import { AREAS } from './defaults';
-import { PLAN, bimestreDelPlan, corteHandyx, faseTrabajo, nombreTramo, tramoActivo, ventanaW } from './plan';
+import { PLAN, bimestreDelPlan, enPlan, corteHandyx, faseTrabajo, nombreTramo, tramoActivo, ventanaW } from './plan';
 import type { PlanState } from './plan-state';
 import { RAMA_COLOR } from './ramas';
 import { focusUnit } from './study';
@@ -18,12 +18,18 @@ export function colorDeBloque(b: Pick<Block, 'rama' | 'area'>, delPlan: boolean)
 }
 
 /** Título que se muestra: el bloque de programación lleva el proyecto activo ("Programación · Faro v1"). */
-export function tituloDeBloque(b: Block, date: string, t0?: string) {
+export function tituloDeBloque(b: Pick<Block, 'rama' | 'key' | 'title'>, date: string, t0?: string) {
   if (b.rama !== 'programacion' || b.key !== 'prog') return b.title;
+  return programacionDelPlan(date, t0) ?? b.title;
+}
+
+/** "Programación · Faro v1" (o la certificación) en vez de "Python": lo que se programa hoy según el plan. */
+export function programacionDelPlan(date: string, t0?: string) {
+  if (!enPlan(date, t0)) return null;
   const t = tramoActivo(date, t0);
   if (t.tipo === 'proyecto') return `Programación · ${nombreTramo(t, false)}`;
   if (t.tipo === 'cert') return `Programación · ${t.corto ?? t.nombre}`;
-  return b.title;
+  return null;
 }
 
 export interface Ctx {

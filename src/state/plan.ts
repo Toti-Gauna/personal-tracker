@@ -163,6 +163,11 @@ export function editarMetaFija(clave: string, texto: string) {
   });
 }
 
+/** Cambia T0 (inicio del plan): todas las fechas del plan se recalculan desde ahí. */
+export function setInicioPlan(fecha: string) {
+  setState((s) => (s.settings && /^\d{4}-\d{2}-\d{2}$/.test(fecha) ? { ...s, settings: { ...s.settings, startDate: fecha } } : s));
+}
+
 /** Ajustes del plan. */
 export function setPlanSettings(patch: Partial<PlanSettings>) {
   setState((s) => (s.settings ? { ...s, settings: { ...s.settings, plan: { ...(s.settings.plan ?? {}), ...patch } } } : s));

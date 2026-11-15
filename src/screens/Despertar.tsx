@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react';
 import { dayNumber } from '../data/derive';
+import { tituloDeBloque } from '../data/etiquetas';
 import { DAY_ROUTINES, WAKE, isMeta, planRoutine, routineFor, wakeRange, type DayType } from '../data/routines';
 import { fmtDur, fmtFecha, nowMin, toHHMM, toMin } from '../data/time';
 import type { RoutineId } from '../data/types';
@@ -92,7 +93,7 @@ export function Despertar({ date }: { date: string }) {
             {manana.map((p) => (
               <li key={p.block.id}>
                 <span className="mono">{p.start}</span>
-                <span className="manana-n">{p.block.label}</span>
+                <span className="manana-n">{tituloDeBloque({ rama: p.block.rama, key: p.block.id, title: p.block.label }, date, settings.startDate)}</span>
                 <span className="mono sub">{p.block.kind === 'fixed' ? 'fijo' : fmtDur(p.min)}</span>
               </li>
             ))}

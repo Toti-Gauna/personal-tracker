@@ -235,3 +235,4 @@
 .pim-antes { list-style: none; margin: 0; padding: 0; }
 .pim-antes li { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--linea); align-items: baseline; }
 .pim-antes .mono { font-size: 12px; }
+.meta-rama.foco-rama { padding: 0; margin: 6px 0 0; font-size: 13px; white-space: normal; }

@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { AREAS } from '../data/defaults';
+import { etiquetaDeBloque } from '../data/etiquetas';
 import { focusMinutes } from '../data/pomodoro';
 import { pause, restNow, resume, segProgress, segRemaining, skipRest } from '../data/focus';
 import { blockEnd } from '../data/schedule';
@@ -17,6 +18,9 @@ const TICKS = 40;
 /** 1.5 Foco: tiempo, avance y tareas del bloque. */
 export function Foco({ day }: { day: DayLog }) {
   const focus = useStore((s) => s.focus);
+  const planSt = useStore((s) => s.plan);
+  const study = useStore((s) => s.study);
+  const t0 = useStore((s) => s.settings?.startDate);
   const now = useNow(250);
   const [tarea, setTarea] = useState('');
   const [nota, setNota] = useState<string | null>(null);
@@ -32,6 +36,7 @@ export function Foco({ day }: { day: DayLog }) {
   }
 
   const area = AREAS[block.area];
+  const tag = etiquetaDeBloque(block, { day, t0, plan: planSt, study });
   const delArea = day.blocks.filter((b) => b.area === block.area);
   const seg = focus.segs[focus.i];
   const pausado = focus.pausedAt != null;
@@ -55,6 +60,7 @@ export function Foco({ day }: { day: DayLog }) {
         {area.name} · bloque {delArea.indexOf(block) + 1} de {delArea.length}
       </div>
       <h1 className="titulo foco-t">{block.title.split(' · ')[0]}</h1>
+      {tag && tag !== 'fuera del plan' && <div className="meta-rama mono foco-rama">↳ {tag}</div>}
 
       <div className="foco-reloj">
         <div className="foco-fila">
