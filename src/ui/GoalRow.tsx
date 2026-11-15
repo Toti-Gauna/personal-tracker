@@ -8,7 +8,7 @@ import { Casilla } from './Casilla';
 const fmt = (n: number) => String(n).replace('.', ',');
 
 /** Una meta con su contador, su barra y el botón + (o una casilla si es una tarea). */
-export function GoalRow({ g, date, editar }: { g: Goal; date: string; editar?: boolean }) {
+export function GoalRow({ g, date, editar, sub }: { g: Goal; date: string; editar?: boolean; sub?: string }) {
   const study = useStore((s) => s.study);
   const days = useStore((s) => s.days);
   const train = useStore((s) => s.train);
@@ -24,6 +24,7 @@ export function GoalRow({ g, date, editar }: { g: Goal; date: string; editar?: b
             {g.type === 'tarea' ? (done ? 'hecha' : 'pendiente') : `${fmt(v)}/${g.target}${g.unit === 'h' || g.unit === 'kg' ? ` ${g.unit}` : ''}`}
           </span>
         </div>
+        {sub && <small className="mg-sub mono">{sub}</small>}
         <div className="mg-barra" aria-hidden="true"><span style={{ width: `${ratio(v, g.target) * 100}%` }} /></div>
       </div>
       {editar ? (

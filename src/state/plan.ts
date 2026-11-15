@@ -111,13 +111,21 @@ export function confirmarMetas(tipo: 'meses' | 'semanas', clave: string, metas: 
   update((p) => ({ ...p, [tipo]: { ...p[tipo], [clave]: { confirmado: hoy, metas } } }));
 }
 
-export function editarMeta(tipo: 'meses' | 'semanas', clave: string, id: string, patch: Partial<MetaGenerada> | null) {
+/**
+ * Cambia o borra una meta de mes o semana. Si el período todavía no se guardó, se guarda primero
+ * con las generadas (`base`), así lo que cambiaste no se pierde cuando el plan se recalcula.
+ */
+export function editarMeta(tipo: 'meses' | 'semanas', clave: string, id: string, patch: Partial<MetaGenerada> | null, base: MetaGenerada[] = []) {
   update((p) => {
-    const cur = p[tipo][clave];
-    if (!cur) return p;
+    const cur = p[tipo][clave] ?? { metas: base };
     const metas = patch === null ? cur.metas.filter((m) => m.id !== id) : cur.metas.map((m) => (m.id === id ? { ...m, ...patch } : m));
     return { ...p, [tipo]: { ...p[tipo], [clave]: { ...cur, metas } } };
   });
+}
+
+/** Suma a mano a una meta de mes o semana sin contador propio (o la marca si es una tarea). */
+export function sumarHechoMeta(tipo: 'meses' | 'semanas', clave: string, m: MetaGenerada, n: number, base: MetaGenerada[] = []) {
+  editarMeta(tipo, clave, m.id, { hecho: Math.max(0, (m.hecho ?? 0) + n) }, base);
 }
 
 export function sumarMetaPropia(tipo: 'meses' | 'semanas', clave: string, meta: Omit<MetaGenerada, 'id' | 'origen'>) {

@@ -92,6 +92,12 @@ export interface MetaGenerada {
   meta?: number;
   unidad?: string;
   origen: 'plan' | 'propia' | 'chequeo';
+  /** De dónde sale el avance solo ("postulaciones", "horas-mate", "casillas:P1"…); sin valor, se suma a mano. */
+  clave?: string;
+  /** Avance sumado a mano. */
+  hecho?: number;
+  /** "5 por día". */
+  nota?: string;
 }
 
 export interface Fase {

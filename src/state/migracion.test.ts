@@ -44,3 +44,17 @@ describe('migración al plan T+18 (trazo.v1)', () => {
     expect(s.plan.entrevistas).toEqual([]);
   });
 });
+
+describe('metas personales con el plan T+18', () => {
+  it('las semillas que el plan reemplaza se van sin avance; las personales toman su rama', () => {
+    const goal = (id: string, title: string, horizon: string, progress: Record<string, number> = {}) => ({ id, title, area: 'rutina', horizon, type: 'numero', target: 1, repeat: true, from: '2026-11-16', progress });
+    const s = migrate({
+      ...structuredClone(viejo),
+      goals: { bimesterNames: {}, goals: [goal('g-seed-0', 'CV enviados', 'semana'), goal('g-seed-1', 'Mensajes a RRHH', 'semana', { '2026-11-09': 3 }), goal('g-seed-2', 'Llegar a 95 kg entrenando 6 días', 'anio'), goal('g-seed-3', 'Ventas Foody', 'semana'), goal('x1', 'CV enviados', 'semana')] },
+    });
+    const ids = s.goals.goals.map((g) => g.id);
+    expect(ids).toEqual(['g-seed-1', 'g-seed-2', 'g-seed-3', 'x1']);
+    expect(s.goals.goals.find((g) => g.id === 'g-seed-2')?.rama).toBe('salud');
+    expect(s.goals.goals.find((g) => g.id === 'g-seed-3')?.rama).toBeUndefined();
+  });
+});

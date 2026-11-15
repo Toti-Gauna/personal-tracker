@@ -6,7 +6,7 @@ import { emptyPlan, DEFAULT_PLAN_SETTINGS, type PlanSettings, type PlanState } f
 import { semanaDelPlan, ventanaW } from '../data/plan';
 import { addDays, dateKey } from '../data/time';
 import { emptyStudy } from '../data/study-catalog';
-import { defaultGoals, emptyGoals } from '../data/goals-catalog';
+import { defaultGoals, emptyGoals, RAMA_DE_SEMILLA, REEMPLAZADAS_POR_PLAN } from '../data/goals-catalog';
 import type { Goal, GoalsState } from '../data/goals-types';
 import { periodKey } from '../data/goals';
 import { emptyTrain } from '../data/train-catalog';
@@ -90,11 +90,17 @@ export function useStore<T>(sel: (s: State) => T): T {
   return useSyncExternalStore(subscribe, () => sel(state), () => sel(state));
 }
 
-/** Ola 5: Entrenar, Entrenamientos y el peso pasan a salir solos del entreno. */
+/**
+ * Ola 5: Entrenar, Entrenamientos y el peso pasan a salir solos del entreno.
+ * Ola 8: las semillas que el plan reemplaza con sus contadores se van si no tienen avance, y las
+ * metas personales de partida toman su rama (Handyx, salud).
+ */
 function migrateGoals(g: GoalsState): GoalsState {
+  const reemplazada = (x: GoalsState['goals'][number]) =>
+    x.id.startsWith('g-seed') && REEMPLAZADAS_POR_PLAN.some(([t, h]) => t === x.title && h === x.horizon) && (x.auto || !Object.values(x.progress ?? {}).some((v) => v));
   return {
     ...g,
-    goals: g.goals.map((x) => {
+    goals: g.goals.filter((x) => !reemplazada(x)).map((x) => (x.rama || !x.id.startsWith('g-seed') || !RAMA_DE_SEMILLA[x.title] ? x : { ...x, rama: RAMA_DE_SEMILLA[x.title] })).map((x) => {
       if (x.auto) return x;
       if (x.title === 'Entrenar' && x.horizon === 'semana') return { ...x, auto: { kind: 'entreno' }, quick: false };
       if (x.title === 'Entrenamientos' && x.horizon === 'mes') return { ...x, auto: { kind: 'entreno' } };

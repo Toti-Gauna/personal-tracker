@@ -2,7 +2,8 @@ import { useState } from 'react';
 import { AREAS } from '../data/defaults';
 import { HORIZON_LABEL } from '../data/goals';
 import type { GoalType, Horizon } from '../data/goals-types';
-import type { Area } from '../data/types';
+import { RAMA_COLOR, RAMAS } from '../data/ramas';
+import type { Area, Rama } from '../data/types';
 import { ir } from '../lib/routes';
 import { addGoal } from '../state/goals';
 import { toast } from '../ui/avisos';
@@ -26,12 +27,13 @@ export function NuevaMeta({ today, horizon }: { today: string; horizon?: string 
   const [meta, setMeta] = useState('10');
   const [unidad, setUnidad] = useState('');
   const [quick, setQuick] = useState(false);
+  const [rama, setRama] = useState<Rama | null>(null);
 
   const target = tipo === 'tarea' ? 1 : Number(meta.replace(',', '.')) || 0;
   const valida = titulo.trim() && target > 0;
   const guardar = () => {
     if (!valida) return;
-    addGoal({ title: titulo.trim(), area, horizon: h, type: tipo, target, unit: tipo === 'tarea' ? undefined : unidad.trim() || undefined, quick: quick && tipo !== 'tarea' && (h === 'dia' || h === 'semana') }, today);
+    addGoal({ title: titulo.trim(), area, horizon: h, type: tipo, target, unit: tipo === 'tarea' ? undefined : unidad.trim() || undefined, quick: quick && tipo !== 'tarea' && (h === 'dia' || h === 'semana'), ...(rama ? { rama } : {}) }, today);
     toast({ title: 'Meta guardada', sub: `${titulo.trim()} · ${HORIZON_LABEL[h].toLowerCase()}`, color: AREAS[area].css }, false);
     ir(`metas/${RUTA[h]}`);
   };
@@ -56,6 +58,15 @@ export function NuevaMeta({ today, horizon }: { today: string; horizon?: string 
           <button key={a} role="radio" aria-checked={area === a} onClick={() => setArea(a)}><i style={{ background: AREAS[a].css }} />{AREAS[a].name}</button>
         ))}
       </div>
+
+      <span className="etiqueta">Rama del plan T+18 · opcional</span>
+      <div className="nm-ramas" role="radiogroup" aria-label="Rama del plan">
+        <button role="radio" aria-checked={rama === null} onClick={() => setRama(null)}>ninguna</button>
+        {RAMAS.map((r) => (
+          <button key={r} role="radio" aria-checked={rama === r} style={{ ['--c' as string]: RAMA_COLOR[r] }} onClick={() => setRama(r)}>{r}</button>
+        ))}
+      </div>
+      <p className="sub nota-izq">Con rama, la meta suma al avance de esa rama en la Ruta y aparece en el mapa.</p>
 
       <span className="etiqueta">Tipo</span>
       <div className="tipos" role="radiogroup" aria-label="Tipo">

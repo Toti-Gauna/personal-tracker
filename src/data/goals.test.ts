@@ -1,3 +1,4 @@
+import type { Goal } from './goals-types';
 import { beforeEach, describe, expect, it } from 'vitest';
 import { getState, register, resetState, startDay } from '../state/store';
 import { addGoal, addProgress, deleteGoal, renameBimester, toggleGoal } from '../state/goals';
@@ -44,9 +45,12 @@ describe('metas', () => {
 
   it('arranca con las metas del diseño', () => {
     const gs = getState().goals.goals;
-    expect(gs.filter((g) => g.horizon === 'semana')).toHaveLength(10);
-    expect(gs.filter((g) => g.horizon === 'mes')).toHaveLength(6);
-    expect(gs.filter((g) => g.horizon === 'anio')).toHaveLength(5);
+    // Ola 8: búsqueda, horas, entrenos y tests salen de los contadores del plan.
+    expect(gs.filter((g) => g.horizon === 'semana')).toHaveLength(7);
+    expect(gs.filter((g) => g.horizon === 'mes')).toHaveLength(2);
+    expect(gs.filter((g) => g.horizon === 'bim')).toHaveLength(3);
+    expect(gs.filter((g) => g.horizon === 'anio')).toHaveLength(3);
+    expect(gs.find((g) => g.title === 'Llegar a 95 kg entrenando 6 días')?.rama).toBe('salud');
   });
 
   it('el avance semanal se reinicia cada semana', () => {
@@ -76,7 +80,7 @@ describe('metas', () => {
   });
 
   it('los tests aprobados del mes salen solos del estudio', () => {
-    const g = getState().goals.goals.find((x) => x.title.startsWith('Tests aprobados'))!;
+    const g: Goal = { id: 't', title: 'Tests aprobados', area: 'ing', horizon: 'mes', type: 'numero', target: 5, repeat: true, from: '2026-11', progress: {}, auto: { kind: 'tests' } };
     completeLearn(D0, 'conamat', 1);
     saveTest(D0, 'conamat', 1, { score: 15, total: 15, errors: ok, mode: 'app' });
     saveTest(D0, 'conamat', 2, { score: 10, total: 20, errors: { ...ok, concepto: 10 }, mode: 'app' });
