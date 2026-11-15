@@ -236,3 +236,11 @@
 .pim-antes li { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--linea); align-items: baseline; }
 .pim-antes .mono { font-size: 12px; }
 .meta-rama.foco-rama { padding: 0; margin: 6px 0 0; font-size: 13px; white-space: normal; }
+.mp-standby { font-size: 12px; margin: 20px 0 0; line-height: 1.6; }
+.pr-ramas li.standby { opacity: 0.55; }
+.pr-ramas li.standby .pr-lado { font-style: italic; }
+.franja-pausa { display: flex; justify-content: space-between; align-items: center; gap: 12px; border: 1px dashed var(--sub); border-radius: 8px; padding: 10px 14px; margin: 8px 0 14px; font-family: var(--font-mono); font-size: 13px; color: var(--sub); }
+.franja-pausa button { color: var(--tinta); min-height: 40px; font-family: var(--font-body, inherit); font-size: 15px; }
+.en-pausa .ph-cortes, .en-pausa .ph-horas, .en-pausa .ph-stats { opacity: 0.6; }
+.ph-lectura { border: 0; margin: 0; padding: 0; min-width: 0; }
+.ph-lectura:disabled button, .ph-lectura:disabled input { opacity: 0.4; }

@@ -47,7 +47,7 @@ export function PlanRuta({ day }: { day: DayLog }) {
       <div className="fila-t pr-t"><span className="etiqueta">Las seis ramas</span><a className="subrayado" href="#/metas/mapa">Ver el mapa →</a></div>
       <ul className="pr-ramas">
         {v.ramas.map((r) => (
-          <li key={r.rama} style={{ ['--c' as string]: RAMA_COLOR[r.rama] }}>
+          <li key={r.rama} className={r.pausa ? 'standby' : undefined} style={{ ['--c' as string]: RAMA_COLOR[r.rama] }}>
             <a href={r.href}>
               <i aria-hidden="true" />
               <span className="pr-rama-txt">

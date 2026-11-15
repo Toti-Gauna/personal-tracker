@@ -3,10 +3,10 @@
  * fecha, el plan registrado y los ajustes, y devuelve los avisos en el orden en que importan.
  */
 import { PLAN, finSemana, inicioSemana, nombreTramo, tramoActivo, ventanaW, type Capa } from './plan';
-import type { PlanSettings, PlanState } from './plan-state';
+import { enPausa, type PlanSettings, type PlanState } from './plan-state';
 import { RAMA_NOMBRE } from './ramas';
-import { addDays, fmtFecha, parseDate } from './time';
-import type { Rama, RamaOMain } from './types';
+import { addDays, fmtFecha, parseDate, toMin } from './time';
+import type { DayLog, Rama, RamaOMain } from './types';
 
 export interface Aviso {
   id: string;
@@ -75,7 +75,30 @@ export function avisosEntreRamas(date: string, p: PlanState, cfg: PlanSettings, 
       accion: 'con-trabajo',
     });
   }
-  return out;
+  // Ola 8b: una rama en pausa (stand-by) no genera avisos, ni de ida ni de vuelta.
+  return out.filter((a) => !(a.de !== 'main' && enPausa(p, a.de, date)) && !(a.a !== 'main' && enPausa(p, a.a, date)));
 }
 
 export const nombreRama = (r: Rama | 'main') => RAMA_NOMBRE[r];
+
+/**
+ * Entre 04:30 y 21:00 no hay hueco: si el foco sigue después de la hora de fin de su bloque,
+ * Hoy avisa cuánto se pasó y que el siguiente se acorta (los fijos no se corren).
+ */
+export function avisoPasado(day: DayLog, focoKey: string | undefined, ahora: number): Aviso | null {
+  if (!focoKey) return null;
+  const i = day.blocks.findIndex((b) => b.key === focoKey);
+  if (i < 0) return null;
+  const b = day.blocks[i];
+  const fin = toMin(b.start) + b.min;
+  const pasado = ahora - fin;
+  if (pasado < 1) return null;
+  const sig = day.blocks[i + 1];
+  const queda = sig ? Math.max(0, toMin(sig.start) + sig.min - ahora) : 0;
+  return {
+    id: `pasado-${b.key}`, de: (b.rama ?? 'main') as Aviso['de'], a: (sig?.rama ?? 'main') as Aviso['a'],
+    titulo: `${b.title} se pasó ${pasado} min`,
+    texto: sig ? `${sig.title} se acorta a ${queda} min; el resto del día no se corre.` : 'Es el último bloque del día.',
+    href: '#/foco',
+  };
+}

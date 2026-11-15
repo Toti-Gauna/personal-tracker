@@ -7,7 +7,7 @@ import { DEFAULT_ALARMS } from '../data/sounds';
 import type { Area } from '../data/types';
 import { applyTheme, getThemePref, type ThemePref } from '../lib/theme';
 import { planSettings, useStore } from '../state/store';
-import { setInicioPlan, setPlanSettings } from '../state/plan';
+import { activarIntensiva, desactivarIntensiva, setInicioPlan, setPlanSettings } from '../state/plan';
 import { dateKey } from '../data/time';
 import { renameBimester } from '../state/goals';
 import { setAreaName } from '../state/profile';
@@ -118,12 +118,21 @@ function PlanT18() {
   const cfg = planSettings(settings);
   const t0 = settings.startDate || T0_PLAN;
   const [marcar, setMarcar] = useState(false);
+  const intensiva = cfg.modo === 'busqueda-intensiva';
   const decision = PLAN.hitos.find((h) => h.id === 'T+12')!;
   const fechaDecision = (() => { const d = new Date(t0 + 'T12:00'); d.setDate(d.getDate() + (decision.semana - 1) * 7); return dateKey(d); })();
   return (
     <>
       <div className="etiqueta aj-t">Plan T+18</div>
       <ul className="aj-plan">
+        <li>
+          <span><b>Búsqueda intensiva</b><small>{intensiva ? `Activa · Handyx y ventas en stand-by. Al apagarla vuelve la rutina ${cfg.previo?.rutina === 'con-trabajo' ? 'con trabajo' : 'buscando trabajo'} y el día libre.` : 'Rutinas de búsqueda todos los días, sin día libre; Handyx y ventas en pausa sin borrar nada.'}</small></span>
+          <button role="switch" className="switch" aria-checked={intensiva} aria-label="Búsqueda intensiva" onClick={() => {
+            if (intensiva) {
+              if (window.confirm('¿Apagás la búsqueda intensiva? Vuelve la rutina anterior, el día libre y Handyx y ventas salen de la pausa.')) desactivarIntensiva(dateKey());
+            } else if (window.confirm('¿Activás la búsqueda intensiva desde hoy? Handyx y ventas quedan en pausa (no se borra nada).')) activarIntensiva(dateKey());
+          }} />
+        </li>
         <li>
           <span><b>Inicio del plan</b><small>Semana 1 · {SEMANAS} semanas · {BIMESTRES} bimestres</small></span>
           <input className="campo-texto mono" type="date" value={t0} onChange={(e) => e.target.value && setInicioPlan(e.target.value)} aria-label="Inicio del plan" />
@@ -146,8 +155,8 @@ function PlanT18() {
           )}
         </li>
         <li>
-          <span><b>Día libre</b><small>Solo repasos de 20 min y entreno suave</small></span>
-          <select className="campo-texto" value={cfg.diaLibre ?? ''} onChange={(e) => setPlanSettings({ diaLibre: e.target.value ? Number(e.target.value) : null })} aria-label="Día libre">
+          <span><b>Día libre</b><small>{intensiva ? `Ninguno mientras dure la búsqueda intensiva; ${DIAS_LIBRE.find(([v]) => v === (cfg.previo?.diaLibre ?? null))?.[1].toLowerCase()} queda guardado` : 'Solo repasos de 20 min y entreno suave'}</small></span>
+          <select className="campo-texto" disabled={intensiva} value={cfg.diaLibre ?? ''} onChange={(e) => setPlanSettings({ diaLibre: e.target.value ? Number(e.target.value) : null })} aria-label="Día libre">
             {DIAS_LIBRE.map(([v, n]) => <option key={n} value={v ?? ''}>{n}</option>)}
           </select>
         </li>

@@ -106,7 +106,7 @@ export function Hoy({ day }: { day: DayLog }) {
         <span className="mejora-n mono">+{fmtPct(mejora)} %</span>
       </section>
 
-      <AvisosRamas date={day.date} />
+      <AvisosRamas date={day.date} day={day} />
 
       <ol className="metas" ref={lista}>
         <li className="regla-horas" aria-hidden="true" />

@@ -53,3 +53,19 @@ export function diasEnPausa(plan: Pick<PlanState, 'pausas'>, objetivo: string, h
   }
   return d;
 }
+
+/**
+ * Los cortes de Handyx corridos por la pausa: cada corte que cae después del inicio de la
+ * pausa se corre lo que dure (si sigue abierta, lo que va hasta hoy). La fecha original queda
+ * para mostrarla tachada.
+ */
+export function cortesCorridos(cortes: { id: string; fin: string }[], plan: Pick<PlanState, 'pausas'>, hoy: string) {
+  const ps = (plan.pausas ?? []).filter((p) => p.objetivo === 'handyx');
+  const desde = ps.length ? ps.map((p) => p.desde).sort()[0] : null;
+  const n = diasEnPausa(plan, 'handyx', hoy);
+  return cortes.map((c) => {
+    const corre = desde != null && c.fin > desde && n > 0;
+    const fecha = corre ? new Date(new Date(c.fin + 'T12:00').getTime() + n * 864e5).toISOString().slice(0, 10) : c.fin;
+    return { ...c, fecha, original: c.fin, corrido: corre ? n : 0 };
+  });
+}

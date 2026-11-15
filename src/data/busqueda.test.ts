@@ -81,3 +81,39 @@ describe('búsqueda intensiva', () => {
     expect(getState().plan.pausas.find((p) => p.objetivo === 'handyx')!.guardado).toEqual({ handyx: {} });
   });
 });
+
+describe('pausas en metas, cortes y avisos', () => {
+  const pausa = { pausas: [{ id: 'p', objetivo: 'handyx', desde: '2026-11-16', motivo: 'búsqueda intensiva', guardado: {} }] };
+
+  it('la semana de la intensiva no genera metas de Handyx y suma clipping', async () => {
+    const { metasSemanaGeneradas, metasMesGeneradas } = await import('./metas-plan');
+    const s = metasSemanaGeneradas('2026-11-23', '2026-11-16', { intensiva: true, pausa });
+    expect(s.some((m) => m.rama === 'handyx')).toBe(false);
+    expect(s.find((m) => m.clave === 'horas-prog')?.meta).toBe(25.5);
+    expect(s.find((m) => m.clave === 'horas-clipping')?.meta).toBe(10.5);
+    const normal = metasSemanaGeneradas('2026-11-23', '2026-11-16');
+    expect(normal.some((m) => m.rama === 'handyx')).toBe(true);
+    const ene = metasMesGeneradas('2027-02-01', '2026-11-16', undefined, { intensiva: true, pausa });
+    expect(ene.some((m) => m.rama === 'handyx')).toBe(false);
+  });
+
+  it('los cortes de Handyx se corren lo que dura la pausa y guardan la fecha original', async () => {
+    const { cortesCorridos } = await import('./busqueda');
+    const c = cortesCorridos([{ id: 'lanzar', fin: '2027-02-14' }], pausa, '2026-12-14');
+    expect(c[0]).toMatchObject({ original: '2027-02-14', fecha: '2027-03-14', corrido: 28 });
+    const cerrada = { pausas: [{ ...pausa.pausas[0], hasta: '2026-12-14' }] };
+    expect(cortesCorridos([{ id: 'lanzar', fin: '2027-02-14' }], cerrada, '2027-06-01')[0].fecha).toBe('2027-03-14');
+  });
+
+  it('si el foco se pasa de hora, Hoy avisa y el siguiente se acorta', async () => {
+    const { avisoPasado } = await import('./avisos');
+    const day = { date: '2026-11-17', wake: '04:30', routine: 'completo' as const, notes: [], focus: [], blocks: [
+      { key: 'math', n: 1, title: 'Matemática', short: 'm', area: 'ing' as const, kind: 'estudio' as const, start: '04:30', min: 120, fixed: false, rama: 'matematica' as const, tasks: [] },
+      { key: 'prog', n: 2, title: 'Programación', short: 'p', area: 'ing' as const, kind: 'pomodoro' as const, start: '06:30', min: 120, fixed: false, rama: 'programacion' as const, tasks: [] },
+    ] };
+    expect(avisoPasado(day, 'math', 6 * 60 + 20)).toBeNull();
+    const a = avisoPasado(day, 'math', 6 * 60 + 50)!;
+    expect(a.titulo).toBe('Matemática se pasó 20 min');
+    expect(a.texto).toBe('Programación se acorta a 100 min; el resto del día no se corre.');
+  });
+});
