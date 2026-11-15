@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react';
 import { dayNumber } from '../data/derive';
 import { tituloDeBloque } from '../data/etiquetas';
-import { DAY_ROUTINES, WAKE, isMeta, planRoutine, routineFor, wakeRange, type DayType } from '../data/routines';
+import { DAY_ROUTINES, isMeta, wakeDe, planRoutine, routineFor, wakeRange, type DayType } from '../data/routines';
 import { fmtDur, fmtFecha, nowMin, toHHMM, toMin } from '../data/time';
 import type { RoutineId } from '../data/types';
 import { planSettings, startDay, useStore } from '../state/store';
@@ -14,9 +14,10 @@ const MODOS = [['completo', 'Día completo'], ['corto', 'Día corto']] as const;
 
 function defaultChoice(now: number, t: DayType): { r: RoutineId; otra: number } {
   const { min, max } = wakeRange(t);
-  const otra = toMin(WAKE.completo) + 40;
-  if (now <= toMin(WAKE.completo) + 30) return { r: 'completo', otra };
-  if (now <= toMin(WAKE.corto) + 30) return { r: 'corto', otra };
+  const w = wakeDe(t);
+  const otra = toMin(w.completo) + 40;
+  if (now <= toMin(w.completo) + 30) return { r: 'completo', otra };
+  if (now <= toMin(w.corto) + 30) return { r: 'corto', otra };
   const rounded = Math.floor(now / STEP) * STEP;
   return { r: 'otra', otra: Math.min(max, Math.max(min, rounded)) };
 }
@@ -35,6 +36,7 @@ export function Despertar({ date }: { date: string }) {
   const [otra, setOtra] = useState(init.otra);
   const range = wakeRange(tipo);
 
+  const WAKE = wakeDe(tipo);
   const wake = choice === 'otra' ? toHHMM(otra) : WAKE[choice];
   const plan = planRoutine(tipo, choice, wake);
   const firstFixed = plan.findIndex((p) => p.block.kind === 'fixed');

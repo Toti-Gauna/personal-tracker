@@ -133,7 +133,9 @@ describe('de la ruta a tu día', () => {
     expect(bl.math).toMatchObject({ ref: 'b1-conamat-arit-01', part: 'learn' });
     expect(bl.prog).toMatchObject({ ref: 'b1-prog-python', part: 'learn' });
     expect(bl.abi.ref).toBeUndefined();
-    expect(bl.handyx.ref).toBeUndefined();
+    // Ola 8b: con la búsqueda intensiva no hay bloque de Handyx (en pausa); clipping va sin ruta.
+    expect(bl.handyx).toBeUndefined();
+    expect(bl.clipping.ref).toBeUndefined();
   });
 
   it('marcar la meta suma a la mejora, avanza la meta semanal, mueve el carril y recalcula el ritmo', () => {
