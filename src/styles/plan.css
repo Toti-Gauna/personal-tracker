@@ -209,3 +209,29 @@
 .pb-nueva { width: auto; flex: none; margin: 0; }
 .plan-rama .fila-t .mg-mas.chico { white-space: nowrap; flex: none; }
 .plan-rama .fila-t { gap: 12px; }
+
+/* 7.7 · Importar */
+.pim-pasos { list-style: none; margin: 18px 0 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); border: 1px solid var(--linea); }
+.pim-pasos li { padding: 10px; border-left: 1px solid var(--linea); display: grid; gap: 4px; align-content: start; font-size: 14px; line-height: 1.25; }
+.pim-pasos li:first-child { border-left: 0; }
+.pim-pasos li.on { box-shadow: inset 0 -3px 0 var(--tinta); }
+.pim-pasos .mono { font-size: 12px; }
+.nm-ramas button:disabled { opacity: 0.35; }
+.pim-json { display: grid; grid-template-columns: auto minmax(0, 1fr); border: 1px solid var(--linea); border-radius: 8px; background: color-mix(in srgb, var(--tinta) 4%, var(--papel)); overflow: hidden; }
+.pim-json.con-error { border-color: var(--rutina); }
+.pim-num { display: grid; align-content: start; padding: 14px 6px 14px 10px; font-size: 13px; line-height: 1.55; color: var(--sub); text-align: right; user-select: none; border-right: 1px solid var(--linea); }
+.pim-num .mal { color: var(--papel); background: var(--rutina); border-radius: 3px; padding: 0 3px; }
+.pim-json textarea { border: 0; background: transparent; color: var(--tinta); font-size: 13px; line-height: 1.55; padding: 14px 12px; resize: vertical; white-space: pre; overflow-x: auto; min-height: 200px; width: 100%; box-sizing: border-box; }
+.pim-json textarea:focus { outline: 2px solid var(--c); outline-offset: -2px; }
+.pim-estado { font-size: 13px; margin: 10px 0 0; overflow-wrap: anywhere; }
+.pim-cambios { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--linea); }
+.pim-cambios li { display: grid; grid-template-columns: 14px minmax(0, 1fr); gap: 14px; padding: 12px 0; border-bottom: 1px solid var(--linea); }
+.pim-cambios i { width: 14px; height: 14px; margin-top: 4px; }
+.pim-cambios div { display: grid; gap: 2px; }
+.pim-cambios b { font-weight: 600; font-size: 17px; }
+.pim-btn { margin-top: 14px; width: 100%; }
+.pim-hecho { margin-top: 22px; display: grid; gap: 10px; }
+.pim-hecho ul { margin: 0; padding-left: 18px; }
+.pim-antes { list-style: none; margin: 0; padding: 0; }
+.pim-antes li { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--linea); align-items: baseline; }
+.pim-antes .mono { font-size: 12px; }

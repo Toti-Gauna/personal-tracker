@@ -15,6 +15,7 @@ import { EditarRutina } from './screens/EditarRutina';
 import { Entreno } from './screens/Entreno';
 import { EntrenoSemana } from './screens/EntrenoSemana';
 import { Metas } from './screens/Metas';
+import { PlanImportar } from './screens/PlanImportar';
 import { MotorEntreno } from './screens/MotorEntreno';
 import { Peso } from './screens/Peso';
 import { ResumenEntreno } from './screens/ResumenEntreno';
@@ -83,6 +84,7 @@ export function App() {
       case 'foco': contenido = <Foco day={day} />; break;
       case 'pomodoros': contenido = <Pomodoros />; break;
       case 'json': contenido = <DiaJson day={day} />; break;
+      case 'importar': contenido = <PlanImportar day={day} />; break;
       case 'estudio': contenido = <Estudio day={day} />; break;
       case 'sesion': contenido = <SesionEstudio key={ruta.param} day={day} id={ruta.param} />; break;
       case 'como': contenido = <ComoFunciona />; break;
