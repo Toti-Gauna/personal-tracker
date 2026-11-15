@@ -384,7 +384,7 @@ export function PlanHandyx({ day }: { day: DayLog }) {
       </fieldset>
 
       <div className="pr-card pp-cerrar">
-        <span className="etiqueta">Criterio para el {fechaCorta(decision)} {decision.slice(0, 4)}</span>
+        <span className="etiqueta">Criterio para el {fechaCorta(cortes[cortes.length - 1].fecha)} {cortes[cortes.length - 1].fecha.slice(0, 4)}</span>
         <p>Seguir si deja al menos <b>{cfg.umbralIngreso || '[tu umbral de ingreso]'}</b> por mes con <b>{cfg.horasMaximas || '[horas máximas]'}</b> por semana. Si no, delegar u ordenar la salida. Las {PLAN.handyx.horasPorDia} h vuelven a programación o a Eclipse.</p>
         {(!cfg.umbralIngreso || !cfg.horasMaximas) && <a className="subrayado" href="#/ajustes">Escribir los umbrales en Ajustes</a>}
       </div>

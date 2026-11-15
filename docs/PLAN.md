@@ -5,7 +5,7 @@ Tracker personal de Toti: el día en horas, el estudio con su propio motor de re
 - **Diseño:** [canvas de Trazo](https://claude.ai/artifact/6Cc2E6aW2ViU5ikovpsRTy)
 - **Roadmap de estudio:** [ruta ML + DevSecOps](https://claude.ai/artifact/9PEokku7mBLZdCFJr1zqXP)
 - **Pantallas:** presentación `Trazo-pantallas.pptx` y su ZIP de imágenes (44 pantallas, 8 flujos).
-- **Estado:** ola 8 (Plan T+18) en revisión. Este archivo es la fuente de verdad.
+- **Estado:** ola 8 (Plan T+18) y ola 8b (búsqueda intensiva) en revisión. Este archivo es la fuente de verdad.
 
 ---
 
@@ -339,6 +339,18 @@ Seis ramas que salen de main (Trazo) el lunes de T0 y vuelven a juntarse 78 sema
 - **Importar JSON:** campos comunes `tipo`, `rama` y `fecha`; tipos `sesion`, `revision`, `examen`, `entrevista`, `simulacro`, `postulaciones` y `semana`. Validación a mano (sin dependencias) que marca la línea que falla; "Qué cambia" antes de guardar; cada importación queda como commit de su rama en el mapa.
 - **Migración:** la clave sigue siendo `trazo.v1`. Los días guardados no cambian; el plan arranca vacío; las semillas que el plan reemplaza con sus contadores (CV, mensajes a RRHH, horas, tests, entrenos) se van solo si no tienen avance.
 
+## 5 quinquies. Búsqueda intensiva (ola 8b)
+
+Desde el lunes 16 nov 2026 la prioridad es un trabajo remoto de USD 3.000 a 5.000 por mes. **Esta sección reemplaza las "Rutinas del día" de la ola 8** mientras el modo esté activo.
+
+- **Modo `busqueda-intensiva`** (Ajustes → Plan T+18): rutinas `busqueda-intensiva` (lunes a viernes, 10 metas) y `busqueda-intensiva-finde` (8 metas), arrancan a las 04:30 (día corto 05:30; la cadena de la mañana es matemática y programación). Sin día libre: queda en "ninguno" y el anterior se guarda. Horas por semana: matemática 14, programación 25,5, inglés 11,5, búsqueda 10,5, clipping 10,5, entrenamiento 10. Desactivarlo vuelve exactamente a la rutina y al día libre de antes.
+- **Sprint de 14 días** (`#/metas/sprint`, 10.2): si el día 14 no hay oferta, el sprint se renueva; la búsqueda no se cierra. Metas del embudo editables (supuestos). Qué cambia en la ruta (`#/metas/impacto`, 10.3).
+- **Pausa (stand-by)**, concepto genérico (`Pausa` en `plan-state.ts`): una rama o área en pausa no aparece en Hoy ni genera avisos, metas ni contadores; nada se borra (`guardado` es una foto). En el mapa va punteada y tenue desde la pausa; sus cortes se corren +N días con la fecha original tachada; Handyx abre en modo lectura con "Retomar". Pausas iniciales: Handyx y ventas desde T0.
+- **Clipping**: bloque sin rama, con el color de Eclipse; en el mapa tiene su propia columna.
+- **Hitos por rama** (`src/data/hitos.ts`, 10.4): commit, hito grande (rombo) o de main, con flecha desde la rama que entrega. Se guardan como días desde T0. Marcar uno como hecho lo pasa a trazo lleno y mueve HEAD; los de búsqueda que pasan sin cumplirse quedan vencidos con fecha nueva propuesta. Pestaña Trimestre del mapa; también en Semana, Mes y Bimestre.
+- **Entrevista a 3 días o menos:** el bloque de inglés pasa a simulacro de esa entrevista. **Bloque que se pasa de hora:** Hoy avisa y el siguiente se acorta; no se corre el día.
+- Prompts de los bloques: `docs/prompts/bloques.md` (5, 17, 18 y 19).
+
 ## 6. Olas de desarrollo (un PR por ola, un modelo por ola)
 
 | Ola | Qué sale | Modelo · esfuerzo |
@@ -351,6 +363,7 @@ Seis ramas que salen de main (Trazo) el lunes de T0 y vuelven a juntarse 78 sema
 | 5 · Entreno | Rutinas, semana, editor, sesión en pareja, resumen, peso | Sonnet 5.5 · alto |
 | 6 · Cierre y sellos | Cierre, XP, sellos, ajustes, sonidos y alarmas .ics | Sonnet 5.5 · medio |
 | 7 · Escritorio y tablet | Barra lateral, riel, vista Avance, modo presentación, pulido GSAP, **lista de metas del día con la hora a la derecha del título (§3 bis)** | Sonnet 5.5 · medio |
+| 8b · Búsqueda intensiva | Modo con dos rutinas y sin día libre, pausas (stand-by), hitos por rama, mapa con stand-by y Trimestre, sprint de 14 días y qué cambia en la ruta (§5 quinquies) | Opus 5.5 · alto |
 | 8 · Plan T+18 | Seis ramas desde T0, rutinas con trabajo y día libre, rama en cada bloque, avisos entre ramas, Ruta y mapa en ramas, Metas generadas desde el plan, Proyecto, Búsqueda, Inglés, Handyx, Importar JSON y Ajustes del plan (§5 quater) | Opus 5.5 · alto |
 
 En el día a día alcanza con **Haiku 5.5 · bajo**: pegás el JSON del cierre y queda commiteado en `data/days/`.
@@ -677,3 +690,10 @@ En el día a día alcanza con **Haiku 5.5 · bajo**: pegás el JSON del cierre y
 - Metas abre en Ruta (semana N de 78, seis ramas, lo que viene) con el mapa en ramas; Semana, Mes, Bimestre y Año salen del plan; Nueva meta con rama.
 - Proyecto, Búsqueda, Inglés y Handyx; Importar JSON con validación y "Qué cambia".
 - Ajustes del plan (inicio, rutina, T+2, día libre, umbrales de Handyx, colores) y nombres sugeridos de B2 a B9; "Programación · Faro v1" en Buen día, Elegir pomodoro, Foco, Estudio y Avance.
+
+**2026-11-15 · ola 8b · búsqueda intensiva**
+
+- Modo búsqueda intensiva activo desde T0: rutinas de lunes a viernes y de finde, sin día libre, con Handyx y ventas en stand-by; se apaga en Ajustes y vuelve todo como estaba.
+- Pausas genéricas: fuera de Hoy, avisos, metas y contadores; mapa punteado; cortes de Handyx corridos; Handyx en modo lectura con Retomar.
+- Hitos por rama (26 iniciales), rama clipping y pestaña Trimestre del mapa; hitos hechos, vencidos y movidos.
+- Sprint de búsqueda de 14 días y "Qué cambia en la ruta"; prompts 17 a 19 para el bloque de inglés.

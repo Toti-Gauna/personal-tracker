@@ -5,7 +5,7 @@ import { metasSemanaPlan } from '../data/plan';
 import { RAMA_COLOR } from '../data/ramas';
 import { addDays, nowMin } from '../data/time';
 import type { DayLog, RamaOMain } from '../data/types';
-import { lunesDe, contador, ensayarRespuesta, setPlanSettings, sumarContador, sumarHandyx } from '../state/plan';
+import { desactivarIntensiva, lunesDe, contador, ensayarRespuesta, setPlanSettings, sumarContador, sumarHandyx } from '../state/plan';
 import { planSettings, useStore } from '../state/store';
 import { toast } from './avisos';
 import { useNow } from './useNow';
@@ -33,6 +33,8 @@ export function AvisosRamas({ date, day }: { date: string; day?: DayLog }) {
   if (!avisos.length) return null;
   const pasar = () => {
     if (!window.confirm('¿Pasás a la rutina con trabajo de lunes a viernes? Se aplica desde el próximo día que empieces.')) return;
+    // Con trabajo nuevo termina la búsqueda intensiva: Handyx y ventas salen de la pausa.
+    if (cfg.modo === 'busqueda-intensiva') desactivarIntensiva(date);
     setPlanSettings({ rutina: 'con-trabajo' });
     toast({ title: 'Rutina con trabajo', sub: 'Desde el próximo Buen día', color: 'var(--rutina)' }, false);
   };

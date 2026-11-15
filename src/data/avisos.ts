@@ -38,7 +38,9 @@ export function avisosEntreRamas(date: string, p: PlanState, cfg: PlanSettings, 
     out.push({
       id: `ent-${ent.id}`, de: 'trabajo', a: 'ingles',
       titulo: `Entrevista ${ent.fecha === date ? 'hoy' : elDia(ent.fecha)}${ent.hora ? ` a las ${ent.hora}` : ''}`,
-      texto: 'El bloque de búsqueda se parte: 45 min de postulaciones y 45 de respuestas en voz alta.',
+      texto: cfg.modo === 'busqueda-intensiva'
+        ? `El bloque de inglés pasa a simulacro de esta entrevista${ent.empresa ? ` en ${ent.empresa}` : ''}: ${ent.rol}.`
+        : 'El bloque de búsqueda se parte: 45 min de postulaciones y 45 de respuestas en voz alta.',
       href: '#/metas/ingles',
     });
   }

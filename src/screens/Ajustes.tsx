@@ -138,10 +138,10 @@ function PlanT18() {
           <input className="campo-texto mono" type="date" value={t0} onChange={(e) => e.target.value && setInicioPlan(e.target.value)} aria-label="Inicio del plan" />
         </li>
         <li>
-          <span><b>Rutina del día</b><small>Cambia al marcar T+2 (con confirmación)</small></span>
+          <span><b>Rutina del día</b><small>{intensiva ? 'La de la búsqueda intensiva mientras dure; al apagarla vuelve esta' : 'Cambia al marcar T+2 (con confirmación)'}</small></span>
           <div className="segmentado" role="radiogroup" aria-label="Rutina de lunes a viernes">
-            <button role="radio" aria-checked={cfg.rutina === 'busqueda'} onClick={() => setPlanSettings({ rutina: 'busqueda' })}>Búsqueda</button>
-            <button role="radio" aria-checked={cfg.rutina === 'con-trabajo'} onClick={() => setPlanSettings({ rutina: 'con-trabajo' })}>Con trabajo</button>
+            <button role="radio" disabled={intensiva} aria-checked={(intensiva ? cfg.previo?.rutina : cfg.rutina) === 'busqueda'} onClick={() => setPlanSettings({ rutina: 'busqueda' })}>Búsqueda</button>
+            <button role="radio" disabled={intensiva} aria-checked={(intensiva ? cfg.previo?.rutina : cfg.rutina) === 'con-trabajo'} onClick={() => setPlanSettings({ rutina: 'con-trabajo' })}>Con trabajo</button>
           </div>
         </li>
         <li>
