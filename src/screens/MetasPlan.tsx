@@ -14,10 +14,12 @@ import {
 import { BIMESTRES, PLAN, SEMANAS, T0_PLAN, diaSemanaCorto, faseTrabajo, fechaHito, finSemana, semanaDelPlan, type MetaGenerada } from '../data/plan';
 import { RAMA_COLOR, RAMAS } from '../data/ramas';
 import { enPausa } from '../data/plan-state';
+import { hitosEntre } from '../data/hitos';
+import { colorMapa } from '../data/mapa';
 import { addDays, parseDate } from '../data/time';
 import type { DayLog, Rama } from '../data/types';
 import { addProgress, deleteGoal, renameBimester, stepOf } from '../state/goals';
-import { confirmarMetas, editarMeta, editarMetaFija, ensayarRespuesta, lunesDe, sumarContador, sumarHandyx, sumarHechoMeta } from '../state/plan';
+import { marcarHito, moverHito, confirmarMetas, editarMeta, editarMetaFija, ensayarRespuesta, lunesDe, sumarContador, sumarHandyx, sumarHechoMeta } from '../state/plan';
 import { planSettings, useStore } from '../state/store';
 import { Calendario } from '../ui/Calendario';
 import { Casilla } from '../ui/Casilla';
@@ -49,6 +51,34 @@ function StandBy({ plan, date }: { plan: CtxPlan['plan']; date: string }) {
     <p className="mono sub mp-standby">
       stand-by desde el {dm(ps[0].desde)}: {ps.map((p) => (p.objetivo === 'ventas' ? 'ventas de Eclipse' : p.objetivo)).join(' y ')} · sus metas quedan guardadas · <a className="subrayado" href="#/metas/sprint">ver el sprint</a>
     </p>
+  );
+}
+
+/** Los hitos de las ramas que caen en el período (Ola 8b), con su casilla de hecho. */
+function HitosRango({ desde, hasta, date }: { desde: string; hasta: string; date: string }) {
+  const plan = useStore((s) => s.plan);
+  const t0 = useStore((s) => s.settings?.startDate);
+  const hs = hitosEntre(date, desde, hasta, plan.hitos ?? {}, t0);
+  if (!hs.length) return null;
+  return (
+    <>
+      <div className="etiqueta pp-sec">Hitos del período</div>
+      <ul className="mp-hitos">
+        {hs.map((h) => {
+          const c = h.rama === 'main' ? 'var(--tinta)' : colorMapa(h.rama);
+          return (
+            <li key={h.id} className={`${h.estado}${h.rama !== 'main' && h.rama !== 'clipping' && enPausa(plan, h.rama, h.fecha) ? ' standby' : ''}`} style={{ ['--c' as string]: c }}>
+              <Casilla checked={h.estado === 'hecho'} label={`${h.texto}: marcar hecho`} onChange={() => marcarHito(h.id, h.estado === 'hecho' ? null : date)} />
+              <div>
+                <span className="mono mp-rama">{h.rama} · {dm(h.fecha)}{h.estado === 'vencido' ? ' · vencido' : ''}</span>
+                <span className={h.tipo === 'grande' && h.estado !== 'vencido' ? 'resaltado' : ''}>{h.tipo === 'grande' ? '◇ ' : ''}{h.texto}</span>
+                {h.propuesta && <button className="subrayado mono mp-mover" onClick={() => moverHito(h.id, h.propuesta!)}>Mover al {dm(h.propuesta)}</button>}
+              </div>
+            </li>
+          );
+        })}
+      </ul>
+    </>
   );
 }
 
@@ -209,6 +239,7 @@ export function SemanaPlan({ day, editar }: { day: DayLog; editar: boolean }) {
           <ul className="mg-lista">{gs.map((g) => <GoalRow key={g.id} g={g} date={date} editar={editar} />)}</ul>
         </section>
       ))}
+      <HitosRango desde={l} hasta={d7} date={date} />
       <StandBy plan={ctx.plan} date={date} />
     </>
   );
@@ -270,6 +301,7 @@ export function MesPlan({ day, editar }: { day: DayLog; editar: boolean }) {
         {personales.map((g) => <GoalRow key={g.id} g={g} date={date} editar={editar} sub={`${g.rama ?? (g.group ?? AREAS[g.area].name)} · tuya`} />)}
       </ul>
       {!metas.length && !personales.length && <p className="sub vacio">Este mes no hay metas del plan.</p>}
+      <HitosRango desde={a} hasta={b} date={date} />
       <StandBy plan={ctx.plan} date={date} />
 
       {resumen.length > 0 && (
@@ -350,6 +382,8 @@ export function BimestrePlan({ day, editar, elegido }: { day: DayLog; editar: bo
         ))}
       </div>
       {editar && <p className="sub nota-izq">Vacío vuelve al texto del plan.</p>}
+
+      <HitosRango desde={b.inicio} hasta={b.fin} date={date} />
 
       <div className="pr-card mp-sig">
         <span className="etiqueta">Al cerrar B{n} · {dm(cierre.fecha)}</span>
