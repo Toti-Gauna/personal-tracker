@@ -30,9 +30,18 @@ describe('migración al plan T+18 (trazo.v1)', () => {
     expect(s.plan.respuestas.every((r) => r.veces === 0)).toBe(true);
   });
 
-  it('sin ajustes del plan: buscando trabajo y martes libre', () => {
-    const cfg = planSettings(migrate(structuredClone(viejo)).settings);
-    expect(cfg).toMatchObject({ rutina: 'busqueda', diaLibre: 2, umbralIngreso: '', horasMaximas: '' });
+  it('sin ajustes del plan: arranca en búsqueda intensiva, sin día libre y con el martes guardado', () => {
+    const s = migrate(structuredClone(viejo));
+    const cfg = planSettings(s.settings);
+    expect(cfg).toMatchObject({ modo: 'busqueda-intensiva', diaLibre: null, previo: { rutina: 'busqueda', diaLibre: 2 }, umbralIngreso: '', horasMaximas: '' });
+    expect(routineFor('2026-11-17', cfg)).toBe('busqueda-intensiva');
+    expect(routineFor('2026-11-21', cfg)).toBe('busqueda-intensiva-finde');
+    expect(s.plan.pausas.map((p) => [p.objetivo, p.desde, p.hasta])).toEqual([['handyx', '2026-11-16', undefined], ['ventas', '2026-11-16', undefined]]);
+  });
+
+  it('si el modo ya se decidió, la migración lo respeta', () => {
+    const v = { ...structuredClone(viejo), settings: { ...viejo.settings, plan: { modo: null } } };
+    const cfg = planSettings(migrate(v).settings);
     expect(routineFor('2026-11-17', cfg)).toBe('libre');
     expect(routineFor('2026-11-18', cfg)).toBe('weekday');
   });

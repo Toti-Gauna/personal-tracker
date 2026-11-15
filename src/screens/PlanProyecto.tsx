@@ -8,7 +8,8 @@ import { PLAN, TRAMOS, diaSemanaCorto, fechaCorta, fechas, nombreTramo, proyecto
 import { proyectoVacio, type TipoError } from '../data/plan-state';
 import { RAMA_COLOR } from '../data/ramas';
 import type { DayLog } from '../data/types';
-import { guardarExamen, marcarCapa, sumarRevision, sumarTiempo } from '../state/plan';
+import { guardarExamen, marcarCapa, setTecnica, sumarRevision, sumarTiempo, toggleAgentico } from '../state/plan';
+import { atrasoPuerta, puertaAprobada } from '../data/puertas';
 import { useStore } from '../state/store';
 import { Casilla } from '../ui/Casilla';
 
@@ -77,7 +78,10 @@ export function PlanProyecto({ day, id }: { day: DayLog; id?: string }) {
       )}
 
       {t.tipo === 'ventana' && (
-        <p className="sub">Los bloques de programación pasan a matemática: el avance se registra en <a className="subrayado" href="#/unidades">Unidades</a>.</p>
+        <>
+          <p className="sub">Los bloques de programación pasan a matemática: el avance se registra en <a className="subrayado" href="#/unidades">Unidades</a>.</p>
+          <Puerta id={t.id} date={date} />
+        </>
       )}
       {(t.tipo === 'pausa' || t.tipo === 'colchon') && <p className="sub">Sin entrega en esta etapa.</p>}
 
@@ -101,6 +105,11 @@ export function PlanProyecto({ day, id }: { day: DayLog; id?: string }) {
 
       {(t.tipo === 'proyecto' || t.tipo === 'cert') && <Revisiones id={t.id} date={date} revisiones={p.revisiones} />}
       {(t.tipo === 'proyecto' || t.tipo === 'cert') && <Examen id={t.id} date={date} examen={p.examen} />}
+      {t.tipo === 'proyecto' && t.id !== 'P0' && <Tecnica id={t.id} date={date} />}
+      {t.tipo === 'proyecto' && <Agentico id={t.id} />}
+      {PLAN.programacion.creditos[t.id] != null && (
+        <p className="sub pp-creditos mono">créditos de la API de Claude: US$ {PLAN.programacion.creditos[t.id]} de {PLAN.programacion.creditos.total} · tope por agente y evals con un modelo chico</p>
+      )}
 
       {(t.tipo === 'proyecto' || t.tipo === 'cert') && (
         <div className="pr-card pp-cerrar">
@@ -198,7 +207,72 @@ function Examen({ id, date, examen }: { id: string; date: string; examen?: { fec
         <input className="campo-texto mono" inputMode="numeric" value={v} onChange={(e) => setV(e.target.value.replace(/\D/g, '').slice(0, 3))} placeholder="Puntaje" aria-label="Puntaje del examen (0 a 100)" />
         <button type="submit" className="btn-borde" disabled={v === '' || n > 100}>{examen ? 'Cambiar' : 'Guardar'}</button>
       </form>
-      <p className="sub">Con 85 % o más el proyecto queda cerrado. También entra con el JSON del examen (Importar JSON).</p>
+      <p className="sub">{id.startsWith('W') ? 'Con 85 % o más la puerta queda aprobada.' : 'Con 85 % o más y la entrevista técnica completa, el proyecto queda cerrado.'} También entra con el JSON del examen (Importar JSON).</p>
+    </>
+  );
+}
+
+/** La puerta de matemática de una ventana: qué proyecto abre y cuánto atraso suma. */
+function Puerta({ id, date }: { id: string; date: string }) {
+  const plan = useStore((s) => s.plan);
+  const t0 = useStore((s) => s.settings?.startDate) ?? T0_PLAN;
+  const abre = PLAN.programacion.puertas[id];
+  const ok = puertaAprobada(plan, id);
+  const atraso = atrasoPuerta(plan, id, date, t0);
+  return (
+    <>
+      <div className="pr-card pp-puerta" style={{ borderColor: ok ? 'var(--salud)' : RAMA_COLOR.matematica }}>
+        <span className="etiqueta" style={{ color: RAMA_COLOR.matematica }}>Puerta {id} · abre {abre}</span>
+        <p>{ok ? `Aprobada el ${fechaCorta(ok)}: ${abre} puede arrancar.` : `${abre} no arranca hasta aprobar los tests del tema (85 % o más). Mientras, los bloques de programación son de matemática pura.`}</p>
+        {atraso > 0 && <p className="sub">+{atraso} {atraso === 1 ? 'semana' : 'semanas'} de atraso: corren las fechas siguientes y se descuentan del colchón.</p>}
+      </div>
+      <Examen id={id} date={date} examen={plan.proyectos[id]?.examen} />
+    </>
+  );
+}
+
+/** Entrevista técnica dentro del proyecto: diseño de 2 páginas, 6 a 8 ejercicios con tests y defensa de 45 min. */
+function Tecnica({ id, date }: { id: string; date: string }) {
+  const t = useStore((s) => s.plan.proyectos[id]?.tecnica) ?? {};
+  const cfg = PLAN.programacion.tecnica;
+  const n = t.ejercicios ?? 0;
+  const completa = !!(t.diseno && n >= cfg.ejercicios[0] && t.defensa);
+  return (
+    <>
+      <div className="fila-t pp-sec"><span className="etiqueta">Entrevista técnica del proyecto</span><span className="mono sub">{completa ? 'completa' : `${[t.diseno, n >= cfg.ejercicios[0], t.defensa].filter(Boolean).length} de 3`}</span></div>
+      <ul className="pp-capas">
+        <li>
+          <Casilla checked={!!t.diseno} label="Documento de diseño: marcar" onChange={() => setTecnica(id, { diseno: !t.diseno })} />
+          <div><b>Documento de diseño</b><p className="sub">{cfg.paginasDiseno} páginas: requisitos, carga, componentes, API, trade-offs, fallas, costos y seguridad (prompt 21).</p></div>
+        </li>
+        <li>
+          <span className="pp-num mono">{n}/{cfg.ejercicios[1]}</span>
+          <div>
+            <b>Set de algoritmos con tests</b>
+            <p className="sub">{cfg.ejercicios[0]} a {cfg.ejercicios[1]} ejercicios atados al código del proyecto (prompt 20). {cfg.sesionesPorSemana} sesiones de 45 min por semana: 2 de algoritmos y 1 de diseño.</p>
+            <span className="pp-mas"><button className="mg-mas chico" onClick={() => setTecnica(id, { ejercicios: Math.max(0, n - 1) })} aria-label="Restar un ejercicio">−</button><button className="mg-mas chico" onClick={() => setTecnica(id, { ejercicios: Math.min(cfg.ejercicios[1], n + 1) })} aria-label="Sumar un ejercicio">+1</button></span>
+          </div>
+        </li>
+        <li>
+          <Casilla checked={!!t.defensa} label="Defensa simulada aprobada: marcar" onChange={() => setTecnica(id, { defensa: t.defensa ? null : date })} />
+          <div><b>Defensa simulada de {cfg.defensaMin} min</b><p className="sub">{t.defensa ? `Aprobada el ${fechaCorta(t.defensa)}.` : 'Con la rúbrica del prompt 21: requisitos, estimación, trade-offs, fallas y comunicación.'}</p></div>
+        </li>
+      </ul>
+      <p className="sub">El proyecto no se marca como cerrado sin estos tres.</p>
+    </>
+  );
+}
+
+/** Un servidor MCP y un agente con trazas por proyecto (prompt 22). */
+function Agentico({ id }: { id: string }) {
+  const p = useStore((s) => s.plan.proyectos[id]);
+  return (
+    <>
+      <div className="etiqueta pp-sec">Portfolio agéntico</div>
+      <ul className="pp-capas">
+        <li><Casilla checked={!!p?.mcp} label="Servidor MCP publicado: marcar" onChange={() => toggleAgentico(id, 'mcp')} /><div><b>Servidor MCP publicado</b><p className="sub">Herramientas tipadas, 5 tests, 10 evals y README con instalación en una línea (prompt 22).</p></div></li>
+        <li><Casilla checked={!!p?.agente} label="Agente con trazas: marcar" onChange={() => toggleAgentico(id, 'agente')} /><div><b>Agente con trazas</b><p className="sub">Con tokens, latencia y costo a la vista; suma a "Preguntale a mis proyectos".</p></div></li>
+      </ul>
     </>
   );
 }

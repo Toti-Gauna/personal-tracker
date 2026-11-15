@@ -1,3 +1,6 @@
+import { puertaBloqueando } from '../data/puertas';
+import { T0_PLAN } from '../data/plan';
+import { aplicarIntensiva } from '../data/busqueda';
 import { useSyncExternalStore } from 'react';
 import { DEFAULT_BLOCK_PRESETS, DEFAULT_PRESETS } from '../data/defaults';
 import { buildBlocks, newId, planDay } from '../data/schedule';
@@ -56,8 +59,12 @@ export function migrate(parsed: any): State {
   const train = parsed.train ? { ...emptyTrain(), ...parsed.train } : emptyTrain();
   const ruta = { ...emptyRuta(), ...(parsed.ruta ?? {}) };
   // Ola 8: el plan T+18 arranca vacío; los días ya guardados no cambian.
-  const plan = { ...emptyPlan(), ...(parsed.plan ?? {}) };
-  return { ...empty(), ...parsed, study, train, ruta, plan, profile: { seals: {}, seen: Object.keys(parsed.profile?.seals ?? {}), ...(parsed.profile ?? {}) }, goals: migrateGoals(goals ?? seedGoals(parsed.settings?.startDate ?? dateKey())) };
+  let plan = { ...emptyPlan(), ...(parsed.plan ?? {}) };
+  // Ola 8b: la búsqueda intensiva es la prioridad desde T0. Si nunca se decidió el modo, se activa
+  // (con Handyx y ventas en pausa desde T0); si ya se decidió, se respeta.
+  let settings = parsed.settings ?? null;
+  if (settings && settings.plan?.modo === undefined) ({ settings, plan } = aplicarIntensiva(settings, plan, settings.startDate || T0_PLAN));
+  return { ...empty(), ...parsed, settings, study, train, ruta, plan, profile: { seals: {}, seen: Object.keys(parsed.profile?.seals ?? {}), ...(parsed.profile ?? {}) }, goals: migrateGoals(goals ?? seedGoals(parsed.settings?.startDate ?? dateKey())) };
 }
 
 let state: State = load();
@@ -128,6 +135,8 @@ export function register(me: string, partner: string, today = dateKey()) {
       blockPresets: DEFAULT_BLOCK_PRESETS,
     },
   }));
+  // Desde el primer día: búsqueda intensiva con Handyx y ventas en pausa.
+  setState((s) => (s.settings ? { ...s, ...aplicarIntensiva(s.settings, s.plan, s.settings.startDate) } : s));
 }
 
 export function startDay(routine: RoutineId, wake: string, date = dateKey()) {
@@ -139,9 +148,10 @@ export function startDay(routine: RoutineId, wake: string, date = dateKey()) {
     const cfg = planSettings(s.settings);
     const dayType = routineFor(date, cfg);
     const t0 = s.settings?.startDate;
-    const ventana = ventanaW(date, t0).ahora?.id;
+    const puerta = puertaBloqueando(date, s.plan, t0) ?? undefined;
+    const ventana = ventanaW(date, t0).ahora?.id ?? puerta;
     const entrevista = entrevistaCerca(s.plan, date);
-    const blocks = buildBlocks(planDay(date, routine, wake, dayType, { ventana, entrevista }), carry).map((b) => (refs[b.key] ? { ...b, ...refs[b.key] } : b));
+    const blocks = buildBlocks(planDay(date, routine, wake, dayType, { ventana, entrevista, puerta }), carry).map((b) => (refs[b.key] ? { ...b, ...refs[b.key] } : b));
     const day: DayLog = { date, wake, routine, dayType, ...(ventana ? { ventana } : {}), blocks, notes: [], focus: [] };
     return { ...s, days: { ...s.days, [date]: day }, carry: restCarry };
   });
@@ -151,8 +161,9 @@ export function startDay(routine: RoutineId, wake: string, date = dateKey()) {
 export const planSettings = (st: Settings | null): PlanSettings => ({ ...DEFAULT_PLAN_SETTINGS, ...(st?.plan ?? {}) });
 
 /** ¿Hay una entrevista cargada entre hoy y dentro de 3 días? */
-export function entrevistaCerca(p: PlanState, date: string) {
-  return p.entrevistas.some((e) => e.fecha >= date && e.fecha <= addDays(date, 3));
+export function entrevistaCerca(p: PlanState, date: string): { rol: string; empresa?: string } | false {
+  const e = p.entrevistas.filter((x) => x.fecha >= date && x.fecha <= addDays(date, 3)).sort((a, b) => a.fecha.localeCompare(b.fecha))[0];
+  return e ? { rol: e.rol, ...(e.empresa ? { empresa: e.empresa } : {}) } : false;
 }
 
 /** Semana del plan para una fecha, con el T0 de los ajustes. */

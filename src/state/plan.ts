@@ -6,6 +6,7 @@ import { addDays, parseDate } from '../data/time';
 import type { Rama } from '../data/types';
 import { getState, setState } from './store';
 import { addCards } from './study';
+import { aplicarIntensiva, quitarIntensiva } from '../data/busqueda';
 
 /** Lunes de la semana de una fecha. */
 export const lunesDe = (date: string) => addDays(date, -((parseDate(date).getDay() + 6) % 7));
@@ -175,3 +176,67 @@ export function setPlanSettings(patch: Partial<PlanSettings>) {
 
 export const semanaDe = (date: string) => semanaDelPlan(date, getState().settings?.startDate);
 export const _plan = PLAN;
+
+/** Activa la búsqueda intensiva desde hoy (Ajustes). */
+export function activarIntensiva(hoy: string) {
+  setState((s) => (s.settings ? { ...s, ...aplicarIntensiva(s.settings, s.plan, hoy) } : s));
+}
+
+/** Desactiva la búsqueda intensiva: vuelve a la rutina anterior y cierra sus pausas. Nada se borra. */
+export function desactivarIntensiva(hoy: string) {
+  setState((s) => (s.settings ? { ...s, ...quitarIntensiva(s.settings, s.plan, hoy) } : s));
+}
+
+/** Retomar una rama o área en pausa: cierra esa pausa y vuelve a la rutina anterior. */
+export function retomar(objetivo: string, hoy: string) {
+  setState((s) => (s.settings ? { ...s, ...quitarIntensiva(s.settings, s.plan, hoy, objetivo) } : s));
+}
+
+/** Marcar un hito como hecho (o deshacerlo) y moverle la fecha. */
+export function marcarHito(id: string, hoy: string | null) {
+  update((p) => ({ ...p, hitos: { ...p.hitos, [id]: { ...(p.hitos[id] ?? {}), hecho: hoy ?? undefined } } }));
+}
+export function moverHito(id: string, fecha: string) {
+  update((p) => ({ ...p, hitos: { ...p.hitos, [id]: { ...(p.hitos[id] ?? {}), fecha } } }));
+}
+
+/** Sprint de búsqueda: cambiar una meta del embudo (son supuestos) o marcar CV, LinkedIn y caso. */
+export function setMetaEmbudo(id: string, n: number) {
+  update((p) => ({ ...p, sprint: { ...(p.sprint ?? {}), metas: { ...(p.sprint?.metas ?? {}), [id]: n } } }));
+}
+export function toggleSprintCheck(id: string) {
+  update((p) => ({ ...p, sprint: { ...(p.sprint ?? {}), checks: { ...(p.sprint?.checks ?? {}), [id]: !p.sprint?.checks?.[id] } } }));
+}
+
+/** Entrevista técnica del proyecto: documento de diseño, ejercicios con tests y defensa. */
+export function setTecnica(proyecto: string, patch: { diseno?: boolean; ejercicios?: number; defensa?: string | null }) {
+  update((p) => {
+    const cur = p.proyectos[proyecto] ?? proyectoVacio();
+    const t = { ...(cur.tecnica ?? {}), ...patch };
+    if (patch.defensa === null) delete t.defensa;
+    return { ...p, proyectos: { ...p.proyectos, [proyecto]: { ...cur, tecnica: t as NonNullable<typeof cur.tecnica> } } };
+  });
+}
+
+/** MCP publicado o agente con trazas de un proyecto. */
+export function toggleAgentico(proyecto: string, k: 'mcp' | 'agente') {
+  update((p) => {
+    const cur = p.proyectos[proyecto] ?? proyectoVacio();
+    return { ...p, proyectos: { ...p.proyectos, [proyecto]: { ...cur, [k]: !cur[k] } } };
+  });
+}
+
+/** Meta "Mapa de proyectos del portfolio": marcar un paso. */
+export function togglePasoMapa(id: string) {
+  update((p) => ({ ...p, mapaPortfolio: { ...(p.mapaPortfolio ?? {}), [id]: !p.mapaPortfolio?.[id] } }));
+}
+
+/** Revisión de mercado: ofertas cargadas, % por proyecto movible y el día en que se decidió el orden. */
+export function setMercado(patch: { ofertas?: number; pct?: Record<string, number>; decidido?: string | null }) {
+  update((p) => {
+    const cur = p.mercado ?? {};
+    const next = { ...cur, ...patch, pct: { ...(cur.pct ?? {}), ...(patch.pct ?? {}) } };
+    if (patch.decidido === null) delete next.decidido;
+    return { ...p, mercado: next as NonNullable<typeof p.mercado> };
+  });
+}

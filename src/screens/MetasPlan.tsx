@@ -9,14 +9,17 @@ import { appliesTo, averagePct, dayPct, monthLabel, ratio, valueOf, yearMonths }
 import type { Goal } from '../data/goals-types';
 import {
   accionMeta, alCerrar, avanceMeta, cierraEnMes, claveMes, esTarea, filasAnio, filasBimestre, metasMesGeneradas, metasSemanaGeneradas,
-  nombreBimestre, pasoMeta, rangoMes, resumenMes, semanasDelBimestre, tituloSemana, type CtxPlan,
+  nombreBimestre, PASOS_MAPA, pasoMeta, rangoMes, resumenMes, semanasDelBimestre, tituloSemana, type CtxPlan,
 } from '../data/metas-plan';
 import { BIMESTRES, PLAN, SEMANAS, T0_PLAN, diaSemanaCorto, faseTrabajo, fechaHito, finSemana, semanaDelPlan, type MetaGenerada } from '../data/plan';
 import { RAMA_COLOR, RAMAS } from '../data/ramas';
+import { enPausa } from '../data/plan-state';
+import { hitosEntre } from '../data/hitos';
+import { colorMapa } from '../data/mapa';
 import { addDays, parseDate } from '../data/time';
 import type { DayLog, Rama } from '../data/types';
 import { addProgress, deleteGoal, renameBimester, stepOf } from '../state/goals';
-import { confirmarMetas, editarMeta, editarMetaFija, ensayarRespuesta, lunesDe, sumarContador, sumarHandyx, sumarHechoMeta } from '../state/plan';
+import { togglePasoMapa, marcarHito, moverHito, confirmarMetas, editarMeta, editarMetaFija, ensayarRespuesta, lunesDe, sumarContador, sumarHandyx, sumarHechoMeta } from '../state/plan';
 import { planSettings, useStore } from '../state/store';
 import { Calendario } from '../ui/Calendario';
 import { Casilla } from '../ui/Casilla';
@@ -32,14 +35,82 @@ const ORDEN: Rama[] = ['trabajo', 'programacion', 'matematica', 'ingles', 'handy
 const ORIGEN: Record<MetaGenerada['origen'], string> = { plan: 'del plan', propia: 'tuya', chequeo: 'chequeo mensual' };
 
 /** El contexto que necesitan los cálculos del plan. */
-function useCtx(): CtxPlan & { goals: Goal[] } {
+/**
+ * Las metas personales que se muestran: las de una rama en pausa (Handyx) y las de ventas de
+ * Eclipse en pausa no aparecen; siguen guardadas y vuelven al retomar.
+ */
+function visibles(goals: Goal[], plan: CtxPlan['plan'], date: string) {
+  return goals.filter((g) => !(g.rama && enPausa(plan, g.rama, date)) && !(g.area === 'eclipse' && enPausa(plan, 'ventas', date)));
+}
+
+/** "En stand-by: Handyx y ventas · ver" debajo de los contadores, para que no parezca que se perdieron. */
+function StandBy({ plan, date }: { plan: CtxPlan['plan']; date: string }) {
+  const ps = (plan.pausas ?? []).filter((p) => p.desde <= date && (!p.hasta || p.hasta > date));
+  if (!ps.length) return null;
+  return (
+    <p className="mono sub mp-standby">
+      stand-by desde el {dm(ps[0].desde)}: {ps.map((p) => (p.objetivo === 'ventas' ? 'ventas de Eclipse' : p.objetivo)).join(' y ')} · sus metas quedan guardadas · <a className="subrayado" href="#/metas/sprint">ver el sprint</a>
+    </p>
+  );
+}
+
+/** Los hitos de las ramas que caen en el período (Ola 8b), con su casilla de hecho. */
+function HitosRango({ desde, hasta, date }: { desde: string; hasta: string; date: string }) {
+  const plan = useStore((s) => s.plan);
+  const t0 = useStore((s) => s.settings?.startDate);
+  const hs = hitosEntre(date, desde, hasta, plan.hitos ?? {}, t0);
+  if (!hs.length) return null;
+  return (
+    <>
+      <div className="etiqueta pp-sec">Hitos del período</div>
+      <ul className="mp-hitos">
+        {hs.map((h) => {
+          const c = h.rama === 'main' ? 'var(--tinta)' : colorMapa(h.rama);
+          return (
+            <li key={h.id} className={`${h.estado}${h.rama !== 'main' && h.rama !== 'clipping' && enPausa(plan, h.rama, h.fecha) ? ' standby' : ''}`} style={{ ['--c' as string]: c }}>
+              <Casilla checked={h.estado === 'hecho'} label={`${h.texto}: marcar hecho`} onChange={() => marcarHito(h.id, h.estado === 'hecho' ? null : date)} />
+              <div>
+                <span className="mono mp-rama">{h.rama} · {dm(h.fecha)}{h.estado === 'vencido' ? ' · vencido' : ''}</span>
+                <span className={h.tipo === 'grande' && h.estado !== 'vencido' ? 'resaltado' : ''}>{h.tipo === 'grande' ? '◇ ' : ''}{h.texto}</span>
+                {h.propuesta && <button className="subrayado mono mp-mover" onClick={() => moverHito(h.id, h.propuesta!)}>Mover al {dm(h.propuesta)}</button>}
+              </div>
+            </li>
+          );
+        })}
+      </ul>
+    </>
+  );
+}
+
+/**
+ * Meta "Mapa de proyectos del portfolio": Trazo solo guarda la meta y sus 4 pasos; el diseño
+ * visual lo hace el usuario. Cada proyecto que cierra actualiza su nodo.
+ */
+function MapaPortfolio() {
+  const pasos = useStore((s) => s.plan.mapaPortfolio) ?? {};
+  const n = PASOS_MAPA.filter(([k]) => pasos[k]).length;
+  return (
+    <section className="mg-grupo mp-grupo" style={{ ['--c' as string]: RAMA_COLOR.programacion }}>
+      <div className="mp-rama-cab"><span className="mono mp-rama">programacion · meta</span><span className="mono sub">{n}/{PASOS_MAPA.length}</span></div>
+      <div className="mg-grupo-cab"><h2 className="resaltado">Mapa de proyectos del portfolio</h2></div>
+      <ul className="mp-hitos">
+        {PASOS_MAPA.map(([k, t]) => (
+          <li key={k}><Casilla checked={!!pasos[k]} label={`${t}: marcar`} onChange={() => togglePasoMapa(k)} /><div><span>{t}</span></div></li>
+        ))}
+      </ul>
+      <p className="sub">Cada proyecto que cierra actualiza su nodo (estado, tecnologías, qué reutiliza). Prompt 23.</p>
+    </section>
+  );
+}
+
+function useCtx(): CtxPlan & { goals: Goal[]; intensiva: boolean } {
   const plan = useStore((s) => s.plan);
   const days = useStore((s) => s.days);
   const study = useStore((s) => s.study);
   const train = useStore((s) => s.train);
   const settings = useStore((s) => s.settings);
   const goals = useStore((s) => s.goals.goals);
-  return { plan, days, study, train, goals, t0: settings?.startDate ?? T0_PLAN, t2: planSettings(settings).t2 };
+  return { plan, days, study, train, goals, t0: settings?.startDate ?? T0_PLAN, t2: planSettings(settings).t2, intensiva: planSettings(settings).modo === 'busqueda-intensiva' };
 }
 
 const colorDe = (m: { rama?: Rama; area?: keyof typeof AREAS }) => (m.rama ? RAMA_COLOR[m.rama] : m.area ? AREAS[m.area].css : 'var(--sub)');
@@ -108,9 +179,9 @@ export function SemanaPlan({ day, editar }: { day: DayLog; editar: boolean }) {
   const d7 = addDays(l, 6);
   const s = semanaDelPlan(date, t0);
   const guardadas = ctx.plan.semanas[l];
-  const generadas = useMemo(() => metasSemanaGeneradas(date, t0), [date, t0]);
+  const generadas = useMemo(() => metasSemanaGeneradas(date, t0, { intensiva: ctx.intensiva, pausa: ctx.plan }), [date, t0, ctx.intensiva, ctx.plan]);
   const metas = guardadas?.metas ?? generadas;
-  const personales = ctx.goals.filter((g) => appliesTo(g, 'semana', date));
+  const personales = visibles(ctx.goals.filter((g) => appliesTo(g, 'semana', date)), ctx.plan, date);
   const vctx = { study: ctx.study, days: ctx.days, train: ctx.train };
   const ratios = [...metas.map((m) => ratio(avanceMeta(m, l, d7, ctx).v, m.meta ?? 1)), ...personales.map((g) => ratio(valueOf(g, date, vctx), g.target))];
   const avg = ratios.length ? ratios.reduce((a, b) => a + b, 0) / ratios.length : 0;
@@ -152,7 +223,7 @@ export function SemanaPlan({ day, editar }: { day: DayLog; editar: boolean }) {
       </div>
       {s >= 1 && s <= SEMANAS ? (
         <div className="mp-fase">
-          <span className="mono sub">contadores de la fase {fase.id === 'busqueda' ? 'búsqueda · cambian solos en T+2' : 'con trabajo nuevo'}</span>
+          <span className="mono sub">{ctx.intensiva ? 'contadores de la búsqueda intensiva · siguen hasta que entre el trabajo' : `contadores de la fase ${fase.id === 'busqueda' ? 'búsqueda · cambian solos en T+2' : 'con trabajo nuevo'}`}</span>
           <Confirmar tipo="semanas" clave={l} metas={metas} date={date} confirmado={guardadas?.confirmado} que="la semana" />
         </div>
       ) : (
@@ -175,6 +246,13 @@ export function SemanaPlan({ day, editar }: { day: DayLog; editar: boolean }) {
           </section>
         );
       })}
+      {metas.some((m) => !m.rama) && (
+        <section className="mg-grupo mp-grupo" style={{ ['--c' as string]: AREAS.eclipse.css }}>
+          <div className="mp-rama-cab"><span className="mono mp-rama">clipping · fuera del plan</span><span className="mono sub">1 h 30 por día</span></div>
+          <div className="mg-grupo-cab"><h2 className="resaltado">Clipping</h2></div>
+          <ul className="mg-lista">{metas.filter((m) => !m.rama).map((m) => <MetaPlanFila key={m.id} m={m} tipo="semanas" clave={l} base={metas} desde={l} hasta={d7} date={date} ctx={ctx} editar={editar} />)}</ul>
+        </section>
+      )}
       {[...grupos.entries()].map(([nombre, gs]) => (
         <section key={nombre} className="mg-grupo mp-grupo" style={{ ['--c' as string]: AREAS[gs[0].area].css }}>
           <div className="mp-rama-cab"><span className="mono mp-rama">área · fuera del plan</span></div>
@@ -182,6 +260,9 @@ export function SemanaPlan({ day, editar }: { day: DayLog; editar: boolean }) {
           <ul className="mg-lista">{gs.map((g) => <GoalRow key={g.id} g={g} date={date} editar={editar} />)}</ul>
         </section>
       ))}
+      {!(ctx.plan.mapaPortfolio && PASOS_MAPA.every(([k]) => ctx.plan.mapaPortfolio![k])) && <MapaPortfolio />}
+      <HitosRango desde={l} hasta={d7} date={date} />
+      <StandBy plan={ctx.plan} date={date} />
     </>
   );
 }
@@ -195,11 +276,11 @@ export function MesPlan({ day, editar }: { day: DayLog; editar: boolean }) {
   const [a, b] = rangoMes(date);
   const key = claveMes(date);
   const guardado = ctx.plan.meses[key];
-  const generadas = useMemo(() => metasMesGeneradas(date, t0, ctx.study), [date, t0, ctx.study]);
+  const generadas = useMemo(() => metasMesGeneradas(date, t0, ctx.study, { intensiva: ctx.intensiva, pausa: ctx.plan }), [date, t0, ctx.study, ctx.intensiva, ctx.plan]);
   const metas = guardado?.metas ?? generadas;
   const confirmado = guardado?.confirmado ?? (t0 >= a && t0 <= b ? t0 : undefined);
   const cierra = cierraEnMes(date, ctx.plan.entrevistas, t0);
-  const personales = ctx.goals.filter((g) => appliesTo(g, 'mes', date));
+  const personales = visibles(ctx.goals.filter((g) => appliesTo(g, 'mes', date)), ctx.plan, date);
   const s1 = Math.max(1, semanaDelPlan(a, t0));
   const s2 = Math.min(SEMANAS, semanaDelPlan(b, t0));
   const sig = addDays(b, 1);
@@ -242,6 +323,8 @@ export function MesPlan({ day, editar }: { day: DayLog; editar: boolean }) {
         {personales.map((g) => <GoalRow key={g.id} g={g} date={date} editar={editar} sub={`${g.rama ?? (g.group ?? AREAS[g.area].name)} · tuya`} />)}
       </ul>
       {!metas.length && !personales.length && <p className="sub vacio">Este mes no hay metas del plan.</p>}
+      <HitosRango desde={a} hasta={b} date={date} />
+      <StandBy plan={ctx.plan} date={date} />
 
       {resumen.length > 0 && (
         <div className="pr-card mp-sig">
@@ -321,6 +404,9 @@ export function BimestrePlan({ day, editar, elegido }: { day: DayLog; editar: bo
         ))}
       </div>
       {editar && <p className="sub nota-izq">Vacío vuelve al texto del plan.</p>}
+
+      {n === 1 && <MapaPortfolio />}
+      <HitosRango desde={b.inicio} hasta={b.fin} date={date} />
 
       <div className="pr-card mp-sig">
         <span className="etiqueta">Al cerrar B{n} · {dm(cierre.fecha)}</span>

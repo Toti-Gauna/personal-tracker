@@ -9,12 +9,12 @@ describe('mapa en ramas', () => {
     expect(f[0]).toMatchObject({ hito: 'T+18', fecha: '2028-05-14' });
     expect(f[f.length - 1]).toMatchObject({ hito: 'T+0', fecha: '2026-11-16' });
     const head = f.findIndex((x) => x.tipo === 'head');
-    expect(f[head].texto).toBe('Faro v1 · semana 3 de 4');
+    expect(f[head].texto).toBe('Faro v1 · semana 3 de 3');
     expect(f.slice(1, head).every((x) => x.futuro || x.tipo === 'gap')).toBe(true);
     expect(f.slice(head + 1).every((x) => !x.futuro)).toBe(true);
-    // Este mes incluye T+2 (11 ene) y la entrega de Faro v1 (27 dic).
+    // Este mes incluye T+2 (11 ene) y la entrega de Faro v1 (20 dic).
     expect(f.some((x) => x.hito === 'T+2')).toBe(true);
-    expect(f.some((x) => x.a === 'trabajo' && x.fecha === '2026-12-27')).toBe(true);
+    expect(f.some((x) => x.a === 'trabajo' && x.fecha === '2026-12-20')).toBe(true);
     // Ordenadas de la más nueva a la más vieja.
     const fechas = f.filter((x) => x.tipo !== 'gap').map((x) => x.fecha);
     expect([...fechas].sort().reverse()).toEqual(fechas);
@@ -26,5 +26,45 @@ describe('mapa en ramas', () => {
     for (const id of ['fin-P1', 'fin-P10', 'fin-C1', 'fin-C2', 'fin-C3', 'fin-W1', 'fin-W2', 'fin-W3']) expect(ids).toContain(id);
     expect(ids.filter((x) => x.startsWith('fin-P'))).toHaveLength(11);
     expect(f.some((x) => x.tipo === 'gap')).toBe(false);
+  });
+});
+
+describe('mapa · hitos y stand-by (Ola 8b)', () => {
+  it('Trimestre: los 30 hitos iniciales, ordenados por fecha, con clipping y rombos', async () => {
+    const { HITOS } = await import('./hitos');
+    const f = filasMapa('2026-11-15', 'trimestre', emptyPlan(), emptyStudy(), '2026-11-16');
+    const h = f.filter((x) => x.hitoId);
+    expect(h).toHaveLength(30);
+    expect(HITOS).toHaveLength(30);
+    const fechas = h.map((x) => x.fecha);
+    expect([...fechas].sort().reverse()).toEqual(fechas);
+    expect(h[h.length - 1]).toMatchObject({ fecha: '2026-11-16', rama: 'main', hito: 'T+0' });
+    expect(h[0]).toMatchObject({ fecha: '2027-02-21', rama: 'programacion', hitoTipo: 'grande' });
+    expect(h.find((x) => x.fecha === '2027-02-01')).toMatchObject({ rama: 'programacion', desde: 'matematica' });
+    expect(h.filter((x) => x.rama === 'clipping')).toHaveLength(3);
+    expect(h.filter((x) => x.hitoTipo === 'grande')).toHaveLength(11);
+    expect(f[0].hito).toBe('T+18');
+  });
+
+  it('marcar un hito como hecho lo pasa a trazo lleno y mueve HEAD', () => {
+    const plan = { ...emptyPlan(), hitos: { 'programacion-13': { hecho: '2026-11-25' } } };
+    const f = filasMapa('2026-11-25', 'trimestre', plan, emptyStudy(), '2026-11-16');
+    const p0 = f.find((x) => x.hitoId === 'programacion-13')!;
+    expect(p0).toMatchObject({ estado: 'hecho', futuro: false });
+    expect(f.find((x) => x.tipo === 'head')!.fecha).toBe('2026-11-29');
+  });
+
+  it('un hito de búsqueda que pasó sin cumplirse queda vencido con fecha nueva propuesta', () => {
+    const f = filasMapa('2026-12-12', 'trimestre', emptyPlan(), emptyStudy(), '2026-11-16');
+    const rec = f.find((x) => x.texto === 'Primera entrevista con recruiter')!;
+    expect(rec).toMatchObject({ estado: 'vencido', propuesta: '2026-12-26' });
+    expect(f.find((x) => x.texto.startsWith('Aritmética · test'))!.estado).toBe('pendiente');
+  });
+
+  it('con Handyx en pausa sus filas van en stand-by', () => {
+    const plan = { ...emptyPlan(), pausas: [{ id: 'p', objetivo: 'handyx', desde: '2026-11-16', motivo: 'búsqueda intensiva', guardado: {} }] };
+    const f = filasMapa('2026-12-14', 'trimestre', plan, emptyStudy(), '2026-11-16');
+    expect(f.filter((x) => x.rama === 'handyx').every((x) => x.standby)).toBe(true);
+    expect(f.filter((x) => x.rama === 'programacion').some((x) => x.standby)).toBe(false);
   });
 });

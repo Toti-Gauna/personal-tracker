@@ -75,70 +75,83 @@
     "hasta": 2,
     "tipo": "proyecto",
     "nombre": "Consolidación",
-    "que": "Diagnóstico, CV, LinkedIn y portfolio",
+    "que": "Portfolio hub, mapa de proyectos en 3D, Trazo como caso, RAG para negocios, 3 automatizaciones, portfolio-mcp v0 y tráiler",
     "stack": [
-     "tu stack",
-     "entrevistas"
+     "Next.js",
+     "Three.js",
+     "RAG",
+     "MCP",
+     "ElevenLabs",
+     "Higgsfield"
     ],
-    "perfil": "Sr Full-stack con IA aplicada"
+    "perfil": "Sr Full-stack con IA aplicada",
+    "meta": 2,
+    "tope": 3
    },
    {
     "id": "P1",
     "desde": 3,
-    "hasta": 6,
+    "hasta": 5,
     "tipo": "proyecto",
     "nombre": "Faro",
     "version": "v1",
     "industria": "petróleo",
     "producto": "faro",
-    "que": "Asistente RAG sobre normativa y documentación de operadoras, con cita exacta, tasa de error medida y visor 3D de la instalación",
+    "que": "API en Spring Boot y servicio RAG en Python sobre normativa de operadoras, con cita exacta, tasa de error medida, MCP y visor 3D de la instalación",
     "stack": [
+     "Java",
+     "Spring Boot",
      "Python",
-     "FastAPI",
      "RAG y evals",
+     "MCP",
      "Docker",
-     "GitHub Actions",
-     "AWS",
      "Three.js"
     ],
-    "perfil": "Full-stack AI Engineer"
+    "perfil": "Full-stack AI Engineer",
+    "meta": 3,
+    "tope": 4
    },
    {
     "id": "pausa",
-    "desde": 7,
-    "hasta": 7,
+    "desde": 6,
+    "hasta": 6,
     "tipo": "pausa",
     "nombre": "Pausa de fin de año",
-    "que": "Descanso y repasos"
+    "que": "Descanso y repasos",
+    "meta": 1
    },
    {
     "id": "P2",
-    "desde": 8,
-    "hasta": 11,
+    "desde": 7,
+    "hasta": 9,
     "tipo": "proyecto",
     "nombre": "Escudo",
     "industria": "medicina",
     "que": "Gateway en Go que protege datos de pacientes, con acceso por rol, auditoría, modelo local opcional y banco de ataques",
     "stack": [
      "Go",
-     "OWASP LLM Top 10",
+     "MCP",
      "OAuth",
+     "OWASP LLM Top 10",
      "rate limiting"
     ],
-    "perfil": "AI Engineer con seguridad"
+    "perfil": "AI Engineer con seguridad",
+    "meta": 3,
+    "tope": 4
    },
    {
     "id": "W1",
-    "desde": 12,
-    "hasta": 13,
+    "desde": 10,
+    "hasta": 11,
     "tipo": "ventana",
     "nombre": "Ventana de matemática",
-    "que": "Álgebra y estadística básica"
+    "que": "Álgebra y estadística básica",
+    "meta": 2
    },
    {
     "id": "P3",
-    "desde": 14,
-    "hasta": 18,
+    "desde": 12,
+    "hasta": 14,
     "tipo": "proyecto",
     "nombre": "Surco",
     "version": "v1",
@@ -152,22 +165,25 @@
      "MLflow",
      "Three.js"
     ],
-    "perfil": "Applied ML Engineer"
+    "perfil": "Applied ML Engineer",
+    "meta": 3,
+    "tope": 4
    },
    {
     "id": "C1",
-    "desde": 19,
-    "hasta": 21,
+    "desde": 15,
+    "hasta": 16,
     "tipo": "cert",
     "nombre": "AWS Solutions Architect – Associate",
     "corto": "AWS SAA",
     "que": "2 semanas de estudio y laboratorios, 1 de simulacros y examen",
-    "perfil": "Cloud certificado"
+    "perfil": "Cloud certificado",
+    "meta": 2
    },
    {
     "id": "P4",
-    "desde": 22,
-    "hasta": 26,
+    "desde": 17,
+    "hasta": 20,
     "tipo": "proyecto",
     "nombre": "Estación",
     "version": "v1",
@@ -176,16 +192,18 @@
     "que": "Ingesta y decodificación de telemetría satelital en Rust, visor 3D de pasadas",
     "stack": [
      "Rust",
+     "Three.js",
      "telemetría",
-     "órbitas (SGP4)",
-     "Three.js"
+     "órbitas (SGP4)"
     ],
-    "perfil": "Systems / Ground Software Engineer"
+    "perfil": "Systems / Ground Software Engineer",
+    "meta": 4,
+    "tope": 5
    },
    {
     "id": "P5",
-    "desde": 27,
-    "hasta": 31,
+    "desde": 21,
+    "hasta": 22,
     "tipo": "proyecto",
     "nombre": "Faro",
     "version": "v2",
@@ -201,30 +219,34 @@
      "IAM y OIDC",
      "detection engineering"
     ],
-    "perfil": "DevSecOps / Cloud Security Engineer"
+    "perfil": "DevSecOps / Cloud Security Engineer",
+    "meta": 2,
+    "tope": 3
    },
    {
     "id": "C2",
-    "desde": 32,
-    "hasta": 35,
+    "desde": 23,
+    "hasta": 25,
     "tipo": "cert",
     "nombre": "CompTIA Security+",
     "corto": "Security+",
     "que": "3 semanas de estudio, 1 de simulacros y examen",
-    "perfil": "Seguridad certificada"
+    "perfil": "Seguridad certificada",
+    "meta": 3
    },
    {
     "id": "W2",
-    "desde": 36,
-    "hasta": 38,
+    "desde": 26,
+    "hasta": 28,
     "tipo": "ventana",
     "nombre": "Ventana de matemática",
-    "que": "Cálculo diferencial, vectores y matrices"
+    "que": "Cálculo diferencial, vectores y matrices",
+    "meta": 3
    },
    {
     "id": "P6",
-    "desde": 39,
-    "hasta": 44,
+    "desde": 29,
+    "hasta": 32,
     "tipo": "proyecto",
     "nombre": "Lupa",
     "version": "v1",
@@ -238,12 +260,14 @@
      "datos sintéticos",
      "Three.js"
     ],
-    "perfil": "ML Engineer (deep learning)"
+    "perfil": "ML Engineer (deep learning)",
+    "meta": 4,
+    "tope": 5
    },
    {
     "id": "P7",
-    "desde": 45,
-    "hasta": 50,
+    "desde": 33,
+    "hasta": 34,
     "tipo": "proyecto",
     "nombre": "Surco",
     "version": "v2",
@@ -256,30 +280,34 @@
      "serving en K8s",
      "drift"
     ],
-    "perfil": "ML / MLOps Engineer"
+    "perfil": "ML / MLOps Engineer",
+    "meta": 2,
+    "tope": 3
    },
    {
     "id": "C3",
-    "desde": 51,
-    "hasta": 53,
+    "desde": 35,
+    "hasta": 36,
     "tipo": "cert",
     "nombre": "AWS Machine Learning Engineer – Associate",
     "corto": "AWS ML Engineer",
     "que": "2 semanas de estudio y laboratorios, 1 de simulacros y examen",
-    "perfil": "ML en cloud certificado"
+    "perfil": "ML en cloud certificado",
+    "meta": 2
    },
    {
     "id": "W3",
-    "desde": 54,
-    "hasta": 55,
+    "desde": 37,
+    "hasta": 38,
     "tipo": "ventana",
     "nombre": "Ventana de matemática",
-    "que": "Probabilidad y optimización"
+    "que": "Probabilidad y optimización",
+    "meta": 2
    },
    {
     "id": "P8",
-    "desde": 56,
-    "hasta": 61,
+    "desde": 39,
+    "hasta": 40,
     "tipo": "proyecto",
     "nombre": "Núcleo",
     "industria": "nuclear",
@@ -291,12 +319,14 @@
      "red teaming",
      "Three.js"
     ],
-    "perfil": "AI Security Engineer"
+    "perfil": "AI Security Engineer",
+    "meta": 2,
+    "tope": 3
    },
    {
     "id": "P9",
-    "desde": 62,
-    "hasta": 66,
+    "desde": 41,
+    "hasta": 43,
     "tipo": "proyecto",
     "nombre": "Lupa",
     "version": "v2",
@@ -310,12 +340,14 @@
      "simulación",
      "Three.js"
     ],
-    "perfil": "Edge AI Engineer"
+    "perfil": "Edge AI Engineer",
+    "meta": 3,
+    "tope": 4
    },
    {
     "id": "P10",
-    "desde": 67,
-    "hasta": 72,
+    "desde": 44,
+    "hasta": 47,
     "tipo": "proyecto",
     "nombre": "Estación",
     "version": "v2",
@@ -328,15 +360,18 @@
      "SLO y costos",
      "multiempresa"
     ],
-    "perfil": "Senior ML + DevSecOps + Cloud"
+    "perfil": "Senior ML + DevSecOps + Cloud",
+    "meta": 4,
+    "tope": 5
    },
    {
     "id": "colchon",
-    "desde": 73,
-    "hasta": 78,
+    "desde": 48,
+    "hasta": 53,
     "tipo": "colchon",
-    "nombre": "Colchón y salto",
-    "que": "Atrasos, examen C1 y entrevistas senior"
+    "nombre": "Colchón",
+    "que": "Atrasos de las puertas de matemática, entrevistas senior y C1",
+    "meta": 6
    }
   ],
   "pares": [
@@ -394,16 +429,38 @@
    "producto": 30,
    "lanzamiento": 15
   },
-  "laboratorios": "2 a 3 h por semana en TryHackMe o Hack The Box; un registro mensual. AZ-500 queda como certificación opcional."
+  "laboratorios": "2 a 3 h por semana en TryHackMe o Hack The Box; un registro mensual. AZ-500 queda como certificación opcional.",
+  "creditos": {
+   "total": 100,
+   "P0": 10,
+   "P1": 30,
+   "P2": 20,
+   "reserva": 40
+  },
+  "semanasOriginal": 78,
+  "tecnica": {
+   "sesionesPorSemana": 3,
+   "ejercicios": [
+    6,
+    8
+   ],
+   "defensaMin": 45,
+   "paginasDiseno": 2
+  },
+  "puertas": {
+   "W1": "P3",
+   "W2": "P6",
+   "W3": "P8"
+  }
  },
  "matematica": {
   "tramos": [
    {
     "id": "m1",
     "desde": 1,
-    "hasta": 11,
+    "hasta": 9,
     "desdeT": "T+0",
-    "hastaT": "T+3",
+    "hastaT": "T+2",
     "libros": [
      "CONAMAT · Aritmética",
      "CONAMAT · Álgebra"
@@ -412,8 +469,8 @@
    },
    {
     "id": "W1",
-    "desde": 12,
-    "hasta": 13,
+    "desde": 10,
+    "hasta": 11,
     "libros": [
      "CONAMAT · Álgebra",
      "Estadística básica"
@@ -422,10 +479,10 @@
    },
    {
     "id": "m2",
-    "desde": 14,
-    "hasta": 35,
+    "desde": 12,
+    "hasta": 25,
     "desdeT": "T+3",
-    "hastaT": "T+8",
+    "hastaT": "T+6",
     "libros": [
      "CONAMAT · Geometría y trigonometría",
      "CONAMAT · Geometría analítica"
@@ -434,19 +491,20 @@
    },
    {
     "id": "W2",
-    "desde": 36,
-    "hasta": 38,
+    "desde": 26,
+    "hasta": 28,
     "libros": [
-     "CONAMAT · Cálculo diferencial"
+     "CONAMAT · Cálculo diferencial",
+     "Vectores y matrices"
     ],
     "habilita": "P6"
    },
    {
     "id": "m3",
-    "desde": 39,
-    "hasta": 53,
-    "desdeT": "T+9",
-    "hastaT": "T+12",
+    "desde": 29,
+    "hasta": 36,
+    "desdeT": "T+7",
+    "hastaT": "T+8",
     "libros": [
      "CONAMAT · Cálculo integral",
      "Strang"
@@ -455,18 +513,19 @@
    },
    {
     "id": "W3",
-    "desde": 54,
-    "hasta": 55,
+    "desde": 37,
+    "hasta": 38,
     "libros": [
-     "Blitzstein y Hwang"
+     "Probabilidad",
+     "Optimización"
     ],
     "habilita": "P8"
    },
    {
     "id": "m4",
-    "desde": 56,
+    "desde": 39,
     "hasta": 78,
-    "desdeT": "T+13",
+    "desdeT": "T+9",
     "hastaT": "T+18",
     "libros": [
      "Mathematics for ML",
@@ -625,15 +684,15 @@
  },
  "metasBimestre": {
   "programacion": [
-   "P0, Faro v1, Escudo empieza",
-   "Escudo, W1, Surco v1",
-   "AWS SAA, Estación v1, Faro v2 empieza",
-   "Faro v2, Security+, W2 empieza",
-   "W2, Lupa v1, Surco v2 empieza",
-   "Surco v2, AWS ML, W3 empieza",
-   "W3, Núcleo, Lupa v2 empieza",
-   "Lupa v2, Estación v2",
-   "Colchón y salto senior"
+   "P0, Faro v1 y Escudo",
+   "W1, Surco v1, AWS SAA y Estación v1 empieza",
+   "Estación v1, Faro v2, Security+ y W2 empieza",
+   "W2, Lupa v1, Surco v2 y AWS ML",
+   "W3, Núcleo, Lupa v2 y Estación v2 empieza",
+   "Estación v2 y colchón",
+   "Margen: entrevistas senior",
+   "Margen: entrevistas senior",
+   "Salto senior"
   ],
   "matematica": [
    "Aritmética 1–11",
@@ -693,14 +752,14 @@
  },
  "nombresBimestre": [
   "El despegue",
-  "Escudo, W1 y Surco v1",
-  "AWS SAA y Estación v1",
-  "Faro v2 y Security+",
-  "W2 y Lupa v1",
-  "Surco v2, AWS ML y decisión de Handyx",
-  "W3 y Núcleo",
-  "Lupa v2 y Estación v2",
-  "Colchón, C1 y salto senior"
+  "Surco v1 y AWS SAA",
+  "Estación v1 y Faro v2",
+  "Lupa v1 y Surco v2",
+  "Núcleo y Lupa v2",
+  "Estación v2 y colchón",
+  "Margen y C1",
+  "Margen y entrevistas senior",
+  "Salto senior y C1"
  ],
  "metasAnio": {
   "anio1": [
@@ -710,7 +769,7 @@
    },
    {
     "rama": "programacion",
-    "texto": "8 proyectos (P0–P7), AWS SAA y Security+"
+    "texto": "11 proyectos (P0–P10), AWS SAA, Security+ y AWS ML"
    },
    {
     "rama": "matematica",
@@ -740,7 +799,7 @@
    },
    {
     "rama": "programacion",
-    "texto": "Núcleo, Lupa v2, Estación v2 y AWS ML Engineer"
+    "texto": "Margen: lo que sumó la revisión de mercado y entrevistas senior"
    },
    {
     "rama": "ingles",

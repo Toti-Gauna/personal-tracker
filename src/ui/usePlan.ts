@@ -11,6 +11,8 @@ import { useStore } from '../state/store';
 export interface EtapaReal extends Etapa {
   href: string;
   riesgo?: string;
+  /** En pausa (stand-by) desde esa fecha. */
+  pausa?: string;
 }
 
 const HREF: Record<Rama, string> = {
@@ -49,6 +51,13 @@ export function usePlanVista(date: string) {
         r.sub = `${ensayadas} de ${st.plan.respuestas.length} respuestas ensayadas · después, bloque diario al C1`;
         r.lado = `${ensayadas}/${st.plan.respuestas.length}`;
         r.avance = Math.max(0.02, ensayadas / st.plan.respuestas.length);
+      }
+      const pa = (st.plan.pausas ?? []).find((x) => x.objetivo === e.rama && x.desde <= date && (!x.hasta || x.hasta > date));
+      if (pa) {
+        r.pausa = pa.desde;
+        r.sub = `Stand-by desde el ${Number(pa.desde.slice(8))} ${['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'][Number(pa.desde.slice(5, 7)) - 1]}: vuelve con la rutina con trabajo. Nada se borró.`;
+        r.lado = 'stand-by';
+        r.avance = 0;
       }
       if (e.rama === 'salud') {
         r.sub = PLAN.metasBimestre.salud[Math.min(8, bim.n)] ? `Después: ${PLAN.metasBimestre.salud[Math.min(8, bim.n)].toLowerCase()}` : e.sub;

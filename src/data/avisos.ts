@@ -3,10 +3,11 @@
  * fecha, el plan registrado y los ajustes, y devuelve los avisos en el orden en que importan.
  */
 import { PLAN, finSemana, inicioSemana, nombreTramo, tramoActivo, ventanaW, type Capa } from './plan';
-import type { PlanSettings, PlanState } from './plan-state';
+import { enPausa, type PlanSettings, type PlanState } from './plan-state';
 import { RAMA_NOMBRE } from './ramas';
-import { addDays, fmtFecha, parseDate } from './time';
-import type { Rama, RamaOMain } from './types';
+import { puertaBloqueando } from './puertas';
+import { addDays, fmtFecha, parseDate, toMin } from './time';
+import type { DayLog, Rama, RamaOMain } from './types';
 
 export interface Aviso {
   id: string;
@@ -38,7 +39,9 @@ export function avisosEntreRamas(date: string, p: PlanState, cfg: PlanSettings, 
     out.push({
       id: `ent-${ent.id}`, de: 'trabajo', a: 'ingles',
       titulo: `Entrevista ${ent.fecha === date ? 'hoy' : elDia(ent.fecha)}${ent.hora ? ` a las ${ent.hora}` : ''}`,
-      texto: 'El bloque de búsqueda se parte: 45 min de postulaciones y 45 de respuestas en voz alta.',
+      texto: cfg.modo === 'busqueda-intensiva'
+        ? `El bloque de inglés pasa a simulacro de esta entrevista${ent.empresa ? ` en ${ent.empresa}` : ''}: ${ent.rol}.`
+        : 'El bloque de búsqueda se parte: 45 min de postulaciones y 45 de respuestas en voz alta.',
       href: '#/metas/ingles',
     });
   }
@@ -54,6 +57,16 @@ export function avisosEntreRamas(date: string, p: PlanState, cfg: PlanSettings, 
         href: `#/metas/proyecto/${t.id}`,
       });
     }
+  }
+  // Ola 8b: puerta de matemática sin aprobar → el proyecto no arranca.
+  const pb = puertaBloqueando(date, p, t0);
+  if (pb) {
+    out.push({
+      id: `puerta-${pb}`, de: 'matematica', a: 'programacion',
+      titulo: `${t.id} no arranca: falta aprobar la puerta ${pb}`,
+      texto: 'Hasta aprobar los tests del tema (85 % o más), los bloques de programación son de matemática pura. Cada semana extra se descuenta del colchón.',
+      href: `#/metas/proyecto/${pb}`,
+    });
   }
   // Ventana W que empieza en 7 días o menos.
   const w = ventanaW(date, t0);
@@ -75,7 +88,30 @@ export function avisosEntreRamas(date: string, p: PlanState, cfg: PlanSettings, 
       accion: 'con-trabajo',
     });
   }
-  return out;
+  // Ola 8b: una rama en pausa (stand-by) no genera avisos, ni de ida ni de vuelta.
+  return out.filter((a) => !(a.de !== 'main' && enPausa(p, a.de, date)) && !(a.a !== 'main' && enPausa(p, a.a, date)));
 }
 
 export const nombreRama = (r: Rama | 'main') => RAMA_NOMBRE[r];
+
+/**
+ * Entre 04:30 y 21:00 no hay hueco: si el foco sigue después de la hora de fin de su bloque,
+ * Hoy avisa cuánto se pasó y que el siguiente se acorta (los fijos no se corren).
+ */
+export function avisoPasado(day: DayLog, focoKey: string | undefined, ahora: number): Aviso | null {
+  if (!focoKey) return null;
+  const i = day.blocks.findIndex((b) => b.key === focoKey);
+  if (i < 0) return null;
+  const b = day.blocks[i];
+  const fin = toMin(b.start) + b.min;
+  const pasado = ahora - fin;
+  if (pasado < 1) return null;
+  const sig = day.blocks[i + 1];
+  const queda = sig ? Math.max(0, toMin(sig.start) + sig.min - ahora) : 0;
+  return {
+    id: `pasado-${b.key}`, de: (b.rama ?? 'main') as Aviso['de'], a: (sig?.rama ?? 'main') as Aviso['a'],
+    titulo: `${b.title} se pasó ${pasado} min`,
+    texto: sig ? `${sig.title} se acorta a ${queda} min; el resto del día no se corre.` : 'Es el último bloque del día.',
+    href: '#/foco',
+  };
+}

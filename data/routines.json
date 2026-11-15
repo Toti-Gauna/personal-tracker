@@ -560,6 +560,318 @@
      "meta": false
     }
    ]
+  },
+  "busqueda-intensiva": {
+   "label": "Lunes a viernes · búsqueda intensiva",
+   "reemplaza": "weekday",
+   "modo": "busqueda-intensiva",
+   "wake": {
+    "completo": "04:30",
+    "corto": "05:30"
+   },
+   "blocks": [
+    {
+     "id": "math",
+     "label": "Matemática · CONAMAT",
+     "short": "matemática",
+     "start": "04:30",
+     "end": "06:30",
+     "area": "ing",
+     "kind": "flex",
+     "focus": true,
+     "rama": "matematica",
+     "tasks": [
+      "Repaso de tarjetas",
+      "Capítulo del día",
+      "Test del capítulo"
+     ]
+    },
+    {
+     "id": "prog",
+     "label": "Programación · CV y portfolio (P0)",
+     "short": "programación",
+     "start": "06:30",
+     "end": "08:30",
+     "area": "ing",
+     "kind": "flex",
+     "focus": true,
+     "rama": "programacion",
+     "tasks": [
+      "Tarea del portfolio (P0)",
+      "Commit y nota para la revisión"
+     ]
+    },
+    {
+     "id": "abi",
+     "label": "Acompañar a Abi y correr",
+     "short": "Abi",
+     "start": "08:30",
+     "end": "10:00",
+     "area": "salud",
+     "kind": "fixed",
+     "focus": false,
+     "rama": "salud",
+     "tasks": [
+      "Correr y ducha"
+     ]
+    },
+    {
+     "id": "trabajo",
+     "label": "Trabajo actual",
+     "short": "el trabajo",
+     "start": "10:00",
+     "end": "12:00",
+     "area": "economia",
+     "kind": "fixed",
+     "focus": true,
+     "tasks": [
+      "Tarea principal del trabajo"
+     ]
+    },
+    {
+     "id": "caso",
+     "label": "Programación · caso para entrevistas",
+     "short": "el caso",
+     "start": "12:00",
+     "end": "13:30",
+     "area": "ing",
+     "kind": "fixed",
+     "focus": true,
+     "rama": "programacion",
+     "tasks": [
+      "Contar el caso en 3 minutos",
+      "Sesión técnica: algoritmos o diseño"
+     ]
+    },
+    {
+     "id": "ingles",
+     "label": "Inglés · modo entrevista",
+     "short": "inglés",
+     "start": "13:30",
+     "end": "15:00",
+     "area": "ing",
+     "kind": "fixed",
+     "focus": true,
+     "rama": "ingles",
+     "tasks": [
+      "Respuestas ensayadas en voz alta",
+      "Pitch de 60 s",
+      "Una historia STAR"
+     ]
+    },
+    {
+     "id": "busqueda",
+     "label": "Búsqueda laboral",
+     "short": "la búsqueda",
+     "start": "15:00",
+     "end": "16:30",
+     "area": "rutina",
+     "kind": "fixed",
+     "focus": true,
+     "rama": "trabajo",
+     "tasks": [
+      "5 postulaciones a medida",
+      "5 mensajes directos",
+      "CV, LinkedIn o revisión de mercado"
+     ]
+    },
+    {
+     "id": "clipping",
+     "label": "Clipping",
+     "short": "el clipping",
+     "start": "16:30",
+     "end": "18:00",
+     "area": "eclipse",
+     "kind": "fixed",
+     "focus": true,
+     "tasks": [
+      "Editar clips",
+      "Publicar"
+     ]
+    },
+    {
+     "id": "entreno",
+     "label": "Entrenamiento",
+     "short": "el entreno",
+     "start": "18:00",
+     "end": "20:00",
+     "area": "salud",
+     "kind": "fixed",
+     "focus": true,
+     "rama": "salud",
+     "tasks": [
+      "Caminata y movilidad",
+      "Rutina del día"
+     ]
+    },
+    {
+     "id": "cierre",
+     "label": "Descansar · cierre de 5 min",
+     "short": "el cierre",
+     "start": "20:00",
+     "end": "21:00",
+     "area": "rutina",
+     "kind": "fixed",
+     "focus": false,
+     "rama": "main",
+     "tasks": [
+      "Cerrar el día en 5 min",
+      "Preparar mañana"
+     ]
+    },
+    {
+     "id": "sueno",
+     "label": "Sueño",
+     "start": "21:00",
+     "end": "04:30",
+     "area": "rutina",
+     "kind": "fixed",
+     "focus": false,
+     "meta": false
+    }
+   ]
+  },
+  "busqueda-intensiva-finde": {
+   "label": "Fin de semana · búsqueda intensiva",
+   "reemplaza": "weekend",
+   "modo": "busqueda-intensiva",
+   "wake": {
+    "completo": "04:30",
+    "corto": "05:30"
+   },
+   "blocks": [
+    {
+     "id": "math",
+     "label": "Matemática · CONAMAT",
+     "short": "matemática",
+     "start": "04:30",
+     "end": "06:30",
+     "area": "ing",
+     "kind": "flex",
+     "focus": true,
+     "rama": "matematica",
+     "tasks": [
+      "Repaso de tarjetas",
+      "Capítulo del día",
+      "Test del capítulo"
+     ]
+    },
+    {
+     "id": "prog",
+     "label": "Programación · CV y portfolio (P0)",
+     "short": "programación",
+     "start": "06:30",
+     "end": "08:30",
+     "area": "ing",
+     "kind": "flex",
+     "focus": true,
+     "rama": "programacion",
+     "tasks": [
+      "Tarea del portfolio (P0)",
+      "Commit y nota para la revisión"
+     ]
+    },
+    {
+     "id": "abi",
+     "label": "Acompañar a Abi y correr",
+     "short": "Abi",
+     "start": "08:30",
+     "end": "10:00",
+     "area": "salud",
+     "kind": "fixed",
+     "focus": false,
+     "rama": "salud",
+     "tasks": [
+      "Correr y ducha"
+     ]
+    },
+    {
+     "id": "caso",
+     "label": "Programación · caso para entrevistas",
+     "short": "el caso",
+     "start": "10:00",
+     "end": "12:00",
+     "area": "ing",
+     "kind": "fixed",
+     "focus": true,
+     "rama": "programacion",
+     "tasks": [
+      "Contar el caso en 3 minutos",
+      "Sesión técnica: algoritmos o diseño"
+     ]
+    },
+    {
+     "id": "ingles",
+     "label": "Inglés · modo entrevista",
+     "short": "inglés",
+     "start": "12:00",
+     "end": "14:00",
+     "area": "ing",
+     "kind": "fixed",
+     "focus": true,
+     "rama": "ingles",
+     "tasks": [
+      "Respuestas ensayadas en voz alta",
+      "Pitch de 60 s",
+      "Una historia STAR"
+     ]
+    },
+    {
+     "id": "busqueda",
+     "label": "Búsqueda laboral",
+     "short": "la búsqueda",
+     "start": "14:00",
+     "end": "15:30",
+     "area": "rutina",
+     "kind": "fixed",
+     "focus": true,
+     "rama": "trabajo",
+     "tasks": [
+      "5 postulaciones a medida",
+      "5 mensajes directos",
+      "CV, LinkedIn o revisión de mercado"
+     ]
+    },
+    {
+     "id": "clipping",
+     "label": "Clipping",
+     "short": "el clipping",
+     "start": "15:30",
+     "end": "17:00",
+     "area": "eclipse",
+     "kind": "fixed",
+     "focus": true,
+     "tasks": [
+      "Editar clips",
+      "Publicar"
+     ]
+    },
+    {
+     "id": "cierre",
+     "label": "Descansar · cierre de 5 min a las 20:00",
+     "short": "el descanso",
+     "start": "17:00",
+     "end": "21:00",
+     "area": "rutina",
+     "kind": "fixed",
+     "focus": false,
+     "rama": "main",
+     "tasks": [
+      "Descansar",
+      "Cerrar el día en 5 min a las 20:00"
+     ]
+    },
+    {
+     "id": "sueno",
+     "label": "Sueño",
+     "start": "21:00",
+     "end": "04:30",
+     "area": "rutina",
+     "kind": "fixed",
+     "focus": false,
+     "meta": false
+    }
+   ]
   }
  }
 }
