@@ -35,6 +35,8 @@ function camino(r: RamaMapa, y0: number, y1: number, curvaArriba: boolean, curva
  */
 export function RutaMapa({ day }: { day: DayLog }) {
   const [rango, setRango] = useState<Rango>('mes');
+  const [sel, setSel] = useState<string | null>(null);
+  const [ramaF, setRamaF] = useState<RamaMapa | null>(null);
   const plan = useStore((s) => s.plan);
   const study = useStore((s) => s.study);
   const t0 = useStore((s) => s.settings?.startDate);
@@ -68,6 +70,7 @@ export function RutaMapa({ day }: { day: DayLog }) {
       ? `Handyx y Eclipse quedan en stand-by desde el ${desdeTxt}. Las otras ramas van a fondo hasta que entre el trabajo. Lo hecho va en trazo lleno; lo que viene, punteado.`
       : `Las ramas salen de main el ${fechaCorta(filas[filas.length - 1].fecha)} y vuelven a juntarse en mayo de 2028. Lo hecho va en trazo lleno; lo que viene, punteado.`;
 
+  const fSel = filas.find((f) => f.id === sel);
   const etiqueta = (f: Fila) => {
     if (f.tipo === 'hito') return `${f.hito} · ${f.hito === 'T+18' ? `${MESES[Number(f.fecha.slice(5, 7)) - 1]} ${f.fecha.slice(0, 4)}` : fechaCorta(f.fecha)}`;
     if (f.tipo === 'head') return `HEAD · hoy ${fechaCorta(f.fecha)}`;
@@ -83,7 +86,7 @@ export function RutaMapa({ day }: { day: DayLog }) {
         <p className="sub">{texto}</p>
       </header>
       <div className="segmentado" role="radiogroup" aria-label="Cuánto mirar">
-        {RANGOS.map(([id, n]) => <button key={id} role="radio" aria-checked={rango === id} onClick={() => setRango(id)}>{n}</button>)}
+        {RANGOS.map(([id, n]) => <button key={id} role="radio" aria-checked={rango === id} onClick={() => { setRango(id); setSel(null); }}>{n}</button>)}
       </div>
 
       <div className="mapa" style={{ ['--w' as string]: `${W + 14}px` }}>
@@ -124,7 +127,7 @@ export function RutaMapa({ day }: { day: DayLog }) {
             if (f.tipo === 'gap') return null;
             const cx = x(f.rama);
             const c = f.rama === 'main' ? 'var(--tinta)' : colorMapa(f.rama);
-            const cls = `mp-commit${f.futuro || f.estado === 'vencido' ? ' futuro' : ''}${f.standby ? ' standby' : ''}${f.estado === 'vencido' ? ' vencido' : ''}`;
+            const cls = `mp-commit${sel === f.id ? ' sel' : ''}${f.futuro || f.estado === 'vencido' ? ' futuro' : ''}${f.standby ? ' standby' : ''}${f.estado === 'vencido' ? ' vencido' : ''}`;
             if (f.hitoTipo === 'grande') {
               const s = 13;
               return <rect key={f.id} x={cx - s / 2} y={cy(i) - s / 2} width={s} height={s} transform={`rotate(45 ${cx} ${cy(i)})`} className={`${cls} rombo`} style={{ ['--c' as string]: c }} />;
@@ -137,12 +140,14 @@ export function RutaMapa({ day }: { day: DayLog }) {
               </g>
             );
           })}
+          {filas.map((f, i) => (sel === f.id && f.tipo !== 'gap' ? <circle key={`s-${f.id}`} cx={x(f.rama)} cy={cy(i)} r={12} className="mp-sel" style={{ ['--c' as string]: f.rama === 'main' ? 'var(--tinta)' : colorMapa(f.rama) }} /> : null))}
           {headI < 0 && <circle cx={MAIN} cy={bottom} r={15} className="mp-halo" />}
         </svg>
         <ol className="mapa-filas">
           {filas.map((f) => {
             const c = f.rama === 'main' ? 'var(--tinta)' : colorMapa(f.rama);
             const resaltar = f.tipo === 'head' || (f.hitoTipo === 'grande' && f.estado !== 'vencido');
+            const atenuada = ramaF != null && f.tipo !== 'gap' && f.tipo !== 'head' && f.rama !== ramaF && f.desde !== ramaF && f.a !== ramaF && f.rama !== 'main';
             const cuerpo = (
               <>
                 <span className="mono mf-et">{etiqueta(f)}{f.desde ? <span className="sub"> ← {RAMA_NOMBRE[f.desde].toLowerCase()}</span> : null}</span>
@@ -150,23 +155,60 @@ export function RutaMapa({ day }: { day: DayLog }) {
               </>
             );
             return (
-              <li key={f.id} className={`mf-${f.tipo}${f.standby ? ' standby' : ''}${f.estado === 'vencido' ? ' vencido' : ''}`} style={{ ['--c' as string]: c }}>
-                {f.hitoId ? (
-                  <button className="mf-boton" aria-pressed={f.estado === 'hecho'} onClick={() => marcarHito(f.hitoId!, f.estado === 'hecho' ? null : day.date)} aria-label={`${f.texto}: ${f.estado === 'hecho' ? 'desmarcar' : 'marcar hecho'}`}>{cuerpo}</button>
-                ) : cuerpo}
-                {f.estado === 'vencido' && f.propuesta && (
-                  <button className="mf-mover subrayado mono" onClick={() => moverHito(f.hitoId!, f.propuesta!)}>Mover al {fechaCorta(f.propuesta)}</button>
+              <li key={f.id} className={`mf-${f.tipo}${f.standby ? ' standby' : ''}${f.estado === 'vencido' ? ' vencido' : ''}${sel === f.id ? ' sel' : ''}${atenuada ? ' atenuada' : ''}`} style={{ ['--c' as string]: c }}>
+                {f.tipo === 'gap' ? cuerpo : (
+                  <button className="mf-boton" aria-pressed={sel === f.id} onClick={() => setSel(sel === f.id ? null : f.id)}>{cuerpo}</button>
                 )}
               </li>
             );
           })}
         </ol>
       </div>
-      <div className="mapa-ley mono" aria-hidden="true">
-        <span style={{ ['--c' as string]: 'var(--tinta)' }}><i />main</span>
-        {COLUMNAS.map((r) => <span key={r} className={enPausa.has(r) ? 'standby' : undefined} style={{ ['--c' as string]: colorMapa(r) }}><i />{r}{enPausa.has(r) ? ' · stand-by' : ''}</span>)}
-      </div>
+      <section className="mapa-ley-caja" aria-label="Leyenda y filtro por rama">
+        <span className="etiqueta">Ramas · tocá una para resaltarla</span>
+        <div className="mapa-ley mono">
+          <button type="button" aria-pressed={ramaF === null} onClick={() => setRamaF(null)} style={{ ['--c' as string]: 'var(--tinta)' }}><i />todas</button>
+          {COLUMNAS.map((r) => (
+            <button key={r} type="button" aria-pressed={ramaF === r} className={enPausa.has(r) ? 'standby' : undefined} onClick={() => setRamaF(ramaF === r ? null : r)} style={{ ['--c' as string]: colorMapa(r) }}>
+              <i />{r}{enPausa.has(r) ? ' · stand-by' : ''}
+            </button>
+          ))}
+        </div>
+        <ul className="mapa-simbolos sub">
+          <li><svg width="14" height="14" aria-hidden="true"><rect x="2" y="2" width="10" height="10" rx="3" className="mp-commit" style={{ ['--c' as string]: 'var(--tinta)' }} /></svg>commit: un paso de la rama</li>
+          <li><svg width="16" height="16" aria-hidden="true"><rect x="3.5" y="3.5" width="9" height="9" transform="rotate(45 8 8)" className="mp-commit" style={{ ['--c' as string]: 'var(--tinta)' }} /></svg>rombo: un hito grande</li>
+          <li><svg width="14" height="14" aria-hidden="true"><rect x="1" y="1" width="12" height="12" rx="3" className="mp-commit" style={{ ['--c' as string]: 'var(--tinta)' }} /></svg>T+0, T+2…: hitos de main</li>
+          <li><svg width="22" height="8" aria-hidden="true"><line x1="1" x2="21" y1="4" y2="4" className="mp-linea" style={{ stroke: 'var(--tinta)' }} /></svg>trazo lleno: ya pasó o está hecho</li>
+          <li><svg width="22" height="8" aria-hidden="true"><line x1="1" x2="21" y1="4" y2="4" className="mp-linea futuro" style={{ stroke: 'var(--tinta)' }} /></svg>punteado: lo que viene</li>
+        </ul>
+      </section>
       {foco && <p className="sub nota-izq"><a className="subrayado" href="#/metas/impacto">Qué cambia en la ruta →</a> · <a className="subrayado" href="#/metas/sprint">El sprint de búsqueda →</a></p>}
+      {fSel && fSel.tipo !== 'gap' && (
+        <aside className="mapa-detalle" style={{ ['--c' as string]: fSel.rama === 'main' ? 'var(--tinta)' : colorMapa(fSel.rama) }} aria-live="polite">
+          <div className="md-cab">
+            <span className="mono md-et">{etiqueta(fSel)}</span>
+            <button type="button" className="md-x" aria-label="Cerrar detalle" onClick={() => setSel(null)}>×</button>
+          </div>
+          <b className="md-t">{fSel.texto}</b>
+          <span className="mono sub md-meta">
+            {fSel.rama === 'clipping' ? 'Clipping' : RAMA_NOMBRE[fSel.rama]}
+            {fSel.desde ? ` · entrega ${RAMA_NOMBRE[fSel.desde].toLowerCase()}` : ''}
+            {fSel.estado === 'hecho' ? ' · hecho' : fSel.estado === 'vencido' ? ' · vencido' : fSel.tipo === 'head' ? ' · hoy' : fSel.futuro ? ' · por venir' : ''}
+            {fSel.original && fSel.original !== fSel.fecha ? ` · planeado para el ${fechaCorta(fSel.original)}` : ''}
+            {fSel.standby ? ' · rama en stand-by' : ''}
+          </span>
+          {fSel.hitoId && (
+            <div className="md-acc">
+              <button type="button" className={fSel.estado === 'hecho' ? 'btn-borde' : 'btn-principal'} onClick={() => marcarHito(fSel.hitoId!, fSel.estado === 'hecho' ? null : day.date)}>
+                {fSel.estado === 'hecho' ? 'Desmarcar' : 'Marcar hecho'}
+              </button>
+              {fSel.estado === 'vencido' && fSel.propuesta && (
+                <button type="button" className="btn-borde" onClick={() => moverHito(fSel.hitoId!, fSel.propuesta!)}>Mover al {fechaCorta(fSel.propuesta)}</button>
+              )}
+            </div>
+          )}
+        </aside>
+      )}
       <TablaSR caption="Mapa en ramas, de lo más nuevo a lo más viejo" head={['Cuándo', 'Rama', 'Qué']} rows={filas.filter((f) => f.tipo !== 'gap').map((f) => [etiqueta(f), f.rama, f.texto])} />
     </main>
   );

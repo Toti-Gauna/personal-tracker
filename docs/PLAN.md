@@ -398,11 +398,13 @@ Salen de usar la app en el teléfono. Una rama y un PR por ola; se mergea a `mai
 - **Decisiones:** una meta con submetas es un contador de "pasos" y su avance se reinicia cada período. "Marcar día por día" solo existe en metas de la semana sin submetas; las futuras no se pueden marcar. Las metas con submetas o por día no ofrecen "Mostrar en Hoy", porque el `+1` rápido rompería su cuenta.
 - **Arreglo aparte:** Nueva meta arrancaba en el área Eclipse, que está en stand-by, y la meta se guardaba pero no se veía en Semana. Ahora arranca en Salud y avisa si elegís un área en pausa.
 
-**Ola 11 · Mapa de hitos** (Sonnet 5.5 · medio)
+**Ola 11 · Mapa de hitos** (Sonnet 5.5 · medio) — *hecha*
 
 - **Diagnóstico primero:** hoy, al seleccionar un hito, otro se mueve de lugar. El mapa es de hitos y el orden solo tiene que depender de la fecha.
 - **Claridad:** leyenda de símbolos (commit, hito grande, hito de `main`), filtro por rama, "hoy" marcado, hito seleccionado resaltado con su detalle debajo.
-- **Aceptación:** test de que el orden no cambia al seleccionar.
+- **Aceptación:** test de que el orden no cambia al seleccionar. *Hecho.*
+- **Causa:** `filasMapa` calculaba HEAD como "el último hito marcado como hecho si se adelantó". Tocar un hito futuro lo marcaba y HEAD saltaba a su fecha, reacomodando todo. Ahora HEAD es siempre hoy y marcar un hito solo lo pasa a trazo lleno.
+- **Decisiones:** tocar un hito lo selecciona y abre un detalle fijo abajo (rama, fecha, estado y fecha planeada); marcar hecho, desmarcar o mover es un botón explícito del detalle, ya no un toque accidental. El filtro por rama atenúa las demás filas en vez de quitarlas, para que nada cambie de lugar. La leyenda explica commit, rombo, hitos de main, trazo lleno y punteado.
 
 **Ola 12a · Estudio: datos del roadmap** (Opus 5.5 · alto)
 

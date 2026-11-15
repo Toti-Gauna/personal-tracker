@@ -31,6 +31,8 @@ export interface Fila {
   desde?: Rama;
   estado?: EstadoHito;
   propuesta?: string;
+  /** Fecha que le tocaba según el plan (si la moviste, es distinta de `fecha`). */
+  original?: string;
   /** Rama en pausa (stand-by) en esa fecha. */
   standby?: boolean;
 }
@@ -57,7 +59,7 @@ function filaDeHito(h: ReturnType<typeof hitosFechados>[number], head: string, p
   const id = main ? h.texto.split(' · ')[0] : undefined;
   return {
     id: `h-${h.id}`, rama: h.rama, fecha: h.fecha, tipo: main ? 'hito' : 'evento', hito: id, texto: main ? h.texto.split(' · ').slice(1).join(' · ').replace(/^./, (c) => c.toUpperCase()) : h.texto,
-    futuro: h.estado !== 'hecho' && h.fecha > head, hitoTipo: h.tipo, hitoId: h.id, desde: h.desde, estado: h.estado, propuesta: h.propuesta,
+    futuro: h.estado !== 'hecho' && h.fecha > head, hitoTipo: h.tipo, hitoId: h.id, desde: h.desde, estado: h.estado, propuesta: h.propuesta, original: h.original,
     standby: h.rama !== 'main' && h.rama !== 'clipping' && (plan.pausas ?? []).some((p) => p.objetivo === h.rama && p.desde <= h.fecha && (!p.hasta || p.hasta > h.fecha)),
   };
 }
@@ -68,8 +70,8 @@ export function filasMapa(date: string, rango: Rango, plan: PlanState, study: St
   const ini = fechaHito(PLAN.hitos[0], t0);
   const fin = fechaHito(PLAN.hitos[3], t0);
   const hitos = hitosFechados(date, plan.hitos ?? {}, t0);
-  // HEAD es hoy, o el último hito marcado como hecho si se adelantó.
-  const head = hitos.filter((h) => h.estado === 'hecho' && h.fecha > date).map((h) => h.fecha).sort().pop() ?? date;
+  // HEAD es siempre hoy: marcar un hito como hecho lo pasa a trazo lleno, pero no mueve el mapa.
+  const head = date;
   if (rango === 'trimestre') return filasTrimestre(date, head, hitos, plan, t0);
   const desde = rango === 'todo' ? ini : addDays(date, -DIAS_RANGO[rango]);
   const hasta = rango === 'todo' ? fin : addDays(date, DIAS_RANGO[rango]);
