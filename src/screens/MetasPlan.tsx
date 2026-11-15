@@ -217,7 +217,7 @@ export function MesPlan({ day, editar }: { day: DayLog; editar: boolean }) {
 
       {cierra.length > 0 && (
         <>
-          <div className="etiqueta mg-t">Lo que cierra en {mesNombre}</div>
+          <div className="etiqueta pp-sec">Lo que cierra en {mesNombre}</div>
           <ul className="mp-cierra">
             {cierra.map((c, i) => (
               <li key={i}>
@@ -230,7 +230,7 @@ export function MesPlan({ day, editar }: { day: DayLog; editar: boolean }) {
         </>
       )}
 
-      <div className="fila-t mg-t mp-mes-cab">
+      <div className="fila-t pp-sec mp-mes-cab">
         <span className="etiqueta">Metas de {mesNombre}</span>
         <Confirmar tipo="meses" clave={key} metas={metas} date={date} confirmado={confirmado} que="el mes" />
       </div>
@@ -280,7 +280,7 @@ export function BimestrePlan({ day, editar, elegido }: { day: DayLog; editar: bo
           <button key={x} role="tab" aria-selected={x === n} className={x === actual ? 'actual' : ''} onClick={() => { setN(x); setEditando(null); }}>B{x}</button>
         ))}
       </div>
-      <div className="etiqueta mg-t">Bimestre {n} de {BIMESTRES} · {dm(b.inicio)} — {dm(b.fin)}</div>
+      <div className="etiqueta pp-sec">Bimestre {n} de {BIMESTRES} · {dm(b.inicio)} — {dm(b.fin)}</div>
       <div className="bim-nombre">
         {editando == null ? (
           <>
@@ -327,7 +327,7 @@ export function BimestrePlan({ day, editar, elegido }: { day: DayLog; editar: bo
         <p>{cierre.texto}</p>
       </div>
 
-      <div className="etiqueta mg-t">También en este bimestre</div>
+      <div className="etiqueta pp-sec">También en este bimestre</div>
       {personales.length ? <ul className="mg-lista">{personales.map((g) => <GoalRow key={g.id} g={g} date={date} editar={editar} />)}</ul> : <p className="sub vacio">Todavía no hay metas tuyas acá.</p>}
     </>
   );
@@ -369,7 +369,7 @@ export function AnioPlan({ day, editar }: { day: DayLog; editar: boolean }) {
       </div>
       <div className="bims-fechas mono sub"><span>{dmy(t0)}</span><span>T+12 · {dmy(t12)}</span><span>{dmy(finB6)}</span></div>
 
-      <div className="fila-t mg-t"><span className="etiqueta">Promedio por mes</span><span className="mono sub">objetivo 85 %</span></div>
+      <div className="fila-t pp-sec"><span className="etiqueta">Promedio por mes</span><span className="mono sub">objetivo 85 %</span></div>
       <div className="meses" role="img" aria-label={`Promedio por mes: ${prom.map((m) => `${m.name} ${m.loaded ? Math.round(m.avg * 100) + ' %' : 'sin datos'}`).join(', ')}`}>
         <div className="meses-meta" />
         {prom.map((m) => (
@@ -380,7 +380,7 @@ export function AnioPlan({ day, editar }: { day: DayLog; editar: boolean }) {
         ))}
       </div>
 
-      <div className="etiqueta mg-t">Las metas del año 1</div>
+      <div className="etiqueta pp-sec">Las metas del año 1</div>
       <ul className="anio-lista">
         {filas.map((f) => (
           <li key={f.clave} style={{ ['--c' as string]: RAMA_COLOR[f.rama!] }}>

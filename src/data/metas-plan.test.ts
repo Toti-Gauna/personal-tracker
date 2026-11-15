@@ -54,6 +54,15 @@ describe('metas generadas desde el plan', () => {
   });
 });
 
+describe('proyecto', () => {
+  it('casillas del estándar y examen de 85 % o más salen del estado del proyecto', () => {
+    const plan = { ...emptyPlan(), proyectos: { P1: { estandar: { ux: true, ingenieria: true }, tiempo: { nucleo: 0, producto: 0, lanzamiento: 0 }, revisiones: [], examen: { fecha: '2026-12-27', puntaje: 88 } } } };
+    const c = ctx({ plan });
+    expect(avanceMeta({ id: 'a', texto: 'Faro', meta: 6, clave: 'casillas:P1', origen: 'plan' }, '2026-12-01', '2026-12-31', c)).toEqual({ v: 2, auto: true });
+    expect(avanceMeta({ id: 'b', texto: 'Examen', meta: 1, clave: 'examen:P1', origen: 'plan' }, '2026-12-01', '2026-12-31', c).v).toBe(1);
+  });
+});
+
 describe('bimestre y año', () => {
   it('B1 tiene 9 semanas con P0, Faro, la pausa y Escudo; B9 tiene 6', () => {
     const b1 = semanasDelBimestre(1, T0);

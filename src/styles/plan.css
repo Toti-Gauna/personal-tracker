@@ -103,3 +103,44 @@
 .nm-ramas { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 6px; }
 .nm-ramas button { min-height: 44px; padding: 0 14px; border: 1px solid var(--c, var(--linea)); border-radius: 6px; font-family: var(--font-mono); font-size: 14px; color: var(--c, var(--tinta)); }
 .nm-ramas button[aria-checked='true'] { background: var(--c, var(--tinta)); color: var(--papel); }
+.pr-card { border: 1.5px solid var(--tinta); border-radius: 12px; padding: 16px; }
+.pr-card .etiqueta { display: block; }
+
+/* 7.3 · Proyecto */
+.plan-proy .topbar .mono { font-size: 13px; }
+.pp-titulo { font-size: clamp(40px, 13vw, 52px); margin: 6px 0 8px; }
+.pp-titulo .resaltado { padding: 0 4px; }
+.pp-titulo small { font-size: 0.45em; color: var(--sub); }
+.pp-que { font-size: 17px; color: var(--sub); margin: 0 0 18px; }
+.pp-segs { display: flex; gap: 4px; }
+.pp-segs span { flex: 1; height: 8px; background: var(--linea); }
+.pp-segs span.pas { background: var(--ing); }
+.pp-segs span.on { background: color-mix(in srgb, var(--ing) 55%, var(--linea)); }
+.pp-cuando { display: flex; justify-content: space-between; gap: 10px; flex-wrap: wrap; font-size: 13px; margin-top: 10px; }
+.pp-par { margin: 10px 0 0; }
+.pp-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.pp-chips span { border: 1px solid var(--linea); border-radius: 4px; padding: 6px 10px; font-size: 13px; }
+.pp-perfil { margin: 12px 0 0; color: var(--sub); }
+.pp-perfil b { color: var(--tinta); }
+.pp-capas { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--tinta); }
+.pp-capas li { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 14px; padding: 14px 0; border-bottom: 1px solid var(--linea); }
+.pp-capas b { font-size: 18px; font-weight: 600; padding: 0 2px; }
+.pp-capas p { margin: 4px 0 0; }
+.pp-tiempo { list-style: none; margin: 0; padding: 0; display: grid; gap: 14px; }
+.pp-tiempo-cab { display: grid; grid-template-columns: minmax(0, 1fr) auto auto; gap: 10px; align-items: center; margin-bottom: 6px; }
+.pp-tiempo-cab .mono { font-size: 13px; }
+.pp-tiempo-cab .mg-mas.chico { height: 36px; padding: 0 10px; font-size: 14px; }
+.pp-barra { position: relative; height: 10px; background: var(--linea); }
+.pp-barra span { display: block; height: 100%; background: var(--c); }
+.pp-barra i { position: absolute; top: -4px; bottom: -4px; border-left: 2px dotted var(--tinta); }
+.pp-revs { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--linea); }
+.pp-revs li { display: grid; grid-template-columns: 52px minmax(0, 1fr) auto; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--linea); align-items: baseline; }
+.pp-revs .mono { font-size: 13px; }
+.pp-rev-form, .pp-examen { display: grid; gap: 8px; margin-top: 12px; }
+.pp-examen { grid-template-columns: minmax(0, 1fr) auto; }
+.pp-cerrar { margin-top: 28px; display: grid; gap: 8px; }
+.pp-cerrar p { margin: 0; }
+.pp-nav { display: flex; justify-content: space-between; margin-top: 24px; min-height: 44px; align-items: center; }
+.pp-sec { margin: 28px 0 10px; }
+.etiqueta.pp-sec { display: block; }
+.fila-t.pp-sec { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; }

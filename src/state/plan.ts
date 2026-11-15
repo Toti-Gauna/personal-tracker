@@ -94,6 +94,14 @@ export function sumarRevision(proyecto: string, fecha: string, texto: string, ti
   });
 }
 
+/** Examen de programación de un proyecto o certificación (85 % o más lo cierra). */
+export function guardarExamen(proyecto: string, fecha: string, puntaje: number) {
+  update((p) => {
+    const cur = p.proyectos[proyecto] ?? proyectoVacio();
+    return evento({ ...p, proyectos: { ...p.proyectos, [proyecto]: { ...cur, examen: { fecha, puntaje } } } }, 'programacion', fecha, `Examen de ${proyecto}: ${puntaje} %`);
+  });
+}
+
 export function registrarEvento(rama: Rama, fecha: string, texto: string) {
   update((p) => evento(p, rama, fecha, texto));
 }
