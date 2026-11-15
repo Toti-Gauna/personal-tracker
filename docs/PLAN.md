@@ -389,12 +389,14 @@ Salen de usar la app en el teléfono. Una rama y un PR por ola; se mergea a `mai
 - **Mini reproductor:** tarjeta con el estado (Concentración, Descanso o En pausa), el bloque, el tiempo grande, el plan ("50/10 · 1 de 2"), play/pausa y barra de avance. *Hecho.* El bloque azul enorme era un choque de clases: usaba `.avance`, que también es la pantalla Avance; ahora usa clases `mini-*`.
 - **Aceptación:** a 390 px sin desbordes, en claro y oscuro, y con movimiento reducido.
 
-**Ola 10 · Metas: submetas y marcar por día** (Sonnet 5.5 · alto)
+**Ola 10 · Metas: submetas y marcar por día** (Sonnet 5.5 · alto) — *hecha*
 
 - **Modelo:** `Goal` suma `subs` (submetas), `subDone` (hechas por período) y `marks` (días marcados). El avance sigue guardándose por período, así que los gráficos no cambian. Migración de lo guardado y tests.
 - **Nueva meta:** sección Submetas con **+ Agregar**, que abre una hoja para escribirla. Se listan y se quitan. Con submetas, la meta pasa a contar cuántas hiciste.
 - **Semana:** cada meta se suma según su tipo: casilla en las tareas, `+1` grande en los contadores y una tira L M X J V S D donde se toca el día en las metas diarias ("comer mejor"). Las automáticas dicen "auto". Una línea arriba explica cómo se suma.
 - **Aceptación:** una meta diaria se marca desde Semana en un toque y las submetas se marcan dentro de la fila.
+- **Decisiones:** una meta con submetas es un contador de "pasos" y su avance se reinicia cada período. "Marcar día por día" solo existe en metas de la semana sin submetas; las futuras no se pueden marcar. Las metas con submetas o por día no ofrecen "Mostrar en Hoy", porque el `+1` rápido rompería su cuenta.
+- **Arreglo aparte:** Nueva meta arrancaba en el área Eclipse, que está en stand-by, y la meta se guardaba pero no se veía en Semana. Ahora arranca en Salud y avisa si elegís un área en pausa.
 
 **Ola 11 · Mapa de hitos** (Sonnet 5.5 · medio)
 

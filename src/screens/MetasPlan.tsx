@@ -168,6 +168,23 @@ function Confirmar({ tipo, clave, metas, date, confirmado, que }: { tipo: 'meses
   return <button className="mp-confirmar" onClick={() => confirmarMetas(tipo, clave, metas, date)}>Confirmar {que}</button>;
 }
 
+/** Una línea por tipo de meta: cómo se suma cada una. */
+function ComoSumar() {
+  return (
+    <details className="como-suma">
+      <summary>¿Cómo se suma cada meta?</summary>
+      <ul>
+        <li><b>Casilla</b>: una tarea, la tildás una vez.</li>
+        <li><b>+1</b>: un contador, tocás cada vez que lo hacés.</li>
+        <li><b>L M X J V S D</b>: una meta diaria, tocás cada día que la cumplís.</li>
+        <li><b>Submetas</b>: pasos dentro de la meta, tildás los que hiciste.</li>
+        <li><b>auto</b>: se suma sola desde Estudio, Entreno o el plan.</li>
+        <li>¿La usás seguido? En Nueva meta, «Mostrar en Hoy» pone un botón en «Sumar a la semana».</li>
+      </ul>
+    </details>
+  );
+}
+
 // ——— 4.1 Semana ———
 
 export function SemanaPlan({ day, editar }: { day: DayLog; editar: boolean }) {
@@ -229,6 +246,8 @@ export function SemanaPlan({ day, editar }: { day: DayLog; editar: boolean }) {
       ) : (
         <p className="sub">{s < 1 ? `El plan arranca el ${dm(t0)}: ahí aparecen los contadores de cada rama.` : 'El plan T+18 terminó; quedan tus metas.'}</p>
       )}
+
+      <ComoSumar />
 
       {ORDEN.map((r) => {
         const ms = metas.filter((m) => m.rama === r);

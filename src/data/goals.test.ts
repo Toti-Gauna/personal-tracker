@@ -1,7 +1,7 @@
 import type { Goal } from './goals-types';
 import { beforeEach, describe, expect, it } from 'vitest';
 import { getState, register, resetState, startDay } from '../state/store';
-import { addGoal, addProgress, deleteGoal, renameBimester, toggleGoal } from '../state/goals';
+import { addGoal, addProgress, deleteGoal, renameBimester, toggleGoal, toggleMark, toggleSub } from '../state/goals';
 import { completeLearn, saveTest } from '../state/study';
 import { bimesterAt } from './bimesters';
 import { bimester } from './derive';
@@ -102,5 +102,48 @@ describe('metas', () => {
     expect(getState().goals.bimesterNames[1]).toBe('El salto');
     renameBimester(1, '  ');
     expect(getState().goals.bimesterNames[1]).toBeUndefined();
+  });
+});
+
+describe('submetas y metas por día (ola 10)', () => {
+  beforeEach(() => { resetState(); register('Toti', 'Abi', D0); });
+  const find = (id: string) => getState().goals.goals.find((g) => g.id === id)!;
+
+  it('con submetas la meta pasa a contar cuántas hiciste', () => {
+    const id = addGoal({ title: 'Comer mejor', area: 'salud', horizon: 'semana', type: 'numero', target: 99, subs: [{ id: 'a', t: 'Cocinar' }, { id: 'b', t: ' ' }, { id: 'c', t: 'Sin azúcar' }] }, D0);
+    expect(find(id)).toMatchObject({ type: 'contador', target: 2, unit: 'pasos' });
+    expect(find(id).subs!.map((x) => x.t)).toEqual(['Cocinar', 'Sin azúcar']);
+    toggleSub(id, D0, 'a');
+    expect(valueOf(find(id), D0, ctx())).toBe(1);
+    toggleSub(id, D0, 'c');
+    expect(valueOf(find(id), D0, ctx())).toBe(2);
+    toggleSub(id, D0, 'a');
+    expect(valueOf(find(id), D0, ctx())).toBe(1);
+  });
+
+  it('las submetas se reinician cada semana', () => {
+    const id = addGoal({ title: 'x', area: 'salud', horizon: 'semana', type: 'tarea', target: 1, subs: [{ id: 'a', t: 'uno' }] }, D0);
+    toggleSub(id, D0, 'a');
+    expect(valueOf(find(id), D0, ctx())).toBe(1);
+    expect(valueOf(find(id), '2026-11-18', ctx())).toBe(0);
+  });
+
+  it('marcar días suma los días de la semana y no los de otra', () => {
+    const id = addGoal({ title: 'Comer mejor', area: 'salud', horizon: 'semana', type: 'contador', target: 7, daily: true }, D0);
+    expect(find(id).daily).toBe(true);
+    toggleMark(id, '2026-11-09');
+    toggleMark(id, '2026-11-11');
+    toggleMark(id, '2026-11-16');
+    expect(valueOf(find(id), '2026-11-11', ctx())).toBe(2);
+    expect(valueOf(find(id), '2026-11-16', ctx())).toBe(1);
+    toggleMark(id, '2026-11-11');
+    expect(valueOf(find(id), '2026-11-11', ctx())).toBe(1);
+  });
+
+  it('"por día" solo vale en la semana y sin submetas', () => {
+    const mes = addGoal({ title: 'm', area: 'salud', horizon: 'mes', type: 'contador', target: 5, daily: true }, D0);
+    expect(find(mes).daily).toBeUndefined();
+    toggleMark(mes, D0);
+    expect(valueOf(find(mes), D0, ctx())).toBe(0);
   });
 });

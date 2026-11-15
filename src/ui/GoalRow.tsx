@@ -2,10 +2,14 @@ import { AREAS } from '../data/defaults';
 import { ratio, valueOf } from '../data/goals';
 import type { Goal } from '../data/goals-types';
 import { useStore } from '../state/store';
-import { addProgress, deleteGoal, stepOf, toggleGoal } from '../state/goals';
+import { periodKey } from '../data/goals';
+import { addDays } from '../data/time';
+import { addProgress, deleteGoal, stepOf, toggleGoal, toggleMark, toggleSub } from '../state/goals';
+import { dateKey } from '../data/time';
 import { Casilla } from './Casilla';
 
 const fmt = (n: number) => String(n).replace('.', ',');
+const DIAS = ['L', 'M', 'X', 'J', 'V', 'S', 'D'];
 
 /** Una meta con su contador, su barra y el botón + (o una casilla si es una tarea). */
 export function GoalRow({ g, date, editar, sub }: { g: Goal; date: string; editar?: boolean; sub?: string }) {
@@ -15,6 +19,11 @@ export function GoalRow({ g, date, editar, sub }: { g: Goal; date: string; edita
   const v = valueOf(g, date, { study, days, train });
   const manual = !g.auto;
   const done = v >= g.target;
+  const conSubs = !!g.subs?.length;
+  const porDia = !!g.daily && manual;
+  const hechas = new Set(g.subDone?.[periodKey(g.horizon, date)] ?? []);
+  const lunes = periodKey('semana', date);
+  const hoy = dateKey();
   return (
     <li className="meta-fila-g" style={{ ['--c' as string]: AREAS[g.area].css }}>
       <div className="mg-cuerpo">
@@ -29,12 +38,37 @@ export function GoalRow({ g, date, editar, sub }: { g: Goal; date: string; edita
       </div>
       {editar ? (
         <button className="borrar" onClick={() => deleteGoal(g.id)} aria-label={`Borrar ${g.title}`}>Borrar</button>
-      ) : manual && g.type === 'tarea' ? (
+      ) : conSubs || porDia ? null : manual && g.type === 'tarea' ? (
         <Casilla checked={done} label={`${g.title}: marcar`} onChange={() => toggleGoal(g.id, date)} />
       ) : manual ? (
         <button className="mg-mas" aria-label={`Sumar ${stepOf(g)} a ${g.title}`} onClick={() => addProgress(g.id, date, stepOf(g))}>+</button>
       ) : (
         <span className="mg-auto mono" title="Se suma solo">auto</span>
+      )}
+      {!editar && conSubs && (
+        <ul className="mg-extra mg-subs" aria-label={`Submetas de ${g.title}`}>
+          {g.subs!.map((x) => (
+            <li key={x.id}>
+              <Casilla id={`s-${g.id}-${x.id}`} checked={hechas.has(x.id)} label={x.t} onChange={() => toggleSub(g.id, date, x.id)} />
+              <label htmlFor={`s-${g.id}-${x.id}`}><span className={`trazo${hechas.has(x.id) ? ' on' : ''}`}>{x.t}</span></label>
+            </li>
+          ))}
+        </ul>
+      )}
+      {!editar && porDia && (
+        <div className="mg-extra mg-dias" role="group" aria-label={`Días de ${g.title}`}>
+          {DIAS.map((l, i) => {
+            const d = addDays(lunes, i);
+            const on = !!g.marks?.includes(d);
+            const futuro = d > hoy;
+            return (
+              <button key={d} type="button" aria-pressed={on} disabled={futuro} className={d === hoy ? 'hoy' : ''} aria-label={`${l} ${d.slice(8)}: ${on ? 'hecho' : 'sin marcar'}`} onClick={() => toggleMark(g.id, d)}>
+                <span className="mono">{l}</span>
+                <i aria-hidden="true">{on ? '✓' : ''}</i>
+              </button>
+            );
+          })}
+        </div>
       )}
     </li>
   );
