@@ -1,4 +1,4 @@
-import type { Area, RoadmapLink } from './types';
+import type { Area, Rama, RoadmapLink } from './types';
 
 export type Horizon = 'dia' | 'semana' | 'mes' | 'bim' | 'anio';
 export type GoalType = 'tarea' | 'contador' | 'numero';
@@ -16,6 +16,8 @@ export interface Goal extends RoadmapLink {
   id: string;
   title: string;
   area: Area;
+  /** Rama del plan T+18 a la que suma (opcional): aparece dentro de esa rama en Semana y Año. */
+  rama?: Rama;
   /** Encabezado del grupo (por ejemplo "Trabajo nuevo"); sin valor, el nombre del área. */
   group?: string;
   horizon: Horizon;

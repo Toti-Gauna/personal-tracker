@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { AREAS } from '../data/defaults';
+import { programacionDelPlan } from '../data/etiquetas';
 import { KIND_LABEL, STEP_LABEL, unitPhases, type PlanStep } from '../data/study';
 import { addDays, fmtDur } from '../data/time';
 import type { ReviewItem } from '../data/study-types';
@@ -94,6 +95,8 @@ export function Estudio({ day }: { day: DayLog }) {
   const plan = useStudyPlan(day);
   const study = useStore((s) => s.study);
   const days = useStore((s) => s.days);
+  const t0 = useStore((s) => s.settings?.startDate);
+  const progPlan = programacionDelPlan(day.date, t0);
   const [sel, setSel] = useState<string | null>(null);
   const actual = plan.contenidos.find((c) => c.id === sel) ?? plan.contenidos.find((c) => c.falta > 0 && c.id !== 'repaso') ?? plan.contenidos[0];
   useEffect(() => { if (actual && sel == null) setSel(actual.id); }, [actual, sel]);
@@ -121,7 +124,7 @@ export function Estudio({ day }: { day: DayLog }) {
           const pct = c.total ? Math.round(((c.total - c.falta) / c.total) * 100) : 0;
           return (
             <button key={c.id} role="tab" aria-selected={actual?.id === c.id} className="contenido" style={{ ['--c' as string]: AREAS[c.color as keyof typeof AREAS].css }} onClick={() => setSel(c.id)}>
-              <span className="cont-frente"><i />{c.front}</span>
+              <span className="cont-frente"><i />{c.front === 'Programación' ? progPlan ?? c.front : c.front}</span>
               <b className={actual?.id === c.id ? 'trazo on' : ''}>{c.title}</b>
               <span className="cont-barra"><span style={{ width: `${pct}%` }} /></span>
               <span className="mono sub">{c.falta ? `falta ${fmtDur(c.falta)}` : 'listo'}</span>

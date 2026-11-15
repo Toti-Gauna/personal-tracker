@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react';
 import { AREAS, BUILTIN_PRESETS } from '../data/defaults';
+import { tituloDeBloque } from '../data/etiquetas';
 import { startFocus } from '../data/focus';
 import { fitPreset, focusMinutes, planLabel } from '../data/pomodoro';
 import { blockEnd, remainingMin } from '../data/schedule';
@@ -70,7 +71,7 @@ export function ElegirFoco({ day, blockKey }: { day: DayLog; blockKey?: string }
       </div>
       <div className="kicker">{area.name} · quedan {fmtDur(minutes)}</div>
       <h1 className="titulo">¿Cómo lo trabajás?</h1>
-      <p className="elegir-sub">{block.title}. Cada opción entra justa en los {minutes} minutos que quedan.</p>
+      <p className="elegir-sub">{tituloDeBloque(block, day.date, settings.startDate)}. Cada opción entra justa en los {minutes} minutos que quedan.</p>
 
       <div className="opciones" role="radiogroup" aria-label="Forma de trabajar el bloque">
         {opciones.map((o, i) => (

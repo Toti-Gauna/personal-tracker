@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Ajustes</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,500..900&amp;family=Geist:wght@400;500;600&amp;family=Geist+Mono:wght@400;500;600&amp;display=swap">
+<style>body{margin:0}</style>
+</helmet>
+<div style="{{ vars }} width: 390px; min-height: 1710px; box-sizing: border-box; background-color: var(--paper); background-image: radial-gradient(var(--dot) 1px, transparent 1.3px); background-size: 18px 18px; color: var(--ink); font-family: Geist, system-ui, sans-serif; display: flex; flex-direction: column; padding: 18px 20px 28px; gap: 26px">
+
+  <a href="Logros.dc.html" style="display: flex; align-items: center; gap: 6px; min-height: 44px; color: var(--ink); text-decoration: none; font-size: 14px; width: fit-content"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>Perfil</a>
+  <h1 style="margin: 0; font-family: Archivo, sans-serif; font-stretch: 125%; font-size: 40px; font-weight: 900; letter-spacing: -0.05em; line-height: 0.95">Ajustes</h1>
+
+  <section aria-label="Tema" style="display: flex; flex-direction: column; gap: 10px">
+    <span style="font-family: 'Geist Mono', monospace; font-size: 11.5px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--sub)">Tema</span>
+    <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); border: 1px solid var(--line); border-radius: 6px; overflow: hidden">
+      <button aria-pressed="true" style="min-height: 44px; border: 0; border-right: 1px solid var(--line); background: var(--ink); color: var(--paper); font-family: Geist, sans-serif; font-size: 14px; font-weight: 600">Oscuro</button>
+      <button aria-pressed="false" style="min-height: 44px; border: 0; border-right: 1px solid var(--line); background: transparent; color: var(--ink); font-family: Geist, sans-serif; font-size: 14px">Claro</button>
+      <button aria-pressed="false" style="min-height: 44px; border: 0; background: transparent; color: var(--ink); font-family: Geist, sans-serif; font-size: 14px">Sistema</button>
+    </div>
+  </section>
+
+  <section aria-label="Bimestres" style="display: flex; flex-direction: column">
+    <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 4px"><span style="font-family: 'Geist Mono', monospace; font-size: 11.5px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--sub)">Nombres de los bimestres</span><span style="font-size: 12px; color: var(--sub)">lo que significa para vos</span></div>
+    <label for="b1" style="display: grid; grid-template-columns: 30px 1fr; gap: 10px; align-items: center; min-height: 54px; border-bottom: 1px solid var(--ink)"><span style="font-family: 'Geist Mono', monospace; font-size: 12px; color: var(--sub)">01</span><input id="b1" type="text" value="El despegue" style="border: 0; background: transparent; color: var(--ink); font-family: Archivo, sans-serif; font-stretch: 112%; font-size: 19px; font-weight: 800; padding: 0; min-height: 44px"></label>
+    <sc-for list="{{ bims }}" as="b" hint-placeholder-count="8">
+      <div style="display: grid; grid-template-columns: 30px 1fr auto; gap: 10px; align-items: center; min-height: 50px; border-bottom: 1px solid var(--line)">
+        <span style="font-family: 'Geist Mono', monospace; font-size: 12px; color: var(--sub)">{{ b.n }}</span>
+        <span style="font-size: 14.5px; color: var(--sub)">{{ b.ind }}</span>
+        <span style="font-size: 12.5px; color: var(--ink); text-decoration: underline; text-underline-offset: 3px">Nombrar</span>
+      </div>
+    </sc-for>
+  </section>
+
+  <section aria-label="Áreas" style="display: flex; flex-direction: column">
+    <span style="font-family: 'Geist Mono', monospace; font-size: 11.5px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--sub); margin-bottom: 4px">Áreas</span>
+    <div style="display: flex; flex-wrap: wrap; gap: 8px">
+      <sc-for list="{{ areas }}" as="a" hint-placeholder-count="6"><span style="display: flex; align-items: center; gap: 8px; min-height: 40px; padding: 0 12px; border: 1px solid var(--line); border-radius: 999px; font-size: 13.5px"><span style="{{ a.dot }}"></span>{{ a.n }}</span></sc-for>
+      <span style="display: flex; align-items: center; min-height: 40px; padding: 0 12px; border: 1px dashed var(--sub); border-radius: 999px; font-size: 13.5px">+ Área</span>
+    </div>
+  </section>
+
+  <section aria-label="Plan T+18" style="display: flex; flex-direction: column">
+    <span style="font-family: 'Geist Mono', monospace; font-size: 11.5px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--sub); margin-bottom: 4px">Plan T+18</span>
+    <div style="display: grid; grid-template-columns: 1fr auto; gap: 10px; align-items: center; min-height: 56px; border-bottom: 1px solid var(--line)"><span style="display: flex; flex-direction: column; gap: 2px"><span style="font-size: 15px">Inicio del plan</span><span style="font-size: 12.5px; color: var(--sub)">Semana 1 · 78 semanas · 9 bimestres</span></span><span style="font-family: 'Geist Mono', monospace; font-size: 13px">16 nov 2026</span></div>
+    <div style="display: grid; grid-template-columns: 1fr auto; gap: 10px; align-items: center; min-height: 56px; border-bottom: 1px solid var(--line)"><span style="display: flex; flex-direction: column; gap: 2px"><span style="font-size: 15px">Rutina del día</span><span style="font-size: 12.5px; color: var(--sub)">Cambia sola al marcar T+2 (con confirmación)</span></span><span style="font-family: 'Geist Mono', monospace; font-size: 13px">Búsqueda</span></div>
+    <div style="display: grid; grid-template-columns: 1fr auto; gap: 10px; align-items: center; min-height: 56px; border-bottom: 1px solid var(--line)"><span style="display: flex; flex-direction: column; gap: 2px"><span style="font-size: 15px">Día libre</span><span style="font-size: 12.5px; color: var(--sub)">Solo repasos de 20 min y entreno suave</span></span><span style="font-family: 'Geist Mono', monospace; font-size: 13px">Martes</span></div>
+    <div style="display: grid; grid-template-columns: 1fr auto; gap: 10px; align-items: center; min-height: 56px; border-bottom: 1px solid var(--line)"><span style="display: flex; flex-direction: column; gap: 2px"><span style="font-size: 15px">Umbrales de Handyx</span><span style="font-size: 12.5px; color: var(--sub)">Para decidir el 15 nov 2027</span></span><span style="font-family: 'Geist Mono', monospace; font-size: 13px; color: var(--sub)">[definir] →</span></div>
+    <div style="display: flex; flex-wrap: wrap; gap: 8px; padding-top: 12px">
+      <span style="display: flex; align-items: center; gap: 7px; min-height: 36px; padding: 0 11px; border: 1px solid var(--line); border-radius: 999px; font-family: 'Geist Mono', monospace; font-size: 12px"><span style="width: 9px; height: 9px; background: var(--ing)"></span>programacion</span>
+      <span style="display: flex; align-items: center; gap: 7px; min-height: 36px; padding: 0 11px; border: 1px solid var(--line); border-radius: 999px; font-family: 'Geist Mono', monospace; font-size: 12px"><span style="width: 9px; height: 9px; background: var(--eco)"></span>matematica</span>
+      <span style="display: flex; align-items: center; gap: 7px; min-height: 36px; padding: 0 11px; border: 1px solid var(--line); border-radius: 999px; font-family: 'Geist Mono', monospace; font-size: 12px"><span style="width: 9px; height: 9px; background: var(--ru)"></span>trabajo</span>
+      <span style="display: flex; align-items: center; gap: 7px; min-height: 36px; padding: 0 11px; border: 1px solid var(--line); border-radius: 999px; font-family: 'Geist Mono', monospace; font-size: 12px"><span style="width: 9px; height: 9px; background: #F49AC2"></span>ingles</span>
+      <span style="display: flex; align-items: center; gap: 7px; min-height: 36px; padding: 0 11px; border: 1px solid var(--line); border-radius: 999px; font-family: 'Geist Mono', monospace; font-size: 12px"><span style="width: 9px; height: 9px; background: var(--hx)"></span>handyx</span>
+      <span style="display: flex; align-items: center; gap: 7px; min-height: 36px; padding: 0 11px; border: 1px solid var(--line); border-radius: 999px; font-family: 'Geist Mono', monospace; font-size: 12px"><span style="width: 9px; height: 9px; background: var(--sa)"></span>salud</span>
+    </div>
+  </section>
+
+  <section aria-label="Datos y app" style="display: flex; flex-direction: column">
+    <span style="font-family: 'Geist Mono', monospace; font-size: 11.5px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--sub); margin-bottom: 4px">Datos y app</span>
+    <sc-for list="{{ rows }}" as="r" hint-placeholder-count="6">
+      <div style="display: grid; grid-template-columns: 1fr auto; gap: 10px; align-items: center; min-height: 56px; border-bottom: 1px solid var(--line)">
+        <span style="display: flex; flex-direction: column; gap: 2px"><span style="font-size: 15px">{{ r.n }}</span><span style="font-size: 12.5px; color: var(--sub)">{{ r.d }}</span></span>
+        <span style="font-family: 'Geist Mono', monospace; color: var(--sub)">→</span>
+      </div>
+    </sc-for>
+  </section>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"theme":{"editor":"enum","options":["dark","light"],"default":"dark"},"$preview":{"width":390,"height":1710}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const T = { dark: { paper: '#0E0F10', ink: '#EDEDE8', sub: '#9A9D98', line: '#2C2E2D', dot: 'rgba(237,237,232,0.08)', ing: '#6CC4EE', hx: '#B3A4FF', ec: '#FF9F62', sa: '#7FD69A', ru: '#FF8E8E', eco: '#F0D45C' }, light: { paper: '#F2F3EF', ink: '#141515', sub: '#585C59', line: '#C9CCC6', dot: 'rgba(20,21,21,0.10)', ing: '#1C7FB0', hx: '#5F4BCF', ec: '#C2560F', sa: '#24854A', ru: '#C23A3A', eco: '#8A6C00' } };
+    const t = T[this.props.theme] || T.dark;
+    let vars = '';
+    for (const k in t) vars += '--' + k + ':' + t[k] + ';';
+    const bims = [['02','Escudo, W1 y Surco v1'],['03','AWS SAA y Estación v1'],['04','Faro v2 y Security+'],['05','W2 y Lupa v1'],['06','Surco v2, AWS ML y decisión de Handyx'],['07','W3 y Núcleo'],['08','Lupa v2 y Estación v2'],['09','Colchón, C1 y salto senior']].map(([n, ind]) => ({ n, ind }));
+    const areas = [['Ingeniería','ing'],['Handyx','hx'],['Eclipse','ec'],['Salud','sa'],['Rutina','ru'],['Economía','eco']].map(([n, k]) => ({ n, dot: 'width:9px;height:9px;background:var(--' + k + ')' }));
+    return { vars, bims, areas, rows: [
+      { n: 'Rutinas del día', d: '04:00 día completo · 05:00 día corto' },
+      { n: 'Sonidos y alarmas', d: 'Campana de bronce · 4 alarmas en el calendario' },
+      { n: 'Compañera de entrenamiento', d: 'Abi · pesos y récords propios' },
+      { n: 'Importar mazo de Anki', d: 'Archivo de texto exportado desde Anki' },
+      { n: 'Datos del repositorio', d: 'Última carga: hoy 04:02 · 3 días' },
+      { n: 'Instalar Trazo', d: 'Agregar a la pantalla de inicio' }
+    ] };
+  }
+}
+</script>
+</body>
+</html>

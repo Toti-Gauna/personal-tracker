@@ -132,7 +132,6 @@ describe('de la ruta a tu día', () => {
     const bl = Object.fromEntries(getState().days[D].blocks.map((b) => [b.key, b]));
     expect(bl.math).toMatchObject({ ref: 'b1-conamat-arit-01', part: 'learn' });
     expect(bl.prog).toMatchObject({ ref: 'b1-prog-python', part: 'learn' });
-    expect(bl.eclipse.ref).toBe('b1-piloto');
     expect(bl.abi.ref).toBeUndefined();
     expect(bl.handyx.ref).toBeUndefined();
   });
@@ -144,7 +143,7 @@ describe('de la ruta a tu día', () => {
     for (const t of math.tasks) marcarTarea(D, 'math', t.id);
     const s = getState();
     const p = progressMap(s.ruta.log);
-    expect(mejoraDia(s.days[D])).toBe(0.125);
+    expect(mejoraDia(s.days[D])).toBe(0.1);
     expect(p['b1-conamat-arit-01']).toBe(0.5);
     expect(laneStatus(B1, 'math', D, p).done).toBe(antes.done + 0.5);
     const semana = weekPlan(D).plan.goals.find((g) => g.lane === 'math')!;
@@ -164,11 +163,12 @@ describe('de la ruta a tu día', () => {
     expect(progressMap(getState().ruta.log)['b1-conamat-arit-01']).toBeUndefined();
   });
 
-  it('el día siguiente pide el próximo paso: el test del capítulo 1', () => {
+  it('el próximo día de estudio pide el próximo paso: el test del capítulo 1', () => {
     const math = getState().days[D].blocks.find((b) => b.key === 'math')!;
     for (const t of math.tasks) marcarTarea(D, 'math', t.id);
-    startDay('completo', '04:00', '2026-11-17');
-    expect(getState().days['2026-11-17'].blocks.find((b) => b.key === 'math')).toMatchObject({ ref: 'b1-conamat-arit-01', part: 'test' });
+    // El martes es el día libre de fábrica: el próximo con matemática es el miércoles.
+    startDay('completo', '04:00', '2026-11-18');
+    expect(getState().days['2026-11-18'].blocks.find((b) => b.key === 'math')).toMatchObject({ ref: 'b1-conamat-arit-01', part: 'test' });
   });
 
   it('aprobar el test de CONAMAT completa su ítem una sola vez', () => {
@@ -180,8 +180,8 @@ describe('de la ruta a tu día', () => {
   });
 
   it('Eclipse suma llamadas al piloto y el embudo se ajusta a mano', () => {
-    const ec = getState().days[D].blocks.find((b) => b.key === 'eclipse')!;
-    for (const t of ec.tasks) marcarTarea(D, 'eclipse', t.id);
+    // Eclipse ya no es un bloque fijo (va en la programación de la tarde en semana de venta).
+    addPilot(D, 1, 'calls', 1);
     addPilot(D, 1, 'calls', 1);
     addPilot(D, 1, 'interested', 1);
     const pil = weekPlan(D).plan.goals.find((g) => g.lane === 'piloto')!;

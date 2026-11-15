@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Ruta T+18</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,500..900&amp;family=Geist:wght@400;500;600&amp;family=Geist+Mono:wght@400;500;600&amp;display=swap">
+<style>body{margin:0}</style>
+</helmet>
+<div style="{{ vars }} width: 390px; min-height: 1850px; box-sizing: border-box; background-color: var(--paper); background-image: radial-gradient(var(--dot) 1px, transparent 1.3px); background-size: 18px 18px; color: var(--ink); font-family: Geist, system-ui, sans-serif; display: flex; flex-direction: column">
+  <main style="flex: 1; padding: 18px 20px 28px; display: flex; flex-direction: column; gap: 26px">
+    <div style="display: flex; justify-content: space-between; align-items: center">
+      <span style="font-family: Archivo, sans-serif; font-stretch: 125%; font-weight: 900; font-size: 20px; letter-spacing: -0.04em; padding: 0 3px; background: linear-gradient(98deg, transparent 2%, var(--mk-eco) 2% 98%, transparent 98%) 0 80% / 100% 50% no-repeat">trazo</span>
+      <span style="font-family: 'Geist Mono', monospace; font-size: 12px; color: var(--sub)">HEAD → <b style="color: var(--ing); font-weight: 600">programacion</b></span>
+    </div>
+    <header style="display: flex; flex-direction: column; gap: 6px">
+      <h1 style="margin: 0; font-family: Archivo, sans-serif; font-stretch: 125%; font-size: 34px; font-weight: 900; letter-spacing: -0.045em; line-height: 1">Metas</h1>
+      <p style="margin: 0; font-size: 14.5px; line-height: 1.5; color: var(--sub)">Plan T+18: seis ramas que salen de Trazo y vuelven en mayo de 2028, con perfil senior en ML, DevSecOps y cloud.</p>
+    </header>
+    <div role="tablist" aria-label="Horizonte" style="display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); border-bottom: 1px solid var(--line); margin-top: -8px">
+      <a href="Ruta.dc.html" role="tab" aria-selected="true" style="min-height: 44px; display: flex; align-items: center; justify-content: center; text-decoration: none; font-size: 14px; border-bottom: 2px solid var(--ink); margin-bottom: -1px; color: var(--ink); font-weight: 600">Ruta</a>
+      <a href="Semana.dc.html" role="tab" aria-selected="false" style="min-height: 44px; display: flex; align-items: center; justify-content: center; text-decoration: none; font-size: 14px; color: var(--sub)">Semana</a>
+      <a href="MetasMes.dc.html" role="tab" aria-selected="false" style="min-height: 44px; display: flex; align-items: center; justify-content: center; text-decoration: none; font-size: 14px; color: var(--sub)">Mes</a>
+      <a href="Metas.dc.html" role="tab" aria-selected="false" style="min-height: 44px; display: flex; align-items: center; justify-content: center; text-decoration: none; font-size: 14px; color: var(--sub)">Bim.</a>
+      <a href="MetasAnio.dc.html" role="tab" aria-selected="false" style="min-height: 44px; display: flex; align-items: center; justify-content: center; text-decoration: none; font-size: 14px; color: var(--sub)">Año</a>
+    </div>
+
+    <section aria-label="Semana del plan" style="display: flex; flex-direction: column; gap: 10px">
+      <div style="display: flex; justify-content: space-between; align-items: baseline">
+        <b style="font-family: 'Geist Mono', monospace; font-size: 30px; font-weight: 500; letter-spacing: -0.04em">5<span style="color: var(--sub); font-size: 18px"> / 78</span></b>
+        <span style="font-family: 'Geist Mono', monospace; font-size: 12px; color: var(--sub)">B1 · El despegue · 14 dic 2026</span>
+      </div>
+      <div style="display: grid; grid-template-columns: repeat(78, minmax(0, 1fr)); gap: 1px" aria-label="Semana 5 de 78">
+        <sc-for list="{{ weeks }}" as="w" hint-placeholder-count="78"><span style="{{ w }}"></span></sc-for>
+      </div>
+      <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); border-top: 1px solid var(--line); border-left: 1px solid var(--line)">
+        <sc-for list="{{ hitos }}" as="h" hint-placeholder-count="3">
+          <span style="display: flex; flex-direction: column; gap: 3px; padding: 10px; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line)">
+            <b style="font-family: 'Geist Mono', monospace; font-size: 13px; font-weight: 600">{{ h.t }}</b>
+            <span style="font-size: 12.5px; line-height: 1.35">{{ h.what }}</span>
+            <span style="font-family: 'Geist Mono', monospace; font-size: 11px; color: var(--sub)">{{ h.when }}</span>
+          </span>
+        </sc-for>
+      </div>
+    </section>
+
+    <section aria-label="Las seis ramas" style="display: flex; flex-direction: column">
+      <div style="display: flex; justify-content: space-between; align-items: baseline; padding-bottom: 8px; border-bottom: 1px solid var(--line)">
+        <span style="font-family: 'Geist Mono', monospace; font-size: 11.5px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--sub)">Las seis ramas</span>
+        <a href="RutaMapa.dc.html" style="font-size: 13px; color: var(--ink); min-height: 32px; display: inline-flex; align-items: center">Ver el mapa →</a>
+      </div>
+      <sc-for list="{{ ramas }}" as="r" hint-placeholder-count="6">
+        <a href="{{ r.href }}" style="display: grid; grid-template-columns: 14px minmax(0, 1fr) auto; gap: 12px; padding: 14px 0; border-bottom: 1px solid var(--line); color: var(--ink); text-decoration: none">
+          <span style="{{ r.sq }}"></span>
+          <span style="display: flex; flex-direction: column; gap: 4px; min-width: 0">
+            <span style="{{ r.tag }}">{{ r.name }}</span>
+            <b style="{{ r.stage }}">{{ r.etapa }}</b>
+            <span style="font-size: 12.5px; color: var(--sub); line-height: 1.4">{{ r.next }}</span>
+            <span style="display: block; height: 3px; background: var(--line)"><span style="{{ r.bar }}"></span></span>
+          </span>
+          <span style="font-family: 'Geist Mono', monospace; font-size: 12px; color: var(--sub); padding-top: 2px">{{ r.meta }}</span>
+        </a>
+      </sc-for>
+    </section>
+
+    <section aria-label="Lo que viene" style="display: flex; flex-direction: column; gap: 10px">
+      <span style="font-family: 'Geist Mono', monospace; font-size: 11.5px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--sub)">Lo que viene · entregas entre ramas</span>
+      <div style="display: flex; flex-direction: column; border-top: 1px solid var(--line)">
+        <sc-for list="{{ viene }}" as="v" hint-placeholder-count="4">
+          <div style="display: grid; grid-template-columns: 52px minmax(0, 1fr); gap: 10px; padding: 11px 0; border-bottom: 1px solid var(--line)">
+            <span style="font-family: 'Geist Mono', monospace; font-size: 12px; color: var(--sub)">{{ v.d }}</span>
+            <span style="display: flex; flex-direction: column; gap: 3px; min-width: 0">
+              <span style="font-family: 'Geist Mono', monospace; font-size: 11px"><span style="{{ v.ca }}">{{ v.a }}</span><span style="color: var(--sub)"> → </span><span style="{{ v.cb }}">{{ v.b }}</span></span>
+              <span style="font-size: 14px; line-height: 1.4">{{ v.t }}</span>
+            </span>
+          </div>
+        </sc-for>
+      </div>
+    </section>
+
+    <section style="display: flex; flex-direction: column; gap: 8px; padding: 14px; border: 1.5px solid var(--ink); border-radius: 8px">
+      <span style="font-family: 'Geist Mono', monospace; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--sub)">T+18 · mayo 2028 · todo vuelve a main</span>
+      <b style="font-family: Archivo, sans-serif; font-stretch: 112%; font-size: 19px; font-weight: 800">Senior ML + DevSecOps + cloud</b>
+      <span style="font-size: 13px; line-height: 1.5; color: var(--sub)">10 proyectos en 6 industrias, AWS SAA, Security+ y AWS ML Engineer, examen C1, Handyx decidido y la base matemática hacia la ingeniería.</span>
+      <span style="display: block; height: 4px; background: var(--line)"><span style="display: block; height: 4px; width: 6%; background: var(--ink)"></span></span>
+      <span style="font-family: 'Geist Mono', monospace; font-size: 11.5px; color: var(--sub)">6 % del plan · 1 de 10 proyectos cerrado (P0)</span>
+    </section>
+  </main>
+  <nav aria-label="Secciones" style="border-top: 1px solid var(--line); background: var(--paper); padding: 10px 12px 14px">
+    <div style="display: grid; grid-template-columns: repeat(5, minmax(0, 1fr))">
+      <sc-for list="{{ nav }}" as="n" hint-placeholder-count="5">
+        <a href="{{ n.href }}" aria-current="{{ n.cur }}" style="{{ n.st }}">
+          <span style="{{ n.pill }}"><span style="{{ n.ico }}"></span></span>
+          <span>{{ n.label }}</span>
+          <sc-if value="{{ n.hasBadge }}" hint-placeholder-val="{{ false }}"><span style="position: absolute; top: 4px; left: calc(50% + 9px); min-width: 18px; height: 18px; padding: 0 5px; box-sizing: border-box; border-radius: 999px; background: var(--ink); color: var(--paper); font-family: 'Geist Mono', monospace; font-size: 10.5px; font-weight: 600; display: grid; place-items: center">{{ n.badge }}</span></sc-if>
+        </a>
+      </sc-for>
+    </div>
+  </nav>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"theme":{"editor":"enum","options":["dark","light"],"default":"dark"},"$preview":{"width":390,"height":1850}}'>
+class Component extends DCLogic {
+  base(active) {
+    const T = { dark: { paper: '#0E0F10', ink: '#EDEDE8', sub: '#9A9D98', line: '#2C2E2D', soft: '#18191A', dot: 'rgba(237,237,232,0.08)', ing: '#6CC4EE', hx: '#B3A4FF', ec: '#FF9F62', sa: '#7FD69A', ru: '#FF8E8E', eco: '#F0D45C', idi: '#F49AC2', a: '38%' }, light: { paper: '#F2F3EF', ink: '#141515', sub: '#585C59', line: '#C9CCC6', soft: '#E7E9E4', dot: 'rgba(20,21,21,0.10)', ing: '#1C7FB0', hx: '#5F4BCF', ec: '#C2560F', sa: '#24854A', ru: '#C23A3A', eco: '#8A6C00', idi: '#B4316F', a: '60%' } };
+    const L = this.props.theme === 'light';
+    const t = L ? T.light : T.dark;
+    let vars = '';
+    for (const k in t) if (k !== 'a') vars += '--' + k + ':' + t[k] + ';';
+    const D = T.dark;
+    for (const k of ['ing', 'hx', 'ec', 'sa', 'ru', 'eco', 'idi']) vars += '--mk-' + k + ':color-mix(in srgb,' + D[k] + ' ' + t.a + ',transparent);';
+    vars += '--mk-nav:color-mix(in srgb,#F0D45C ' + t.a + ',transparent);';
+    const ICO = { Hoy: '<path d="M3 18.5h18M7 18.5a5 5 0 0 1 10 0M12 5v3.2M5 9.6l1.9 1.3M19 9.6l-1.9 1.3"/>', Estudio: '<path d="M12 6.8c-2.2-1.6-5.2-2-8-1.6v12.9c2.8-.4 5.8 0 8 1.6 2.2-1.6 5.2-2 8-1.6V5.2c-2.8-.4-5.8 0-8 1.6zM12 6.8v12.9"/>', Metas: '<path d="M5.5 21V3.5M5.5 4.5h12.5l-2.6 4 2.6 4H5.5"/>', Entreno: '<path d="M6.5 6.5v11M17.5 6.5v11M3.5 9.5v5M20.5 9.5v5M6.5 12h11"/>', Perfil: '<circle cx="12" cy="9.5" r="5.5"/><path d="M9 14.6 7.6 21l4.4-2.2 4.4 2.2-1.4-6.4"/>' };
+    const mask = (p) => { const u = 'url(data:image/svg+xml,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">' + p + '</svg>') + ')'; return 'width:22px;height:22px;background:currentColor;-webkit-mask:' + u + ' center / 22px 22px no-repeat;mask:' + u + ' center / 22px 22px no-repeat'; };
+    const nav = [['Hoy', 'Hoy.dc.html', ''], ['Estudio', 'Estudio.dc.html', '22'], ['Metas', 'Ruta.dc.html', ''], ['Entreno', 'Rutinas.dc.html', ''], ['Perfil', 'Logros.dc.html', '']].map(([label, href, badge]) => { const on = label === active; return { label, href, badge, hasBadge: !!badge && !on, cur: on ? 'page' : 'false', ico: mask(ICO[label]),
+      st: 'position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;min-height:60px;text-decoration:none;font-size:11.5px;letter-spacing:0.01em;color:' + (on ? 'var(--ink);font-weight:600' : 'var(--sub)'),
+      pill: 'width:54px;height:32px;display:grid;place-items:center;' + (on ? 'background:var(--mk-nav);clip-path:polygon(9% 0,100% 0,91% 100%,0 100%)' : '') }; });
+    return { vars, nav };
+  }
+  renderVals() {
+    const { vars, nav } = this.base('Metas');
+    const C = { programacion: 'ing', matematica: 'eco', trabajo: 'ru', ingles: 'idi', handyx: 'hx', salud: 'sa' };
+    const weeks = Array.from({ length: 78 }, (_, i) => { const w = i + 1; const hit = w === 9 || w === 53 || w === 78; return 'height:' + (hit ? 14 : 8) + 'px;align-self:end;background:' + (w < 5 ? 'var(--ink)' : w === 5 ? 'var(--eco)' : hit ? 'var(--sub)' : 'var(--line)'); });
+    const hitos = [{ t: 'T+2', what: 'Remoto de USD 3.000 a 5.000', when: '11 ene 2027' }, { t: 'T+12', what: 'Decisión de Handyx', when: '15 nov 2027' }, { t: 'T+18', what: 'Senior y examen C1', when: 'mayo 2028' }];
+    const R = [
+      ['programacion', 'P1 · Faro v1 · petróleo', 'Entrega el dom 27 dic · sigue Escudo · medicina', 'sem 3/4', 62, 'PlanProyecto.dc.html'],
+      ['matematica', 'CONAMAT · Aritmética, cap. 4 de 11', 'W1 (álgebra y estadística) el 1 feb, antes de Surco v1', 'cap 4/11', 30, 'PlanBimestre.dc.html'],
+      ['trabajo', 'Búsqueda intensa', 'Entrevista el jue 17 · meta: remoto para el 11 ene', 'sem 4/8', 50, 'PlanBusqueda.dc.html'],
+      ['ingles', 'Modo entrevista', '6 de 10 respuestas ensayadas · después, bloque diario al C1', '6/10', 60, 'PlanIngles.dc.html'],
+      ['handyx', 'Año de prueba · Lanzar', 'Corte 1 el 14 feb: primeras operaciones', 'sem 5/13', 38, 'PlanHandyx.dc.html'],
+      ['salud', 'Rutina estable y registro diario', 'Ciclo de fuerza medido desde febrero', '5/6 ses.', 83, 'Rutinas.dc.html']
+    ];
+    const ramas = R.map(([name, etapa, next, meta, pct, href]) => { const c = C[name]; return { name, etapa, next, meta, href,
+      sq: 'width:11px;height:11px;margin-top:3px;border-radius:2px;background:var(--' + c + ')',
+      tag: 'font-family:Geist Mono,monospace;font-size:11.5px;color:var(--' + c + ')',
+      stage: 'font-family:Archivo,sans-serif;font-stretch:112%;font-size:16px;font-weight:800;line-height:1.25',
+      bar: 'display:block;height:3px;width:' + pct + '%;background:var(--' + c + ')' }; });
+    const V = [['20 dic', 'trabajo', 'ingles', 'Entrevista del jue 17: lo que falló pasa a tarjetas de inglés'], ['28 dic', 'programacion', 'trabajo', 'Faro v1 entra al portfolio con tráiler y landing'], ['11 ene', 'trabajo', 'ingles', 'Trabajo nuevo: empieza el bloque diario hacia el C1'], ['1 feb', 'matematica', 'programacion', 'Ventana W1 de 2 semanas: la base de Surco v1']];
+    const viene = V.map(([d, a, b, t]) => ({ d, a, b, t, ca: 'color:var(--' + C[a] + ')', cb: 'color:var(--' + C[b] + ')' }));
+    return { vars, nav, weeks, hitos, ramas, viene };
+  }
+}
+</script>
+</body>
+</html>

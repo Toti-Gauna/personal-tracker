@@ -5,7 +5,7 @@ Tracker personal de Toti: el día en horas, el estudio con su propio motor de re
 - **Diseño:** [canvas de Trazo](https://claude.ai/artifact/6Cc2E6aW2ViU5ikovpsRTy)
 - **Roadmap de estudio:** [ruta ML + DevSecOps](https://claude.ai/artifact/9PEokku7mBLZdCFJr1zqXP)
 - **Pantallas:** presentación `Trazo-pantallas.pptx` y su ZIP de imágenes (44 pantallas, 8 flujos).
-- **Estado:** ola 7 (Escritorio y tablet) en revisión. Este archivo es la fuente de verdad.
+- **Estado:** ola 8 (Plan T+18) en revisión. Este archivo es la fuente de verdad.
 
 ---
 
@@ -40,6 +40,9 @@ Tracker personal de Toti: el día en horas, el estudio con su propio motor de re
 | Salud | `#7FD69A` | `#24854A` |
 | Rutina | `#FF8E8E` | `#C23A3A` |
 | Economía | `#F0D45C` | `#8A6C00` |
+| Inglés (`--idi`, rama del plan T+18) | `#F49AC2` | `#B4316F` |
+
+**Ramas del plan T+18:** main = Trazo, en tinta. Cada rama toma el color de un área: programación `--ing`, matemática `--economia` (el resaltador), trabajo `--rutina`, inglés `--idi` (nuevo), Handyx `--handyx` y salud `--salud`.
 
 **Resaltador:** el color del área al 38 % sobre fondo oscuro y al 60 % sobre claro, con las puntas en bisel.
 
@@ -84,13 +87,13 @@ Tracker personal de Toti: el día en horas, el estudio con su propio motor de re
 **1 · Empezar el día**
 
 1. **Instalar.** Agregás Trazo a inicio y cargás tu nombre y el de Abi. Queda guardado y no se vuelve a pedir.
-2. **Buen día.** La primera apertura de cada día pregunta a qué hora te levantaste. La rutina se elige sola por el día de la semana (hora de Buenos Aires): de lunes a viernes, "weekday" (8 metas); sábado y domingo, "weekend" (5 metas). No hay selector manual.
+2. **Buen día.** La primera apertura de cada día pregunta a qué hora te levantaste. La rutina se elige sola por el día de la semana (hora de Buenos Aires): de lunes a viernes, "weekday" (10 metas); sábado y domingo, "weekend" (6 metas). Desde T+2, "con trabajo" reemplaza a la de lunes a viernes, y el día libre (martes por defecto) deja solo repasos y entreno suave; se eligen en Ajustes → Plan T+18 (§5 quater).
    - 04:00 arma el día completo de la rutina que corresponda.
    - 05:00 arma el día corto: las metas flexibles de la mañana se acortan (de lunes a viernes, matemática 1 h 30 y programación 1 h 30; el finde, matemática 3 h). Los bloques fijos no se tocan.
    - Con "Otra hora" el día corre los bloques y acorta los flexibles, nunca a menos de 15 min.
    - **Fijos** (no se acortan ni se mueven): correr y acompañar a Abi (08:30–10:00), trabajo, entrenamiento y sueño. **Flexibles:** matemática, programación, Handyx, Eclipse y búsqueda laboral. Solo se acortan los flexibles de antes del primer fijo; los de la tarde quedan en su hora.
    - La ducha va adentro de correr, del almuerzo y del estudio; no es un bloque aparte. Despertar, comidas, descanso, desconexión y sueño no cuentan como meta.
-3. **Hoy.** El encabezado, el avance del día y la regla de horas con las metas numeradas (del 1 al 8 de lunes a viernes, del 1 al 5 el finde; mismo diseño). **Entrar en foco** te lleva al motor de esa meta:
+3. **Hoy.** El encabezado, el avance del día y la regla de horas con las metas numeradas (del 1 al 10 de lunes a viernes, del 1 al 6 el finde; mismo diseño). **Entrar en foco** te lleva al motor de esa meta:
    - una meta de estudio abre su sesión de estudio;
    - la de entreno abre la sesión de entreno;
    - el resto va a elegir pomodoro.
@@ -321,6 +324,21 @@ El repo es público y está bien así para estos datos.
 - **Competencias:** cada ítem suma a un eje (Matemática; Seguridad, Cloud y Hardware por palabras clave; Producto; el resto, ML), ponderado por horas. La meta del año 1 es todo hecho hasta el B6; la del año 3, hasta el B18.
 - **Constancia:** el martes sin registro no cuenta como falta. Los gráficos con pocos días muestran el tramo que hay y avisan que se completan con el uso.
 
+## 5 quater. Plan T+18 (ola 8)
+
+Seis ramas que salen de main (Trazo) el lunes de T0 y vuelven a juntarse 78 semanas después, en mayo de 2028, con perfil senior en ML, DevSecOps y cloud. Fuente: `data/plan.json`, tipado en `src/data/plan.ts`. **Todo se cuenta en semanas desde T0** (`settings.startDate`; si no hay, el T0 del plan, 2026-11-16): no hay fechas sueltas en pantallas.
+
+- **Tiempo:** 78 semanas, 9 bimestres de 9 semanas (B9 tiene 6). No hay trimestres. Hitos: T+0 (semana 1), T+2 (semana 9, trabajo remoto), T+12 (semana 53, decisión de Handyx) y T+18 (fin de la semana 78).
+- **Ramas y colores:** programacion (`--ing`), matematica (`--economia`), trabajo (`--rutina`), ingles (`--idi`, nuevo), handyx (`--handyx`), salud (`--salud`); main es `--tinta`. Eclipse sigue siendo un área, no una rama.
+- **Programación:** P0 a P10, certificaciones C1 a C3, ventanas W1 a W3, la pausa de fin de año y el colchón. Cada proyecto tiene industria, versión (v1 → v2 en los pares P1/P5, P3/P7, P4/P10, P6/P9), stack, perfil al cerrar y un estándar de entrega de 6 capas (UX/UI, 3D útil, animación y tráiler, documentación, venta, ingeniería). Tiempo: 55 % núcleo, 30 % producto, 15 % lanzamiento; si no alcanza, se recorta producto, nunca tests ni seguridad.
+- **Rutinas** (`data/routines.json`): lunes a viernes buscando trabajo (10 metas), fin de semana (6), **con trabajo** (9, reemplaza a la de lunes a viernes desde que se marca T+2) y **día libre** (por defecto el martes: repaso de 20 min y entreno suave). En una ventana W los bloques de programación pasan a matemática; con una entrevista a 3 días o menos, la búsqueda se parte en búsqueda y "Inglés · modo entrevista".
+- **Cada bloque lleva su rama**; Hoy muestra la línea `↳ programacion · P1 · semana 3 de 4` bajo el título (la hora sigue a la derecha, §3 bis). El JSON del día suma `rama` por bloque y `plan: { semana, bimestre, ramas }`.
+- **Avisos entre ramas** (arriba de la lista de Hoy): entrevista a 3 días o menos (trabajo → inglés), proyecto que cierra en 14 días con capas sin marcar (programación → trabajo), ventana W en 7 días (matemática → programación) y T+2 marcado con la rutina de búsqueda (pide confirmar el cambio a con trabajo).
+- **Metas por horizonte:** año y bimestre son fijos (vienen del plan y se editan); mes y semana se generan desde el plan para cualquier fecha y se confirman, cambian o borran. El mes de T0 trae las metas del mes 1 y la semana 1, sus tareas. El mes suma lo que cierra (entrega, examen, capítulos, corte de Handyx, ventana), los chequeos mensuales (laboratorios, medidas; simulacros del C1 desde la semana 61) y la búsqueda prorrateada (5 postulaciones y 5 mensajes por día). Las metas personales (95 kg, Foody, Roofy, demos, Handyx 100 usuarios y 56 especialistas, Make It Stick, meditar, deudas) siguen; con rama, aparecen dentro de esa rama.
+- **Pantallas:** Ruta (`#/metas`, 7.1), el mapa en ramas (`#/metas/mapa`, 7.2, un SVG tipo `git log --graph`), Proyecto (`#/metas/proyecto/P1`, 7.3), Búsqueda (`#/metas/trabajo`, 7.4), Inglés (`#/metas/ingles`, 7.5), Handyx (`#/metas/handyx`, 7.6), Importar (`#/importar`, 7.7) y Tu evolución (`#/metas/evolucion`, 7.8). Las pantallas del flujo 7 anterior (bimestre, de la ruta a tu día y la ruta de escritorio) se fueron. Referencias en `docs/diseno/plan-t18/`.
+- **Importar JSON:** campos comunes `tipo`, `rama` y `fecha`; tipos `sesion`, `revision`, `examen`, `entrevista`, `simulacro`, `postulaciones` y `semana`. Validación a mano (sin dependencias) que marca la línea que falla; "Qué cambia" antes de guardar; cada importación queda como commit de su rama en el mapa.
+- **Migración:** la clave sigue siendo `trazo.v1`. Los días guardados no cambian; el plan arranca vacío; las semillas que el plan reemplaza con sus contadores (CV, mensajes a RRHH, horas, tests, entrenos) se van solo si no tienen avance.
+
 ## 6. Olas de desarrollo (un PR por ola, un modelo por ola)
 
 | Ola | Qué sale | Modelo · esfuerzo |
@@ -333,6 +351,7 @@ El repo es público y está bien así para estos datos.
 | 5 · Entreno | Rutinas, semana, editor, sesión en pareja, resumen, peso | Sonnet 5.5 · alto |
 | 6 · Cierre y sellos | Cierre, XP, sellos, ajustes, sonidos y alarmas .ics | Sonnet 5.5 · medio |
 | 7 · Escritorio y tablet | Barra lateral, riel, vista Avance, modo presentación, pulido GSAP, **lista de metas del día con la hora a la derecha del título (§3 bis)** | Sonnet 5.5 · medio |
+| 8 · Plan T+18 | Seis ramas desde T0, rutinas con trabajo y día libre, rama en cada bloque, avisos entre ramas, Ruta y mapa en ramas, Metas generadas desde el plan, Proyecto, Búsqueda, Inglés, Handyx, Importar JSON y Ajustes del plan (§5 quater) | Opus 5.5 · alto |
 
 En el día a día alcanza con **Haiku 5.5 · bajo**: pegás el JSON del cierre y queda commiteado en `data/days/`.
 
@@ -464,6 +483,15 @@ En el día a día alcanza con **Haiku 5.5 · bajo**: pegás el JSON del cierre y
 - **Hoy en escritorio:** dos columnas: a la izquierda el avance, la mejora, "Sumar a la semana" y el cierre; a la derecha la lista de metas del día.
 - **Hora a la derecha del título (§3 bis), revisada a 390, 834 y 1440 px, en claro y oscuro:** en las 8 filas la hora queda en la misma línea, a 11 px del título y antes del contador; el checkbox y el número se alinean entre filas. Semana de Metas y Avance no listan las metas del día, así que no aplica ahí.
 - **Pulido de movimiento (GSAP):** cada pantalla entra subiendo 8 px en 280 ms (fundido de 150 ms con movimiento reducido); las filas de Hoy aparecen escalonadas (0,035 s) y la regla de horas baja hasta su lugar en 0,7 s; la tarjeta gira en 3D al darla vuelta (0,5 s); y el recuadro del descanso de entreno late en los últimos 3 segundos (escala 1 a 1,03, 5 veces).
+
+**Ola 8 · lo que quedó y decisiones**
+
+- La rutina de lunes a viernes del plan (10 metas, con rutina de la mañana y cierre) reemplaza a la de la ola de rutinas (8 metas). El cierre va de 20:30 a 21:00 como en la tabla del plan (la captura decía 21:00).
+- Con trabajo: trabajo de 10:00 a 17:00 y Handyx de 17:00 a 18:30 (el plan no da las horas exactas).
+- El "libre" del fin de semana no es meta. En una ventana W el bloque de programación conserva su id (`prog`) para no romper el vínculo con Estudio.
+- "Sumar a la semana" en Hoy muestra solo los contadores del plan; las metas rápidas personales siguen en Metas.
+- Riesgo en la Ruta: un test de matemática sin aprobar bajo 85 % marca programación en riesgo.
+- Los capítulos de matemática después de Aritmética cuentan cuando el catálogo de Estudio los tenga (`TODO(ola 9)`).
 
 **Infraestructura (ola 0)**
 
@@ -640,3 +668,12 @@ En el día a día alcanza con **Haiku 5.5 · bajo**: pegás el JSON del cierre y
 - data/routines.json con "dayRoutines": lunes a viernes (8 metas) y fin de semana (5 metas), validado al cargar. Nada de horarios en el código.
 - Buen día y Hoy usan la rutina del día de la semana (hora de Buenos Aires); 04:00, 05:00 y "Otra hora" se mantienen. Fijos que no se mueven y flexibles que se acortan.
 - Ajustes → Rutinas del día muestra las dos rutinas con sus bloques (ya no se editan en la app).
+
+**2026-11-15 · ola 8 · Plan T+18**
+
+- Token `--idi` (inglés) y un color por rama; `data/plan.json` con tramos, fases, cortes, metas de bimestre y año, y la etapa actual; tests de fechas para 2026-11-16, 2026-12-14, 2027-02-01, 2027-11-15 y 2028-05-14.
+- Rutinas buscando trabajo, fin de semana, con trabajo y día libre; rama en cada bloque; ventanas W y modo entrevista; migración sin tocar los días guardados.
+- Hoy con la línea de rama, avisos entre ramas y los contadores del plan; el JSON del día suma la rama y el plan.
+- Metas abre en Ruta (semana N de 78, seis ramas, lo que viene) con el mapa en ramas; Semana, Mes, Bimestre y Año salen del plan; Nueva meta con rama.
+- Proyecto, Búsqueda, Inglés y Handyx; Importar JSON con validación y "Qué cambia".
+- Ajustes del plan (inicio, rutina, T+2, día libre, umbrales de Handyx, colores) y nombres sugeridos de B2 a B9; "Programación · Faro v1" en Buen día, Elegir pomodoro, Foco, Estudio y Avance.

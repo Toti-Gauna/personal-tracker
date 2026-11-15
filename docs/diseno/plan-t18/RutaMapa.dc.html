@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>El mapa en ramas</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,500..900&amp;family=Geist:wght@400;500;600&amp;family=Geist+Mono:wght@400;500;600&amp;display=swap">
+<style>body{margin:0}</style>
+</helmet>
+<div style="{{ vars }} width: 390px; min-height: 1240px; box-sizing: border-box; background-color: var(--paper); background-image: radial-gradient(var(--dot) 1px, transparent 1.3px); background-size: 18px 18px; color: var(--ink); font-family: Geist, system-ui, sans-serif; display: flex; flex-direction: column">
+  <main style="flex: 1; padding: 18px 20px 28px; display: flex; flex-direction: column; gap: 20px">
+    <div style="display: flex; justify-content: space-between; align-items: center">
+      <a href="Ruta.dc.html" style="display: flex; align-items: center; gap: 6px; min-height: 44px; color: var(--ink); text-decoration: none; font-size: 14px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>Ruta</a>
+      <span style="font-family: 'Geist Mono', monospace; font-size: 12px; color: var(--sub)">git log --graph</span>
+    </div>
+    <header style="display: flex; flex-direction: column; gap: 6px">
+      <h1 style="margin: 0; font-family: Archivo, sans-serif; font-stretch: 125%; font-size: 30px; font-weight: 900; letter-spacing: -0.045em; line-height: 1">El mapa</h1>
+      <p style="margin: 0; font-size: 14px; line-height: 1.5; color: var(--sub)">Las seis ramas salen de main el 16 nov y vuelven a juntarse en mayo de 2028. Lo hecho va en trazo lleno; lo que viene, punteado.</p>
+    </header>
+    <div role="tablist" aria-label="Rango" style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); border: 1px solid var(--line); border-radius: 6px; overflow: hidden">
+      <sc-for list="{{ ranges }}" as="r" hint-placeholder-count="3">
+        <button role="tab" aria-selected="{{ r.on }}" onClick="{{ r.pick }}" style="{{ r.st }}">{{ r.label }}</button>
+      </sc-for>
+    </div>
+
+    <section aria-label="Historial del plan" style="position: relative; height: 870px">
+      <svg width="144" height="870" viewBox="0 0 144 870" aria-hidden="true" style="position: absolute; left: 0; top: 0; overflow: visible">
+        <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+          <path d="{{ g.sa.d }}" stroke="var(--sa)" stroke-width="2" stroke-dasharray="0.5 6" opacity="0.8"/>
+          <path d="{{ g.hx.d }}" stroke="var(--hx)" stroke-width="2" stroke-dasharray="0.5 6" opacity="0.8"/>
+          <path d="{{ g.eco.d }}" stroke="var(--eco)" stroke-width="2" stroke-dasharray="0.5 6" opacity="0.8"/>
+          <path d="{{ g.ing.d }}" stroke="var(--ing)" stroke-width="2" stroke-dasharray="0.5 6" opacity="0.8"/>
+          <path d="{{ g.ru.d }}" stroke="var(--ru)" stroke-width="2" stroke-dasharray="0.5 6" opacity="0.8"/>
+          <path d="{{ g.idi.d }}" stroke="var(--idi)" stroke-width="2" stroke-dasharray="0.5 6" opacity="0.8"/>
+          <path d="{{ g.ink.d }}" stroke="var(--ink)" stroke-width="2.6" stroke-dasharray="0.5 7" opacity="0.8"/>
+          <path d="{{ g.sa.s }}" stroke="var(--sa)" stroke-width="2"/>
+          <path d="{{ g.hx.s }}" stroke="var(--hx)" stroke-width="2"/>
+          <path d="{{ g.eco.s }}" stroke="var(--eco)" stroke-width="2"/>
+          <path d="{{ g.ing.s }}" stroke="var(--ing)" stroke-width="2"/>
+          <path d="{{ g.ru.s }}" stroke="var(--ru)" stroke-width="2"/>
+          <path d="{{ g.idi.s }}" stroke="var(--idi)" stroke-width="2"/>
+          <path d="{{ g.ink.s }}" stroke="var(--ink)" stroke-width="2.6"/>
+        </g>
+      </svg>
+      <sc-for list="{{ dots }}" as="d" hint-placeholder-count="14">
+        <span style="{{ d.halo }}"></span><span style="{{ d.st }}"></span>
+      </sc-for>
+      <div style="position: absolute; left: 0; right: 0; top: 0; display: flex; flex-direction: column">
+        <sc-for list="{{ rows }}" as="r" hint-placeholder-count="15">
+          <div style="{{ r.row }}">
+            <span style="{{ r.tagSt }}">{{ r.tag }}</span>
+            <span style="{{ r.textSt }}">{{ r.text }}</span>
+          </div>
+        </sc-for>
+      </div>
+    </section>
+
+    <div style="display: flex; flex-wrap: wrap; gap: 6px 14px; font-family: 'Geist Mono', monospace; font-size: 11.5px; padding-top: 4px; border-top: 1px solid var(--line)">
+      <sc-for list="{{ legend }}" as="g" hint-placeholder-count="7">
+        <span style="{{ g.st }}"><span style="{{ g.sq }}"></span>{{ g.name }}</span>
+      </sc-for>
+    </div>
+  </main>
+  <nav aria-label="Secciones" style="border-top: 1px solid var(--line); background: var(--paper); padding: 10px 12px 14px">
+    <div style="display: grid; grid-template-columns: repeat(5, minmax(0, 1fr))">
+      <sc-for list="{{ nav }}" as="n" hint-placeholder-count="5">
+        <a href="{{ n.href }}" aria-current="{{ n.cur }}" style="{{ n.st }}">
+          <span style="{{ n.pill }}"><span style="{{ n.ico }}"></span></span>
+          <span>{{ n.label }}</span>
+          <sc-if value="{{ n.hasBadge }}" hint-placeholder-val="{{ false }}"><span style="position: absolute; top: 4px; left: calc(50% + 9px); min-width: 18px; height: 18px; padding: 0 5px; box-sizing: border-box; border-radius: 999px; background: var(--ink); color: var(--paper); font-family: 'Geist Mono', monospace; font-size: 10.5px; font-weight: 600; display: grid; place-items: center">{{ n.badge }}</span></sc-if>
+        </a>
+      </sc-for>
+    </div>
+  </nav>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"theme":{"editor":"enum","options":["dark","light"],"default":"dark"},"$preview":{"width":390,"height":1240}}'>
+class Component extends DCLogic {
+  constructor(p) { super(p); this.state = { range: 0 }; }
+  base(active) {
+    const T = { dark: { paper: '#0E0F10', ink: '#EDEDE8', sub: '#9A9D98', line: '#2C2E2D', soft: '#18191A', dot: 'rgba(237,237,232,0.08)', ing: '#6CC4EE', hx: '#B3A4FF', ec: '#FF9F62', sa: '#7FD69A', ru: '#FF8E8E', eco: '#F0D45C', idi: '#F49AC2', a: '38%' }, light: { paper: '#F2F3EF', ink: '#141515', sub: '#585C59', line: '#C9CCC6', soft: '#E7E9E4', dot: 'rgba(20,21,21,0.10)', ing: '#1C7FB0', hx: '#5F4BCF', ec: '#C2560F', sa: '#24854A', ru: '#C23A3A', eco: '#8A6C00', idi: '#B4316F', a: '60%' } };
+    const L = this.props.theme === 'light';
+    const t = L ? T.light : T.dark;
+    let vars = '';
+    for (const k in t) if (k !== 'a') vars += '--' + k + ':' + t[k] + ';';
+    const D = T.dark;
+    for (const k of ['ing', 'hx', 'ec', 'sa', 'ru', 'eco', 'idi']) vars += '--mk-' + k + ':color-mix(in srgb,' + D[k] + ' ' + t.a + ',transparent);';
+    vars += '--mk-nav:color-mix(in srgb,#F0D45C ' + t.a + ',transparent);';
+    const ICO = { Hoy: '<path d="M3 18.5h18M7 18.5a5 5 0 0 1 10 0M12 5v3.2M5 9.6l1.9 1.3M19 9.6l-1.9 1.3"/>', Estudio: '<path d="M12 6.8c-2.2-1.6-5.2-2-8-1.6v12.9c2.8-.4 5.8 0 8 1.6 2.2-1.6 5.2-2 8-1.6V5.2c-2.8-.4-5.8 0-8 1.6zM12 6.8v12.9"/>', Metas: '<path d="M5.5 21V3.5M5.5 4.5h12.5l-2.6 4 2.6 4H5.5"/>', Entreno: '<path d="M6.5 6.5v11M17.5 6.5v11M3.5 9.5v5M20.5 9.5v5M6.5 12h11"/>', Perfil: '<circle cx="12" cy="9.5" r="5.5"/><path d="M9 14.6 7.6 21l4.4-2.2 4.4 2.2-1.4-6.4"/>' };
+    const mask = (p) => { const u = 'url(data:image/svg+xml,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">' + p + '</svg>') + ')'; return 'width:22px;height:22px;background:currentColor;-webkit-mask:' + u + ' center / 22px 22px no-repeat;mask:' + u + ' center / 22px 22px no-repeat'; };
+    const nav = [['Hoy', 'Hoy.dc.html', ''], ['Estudio', 'Estudio.dc.html', '22'], ['Metas', 'Ruta.dc.html', ''], ['Entreno', 'Rutinas.dc.html', ''], ['Perfil', 'Logros.dc.html', '']].map(([label, href, badge]) => { const on = label === active; return { label, href, badge, hasBadge: !!badge && !on, cur: on ? 'page' : 'false', ico: mask(ICO[label]),
+      st: 'position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;min-height:60px;text-decoration:none;font-size:11.5px;letter-spacing:0.01em;color:' + (on ? 'var(--ink);font-weight:600' : 'var(--sub)'),
+      pill: 'width:54px;height:32px;display:grid;place-items:center;' + (on ? 'background:var(--mk-nav);clip-path:polygon(9% 0,100% 0,91% 100%,0 100%)' : '') }; });
+    return { vars, nav };
+  }
+  renderVals() {
+    const { vars, nav } = this.base('Metas');
+    // Ramas: 0 main, 1 ingles, 2 trabajo, 3 programacion, 4 matematica, 5 handyx, 6 salud
+    const K = ['main', 'ingles', 'trabajo', 'programacion', 'matematica', 'handyx', 'salud'];
+    const TOK = ['ink', 'idi', 'ru', 'ing', 'eco', 'hx', 'sa'];
+    const X = (k) => 16 + k * 19;
+    const Y = (i) => 29 + 58 * i;
+    const HEAD = 8, LAST = 14;
+    // [rama, texto, etiqueta, rama que entrega o null, tipo]  · arriba lo que viene
+    const raw = [
+      [0, 'Todo vuelve a main: senior ML + DevSecOps + cloud', 'T+18 · mayo 2028', null, 'hito'],
+      [null, '10 proyectos, 3 certificaciones, W1 a W3 y el C1 en el medio', '⋮ 69 semanas', null, 'gap'],
+      [0, 'Trabajo remoto de USD 3.000 a 5.000', 'T+2 · 11 ene', null, 'hito'],
+      [1, 'Empieza el bloque diario hacia el C1', 'ingles · 11 ene', 2],
+      [3, 'P2 · Escudo · medicina', 'programacion · 4 ene', null],
+      [2, 'Faro v1 entra al portfolio', 'trabajo · 28 dic', 3],
+      [3, 'P1 · Faro v1 con tráiler y landing', 'programacion · 27 dic', null],
+      [1, 'Lo que falló en la entrevista, a tarjetas', 'ingles · 17 dic', 2],
+      [3, 'Faro v1 · semana 3 de 4', 'HEAD · hoy 14 dic', null, 'head'],
+      [4, 'Test del cap. 3 aprobado', 'matematica · 11 dic', null],
+      [2, 'Entrevista agendada para el jueves', 'trabajo · 10 dic', null],
+      [5, 'Primera operación cerrada', 'handyx · 4 dic', null],
+      [2, 'CV, LinkedIn y portfolio listos', 'trabajo · 30 nov', 3],
+      [3, 'P0 · consolidación cerrada', 'programacion · 29 nov', null],
+      [0, 'Arranca el plan: seis ramas salen de main', 'T+0 · 16 nov', null, 'hito']
+    ];
+    const g = {}; TOK.forEach((k) => (g[k] = { s: 'M0 0', d: 'M0 0' }));
+    const y0 = Y(0), yh = Y(HEAD), yl = Y(LAST);
+    g.ink.s += ' M16 ' + yl + ' V' + yh; g.ink.d += ' M16 ' + yh + ' V' + y0;
+    for (let k = 1; k < 7; k++) {
+      const x = X(k), T = TOK[k];
+      g[T].s += ' M16 ' + yl + ' C16 ' + (yl - 26) + ' ' + x + ' ' + (yl - 20) + ' ' + x + ' ' + (yl - 46) + ' V' + yh;
+      g[T].d += ' M' + x + ' ' + yh + ' V' + (y0 + 92) + ' C' + x + ' ' + (y0 + 40) + ' 16 ' + (y0 + 52) + ' 16 ' + y0;
+    }
+    raw.forEach(([lane, , , src], i) => {
+      if (src == null || lane == null) return;
+      const xs = X(src), xt = X(lane), yi = Y(i);
+      const seg = ' M' + xs + ' ' + (yi + 50) + ' C' + xs + ' ' + (yi + 22) + ' ' + xt + ' ' + (yi + 30) + ' ' + xt + ' ' + yi;
+      if (i >= HEAD) g[TOK[src]].s += seg; else g[TOK[src]].d += seg;
+    });
+    const dots = [];
+    raw.forEach(([lane, , , , kind], i) => {
+      if (lane == null) return;
+      const past = i >= HEAD, head = kind === 'head', hito = kind === 'hito';
+      const s = head ? 14 : hito ? 13 : 10, c = 'var(--' + TOK[lane] + ')';
+      const x = X(lane), y = Y(i);
+      dots.push({
+        halo: head ? 'position:absolute;left:' + (x - 15) + 'px;top:' + (y - 15) + 'px;width:30px;height:30px;border-radius:50%;background:var(--mk-' + TOK[lane] + ')' : 'display:none',
+        st: 'position:absolute;box-sizing:border-box;left:' + (x - s / 2) + 'px;top:' + (y - s / 2) + 'px;width:' + s + 'px;height:' + s + 'px;border-radius:3px;' + (past || hito ? 'background:' + c + ';border:2.5px solid var(--paper);box-shadow:0 0 0 1.5px ' + c : 'background:var(--paper);border:2px solid ' + c)
+      });
+    });
+    const rows = raw.map(([lane, text, tag, src, kind], i) => {
+      const fut = i < HEAD, head = kind === 'head', gap = kind === 'gap';
+      const c = lane == null ? 'var(--sub)' : 'var(--' + TOK[lane] + ')';
+      return { text, tag,
+        row: 'box-sizing:border-box;height:58px;margin-left:146px;display:flex;flex-direction:column;justify-content:center;gap:2px;min-width:0;' + (i < LAST ? 'border-bottom:1px solid var(--line);' : '') + (fut && !gap ? 'opacity:0.72;' : ''),
+        tagSt: 'font-family:Geist Mono,monospace;font-size:11px;letter-spacing:0.02em;color:' + (kind === 'hito' ? 'var(--ink);font-weight:600' : c),
+        textSt: 'font-size:13.5px;line-height:1.3;width:fit-content;' + (gap ? 'color:var(--sub);font-size:12.5px' : '') + (head ? 'font-family:Archivo,sans-serif;font-stretch:112%;font-weight:800;font-size:15px;padding:0 4px;margin-left:-4px;background:linear-gradient(98deg,transparent 2%,var(--mk-ing) 2% 98%,transparent 98%) 0 75% / 100% 55% no-repeat' : '') + (kind === 'hito' ? 'font-weight:600' : '') };
+    });
+    const labels = ['Este mes', 'Trimestre', '18 meses'];
+    const ranges = labels.map((label, i) => { const on = this.state.range === i; return { label, on: on ? 'true' : 'false', pick: () => this.setState({ range: i }),
+      st: 'min-height:40px;border:0;font:' + (on ? '600' : '400') + ' 13px Geist,sans-serif;cursor:pointer;background:' + (on ? 'var(--ink);color:var(--paper)' : 'transparent;color:var(--ink)') }; });
+    const legend = K.map((name, i) => ({ name, st: 'display:inline-flex;align-items:center;gap:6px;color:var(--' + TOK[i] + ')', sq: 'width:9px;height:9px;border-radius:2px;background:var(--' + TOK[i] + ')' }));
+    return { vars, nav, g, dots, rows, ranges, legend };
+  }
+}
+</script>
+</body>
+</html>

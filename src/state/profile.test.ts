@@ -65,12 +65,12 @@ describe('cierre, sellos y ajustes', () => {
   it('las tareas elegidas pasan a mañana y las demás quedan en el día', () => {
     const pend = getState().days[D0].blocks[0].tasks;
     closeDay(D0, { victoria: '', manana: '', carry: [pend[0].id], score: 0 });
-    expect(getState().carry[addDays(D0, 1)].math).toEqual([pend[0].t]);
+    expect(getState().carry[addDays(D0, 1)].rutina).toEqual([pend[0].t]);
     expect(getState().days[D0].blocks[0].tasks.map((t) => t.id)).toEqual(pend.slice(1).map((t) => t.id));
   });
 
-  it('un día con las 8 metas es "Día perfecto" y suma 1 % de mejora', () => {
-    hacer(D0, 8);
+  it('un día con todas las metas es "Día perfecto" y suma 1 % de mejora', () => {
+    hacer(D0, 10);
     expect(syncSeals(D0)).toContain('dia-perfecto');
     expect(getState().profile.seals['dia-perfecto']).toBe(D0);
     expect(syncSeals(D0)).toEqual([]);

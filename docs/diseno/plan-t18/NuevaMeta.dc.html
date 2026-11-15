@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Nueva meta</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,500..900&amp;family=Geist:wght@400;500;600&amp;family=Geist+Mono:wght@400;500;600&amp;display=swap">
+<style>body{margin:0}</style>
+</helmet>
+<div style="{{ vars }} width: 390px; min-height: 1080px; box-sizing: border-box; background-color: var(--paper); background-image: radial-gradient(var(--dot) 1px, transparent 1.3px); background-size: 18px 18px; color: var(--ink); font-family: Geist, system-ui, sans-serif; display: flex; flex-direction: column; padding: 18px 20px 28px; gap: 24px">
+
+  <div style="display: flex; justify-content: space-between; align-items: center">
+    <a href="Semana.dc.html" style="display: flex; align-items: center; min-height: 44px; color: var(--ink); text-decoration: none; font-size: 14px">Cancelar</a>
+    <span style="font-family: 'Geist Mono', monospace; font-size: 12px; color: var(--sub)">nueva meta</span>
+  </div>
+
+  <label for="meta" style="display: flex; flex-direction: column; gap: 8px">
+    <span style="font-family: 'Geist Mono', monospace; font-size: 11.5px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--sub)">¿Qué querés lograr?</span>
+    <input id="meta" type="text" value="Ventas de Roofy" style="border: 0; border-bottom: 1px solid var(--ink); background: transparent; color: var(--ink); font-family: Archivo, sans-serif; font-stretch: 112%; font-size: 28px; font-weight: 800; padding: 6px 0">
+  </label>
+
+  <fieldset style="border: 0; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px">
+    <legend style="font-family: 'Geist Mono', monospace; font-size: 11.5px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--sub); margin-bottom: 10px">Horizonte</legend>
+    <div style="display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); border: 1px solid var(--line); border-radius: 6px; overflow: hidden">
+      <sc-for list="{{ horizons }}" as="h" hint-placeholder-count="5"><button aria-pressed="{{ h.on }}" style="{{ h.st }}">{{ h.n }}</button></sc-for>
+    </div>
+  </fieldset>
+
+  <fieldset style="border: 0; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px">
+    <legend style="font-family: 'Geist Mono', monospace; font-size: 11.5px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--sub); margin-bottom: 10px">Área</legend>
+    <div style="display: flex; flex-wrap: wrap; gap: 8px">
+      <sc-for list="{{ areas }}" as="a" hint-placeholder-count="6"><button aria-pressed="{{ a.on }}" style="{{ a.st }}"><span style="{{ a.dot }}"></span>{{ a.n }}</button></sc-for>
+    </div>
+  </fieldset>
+
+  <fieldset style="border: 0; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px">
+    <legend style="font-family: 'Geist Mono', monospace; font-size: 11.5px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--sub); margin-bottom: 10px">Rama del plan T+18 · opcional</legend>
+    <div style="display: flex; flex-wrap: wrap; gap: 6px">
+      <button aria-pressed="true" style="min-height: 40px; padding: 0 12px; border-radius: 6px; border: 1.5px solid var(--ink); background: var(--ink); color: var(--paper); font-family: 'Geist Mono', monospace; font-size: 12px">ninguna</button>
+      <button aria-pressed="false" style="min-height: 40px; padding: 0 12px; border-radius: 6px; border: 1.5px solid var(--ing); background: transparent; color: var(--ing); font-family: 'Geist Mono', monospace; font-size: 12px">programacion</button>
+      <button aria-pressed="false" style="min-height: 40px; padding: 0 12px; border-radius: 6px; border: 1.5px solid var(--eco); background: transparent; color: var(--eco); font-family: 'Geist Mono', monospace; font-size: 12px">matematica</button>
+      <button aria-pressed="false" style="min-height: 40px; padding: 0 12px; border-radius: 6px; border: 1.5px solid var(--ru); background: transparent; color: var(--ru); font-family: 'Geist Mono', monospace; font-size: 12px">trabajo</button>
+      <button aria-pressed="false" style="min-height: 40px; padding: 0 12px; border-radius: 6px; border: 1.5px solid #F49AC2; background: transparent; color: #F49AC2; font-family: 'Geist Mono', monospace; font-size: 12px">ingles</button>
+      <button aria-pressed="false" style="min-height: 40px; padding: 0 12px; border-radius: 6px; border: 1.5px solid var(--hx); background: transparent; color: var(--hx); font-family: 'Geist Mono', monospace; font-size: 12px">handyx</button>
+      <button aria-pressed="false" style="min-height: 40px; padding: 0 12px; border-radius: 6px; border: 1.5px solid var(--sa); background: transparent; color: var(--sa); font-family: 'Geist Mono', monospace; font-size: 12px">salud</button>
+    </div>
+    <span style="font-size: 12.5px; color: var(--sub)">Con rama, la meta suma al avance de esa rama en la Ruta y aparece en el mapa.</span>
+  </fieldset>
+
+  <fieldset style="border: 0; margin: 0; padding: 0; display: flex; flex-direction: column">
+    <legend style="font-family: 'Geist Mono', monospace; font-size: 11.5px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--sub); margin-bottom: 6px">Tipo</legend>
+    <sc-for list="{{ types }}" as="ty" hint-placeholder-count="3">
+      <label style="display: grid; grid-template-columns: 24px 1fr; gap: 12px; align-items: center; min-height: 58px; border-bottom: 1px solid var(--line)">
+        <span style="{{ ty.radio }}"></span>
+        <span style="display: flex; flex-direction: column; gap: 2px"><span style="font-size: 15px">{{ ty.n }}</span><span style="font-size: 12.5px; color: var(--sub)">{{ ty.d }}</span></span>
+      </label>
+    </sc-for>
+  </fieldset>
+
+  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px">
+    <label for="target" style="display: flex; flex-direction: column; gap: 6px; font-size: 12.5px; color: var(--sub)">Llegar a<input id="target" type="number" value="23" style="min-height: 48px; border: 1px solid var(--line); border-radius: 6px; background: transparent; color: var(--ink); font-family: 'Geist Mono', monospace; font-size: 20px; padding: 0 12px"></label>
+    <label for="unit" style="display: flex; flex-direction: column; gap: 6px; font-size: 12.5px; color: var(--sub)">Unidad<input id="unit" type="text" value="ventas" style="min-height: 48px; border: 1px solid var(--line); border-radius: 6px; background: transparent; color: var(--ink); font-family: Geist, sans-serif; font-size: 16px; padding: 0 12px"></label>
+  </div>
+
+  <a href="Semana.dc.html" style="margin-top: auto; display: flex; align-items: center; justify-content: center; min-height: 52px; border-radius: 6px; background: var(--ink); color: var(--paper); text-decoration: none; font-size: 15.5px; font-weight: 600">Guardar meta</a>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"theme":{"editor":"enum","options":["dark","light"],"default":"dark"},"$preview":{"width":390,"height":1080}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const T = { dark: { paper: '#0E0F10', ink: '#EDEDE8', sub: '#9A9D98', line: '#2C2E2D', dot: 'rgba(237,237,232,0.08)', ing: '#6CC4EE', hx: '#B3A4FF', ec: '#FF9F62', sa: '#7FD69A', ru: '#FF8E8E', eco: '#F0D45C' }, light: { paper: '#F2F3EF', ink: '#141515', sub: '#585C59', line: '#C9CCC6', dot: 'rgba(20,21,21,0.10)', ing: '#1C7FB0', hx: '#5F4BCF', ec: '#C2560F', sa: '#24854A', ru: '#C23A3A', eco: '#8A6C00' } };
+    const t = T[this.props.theme] || T.dark;
+    let vars = '';
+    for (const k in t) vars += '--' + k + ':' + t[k] + ';';
+    const horizons = ['Día', 'Semana', 'Mes', 'Bim.', 'Año'].map((n, i) => ({ n, on: String(i === 1), st: 'min-height:44px;border:0;' + (i < 4 ? 'border-right:1px solid var(--line);' : '') + 'font-family:Geist,sans-serif;font-size:13px;' + (i === 1 ? 'background:var(--ink);color:var(--paper);font-weight:600' : 'background:transparent;color:var(--ink)') }));
+    const areas = [['Ingeniería','ing'],['Handyx','hx'],['Eclipse','ec'],['Salud','sa'],['Rutina','ru'],['Economía','eco']].map(([n, k]) => ({ n, on: String(k === 'ec'),
+      st: 'min-height:40px;padding:0 12px;border-radius:999px;display:flex;align-items:center;gap:8px;font-family:Geist,sans-serif;font-size:13.5px;color:var(--ink);background:transparent;border:1px solid ' + (k === 'ec' ? 'var(--ink)' : 'var(--line)') + (k === 'ec' ? ';font-weight:600' : ''),
+      dot: 'width:9px;height:9px;background:var(--' + k + ')' }));
+    const radio = (on) => 'width:20px;height:20px;border-radius:50%;border:1.5px solid var(--ink);box-sizing:border-box;' + (on ? 'background:radial-gradient(var(--ink) 0 4.5px, transparent 5px)' : '');
+    const types = [
+      { n: 'Tarea', d: 'Se cumple una vez: terminar docs, pagar el alquiler', radio: radio(false) },
+      { n: 'Contador', d: 'Veces por semana: entrenar 7×, meditar 3×', radio: radio(false) },
+      { n: 'Número', d: 'Llegar a una cifra: 23 ventas, 100 usuarios', radio: radio(true) }
+    ];
+    return { vars, horizons, areas, types };
+  }
+}
+</script>
+</body>
+</html>

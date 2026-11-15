@@ -118,3 +118,18 @@
 .meta-ruta { display: block; padding: 0 0 12px 60px; margin-top: -8px; text-decoration: none; position: relative; }
 .meta.con-ruta:not(.abierta) .meta-ruta::after { content: ''; position: absolute; left: 30px; right: 0; bottom: 0; height: 1px; background: var(--linea); }
 .meta-ruta .chip-ruta { margin-top: 0; }
+
+/* Plan T+18: avisos entre ramas y etiqueta de rama bajo cada meta */
+.avisos-ramas { display: grid; gap: 10px; margin: 0 0 22px; }
+.aviso-rama { position: relative; display: grid; gap: 3px; border: 1px solid var(--linea); border-radius: 10px; padding: 12px 14px 12px 20px; color: var(--tinta); text-decoration: none; }
+.aviso-rama::before { content: ''; position: absolute; left: 0; top: 12px; bottom: 12px; width: 4px; background: var(--c); }
+.aviso-rama b { font-weight: 700; font-size: 16px; }
+.aviso-rama .sub { font-size: 14px; }
+.aviso-rama .btn-borde { margin-top: 8px; }
+.de-a { font-size: 12px; }
+.meta-rama { position: relative; display: block; font-size: 11px; color: var(--c); padding: 0 0 10px 64px; margin-top: -10px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.meta.con-rama .meta-fila::after { display: none; }
+.meta.con-rama .meta-rama::after { content: ''; position: absolute; left: 30px; right: 0; bottom: 0; height: 1px; background: var(--linea); }
+.meta.con-rama.abierta .meta-rama::after { display: none; }
+.meta-rama.sin { color: var(--sub); }
+.importar-link { margin-top: 18px; }

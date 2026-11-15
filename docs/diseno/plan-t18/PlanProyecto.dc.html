@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Proyecto en curso</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,500..900&amp;family=Geist:wght@400;500;600&amp;family=Geist+Mono:wght@400;500;600&amp;display=swap">
+<style>body{margin:0}</style>
+</helmet>
+<div style="{{ vars }} width: 390px; min-height: 1560px; box-sizing: border-box; background-color: var(--paper); background-image: radial-gradient(var(--dot) 1px, transparent 1.3px); background-size: 18px 18px; color: var(--ink); font-family: Geist, system-ui, sans-serif; display: flex; flex-direction: column">
+  <main style="flex: 1; padding: 18px 20px 28px; display: flex; flex-direction: column; gap: 24px">
+    <div style="display: flex; justify-content: space-between; align-items: center">
+      <a href="Ruta.dc.html" style="display: flex; align-items: center; gap: 6px; min-height: 44px; color: var(--ink); text-decoration: none; font-size: 14px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>Ruta</a>
+      <span style="font-family: 'Geist Mono', monospace; font-size: 12px; color: var(--ing)">programacion · P1 de 10</span>
+    </div>
+    <header style="display: flex; flex-direction: column; gap: 8px">
+      <span style="font-family: 'Geist Mono', monospace; font-size: 11.5px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--sub)">Petróleo · v1</span>
+      <h1 style="margin: 0; font-family: Archivo, sans-serif; font-stretch: 125%; font-size: 34px; font-weight: 900; letter-spacing: -0.045em; line-height: 1; width: fit-content; padding: 0 4px; margin-left: -4px; background: linear-gradient(98deg, transparent 2%, var(--mk-ing) 2% 98%, transparent 98%) 0 80% / 100% 50% no-repeat">Faro</h1>
+      <p style="margin: 0; font-size: 14.5px; line-height: 1.5; color: var(--sub)">Asistente RAG sobre normativa y documentación de operadoras, con cita exacta, tasa de error medida y visor 3D de la instalación.</p>
+    </header>
+
+    <section aria-label="Semanas" style="display: flex; flex-direction: column; gap: 8px">
+      <div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 3px">
+        <span style="height: 8px; background: var(--ing)"></span><span style="height: 8px; background: var(--ing)"></span><span style="height: 8px; background: color-mix(in srgb, var(--ing) 45%, var(--line))"></span><span style="height: 8px; background: var(--line)"></span>
+      </div>
+      <div style="display: flex; justify-content: space-between; font-family: 'Geist Mono', monospace; font-size: 12px; color: var(--sub)"><span><b style="color: var(--ink); font-weight: 600">semana 3 de 4</b> · 30 nov – 27 dic</span><span>examen dom 27</span></div>
+    </section>
+
+    <section aria-label="Qué aprendés" style="display: flex; flex-direction: column; gap: 10px">
+      <span style="font-family: 'Geist Mono', monospace; font-size: 11.5px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--sub)">Qué aprendés</span>
+      <div style="display: flex; flex-wrap: wrap; gap: 6px">
+        <sc-for list="{{ stack }}" as="s" hint-placeholder-count="7"><span style="font-family: 'Geist Mono', monospace; font-size: 12px; padding: 4px 9px; border: 1px solid var(--line); border-radius: 4px">{{ s }}</span></sc-for>
+      </div>
+      <span style="font-size: 13px; color: var(--sub)">Perfil al cerrar: <b style="color: var(--ink); font-weight: 600">Full-stack AI Engineer</b></span>
+    </section>
+
+    <section aria-label="Estándar de entrega" style="display: flex; flex-direction: column; gap: 4px">
+      <div style="display: flex; justify-content: space-between; align-items: baseline; padding-bottom: 6px">
+        <span style="font-family: 'Geist Mono', monospace; font-size: 11.5px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--sub)">Estándar de entrega</span>
+        <span style="font-family: 'Geist Mono', monospace; font-size: 12px; color: var(--sub)">{{ doneN }} de 6</span>
+      </div>
+      <div style="border-top: 1px solid var(--line)">
+        <sc-for list="{{ capas }}" as="c" hint-placeholder-count="6">
+          <div style="display: flex; align-items: flex-start; gap: 14px; padding: 12px 0; border-bottom: 1px solid var(--line)">
+            <button aria-label="{{ c.aria }}" onClick="{{ c.toggle }}" style="{{ c.box }}"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg></button>
+            <span style="display: flex; flex-direction: column; gap: 3px; min-width: 0">
+              <span style="{{ c.tit }}">{{ c.name }}</span>
+              <span style="font-size: 12.5px; line-height: 1.45; color: var(--sub)">{{ c.d }}</span>
+            </span>
+          </div>
+        </sc-for>
+      </div>
+    </section>
+
+    <section aria-label="Tiempo" style="display: flex; flex-direction: column; gap: 10px">
+      <span style="font-family: 'Geist Mono', monospace; font-size: 11.5px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--sub)">Tiempo real contra 55 / 30 / 15</span>
+      <sc-for list="{{ tiempo }}" as="t" hint-placeholder-count="3">
+        <div style="display: flex; flex-direction: column; gap: 5px">
+          <div style="display: flex; justify-content: space-between; font-size: 13.5px"><span>{{ t.name }}</span><span style="font-family: 'Geist Mono', monospace; font-size: 12px; color: var(--sub)">{{ t.real }} · plan {{ t.plan }}</span></div>
+          <div style="position: relative; height: 8px; background: var(--line)"><span style="{{ t.bar }}"></span><span style="{{ t.mark }}"></span></div>
+        </div>
+      </sc-for>
+      <span style="font-size: 12.5px; line-height: 1.45; color: var(--sub)">La línea punteada es el plan. Si el tiempo no alcanza, se recorta producto, nunca tests ni seguridad.</span>
+    </section>
+
+    <section aria-label="Revisiones de código" style="display: flex; flex-direction: column; gap: 6px">
+      <div style="display: flex; justify-content: space-between; align-items: baseline">
+        <span style="font-family: 'Geist Mono', monospace; font-size: 11.5px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--sub)">Revisiones conmigo</span>
+        <a href="PuntosDebiles.dc.html" style="font-size: 13px; color: var(--ink); min-height: 32px; display: inline-flex; align-items: center">Puntos débiles →</a>
+      </div>
+      <div style="border-top: 1px solid var(--line)">
+        <sc-for list="{{ revs }}" as="r" hint-placeholder-count="3">
+          <div style="display: grid; grid-template-columns: 44px minmax(0, 1fr) auto; gap: 10px; align-items: baseline; padding: 11px 0; border-bottom: 1px solid var(--line)">
+            <span style="font-family: 'Geist Mono', monospace; font-size: 12px; color: var(--sub)">{{ r.d }}</span>
+            <span style="font-size: 13.5px; line-height: 1.4">{{ r.t }}</span>
+            <span style="{{ r.st }}">{{ r.tipo }}</span>
+          </div>
+        </sc-for>
+      </div>
+    </section>
+
+    <section style="display: flex; flex-direction: column; gap: 8px; padding: 14px; border: 1.5px solid var(--ink); border-radius: 8px">
+      <span style="font-family: 'Geist Mono', monospace; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--sub)">Al cerrar · dom 27 dic</span>
+      <span style="font-size: 13.5px; line-height: 1.5">Examen de programación conmigo; el resultado entra como JSON. Faro v1 se entrega a <b style="color: var(--ru); font-weight: 600">trabajo</b> (portfolio y demo) y a <b style="color: var(--ec); font-weight: 600">Eclipse</b> (producto vendible).</span>
+      <span style="font-family: 'Geist Mono', monospace; font-size: 12px; color: var(--sub)">Sigue: P2 · Escudo · medicina · 4 ene</span>
+    </section>
+  </main>
+  <nav aria-label="Secciones" style="border-top: 1px solid var(--line); background: var(--paper); padding: 10px 12px 14px">
+    <div style="display: grid; grid-template-columns: repeat(5, minmax(0, 1fr))">
+      <sc-for list="{{ nav }}" as="n" hint-placeholder-count="5">
+        <a href="{{ n.href }}" aria-current="{{ n.cur }}" style="{{ n.st }}">
+          <span style="{{ n.pill }}"><span style="{{ n.ico }}"></span></span>
+          <span>{{ n.label }}</span>
+          <sc-if value="{{ n.hasBadge }}" hint-placeholder-val="{{ false }}"><span style="position: absolute; top: 4px; left: calc(50% + 9px); min-width: 18px; height: 18px; padding: 0 5px; box-sizing: border-box; border-radius: 999px; background: var(--ink); color: var(--paper); font-family: 'Geist Mono', monospace; font-size: 10.5px; font-weight: 600; display: grid; place-items: center">{{ n.badge }}</span></sc-if>
+        </a>
+      </sc-for>
+    </div>
+  </nav>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"theme":{"editor":"enum","options":["dark","light"],"default":"dark"},"$preview":{"width":390,"height":1560}}'>
+class Component extends DCLogic {
+  constructor(p) { super(p); this.state = { done: { 0: true, 5: true } }; }
+  base(active) {
+    const T = { dark: { paper: '#0E0F10', ink: '#EDEDE8', sub: '#9A9D98', line: '#2C2E2D', soft: '#18191A', dot: 'rgba(237,237,232,0.08)', ing: '#6CC4EE', hx: '#B3A4FF', ec: '#FF9F62', sa: '#7FD69A', ru: '#FF8E8E', eco: '#F0D45C', idi: '#F49AC2', a: '38%' }, light: { paper: '#F2F3EF', ink: '#141515', sub: '#585C59', line: '#C9CCC6', soft: '#E7E9E4', dot: 'rgba(20,21,21,0.10)', ing: '#1C7FB0', hx: '#5F4BCF', ec: '#C2560F', sa: '#24854A', ru: '#C23A3A', eco: '#8A6C00', idi: '#B4316F', a: '60%' } };
+    const L = this.props.theme === 'light';
+    const t = L ? T.light : T.dark;
+    let vars = '';
+    for (const k in t) if (k !== 'a') vars += '--' + k + ':' + t[k] + ';';
+    const D = T.dark;
+    for (const k of ['ing', 'hx', 'ec', 'sa', 'ru', 'eco', 'idi']) vars += '--mk-' + k + ':color-mix(in srgb,' + D[k] + ' ' + t.a + ',transparent);';
+    vars += '--mk-nav:color-mix(in srgb,#F0D45C ' + t.a + ',transparent);';
+    const ICO = { Hoy: '<path d="M3 18.5h18M7 18.5a5 5 0 0 1 10 0M12 5v3.2M5 9.6l1.9 1.3M19 9.6l-1.9 1.3"/>', Estudio: '<path d="M12 6.8c-2.2-1.6-5.2-2-8-1.6v12.9c2.8-.4 5.8 0 8 1.6 2.2-1.6 5.2-2 8-1.6V5.2c-2.8-.4-5.8 0-8 1.6zM12 6.8v12.9"/>', Metas: '<path d="M5.5 21V3.5M5.5 4.5h12.5l-2.6 4 2.6 4H5.5"/>', Entreno: '<path d="M6.5 6.5v11M17.5 6.5v11M3.5 9.5v5M20.5 9.5v5M6.5 12h11"/>', Perfil: '<circle cx="12" cy="9.5" r="5.5"/><path d="M9 14.6 7.6 21l4.4-2.2 4.4 2.2-1.4-6.4"/>' };
+    const mask = (p) => { const u = 'url(data:image/svg+xml,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">' + p + '</svg>') + ')'; return 'width:22px;height:22px;background:currentColor;-webkit-mask:' + u + ' center / 22px 22px no-repeat;mask:' + u + ' center / 22px 22px no-repeat'; };
+    const nav = [['Hoy', 'Hoy.dc.html', ''], ['Estudio', 'Estudio.dc.html', '22'], ['Metas', 'Ruta.dc.html', ''], ['Entreno', 'Rutinas.dc.html', ''], ['Perfil', 'Logros.dc.html', '']].map(([label, href, badge]) => { const on = label === active; return { label, href, badge, hasBadge: !!badge && !on, cur: on ? 'page' : 'false', ico: mask(ICO[label]),
+      st: 'position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;min-height:60px;text-decoration:none;font-size:11.5px;letter-spacing:0.01em;color:' + (on ? 'var(--ink);font-weight:600' : 'var(--sub)'),
+      pill: 'width:54px;height:32px;display:grid;place-items:center;' + (on ? 'background:var(--mk-nav);clip-path:polygon(9% 0,100% 0,91% 100%,0 100%)' : '') }; });
+    return { vars, nav };
+  }
+  renderVals() {
+    const { vars, nav } = this.base('Metas');
+    const stack = ['Python', 'FastAPI', 'RAG y evals', 'Docker', 'GitHub Actions', 'AWS', 'Three.js'];
+    const CAP = [
+      ['UX/UI', 'Sistema de diseño propio, claro y oscuro, estados vacíos y de error, accesible.'],
+      ['3D útil', 'Visor de la instalación que marca la norma citada. Fluido en el celular.'],
+      ['Animación y tráiler', 'Transiciones con propósito y un tráiler de 60 a 90 s.'],
+      ['Documentación', 'README en inglés, arquitectura, decisiones, guía de demo, API y runbook.'],
+      ['Venta', 'Landing, demo con datos de ejemplo, one-pager, precio y caso de estudio.'],
+      ['Ingeniería', 'CI/CD, tests, evals, sección de seguridad y monitoreo.']
+    ];
+    const d = this.state.done;
+    const capas = CAP.map(([name, desc], i) => { const on = !!d[i]; return { name, d: desc, aria: on ? 'Desmarcar ' + name : 'Marcar ' + name,
+      toggle: () => this.setState({ done: { ...this.state.done, [i]: !this.state.done[i] } }),
+      box: 'flex:none;width:22px;height:22px;margin-top:1px;padding:0;border-radius:3px;border:1.5px solid var(--ink);display:flex;align-items:center;justify-content:center;cursor:pointer;' + (on ? 'background:var(--ink);color:var(--paper)' : 'background:transparent;color:transparent'),
+      tit: 'font-size:15px;font-weight:600;width:fit-content;' + (on ? 'padding:0 3px;margin-left:-3px;background:linear-gradient(98deg,transparent 1%,var(--mk-ing) 1% 98%,transparent 98%) 0 70% / 100% 52% no-repeat' : '') }; });
+    const doneN = CAP.filter((_, i) => d[i]).length;
+    const tiempo = [['Núcleo técnico', 62, 55, 'ing'], ['Producto: UX/UI y 3D', 28, 30, 'hx'], ['Lanzamiento', 10, 15, 'ec']].map(([name, real, plan, c]) => ({ name, real: real + ' %', plan: plan + ' %',
+      bar: 'position:absolute;left:0;top:0;bottom:0;width:' + real + '%;background:var(--' + c + ')',
+      mark: 'position:absolute;top:-4px;bottom:-4px;left:' + plan + '%;border-left:1.5px dashed var(--ink)' }));
+    const tipoC = { concepto: 'ru', 'técnica': 'eco', descuido: 'sub' };
+    const revs = [['11 dic', 'El retriever no filtra por vigencia de la norma', 'concepto'], ['9 dic', 'Falta timeout y reintento en la llamada al modelo', 'técnica'], ['7 dic', 'Variable sin usar en el test de citas', 'descuido']].map(([dd, t, tipo]) => ({ d: dd, t, tipo,
+      st: 'font-family:Geist Mono,monospace;font-size:11.5px;color:var(--' + tipoC[tipo] + ')' }));
+    return { vars, nav, stack, capas, doneN, tiempo, revs };
+  }
+}
+</script>
+</body>
+</html>

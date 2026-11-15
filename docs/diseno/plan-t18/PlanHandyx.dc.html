@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Handyx · año de prueba</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,500..900&amp;family=Geist:wght@400;500;600&amp;family=Geist+Mono:wght@400;500;600&amp;display=swap">
+<style>body{margin:0}</style>
+</helmet>
+<div style="{{ vars }} width: 390px; min-height: 1240px; box-sizing: border-box; background-color: var(--paper); background-image: radial-gradient(var(--dot) 1px, transparent 1.3px); background-size: 18px 18px; color: var(--ink); font-family: Geist, system-ui, sans-serif; display: flex; flex-direction: column">
+  <main style="flex: 1; padding: 18px 20px 28px; display: flex; flex-direction: column; gap: 24px">
+    <div style="display: flex; justify-content: space-between; align-items: center">
+      <a href="Ruta.dc.html" style="display: flex; align-items: center; gap: 6px; min-height: 44px; color: var(--ink); text-decoration: none; font-size: 14px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>Ruta</a>
+      <span style="font-family: 'Geist Mono', monospace; font-size: 12px; color: var(--hx)">handyx · semana 5 de 52</span>
+    </div>
+    <header style="display: flex; flex-direction: column; gap: 6px">
+      <h1 style="margin: 0; font-family: Archivo, sans-serif; font-stretch: 125%; font-size: 34px; font-weight: 900; letter-spacing: -0.045em; line-height: 1">Handyx</h1>
+      <p style="margin: 0; font-size: 14.5px; line-height: 1.5; color: var(--sub)">Un año de prueba a 3 h por día. El 15 nov 2027 decidís con datos: seguir, delegar o soltar.</p>
+    </header>
+
+    <section aria-label="Cortes del año" style="display: flex; flex-direction: column">
+      <span style="font-family: 'Geist Mono', monospace; font-size: 11.5px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--sub); padding-bottom: 8px">Cuatro cortes</span>
+      <sc-for list="{{ cortes }}" as="c" hint-placeholder-count="4">
+        <div style="display: grid; grid-template-columns: 18px minmax(0, 1fr); column-gap: 12px; min-height: 64px">
+          <div style="display: flex; flex-direction: column; align-items: center"><span style="width: 1px; height: 16px; background: var(--line)"></span><span style="{{ c.dot }}"></span><span style="width: 1px; flex: 1; background: var(--line)"></span></div>
+          <div style="padding: 10px 0 12px; border-bottom: 1px solid var(--line); display: flex; flex-direction: column; gap: 3px">
+            <span style="display: flex; justify-content: space-between; gap: 8px"><b style="{{ c.tit }}">{{ c.name }}</b><span style="font-family: 'Geist Mono', monospace; font-size: 12px; color: var(--sub)">{{ c.hasta }}</span></span>
+            <span style="font-size: 13px; line-height: 1.45; color: var(--sub)">{{ c.d }}</span>
+          </div>
+        </div>
+      </sc-for>
+    </section>
+
+    <section aria-label="Horas de la semana" style="display: flex; flex-direction: column; gap: 10px">
+      <div style="display: flex; justify-content: space-between; align-items: baseline">
+        <span style="font-family: 'Geist Mono', monospace; font-size: 11.5px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--sub)">Horas esta semana</span>
+        <b style="font-family: 'Geist Mono', monospace; font-size: 14px; font-weight: 500">3 <span style="color: var(--sub)">/ 21 h</span></b>
+      </div>
+      <div style="position: relative; display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 8px; align-items: end; height: 110px; border-bottom: 1px solid var(--line)">
+        <span style="position: absolute; left: 0; right: 0; bottom: 75px; border-top: 1.5px dashed var(--sub)"></span>
+        <sc-for list="{{ dias }}" as="d" hint-placeholder-count="7"><span style="{{ d.bar }}"></span></sc-for>
+      </div>
+      <div style="display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 8px; font-family: 'Geist Mono', monospace; font-size: 11.5px; color: var(--sub); text-align: center">
+        <span>L</span><span>M</span><span>M</span><span>J</span><span>V</span><span>S</span><span>D</span>
+      </div>
+      <span style="font-size: 12.5px; color: var(--sub)">La línea punteada son las 3 h del plan. Lunes en curso.</span>
+    </section>
+
+    <section aria-label="Números del corte" style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); border-top: 1px solid var(--line); border-left: 1px solid var(--line)">
+      <sc-for list="{{ nums }}" as="n" hint-placeholder-count="4">
+        <span style="display: flex; flex-direction: column; gap: 4px; padding: 12px; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line)">
+          <span style="font-size: 12.5px; color: var(--sub)">{{ n.l }}</span>
+          <b style="font-family: 'Geist Mono', monospace; font-size: 20px; font-weight: 500">{{ n.v }}</b>
+        </span>
+      </sc-for>
+    </section>
+
+    <section style="display: flex; flex-direction: column; gap: 8px; padding: 14px; border: 1.5px solid var(--ink); border-radius: 8px">
+      <span style="font-family: 'Geist Mono', monospace; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--sub)">Criterio para el 15 nov 2027</span>
+      <span style="font-size: 13.5px; line-height: 1.5">Seguir si deja al menos <b>[tu umbral de ingreso]</b> por mes con <b>[horas máximas]</b> por semana. Si no, delegar u ordenar la salida. Las 3 h vuelven a programación o a Eclipse.</span>
+    </section>
+  </main>
+  <nav aria-label="Secciones" style="border-top: 1px solid var(--line); background: var(--paper); padding: 10px 12px 14px">
+    <div style="display: grid; grid-template-columns: repeat(5, minmax(0, 1fr))">
+      <sc-for list="{{ nav }}" as="n" hint-placeholder-count="5">
+        <a href="{{ n.href }}" aria-current="{{ n.cur }}" style="{{ n.st }}">
+          <span style="{{ n.pill }}"><span style="{{ n.ico }}"></span></span>
+          <span>{{ n.label }}</span>
+          <sc-if value="{{ n.hasBadge }}" hint-placeholder-val="{{ false }}"><span style="position: absolute; top: 4px; left: calc(50% + 9px); min-width: 18px; height: 18px; padding: 0 5px; box-sizing: border-box; border-radius: 999px; background: var(--ink); color: var(--paper); font-family: 'Geist Mono', monospace; font-size: 10.5px; font-weight: 600; display: grid; place-items: center">{{ n.badge }}</span></sc-if>
+        </a>
+      </sc-for>
+    </div>
+  </nav>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"theme":{"editor":"enum","options":["dark","light"],"default":"dark"},"$preview":{"width":390,"height":1240}}'>
+class Component extends DCLogic {
+  base(active) {
+    const T = { dark: { paper: '#0E0F10', ink: '#EDEDE8', sub: '#9A9D98', line: '#2C2E2D', soft: '#18191A', dot: 'rgba(237,237,232,0.08)', ing: '#6CC4EE', hx: '#B3A4FF', ec: '#FF9F62', sa: '#7FD69A', ru: '#FF8E8E', eco: '#F0D45C', idi: '#F49AC2', a: '38%' }, light: { paper: '#F2F3EF', ink: '#141515', sub: '#585C59', line: '#C9CCC6', soft: '#E7E9E4', dot: 'rgba(20,21,21,0.10)', ing: '#1C7FB0', hx: '#5F4BCF', ec: '#C2560F', sa: '#24854A', ru: '#C23A3A', eco: '#8A6C00', idi: '#B4316F', a: '60%' } };
+    const L = this.props.theme === 'light';
+    const t = L ? T.light : T.dark;
+    let vars = '';
+    for (const k in t) if (k !== 'a') vars += '--' + k + ':' + t[k] + ';';
+    const D = T.dark;
+    for (const k of ['ing', 'hx', 'ec', 'sa', 'ru', 'eco', 'idi']) vars += '--mk-' + k + ':color-mix(in srgb,' + D[k] + ' ' + t.a + ',transparent);';
+    vars += '--mk-nav:color-mix(in srgb,#F0D45C ' + t.a + ',transparent);';
+    const ICO = { Hoy: '<path d="M3 18.5h18M7 18.5a5 5 0 0 1 10 0M12 5v3.2M5 9.6l1.9 1.3M19 9.6l-1.9 1.3"/>', Estudio: '<path d="M12 6.8c-2.2-1.6-5.2-2-8-1.6v12.9c2.8-.4 5.8 0 8 1.6 2.2-1.6 5.2-2 8-1.6V5.2c-2.8-.4-5.8 0-8 1.6zM12 6.8v12.9"/>', Metas: '<path d="M5.5 21V3.5M5.5 4.5h12.5l-2.6 4 2.6 4H5.5"/>', Entreno: '<path d="M6.5 6.5v11M17.5 6.5v11M3.5 9.5v5M20.5 9.5v5M6.5 12h11"/>', Perfil: '<circle cx="12" cy="9.5" r="5.5"/><path d="M9 14.6 7.6 21l4.4-2.2 4.4 2.2-1.4-6.4"/>' };
+    const mask = (p) => { const u = 'url(data:image/svg+xml,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">' + p + '</svg>') + ')'; return 'width:22px;height:22px;background:currentColor;-webkit-mask:' + u + ' center / 22px 22px no-repeat;mask:' + u + ' center / 22px 22px no-repeat'; };
+    const nav = [['Hoy', 'Hoy.dc.html', ''], ['Estudio', 'Estudio.dc.html', '22'], ['Metas', 'Ruta.dc.html', ''], ['Entreno', 'Rutinas.dc.html', ''], ['Perfil', 'Logros.dc.html', '']].map(([label, href, badge]) => { const on = label === active; return { label, href, badge, hasBadge: !!badge && !on, cur: on ? 'page' : 'false', ico: mask(ICO[label]),
+      st: 'position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;min-height:60px;text-decoration:none;font-size:11.5px;letter-spacing:0.01em;color:' + (on ? 'var(--ink);font-weight:600' : 'var(--sub)'),
+      pill: 'width:54px;height:32px;display:grid;place-items:center;' + (on ? 'background:var(--mk-nav);clip-path:polygon(9% 0,100% 0,91% 100%,0 100%)' : '') }; });
+    return { vars, nav };
+  }
+  renderVals() {
+    const { vars, nav } = this.base('Metas');
+    const cortes = [['Lanzar', 'hasta 14 feb', 'Primeras operaciones y feedback de usuarios.', 'now'], ['Operar y delegar', 'hasta 16 may', 'Procesos escritos; lo repetitivo pasa a otra persona o a un agente.', ''], ['Rentabilidad', 'hasta 15 ago', 'Margen por operación y costo de conseguir cada cliente.', ''], ['Decidir', 'hasta 14 nov', 'Con los tres cortes anteriores sobre la mesa.', '']].map(([name, hasta, d, st]) => ({ name, hasta, d,
+      dot: 'width:11px;height:11px;flex:none;border-radius:2px;' + (st === 'now' ? 'background:var(--paper);border:2px solid var(--hx)' : 'border:1.5px solid var(--hx)'),
+      tit: st === 'now' ? 'font-family:Archivo,sans-serif;font-stretch:112%;font-weight:800;font-size:17px;padding:0 4px;margin-left:-4px;background:linear-gradient(98deg,transparent 2%,var(--mk-hx) 2% 98%,transparent 98%) 0 75% / 100% 55% no-repeat' : 'font-size:15px;font-weight:500' }));
+    const H = [3, 0, 0, 0, 0, 0, 0];
+    const dias = H.map((h, i) => ({ bar: 'display:block;height:' + Math.max(h / 4 * 100, 3) + 'px;background:' + (h ? 'var(--hx)' : 'var(--line)') }));
+    const nums = [{ l: 'Operaciones', v: '3' }, { l: 'Usuarios activos', v: '41' }, { l: 'Horas del año', v: '78 / 1.092' }, { l: 'Margen por operación', v: 'corte 3' }];
+    return { vars, nav, cortes, dias, nums };
+  }
+}
+</script>
+</body>
+</html>

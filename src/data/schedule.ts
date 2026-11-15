@@ -1,4 +1,4 @@
-import { dayTypeOf, isMeta, planRoutine, toTemplate, type DayType } from './routines';
+import { ajustarDia, dayTypeOf, isMeta, planRoutine, toTemplate, type Ajustes, type DayType } from './routines';
 import type { Block, BlockTemplate, RoutineId } from './types';
 import { toMin } from './time';
 
@@ -13,8 +13,8 @@ export interface PlannedBlock {
  * el modo del modal "Buen día" (04:00 completo, 05:00 corto u otra hora). Lo que no es meta
  * (despertar, comidas, descanso y sueño) no entra.
  */
-export function planDay(date: string, routine: RoutineId, wake?: string, type: DayType = dayTypeOf(date)): PlannedBlock[] {
-  return planRoutine(type, routine, wake)
+export function planDay(date: string, routine: RoutineId, wake?: string, type: DayType = dayTypeOf(date), ajustes: Ajustes = {}): PlannedBlock[] {
+  return ajustarDia(planRoutine(type, routine, wake), ajustes)
     .filter((p) => isMeta(p.block))
     .map((p) => ({ tpl: toTemplate(p.block, p.min), start: p.start, min: p.min }));
 }
@@ -35,6 +35,7 @@ export function buildBlocks(plan: PlannedBlock[], carry: Record<string, string[]
     min,
     fixed: !!tpl.fixed,
     ...(tpl.focus === false ? { focus: false } : {}),
+    ...(tpl.rama ? { rama: tpl.rama } : {}),
     tasks: [...tpl.tasks, ...(carry[tpl.key] ?? [])].map((t) => ({ id: newId(), t, done: false })),
   }));
 }

@@ -38,9 +38,9 @@ describe('pomodoros que entran justos', () => {
 });
 
 describe('metas del día', () => {
-  it('8 metas de lunes a viernes, con lo que quedó de ayer sumado a su bloque', () => {
+  it('10 metas de lunes a viernes, con lo que quedó de ayer sumado a su bloque', () => {
     const blocks = buildBlocks(planDay('2026-11-11', 'completo'), { prog: ['Commit de lo avanzado'] });
-    expect(blocks.map((b) => b.n)).toEqual([1, 2, 3, 4, 5, 6, 7, 8]);
+    expect(blocks.map((b) => b.n)).toEqual([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
     expect(blocks.find((b) => b.key === 'prog')!.tasks).toHaveLength(4);
   });
 
@@ -91,8 +91,8 @@ describe('mejora y JSON del día', () => {
   blocks[1].tasks.forEach((t) => (t.done = true));
   const day: DayLog = { date: '2026-11-11', wake: '04:00', routine: 'completo', blocks, notes: ['idea'], focus: [] };
 
-  it('hasta 1 % repartido entre las 8 metas', () => {
-    expect(mejoraDia(day)).toBe(0.25);
+  it('hasta 1 % repartido entre las 10 metas', () => {
+    expect(mejoraDia(day)).toBe(0.2);
     expect(acumulado([1, 1])).toBeCloseTo(2.01);
   });
 
@@ -103,9 +103,13 @@ describe('mejora y JSON del día', () => {
     const j = dayJson(day, settings, { [day.date]: day, [ayer.date]: ayer });
     expect(j.day).toBe(3);
     expect(j.bimester).toEqual({ n: 1, name: 'El despegue', week: 1 });
-    expect(j.blocks).toHaveLength(8);
-    expect(j.blocks[0]).toMatchObject({ n: 1, id: 'math', area: 'ing', start: '04:30', done: true });
-    expect(j.mejora).toEqual({ hoy: 0.25, ayer: 0.125, acumulado: 0.38 });
+    expect(j.blocks).toHaveLength(10);
+    expect(j.blocks[0]).toMatchObject({ n: 1, id: 'rutina', area: 'rutina', start: '04:00', done: true });
+    expect(j.mejora).toEqual({ hoy: 0.2, ayer: 0.1, acumulado: 0.3 });
+    expect(j.blocks[0]).toMatchObject({ rama: 'main' });
+    // Con T0 el 8 nov, el 11 nov es la semana 1 del plan.
+    expect(j.plan).toMatchObject({ semana: 1, bimestre: { n: 1, semana: 1, semanas: 9 } });
+    expect(Object.keys(j.plan!.ramas)).toEqual(['programacion', 'matematica', 'trabajo', 'ingles', 'handyx', 'salud']);
   });
 });
 

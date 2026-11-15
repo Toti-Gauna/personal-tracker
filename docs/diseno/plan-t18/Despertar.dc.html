@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Buen día</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,500..900&amp;family=Geist:wght@400;500;600&amp;family=Geist+Mono:wght@400;500;600&amp;display=swap">
+<style>body{margin:0}</style>
+</helmet>
+<div style="{{ vars }} width: 390px; min-height: 1000px; box-sizing: border-box; position: relative; background-color: var(--paper); background-image: radial-gradient(var(--dot) 1px, transparent 1.3px); background-size: 18px 18px; color: var(--ink); font-family: Geist, system-ui, sans-serif; display: flex; flex-direction: column">
+
+  <div aria-hidden="true" style="padding: 18px 20px; display: flex; flex-direction: column; gap: 24px; opacity: 0.28">
+    <div style="display: flex; justify-content: space-between"><span style="font-family: Archivo, sans-serif; font-stretch: 125%; font-weight: 900; font-size: 20px; letter-spacing: -0.04em">trazo</span><span style="font-family: 'Geist Mono', monospace; font-size: 12px">racha 3 · nivel 4</span></div>
+    <div style="display: flex; flex-direction: column; gap: 6px; padding-bottom: 18px; border-bottom: 1px solid var(--line)"><span style="font-family: 'Geist Mono', monospace; font-size: 11.5px; letter-spacing: 0.12em; text-transform: uppercase">Miércoles 11 nov</span><span style="font-family: Archivo, sans-serif; font-stretch: 125%; font-size: 58px; font-weight: 900; letter-spacing: -0.05em; line-height: 0.9">Día 03</span></div>
+  </div>
+
+  <section role="dialog" aria-modal="true" aria-labelledby="desp-t" style="margin-top: auto; background: var(--paper); border-top: 1px solid var(--ink); border-radius: 18px 18px 0 0; padding: 12px 20px 28px; display: flex; flex-direction: column; gap: 22px">
+    <span style="align-self: center; width: 38px; height: 4px; border-radius: 99px; background: var(--line)" aria-hidden="true"></span>
+
+    <div style="display: flex; flex-direction: column; gap: 8px">
+      <span style="font-family: 'Geist Mono', monospace; font-size: 11.5px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--sub)">Buen día, Toti · 04:06</span>
+      <h2 id="desp-t" style="margin: 0; font-family: Archivo, sans-serif; font-stretch: 125%; font-size: 36px; font-weight: 900; letter-spacing: -0.045em; line-height: 0.98">¿A qué hora te levantaste?</h2>
+    </div>
+
+    <div role="radiogroup" aria-label="Hora de levantarte" style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px">
+      <sc-for list="{{ wake }}" as="w" hint-placeholder-count="2">
+        <div role="radio" aria-checked="{{ w.checked }}" style="{{ w.card }}">
+          <span style="{{ w.time }}">{{ w.h }}</span>
+          <b style="font-size: 14.5px; font-weight: 600">{{ w.name }}</b>
+          <span style="font-size: 12.5px; color: var(--sub); line-height: 1.45">{{ w.d }}</span>
+        </div>
+      </sc-for>
+    </div>
+
+    <div style="display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 12px; min-height: 52px; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line)">
+      <span style="display: flex; flex-direction: column; gap: 2px"><span style="font-size: 14.5px">Otra hora</span><span style="font-size: 12px; color: var(--sub)">Corre los bloques y acorta los flexibles</span></span>
+      <span style="display: flex; align-items: center; border: 1px solid var(--line); border-radius: 6px"><button aria-label="Diez minutos antes" style="width: 40px; height: 40px; border: 0; background: transparent; color: var(--ink); font-size: 18px">−</button><span style="font-family: 'Geist Mono', monospace; font-size: 14px; padding: 0 4px; color: var(--sub)">04:40</span><button aria-label="Diez minutos después" style="width: 40px; height: 40px; border: 0; background: transparent; color: var(--ink); font-size: 18px">+</button></span>
+    </div>
+
+    <div style="display: flex; flex-direction: column; gap: 6px">
+      <span style="font-family: 'Geist Mono', monospace; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--sub)">Así queda tu mañana</span>
+      <sc-for list="{{ plan }}" as="p" hint-placeholder-count="4">
+        <div style="display: grid; grid-template-columns: 48px 1fr auto; gap: 10px; align-items: baseline; min-height: 36px; border-bottom: 1px solid var(--line); padding-top: 8px">
+          <span style="font-family: 'Geist Mono', monospace; font-size: 12.5px">{{ p.t }}</span>
+          <span style="font-size: 14px">{{ p.n }}</span>
+          <span style="{{ p.dSt }}">{{ p.d }}</span>
+        </div>
+      </sc-for>
+    </div>
+
+    <a href="Hoy.dc.html" style="display: flex; align-items: center; justify-content: center; min-height: 54px; border-radius: 6px; background: var(--ink); color: var(--paper); text-decoration: none; font-size: 15.5px; font-weight: 600">Empezar el día</a>
+    <span style="font-size: 12.5px; color: var(--sub); text-align: center; line-height: 1.5; margin-top: -10px">Te lo pregunta una vez por día, la primera vez que abrís Trazo.<br>Las dos rutinas se editan en Ajustes.</span>
+  </section>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"theme":{"editor":"enum","options":["dark","light"],"default":"dark"},"$preview":{"width":390,"height":1000}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const T = { dark: { paper: '#0E0F10', ink: '#EDEDE8', sub: '#9A9D98', line: '#2C2E2D', dot: 'rgba(237,237,232,0.08)', ru: '#FF8E8E', a: '38%' }, light: { paper: '#F2F3EF', ink: '#141515', sub: '#585C59', line: '#C9CCC6', dot: 'rgba(20,21,21,0.10)', ru: '#C23A3A', a: '60%' } };
+    const t = T[this.props.theme] || T.dark;
+    let vars = '';
+    for (const k in t) if (k !== 'a') vars += '--' + k + ':' + t[k] + ';';
+    vars += '--mk-eco:color-mix(in srgb,#F0D45C ' + t.a + ',transparent);';
+    const w = (h, name, d, on) => ({ h, name, d, checked: on ? 'true' : 'false',
+      card: 'display:flex;flex-direction:column;gap:6px;padding:16px 14px;border-radius:8px;' + (on ? 'border:1.5px solid var(--ink)' : 'border:1px solid var(--line)'),
+      time: 'font-family:Geist Mono,monospace;font-size:34px;font-weight:500;letter-spacing:-0.06em;line-height:1.1;width:fit-content;' + (on ? 'padding:0 4px;margin-left:-4px;background:linear-gradient(98deg,transparent 2%,var(--mk-eco) 2% 98%,transparent 98%) 0 80% / 100% 50% no-repeat' : 'color:var(--sub)') });
+    const p = (tm, n, d, changed) => ({ t: tm, n, d, dSt: 'font-family:Geist Mono,monospace;font-size:12px;' + (changed ? 'color:var(--ru)' : 'color:var(--sub)') });
+    return { vars,
+      wake: [w('04:00', 'Día completo', 'Matemática 2 h y programación 2 h', true), w('05:00', 'Día corto', 'Matemática 1 h 30 y programación 1 h 40', false)],
+      plan: [p('04:00', 'Rutina de la mañana', '30 min', false), p('04:30', 'Matemática · CONAMAT', '2 h', false), p('06:30', 'Programación · Faro v1', '2 h', false), p('08:30', 'Acompañar a Abi y correr', 'fijo', false)] };
+  }
+}
+</script>
+</body>
+</html>

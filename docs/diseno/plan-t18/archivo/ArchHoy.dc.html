@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Hoy</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,500..900&amp;family=Geist:wght@400;500;600&amp;family=Geist+Mono:wght@400;500;600&amp;display=swap">
+<style>body{margin:0}</style>
+</helmet>
+<div style="{{ vars }} width: 390px; min-height: 1250px; box-sizing: border-box; background-color: var(--paper); background-image: radial-gradient(var(--dot) 1px, transparent 1.3px); background-size: 18px 18px; color: var(--ink); font-family: Geist, system-ui, sans-serif; display: flex; flex-direction: column">
+  <main style="flex: 1; padding: 18px 20px 24px; display: flex; flex-direction: column; gap: 24px">
+
+    <div style="display: flex; justify-content: space-between; align-items: center">
+      <span style="font-family: Archivo, sans-serif; font-stretch: 125%; font-weight: 900; font-size: 20px; letter-spacing: -0.04em; padding: 0 3px; background: linear-gradient(98deg, transparent 2%, var(--mk-eco) 2% 98%, transparent 98%) 0 80% / 100% 50% no-repeat">trazo</span>
+      <span style="font-family: 'Geist Mono', monospace; font-size: 12px; color: var(--sub)">racha <b style="color: var(--ink); font-weight: 600">3</b> · nivel <b style="color: var(--ink); font-weight: 600">4</b></span>
+    </div>
+
+    <header style="display: flex; flex-direction: column; gap: 6px">
+      <div style="display: flex; justify-content: space-between; align-items: center; gap: 12px"><h1 style="margin: 0; font-family: Archivo, sans-serif; font-stretch: 125%; font-size: 34px; font-weight: 900; letter-spacing: -0.045em; line-height: 1">Hoy</h1></div>
+      <p style="margin: 0; font-size: 14.5px; line-height: 1.5; color: var(--sub)">Miércoles 11 nov, día 03 de El despegue. Ahora toca programación; después, Abi y Handyx.</p>
+    </header>
+    <div style="display: flex; flex-direction: column; gap: 8px; margin-top: -8px">
+      <div style="display: grid; grid-template-columns: repeat(18, minmax(0, 1fr)); gap: 2px" aria-label="11 de 18 tareas">
+        <span style="height: 6px; background: var(--ink)"></span><span style="height: 6px; background: var(--ink)"></span><span style="height: 6px; background: var(--ink)"></span><span style="height: 6px; background: var(--ink)"></span><span style="height: 6px; background: var(--ink)"></span><span style="height: 6px; background: var(--ink)"></span><span style="height: 6px; background: var(--ink)"></span><span style="height: 6px; background: var(--ink)"></span><span style="height: 6px; background: var(--ink)"></span><span style="height: 6px; background: var(--ink)"></span><span style="height: 6px; background: var(--ink)"></span><span style="height: 6px; background: var(--line)"></span><span style="height: 6px; background: var(--line)"></span><span style="height: 6px; background: var(--line)"></span><span style="height: 6px; background: var(--line)"></span><span style="height: 6px; background: var(--line)"></span><span style="height: 6px; background: var(--line)"></span><span style="height: 6px; background: var(--line)"></span>
+      </div>
+      <div style="display: flex; justify-content: space-between; font-family: 'Geist Mono', monospace; font-size: 12px; color: var(--sub)"><span><b style="color: var(--ink); font-weight: 600">61 %</b> · 11 de 18</span><span>semana 1 de 9</span></div>
+    </div>
+    <a href="Cierre.dc.html" style="display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 12px; align-items: center; padding: 12px 14px; border: 1px solid var(--line); border-radius: 8px; color: var(--ink); text-decoration: none; margin-top: -10px">
+      <span style="display: flex; flex-direction: column; gap: 2px"><span style="font-size: 13.5px; font-weight: 600">Mejora de hoy</span><span style="font-size: 11.5px; color: var(--sub)">ayer cerraste +0,63 %</span></span>
+      <span style="display: grid; grid-template-columns: repeat(8, minmax(0, 1fr)); gap: 2px" aria-label="2 de 8 metas del día"><span style="height: 6px; background: var(--eco)"></span><span style="height: 6px; background: var(--eco)"></span><span style="height: 6px; background: var(--line)"></span><span style="height: 6px; background: var(--line)"></span><span style="height: 6px; background: var(--line)"></span><span style="height: 6px; background: var(--line)"></span><span style="height: 6px; background: var(--line)"></span><span style="height: 6px; background: var(--line)"></span></span>
+      <b style="font-family: 'Geist Mono', monospace; font-size: 17px; font-weight: 500">+0,25 %</b>
+    </a>
+
+    <section aria-label="Regla del día" style="display: flex; flex-direction: column">
+      <sc-for list="{{ blocks }}" as="b" hint-placeholder-count="8">
+        <div style="display: grid; grid-template-columns: 50px 14px 1fr; column-gap: 10px; min-height: 58px">
+          <span style="font-family: 'Geist Mono', monospace; font-size: 12px; color: var(--sub); padding-top: 18px">{{ b.start }}</span>
+          <div style="display: flex; flex-direction: column; align-items: center"><span style="width: 1px; height: 20px; background: var(--line)"></span><span style="{{ b.dot }}"></span><span style="width: 1px; flex: 1; background: var(--line)"></span></div>
+          <div style="padding: 14px 0; border-bottom: 1px solid var(--line); display: flex; flex-direction: column; gap: 10px; min-width: 0">
+            <div style="display: flex; justify-content: space-between; align-items: baseline; gap: 10px">
+              <span style="display: flex; align-items: baseline; gap: 8px; min-width: 0"><span style="{{ b.numSt }}">{{ b.num }}</span><span style="{{ b.nameStyle }}">{{ b.name }}</span></span>
+              <span style="font-family: 'Geist Mono', monospace; font-size: 12px; color: var(--sub)">{{ b.count }}</span>
+            </div>
+            <sc-if value="{{ b.now }}" hint-placeholder-val="{{ false }}">
+              <div style="display: flex; flex-direction: column; gap: 2px">
+                <span style="font-family: 'Geist Mono', monospace; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ing)">Ahora · 07:00 · quedan 1 h 30</span>
+                <sc-for list="{{ b.tasks }}" as="t" hint-placeholder-count="3">
+                  <div style="display: flex; align-items: center; gap: 12px; min-height: 44px">
+                    <button aria-label="{{ t.aria }}" style="{{ t.box }}"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg></button>
+                    <span style="{{ t.txt }}">{{ t.text }}</span>
+                  </div>
+                </sc-for>
+                <a href="SesionEstudio.dc.html" style="margin-top: 6px; display: flex; align-items: center; justify-content: center; min-height: 44px; border: 1px solid var(--ink); border-radius: 6px; color: var(--ink); text-decoration: none; font-size: 14px; font-weight: 600">Entrar en foco · sesión de estudio</a>
+              </div>
+            </sc-if>
+          </div>
+        </div>
+      </sc-for>
+    </section>
+
+    <section aria-label="Sumar a la semana" style="display: flex; flex-direction: column; gap: 10px">
+      <span style="font-family: 'Geist Mono', monospace; font-size: 11.5px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--sub)">Sumar a la semana</span>
+      <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); border-top: 1px solid var(--line); border-left: 1px solid var(--line)">
+        <sc-for list="{{ quick }}" as="q" hint-placeholder-count="4">
+          <button style="min-height: 64px; padding: 10px 12px; border: 0; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); background: transparent; color: var(--ink); font-family: Geist, sans-serif; text-align: left; display: flex; flex-direction: column; gap: 4px">
+            <span style="font-size: 13.5px">{{ q.label }}</span>
+            <span style="{{ q.val }}">{{ q.count }}</span>
+          </button>
+        </sc-for>
+      </div>
+    </section>
+  </main>
+
+  <nav aria-label="Secciones" style="border-top: 1px solid var(--line); background: var(--paper); display: flex; flex-direction: column; gap: 8px; padding: 10px 12px 14px">
+    <sc-if value="{{ nav.mini }}" hint-placeholder-val="{{ false }}">
+      <div style="display: grid; grid-template-columns: minmax(0, 1fr) 54px; border: 1px solid var(--line); border-radius: 10px; overflow: hidden; background: linear-gradient(var(--fx), var(--fx)) 0 100% / 24% 2px no-repeat">
+        <a href="Foco.dc.html" style="display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 12px; min-height: 54px; padding: 0 14px; color: var(--ink); text-decoration: none">
+          <span style="width: 8px; height: 8px; background: var(--fx)"></span>
+          <span style="display: flex; flex-direction: column; gap: 1px; min-width: 0"><span style="font-size: 13.5px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">Programación en foco</span><span style="font-family: 'Geist Mono', monospace; font-size: 11px; color: var(--sub)">50/10 + 30 · 1 de 2</span></span>
+          <b style="font-family: 'Geist Mono', monospace; font-size: 22px; font-weight: 500; letter-spacing: -0.05em">38:12</b>
+        </a>
+        <button aria-label="Pausar" style="border: 0; border-left: 1px solid var(--line); background: transparent; color: var(--ink); display: grid; place-items: center; padding: 0"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg></button>
+      </div>
+    </sc-if>
+    <div style="display: grid; grid-template-columns: repeat(5, minmax(0, 1fr))">
+      <sc-for list="{{ nav.items }}" as="n" hint-placeholder-count="5">
+        <a href="{{ n.href }}" aria-current="{{ n.cur }}" style="{{ n.st }}">
+          <span style="{{ n.pill }}"><span style="{{ n.ico }}"></span></span>
+          <span>{{ n.label }}</span>
+          <sc-if value="{{ n.hasBadge }}" hint-placeholder-val="{{ false }}"><span style="position: absolute; top: 4px; left: calc(50% + 9px); min-width: 18px; height: 18px; padding: 0 5px; box-sizing: border-box; border-radius: 999px; background: var(--ink); color: var(--paper); font-family: 'Geist Mono', monospace; font-size: 10.5px; font-weight: 600; display: grid; place-items: center">{{ n.badge }}</span></sc-if>
+        </a>
+      </sc-for>
+    </div>
+  </nav>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"theme":{"editor":"enum","options":["dark","light"],"default":"dark"},"$preview":{"width":390,"height":1250}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const T = { dark: { paper: '#0E0F10', ink: '#EDEDE8', sub: '#9A9D98', line: '#2C2E2D', soft: '#18191A', dot: 'rgba(237,237,232,0.08)', ing: '#6CC4EE', hx: '#B3A4FF', ec: '#FF9F62', sa: '#7FD69A', ru: '#FF8E8E', eco: '#F0D45C', a: '38%' }, light: { paper: '#F2F3EF', ink: '#141515', sub: '#585C59', line: '#C9CCC6', soft: '#E7E9E4', dot: 'rgba(20,21,21,0.10)', ing: '#1C7FB0', hx: '#5F4BCF', ec: '#C2560F', sa: '#24854A', ru: '#C23A3A', eco: '#8A6C00', a: '60%' } };
+    const BR = { ing: '#6CC4EE', hx: '#B3A4FF', ec: '#FF9F62', sa: '#7FD69A', ru: '#FF8E8E', eco: '#F0D45C' };
+    const t = T[this.props.theme] || T.dark;
+    let vars = '';
+    for (const k in t) if (k !== 'a') vars += '--' + k + ':' + t[k] + ';';
+    for (const k in BR) vars += '--mk-' + k + ':color-mix(in srgb,' + BR[k] + ' ' + t.a + ',transparent);';
+    const L = this.props.theme === 'light';
+    vars += '--fx:' + (L ? '#1C7FB0' : '#6CC4EE') + ';--mk-nav:color-mix(in srgb,#F0D45C ' + (L ? '60%' : '38%') + ',transparent);';
+    const ICO = { Hoy: '<path d="M3 18.5h18M7 18.5a5 5 0 0 1 10 0M12 5v3.2M5 9.6l1.9 1.3M19 9.6l-1.9 1.3"/>', Estudio: '<path d="M12 6.8c-2.2-1.6-5.2-2-8-1.6v12.9c2.8-.4 5.8 0 8 1.6 2.2-1.6 5.2-2 8-1.6V5.2c-2.8-.4-5.8 0-8 1.6zM12 6.8v12.9"/>', Metas: '<path d="M5.5 21V3.5M5.5 4.5h12.5l-2.6 4 2.6 4H5.5"/>', Entreno: '<path d="M6.5 6.5v11M17.5 6.5v11M3.5 9.5v5M20.5 9.5v5M6.5 12h11"/>', Perfil: '<circle cx="12" cy="9.5" r="5.5"/><path d="M9 14.6 7.6 21l4.4-2.2 4.4 2.2-1.4-6.4"/>' };
+    const mask = (p) => { const u = 'url(data:image/svg+xml,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">' + p + '</svg>') + ')'; return 'width:22px;height:22px;background:currentColor;-webkit-mask:' + u + ' center / 22px 22px no-repeat;mask:' + u + ' center / 22px 22px no-repeat'; };
+    const nav = { mini: false, items: [['Hoy','Hoy.dc.html',''],['Estudio','Estudio.dc.html','12'],['Metas','Ruta.dc.html',''],['Entreno','Rutinas.dc.html',''],['Perfil','Logros.dc.html','']].map(([label, href, badge]) => { const on = label === 'Hoy'; return { label, href, badge, hasBadge: !!badge && !on, cur: on ? 'page' : 'false', ico: mask(ICO[label]),
+      st: 'position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;min-height:60px;text-decoration:none;font-size:11.5px;letter-spacing:0.01em;color:' + (on ? 'var(--ink);font-weight:600' : 'var(--sub)'),
+      pill: 'width:54px;height:32px;display:grid;place-items:center;' + (on ? 'background:var(--mk-nav);clip-path:polygon(9% 0,100% 0,91% 100%,0 100%)' : '') }; }) };
+    const task = (text, done, area) => ({ text, aria: done ? 'Desmarcar' : 'Marcar',
+      box: 'flex:none;width:22px;height:22px;padding:0;border-radius:3px;border:1.5px solid var(--ink);display:flex;align-items:center;justify-content:center;' + (done ? 'background:var(--ink);color:var(--paper)' : 'background:transparent;color:transparent'),
+      txt: 'font-size:15px;width:fit-content;' + (done ? 'padding:0 3px;background:linear-gradient(98deg,transparent 1%,var(--mk-' + area + ') 1% 98%,transparent 98%) 0 70% / 100% 52% no-repeat' : '') });
+    let bn = 0;
+    const blk = (start, name, area, done, total, now, tasks) => ({ num: String(++bn), numSt: 'font-family:Geist Mono,monospace;font-size:11.5px;color:var(--sub);flex:none;min-width:14px', start, name, count: done + '/' + total, now: !!now, tasks: tasks || [],
+      dot: 'width:11px;height:11px;flex:none;border-radius:2px;' + (done === total ? 'background:var(--' + area + ')' : now ? 'background:var(--paper);border:2px solid var(--' + area + ')' : 'border:1.5px solid var(--' + area + ')'),
+      nameStyle: 'font-size:15.5px;' + (now ? 'font-family:Archivo,sans-serif;font-stretch:112%;font-weight:800;font-size:19px' : done === total ? 'color:var(--sub)' : '') });
+    return { vars, nav, blocks: [
+      blk('04:00', 'Rutina de la mañana', 'ru', 2, 2),
+      blk('04:30', 'Matemática · CONAMAT', 'ing', 3, 3),
+      blk('06:30', 'Programación · Python', 'ing', 1, 3, true, [task('Repaso de tarjetas (12)', true, 'ing'), task('Python Tutorial, secciones 5 y 6', false, 'ing'), task('Commit de lo avanzado', false, 'ing')]),
+      blk('08:30', 'Acompañar a Abi y correr', 'sa', 0, 1),
+      blk('10:00', 'Handyx', 'hx', 0, 3),
+      blk('15:00', 'Eclipse · 10 cold calls', 'ec', 0, 2),
+      blk('18:00', 'Entrenamiento', 'sa', 0, 2),
+      blk('21:00', 'Cerrar y preparar mañana', 'ru', 0, 2)
+    ], quick: [
+      { label: '+1 Entrené', count: '4 / 7', val: 'font-family:Geist Mono,monospace;font-size:13px;color:var(--sa)' },
+      { label: '+10 CV enviados', count: '30 / 70', val: 'font-family:Geist Mono,monospace;font-size:13px;color:var(--ru)' },
+      { label: '+1 Venta Foody', count: '2 / 23', val: 'font-family:Geist Mono,monospace;font-size:13px;color:var(--ec)' },
+      { label: '+1 Usuario Handyx', count: '41 / 100', val: 'font-family:Geist Mono,monospace;font-size:13px;color:var(--hx)' }
+    ] };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,3 +1,4 @@
+import type { Goal } from '../data/goals-types';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { valueOf } from '../data/goals';
 import { exerciseMin, history, nextTarget, plannedFor, rangeOf } from '../data/train';
@@ -88,7 +89,7 @@ describe('sesión de entreno', () => {
     expect(s.sets.filter((x) => x.who === 'me' && x.ex === 'sentadilla')).toHaveLength(4);
     expect(getState().days[D0].blocks.find((b) => b.kind === 'entreno')!.tasks.every((x) => x.done)).toBe(true);
     expect(t().active).toBeNull();
-    const meta = getState().goals.goals.find((g) => g.title === 'Entrenar')!;
+    const meta: Goal = { id: 'e', title: 'Entrenar', area: 'salud', horizon: 'semana', type: 'contador', target: 6, repeat: true, from: D0, progress: {}, auto: { kind: 'entreno' } };
     expect(valueOf(meta, D0, { study: getState().study, days: getState().days, train: t() })).toBe(1);
   });
 

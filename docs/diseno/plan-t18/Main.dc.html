@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Trazo · sistema de diseño</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,500..900&amp;family=Geist:wght@400;500;600&amp;family=Geist+Mono:wght@400;500;600&amp;display=swap">
+<style>body{margin:0}</style>
+</helmet>
+<div style="{{ vars }} width: 1280px; min-height: 2720px; box-sizing: border-box; padding: 72px; background-color: var(--paper); background-image: radial-gradient(var(--dot) 1px, transparent 1.3px); background-size: 18px 18px; color: var(--ink); font-family: Geist, system-ui, sans-serif; display: flex; flex-direction: column; gap: 72px">
+
+  <div style="display: grid; grid-template-columns: 1.25fr 1fr; gap: 56px; align-items: end; padding-bottom: 56px; border-bottom: 1px solid var(--line)">
+    <div style="display: flex; flex-direction: column; gap: 22px">
+      <p style="margin: 0; font-family: 'Geist Mono', monospace; font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--sub)">Sistema de diseño · v0.3 · nov 2026</p>
+      <h1 style="margin: 0; font-family: Archivo, sans-serif; font-stretch: 125%; font-size: 150px; font-weight: 900; letter-spacing: -0.05em; line-height: 0.85; position: relative; isolation: isolate; width: fit-content">trazo<span style="position: absolute; left: -10px; right: -14px; bottom: 14px; height: 46px; background: var(--mk-eco); transform: rotate(-1.6deg); z-index: -1"></span></h1>
+      <p style="margin: 0; font-size: 19px; line-height: 1.55; color: var(--sub); max-width: 560px">Un cuaderno de planificación con memoria. Papel punteado, regla de horas, resaltadores por área y sellos en lugar de medallas.</p>
+    </div>
+    <div style="display: grid; grid-template-columns: 28px 1fr; gap: 14px 12px; font-size: 15px; line-height: 1.5; color: var(--sub)">
+      <span style="font-family: 'Geist Mono', monospace; color: var(--ink)">01</span><p style="margin: 0"><b style="color: var(--ink); font-weight: 600">Sin sombras.</b> La profundidad la dan las líneas de 1 px y el papel punteado.</p>
+      <span style="font-family: 'Geist Mono', monospace; color: var(--ink)">02</span><p style="margin: 0"><b style="color: var(--ink); font-weight: 600">Monocromo con marcas.</b> Tinta y papel para todo; el color solo aparece como resaltador de un área.</p>
+      <span style="font-family: 'Geist Mono', monospace; color: var(--ink)">03</span><p style="margin: 0"><b style="color: var(--ink); font-weight: 600">Una cosa por pantalla.</b> Si hay que scrollear mucho, se divide en otra pantalla.</p>
+    </div>
+  </div>
+
+  <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0; border: 1px solid var(--line)">
+    <div style="padding: 32px; display: flex; flex-direction: column; gap: 20px; border-right: 1px solid var(--line)">
+      <div style="display: flex; justify-content: space-between; align-items: baseline"><h2 style="margin: 0; font-family: Archivo, sans-serif; font-stretch: 112%; font-size: 26px; font-weight: 800">Oscuro</h2><span style="font-family: 'Geist Mono', monospace; font-size: 12px; color: var(--sub)">por defecto · 04:00</span></div>
+      <div style="display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 10px">
+        <sc-for list="{{ darkBase }}" as="c" hint-placeholder-count="5"><div style="display: flex; flex-direction: column; gap: 6px"><div style="{{ c.sw }}"></div><span style="font-size: 12.5px; font-weight: 500">{{ c.n }}</span><span style="font-family: 'Geist Mono', monospace; font-size: 11px; color: var(--sub)">{{ c.h }}</span></div></sc-for>
+      </div>
+    </div>
+    <div style="padding: 32px; display: flex; flex-direction: column; gap: 20px; background: #F2F3EF; color: #141515">
+      <div style="display: flex; justify-content: space-between; align-items: baseline"><h2 style="margin: 0; font-family: Archivo, sans-serif; font-stretch: 112%; font-size: 26px; font-weight: 800">Claro</h2><span style="font-family: 'Geist Mono', monospace; font-size: 12px; color: #585C59">con luz de día</span></div>
+      <div style="display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 10px">
+        <sc-for list="{{ lightBase }}" as="c" hint-placeholder-count="5"><div style="display: flex; flex-direction: column; gap: 6px"><div style="{{ c.sw }}"></div><span style="font-size: 12.5px; font-weight: 500">{{ c.n }}</span><span style="font-family: 'Geist Mono', monospace; font-size: 11px; color: #585C59">{{ c.h }}</span></div></sc-for>
+      </div>
+    </div>
+  </div>
+
+  <div style="display: flex; flex-direction: column; gap: 24px">
+    <div style="display: flex; justify-content: space-between; align-items: baseline"><h2 style="margin: 0; font-family: Archivo, sans-serif; font-stretch: 112%; font-size: 30px; font-weight: 800">Resaltadores</h2><span style="font-family: 'Geist Mono', monospace; font-size: 12px; color: var(--sub)">texto del área · trazo sobre papel</span></div>
+    <div style="display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); border-top: 1px solid var(--line)">
+      <sc-for list="{{ areas }}" as="a" hint-placeholder-count="6">
+        <div style="padding: 20px 16px 0 0; display: flex; flex-direction: column; gap: 10px">
+          <span style="font-family: 'Geist Mono', monospace; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--sub)">{{ a.n }}</span>
+          <span style="{{ a.mark }}">{{ a.sample }}</span>
+          <span style="font-family: 'Geist Mono', monospace; font-size: 11px; color: var(--sub)">{{ a.h }}</span>
+        </div>
+      </sc-for>
+    </div>
+  </div>
+
+  <div style="display: flex; flex-direction: column; gap: 24px">
+    <div style="display: flex; justify-content: space-between; align-items: baseline"><h2 style="margin: 0; font-family: Archivo, sans-serif; font-stretch: 112%; font-size: 30px; font-weight: 800">Ramas del plan T+18</h2><span style="font-family: 'Geist Mono', monospace; font-size: 12px; color: var(--sub)">main = Trazo · cada roadmap toma el color de un área</span></div>
+    <div style="display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); border-top: 1px solid var(--line)"><div style="padding: 18px 14px 18px 0; display: flex; flex-direction: column; gap: 8px; border-bottom: 1px solid var(--line)"><span style="display: block; height: 3px; background: #EDEDE8"></span><span style="font-family: 'Geist Mono', monospace; font-size: 13px; color: #EDEDE8">main</span><span style="font-family: 'Geist Mono', monospace; font-size: 11px; color: var(--sub)">Trazo · tinta</span></div><div style="padding: 18px 14px 18px 0; display: flex; flex-direction: column; gap: 8px; border-bottom: 1px solid var(--line)"><span style="display: block; height: 3px; background: #6CC4EE"></span><span style="font-family: 'Geist Mono', monospace; font-size: 13px; color: #6CC4EE">programacion</span><span style="font-family: 'Geist Mono', monospace; font-size: 11px; color: var(--sub)">ing</span></div><div style="padding: 18px 14px 18px 0; display: flex; flex-direction: column; gap: 8px; border-bottom: 1px solid var(--line)"><span style="display: block; height: 3px; background: #F0D45C"></span><span style="font-family: 'Geist Mono', monospace; font-size: 13px; color: #F0D45C">matematica</span><span style="font-family: 'Geist Mono', monospace; font-size: 11px; color: var(--sub)">eco · resaltador</span></div><div style="padding: 18px 14px 18px 0; display: flex; flex-direction: column; gap: 8px; border-bottom: 1px solid var(--line)"><span style="display: block; height: 3px; background: #FF8E8E"></span><span style="font-family: 'Geist Mono', monospace; font-size: 13px; color: #FF8E8E">trabajo</span><span style="font-family: 'Geist Mono', monospace; font-size: 11px; color: var(--sub)">ru</span></div><div style="padding: 18px 14px 18px 0; display: flex; flex-direction: column; gap: 8px; border-bottom: 1px solid var(--line)"><span style="display: block; height: 3px; background: #F49AC2"></span><span style="font-family: 'Geist Mono', monospace; font-size: 13px; color: #F49AC2">ingles</span><span style="font-family: 'Geist Mono', monospace; font-size: 11px; color: var(--sub)">idi · nuevo · claro #B4316F</span></div><div style="padding: 18px 14px 18px 0; display: flex; flex-direction: column; gap: 8px; border-bottom: 1px solid var(--line)"><span style="display: block; height: 3px; background: #B3A4FF"></span><span style="font-family: 'Geist Mono', monospace; font-size: 13px; color: #B3A4FF">handyx</span><span style="font-family: 'Geist Mono', monospace; font-size: 11px; color: var(--sub)">hx</span></div><div style="padding: 18px 14px 18px 0; display: flex; flex-direction: column; gap: 8px; border-bottom: 1px solid var(--line)"><span style="display: block; height: 3px; background: #7FD69A"></span><span style="font-family: 'Geist Mono', monospace; font-size: 13px; color: #7FD69A">salud</span><span style="font-family: 'Geist Mono', monospace; font-size: 11px; color: var(--sub)">sa</span></div></div>
+  </div>
+
+  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 56px">
+    <div style="display: flex; flex-direction: column; gap: 20px">
+      <h2 style="margin: 0; font-family: Archivo, sans-serif; font-stretch: 112%; font-size: 30px; font-weight: 800">Tipografía</h2>
+      <div style="display: flex; flex-direction: column; border-top: 1px solid var(--line)">
+        <div style="display: flex; justify-content: space-between; align-items: baseline; gap: 16px; padding: 18px 0; border-bottom: 1px solid var(--line)"><span style="font-family: Archivo, sans-serif; font-stretch: 125%; font-size: 44px; font-weight: 900; letter-spacing: -0.04em; line-height: 1">Día 03</span><span style="font-family: 'Geist Mono', monospace; font-size: 11.5px; color: var(--sub)">Archivo Expanded 900</span></div>
+        <div style="display: flex; justify-content: space-between; align-items: baseline; gap: 16px; padding: 18px 0; border-bottom: 1px solid var(--line)"><span style="font-family: Archivo, sans-serif; font-stretch: 112%; font-size: 22px; font-weight: 800">Matemática · CONAMAT</span><span style="font-family: 'Geist Mono', monospace; font-size: 11.5px; color: var(--sub)">Archivo 22/800</span></div>
+        <div style="display: flex; justify-content: space-between; align-items: baseline; gap: 16px; padding: 18px 0; border-bottom: 1px solid var(--line)"><span style="font-size: 16px">Terminar el capítulo 3 y hacer los ejercicios.</span><span style="font-family: 'Geist Mono', monospace; font-size: 11.5px; color: var(--sub)">Geist 16</span></div>
+        <div style="display: flex; justify-content: space-between; align-items: baseline; gap: 16px; padding: 18px 0; border-bottom: 1px solid var(--line)"><span style="font-family: 'Geist Mono', monospace; font-size: 40px; font-weight: 500; letter-spacing: -0.03em">01:29</span><span style="font-family: 'Geist Mono', monospace; font-size: 11.5px; color: var(--sub)">Geist Mono · horas y cifras</span></div>
+        <div style="display: flex; justify-content: space-between; align-items: baseline; gap: 16px; padding: 18px 0; border-bottom: 1px solid var(--line)"><span style="font-family: 'Geist Mono', monospace; font-size: 11.5px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--sub)">Metas de la semana</span><span style="font-family: 'Geist Mono', monospace; font-size: 11.5px; color: var(--sub)">Etiqueta Mono 11.5</span></div>
+      </div>
+    </div>
+    <div style="display: flex; flex-direction: column; gap: 20px">
+      <h2 style="margin: 0; font-family: Archivo, sans-serif; font-stretch: 112%; font-size: 30px; font-weight: 800">Componentes</h2>
+      <div style="display: flex; flex-direction: column; border-top: 1px solid var(--line)">
+
+        <div style="padding: 18px 0; border-bottom: 1px solid var(--line); display: flex; flex-direction: column; gap: 6px">
+          <span style="font-family: 'Geist Mono', monospace; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--sub)">Casilla de cuaderno</span>
+          <div style="display: flex; align-items: center; gap: 12px; min-height: 44px"><button aria-pressed="false" aria-label="Marcar" style="width: 22px; height: 22px; border: 1.5px solid var(--ink); border-radius: 3px; background: transparent; padding: 0"></button><span style="font-size: 15.5px">Test del capítulo 4</span></div>
+          <div style="display: flex; align-items: center; gap: 12px; min-height: 44px"><button aria-pressed="true" aria-label="Desmarcar" style="width: 22px; height: 22px; border: 1.5px solid var(--ink); border-radius: 3px; background: var(--ink); color: var(--paper); padding: 0; display: flex; align-items: center; justify-content: center"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg></button><span style="font-size: 15.5px; background: linear-gradient(98deg, transparent 1%, var(--mk-ing) 1% 98%, transparent 98%) 0 70% / 100% 52% no-repeat">Terminar el capítulo 3</span></div>
+        </div>
+
+        <div style="padding: 18px 0; border-bottom: 1px solid var(--line); display: flex; flex-direction: column; gap: 10px">
+          <span style="font-family: 'Geist Mono', monospace; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--sub)">Contador de la semana</span>
+          <div style="display: flex; align-items: center; gap: 14px"><span style="font-size: 15px; width: 90px">Entrenar</span><div style="display: grid; grid-template-columns: repeat(7, 24px); gap: 6px"><span style="height: 24px; background: var(--sa)"></span><span style="height: 24px; background: var(--sa)"></span><span style="height: 24px; background: var(--sa)"></span><span style="height: 24px; background: var(--sa)"></span><span style="height: 24px; border: 1px solid var(--line)"></span><span style="height: 24px; border: 1px solid var(--line)"></span><span style="height: 24px; border: 1px solid var(--line)"></span></div><span style="font-family: 'Geist Mono', monospace; font-size: 14px">4/7</span></div>
+        </div>
+
+        <div style="padding: 18px 0; border-bottom: 1px solid var(--line); display: flex; flex-wrap: wrap; gap: 10px; align-items: center">
+          <button style="min-height: 46px; padding: 0 20px; border-radius: 6px; border: 1px solid var(--ink); background: var(--ink); color: var(--paper); font-family: Geist, sans-serif; font-weight: 600; font-size: 15px">Cerrar el día</button>
+          <button style="min-height: 46px; padding: 0 20px; border-radius: 6px; border: 1px solid var(--line); background: transparent; color: var(--ink); font-family: Geist, sans-serif; font-weight: 500; font-size: 15px">Agregar meta</button>
+          <button style="min-height: 46px; padding: 0 12px; border: 0; background: transparent; color: var(--sub); font-family: Geist, sans-serif; font-size: 15px; text-decoration: underline; text-underline-offset: 4px">Saltar</button>
+        </div>
+
+        <div style="padding: 18px 0; border-bottom: 1px solid var(--line); display: flex; align-items: center; gap: 18px">
+          <div style="width: 76px; height: 76px; border-radius: 50%; border: 1.5px solid var(--eco); display: flex; align-items: center; justify-content: center; transform: rotate(-8deg)"><div style="width: 62px; height: 62px; border-radius: 50%; border: 1px dashed var(--eco); display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--eco)"><span style="font-family: Archivo, sans-serif; font-stretch: 125%; font-weight: 900; font-size: 17px; line-height: 1">85%</span><span style="font-family: 'Geist Mono', monospace; font-size: 7.5px; letter-spacing: 0.12em">SEMANA</span></div></div>
+          <div style="display: flex; flex-direction: column; gap: 4px"><b style="font-size: 15px; font-weight: 600">Sello · Semana de hierro</b><span style="font-size: 13.5px; color: var(--sub)">Los logros son sellos de tinta, levemente girados, como en un pasaporte.</span></div>
+        </div>
+
+        <div style="padding: 18px 0; display: flex; flex-direction: column; gap: 10px">
+          <span style="font-family: 'Geist Mono', monospace; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--sub)">Navegación</span>
+          <div style="display: flex; justify-content: space-between; align-items: center; min-height: 48px; border-top: 1px solid var(--line); font-size: 14px"><span>Íconos + resaltador en la activa + mini reproductor de foco</span><span style="font-family: 'Geist Mono', monospace; color: var(--sub)">tablero Barra inferior →</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div style="display: flex; flex-direction: column; gap: 24px">
+    <div style="display: flex; justify-content: space-between; align-items: baseline"><h2 style="margin: 0; font-family: Archivo, sans-serif; font-stretch: 112%; font-size: 30px; font-weight: 800">Movimiento con GSAP</h2><span style="font-family: 'Geist Mono', monospace; font-size: 12px; color: var(--sub)">con movimiento reducido: fundido de 150 ms</span></div>
+    <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); border-top: 1px solid var(--line); border-left: 1px solid var(--line)">
+      <sc-for list="{{ motion }}" as="m" hint-placeholder-count="6">
+        <div style="padding: 22px; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); display: flex; flex-direction: column; gap: 8px">
+          <b style="font-size: 15.5px; font-weight: 600">{{ m.name }}</b>
+          <span style="font-size: 14px; color: var(--sub); line-height: 1.5">{{ m.desc }}</span>
+          <span style="font-family: 'Geist Mono', monospace; font-size: 11.5px; color: var(--eco)">{{ m.spec }}</span>
+        </div>
+      </sc-for>
+    </div>
+  </div>
+
+  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 56px; padding-top: 48px; border-top: 1px solid var(--line)">
+    <div style="display: flex; flex-direction: column; gap: 14px">
+      <h2 style="margin: 0; font-family: Archivo, sans-serif; font-stretch: 112%; font-size: 30px; font-weight: 800">Datos</h2>
+      <p style="margin: 0; font-size: 15px; line-height: 1.65; color: var(--sub)">Trazo es una PWA en GitHub Pages. Durante el día guarda todo en el teléfono. Al cerrar el día genera un JSON que me pegás, y lo sumo al repo en <span style="font-family: 'Geist Mono', monospace; color: var(--ink)">data/days/AAAA-MM-DD.json</span>. Las metas, las tarjetas, las rutinas y los nombres de los bimestres viven en <span style="font-family: 'Geist Mono', monospace; color: var(--ink)">data/*.json</span> y viajan en el mismo cierre.</p>
+    </div>
+    <pre style="margin: 0; padding: 22px; border: 1px solid var(--line); font-family: 'Geist Mono', monospace; font-size: 12.5px; line-height: 1.65; color: var(--ink); overflow: auto">{ "date": "2026-11-11", "day": 3,
+  "bimester": { "n": 1, "name": "El despegue" },
+  "blocks": [ { "id": "math", "area": "ing",
+    "tasks": [ { "t": "Cap. 3", "done": true } ] } ],
+  "study": [ { "unit": "conamat-ar-3",
+    "event": "test", "score": 88,
+    "errors": { "tecnica": 1, "descuido": 2 } } ],
+  "cards": { "reviewed": 34, "created": 9 },
+  "workout": { "routine": "push", "min": 74,
+    "athletes": ["toti", "abi"] },
+  "weekly": { "entrenar": 1, "cv": 10 } }</pre>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1280,"height":2720}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const B = { ing: '#6CC4EE', hx: '#B3A4FF', ec: '#FF9F62', sa: '#7FD69A', ru: '#FF8E8E', eco: '#F0D45C' };
+    const t = { paper: '#0E0F10', ink: '#EDEDE8', sub: '#9A9D98', line: '#2C2E2D', soft: '#18191A', dot: 'rgba(237,237,232,0.08)' };
+    let vars = '';
+    for (const k in t) vars += '--' + k + ':' + t[k] + ';';
+    for (const k in B) vars += '--' + k + ':' + B[k] + ';--mk-' + k + ':color-mix(in srgb,' + B[k] + ' 38%,transparent);';
+    const sw = (bg, border) => 'height:64px;background:' + bg + ';border:1px solid ' + border;
+    const darkBase = [['Papel','#0E0F10'],['Tinta','#EDEDE8'],['Lápiz','#9A9D98'],['Línea','#2C2E2D'],['Campo','#18191A']].map(([n,h]) => ({ n, h, sw: sw(h, '#2C2E2D') }));
+    const lightBase = [['Papel','#F2F3EF'],['Tinta','#141515'],['Lápiz','#585C59'],['Línea','#C9CCC6'],['Campo','#E7E9E4']].map(([n,h]) => ({ n, h, sw: sw(h, '#C9CCC6') }));
+    const areas = [['Ingeniería','ing','Cap. 3 terminado','#6CC4EE · claro #1C7FB0'],['Handyx','hx','MVP en revisión','#B3A4FF · claro #5F4BCF'],['Eclipse','ec','10 cold calls','#FF9F62 · claro #C2560F'],['Salud','sa','Entrené 4/7','#7FD69A · claro #24854A'],['Rutina','ru','Dormí 6 h','#FF8E8E · claro #C23A3A'],['Economía','eco','Alquiler pago','#F0D45C · claro #8A6C00']].map(([n,k,sample,h]) => ({ n, sample, h, mark: 'font-size:16px;width:fit-content;padding:0 3px;background:linear-gradient(98deg,transparent 2%,var(--mk-' + k + ') 2% 98%,transparent 98%) 0 72% / 100% 55% no-repeat' }));
+    return { vars, darkBase, lightBase, areas, motion: [
+      { name: 'El trazo', desc: 'Al marcar una tarea, el resaltador barre el texto de izquierda a derecha.', spec: 'backgroundSize 0→100% · 0.45s · power2.out' },
+      { name: 'La regla de horas', desc: 'Al abrir Hoy, la línea de la hora actual baja hasta su lugar.', spec: 'y · 0.7s · power3.out' },
+      { name: 'Entrada de listas', desc: 'Las filas aparecen escalonadas, apenas desde abajo.', spec: 'y 12→0, opacity · stagger 0.035' },
+      { name: 'Tarjeta', desc: 'Al tocarla gira en 3D; al calificarla sale hacia el lado elegido.', spec: 'rotateY 180 · 0.5s · power2.inOut' },
+      { name: 'Sello', desc: 'El logro cae como un sello: escala de más a menos y un temblor corto.', spec: 'scale 1.6→1, rotate -14→-8 · back.out(2)' },
+      { name: 'Descanso', desc: 'Los dígitos ruedan; en los últimos 3 segundos el anillo late.', spec: 'scale 1→1.03 · sine.inOut · repeat 5' }
+    ] };
+  }
+}
+</script>
+</body>
+</html>

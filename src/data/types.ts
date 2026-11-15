@@ -3,6 +3,13 @@ import type { Tramo } from './study-types';
 
 export type Area = 'ing' | 'handyx' | 'eclipse' | 'salud' | 'rutina' | 'economia';
 
+/**
+ * Ramas del plan T+18: seis roadmaps que salen de main (Trazo) en T0 y vuelven en T+18.
+ * "main" es Trazo mismo (rutina de la mañana, cierre).
+ */
+export type Rama = 'programacion' | 'matematica' | 'trabajo' | 'ingles' | 'handyx' | 'salud';
+export type RamaOMain = Rama | 'main';
+
 /** A qué motor lleva "Entrar en foco". Estudio y entreno tienen sesión propia (olas 2 y 5). */
 export type BlockKind = 'estudio' | 'entreno' | 'pomodoro';
 
@@ -28,6 +35,8 @@ export interface BlockTemplate {
   fixed?: string;
   /** Abre una sesión de foco (sin valor: sí). */
   focus?: boolean;
+  /** Rama del plan T+18 ("main" = Trazo); sin valor, fuera del plan. */
+  rama?: RamaOMain;
   tasks: string[];
 }
 
@@ -55,6 +64,8 @@ export interface Block extends RoadmapLink {
   fixed: boolean;
   /** Abre una sesión de foco (sin valor: sí). */
   focus?: boolean;
+  /** Rama del plan T+18 ("main" = Trazo); sin valor, fuera del plan. */
+  rama?: RamaOMain;
   tasks: Task[];
 }
 
@@ -76,8 +87,10 @@ export interface DayLog {
   wake: string;
   /** Modo del modal "Buen día": 04:00 completo, 05:00 corto u otra hora. */
   routine: RoutineId;
-  /** Rutina del día de la semana: lunes a viernes o fin de semana. */
-  dayType?: 'weekday' | 'weekend';
+  /** Rutina del día: lunes a viernes, fin de semana, con trabajo o día libre. */
+  dayType?: 'weekday' | 'weekend' | 'con-trabajo' | 'libre';
+  /** Ventana de matemática del plan si cayó ese día ("W1"). */
+  ventana?: string;
   blocks: Block[];
   notes: string[];
   focus: FocusEntry[];
@@ -128,6 +141,8 @@ export interface Settings {
   areaNames?: Partial<Record<Area, string>>;
   /** Último respaldo descargado (fecha). */
   lastBackup?: string;
+  /** Plan T+18: rutina activa, día libre, T+2 y umbrales de Handyx. */
+  plan?: Partial<import('./plan-state').PlanSettings>;
   startDate: string;
   presets: Preset[];
   /** Preset por bloque: key del bloque → id del preset. */
@@ -154,3 +169,8 @@ export interface FocusState {
   /** Actividad de la sesión de estudio, o 'repaso' para el repaso del día. */
   activityId?: string;
 }
+
+// Tipos del plan T+18 (definidos junto a sus datos en plan.ts).
+export type {
+  Capa, CorteHandyx, Entrega, Entrevista, EstadoPostulacion, EventoRama, Hito, MetaAnio, MetaBimestre, MetaGenerada, Postulacion, Proyecto, RespuestaEnsayada,
+} from './plan';

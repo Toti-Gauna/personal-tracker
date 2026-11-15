@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Búsqueda laboral</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,500..900&amp;family=Geist:wght@400;500;600&amp;family=Geist+Mono:wght@400;500;600&amp;display=swap">
+<style>body{margin:0}</style>
+</helmet>
+<div style="{{ vars }} width: 390px; min-height: 1400px; box-sizing: border-box; background-color: var(--paper); background-image: radial-gradient(var(--dot) 1px, transparent 1.3px); background-size: 18px 18px; color: var(--ink); font-family: Geist, system-ui, sans-serif; display: flex; flex-direction: column">
+  <main style="flex: 1; padding: 18px 20px 28px; display: flex; flex-direction: column; gap: 24px">
+    <div style="display: flex; justify-content: space-between; align-items: center">
+      <a href="Ruta.dc.html" style="display: flex; align-items: center; gap: 6px; min-height: 44px; color: var(--ink); text-decoration: none; font-size: 14px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>Ruta</a>
+      <span style="font-family: 'Geist Mono', monospace; font-size: 12px; color: var(--ru)">trabajo · semana 4 de 8</span>
+    </div>
+    <header style="display: flex; flex-direction: column; gap: 6px">
+      <h1 style="margin: 0; font-family: Archivo, sans-serif; font-stretch: 125%; font-size: 34px; font-weight: 900; letter-spacing: -0.045em; line-height: 1">Búsqueda</h1>
+      <p style="margin: 0; font-size: 14.5px; line-height: 1.5; color: var(--sub)">Meta: remoto de USD 3.000 a 5.000 para el 11 ene. 1 h 30 por día; hoy, 45 min, porque el resto va a inglés.</p>
+    </header>
+
+    <section aria-label="Embudo" style="display: flex; flex-direction: column; gap: 10px">
+      <span style="font-family: 'Geist Mono', monospace; font-size: 11.5px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--sub)">Embudo</span>
+      <sc-for list="{{ embudo }}" as="e" hint-placeholder-count="5">
+        <div style="display: grid; grid-template-columns: 96px minmax(0, 1fr) 30px; gap: 10px; align-items: center">
+          <span style="font-size: 13.5px">{{ e.name }}</span>
+          <span style="height: 14px; background: var(--line); display: block; position: relative"><span style="{{ e.bar }}"></span></span>
+          <b style="font-family: 'Geist Mono', monospace; font-size: 14px; font-weight: 500; text-align: right">{{ e.n }}</b>
+        </div>
+      </sc-for>
+      <span style="font-family: 'Geist Mono', monospace; font-size: 12px; color: var(--sub)">meta de 8 semanas: 250 · 250 · 12 a 18 entrevistas · 1 o 2 ofertas</span>
+    </section>
+
+    <section aria-label="Próxima entrevista" style="display: flex; flex-direction: column; gap: 12px; padding: 16px; border: 1.5px solid var(--ink); border-radius: 8px">
+      <span style="font-family: 'Geist Mono', monospace; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ru)">Próxima entrevista · jue 17 dic · 11:00</span>
+      <b style="font-family: Archivo, sans-serif; font-stretch: 112%; font-size: 20px; font-weight: 800; line-height: 1.15">AI Engineer · USD 4.000–5.000</b>
+      <span style="font-size: 13px; color: var(--sub)">[Empresa] · remoto · entrevista técnica en inglés</span>
+      <div style="display: flex; flex-direction: column; border-top: 1px solid var(--line)">
+        <sc-for list="{{ prep }}" as="p" hint-placeholder-count="4">
+          <a href="{{ p.href }}" style="display: flex; align-items: center; gap: 12px; min-height: 50px; border-bottom: 1px solid var(--line); color: var(--ink); text-decoration: none">
+            <span style="{{ p.box }}"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg></span>
+            <span style="display: flex; flex-direction: column; gap: 2px; min-width: 0; flex: 1">
+              <span style="{{ p.tag }}">{{ p.rama }}</span>
+              <span style="font-size: 14px">{{ p.t }}</span>
+            </span>
+            <span style="font-family: 'Geist Mono', monospace; font-size: 12px; color: var(--sub)">{{ p.n }}</span>
+          </a>
+        </sc-for>
+      </div>
+      <span style="font-size: 12.5px; line-height: 1.45; color: var(--sub)">Después cargás qué preguntaron. Lo que falló va a Puntos débiles de inglés o de programación.</span>
+    </section>
+
+    <section aria-label="Postulaciones" style="display: flex; flex-direction: column">
+      <div style="display: flex; justify-content: space-between; align-items: baseline; padding-bottom: 8px; border-bottom: 1px solid var(--line)">
+        <span style="font-family: 'Geist Mono', monospace; font-size: 11.5px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--sub)">Postulaciones</span>
+        <button style="min-height: 36px; padding: 0 12px; border: 1px solid var(--ink); border-radius: 6px; background: transparent; color: var(--ink); font: 600 13px Geist, sans-serif">+ Nueva</button>
+      </div>
+      <sc-for list="{{ posts }}" as="p" hint-placeholder-count="5">
+        <div style="display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 10px; align-items: center; padding: 12px 0; border-bottom: 1px solid var(--line)">
+          <span style="display: flex; flex-direction: column; gap: 2px; min-width: 0">
+            <span style="font-size: 14.5px; font-weight: 500">{{ p.rol }}</span>
+            <span style="font-family: 'Geist Mono', monospace; font-size: 11.5px; color: var(--sub)">{{ p.rango }} · {{ p.d }}</span>
+          </span>
+          <span style="{{ p.st }}">{{ p.estado }}</span>
+        </div>
+      </sc-for>
+    </section>
+  </main>
+  <nav aria-label="Secciones" style="border-top: 1px solid var(--line); background: var(--paper); padding: 10px 12px 14px">
+    <div style="display: grid; grid-template-columns: repeat(5, minmax(0, 1fr))">
+      <sc-for list="{{ nav }}" as="n" hint-placeholder-count="5">
+        <a href="{{ n.href }}" aria-current="{{ n.cur }}" style="{{ n.st }}">
+          <span style="{{ n.pill }}"><span style="{{ n.ico }}"></span></span>
+          <span>{{ n.label }}</span>
+          <sc-if value="{{ n.hasBadge }}" hint-placeholder-val="{{ false }}"><span style="position: absolute; top: 4px; left: calc(50% + 9px); min-width: 18px; height: 18px; padding: 0 5px; box-sizing: border-box; border-radius: 999px; background: var(--ink); color: var(--paper); font-family: 'Geist Mono', monospace; font-size: 10.5px; font-weight: 600; display: grid; place-items: center">{{ n.badge }}</span></sc-if>
+        </a>
+      </sc-for>
+    </div>
+  </nav>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"theme":{"editor":"enum","options":["dark","light"],"default":"dark"},"$preview":{"width":390,"height":1400}}'>
+class Component extends DCLogic {
+  base(active) {
+    const T = { dark: { paper: '#0E0F10', ink: '#EDEDE8', sub: '#9A9D98', line: '#2C2E2D', soft: '#18191A', dot: 'rgba(237,237,232,0.08)', ing: '#6CC4EE', hx: '#B3A4FF', ec: '#FF9F62', sa: '#7FD69A', ru: '#FF8E8E', eco: '#F0D45C', idi: '#F49AC2', a: '38%' }, light: { paper: '#F2F3EF', ink: '#141515', sub: '#585C59', line: '#C9CCC6', soft: '#E7E9E4', dot: 'rgba(20,21,21,0.10)', ing: '#1C7FB0', hx: '#5F4BCF', ec: '#C2560F', sa: '#24854A', ru: '#C23A3A', eco: '#8A6C00', idi: '#B4316F', a: '60%' } };
+    const L = this.props.theme === 'light';
+    const t = L ? T.light : T.dark;
+    let vars = '';
+    for (const k in t) if (k !== 'a') vars += '--' + k + ':' + t[k] + ';';
+    const D = T.dark;
+    for (const k of ['ing', 'hx', 'ec', 'sa', 'ru', 'eco', 'idi']) vars += '--mk-' + k + ':color-mix(in srgb,' + D[k] + ' ' + t.a + ',transparent);';
+    vars += '--mk-nav:color-mix(in srgb,#F0D45C ' + t.a + ',transparent);';
+    const ICO = { Hoy: '<path d="M3 18.5h18M7 18.5a5 5 0 0 1 10 0M12 5v3.2M5 9.6l1.9 1.3M19 9.6l-1.9 1.3"/>', Estudio: '<path d="M12 6.8c-2.2-1.6-5.2-2-8-1.6v12.9c2.8-.4 5.8 0 8 1.6 2.2-1.6 5.2-2 8-1.6V5.2c-2.8-.4-5.8 0-8 1.6zM12 6.8v12.9"/>', Metas: '<path d="M5.5 21V3.5M5.5 4.5h12.5l-2.6 4 2.6 4H5.5"/>', Entreno: '<path d="M6.5 6.5v11M17.5 6.5v11M3.5 9.5v5M20.5 9.5v5M6.5 12h11"/>', Perfil: '<circle cx="12" cy="9.5" r="5.5"/><path d="M9 14.6 7.6 21l4.4-2.2 4.4 2.2-1.4-6.4"/>' };
+    const mask = (p) => { const u = 'url(data:image/svg+xml,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">' + p + '</svg>') + ')'; return 'width:22px;height:22px;background:currentColor;-webkit-mask:' + u + ' center / 22px 22px no-repeat;mask:' + u + ' center / 22px 22px no-repeat'; };
+    const nav = [['Hoy', 'Hoy.dc.html', ''], ['Estudio', 'Estudio.dc.html', '22'], ['Metas', 'Ruta.dc.html', ''], ['Entreno', 'Rutinas.dc.html', ''], ['Perfil', 'Logros.dc.html', '']].map(([label, href, badge]) => { const on = label === active; return { label, href, badge, hasBadge: !!badge && !on, cur: on ? 'page' : 'false', ico: mask(ICO[label]),
+      st: 'position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;min-height:60px;text-decoration:none;font-size:11.5px;letter-spacing:0.01em;color:' + (on ? 'var(--ink);font-weight:600' : 'var(--sub)'),
+      pill: 'width:54px;height:32px;display:grid;place-items:center;' + (on ? 'background:var(--mk-nav);clip-path:polygon(9% 0,100% 0,91% 100%,0 100%)' : '') }; });
+    return { vars, nav };
+  }
+  renderVals() {
+    const { vars, nav } = this.base('Metas');
+    const embudo = [['Postulaciones', 128, 250], ['Mensajes', 130, 250], ['Respuestas', 14, 0], ['Entrevistas', 2, 18], ['Ofertas', 0, 2]].map(([name, n, meta]) => ({ name, n: String(n), bar: 'position:absolute;left:0;top:0;bottom:0;width:' + (n / 250 * 100) + '%;background:var(--ru)' }));
+    const P = [['ingles', 'idi', '10 respuestas ensayadas en voz alta', '6/10', false, 'PlanIngles.dc.html'], ['programacion', 'ing', 'Demo de Faro v1 en 3 minutos', '—', false, 'PlanProyecto.dc.html'], ['trabajo', 'ru', 'Investigar la empresa y su stack', 'hecho', true, 'PlanBusqueda.dc.html'], ['trabajo', 'ru', 'Preguntas para ellos', 'hecho', true, 'PlanBusqueda.dc.html']];
+    const prep = P.map(([rama, c, t, n, done, href]) => ({ rama, t, n, href,
+      tag: 'font-family:Geist Mono,monospace;font-size:11px;color:var(--' + c + ')',
+      box: 'flex:none;width:22px;height:22px;border-radius:3px;border:1.5px solid var(--ink);display:flex;align-items:center;justify-content:center;' + (done ? 'background:var(--ink);color:var(--paper)' : 'color:transparent') }));
+    const E = { Entrevista: 'ru', Respuesta: 'eco', Enviada: 'sub', Rechazada: 'sub' };
+    const posts = [['AI Engineer', 'USD 4.000–5.000', '3 dic', 'Entrevista'], ['Full-stack con IA', 'USD 3.500–4.500', '5 dic', 'Respuesta'], ['Backend Python', 'USD 3.000–4.000', '8 dic', 'Enviada'], ['ML Engineer Jr.', 'USD 3.000', '1 dic', 'Rechazada'], ['Full-stack (Next.js)', 'USD 3.200–4.000', '11 dic', 'Enviada']].map(([rol, rango, d, estado]) => ({ rol, rango, d, estado,
+      st: 'font-family:Geist Mono,monospace;font-size:12px;padding:3px 8px;border:1px solid ' + (E[estado] === 'sub' ? 'var(--line)' : 'var(--' + E[estado] + ')') + ';border-radius:4px;color:' + (E[estado] === 'sub' ? 'var(--sub)' : 'var(--' + E[estado] + ')') }));
+    return { vars, nav, embudo, prep, posts };
+  }
+}
+</script>
+</body>
+</html>

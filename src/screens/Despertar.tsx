@@ -1,9 +1,10 @@
 import { useMemo, useState } from 'react';
 import { dayNumber } from '../data/derive';
-import { DAY_ROUTINES, WAKE, dayTypeOf, isMeta, planRoutine, wakeRange, type DayType } from '../data/routines';
+import { tituloDeBloque } from '../data/etiquetas';
+import { DAY_ROUTINES, WAKE, isMeta, planRoutine, routineFor, wakeRange, type DayType } from '../data/routines';
 import { fmtDur, fmtFecha, nowMin, toHHMM, toMin } from '../data/time';
 import type { RoutineId } from '../data/types';
-import { startDay, useStore } from '../state/store';
+import { planSettings, startDay, useStore } from '../state/store';
 import { Marca } from '../ui/Marca';
 import '../styles/hoy.css';
 
@@ -27,7 +28,7 @@ function defaultChoice(now: number, t: DayType): { r: RoutineId; otra: number } 
 export function Despertar({ date }: { date: string }) {
   const settings = useStore((s) => s.settings)!;
   const now = nowMin();
-  const tipo = dayTypeOf(date);
+  const tipo = routineFor(date, planSettings(settings));
   const rutina = DAY_ROUTINES[tipo];
   const init = useMemo(() => defaultChoice(now, tipo), []); // eslint-disable-line react-hooks/exhaustive-deps
   const [choice, setChoice] = useState<RoutineId>(init.r);
@@ -92,7 +93,7 @@ export function Despertar({ date }: { date: string }) {
             {manana.map((p) => (
               <li key={p.block.id}>
                 <span className="mono">{p.start}</span>
-                <span className="manana-n">{p.block.label}</span>
+                <span className="manana-n">{tituloDeBloque({ rama: p.block.rama, key: p.block.id, title: p.block.label }, date, settings.startDate)}</span>
                 <span className="mono sub">{p.block.kind === 'fixed' ? 'fijo' : fmtDur(p.min)}</span>
               </li>
             ))}

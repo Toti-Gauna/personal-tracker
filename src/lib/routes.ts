@@ -10,7 +10,7 @@ export const ETIQUETAS: Record<Seccion | 'avance', string> = {
 };
 
 export type Pantalla = Seccion | 'avance' | 'elegir' | 'foco' | 'pomodoros' | 'json' | 'sesion' | 'como' | 'actividad' | 'test' | 'tesis' | 'unidades'
-  | 'repaso' | 'recall' | 'tarjetas' | 'tarjeta-nueva' | 'motor' | 'meta-nueva' | 'flojo'
+  | 'repaso' | 'recall' | 'tarjetas' | 'tarjeta-nueva' | 'motor' | 'meta-nueva' | 'flojo' | 'importar'
   | 'cierre' | 'logro' | 'ajustes' | 'ajustes-rutinas' | 'ajustes-companera' | 'ajustes-datos' | 'sonidos'
   | 'entreno-semana' | 'entreno-rutina' | 'entreno-sesion' | 'entreno-resumen' | 'entreno-peso' | 'entreno-motor';
 
@@ -22,7 +22,7 @@ export interface Ruta {
 }
 
 const SUB: Record<string, Seccion> = {
-  elegir: 'hoy', foco: 'hoy', pomodoros: 'hoy', json: 'hoy',
+  elegir: 'hoy', foco: 'hoy', pomodoros: 'hoy', json: 'hoy', importar: 'hoy',
   sesion: 'estudio', como: 'estudio', actividad: 'estudio', test: 'estudio', tesis: 'estudio', unidades: 'estudio',
   cierre: 'hoy', logro: 'perfil', ajustes: 'perfil', 'ajustes-rutinas': 'perfil', 'ajustes-companera': 'perfil', 'ajustes-datos': 'perfil', sonidos: 'perfil',
   'meta-nueva': 'metas',
