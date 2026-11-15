@@ -33,6 +33,20 @@ export interface Importacion {
   resumen: string[];
 }
 
+/**
+ * Una rama o un área en pausa ("stand-by" en pantalla): no aparece en Hoy ni genera avisos,
+ * metas ni contadores nuevos, pero nada se borra. `guardado` es una foto de lo que había al
+ * pausar, por si hace falta comparar al retomar.
+ */
+export interface Pausa {
+  id: string;
+  objetivo: 'handyx' | 'ventas' | string;
+  desde: string;
+  hasta?: string;
+  motivo: string;
+  guardado: unknown;
+}
+
 export interface PlanState {
   entrevistas: Entrevista[];
   postulaciones: Postulacion[];
@@ -53,12 +67,18 @@ export interface PlanState {
   /** Metas de bimestre y año editadas: "b1-programacion", "anio1-salud" → texto. */
   editadas: Record<string, string>;
   importaciones: Importacion[];
+  /** Pausas (stand-by): las abiertas no tienen "hasta". */
+  pausas: Pausa[];
+  /** Hitos marcados como hechos o movidos de fecha: id → estado. */
+  hitos: Record<string, { hecho?: string; fecha?: string }>;
+  /** Sprint de búsqueda (10.2): metas del embudo editadas y casillas de CV, LinkedIn y caso. */
+  sprint?: { metas?: Partial<Record<'aMedida' | 'mensajes' | 'respuestas' | 'recruiter' | 'tecnica' | 'oferta', number>>; checks?: Record<string, boolean> };
 }
 
 export const emptyPlan = (): PlanState => ({
   entrevistas: [], postulaciones: [], contadores: {},
   respuestas: PLAN.ingles.respuestas.map((texto, i) => ({ id: `r${i + 1}`, texto, veces: 0 })),
-  fallasIngles: [], proyectos: {}, handyx: {}, eventos: [], meses: {}, semanas: {}, editadas: {}, importaciones: [],
+  fallasIngles: [], proyectos: {}, handyx: {}, eventos: [], meses: {}, semanas: {}, editadas: {}, importaciones: [], pausas: [], hitos: {},
 });
 
 export const proyectoVacio = (): ProyectoEstado => ({ estandar: {}, tiempo: { nucleo: 0, producto: 0, lanzamiento: 0 }, revisiones: [] });
@@ -74,6 +94,24 @@ export interface PlanSettings {
   /** Umbrales de la decisión de Handyx: los escribe el usuario. */
   umbralIngreso: string;
   horasMaximas: string;
+  /**
+   * Modo de la semana. "busqueda-intensiva": rutinas de búsqueda intensiva, sin día libre, con
+   * Handyx y ventas en pausa. null: el plan normal. Sin valor: todavía no se decidió (la
+   * migración lo activa, porque es la prioridad desde T0).
+   */
+  modo?: 'busqueda-intensiva' | null;
+  /** La rutina y el día libre de antes de activar el modo, para volver exactamente a ellos. */
+  previo?: { rutina: 'busqueda' | 'con-trabajo'; diaLibre: number | null };
 }
+
+/** Pausas que abre la búsqueda intensiva. */
+export const PAUSAS_INTENSIVA = ['handyx', 'ventas'] as const;
+
+/** ¿Está en pausa ese objetivo (rama o área) en una fecha? */
+export const enPausa = (p: Pick<PlanState, 'pausas'>, objetivo: string, fecha: string) =>
+  (p.pausas ?? []).some((x) => x.objetivo === objetivo && x.desde <= fecha && (!x.hasta || x.hasta > fecha));
+
+/** La pausa abierta de un objetivo. */
+export const pausaAbierta = (p: Pick<PlanState, 'pausas'>, objetivo: string) => (p.pausas ?? []).find((x) => x.objetivo === objetivo && !x.hasta);
 
 export const DEFAULT_PLAN_SETTINGS: PlanSettings = { rutina: 'busqueda', diaLibre: 2, umbralIngreso: '', horasMaximas: '' };

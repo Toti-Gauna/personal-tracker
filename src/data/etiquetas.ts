@@ -13,7 +13,8 @@ import type { Block, DayLog } from './types';
 
 /** Color del cuadrado y de la etiqueta: el de la rama; main va con el del área; sin rama (fuera del plan), gris. */
 export function colorDeBloque(b: Pick<Block, 'rama' | 'area'>, delPlan: boolean) {
-  if (!b.rama) return delPlan ? 'var(--sub)' : AREAS[b.area].css;
+  // Sin rama: gris dentro del plan, salvo el clipping, que lleva el color de Eclipse (Ola 8b).
+  if (!b.rama) return delPlan && b.area !== 'eclipse' ? 'var(--sub)' : AREAS[b.area].css;
   return b.rama === 'main' ? AREAS[b.area].css : RAMA_COLOR[b.rama];
 }
 
@@ -42,7 +43,7 @@ export interface Ctx {
 /** "programacion · P1 · semana 3 de 4", "trabajo · semana 4 de 8 · 45 min hoy", "fuera del plan". */
 export function etiquetaDeBloque(b: Block, { day, t0, plan, study }: Ctx): string | null {
   if (!day.dayType) return null; // días de antes del plan
-  if (!b.rama) return 'fuera del plan';
+  if (!b.rama) return b.key === 'clipping' ? 'clipping · 1 h 30 por día' : 'fuera del plan';
   const date = day.date;
   const bim = bimestreDelPlan(date, t0);
   switch (b.rama) {

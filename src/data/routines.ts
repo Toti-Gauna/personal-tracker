@@ -13,8 +13,10 @@ import type { Area, BlockKind, BlockTemplate, RamaOMain, RoutineId } from './typ
  * lunes a viernes con trabajo nuevo ("con-trabajo", reemplaza a weekday desde T+2) y el día
  * libre ("libre": solo repasos y un entrenamiento suave).
  */
-export type DayType = 'weekday' | 'weekend' | 'con-trabajo' | 'libre';
-export const DAY_TYPES: DayType[] = ['weekday', 'weekend', 'con-trabajo', 'libre'];
+export type DayType = 'weekday' | 'weekend' | 'con-trabajo' | 'libre' | 'busqueda-intensiva' | 'busqueda-intensiva-finde';
+export const DAY_TYPES: DayType[] = ['weekday', 'weekend', 'con-trabajo', 'libre', 'busqueda-intensiva', 'busqueda-intensiva-finde'];
+/** Modos que cambian las rutinas de toda la semana (Ola 8b: búsqueda intensiva). */
+export type ModoRutina = 'busqueda-intensiva';
 /** Las que reparten los días de la semana; las otras reemplazan a una o son el día libre. */
 const BASE: DayType[] = ['weekday', 'weekend'];
 
@@ -47,6 +49,10 @@ export interface DayRoutineDef {
   reemplaza?: DayType;
   /** Es la del día libre. */
   libre?: boolean;
+  /** Solo vale con este modo activo (y entonces reemplaza a "reemplaza" todos los días). */
+  modo?: ModoRutina;
+  /** Hora de levantarse propia (la búsqueda intensiva arranca a las 04:30). Sin valor, la del archivo. */
+  wake?: Record<'completo' | 'corto', string>;
   blocks: RoutineBlock[];
 }
 
@@ -76,6 +82,8 @@ export function routineErrors(x: unknown): string[] {
     if (!r) { err.push(`falta la rutina "${t}"`); continue; }
     if (!r.label) err.push(`${t}: falta "label"`);
     if (!BASE.includes(t) && !r.reemplaza && !r.libre) err.push(`${t}: tiene que reemplazar a otra rutina o ser la del día libre`);
+    if (r.modo && !r.reemplaza) err.push(`${t}: una rutina de modo tiene que decir a cuál reemplaza`);
+    for (const k of ['completo', 'corto'] as const) if (r.wake && !HHMM.test(r.wake[k] ?? '')) err.push(`${t}: "wake.${k}" no es HH:MM`);
     if (BASE.includes(t) && !r.days?.length) err.push(`${t}: faltan los días`);
     for (const d of BASE.includes(t) ? r.days ?? [] : []) {
       if (!Number.isInteger(d) || d < 1 || d > 7) err.push(`${t}: día ${d} fuera de 1 a 7`);
@@ -138,6 +146,8 @@ export interface RutinaCfg {
   rutina?: 'busqueda' | 'con-trabajo';
   /** Día ISO libre (null: ninguno). Sin valor, el del JSON. */
   diaLibre?: number | null;
+  /** Modo activo: con búsqueda intensiva no hay día libre y cada día usa la rutina del modo. */
+  modo?: ModoRutina | null;
 }
 
 /**
@@ -145,15 +155,23 @@ export interface RutinaCfg {
  * "con-trabajo" en lugar de lunes a viernes cuando está activa. Sin selector por día.
  */
 export function routineFor(date: string, cfg: RutinaCfg = {}, file: RoutinesFile = ROUTINES_FILE): DayType {
+  const base = dayTypeOf(date, file);
+  // El modo manda sobre todo: ni día libre ni con-trabajo mientras dure.
+  if (cfg.modo) {
+    const delModo = DAY_TYPES.find((t) => file.dayRoutines[t]?.modo === cfg.modo && file.dayRoutines[t].reemplaza === base);
+    if (delModo) return delModo;
+  }
   const libre = cfg.diaLibre === undefined ? file.diaLibre : cfg.diaLibre;
   if (libre != null && isoDay(date) === libre) return 'libre';
-  const base = dayTypeOf(date, file);
   if (cfg.rutina === 'con-trabajo') {
-    const alt = DAY_TYPES.find((t) => file.dayRoutines[t].reemplaza === base);
+    const alt = DAY_TYPES.find((t) => file.dayRoutines[t].reemplaza === base && !file.dayRoutines[t].modo);
     if (alt) return alt;
   }
   return base;
 }
+
+/** La hora de levantarse de una rutina (la propia o la del archivo). */
+export const wakeDe = (t: DayType, file: RoutinesFile = ROUTINES_FILE) => file.dayRoutines[t].wake ?? file.wake;
 
 export const blockMin = (b: Pick<RoutineBlock, 'start' | 'end'>) => {
   const m = toMin(b.end) - toMin(b.start);
@@ -192,7 +210,8 @@ export function wakeRange(t: DayType, file: RoutinesFile = ROUTINES_FILE) {
  */
 export function planRoutine(t: DayType, mode: RoutineId, wakeHHMM?: string, file: RoutinesFile = ROUTINES_FILE): PlannedRoutineBlock[] {
   const bl = file.dayRoutines[t].blocks;
-  const wake = toMin(mode === 'otra' ? wakeHHMM ?? file.wake.completo : file.wake[mode]);
+  const w = wakeDe(t, file);
+  const wake = toMin(mode === 'otra' ? wakeHHMM ?? w.completo : w[mode]);
   const m = morning(bl);
   const fijo = toMin(bl[m.length].start);
   const dur = new Map(bl.map((b) => [b.id, blockMin(b)]));
@@ -240,8 +259,11 @@ export function toTemplate(b: RoutineBlock, min = blockMin(b)): BlockTemplate {
 export interface Ajustes {
   /** Ventana de matemática en curso ("W1"): los bloques de programación pasan a matemática. */
   ventana?: string;
-  /** Entrevista a 3 días o menos: la búsqueda se parte en 45 min de postulaciones y 45 de inglés. */
-  entrevista?: boolean;
+  /**
+   * Entrevista a 3 días o menos. Si la rutina tiene bloque de inglés (búsqueda intensiva), ese
+   * bloque pasa a simulacro de esa entrevista; si no, la búsqueda se parte en búsqueda e inglés.
+   */
+  entrevista?: boolean | { rol: string; empresa?: string };
 }
 
 /** Aplica la ventana W y la entrevista cercana al día ya armado. */
@@ -252,7 +274,13 @@ export function ajustarDia(plan: PlannedRoutineBlock[], a: Ajustes): PlannedRout
       ? { ...p, block: { ...p.block, label: `Matemática · ventana ${a.ventana}`, short: 'matemática', rama: 'matematica', tasks: ['Repaso de tarjetas', `Capítulo de la ventana ${a.ventana}`, 'Ejercicios del capítulo'] } }
       : p));
   }
-  if (a.entrevista) {
+  if (a.entrevista && out.some((p) => p.block.id === 'ingles')) {
+    const e = typeof a.entrevista === 'object' ? a.entrevista : null;
+    const de = e ? `${e.rol}${e.empresa ? ` en ${e.empresa}` : ''}` : 'la entrevista';
+    out = out.map((p) => (p.block.id === 'ingles'
+      ? { ...p, block: { ...p.block, label: `Inglés · simulacro de ${de}`, tasks: [`Simulacro completo: ${de}`, 'Grabarte y anotar lo que falló', 'Preguntas para ellos'] } }
+      : p));
+  } else if (a.entrevista) {
     out = out.flatMap((p) => {
       if (p.block.id !== 'busqueda' || p.min < 60) return [p];
       const mitad = Math.round(p.min / 2 / 5) * 5;

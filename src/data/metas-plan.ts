@@ -7,7 +7,7 @@ import {
   PLAN, SEMANAS, SEMANAS_BIM, TRAMOS, bimestreDelPlan, corteHandyx, faseIngles, faseTrabajo, fechaCorta, fechaHito, finSemana, hitoSemana,
   inicioSemana, metasSemanaPlan, nombreTramo, semanaDelPlan, T0_PLAN, tramoActivo, type MetaGenerada, type Tramo,
 } from './plan';
-import type { PlanState } from './plan-state';
+import { enPausa, type PlanState } from './plan-state';
 import { RAMAS } from './ramas';
 import { focusUnit, unitState } from './study';
 import type { StudyState } from './study-types';
@@ -45,7 +45,7 @@ export const claveMes = (fecha: string) => fecha.slice(0, 7);
 // ——— Avance de una meta generada ———
 
 /** Contadores que se suman con + (y desde Hoy): viven en plan.contadores por semana. */
-const CONTADORES = new Set(['postulaciones', 'mensajes', 'posts', 'simulada', 'labs', 'respuestas', 'horas-busqueda', 'horas-ingles', 'horas-mate', 'horas-prog', 'horas-handyx', 'pitch']);
+const CONTADORES = new Set(['clips', 'horas-clipping', 'postulaciones', 'mensajes', 'posts', 'simulada', 'labs', 'respuestas', 'horas-busqueda', 'horas-ingles', 'horas-mate', 'horas-prog', 'horas-handyx', 'pitch']);
 /** Horas que también salen solas de las sesiones de foco de los bloques de esa rama. */
 const HORAS: Record<string, Rama> = { 'horas-mate': 'matematica', 'horas-prog': 'programacion', 'horas-handyx': 'handyx', 'horas-ingles': 'ingles', 'horas-busqueda': 'trabajo' };
 
@@ -57,6 +57,13 @@ export function horasDeRama(days: Record<string, DayLog>, rama: Rama, desde: str
     const ramaDe = new Map(day.blocks.map((b) => [b.key, b.rama]));
     for (const f of day.focus) if (ramaDe.get(f.key) === rama) m += f.focusMin;
   }
+  return Math.round((m / 60) * 10) / 10;
+}
+
+/** Horas de foco de un bloque por su clave (el clipping no tiene rama). */
+export function horasDeBloque(days: Record<string, DayLog>, key: string, desde: string, hasta: string) {
+  let m = 0;
+  for (const [d, day] of Object.entries(days)) if (d >= desde && d <= hasta) for (const f of day.focus) if (f.key === key) m += f.focusMin;
   return Math.round((m / 60) * 10) / 10;
 }
 
@@ -92,7 +99,7 @@ export function avanceMeta(m: MetaGenerada, desde: string, hasta: string, c: Ctx
   if (k === 'kit') return { v: c.plan.respuestas.filter((r) => r.veces > 0).length, auto: false };
   if (k === 'operaciones') return { v: Object.entries(c.plan.handyx).filter(([l]) => l >= lunes(desde) && l <= hasta).reduce((s, [, h]) => s + (h.operaciones ?? 0), 0), auto: false };
   if (CONTADORES.has(k)) {
-    const auto = HORAS[k] ? horasDeRama(c.days, HORAS[k], desde, hasta) : 0;
+    const auto = HORAS[k] ? horasDeRama(c.days, HORAS[k], desde, hasta) : k === 'horas-clipping' ? horasDeBloque(c.days, 'clipping', desde, hasta) : 0;
     const handyx = k === 'horas-handyx' ? Object.entries(c.plan.handyx).filter(([l]) => l >= lunes(desde) && l <= hasta).reduce((s, [, h]) => s + (h.horas ?? 0), 0) : 0;
     return { v: Math.round((auto + handyx + sumaContador(c.plan, k, desde, hasta)) * 10) / 10, auto: false };
   }
@@ -124,17 +131,50 @@ export const esTarea = (m: MetaGenerada) => !m.meta || (m.meta === 1 && !m.clave
  * casillas del estándar del proyecto en curso y el capítulo de matemática; la semana 1 trae
  * además las tareas de la etapa actual.
  */
-export function metasSemanaGeneradas(fecha: string, t0 = T0_PLAN): MetaGenerada[] {
+export interface OpcionesPlan {
+  /** Búsqueda intensiva activa: contadores de la intensiva en lugar de los de la fase. */
+  intensiva?: boolean;
+  /** Pausas (stand-by): sus ramas no generan metas nuevas. */
+  pausa?: Pick<PlanState, 'pausas'>;
+}
+
+/**
+ * Los contadores semanales de la búsqueda intensiva (Ola 8b): 70 a medida y 70 mensajes en
+ * las dos semanas del sprint, y las horas de la tabla (matemática 14, programación 25,5,
+ * inglés 11,5, búsqueda 10,5, clipping 10,5, entrenamiento 10).
+ */
+export const SEMANA_INTENSIVA: (Omit<MetaGenerada, 'id' | 'origen'> & { clave: string })[] = [
+  { rama: 'trabajo', texto: 'Postulaciones a medida', meta: 35, clave: 'postulaciones', nota: '5 por día' },
+  { rama: 'trabajo', texto: 'Mensajes directos', meta: 35, clave: 'mensajes', nota: '5 por día' },
+  { rama: 'trabajo', texto: 'Horas de búsqueda', meta: 10.5, unidad: 'h', clave: 'horas-busqueda' },
+  { rama: 'programacion', texto: 'Horas de programación', meta: 25.5, unidad: 'h', clave: 'horas-prog' },
+  { rama: 'matematica', texto: 'Horas de matemática', meta: 14, unidad: 'h', clave: 'horas-mate' },
+  { rama: 'ingles', texto: 'Horas de inglés', meta: 11.5, unidad: 'h', clave: 'horas-ingles' },
+  { rama: 'ingles', texto: 'Respuestas ensayadas', meta: 10, clave: 'respuestas' },
+  { rama: 'ingles', texto: 'Simulacro completo', meta: 1, clave: 'simulada' },
+  { area: 'eclipse', texto: 'Horas de clipping', meta: 10.5, unidad: 'h', clave: 'horas-clipping' },
+  { area: 'eclipse', texto: 'Clips publicados', meta: 25, clave: 'clips' },
+  { rama: 'salud', texto: 'Entrenamientos', meta: 5, clave: 'entrenos' },
+];
+
+/** Saca las metas de ramas o áreas en pausa (Handyx; las ventas de Eclipse). */
+export const sinPausa = (ms: MetaGenerada[], fecha: string, pausa?: Pick<PlanState, 'pausas'>) =>
+  pausa ? ms.filter((m) => !(m.rama && enPausa(pausa, m.rama, fecha)) && !(m.clave === 'ventas' && enPausa(pausa, 'ventas', fecha))) : ms;
+
+export function metasSemanaGeneradas(fecha: string, t0 = T0_PLAN, op: OpcionesPlan = {}): MetaGenerada[] {
   const s = semanaDelPlan(fecha, t0);
   if (s < 1 || s > SEMANAS) return [];
-  const out: MetaGenerada[] = metasSemanaPlan(fecha, t0).map((x) => ({ id: `s-${x.id}`, rama: x.rama, texto: x.texto, meta: x.meta, unidad: x.unidad || undefined, clave: x.id, origen: 'plan' }));
+  const base: MetaGenerada[] = op.intensiva
+    ? SEMANA_INTENSIVA.map((x) => ({ ...x, id: `s-${x.clave}`, origen: 'plan' as const }))
+    : metasSemanaPlan(fecha, t0).map((x) => ({ id: `s-${x.id}`, rama: x.rama, texto: x.texto, meta: x.meta, unidad: x.unidad || undefined, clave: x.id, origen: 'plan' }));
+  const out = sinPausa(base, fecha, op.pausa);
   const t = tramoActivo(fecha, t0);
   if (t.tipo === 'proyecto' && t.id !== 'P0') out.push({ id: 's-casillas', rama: 'programacion', texto: 'Casillas del estándar', meta: 6, clave: `casillas:${t.id}`, origen: 'plan' });
   if (t.tipo !== 'ventana') out.push({ id: 's-caps', rama: 'matematica', texto: 'Capítulo con test aprobado', meta: 1, clave: 'caps', origen: 'plan' });
   if (s === PLAN.etapaActual.semana.semana) {
     PLAN.etapaActual.semana.metas.forEach((m, i) => out.push({ id: `s-e${i}`, rama: m.rama, texto: m.texto, origen: 'plan' }));
   }
-  return out;
+  return sinPausa(out, fecha, op.pausa);
 }
 
 /** El título de la semana: lo que la define. */
@@ -187,7 +227,7 @@ export function cierraEnMes(fecha: string, entrevistas: { fecha: string; rol: st
  * capítulos, corte de Handyx, ventana W), los chequeos mensuales y la búsqueda prorrateada
  * (5 postulaciones y 5 mensajes por día). El mes de T0 trae las metas de la etapa actual.
  */
-export function metasMesGeneradas(fecha: string, t0 = T0_PLAN, study?: StudyState): MetaGenerada[] {
+export function metasMesGeneradas(fecha: string, t0 = T0_PLAN, study?: StudyState, op: OpcionesPlan = {}): MetaGenerada[] {
   const [a0, b0] = rangoMes(fecha);
   const a = max(a0, t0);
   const b = min(b0, finDelPlan(t0));
@@ -246,10 +286,11 @@ export function metasMesGeneradas(fecha: string, t0 = T0_PLAN, study?: StudyStat
     // Salud.
     push({ id: 'm-entreno', rama: 'salud', texto: 'Entrenar 6 de 7 días', meta: Math.round((dias * 6) / 7), clave: 'entrenos' });
   }
+  if (op.intensiva) push({ id: 'm-clips', area: 'eclipse', texto: 'Clips publicados', meta: Math.round((25 * dias) / 7), clave: 'clips' });
   // Chequeos mensuales.
   const sFin = semanaDelPlan(b, t0);
   PLAN.chequeosMensuales.filter((c) => !c.desdeSemana || sFin >= c.desdeSemana).forEach((c, i) => out.push({ id: `m-chq${i}`, rama: c.rama, texto: c.texto, meta: 1, origen: 'chequeo' }));
-  return out;
+  return sinPausa(out, a, op.pausa);
 }
 
 /** Resumen de lo que el plan propone para el mes siguiente ("Escudo, T+2, Aritmética 7 a 9"). */

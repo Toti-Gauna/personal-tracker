@@ -7,12 +7,13 @@ import { RAMA_COLOR, RAMA_NOMBRE, RAMAS } from '../data/ramas';
 import { addDays, parseDate } from '../data/time';
 import type { DayLog } from '../data/types';
 import { lunesDe } from '../state/plan';
-import { getState, useStore } from '../state/store';
+import { getState, planSettings, useStore } from '../state/store';
 import { usePlanVista } from '../ui/usePlan';
 import { AnioPlan, BimestrePlan, MesPlan, SemanaPlan } from './MetasPlan';
 import { PlanProyecto } from './PlanProyecto';
 import { PlanBusqueda, PlanHandyx, PlanIngles } from './PlanRamas';
 import { PlanRuta } from './PlanRuta';
+import { RutaImpacto, SprintBusqueda } from './Sprint';
 import { RutaEvolucion } from './RutaEvolucion';
 import { RutaMapa } from './RutaMapa';
 import '../styles/metas.css';
@@ -30,6 +31,8 @@ export function Metas({ day, tab }: { day: DayLog; tab?: string }) {
   // Las pantallas del plan que se abren desde la pestaña Ruta.
   if (tab === 'mapa') return <RutaMapa day={day} />;
   if (tab === 'evolucion') return <RutaEvolucion day={day} />;
+  if (tab === 'sprint') return <SprintBusqueda day={day} />;
+  if (tab === 'impacto') return <RutaImpacto day={day} />;
   if (tab === 'trabajo') return <PlanBusqueda day={day} />;
   if (tab === 'ingles') return <PlanIngles day={day} />;
   if (tab === 'handyx') return <PlanHandyx day={day} />;
@@ -56,13 +59,13 @@ function MetasTabs({ day, tab }: { day: DayLog; tab?: string }) {
     const fase = faseTrabajo(date, t0);
     const l = lunesDe(date);
     const ctx = { plan, days, study: getState().study, train: getState().train, t0 };
-    const metas = plan.semanas[l]?.metas ?? metasSemanaGeneradas(date, t0);
+    const metas = plan.semanas[l]?.metas ?? metasSemanaGeneradas(date, t0, { intensiva: planSettings(settings).modo === 'busqueda-intensiva', pausa: plan });
     const porRama = RAMAS.map((r) => {
       const ms = metas.filter((m) => m.rama === r && m.meta);
       return [RAMA_NOMBRE[r], ms.length ? ms.reduce((s, m) => s + ratio(avanceMeta(m, l, addDays(l, 6), ctx).v, m.meta!), 0) / ms.length : 1] as const;
     }).sort((a, b) => a[1] - b[1]);
     linea = enPlan(date, t0)
-      ? `Semana ${v.bim.semana} de ${v.nombreBim}, en fase de ${fase.nombre.toLowerCase()}. Los contadores salen del plan${porRama[0][1] < 1 ? `; lo que más falta es ${porRama[0][0].toLowerCase()} y ${porRama[1][0].toLowerCase()}` : ''}.`
+      ? `Semana ${v.bim.semana} de ${v.nombreBim}, ${planSettings(settings).modo === 'busqueda-intensiva' ? 'en búsqueda intensiva, con Handyx y Eclipse en stand-by' : `en fase de ${fase.nombre.toLowerCase()}`}. Los contadores salen del plan${porRama[0][1] < 1 ? `; lo que más falta es ${porRama[0][0].toLowerCase()} y ${porRama[1][0].toLowerCase()}` : ''}.`
       : `El plan T+18 arranca el ${largo(t0)}. Mientras, tus metas de la semana.`;
   } else if (actual === 'mes') {
     const [from, to] = periodRange('mes', date);
