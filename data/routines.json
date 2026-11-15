@@ -566,10 +566,25 @@
    "reemplaza": "weekday",
    "modo": "busqueda-intensiva",
    "wake": {
-    "completo": "04:30",
-    "corto": "05:30"
+    "completo": "04:00",
+    "corto": "05:00"
    },
    "blocks": [
+    {
+     "id": "rutina",
+     "label": "Rutina de la mañana",
+     "short": "la rutina",
+     "start": "04:00",
+     "end": "04:30",
+     "area": "rutina",
+     "kind": "flex",
+     "focus": false,
+     "rama": "main",
+     "tasks": [
+      "Agua y cama hecha",
+      "Movilidad 10 min"
+     ]
+    },
     {
      "id": "math",
      "label": "Matemática · CONAMAT",
@@ -721,13 +736,17 @@
     },
     {
      "id": "sueno",
-     "label": "Sueño",
+     "label": "Dormir a las 21:00",
+     "short": "dormir",
      "start": "21:00",
-     "end": "04:30",
+     "end": "04:00",
      "area": "rutina",
      "kind": "fixed",
      "focus": false,
-     "meta": false
+     "rama": "salud",
+     "tasks": [
+      "En la cama a las 21:00"
+     ]
     }
    ]
   },
@@ -736,10 +755,25 @@
    "reemplaza": "weekend",
    "modo": "busqueda-intensiva",
    "wake": {
-    "completo": "04:30",
-    "corto": "05:30"
+    "completo": "04:00",
+    "corto": "05:00"
    },
    "blocks": [
+    {
+     "id": "rutina",
+     "label": "Rutina de la mañana",
+     "short": "la rutina",
+     "start": "04:00",
+     "end": "04:30",
+     "area": "rutina",
+     "kind": "flex",
+     "focus": false,
+     "rama": "main",
+     "tasks": [
+      "Agua y cama hecha",
+      "Movilidad 10 min"
+     ]
+    },
     {
      "id": "math",
      "label": "Matemática · CONAMAT",
@@ -863,13 +897,17 @@
     },
     {
      "id": "sueno",
-     "label": "Sueño",
+     "label": "Dormir a las 21:00",
+     "short": "dormir",
      "start": "21:00",
-     "end": "04:30",
+     "end": "04:00",
      "area": "rutina",
      "kind": "fixed",
      "focus": false,
-     "meta": false
+     "rama": "salud",
+     "tasks": [
+      "En la cama a las 21:00"
+     ]
     }
    ]
   }
