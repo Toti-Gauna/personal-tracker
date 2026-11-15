@@ -294,6 +294,7 @@ data/
   reviews.json           ← cada intento: tema, tipo (cold recall, tarjeta o ejercicio), resultado, fecha y cuánto creías recordar
   tests.json             ← cada test: capítulo, puntaje y el tipo de cada error
   bimesters.json         ← nombre, fechas, producto y perfil de los 18 bimestres (existe)
+  study-roadmaps.json    ← roadmaps de estudio por frente: fases, materiales con su rol, criterios de salida (existe, ola 12a)
   roadmap.json           ← la ruta completa: ítems por semana, compuertas, certificaciones (existe)
 ```
 
@@ -406,7 +407,7 @@ Salen de usar la app en el teléfono. Una rama y un PR por ola; se mergea a `mai
 - **Causa:** `filasMapa` calculaba HEAD como "el último hito marcado como hecho si se adelantó". Tocar un hito futuro lo marcaba y HEAD saltaba a su fecha, reacomodando todo. Ahora HEAD es siempre hoy y marcar un hito solo lo pasa a trazo lleno.
 - **Decisiones:** tocar un hito lo selecciona y abre un detalle fijo abajo (rama, fecha, estado y fecha planeada); marcar hecho, desmarcar o mover es un botón explícito del detalle, ya no un toque accidental. El filtro por rama atenúa las demás filas en vez de quitarlas, para que nada cambie de lugar. La leyenda explica commit, rombo, hitos de main, trazo lleno y punteado.
 
-**Ola 12a · Estudio: datos del roadmap** (Opus 5.5 · alto)
+**Ola 12a · Estudio: datos del roadmap** (Opus 5.5 · alto) — *hecha*
 
 - **Fuente:** `data/study-roadmap.json`, con las fases M0 a M10 del roadmap de matemáticas. Cada fase lleva libro núcleo, complementarios con su rol, cuándo activarlos, proyecto, salida de fase y duración.
 - **Roles de material:** libro núcleo, complementario imprescindible, banco de ejercicios, curso de apoyo y referencia avanzada.
@@ -414,7 +415,12 @@ Salen de usar la app en el teléfono. Una rama y un PR por ola; se mergea a `mai
 - **Semáforo:** verde desde 80 % (avanzar), amarillo de 65 a 79 % (activar complementario según el tipo de error), rojo bajo 65 % (volver al tema).
 - **Libros que se dividen:** Stewart aparece en M3 (Cálculo I) y en M5 (Cálculo II y multivariable) con partes distintas.
 - **En qué fase estás:** se calcula desde lo que ya registra Estudio (capítulos aprendidos y tests aprobados). Las salidas de fase son criterios a confirmar a mano.
-- **Se valida al cargar y lleva tests.** Mismo patrón que `roadmap.json`.
+- **Se valida al cargar y lleva tests.** Mismo patrón que `roadmap.json`. *Hecho.*
+- **Lo que quedó:** `data/study-roadmaps.json` (matemática, 11 fases y 65 materiales), `src/data/study-roadmap.ts` (tipos, validación, semáforo, qué activar según el error, evidencia y en qué fase estás) y `src/state/estudio-ruta.ts` (tildar criterios, cerrar y reabrir fases). El estado suma `estudioRuta` y los guardados viejos arrancan sin progreso.
+- **En qué fase estás:** las fases se cierran en orden y a mano, cuando tildás todos sus criterios de salida (terminar páginas no alcanza, como dice el roadmap). Los capítulos aprobados de la actividad de la fase se muestran como evidencia, no cierran la fase solos.
+- **Qué activar:** concepto → complementario y después curso; técnica y enunciado → banco de ejercicios; descuido → nada, retest; profundidad → referencia y complementario. Nunca propone el núcleo.
+- **Perfiles por fase** (derivados del roadmap, se cambian en el JSON): Estudiante con método (M0), Aritmético, Precalculista, Calculista, Probabilista para IA, Matemático de ingeniería, Numérico, Físico general, Mecánico, Termofluidista y Pre-aeroespacial (M10).
+- **A confirmar:** (1) este roadmap no coincide con la ruta de `roadmap.json`, donde CONAMAT cubre los 69 capítulos de B1 a B6 hasta cálculo; acá M1 es CONAMAT y Serge Lang, y M2 es Stewart Precalculus. Hoy conviven: Estudio lee este archivo y la Ruta sigue leyendo `roadmap.json`. (2) Sumando las duraciones de cada fase da 45 a 57 meses; el cronograma por años del texto habla de 33. (3) M0 no tiene duración en el texto: quedó en 1 mes.
 
 **Ola 12b · Estudio: pantallas** (Opus 5.5 · alto)
 
