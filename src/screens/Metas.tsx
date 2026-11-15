@@ -11,6 +11,7 @@ import { getState, useStore } from '../state/store';
 import { usePlanVista } from '../ui/usePlan';
 import { AnioPlan, BimestrePlan, MesPlan, SemanaPlan } from './MetasPlan';
 import { PlanProyecto } from './PlanProyecto';
+import { PlanBusqueda, PlanHandyx, PlanIngles } from './PlanRamas';
 import { PlanRuta } from './PlanRuta';
 import { RutaEvolucion } from './RutaEvolucion';
 import { RutaMapa } from './RutaMapa';
@@ -29,6 +30,9 @@ export function Metas({ day, tab }: { day: DayLog; tab?: string }) {
   // Las pantallas del plan que se abren desde la pestaña Ruta.
   if (tab === 'mapa') return <RutaMapa day={day} />;
   if (tab === 'evolucion') return <RutaEvolucion day={day} />;
+  if (tab === 'trabajo') return <PlanBusqueda day={day} />;
+  if (tab === 'ingles') return <PlanIngles day={day} />;
+  if (tab === 'handyx') return <PlanHandyx day={day} />;
   if (tab === 'proyecto' || tab?.startsWith('proyecto/')) return <PlanProyecto key={tab} day={day} id={tab.split('/')[1]} />;
   return <MetasTabs day={day} tab={tab} />;
 }

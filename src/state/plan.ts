@@ -5,6 +5,7 @@ import { newId } from '../data/schedule';
 import { addDays, parseDate } from '../data/time';
 import type { Rama } from '../data/types';
 import { getState, setState } from './store';
+import { addCards } from './study';
 
 /** Lunes de la semana de una fecha. */
 export const lunesDe = (date: string) => addDays(date, -((parseDate(date).getDay() + 6) % 7));
@@ -108,6 +109,15 @@ export function registrarEvento(rama: Rama, fecha: string, texto: string) {
 
 export function sumarFallaIngles(fecha: string, texto: string, tipo: string) {
   update((p) => ({ ...p, fallasIngles: [...p.fallasIngles, { fecha, texto, tipo }] }));
+  // Lo que falló ya es tarjeta: entra al mismo motor de repaso que matemática.
+  addCards(fecha, [{ front: `Decilo bien en voz alta: ${texto}`, back: `Falló en ${tipo}. Grabate y comparalo.`, kind: 'explicar', deck: 'Inglés', frontId: 'ingles', source: 'entrevista' }]);
+}
+
+/** Lo que falló en una entrevista: queda en la entrevista y va a Puntos débiles de inglés o de programación. */
+export function fallaEntrevista(id: string, fecha: string, texto: string, rama: 'ingles' | 'programacion', tipo: string) {
+  update((p) => ({ ...p, entrevistas: p.entrevistas.map((e) => (e.id === id ? { ...e, fallas: [...(e.fallas ?? []), texto] } : e)) }));
+  if (rama === 'ingles') sumarFallaIngles(fecha, texto, tipo);
+  else addCards(fecha, [{ front: `Pregunta de entrevista: ${texto}`, back: 'Respondela completa, con un ejemplo de tus proyectos.', kind: 'explicar', deck: 'Programación', frontId: 'prog', source: 'entrevista' }]);
 }
 
 export function guardarImportacion(i: Importacion) {
