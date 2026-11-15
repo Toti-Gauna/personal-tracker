@@ -8,6 +8,7 @@ import {
   inicioSemana, metasSemanaPlan, tramoEnSemana, nombreTramo, semanaDelPlan, T0_PLAN, tramoActivo, type MetaGenerada, type Tramo,
 } from './plan';
 import { enPausa, type PlanState } from './plan-state';
+import { cierreProyecto } from './puertas';
 import { RAMAS } from './ramas';
 import { focusUnit, unitState } from './study';
 import type { StudyState } from './study-types';
@@ -45,7 +46,7 @@ export const claveMes = (fecha: string) => fecha.slice(0, 7);
 // ——— Avance de una meta generada ———
 
 /** Contadores que se suman con + (y desde Hoy): viven en plan.contadores por semana. */
-const CONTADORES = new Set(['clips', 'horas-clipping', 'postulaciones', 'mensajes', 'posts', 'simulada', 'labs', 'respuestas', 'horas-busqueda', 'horas-ingles', 'horas-mate', 'horas-prog', 'horas-handyx', 'pitch']);
+const CONTADORES = new Set(['sesiones-tecnicas', 'clips', 'horas-clipping', 'postulaciones', 'mensajes', 'posts', 'simulada', 'labs', 'respuestas', 'horas-busqueda', 'horas-ingles', 'horas-mate', 'horas-prog', 'horas-handyx', 'pitch']);
 /** Horas que también salen solas de las sesiones de foco de los bloques de esa rama. */
 const HORAS: Record<string, Rama> = { 'horas-mate': 'matematica', 'horas-prog': 'programacion', 'horas-handyx': 'handyx', 'horas-ingles': 'ingles', 'horas-busqueda': 'trabajo' };
 
@@ -169,7 +170,11 @@ export function metasSemanaGeneradas(fecha: string, t0 = T0_PLAN, op: OpcionesPl
     : metasSemanaPlan(fecha, t0).map((x) => ({ id: `s-${x.id}`, rama: x.rama, texto: x.texto, meta: x.meta, unidad: x.unidad || undefined, clave: x.id, origen: 'plan' }));
   const out = sinPausa(base, fecha, op.pausa);
   const t = tramoActivo(fecha, t0);
-  if (t.tipo === 'proyecto' && t.id !== 'P0') out.push({ id: 's-casillas', rama: 'programacion', texto: 'Casillas del estándar', meta: 6, clave: `casillas:${t.id}`, origen: 'plan' });
+  if (t.tipo === 'proyecto' && t.id !== 'P0') {
+    out.push({ id: 's-casillas', rama: 'programacion', texto: 'Casillas del estándar', meta: 6, clave: `casillas:${t.id}`, origen: 'plan' });
+    // Ola 8b: la entrevista técnica se entrena dentro del proyecto (2 de algoritmos y 1 de diseño).
+    out.push({ id: 's-tecnicas', rama: 'programacion', texto: 'Sesiones técnicas de 45 min', meta: PLAN.programacion.tecnica.sesionesPorSemana, clave: 'sesiones-tecnicas', nota: '2 de algoritmos y 1 de diseño', origen: 'plan' });
+  }
   if (t.tipo !== 'ventana') out.push({ id: 's-caps', rama: 'matematica', texto: 'Capítulo con test aprobado', meta: 1, clave: 'caps', origen: 'plan' });
   if (s === PLAN.etapaActual.semana.semana) {
     PLAN.etapaActual.semana.metas.forEach((m, i) => out.push({ id: `s-e${i}`, rama: m.rama, texto: m.texto, origen: 'plan' }));
@@ -435,10 +440,9 @@ export function cerradosAnio1(c: CtxPlan, fecha: string) {
   const t0 = c.t0 ?? T0_PLAN;
   const ts = TRAMOS.filter((t) => (t.tipo === 'proyecto' || t.tipo === 'cert') && t.hasta <= hitoSemana('T+12') - 3);
   const cerrado = (t: Tramo) => {
+    if (t.tipo === 'proyecto') return !!cierreProyecto(c.plan, t.id) || (t.id === 'P0' && finSemana(t.hasta, t0) < fecha);
     const p = c.plan.proyectos[t.id];
-    if (p?.examen && p.examen.puntaje >= 85) return true;
-    if (t.tipo === 'proyecto' && p && Object.values(p.estandar).filter(Boolean).length >= 6) return true;
-    return t.id === 'P0' && finSemana(t.hasta, t0) < fecha;
+    return !!(p?.examen && p.examen.puntaje >= 85);
   };
   return { total: ts.length, hechos: ts.filter(cerrado).length };
 }
@@ -492,3 +496,11 @@ export function filasAnio(fecha: string, c: CtxPlan, editadas: Record<string, st
 /** Promedio esperado: semana del plan sobre el total, para comparar. */
 export const avanceDelPlan = (fecha: string, t0 = T0_PLAN) => Math.max(0, Math.min(1, semanaDelPlan(fecha, t0) / SEMANAS));
 export { bimestreDelPlan };
+
+/** Los 4 pasos de la meta "Mapa de proyectos del portfolio" (prompt 23). */
+export const PASOS_MAPA: [string, string][] = [
+  ['json', 'proyectos.json validado'],
+  ['escena', 'Escena base 3D'],
+  ['lista', 'Versión de lista accesible'],
+  ['publicado', 'Publicado en el portfolio'],
+];

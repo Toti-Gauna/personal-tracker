@@ -9,7 +9,7 @@ import { appliesTo, averagePct, dayPct, monthLabel, ratio, valueOf, yearMonths }
 import type { Goal } from '../data/goals-types';
 import {
   accionMeta, alCerrar, avanceMeta, cierraEnMes, claveMes, esTarea, filasAnio, filasBimestre, metasMesGeneradas, metasSemanaGeneradas,
-  nombreBimestre, pasoMeta, rangoMes, resumenMes, semanasDelBimestre, tituloSemana, type CtxPlan,
+  nombreBimestre, PASOS_MAPA, pasoMeta, rangoMes, resumenMes, semanasDelBimestre, tituloSemana, type CtxPlan,
 } from '../data/metas-plan';
 import { BIMESTRES, PLAN, SEMANAS, T0_PLAN, diaSemanaCorto, faseTrabajo, fechaHito, finSemana, semanaDelPlan, type MetaGenerada } from '../data/plan';
 import { RAMA_COLOR, RAMAS } from '../data/ramas';
@@ -19,7 +19,7 @@ import { colorMapa } from '../data/mapa';
 import { addDays, parseDate } from '../data/time';
 import type { DayLog, Rama } from '../data/types';
 import { addProgress, deleteGoal, renameBimester, stepOf } from '../state/goals';
-import { marcarHito, moverHito, confirmarMetas, editarMeta, editarMetaFija, ensayarRespuesta, lunesDe, sumarContador, sumarHandyx, sumarHechoMeta } from '../state/plan';
+import { togglePasoMapa, marcarHito, moverHito, confirmarMetas, editarMeta, editarMetaFija, ensayarRespuesta, lunesDe, sumarContador, sumarHandyx, sumarHechoMeta } from '../state/plan';
 import { planSettings, useStore } from '../state/store';
 import { Calendario } from '../ui/Calendario';
 import { Casilla } from '../ui/Casilla';
@@ -79,6 +79,27 @@ function HitosRango({ desde, hasta, date }: { desde: string; hasta: string; date
         })}
       </ul>
     </>
+  );
+}
+
+/**
+ * Meta "Mapa de proyectos del portfolio": Trazo solo guarda la meta y sus 4 pasos; el diseño
+ * visual lo hace el usuario. Cada proyecto que cierra actualiza su nodo.
+ */
+function MapaPortfolio() {
+  const pasos = useStore((s) => s.plan.mapaPortfolio) ?? {};
+  const n = PASOS_MAPA.filter(([k]) => pasos[k]).length;
+  return (
+    <section className="mg-grupo mp-grupo" style={{ ['--c' as string]: RAMA_COLOR.programacion }}>
+      <div className="mp-rama-cab"><span className="mono mp-rama">programacion · meta</span><span className="mono sub">{n}/{PASOS_MAPA.length}</span></div>
+      <div className="mg-grupo-cab"><h2 className="resaltado">Mapa de proyectos del portfolio</h2></div>
+      <ul className="mp-hitos">
+        {PASOS_MAPA.map(([k, t]) => (
+          <li key={k}><Casilla checked={!!pasos[k]} label={`${t}: marcar`} onChange={() => togglePasoMapa(k)} /><div><span>{t}</span></div></li>
+        ))}
+      </ul>
+      <p className="sub">Cada proyecto que cierra actualiza su nodo (estado, tecnologías, qué reutiliza). Prompt 23.</p>
+    </section>
   );
 }
 
@@ -239,6 +260,7 @@ export function SemanaPlan({ day, editar }: { day: DayLog; editar: boolean }) {
           <ul className="mg-lista">{gs.map((g) => <GoalRow key={g.id} g={g} date={date} editar={editar} />)}</ul>
         </section>
       ))}
+      {!(ctx.plan.mapaPortfolio && PASOS_MAPA.every(([k]) => ctx.plan.mapaPortfolio![k])) && <MapaPortfolio />}
       <HitosRango desde={l} hasta={d7} date={date} />
       <StandBy plan={ctx.plan} date={date} />
     </>
@@ -383,6 +405,7 @@ export function BimestrePlan({ day, editar, elegido }: { day: DayLog; editar: bo
       </div>
       {editar && <p className="sub nota-izq">Vacío vuelve al texto del plan.</p>}
 
+      {n === 1 && <MapaPortfolio />}
       <HitosRango desde={b.inicio} hasta={b.fin} date={date} />
 
       <div className="pr-card mp-sig">

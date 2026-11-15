@@ -264,12 +264,18 @@ export interface Ajustes {
    * bloque pasa a simulacro de esa entrevista; si no, la búsqueda se parte en búsqueda e inglés.
    */
   entrevista?: boolean | { rol: string; empresa?: string };
+  /** Puerta de matemática sin aprobar ("W1"): el proyecto no arranca y programación pasa a matemática pura. */
+  puerta?: string;
 }
 
 /** Aplica la ventana W y la entrevista cercana al día ya armado. */
 export function ajustarDia(plan: PlannedRoutineBlock[], a: Ajustes): PlannedRoutineBlock[] {
   let out = plan;
-  if (a.ventana) {
+  if (a.puerta) {
+    out = out.map((p) => (p.block.rama === 'programacion'
+      ? { ...p, block: { ...p.block, label: `Matemática pura · puerta ${a.puerta}`, short: 'matemática', rama: 'matematica', tasks: [`Tema de ${a.puerta} hasta dominarlo`, `Test de ${a.puerta} (85 % o más)`] } }
+      : p));
+  } else if (a.ventana) {
     out = out.map((p) => (p.block.rama === 'programacion'
       ? { ...p, block: { ...p.block, label: `Matemática · ventana ${a.ventana}`, short: 'matemática', rama: 'matematica', tasks: ['Repaso de tarjetas', `Capítulo de la ventana ${a.ventana}`, 'Ejercicios del capítulo'] } }
       : p));

@@ -207,3 +207,36 @@ export function setMetaEmbudo(id: string, n: number) {
 export function toggleSprintCheck(id: string) {
   update((p) => ({ ...p, sprint: { ...(p.sprint ?? {}), checks: { ...(p.sprint?.checks ?? {}), [id]: !p.sprint?.checks?.[id] } } }));
 }
+
+/** Entrevista técnica del proyecto: documento de diseño, ejercicios con tests y defensa. */
+export function setTecnica(proyecto: string, patch: { diseno?: boolean; ejercicios?: number; defensa?: string | null }) {
+  update((p) => {
+    const cur = p.proyectos[proyecto] ?? proyectoVacio();
+    const t = { ...(cur.tecnica ?? {}), ...patch };
+    if (patch.defensa === null) delete t.defensa;
+    return { ...p, proyectos: { ...p.proyectos, [proyecto]: { ...cur, tecnica: t as NonNullable<typeof cur.tecnica> } } };
+  });
+}
+
+/** MCP publicado o agente con trazas de un proyecto. */
+export function toggleAgentico(proyecto: string, k: 'mcp' | 'agente') {
+  update((p) => {
+    const cur = p.proyectos[proyecto] ?? proyectoVacio();
+    return { ...p, proyectos: { ...p.proyectos, [proyecto]: { ...cur, [k]: !cur[k] } } };
+  });
+}
+
+/** Meta "Mapa de proyectos del portfolio": marcar un paso. */
+export function togglePasoMapa(id: string) {
+  update((p) => ({ ...p, mapaPortfolio: { ...(p.mapaPortfolio ?? {}), [id]: !p.mapaPortfolio?.[id] } }));
+}
+
+/** Revisión de mercado: ofertas cargadas, % por proyecto movible y el día en que se decidió el orden. */
+export function setMercado(patch: { ofertas?: number; pct?: Record<string, number>; decidido?: string | null }) {
+  update((p) => {
+    const cur = p.mercado ?? {};
+    const next = { ...cur, ...patch, pct: { ...(cur.pct ?? {}), ...(patch.pct ?? {}) } };
+    if (patch.decidido === null) delete next.decidido;
+    return { ...p, mercado: next as NonNullable<typeof p.mercado> };
+  });
+}

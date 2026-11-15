@@ -14,6 +14,14 @@ export interface ProyectoEstado {
   tiempo: { nucleo: number; producto: number; lanzamiento: number };
   revisiones: { fecha: string; texto: string; tipo: TipoError }[];
   examen?: { fecha: string; puntaje: number };
+  /**
+   * Ola 8b: la entrevista técnica dentro del proyecto. El proyecto no se marca cerrado sin el
+   * documento de diseño, el set de ejercicios con tests y la defensa simulada de 45 min.
+   */
+  tecnica?: { diseno?: boolean; ejercicios?: number; defensa?: string };
+  /** Un servidor MCP publicado y un agente con trazas por proyecto. */
+  mcp?: boolean;
+  agente?: boolean;
 }
 
 export interface HandyxSemana {
@@ -71,6 +79,10 @@ export interface PlanState {
   pausas: Pausa[];
   /** Hitos marcados como hechos o movidos de fecha: id → estado. */
   hitos: Record<string, { hecho?: string; fecha?: string }>;
+  /** Meta "Mapa de proyectos del portfolio": 4 pasos (Trazo guarda la meta; el diseño es tuyo). */
+  mapaPortfolio?: Record<string, boolean>;
+  /** Revisión de mercado: ofertas cargadas y % de ofertas que piden cada proyecto movible. */
+  mercado?: { ofertas?: number; pct?: Record<string, number>; decidido?: string };
   /** Sprint de búsqueda (10.2): metas del embudo editadas y casillas de CV, LinkedIn y caso. */
   sprint?: { metas?: Partial<Record<'aMedida' | 'mensajes' | 'respuestas' | 'recruiter' | 'tecnica' | 'oferta', number>>; checks?: Record<string, boolean> };
 }

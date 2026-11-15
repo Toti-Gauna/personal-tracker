@@ -1,3 +1,4 @@
+import { puertaBloqueando } from '../data/puertas';
 import { T0_PLAN } from '../data/plan';
 import { aplicarIntensiva } from '../data/busqueda';
 import { useSyncExternalStore } from 'react';
@@ -147,9 +148,10 @@ export function startDay(routine: RoutineId, wake: string, date = dateKey()) {
     const cfg = planSettings(s.settings);
     const dayType = routineFor(date, cfg);
     const t0 = s.settings?.startDate;
-    const ventana = ventanaW(date, t0).ahora?.id;
+    const puerta = puertaBloqueando(date, s.plan, t0) ?? undefined;
+    const ventana = ventanaW(date, t0).ahora?.id ?? puerta;
     const entrevista = entrevistaCerca(s.plan, date);
-    const blocks = buildBlocks(planDay(date, routine, wake, dayType, { ventana, entrevista }), carry).map((b) => (refs[b.key] ? { ...b, ...refs[b.key] } : b));
+    const blocks = buildBlocks(planDay(date, routine, wake, dayType, { ventana, entrevista, puerta }), carry).map((b) => (refs[b.key] ? { ...b, ...refs[b.key] } : b));
     const day: DayLog = { date, wake, routine, dayType, ...(ventana ? { ventana } : {}), blocks, notes: [], focus: [] };
     return { ...s, days: { ...s.days, [date]: day }, carry: restCarry };
   });

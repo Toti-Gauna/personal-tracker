@@ -16,7 +16,7 @@ export type TipoImport = 'sesion' | 'revision' | 'examen' | 'entrevista' | 'simu
 export const RAMAS_DE_TIPO: Record<TipoImport, Rama[]> = {
   sesion: ['matematica', 'programacion'],
   revision: ['programacion'],
-  examen: ['programacion'],
+  examen: ['programacion', 'matematica'],
   entrevista: ['ingles', 'trabajo'],
   simulacro: ['ingles', 'trabajo'],
   postulaciones: ['trabajo'],
@@ -148,8 +148,10 @@ export function validarImportacion(texto: string, ramaElegida?: Rama): Validacio
         return { texto: (x.texto as string).trim(), tipo: (x.tipo as string) ?? tiposOk?.[0] ?? 'otro' };
       });
     };
-    const proyecto = () => {
-      if (!TRAMOS.some((t) => t.id === o.proyecto && (t.tipo === 'proyecto' || t.tipo === 'cert'))) throw new Falla(L('proyecto'), '"proyecto" tiene que ser un id del plan: P0 a P10 o C1 a C3.');
+    // Ola 8b: el examen de una ventana (W1 a W3) es el test de su puerta de matemática.
+    const proyecto = (conVentanas = false) => {
+      const ok = TRAMOS.some((t) => t.id === o.proyecto && (t.tipo === 'proyecto' || t.tipo === 'cert' || (conVentanas && t.tipo === 'ventana')));
+      if (!ok) throw new Falla(L('proyecto'), `"proyecto" tiene que ser un id del plan: P0 a P10 o C1 a C3${conVentanas ? ' (o W1 a W3 para la puerta de matemática)' : ''}.`);
       return o.proyecto as string;
     };
 
@@ -192,7 +194,7 @@ export function validarImportacion(texto: string, ramaElegida?: Rama): Validacio
       d.hallazgos = hallazgos('hallazgos', ['concepto', 'tecnica', 'descuido']);
       if (!d.hallazgos?.length) throw new Falla(L('tipo'), 'Una revisión necesita "hallazgos" con al menos uno.');
     } else if (tipo === 'examen') {
-      d.proyecto = proyecto();
+      d.proyecto = proyecto(true);
       const p = opcNum('puntaje', 0);
       if (p === undefined || p > 100) throw new Falla(L(o.puntaje === undefined ? 'proyecto' : 'puntaje'), '"puntaje" va de 0 a 100.');
       d.puntaje = p;
@@ -270,7 +272,8 @@ export function queCambia(d: Importable, study: StudyState, colores: Record<Rama
     if (d.minutos) out.push({ color: c, titulo: `+${Math.round((d.minutos / 60) * 10) / 10} h de ${d.rama === 'matematica' ? 'matemática' : 'programación'}`, texto: 'Suma al contador de horas de la semana.' });
     if (a && d.capitulo) out.push({ color: colores.main, titulo: `Ruta: ${a.title.split(' · ').pop()} ${d.capitulo} de ${a.units?.length ?? '?'}`, texto: `La rama ${d.rama} avanza y el mapa marca el commit.` });
   } else if (d.tipo === 'revision' || d.tipo === 'examen') {
-    if (d.tipo === 'examen') out.push({ color: c, titulo: `Examen de ${d.proyecto} · ${d.puntaje} %`, texto: (d.puntaje ?? 0) >= 85 ? 'Cierra el proyecto: 85 % o más.' : 'No llega al 85 %: el proyecto sigue abierto.' });
+    const puerta = d.proyecto?.startsWith('W');
+    if (d.tipo === 'examen') out.push({ color: c, titulo: `${puerta ? 'Puerta' : 'Examen de'} ${d.proyecto} · ${d.puntaje} %`, texto: puerta ? ((d.puntaje ?? 0) >= 85 ? 'Puerta aprobada: el proyecto siguiente puede arrancar.' : 'No llega al 85 %: el proyecto siguiente sigue esperando y la programación pasa a matemática pura.') : (d.puntaje ?? 0) >= 85 ? 'Examen aprobado: con la entrevista técnica completa, cierra el proyecto.' : 'No llega al 85 %: el proyecto sigue abierto.' });
     if (d.hallazgos?.length) out.push({ color: c, titulo: `${d.hallazgos.length} ${d.hallazgos.length === 1 ? 'hallazgo' : 'hallazgos'} en ${d.proyecto}`, texto: `${d.hallazgos.map((h) => h.tipo).join(', ')}. Van a las revisiones del proyecto y al mapa.` });
   } else if (d.tipo === 'entrevista' || d.tipo === 'simulacro') {
     if (d.puntaje !== undefined) out.push({ color: c, titulo: `${d.tipo === 'entrevista' ? 'Entrevista' : 'Simulacro'} · ${d.puntaje} %`, texto: 'Queda en el mapa de la rama.' });

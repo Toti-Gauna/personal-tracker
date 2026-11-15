@@ -5,6 +5,7 @@
 import { PLAN, finSemana, inicioSemana, nombreTramo, tramoActivo, ventanaW, type Capa } from './plan';
 import { enPausa, type PlanSettings, type PlanState } from './plan-state';
 import { RAMA_NOMBRE } from './ramas';
+import { puertaBloqueando } from './puertas';
 import { addDays, fmtFecha, parseDate, toMin } from './time';
 import type { DayLog, Rama, RamaOMain } from './types';
 
@@ -56,6 +57,16 @@ export function avisosEntreRamas(date: string, p: PlanState, cfg: PlanSettings, 
         href: `#/metas/proyecto/${t.id}`,
       });
     }
+  }
+  // Ola 8b: puerta de matemática sin aprobar → el proyecto no arranca.
+  const pb = puertaBloqueando(date, p, t0);
+  if (pb) {
+    out.push({
+      id: `puerta-${pb}`, de: 'matematica', a: 'programacion',
+      titulo: `${t.id} no arranca: falta aprobar la puerta ${pb}`,
+      texto: 'Hasta aprobar los tests del tema (85 % o más), los bloques de programación son de matemática pura. Cada semana extra se descuenta del colchón.',
+      href: `#/metas/proyecto/${pb}`,
+    });
   }
   // Ventana W que empieza en 7 días o menos.
   const w = ventanaW(date, t0);

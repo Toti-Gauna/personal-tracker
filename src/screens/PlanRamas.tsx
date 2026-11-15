@@ -13,7 +13,7 @@ import { RAMA_COLOR } from '../data/ramas';
 import { addDays } from '../data/time';
 import type { DayLog } from '../data/types';
 import {
-  ensayarRespuesta, estadoPostulacion, retomar, fallaEntrevista, guardarEntrevista, lunesDe, marcarPrep, nuevaPostulacion, sumarFallaIngles, sumarHandyx,
+  ensayarRespuesta, estadoPostulacion, retomar, setMercado, marcarHito, fallaEntrevista, guardarEntrevista, lunesDe, marcarPrep, nuevaPostulacion, sumarFallaIngles, sumarHandyx,
 } from '../state/plan';
 import { Casilla } from '../ui/Casilla';
 import { cortesCorridos } from '../data/busqueda';
@@ -92,6 +92,8 @@ export function PlanBusqueda({ day }: { day: DayLog }) {
         </>
       )}
 
+      <RevisionMercado date={date} />
+
       <div className="fila-t pp-sec"><span className="etiqueta">Postulaciones</span><button className="btn-borde pb-nueva" onClick={() => setNueva(nueva === 'post' ? null : 'post')}>+ Nueva</button></div>
       {nueva === 'post' && <FormPostulacion date={date} onListo={() => setNueva(null)} />}
       <ul className="pb-posts">
@@ -105,6 +107,50 @@ export function PlanBusqueda({ day }: { day: DayLog }) {
       </ul>
       {!plan.postulaciones.length && <p className="sub">Las postulaciones con detalle van acá; el contador rápido está en Hoy («+1 Postulación»). Tocá el estado para cambiarlo.</p>}
     </main>
+  );
+}
+
+/**
+ * Revisión de mercado (5 ter): la semana del 16 nov se cargan unas 30 ofertas en la planilla
+ * "Ofertas remotas" y el domingo 22 nov se decide el orden de lo que se puede mover. Reglas: lo
+ * que piden el 40 % o más de las ofertas sube; menos del 10 %, baja. Las ventanas de matemática
+ * y la cadena donde un proyecto reusa al anterior no se mueven.
+ */
+const MOVIBLES: [string, string][] = [['P2', 'Escudo (Go)'], ['P4', 'Estación v1 (Rust)'], ['P5', 'Faro v2'], ['C1', 'AWS SAA'], ['C2', 'Security+'], ['C3', 'AWS ML Engineer']];
+const veredicto = (pct?: number) => (pct == null ? '—' : pct >= 40 ? 'sube' : pct < 10 ? 'baja' : 'queda');
+
+function RevisionMercado({ date }: { date: string }) {
+  const m = useStore((s) => s.plan.mercado) ?? {};
+  const t0 = useStore((s) => s.settings?.startDate) ?? T0_PLAN;
+  const domingo = addDays(t0, 6);
+  const ofertas = m.ofertas ?? 0;
+  const decidir = () => {
+    setMercado({ decidido: date });
+    marcarHito('trabajo-6', date);
+  };
+  return (
+    <section className="pr-card pb-mercado">
+      <div className="fila-t"><span className="etiqueta">Revisión de mercado · {fechaCorta(domingo)}</span><span className="mono">{ofertas}/30 ofertas</span></div>
+      <p className="sub">Cargá unas 30 ofertas en la planilla "Ofertas remotas". Por cada proyecto que se puede mover: qué % de las ofertas lo pide. 40 % o más sube; menos de 10 %, baja. Las ventanas de matemática y la cadena de reuso no se mueven.</p>
+      <div className="pb-mercado-ofertas">
+        <button className="mg-mas chico" onClick={() => setMercado({ ofertas: Math.max(0, ofertas - 1) })} aria-label="Restar una oferta">−</button>
+        <button className="mg-mas chico" onClick={() => setMercado({ ofertas: ofertas + 1 })}>+1 oferta</button>
+      </div>
+      <ul className="pb-movibles">
+        {MOVIBLES.map(([id, n]) => {
+          const pct = m.pct?.[id];
+          const v = veredicto(pct);
+          return (
+            <li key={id}>
+              <span>{n}</span>
+              <input className="campo-texto mono" inputMode="numeric" defaultValue={pct ?? ''} placeholder="%" aria-label={`% de ofertas que piden ${n}`} onBlur={(e) => { const x = e.target.value.replace(/\D/g, ''); if (x !== '') setMercado({ pct: { [id]: Math.min(100, Number(x)) } }); }} />
+              <b className={`mono pb-v ${v}`}>{v}</b>
+            </li>
+          );
+        })}
+      </ul>
+      {m.decidido ? <p className="mono sub">orden confirmado el {fechaCorta(m.decidido)}</p> : <button className="btn-borde" onClick={decidir} disabled={ofertas < 1}>Confirmar el orden</button>}
+    </section>
   );
 }
 

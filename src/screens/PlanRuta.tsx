@@ -1,6 +1,7 @@
+import { cierreProyecto, semanasGanadas } from '../data/puertas';
 import { sprintActual } from '../data/sprint';
 import { planSettings, useStore } from '../state/store';
-import { PLAN, SEMANAS, fechaCorta, fechaHito, hitoSemana, proximasEntregas, proyectos, finSemana, type Entrega } from '../data/plan';
+import { FIN_PROGRAMACION, PLAN, SEMANAS, fechaCorta, fechaHito, hitoSemana, proximasEntregas, proyectos, finSemana, type Entrega } from '../data/plan';
 import { RAMA_COLOR } from '../data/ramas';
 import { fmtFecha } from '../data/time';
 import type { DayLog } from '../data/types';
@@ -15,6 +16,8 @@ const fechaLarga = (d: string) => `${Number(d.slice(8))} ${MESES[Number(d.slice(
 /** 7.1 Ruta: la semana del plan, los hitos, las seis ramas con su etapa, lo que viene y T+18. */
 export function PlanRuta({ day }: { day: DayLog }) {
   const date = day.date;
+  const planSt = useStore((s) => s.plan);
+  const cierreProyectoRuta = (id: string) => cierreProyecto(planSt, id);
   const v = usePlanVista(date);
   const hitos = PLAN.hitos.filter((h) => h.id !== 'T+0');
   const marcas = new Set(PLAN.hitos.map((h) => h.semana));
@@ -24,7 +27,8 @@ export function PlanRuta({ day }: { day: DayLog }) {
   const plan = useStore((s) => s.plan);
   const intensiva = useStore((s) => planSettings(s.settings).modo === 'busqueda-intensiva');
   const sprint = intensiva ? sprintActual(date, plan, v.t0) : null;
-  const cerrados = proyectos().filter((p) => p.id !== 'P0' && finSemana(p.hasta, v.t0) < date).length;
+  const ganadas = semanasGanadas(plan, date, v.t0);
+  const cerrados = proyectos().filter((p) => p.id !== 'P0' && cierreProyectoRuta(p.id)).length;
   const total = proyectos().filter((p) => p.id !== 'P0').length;
   const pctPlan = Math.round((v.semana / SEMANAS) * 100);
   return (
@@ -48,6 +52,11 @@ export function PlanRuta({ day }: { day: DayLog }) {
           </div>
         ))}
       </div>
+
+      <a className="pr-ganadas" href="#/metas/proyecto">
+        <b className="mono">{ganadas.total > 0 ? '+' : ''}{ganadas.total}</b>
+        <span><b>semanas ganadas</b><small className="sub">Programación en {FIN_PROGRAMACION} semanas en vez de {PLAN.programacion.semanasOriginal}{ganadas.proyectos ? ` · ${ganadas.proyectos > 0 ? '+' : ''}${ganadas.proyectos} por proyectos` : ''}{ganadas.puertas ? ` · −${ganadas.puertas} por puertas de matemática` : ''}</small></span>
+      </a>
 
       {sprint && (
         <a className="pr-card pr-sprint" href="#/metas/sprint" style={{ ['--c' as string]: RAMA_COLOR.trabajo }}>

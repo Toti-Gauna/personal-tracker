@@ -1,3 +1,4 @@
+import { contadoresAgenticos } from '../data/puertas';
 import { useState } from 'react';
 import { bimester, mejoraAcumulada, racha } from '../data/derive';
 import { GROUP_LABEL, GROUP_ORDER, SEALS, SEAL_XP, history, hitos, levelOf, totalXp, type SealDef } from '../data/profile';
@@ -26,6 +27,7 @@ export function Perfil({ day }: { day: DayLog }) {
   const hs = hitos(s, day.date);
   const hist = history(s, settings.startDate);
   const bim = bimester(settings.startDate, day.date, s.goals.bimesterNames);
+  const ag = contadoresAgenticos(s.plan);
 
   return (
     <main className="pantalla perfil">
@@ -49,6 +51,13 @@ export function Perfil({ day }: { day: DayLog }) {
         <div><b className="mono">{rach}</b><span>racha</span></div>
         <div><b className="mono">{s.study.cards.length}</b><span>tarjetas</span></div>
         <div><b className="mono">+{fmtPct(acum, 1)}%</b><span>mejora</span></div>
+      </div>
+
+      <div className="fila-t hitos-t"><span className="etiqueta">Portfolio agéntico</span><a className="subrayado mono" href="#/metas/proyecto">por proyecto</a></div>
+      <div className="tres-agentico" role="list">
+        <div role="listitem"><b className="mono">{ag.mcp}/{ag.total}</b><span>MCP publicados</span></div>
+        <div role="listitem"><b className="mono">{ag.agentes}/{ag.total}</b><span>agentes con trazas</span></div>
+        <div role="listitem"><b className="mono">{ag.defensas}/{ag.total}</b><span>defensas aprobadas</span></div>
       </div>
 
       <div className="fila-t hitos-t"><span className="etiqueta">Próximos hitos</span><span className="mono sub">los más cerca primero</span></div>
