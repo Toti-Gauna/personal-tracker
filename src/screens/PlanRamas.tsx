@@ -336,6 +336,7 @@ export function PlanHandyx({ day }: { day: DayLog }) {
         <button className="mg-mas chico" onClick={() => sumarHandyx(date, { horas: 1 })} aria-label="Sumar 1 hora a mano">+1 h</button>
       </div>
 
+      {/* TODO(ola 9): prestadores activos y clientes que vuelven (métricas del plan) todavía no tienen fila propia; entran por el JSON de la semana. */}
       <div className="ph-stats">
         <div><span className="sub">Operaciones</span><b className="mono">{sem.operaciones ?? 0}</b><button className="mg-mas chico" onClick={() => sumarHandyx(date, { operaciones: 1 })} aria-label="Sumar una operación">+1</button></div>
         <div>

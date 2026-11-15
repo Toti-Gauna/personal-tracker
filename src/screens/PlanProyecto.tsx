@@ -43,6 +43,7 @@ export function PlanProyecto({ day, id }: { day: DayLog; id?: string }) {
   const par = PLAN.programacion.pares.find((x) => x.includes(t.id));
   const otro = par ? tramoPorId(par[0] === t.id ? par[1] : par[0]) : undefined;
   const conEstandar = t.tipo === 'proyecto' && t.id !== 'P0';
+  // TODO(ola 9): textos del estándar por proyecto (el visor 3D de Faro, el de Escudo…); hoy son los generales del plan.
   const capas = PLAN.programacion.estandar;
   const hechas = capas.filter((c) => p.estandar[c.id]).length;
   const titulo = t.tipo === 'cert' ? t.corto ?? t.nombre : t.tipo === 'ventana' ? `Ventana ${t.id}` : t.nombre;

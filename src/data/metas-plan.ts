@@ -65,6 +65,8 @@ function sumaContador(p: PlanState, id: string, desde: string, hasta: string) {
   return Object.entries(p.contadores).filter(([l]) => l >= l0 && l <= hasta).reduce((s, [, c]) => s + (c[id] ?? 0), 0);
 }
 
+// TODO(ola 9): después de Aritmética (B1) el catálogo de Estudio no trae Álgebra, Geometría ni Cálculo: los capítulos
+// de B2 en adelante cuentan cuando esas actividades existan.
 export const conamatDe = (study: StudyState) => study.activities.find((a) => a.id === 'conamat');
 
 function capsAprobados(study: StudyState, desde: string, hasta: string) {

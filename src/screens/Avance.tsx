@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { programacionDelPlan } from '../data/etiquetas';
 import { AREAS } from '../data/defaults';
 import { bimester, dayNumber, mejoraAcumulada, racha } from '../data/derive';
 import { appliesTo, averagePct, monthLabel, periodRange, ratio, valueOf } from '../data/goals';
@@ -23,6 +24,7 @@ export function Avance({ day, presentacion }: { day: DayLog; presentacion: boole
   const [periodo, setPeriodo] = useState<Periodo>('semana');
   const date = day.date;
   const bim = bimester(settings.startDate, date, s.goals.bimesterNames);
+  const progPlan = programacionDelPlan(date, settings.startDate);
   const n = dayNumber(settings.startDate, date);
   const rach = racha(s.days, date);
   const lv = levelOf(totalXp(s));
@@ -117,7 +119,7 @@ export function Avance({ day, presentacion }: { day: DayLog; presentacion: boole
               const total = a.units ? a.units.length : a.total;
               return (
                 <li key={a.id} style={{ ['--c' as string]: AREAS[f?.color ?? 'ing'].css }}>
-                  <div><i /><span>{a.title}</span><b className="mono">{hechas}/{total}</b></div>
+                  <div><i /><span>{a.front === 'prog' && progPlan ? `${progPlan.replace('Programación · ', '')} · ${a.title}` : a.title}</span><b className="mono">{hechas}/{total}</b></div>
                   <span className="mg-barra"><span style={{ width: `${ratio(hechas, total) * 100}%` }} /></span>
                 </li>
               );
