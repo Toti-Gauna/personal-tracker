@@ -101,24 +101,30 @@
 .toast-x { width: 36px; height: 36px; font-size: 22px; color: var(--sub); }
 @keyframes toast-in { from { opacity: 0; transform: translateY(-8px); } }
 
-/* Modal */
+/* Modal: hoja inferior que sube desde abajo, con asa y botones grandes. */
 .modal-fondo {
   position: fixed; inset: 0; z-index: 55;
-  background: color-mix(in srgb, var(--papel) 70%, transparent);
-  display: grid; place-items: center;
-  padding: var(--gutter);
-  padding-bottom: calc(var(--bar-h) + var(--safe-b) + 16px);
+  background: color-mix(in srgb, #000 55%, transparent);
+  display: flex; align-items: flex-end; justify-content: center;
+  animation: fondo-in 0.2s ease-out;
 }
 .modal {
-  width: 100%; max-width: 440px;
+  width: 100%; max-width: 560px; max-height: 90dvh; overflow-y: auto;
   background: var(--papel);
-  border: 1px solid var(--tinta);
-  border-radius: 14px;
-  padding: 24px;
+  border: 1px solid var(--linea);
+  border-bottom: 0;
+  border-top: 3px solid var(--c, var(--tinta));
+  border-radius: 22px 22px 0 0;
+  padding: 10px var(--gutter) calc(var(--safe-b) + 20px);
+  animation: hoja-sube 0.28s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
-.modal-k { color: var(--c); margin-bottom: 12px; }
-.modal h2 { font-size: 28px; margin-bottom: 12px; }
-.modal p { color: var(--sub); margin: 0 0 20px; }
+.modal::before { content: ''; display: block; width: 44px; height: 4px; border-radius: 2px; background: var(--linea); margin: 0 auto 18px; }
+.modal-k { color: var(--c); margin-bottom: 10px; }
+.modal h2 { font-size: 26px; margin-bottom: 10px; }
+.modal p { color: var(--sub); margin: 0 0 22px; }
+.modal .btn-borde { margin-top: 10px; }
+@keyframes fondo-in { from { opacity: 0; } }
+@keyframes hoja-sube { from { transform: translateY(100%); } }
 
 /* Hoja inferior */
 .hoja-fondo { position: fixed; inset: 0; z-index: 40; background: color-mix(in srgb, var(--papel) 55%, transparent); overflow-y: auto; }
@@ -137,5 +143,5 @@
 
 @media (prefers-reduced-motion: reduce) {
   .trazo { transition-duration: 0.15s; }
-  .toast { animation: none; }
+  .toast, .modal, .modal-fondo { animation: none; }
 }

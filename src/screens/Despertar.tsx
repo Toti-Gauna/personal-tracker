@@ -50,15 +50,12 @@ export function Despertar({ date }: { date: string }) {
   const n = dayNumber(settings.startDate, date);
 
   return (
-    <div className="despertar">
-      <div className="pantalla despertar-fondo" aria-hidden="true">
+    <main className="pantalla despertar-pantalla" aria-labelledby="desp-t">
+      <div className="despertar-cab">
         <Marca date={date} />
-        <div className="etiqueta">{fmtFecha(date)}</div>
-        <div className="titulo dia-n">Día {String(n).padStart(2, '0')}</div>
+        <div className="etiqueta">{fmtFecha(date)} · día {String(n).padStart(2, '0')}</div>
       </div>
-      <div className="hoja-fondo">
-        <section className="hoja" role="dialog" aria-modal="true" aria-labelledby="desp-t">
-          <div className="hoja-asa" />
+      <div className="despertar-cuerpo">
           <div className="etiqueta">Buen día, {settings.names.me} · {toHHMM(now)}</div>
           <h1 id="desp-t" className="titulo desp-t">¿A qué hora te levantaste?</h1>
 
@@ -101,11 +98,12 @@ export function Despertar({ date }: { date: string }) {
             ))}
           </ul>
 
-          <button className="btn-principal" onClick={() => startDay(choice, wake, date)}>Empezar el día</button>
           <p className="nota">Te lo pregunta una vez por día, la primera vez que abrís Trazo.<br />Hoy toca la de {rutina.label.toLowerCase()}; las dos se ven en Ajustes.</p>
-        </section>
       </div>
-    </div>
+      <div className="despertar-pie">
+        <button className="btn-principal" onClick={() => startDay(choice, wake, date)}>Empezar el día · {wake}</button>
+      </div>
+    </main>
   );
 }
 

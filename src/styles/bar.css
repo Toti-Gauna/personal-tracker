@@ -58,25 +58,33 @@
 .mini {
   position: fixed;
   left: var(--gutter); right: var(--gutter);
-  bottom: calc(var(--bar-h) + var(--safe-b) + 8px);
+  bottom: calc(var(--bar-h) + var(--safe-b) + 10px);
   z-index: 9;
   max-width: calc(720px - 2 * var(--gutter));
   margin-inline: auto;
   display: flex;
   align-items: stretch;
-  background: var(--papel);
-  border: 1px solid var(--linea);
-  border-radius: 10px;
+  background: var(--campo);
+  border: 1px solid var(--tinta);
+  border-radius: 12px;
   overflow: hidden;
 }
-.mini .ir { flex: 1; min-width: 0; display: flex; align-items: center; gap: 10px; padding: 8px 12px; text-align: left; }
-.mini .punto { width: 8px; height: 8px; background: var(--c, var(--ing)); flex: none; }
-.mini .t { min-width: 0; flex: 1; }
-.mini .t b { display: block; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.mini .t small { display: block; font-family: var(--font-mono); font-size: 11.5px; color: var(--sub); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.mini .tiempo { font-family: var(--font-mono); font-size: 22px; }
-.mini .pausa { width: 52px; border-left: 1px solid var(--linea); display: grid; place-items: center; }
-.mini .avance { position: absolute; z-index: 1; left: 0; bottom: 0; height: 2px; background: var(--c, var(--ing)); }
+.mini::before { content: ''; flex: none; width: 5px; background: var(--c, var(--ing)); }
+.mini-ir { flex: 1; min-width: 0; display: flex; align-items: center; gap: 12px; padding: 10px 12px 12px 14px; text-align: left; }
+.mini-t { min-width: 0; flex: 1; display: grid; gap: 1px; }
+.mini-t b { font-weight: 600; font-size: 16px; line-height: 1.25; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.mini-estado { display: flex; align-items: center; gap: 6px; font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--c, var(--ing)); }
+.mini-estado i { width: 7px; height: 7px; border-radius: 50%; background: currentColor; animation: mini-late 1.6s ease-in-out infinite; }
+.mini.en-pausa .mini-estado { color: var(--sub); }
+.mini.en-pausa .mini-estado i { animation: none; }
+.mini-det { font-family: var(--font-mono); font-size: 11.5px; color: var(--sub); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.mini-tiempo { font-family: var(--font-mono); font-size: 26px; line-height: 1; letter-spacing: -0.02em; flex: none; }
+.mini-pausa { flex: none; width: 56px; border-left: 1px solid var(--linea); display: grid; place-items: center; color: var(--tinta); }
+.mini-pausa:active { background: var(--linea); }
+.mini-barra { position: absolute; left: 5px; right: 0; bottom: 0; height: 3px; background: var(--linea); }
+.mini-barra span { display: block; height: 100%; background: var(--c, var(--ing)); }
+@keyframes mini-late { 50% { opacity: 0.25; } }
+@media (prefers-reduced-motion: reduce) { .mini-estado i { animation: none; } }
 
 .splash {
   position: fixed; inset: 0; z-index: 50;
