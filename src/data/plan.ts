@@ -26,6 +26,10 @@ export interface Tramo {
   industria?: string;
   /** Producto que crece de v1 a v2 ("faro"). */
   producto?: string;
+  /** Ola 8b: semanas meta del tramo (calendario comprimido). */
+  meta?: number;
+  /** Semanas de tope de un proyecto (meta + 1): si se pasa, se recorta alcance, no calendario. */
+  tope?: number;
   que: string;
   stack?: string[];
   perfil?: string;
@@ -154,7 +158,17 @@ interface PlanFile {
   semanasPorBimestre: number;
   ramas: { id: Rama; nombre: string; color: string; contiene: string }[];
   hitos: Hito[];
-  programacion: { tramos: Tramo[]; pares: [string, string][]; estandar: { id: Capa; nombre: string; texto: string }[]; presupuesto: { nucleo: number; producto: number; lanzamiento: number }; laboratorios: string };
+  programacion: {
+    tramos: Tramo[]; pares: [string, string][]; estandar: { id: Capa; nombre: string; texto: string }[]; presupuesto: { nucleo: number; producto: number; lanzamiento: number }; laboratorios: string;
+    /** Créditos de la API de Claude (US$) por proyecto y reserva. */
+    creditos: Record<string, number>;
+    /** Semanas del calendario original, para el contador de semanas ganadas. */
+    semanasOriginal: number;
+    /** Entrevista técnica dentro de cada proyecto. */
+    tecnica: { sesionesPorSemana: number; ejercicios: [number, number]; defensaMin: number; paginasDiseno: number };
+    /** Puertas de matemática: ventana → proyecto que no arranca sin aprobarla. */
+    puertas: Record<string, string>;
+  };
   matematica: { tramos: TramoMate[]; corte: number };
   trabajo: { fases: Fase[]; embudo: { semanas: number; postulaciones: number; mensajes: number; entrevistas: [number, number]; ofertas: [number, number] }; porDia: { postulaciones: number; mensajes: number }; postsPorSemana: number };
   ingles: { fases: Fase[]; respuestas: string[]; minutosDiarios: number };
@@ -186,6 +200,15 @@ export const SEMANAS = PLAN.semanas;
 export const SEMANAS_BIM = PLAN.semanasPorBimestre;
 export const BIMESTRES = Math.ceil(SEMANAS / SEMANAS_BIM);
 export const TRAMOS = PLAN.programacion.tramos;
+/** Última semana del calendario de programación (53 desde la Ola 8b; antes, 78). */
+export const FIN_PROGRAMACION = TRAMOS[TRAMOS.length - 1].hasta;
+/**
+ * Después del calendario de programación (semana 54 a 78) queda margen: matemática, inglés y
+ * salud siguen hasta T+18. No es una fila del calendario (son 19), pero las pantallas lo usan.
+ */
+export const MARGEN: Tramo = { id: 'margen', desde: FIN_PROGRAMACION + 1, hasta: PLAN.semanas, tipo: 'colchon', nombre: 'Margen', que: 'Lo que sobra del calendario comprimido: entrevistas senior, C1 y lo que sumó la revisión de mercado' };
+/** El tramo de programación de una semana (o el margen después del calendario). */
+export const tramoEnSemana = (s: number) => TRAMOS.find((x) => s >= x.desde && s <= x.hasta) ?? (s > FIN_PROGRAMACION ? MARGEN : TRAMOS[0]);
 
 // ——— Fechas ———
 
@@ -225,7 +248,7 @@ export const tramoDelAnio = (bimestre: number) => (bimestre <= 6 ? 'anio1' : 'fi
 /** El tramo de programación activo (proyecto, certificación, ventana, pausa o colchón). */
 export function tramoActivo(fecha: string, t0 = T0_PLAN) {
   const s = Math.max(1, Math.min(SEMANAS, semanaDelPlan(fecha, t0)));
-  const t = TRAMOS.find((x) => s >= x.desde && s <= x.hasta)!;
+  const t = tramoEnSemana(s);
   return { ...t, semana: s - t.desde + 1, semanas: t.hasta - t.desde + 1, ...fechas(t.desde, t.hasta, t0) };
 }
 

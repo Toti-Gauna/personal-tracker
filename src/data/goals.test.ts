@@ -33,7 +33,7 @@ describe('períodos', () => {
     expect(bimesterAt('2028-05-15').n).toBe(9);
     // Ola 8: el bimestre de la app es el del plan T+18 (9 semanas desde T0) con su nombre sugerido.
     expect(bimester('2026-11-16', '2026-12-14')).toMatchObject({ n: 1, week: 5, weeks: 9, name: 'El despegue' });
-    expect(bimester('2026-11-16', '2027-01-18')).toMatchObject({ n: 2, week: 1, name: 'Escudo, W1 y Surco v1' });
+    expect(bimester('2026-11-16', '2027-01-18')).toMatchObject({ n: 2, week: 1, name: 'Surco v1 y AWS SAA' });
     expect(bimester('2026-11-16', '2028-05-14')).toMatchObject({ n: 9, week: 6, weeks: 6 });
     expect(bimester('2026-11-16', '2026-12-14', { 1: 'El salto' }).name).toBe('El salto');
   });

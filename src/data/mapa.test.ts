@@ -9,12 +9,12 @@ describe('mapa en ramas', () => {
     expect(f[0]).toMatchObject({ hito: 'T+18', fecha: '2028-05-14' });
     expect(f[f.length - 1]).toMatchObject({ hito: 'T+0', fecha: '2026-11-16' });
     const head = f.findIndex((x) => x.tipo === 'head');
-    expect(f[head].texto).toBe('Faro v1 · semana 3 de 4');
+    expect(f[head].texto).toBe('Faro v1 · semana 3 de 3');
     expect(f.slice(1, head).every((x) => x.futuro || x.tipo === 'gap')).toBe(true);
     expect(f.slice(head + 1).every((x) => !x.futuro)).toBe(true);
-    // Este mes incluye T+2 (11 ene) y la entrega de Faro v1 (27 dic).
+    // Este mes incluye T+2 (11 ene) y la entrega de Faro v1 (20 dic).
     expect(f.some((x) => x.hito === 'T+2')).toBe(true);
-    expect(f.some((x) => x.a === 'trabajo' && x.fecha === '2026-12-27')).toBe(true);
+    expect(f.some((x) => x.a === 'trabajo' && x.fecha === '2026-12-20')).toBe(true);
     // Ordenadas de la más nueva a la más vieja.
     const fechas = f.filter((x) => x.tipo !== 'gap').map((x) => x.fecha);
     expect([...fechas].sort().reverse()).toEqual(fechas);

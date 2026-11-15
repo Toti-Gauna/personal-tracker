@@ -5,7 +5,7 @@
  */
 import {
   PLAN, SEMANAS, SEMANAS_BIM, TRAMOS, bimestreDelPlan, corteHandyx, faseIngles, faseTrabajo, fechaCorta, fechaHito, finSemana, hitoSemana,
-  inicioSemana, metasSemanaPlan, nombreTramo, semanaDelPlan, T0_PLAN, tramoActivo, type MetaGenerada, type Tramo,
+  inicioSemana, metasSemanaPlan, tramoEnSemana, nombreTramo, semanaDelPlan, T0_PLAN, tramoActivo, type MetaGenerada, type Tramo,
 } from './plan';
 import { enPausa, type PlanState } from './plan-state';
 import { RAMAS } from './ramas';
@@ -318,7 +318,7 @@ export function semanasDelBimestre(n: number, t0 = T0_PLAN) {
   const hasta = Math.min(SEMANAS, n * SEMANAS_BIM);
   const semanas: { s: number; letra: string; tramo: Tramo }[] = [];
   for (let s = desde; s <= hasta; s++) {
-    const t = TRAMOS.find((x) => s >= x.desde && s <= x.hasta)!;
+    const t = tramoEnSemana(s);
     semanas.push({ s, letra: letraTramo(t), tramo: t });
   }
   const vistos = new Map<string, string>();

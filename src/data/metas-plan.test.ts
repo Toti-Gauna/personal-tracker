@@ -41,7 +41,7 @@ describe('metas generadas desde el plan', () => {
 
   it('lo que cierra en diciembre: la entrega de Faro v1 y la pausa', () => {
     const c = cierraEnMes('2026-12-01', [{ fecha: '2026-12-17', rol: 'AI Engineer' }], T0);
-    expect(c.map((x) => [x.fecha, x.rama])).toEqual([['2026-12-17', 'trabajo'], ['2026-12-27', 'programacion'], ['2026-12-28', null]]);
+    expect(c.map((x) => [x.fecha, x.rama])).toEqual([['2026-12-17', 'trabajo'], ['2026-12-20', 'programacion'], ['2026-12-21', null]]);
   });
 
   it('los contadores suman lo de la semana; las horas también salen de las sesiones de foco', () => {
@@ -66,7 +66,7 @@ describe('proyecto', () => {
 describe('bimestre y año', () => {
   it('B1 tiene 9 semanas con P0, Faro, la pausa y Escudo; B9 tiene 6', () => {
     const b1 = semanasDelBimestre(1, T0);
-    expect(b1.semanas.map((s) => s.letra)).toEqual(['P0', 'P0', 'F', 'F', 'F', 'F', '—', 'E', 'E']);
+    expect(b1.semanas.map((s) => s.letra)).toEqual(['P0', 'P0', 'F', 'F', 'F', '—', 'E', 'E', 'E']);
     expect(b1.fin).toBe('2027-01-17');
     expect(semanasDelBimestre(9, T0).semanas).toHaveLength(6);
   });
