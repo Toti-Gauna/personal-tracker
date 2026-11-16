@@ -5,7 +5,7 @@ Tracker personal de Toti: el día en horas, el estudio con su propio motor de re
 - **Diseño:** [canvas de Trazo](https://claude.ai/artifact/6Cc2E6aW2ViU5ikovpsRTy)
 - **Roadmap de estudio:** [ruta ML + DevSecOps](https://claude.ai/artifact/9PEokku7mBLZdCFJr1zqXP)
 - **Pantallas:** presentación `Trazo-pantallas.pptx` y su ZIP de imágenes (44 pantallas, 8 flujos).
-- **Estado:** olas 0 a 12b hechas y en `main`. Las olas 13 a 15 (check-ins de salud, arreglos de Hoy y un solo roadmap de matemática) están planificadas en §6 ter. Este archivo es la fuente de verdad.
+- **Estado:** olas 0 a 12b hechas y en `main`. Las olas 13 a 16 (check-ins de salud, arreglos de Hoy, un solo roadmap de matemática y el Plan T+18 extendido) están planificadas en §6 ter y §6 quater. Este archivo es la fuente de verdad.
 
 ---
 
@@ -380,6 +380,7 @@ Desde el lunes 16 nov 2026 la prioridad es un trabajo remoto de USD 3.000 a 5.00
 | 13 · Check-ins de salud | Peso al entrar a Entreno la primera vez del día, registro de corridas (minutos, km, sensación) y medidas mensuales (§6 ter) | Sonnet 5.5 · alto |
 | 14 · Arreglos de Hoy | Aviso de bloque pasado que cuenta mal, títulos de meta cortados, toast que tapa el título y marcadores del mapa sin atenuar (§6 ter) | Sonnet 5.5 · medio |
 | 15 · Un solo roadmap de matemática | Unificar Estudio (M0 a M10) con la Ruta y el plan, duraciones y actividades para M2 en adelante (§6 ter) | Opus 5.5 · alto |
+| 16 · Plan T+18 extendido | Programación y matemática en 4 etapas: 171 semanas base (196 con extras de feature), 27 proyectos, 12 ventanas y 7 certificaciones, con fechas derivadas, puertas 85/65 y vistas nuevas (§6 quater) | Opus 5.5 · alto |
 
 ## 6 bis. Olas 9 a 12: mejoras de uso
 
@@ -464,6 +465,57 @@ Mismo flujo: una rama y un PR por ola; se mergea a `main` con el CI en verde.
 - **Hoy conviven dos:** Estudio usa el roadmap M0 a M10 (`data/study-roadmaps.json`); la Ruta y el plan siguen con CONAMAT de B1 a B6 (`data/roadmap.json`, `data/plan.json`).
 - **A decidir:** cuál manda, y las duraciones (las fases suman 45 a 57 meses; el cronograma del texto habla de 33).
 - **Qué sale:** la Ruta, Hoy (el capítulo del día) y el mapa leen el mismo roadmap; actividades de Estudio para M2 en adelante (Stewart, Strang, Blitzstein…), así esas fases también tienen evidencia; tests de que los dos lados coinciden.
+
+## 6 quater. Ola 16: Plan T+18 extendido
+
+**Opus 5.5 · alto.** Es la ola más grande: se hace por pasos, con un commit por paso. Si pesa demasiado, se parte en 16a (datos, fechas y migración) y 16b (matemática, puertas y vistas). *A confirmar.*
+
+**Fuente de verdad:** el prompt "Plan T+18 extendido (programación + matemática)", con los dos roadmaps completos. Se adjunta al arrancar la ola y se guarda en `docs/prompts/plan-t18-extendido.md`.
+
+**Qué es**
+- **Cuatro etapas desde el 16 nov 2026:** núcleo (53 semanas base), ciberseguridad (25), quant (38) y aeroespacial (55). Total: 171 semanas base y 196 con las semanas extra por feature diferencial, unos 45 meses.
+- **Contenido:** 27 proyectos, 12 ventanas de matemática (W1 a W4, WQ1 a WQ3, WA1 a WA5) y 7 certificaciones (C1 a C7).
+- **Matemática por ventanas:** cada ventana va antes del proyecto que la pide, con libro principal, refuerzo según el tipo de error, tests por capítulo y una pieza matemática hecha a mano dentro de cada proyecto.
+
+**Reglas que la app tiene que aplicar**
+1. 85 % o más aprueba y pasa a la tesis; 65 a 84 % activa el refuerzo según el error y retest; menos de 65 % vuelve al tema.
+2. Una ventana siempre va antes de su proyecto. Si la puerta no cierra, la programación pasa a matemática y se descuenta del colchón (2 semanas al final de la etapa 1). Las fechas siguientes se corren solas.
+3. Un proyecto no cierra sin: un número medido contra una referencia externa, un tercero que lo valide y un informe público; además, tests y seguridad.
+4. Si falta tiempo se recorta alcance y la feature diferencial. Nunca tests, seguridad, revisiones, repasos, sueño ni entrenamiento.
+5. Una tecnología nueva por proyecto como máximo y ninguna en bloques con certificación.
+6. Capital real: nada hasta cumplir una puerta escrita (12 semanas o más de paper trading, resultados netos de costos con intervalo de confianza, kill-switch probado y límite de pérdida fijado antes). No es asesoramiento financiero.
+7. Hacking solo sobre lo propio o con permiso escrito; sectores regulados solo con modelos educativos y datos públicos o sintéticos.
+
+**Pasos** (un commit por paso, con tests)
+1. **Diagnóstico y esquema:** qué existe, qué cambia, cómo se migra y qué se asume (se devuelve antes de escribir código).
+2. **Datos:** `data/plan-extendido.json` con etapas y bloques (id, etapa, tipo, semanas base, semanas extra, depende de, estado) y un validador. Tests: ids únicos, referencias rotas, ciclos, fechas coherentes y sumas por etapa (53, 25, 38 y 55 en base).
+3. **Fechas derivadas:** inicio más la suma de semanas en orden. Cambiar una duración recalcula todo lo que sigue, y la feature extra se prende o apaga por bloque.
+4. **Migración:** el calendario deja de tener 78 semanas fijas, sin romper `trazo.v1` ni las sesiones guardadas.
+5. **Matemática:** ventanas y puertas con semáforo 85 / 65, libro de refuerzo por tipo de error y retest.
+6. **Vistas:** línea de tiempo a escala con la etapa actual, panel "hoy sos" con el último perfil desbloqueado y el siguiente, y alertas de vencimiento de certificaciones y cierre de ventanas.
+7. **Proyecto:** ficha con checklist de evidencia, pieza matemática y perfil al terminar.
+
+**Cómo encaja con lo que ya está**
+- **Etapas 1 y 2 = 78 semanas base, igual que hoy.** Hoy el plan tiene 78 semanas: 53 de programación (19 tramos) y 25 de "Margen". La etapa 2 de ciberseguridad ocupa justo ese margen, y el hito T+18 es el cierre de la etapa 2.
+- **Cambia en la etapa 1:** W1 pasa de 2 a 3 semanas, W2 de 3 a 4, W3 de 2 a 4 y el colchón de 6 a 2. Cada proyecto con feature suma 1 o 2 semanas.
+- **Con extras, T+18 se mueve** de mayo de 2028 al 20 de agosto de 2028 (+14 semanas), y la app lo dice en muchos textos.
+- **Impacto en el código:** 13 archivos leen `SEMANAS`, `TRAMOS` o `FIN_PROGRAMACION`, y el mapa, la Ruta, Hoy y los hitos dependen de eso.
+- **Matemática:** es un tercer roadmap, de ventanas y basado en CONAMAT como el de `plan.json`. Absorbe o redefine la ola 15 (un solo roadmap de matemática). *A confirmar.*
+
+**Aceptación**
+- Validador de JSON con tests, y tests del recálculo de fechas y de la regla 85 / 65.
+- Funciona offline como PWA y todo gráfico tiene una lista alternativa.
+- Migración reversible, sin perder sesiones existentes.
+- UI mínima y funcional: el diseño visual lo definís vos.
+
+**Decisiones abiertas (flags editables, no se resuelven en la ola)**
+- Security+ SY0-801 o SY0-701 (se decide el 22 nov 2026).
+- Precios sin verificar: AWS SAA, CKA y AWS MLA; OSCP+ solo con un fragmento.
+- Confirmar los reemplazos propuestos: P8 (red teaming de agentes), P9 (inferencia en CPU), Q2 (réplica de papers), Q6 (datos de mercado) y A6 (open source).
+- Revisión de mercado de abril de 2028: seguir o achicar quant y aeroespacial.
+- Marco legal e impositivo de trading desde Argentina antes de capital real.
+- Alinear las páginas del canvas visual de Trazo con este calendario.
+- Si una carrera universitaria entra al plan: hoy no, camino autodidacta.
 
 En el día a día alcanza con **Haiku 5.5 · bajo**: pegás el JSON del cierre y queda commiteado en `data/days/`.
 
