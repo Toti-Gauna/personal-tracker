@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react';
 import { addDays, fmtFecha } from '../data/time';
 import { weekday } from '../data/study';
-import { debePreguntarPeso, fmtH, fmtKg, fmtPace, monday, plannedFor, RUN_LABEL, runOn, runWeek, restLabel, sessionsInWeek, setsLabel, stepsMin, totalMin, volume, weightAt } from '../data/train';
-import { PLAN_NAME, REST_DAY } from '../data/train-catalog';
+import { debePreguntarPeso, fmtH, fmtKg, fmtPace, monday, pasaDelLimite, plannedFor, rirLabel, RUN_LABEL, runOn, runWeek, restLabel, rutinaDelDia, sessionsInWeek, setsLabel, stepsMin, totalMin, trainingMin, volume, warmMin, weightAt } from '../data/train';
+import { PLAN_NAME, REST_DAY, RULES } from '../data/train-catalog';
+import { T0_PLAN } from '../data/plan';
 import type { DayLog } from '../data/types';
 import { ir } from '../lib/routes';
 import { useStore } from '../state/store';
@@ -20,7 +21,8 @@ export function Entreno({ day }: { day: DayLog }) {
   const settings = useStore((s) => s.settings)!;
   const [pareja, setPareja] = useState(true);
   const date = day.date;
-  const hoy = plannedFor(t, date);
+  const t0 = settings.startDate || T0_PLAN;
+  const hoy = plannedFor(t, date, t0);
   const semana = sessionsInWeek(t, date);
   const planeadas = t.plan.days.filter((d) => d && d !== REST_DAY).length;
   const kgSemana = volume(semana.flatMap((s) => s.sets), 'me');
@@ -29,7 +31,7 @@ export function Entreno({ day }: { day: DayLog }) {
   const hechoHoy = t.sessions.some((s) => s.date === date);
   const enCurso = t.active?.date === date ? t.active : null;
   const partner = settings.names.partner;
-  const otras = t.routines.filter((r) => r.id !== hoy.routine?.id);
+  const otras = t.routines.filter((r) => r.id !== hoy.routine?.id && !r.archivada);
   const corrHoy = runOn(t.runs, date);
   const corrSem = runWeek(t.runs, date);
 
@@ -45,7 +47,7 @@ export function Entreno({ day }: { day: DayLog }) {
       <header>
         <h1 className="titulo">Entreno</h1>
         <p>
-          {hoy.routine ? `Hoy toca ${hoy.routine.name.toLowerCase()}${pareja ? ` con ${partner}` : ''}. ` : hoy.rest ? 'Hoy toca descanso activo: caminar 45 minutos. ' : 'Hoy no hay entreno planeado. '}
+          {hoy.routine ? `Hoy toca ${hoy.routine.name.toLowerCase()}${pareja ? ` con ${partner}` : ''}. ` : hoy.rest ? 'Hoy toca descanso activo: caminar 45 minutos. ' : hoy.libre ? 'Hoy es libre: sin entreno. ' : 'Hoy no hay entreno planeado. '}
           Van {semana.length} de {planeadas} sesiones de la semana, plan {PLAN_NAME[t.plan.template]}.
         </p>
       </header>
@@ -58,8 +60,8 @@ export function Entreno({ day }: { day: DayLog }) {
 
       <div className="semana-tira" role="list" aria-label="Semana de entreno">
         {t.plan.days.map((id, i) => {
-          const r = t.routines.find((x) => x.id === id);
           const key = addDays(m, i);
+          const r = rutinaDelDia(t.routines, id, key, t0);
           const hecho = t.sessions.some((s) => s.date === key);
           return (
             <div key={i} role="listitem" className={i === weekday(date) ? 'hoy' : ''}>
@@ -74,15 +76,22 @@ export function Entreno({ day }: { day: DayLog }) {
 
       {hoy.routine && (
         <>
-          <div className="fila-t hoy-toca"><span className="etiqueta" style={{ color: 'var(--salud)' }}>Hoy toca</span><span className="mono sub">~{fmtH(totalMin(hoy.routine))} con antes y después</span></div>
-          <h2 className="titulo rut-t">{hoy.routine.name}</h2>
+          <div className="fila-t hoy-toca"><span className="etiqueta" style={{ color: 'var(--salud)' }}>Hoy toca</span><span className="mono sub">~{fmtH(totalMin(hoy.routine))} con las caminatas</span></div>
+          <h2 className="titulo rut-t">{hoy.routine.name}{hoy.routine.slot && hoy.routine.desc ? <small> · {hoy.routine.desc.toLowerCase()}</small> : null}</h2>
+          {pasaDelLimite(hoy.routine) && (
+            <p className="aviso-limite" role="status">Esta rutina lleva unos {fmtH(trainingMin(hoy.routine))} de entrenamiento y el bloque es de {fmtH(RULES.limiteMin)}: algo va a quedar para la próxima.</p>
+          )}
           <ul className="rut-lista">
             <li><span>Antes · {hoy.routine.before.map((s) => s.name.toLowerCase()).join(' + ')}</span><span className="mono">{stepsMin(hoy.routine.before)} min</span></li>
+            {!!hoy.routine.calentamiento?.length && (
+              <li><span>Calentamiento · {hoy.routine.calentamiento.map((w) => w.name.toLowerCase()).join(' + ')}</span><span className="mono">{warmMin(hoy.routine)} min</span></li>
+            )}
             {hoy.routine.exercises.map((e) => (
-              <li key={e.id}><span>{e.name}</span><span className="mono">{setsLabel(e)} · {restLabel(e.rest)}</span></li>
+              <li key={e.id}><span>{e.name}</span><span className="mono">{setsLabel(e)}{rirLabel(e) ? ` · ${rirLabel(e)}` : ''} · {restLabel(e.rest)}</span></li>
             ))}
             <li><span>Después · {hoy.routine.after.map((s) => s.name.toLowerCase()).join(' + ')}</span><span className="mono">{stepsMin(hoy.routine.after)} min</span></li>
           </ul>
+          {hoy.routine.estiramiento && <p className="sub nota-estira">Los estiramientos van de 21:00 a 22:00, con {hoy.routine.estiramiento.musculos}.</p>}
           <div className="fila-ajuste caja">
             <span>Entrenar en pareja<small>Con {partner} · cada uno con su peso</small></span>
             <button role="switch" className="switch" aria-checked={pareja} aria-label="Entrenar en pareja" onClick={() => setPareja((v) => !v)} />

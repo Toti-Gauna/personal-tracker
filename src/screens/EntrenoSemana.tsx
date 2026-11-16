@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { addDays } from '../data/time';
 import { weekday } from '../data/study';
-import { adjustDays, exercisesMin, monday, sessionsInWeek } from '../data/train';
+import { adjustDays, fmtH, monday, opcionesDia, rutinaDelDia, sessionsInWeek, trainingMin } from '../data/train';
+import { T0_PLAN } from '../data/plan';
 import { REST_DAY, REST_DAY_MIN, TEMPLATE_LABEL } from '../data/train-catalog';
 import type { Template } from '../data/train-types';
 import type { DayLog } from '../data/types';
@@ -16,7 +17,7 @@ const NOMBRES = ['lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sábado'
 /** 5.2 Semana de entrenamiento: qué entrenás cada día, o una plantilla. */
 export function EntrenoSemana({ day }: { day: DayLog }) {
   const t = useStore((s) => s.train);
-  const partner = useStore((s) => s.settings!.names.partner);
+  const t0 = useStore((s) => s.settings?.startDate) || T0_PLAN;
   const [editando, setEditando] = useState<number | null>(null);
   const date = day.date;
   const m = monday(date);
@@ -53,7 +54,8 @@ export function EntrenoSemana({ day }: { day: DayLog }) {
 
       <ul className="dias-lista">
         {t.plan.days.map((id, i) => {
-          const r = t.routines.find((x) => x.id === id);
+          const r = rutinaDelDia(t.routines, id, addDays(m, i), t0);
+          const alterna = !!r?.variante && id === r.slot;
           const perdido = perdidos.some((p) => p.i === i);
           const hecho = hechos.has(addDays(m, i));
           return (
@@ -62,14 +64,14 @@ export function EntrenoSemana({ day }: { day: DayLog }) {
               <span className="dia-t">
                 <b className={perdido ? 'tachado' : id === REST_DAY ? 'sub' : ''}>{r ? r.name : id === REST_DAY ? 'Descanso activo' : 'Libre'}</b>
                 <small>
-                  {perdido ? 'No se hizo' : hecho ? 'Hecho' : r ? `18:00 · ${exercisesMin(r)} min${i === 1 || i === 2 ? ` · con ${partner}` : ''}${id === 'full' && i === 5 ? ' · opcional' : ''}` : id === REST_DAY ? `caminar ${REST_DAY_MIN} min` : ''}
+                  {perdido ? 'No se hizo' : hecho ? 'Hecho' : r ? `18:00 · ${fmtH(trainingMin(r))}${alterna ? ' · A y B se alternan por semana' : ''}` : id === REST_DAY ? `caminar ${REST_DAY_MIN} min` : 'sin entreno'}
                 </small>
               </span>
               <button className="btn-cambiar" onClick={() => setEditando(editando === i ? null : i)} aria-expanded={editando === i}>Cambiar</button>
               {editando === i && (
                 <div className="cambiar-op" role="radiogroup" aria-label={`Qué entrenás el ${NOMBRES[i]}`}>
-                  {t.routines.map((x) => (
-                    <button key={x.id} role="radio" aria-checked={id === x.id} onClick={() => { setDay(i, x.id); setEditando(null); }}>{x.name}</button>
+                  {opcionesDia(t.routines).map((x) => (
+                    <button key={x.id} role="radio" aria-checked={id === x.id} onClick={() => { setDay(i, x.id); setEditando(null); }}>{x.nombre}{x.alterna ? ' A/B' : ''}</button>
                   ))}
                   <button role="radio" aria-checked={id === REST_DAY} onClick={() => { setDay(i, REST_DAY); setEditando(null); }}>Descanso activo</button>
                   <button role="radio" aria-checked={id == null} onClick={() => { setDay(i, null); setEditando(null); }}>Libre</button>

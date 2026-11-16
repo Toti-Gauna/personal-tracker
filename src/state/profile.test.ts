@@ -94,7 +94,7 @@ describe('cierre, sellos y ajustes', () => {
   it('primer capítulo y primer entreno', () => {
     completeLearn(D0, 'conamat', 1);
     saveTest(D0, 'conamat', 1, { score: 15, total: 15, errors: ok, mode: 'app' });
-    startTraining('legs', D0, false);
+    startTraining('legs-a', D0, false);
     nudge('me', 'kg', 100);
     logSet();
     finishTraining();

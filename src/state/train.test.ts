@@ -8,13 +8,13 @@ import {
   setWho, setsFor, startTraining,
 } from './train';
 
-const D0 = '2026-11-11'; // miércoles: Piernas
+const D0 = '2026-11-11'; // miércoles de una semana B: Push B
 const t = () => getState().train;
-const legs = () => t().routines.find((r) => r.id === 'legs')!;
+const legs = () => t().routines.find((r) => r.id === 'legs-a')!;
 
 /** Hace todas las series de todos los ejercicios con lo que propone el motor. */
 function entrenar(date: string, bonus = 0, partner = true) {
-  startTraining('legs', date, partner);
+  startTraining('legs-a', date, partner);
   const a0 = t().active!;
   for (let k = 0; k < a0.order.length; k++) {
     goToExercise(k);
@@ -44,17 +44,19 @@ describe('sesión de entreno', () => {
   });
 
   it('arranca con la rutina de hoy, los dos con su peso y el tiempo del bloque', () => {
-    expect(plannedFor(t(), D0).routine?.name).toBe('Piernas');
-    startTraining('legs', D0, true);
+    expect(plannedFor(t(), D0).routine?.name).toBe('Push B');
+    startTraining('legs-a', D0, true);
     const a = t().active!;
     expect(a.athletes).toEqual(['me', 'partner']);
-    expect(a.order).toHaveLength(6);
-    expect(a.limitMin).toBe(70);
+    expect(a.order).toHaveLength(7);
+    // El bloque son 2 h de entrenamiento: ese es el límite de la sesión.
+    expect(a.limitMin).toBe(120);
+    expect(a.warmDone).toEqual([]);
     expect(a.restMode).toBe('each');
   });
 
   it('la serie arranca el descanso de quien la marcó (cada uno) o de los dos cuando ambos marcan (compartido)', () => {
-    startTraining('legs', D0, true);
+    startTraining('legs-a', D0, true);
     nudge('me', 'kg', 100);
     logSet(1000);
     let a = t().active!;
@@ -69,13 +71,13 @@ describe('sesión de entreno', () => {
     logSet(2000);
     a = t().active!;
     expect(a.rest.shared?.endsAt).toBe(2000 + 180_000);
-    expect(setsFor(a, 'partner', 'sentadilla')).toHaveLength(1);
+    expect(setsFor(a, 'partner', 'hack-squat')).toHaveLength(1);
 
     // Con tres series hechas por uno solo, el descanso compartido espera al otro.
     setWho('me');
     logSet(3000);
     a = t().active!;
-    expect(setsFor(a, 'me', 'sentadilla')).toHaveLength(2);
+    expect(setsFor(a, 'me', 'hack-squat')).toHaveLength(2);
     expect(a.rest.shared?.endsAt).toBe(2000 + 180_000);
   });
 
@@ -86,7 +88,7 @@ describe('sesión de entreno', () => {
     expect(s.athletes).toEqual(['me', 'partner']);
     expect(s.skipped).toEqual([]);
     expect(s.records).toEqual([]);
-    expect(s.sets.filter((x) => x.who === 'me' && x.ex === 'sentadilla')).toHaveLength(4);
+    expect(s.sets.filter((x) => x.who === 'me' && x.ex === 'hack-squat')).toHaveLength(3);
     expect(getState().days[D0].blocks.find((b) => b.kind === 'entreno')!.tasks.every((x) => x.done)).toBe(true);
     expect(t().active).toBeNull();
     const meta: Goal = { id: 'e', title: 'Entrenar', area: 'salud', horizon: 'semana', type: 'contador', target: 6, repeat: true, from: D0, progress: {}, auto: { kind: 'entreno' } };
@@ -94,18 +96,19 @@ describe('sesión de entreno', () => {
   });
 
   it('lo que no se llegó a hacer pasa al principio de la próxima y no frena la progresión', () => {
-    startTraining('legs', D0, false);
+    startTraining('legs-a', D0, false);
     goToExercise(0);
     nudge('me', 'kg', 100);
     logSet();
     const id = finishTraining()!;
     const s = t().sessions.find((x) => x.id === id)!;
-    expect(s.skipped).toEqual(['pm-rumano', 'prensa', 'curl-femoral', 'extension', 'gemelos']);
-    expect(t().leftovers.legs).toEqual(s.skipped);
-    startTraining('legs', '2026-11-18', false);
-    expect(t().active!.order.slice(0, 5)).toEqual(['pm-rumano', 'prensa', 'curl-femoral', 'extension', 'gemelos']);
-    // El peso muerto sin historial sigue pidiendo peso: nada se castigó.
-    const e = legs().exercises.find((x) => x.id === 'pm-rumano')!;
+    const resto = ['extension-cuadriceps', 'aductores', 'gemelos-afuera', 'gemelos-adentro', 'hiperextensiones', 'elevacion-piernas-colgado'];
+    expect(s.skipped).toEqual(resto);
+    expect(t().leftovers['legs-a']).toEqual(s.skipped);
+    startTraining('legs-a', '2026-11-18', false);
+    expect(t().active!.order.slice(0, 6)).toEqual(resto);
+    // La extensión de cuádriceps sin historial sigue pidiendo peso: nada se castigó.
+    const e = legs().exercises.find((x) => x.id === 'extension-cuadriceps')!;
     expect(nextTarget(history(t().sessions, 'me', e.id), e, rangeOf(t(), 'me', e)).kind).toBe('nuevo');
   });
 
@@ -113,24 +116,24 @@ describe('sesión de entreno', () => {
     entrenar(D0);
     finishTraining();
     const e = legs().exercises[0];
-    // Mismos pesos y repeticiones del mínimo: la próxima pide +1 rep en la primera serie.
+    // Mismos pesos y repeticiones del mínimo (8): la próxima pide +1 rep en la primera serie.
     const target = nextTarget(history(t().sessions, 'me', e.id), e, rangeOf(t(), 'me', e));
     expect(target.kg).toBe(100);
-    expect(target.reps).toEqual([7, 6, 6, 6]);
+    expect(target.reps).toEqual([9, 8, 8]);
     expect(target.note).toBe('+1 rep');
     // Segunda sesión con una repetición más en cada serie: récord de repeticiones.
     entrenar('2026-11-18', 1, false);
     patchActive((x) => x);
     const id = finishTraining()!;
     const s = t().sessions.find((x) => x.id === id)!;
-    const rec = s.records.find((r) => r.ex === 'sentadilla' && r.who === 'me')!;
+    const rec = s.records.find((r) => r.ex === 'hack-squat' && r.who === 'me')!;
     expect(rec.text).toBe('+2 repeticiones con el mismo peso');
   });
 
   it('la sesión guardada dura lo que corrió el reloj', () => {
     vi.useFakeTimers({ toFake: ['Date'] });
     vi.setSystemTime(new Date(2026, 10, 11, 18, 0));
-    startTraining('legs', D0, false);
+    startTraining('legs-a', D0, false);
     vi.setSystemTime(new Date(2026, 10, 11, 19, 12));
     nudge('me', 'kg', 100);
     logSet();
@@ -149,8 +152,8 @@ describe('semana y peso', () => {
 
   it('si faltaste, pasa los próximos días a Full body', () => {
     adjustWeek('2026-11-11', 2);
-    // Como en el diseño: jueves y sábado a Full body, y el viernes queda para descansar de Upper.
-    expect(t().plan.days).toEqual(['push', 'pull', 'legs', 'full', 'lower', 'full', 'descanso']);
+    // Faltaste hasta el miércoles: jueves y viernes pasan a Full body; sábado y domingo siguen libres.
+    expect(t().plan.days).toEqual(['pull', 'legs', 'push', 'full', 'full', null, null]);
     expect(t().plan.template).toBe('propia');
   });
 
@@ -164,6 +167,6 @@ describe('semana y peso', () => {
   });
 
   it('estimación de tiempo por ejercicio', () => {
-    expect(Math.round(exerciseMin(legs().exercises[0]))).toBe(19);
+    expect(Math.round(exerciseMin(legs().exercises[0]))).toBe(14);
   });
 });

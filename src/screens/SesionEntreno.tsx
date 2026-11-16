@@ -1,13 +1,15 @@
-import { useEffect, useMemo, useRef } from 'react';
-import { fmtKg, history, nextTarget, clock, rangeOf, recordsFor, restLabel, volume } from '../data/train';
-import type { RestTimer, Who } from '../data/train-types';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import { fmtKg, history, nextTarget, clock, rangeOf, recordsFor, restLabel, rirLabel, volume, warmMin } from '../data/train';
+import type { Calentamiento, Exercise, RestTimer, Who } from '../data/train-types';
 import { ir } from '../lib/routes';
 import { useStore } from '../state/store';
 import {
   addRest, cancelTraining, exerciseAt, exerciseDone, doneWith, extendLimit, finishTraining, goToExercise, logSet,
-  markRestWarned, noLimit, nudge, plannedSets, setRestMode, setWho, setsFor, skipRest, undoLastSet,
+  markRestWarned, noLimit, nudge, plannedSets, setRestMode, setRir, setWho, setsFor, skipRest, tildarCalentamiento, undoLastSet,
 } from '../state/train';
 import { toast } from '../ui/avisos';
+import { Casilla } from '../ui/Casilla';
+import { ComoSeHace } from '../ui/ComoSeHace';
 import { useNow } from '../ui/useNow';
 import '../styles/entreno.css';
 
@@ -22,6 +24,8 @@ export function SesionEntreno() {
   const a = t.active;
   const r = a ? t.routines.find((x) => x.id === a.routineId) : undefined;
   const avisados = useRef(new Set<string>());
+  // Ola 19: "Cómo se hace" de un ejercicio o de un paso del calentamiento.
+  const [ficha, setFicha] = useState<Exercise | Calentamiento | null>(null);
 
   // Avisa cuando termina un descanso.
   useEffect(() => {
@@ -70,6 +74,11 @@ export function SesionEntreno() {
   const hecho = exerciseDone(a, e);
   const n = plannedSets(a, e);
   const incr = e.kind === 'aislamiento' ? 1 : 2.5;
+  const enSeg = e.unidad === 's';
+  const paso = enSeg ? 5 : 1;
+  const hechoWarm = new Set(a.warmDone ?? []);
+  const calentar = r.calentamiento ?? [];
+  const sinPeso = !e.corporal;
   const quien = a.who;
   const miSerie = setsFor(a, quien, e.id).length + 1;
   const compartido = a.restMode === 'shared';
@@ -116,6 +125,27 @@ export function SesionEntreno() {
       </div>
       <div className="tiempo-barra" aria-hidden="true"><span style={{ width: `${a.noLimit ? 0 : Math.min(100, (elapsed / limit) * 100)}%` }} /></div>
 
+      {calentar.length > 0 && (
+        <details className="calentamiento" open={a.sets.length === 0 && hechoWarm.size < calentar.length}>
+          <summary>
+            <span className="etiqueta" style={{ color: SALUD }}>Calentamiento · {warmMin(r)} min</span>
+            <span className="mono sub">{hechoWarm.size}/{calentar.length}</span>
+          </summary>
+          <ul>
+            {calentar.map((w) => (
+              <li key={w.id}>
+                <Casilla id={`wu-${w.id}`} checked={hechoWarm.has(w.id)} label={w.name} onChange={() => tildarCalentamiento(w.id)} />
+                <label htmlFor={`wu-${w.id}`}>
+                  <b className={hechoWarm.has(w.id) ? 'trazo on' : 'trazo'}>{w.name}</b>
+                  <small>{[w.sets ? `${w.sets} × ${w.reps ?? ''}` : '', w.detalle, w.rir ? rirLabel(w) : '', w.min ? `${w.min} min` : ''].filter(Boolean).join(' · ')}</small>
+                </label>
+                <button className="subrayado" onClick={() => setFicha(w)} aria-label={`Cómo se hace ${w.name}`}>Cómo se hace</button>
+              </li>
+            ))}
+          </ul>
+        </details>
+      )}
+
       <div className="chips-ej" role="tablist" aria-label="Ejercicios">
         {a.order.map((id, i) => {
           const x = r.exercises.find((q) => q.id === id)!;
@@ -140,6 +170,12 @@ export function SesionEntreno() {
 
       <div className="etiqueta ej-n">Ejercicio {a.idx + 1} de {a.order.length} · {n} series · descanso {restLabel(e.rest)}</div>
       <h1 className="titulo ej-t">{e.name}</h1>
+      {(e.tempo || e.rir || e.nota) && (
+        <p className="ej-meta mono sub">
+          {[e.tempo ? `Tempo ${e.tempo}` : '', rirLabel(e), e.nota ?? ''].filter(Boolean).join(' · ')}
+          <button className="subrayado" onClick={() => setFicha(e)}>Cómo se hace</button>
+        </p>
+      )}
 
       <div className="objetivos">
         {a.athletes.map((w) => {
@@ -165,8 +201,8 @@ export function SesionEntreno() {
               const sup = hecha && hecha.reps > obj;
               return (
                 <span key={w} className={`mono${hecha ? ' ok' : ''}${sup ? ' sup' : ''}`}>
-                  {hecha ? <>{fmtKg(hecha.kg)} × {hecha.reps} ✓{sup ? ` +${hecha.reps - obj}` : ''}</> : <>{fmtKg(a.draft[w]?.kg ?? target[w].t.kg)} × —</>}
-                  <small>obj {obj}{sup ? ' · superado' : ''}</small>
+                  {hecha ? <>{fmtKg(hecha.kg)} × {hecha.reps}{enSeg ? ' s' : ''} ✓{sup ? ` +${hecha.reps - obj}` : ''}</> : <>{fmtKg(a.draft[w]?.kg ?? target[w].t.kg)} × —</>}
+                  <small>obj {obj}{enSeg ? ' s' : ''}{e.rir?.[i] != null ? ` · RIR ${e.rir[i]}` : ''}{hecha?.rir != null ? ` · te quedó ${hecha.rir}` : ''}{sup ? ' · superado' : ''}</small>
                 </span>
               );
             })}
@@ -189,16 +225,25 @@ export function SesionEntreno() {
             <div className="cargar">
               <div><span className="sub">Kg</span>
                 <div className="stepper grande"><button aria-label="Menos kilos" onClick={() => nudge(quien, 'kg', -incr)}>−</button><output aria-label="Kilos">{fmtKg(a.draft[quien]?.kg ?? 0)}</output><button aria-label="Más kilos" onClick={() => nudge(quien, 'kg', incr)}>+</button></div></div>
-              <div><span className="sub">Reps · objetivo {target[quien].t.reps[miSerie - 1] ?? '—'}</span>
-                <div className="stepper grande"><button aria-label="Menos repeticiones" onClick={() => nudge(quien, 'reps', -1)}>−</button><output aria-label="Repeticiones">{a.draft[quien]?.reps ?? 0}</output><button aria-label="Más repeticiones" onClick={() => nudge(quien, 'reps', 1)}>+</button></div></div>
+              <div><span className="sub">{enSeg ? 'Segundos' : 'Reps'} · objetivo {target[quien].t.reps[miSerie - 1] ?? '—'}</span>
+                <div className="stepper grande"><button aria-label={enSeg ? 'Menos segundos' : 'Menos repeticiones'} onClick={() => nudge(quien, 'reps', -paso)}>−</button><output aria-label={enSeg ? 'Segundos' : 'Repeticiones'}>{a.draft[quien]?.reps ?? 0}</output><button aria-label={enSeg ? 'Más segundos' : 'Más repeticiones'} onClick={() => nudge(quien, 'reps', paso)}>+</button></div></div>
             </div>
           )}
           {!doneWith(a, e, quien) && (
-            <button className="btn-verde" disabled={!(a.draft[quien]?.kg) || !(a.draft[quien]?.reps)} onClick={() => logSet()}>
+            <div className="rir-fila" role="group" aria-label="RIR que te quedó (opcional)">
+              <span className="sub">RIR que te quedó · opcional{e.rir?.[miSerie - 1] != null ? ` · objetivo ${e.rir[miSerie - 1]}` : ''}</span>
+              <div className="rir-chips">
+                {[0, 1, 2, 3, 4].map((n) => <button key={n} aria-pressed={a.draft[quien]?.rir === n} aria-label={`RIR ${n}`} onClick={() => setRir(quien, n)}>{n}</button>)}
+              </div>
+            </div>
+          )}
+          {!doneWith(a, e, quien) && (
+            <button className="btn-verde" disabled={(sinPeso && !(a.draft[quien]?.kg)) || !(a.draft[quien]?.reps)} onClick={() => logSet()}>
               Serie de {names[quien]} hecha{miSerie < n ? ' · arranca su descanso' : ''}
             </button>
           )}
-          {!(a.draft[quien]?.kg) && !doneWith(a, e, quien) && <p className="sub nota-izq">Elegí con cuánto peso hacés esta serie.</p>}
+          {sinPeso && !(a.draft[quien]?.kg) && !doneWith(a, e, quien) && <p className="sub nota-izq">Elegí con cuánto peso hacés esta serie.</p>}
+          {e.corporal && !(a.draft[quien]?.kg) && !doneWith(a, e, quien) && <p className="sub nota-izq">Sin peso extra: cuenta tu peso corporal. Sumá kilos si agregás lastre.</p>}
         </>
       )}
       {hecho && <button className="btn-verde" onClick={siguiente}>{ultimo ? 'Terminar entreno' : `Siguiente: ${r.exercises.find((x) => x.id === a.order[a.idx + 1])?.name}`}</button>}
@@ -209,6 +254,8 @@ export function SesionEntreno() {
         <button className="sub" onClick={guardarYSalir}>Terminar entreno</button>
       </div>
       <button className="terminar-foco" onClick={() => { cancelTraining(); ir('entreno'); }}>Descartar el entreno</button>
+
+      {ficha && <ComoSeHace e={ficha} kicker={r.name} color={SALUD} onCerrar={() => setFicha(null)} />}
 
       {vencido && (
         <div className="hoja-fondo sheet-tiempo">

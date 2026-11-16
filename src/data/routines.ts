@@ -232,7 +232,15 @@ export function wakeRange(t: DayType, file: RoutinesFile = ROUTINES_FILE) {
  */
 export function planRoutine(t: DayType, mode: RoutineId, wakeHHMM?: string, file: RoutinesFile = ROUTINES_FILE): PlannedRoutineBlock[] {
   // Ola 17: a las 08:00 el día es otro, con los horarios del JSON tal cual (el día libre sigue igual).
-  if (mode === 'tarde' && t !== 'libre') return file.tarde.blocks.map((b) => ({ block: b, start: b.start, min: blockMin(b) }));
+  if (mode === 'tarde' && t !== 'libre') {
+    // Ola 19: sábado y domingo son libres: sin entreno ni su cierre; la tarde queda para descansar hasta las 22:00.
+    const finde = t === 'weekend' || t === 'busqueda-intensiva-finde';
+    return file.tarde.blocks.filter((b) => !(finde && b.id === 'entreno')).map((b) => {
+      if (!(finde && b.id === 'cierre')) return { block: b, start: b.start, min: blockMin(b) };
+      const libre = { ...b, label: 'Descansar · cierre de 5 min a las 21:00', short: 'el descanso', start: '18:00', tasks: ['Descansar', 'Cerrar el día en 5 min a las 20:00'] };
+      return { block: libre, start: libre.start, min: blockMin(libre) };
+    });
+  }
   const bl = file.dayRoutines[t].blocks;
   const w = wakeDe(t, file);
   const wake = toMin(mode === 'otra' ? wakeHHMM ?? w.completo : w[mode === 'tarde' ? 'completo' : mode]);

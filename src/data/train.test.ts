@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { emptyTrain } from './train-catalog';
-import { exercisesMin, history, isDeloadWeek, nextTarget, pace, plannedFor, recordsFor, stalls, totalMin, volume, type Hist } from './train';
+import { esSemanaA, exercisesMin, ficha, history, isDeloadWeek, nextTarget, opcionesDia, pace, pasaDelLimite, plannedFor, recordsFor, rutinaDelDia, seriesPorGrupo, stalls, tempoTexto, totalMin, trainingMin, volume, warmMin, type Hist } from './train';
 import type { Exercise, SetLog, TrainSession } from './train-types';
 
 const ex = (kind: Exercise['kind'], sets = 3, lo = 8, hi = 10): Exercise => ({ id: 'e', name: 'E', sets, repMin: lo, repMax: hi, rest: 120, kind });
@@ -92,15 +92,19 @@ describe('semanas de descarga, récords y volumen', () => {
 
 describe('rutinas y semana', () => {
   const t = emptyTrain();
-  it('Piernas dura unos 70 min de ejercicios y ~2 h con antes y después', () => {
-    const legs = t.routines.find((r) => r.id === 'legs')!;
-    expect(exercisesMin(legs)).toBe(70);
+  it('Legs A: 10 min de calentamiento, 60 de ejercicios y 130 con las dos caminatas de 30', () => {
+    const legs = t.routines.find((r) => r.id === 'legs-a')!;
+    expect(warmMin(legs)).toBe(10);
+    expect(exercisesMin(legs)).toBe(60);
+    expect(trainingMin(legs)).toBe(70);
     expect(totalMin(legs)).toBe(130);
+    expect(pasaDelLimite(legs)).toBe(false);
   });
 
-  it('el miércoles toca Piernas y el domingo, descanso activo', () => {
-    expect(plannedFor(t, '2026-11-11').routine?.name).toBe('Piernas');
-    expect(plannedFor(t, '2026-11-15').rest).toBe(true);
+  it('una rutina que pasa de las 2 h de entrenamiento avisa', () => {
+    const larga = { ...t.routines.find((r) => r.id === 'legs-a')!, exercises: Array.from({ length: 12 }, (_, i) => ({ ...t.routines[0].exercises[0], id: `x${i}`, sets: 4, rest: 180 })) };
+    expect(trainingMin(larga)).toBeGreaterThan(120);
+    expect(pasaDelLimite(larga)).toBe(true);
   });
 
   it('ritmo de peso por semana', () => {
@@ -108,5 +112,98 @@ describe('rutinas y semana', () => {
     const p = pace([{ date: '2026-09-13', kg: 86 }, { date: '2026-11-08', kg: 88.4 }])!;
     expect(p.change).toBeCloseTo(2.4);
     expect(p.perWeek).toBeCloseTo(0.3, 1);
+  });
+});
+
+describe('ola 19 · las rutinas de Toti', () => {
+  const t = emptyTrain();
+  const ids = (r: { exercises: { id: string }[] }) => r.exercises.map((e) => e.id);
+
+  it('hay seis rutinas suyas (Push, Pull y Legs en A y B) y las de la ola 5 ya no están entre las vivas', () => {
+    const suyas = t.routines.filter((r) => r.slot && r.variante);
+    expect(suyas.map((r) => r.name)).toEqual(['Push A', 'Pull A', 'Push B', 'Pull B', 'Legs A', 'Legs B']);
+    expect(suyas.map((r) => r.exercises.length)).toEqual([6, 9, 6, 7, 7, 7]);
+    expect(t.v).toBe(2);
+  });
+
+  it('la semana es PPL + Upper/Lower de lunes a viernes; sábado y domingo, libres', () => {
+    expect(t.plan.days).toEqual(['pull', 'legs', 'push', 'upper', 'lower', null, null]);
+    const semana = (lunes: string) => [0, 1, 2, 3, 4, 5, 6].map((i) => { const p = plannedFor(t, `2026-${lunes}`.replace(/\d+$/, String(Number(lunes.slice(3)) + i).padStart(2, '0'))); return p.routine?.name ?? (p.libre ? 'libre' : '?'); });
+    expect(semana('11-16')).toEqual(['Pull A', 'Legs A', 'Push A', 'Upper', 'Lower', 'libre', 'libre']);
+  });
+
+  it('A y B se alternan por semana: impares del plan, A; pares, B', () => {
+    expect(esSemanaA('2026-11-16')).toBe(true); // semana 1
+    expect(esSemanaA('2026-11-22')).toBe(true);
+    expect(esSemanaA('2026-11-23')).toBe(false); // semana 2
+    expect(esSemanaA('2026-11-30')).toBe(true);
+    expect(esSemanaA('2026-11-09')).toBe(false); // la semana anterior al plan
+    expect(rutinaDelDia(t.routines, 'pull', '2026-11-23')?.name).toBe('Pull B');
+    expect(rutinaDelDia(t.routines, 'pull', '2026-11-30')?.name).toBe('Pull A');
+    expect(rutinaDelDia(t.routines, 'upper', '2026-11-30')?.name).toBe('Upper');
+    expect(rutinaDelDia(t.routines, 'push-b', '2026-11-30')?.name).toBe('Push B'); // un id directo no se alterna
+    expect(rutinaDelDia(t.routines, null, '2026-11-30')).toBeNull();
+    // Con otro T0 la cuenta arranca ahí.
+    expect(esSemanaA('2026-11-23', '2026-11-23')).toBe(true);
+  });
+
+  it('cada rutina lleva calentamiento, RIR por serie y los músculos para estirar', () => {
+    for (const r of t.routines.filter((x) => x.slot && x.variante)) {
+      expect(r.calentamiento!.length).toBeGreaterThan(0);
+      expect(r.estiramiento!.musculos).toBeTruthy();
+      for (const e of r.exercises) if (e.rir) expect(e.rir).toHaveLength(e.sets);
+    }
+    const pullA = t.routines.find((r) => r.id === 'pull-a')!;
+    const dom = pullA.exercises[0];
+    expect(dom).toMatchObject({ name: 'Dominada con agarre neutro al ancho de hombro', rir: [2, 1, 0], tempo: '2-1-2', pesoInicial: 40, corporal: true, repMin: 8, repMax: 12 });
+    expect(dom.posicion).toMatch(/agarre neutro/i);
+    // Los pesos entre paréntesis salieron del nombre y son el peso inicial.
+    expect(pullA.exercises.map((e) => e.name).join(' ')).not.toMatch(/\(\d+ ?kg/);
+    expect(pullA.exercises.find((e) => e.id === 'encogimiento')).toMatchObject({ pesoInicial: 10, tempo: '2-2-2' });
+    expect(pullA.exercises.find((e) => e.id === 'curl-barra-banco')!.pesoInicial).toBe(10);
+    // "Wrist extension" trabaja los extensores.
+    expect(pullA.exercises.find((e) => e.id === 'wrist-extension')!.musculos).toBe('Extensores del antebrazo');
+    expect(t.routines.find((r) => r.id === 'pull-b')!.exercises.find((e) => e.id === 'wrist-extension')!.musculos).toBe('Extensores del antebrazo');
+    // "Abi" era una anotación, no un RIR: ningún RIR sale de ahí.
+    expect(JSON.stringify(t.routines)).not.toMatch(/Abi/);
+  });
+
+  it('el mismo ejercicio en A y B comparte id (y su historial)', () => {
+    const a = ids(t.routines.find((r) => r.id === 'pull-a')!);
+    const b = ids(t.routines.find((r) => r.id === 'pull-b')!);
+    expect(a.filter((x) => b.includes(x))).toEqual(['encogimiento', 'curl-bayesian', 'wrist-extension', 'abs-polea']);
+  });
+
+  it('el peso inicial manda cuando no hay historial; sin él, a elegir; en peso corporal, sin peso', () => {
+    const pull = t.routines.find((r) => r.id === 'pull-a')!;
+    expect(nextTarget([], pull.exercises[0], [8, 12])).toMatchObject({ kg: 40, kind: 'nuevo', note: 'arrancá con 40 kg' });
+    expect(nextTarget([], pull.exercises[1], [10, 12])).toMatchObject({ kg: 0, note: 'elegí tu peso' });
+    const legsB = t.routines.find((r) => r.id === 'pull-b')!;
+    const hang = legsB.exercises.find((e) => e.id === 'dead-hang')!;
+    expect(nextTarget([], hang, [30, 60])).toMatchObject({ kg: 0, note: 'peso corporal', reps: [30, 30, 30] });
+    expect(hang).toMatchObject({ unidad: 's', corporal: true, repMin: 30, repMax: 60 });
+  });
+
+  it('la ficha de "Cómo se hace" solo trae lo que el ejercicio dice', () => {
+    const hack = t.routines.find((r) => r.id === 'legs-a')!.exercises[0];
+    const f = Object.fromEntries(ficha(hack));
+    expect(f.Tempo).toBe('3-1-2 · 3 s bajando — 1 s de pausa — 2 s subiendo');
+    expect(f['RIR por serie']).toBe('2 · 1 · 0 — Última serie: fallo técnico limpio');
+    expect(f.Posicionamiento).toMatch(/Espalda apoyada/);
+    expect(f.Dropset).toBeUndefined();
+    expect(tempoTexto('2-2-3')).toBe('2 s bajando — 2 s de pausa — 3 s subiendo');
+    const ext = Object.fromEntries(ficha(t.routines.find((r) => r.id === 'legs-a')!.exercises[1]));
+    expect(ext.Dropset).toMatch(/Reducir 25–30 %/);
+  });
+
+  it('en el día se elige Pull, Legs o Push una vez (con A y B), no las seis', () => {
+    expect(opcionesDia(t.routines).map((o) => [o.id, o.nombre, o.alterna])).toEqual([
+      ['push', 'Push', true], ['pull', 'Pull', true], ['legs', 'Legs', true], ['upper', 'Upper', false], ['lower', 'Lower', false], ['full', 'Full body', false],
+    ]);
+  });
+
+  it('los estiramientos llevan los músculos del día', () => {
+    expect(t.routines.find((r) => r.id === 'legs-a')!.estiramiento!.musculos).toBe('cuádriceps, aductores, glúteos y gemelos');
+    expect(seriesPorGrupo([t.routines.find((r) => r.id === 'push-a')!])).toMatchObject({ Pecho: 9, Hombros: 3, Tríceps: 3 });
   });
 });
