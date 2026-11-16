@@ -119,11 +119,13 @@ describe('ola 19 · las rutinas de Toti', () => {
   const t = emptyTrain();
   const ids = (r: { exercises: { id: string }[] }) => r.exercises.map((e) => e.id);
 
-  it('hay seis rutinas suyas (Push, Pull y Legs en A y B) y las de la ola 5 ya no están entre las vivas', () => {
+  it('hay seis rutinas suyas (Push, Pull y Legs en A y B), Upper y Lower, y las de la ola 5 ya no están entre las vivas', () => {
     const suyas = t.routines.filter((r) => r.slot && r.variante);
     expect(suyas.map((r) => r.name)).toEqual(['Push A', 'Pull A', 'Push B', 'Pull B', 'Legs A', 'Legs B']);
     expect(suyas.map((r) => r.exercises.length)).toEqual([6, 9, 6, 7, 7, 7]);
-    expect(t.v).toBe(2);
+    expect(t.routines.filter((r) => r.slot && !r.variante).map((r) => [r.id, r.exercises.length])).toEqual([['upper', 8], ['lower', 8]]);
+    expect(t.routines.map((r) => r.id).slice(-1)).toEqual(['full']);
+    expect(t.v).toBe(3);
   });
 
   it('la semana es PPL + Upper/Lower de lunes a viernes; sábado y domingo, libres', () => {
@@ -205,5 +207,70 @@ describe('ola 19 · las rutinas de Toti', () => {
   it('los estiramientos llevan los músculos del día', () => {
     expect(t.routines.find((r) => r.id === 'legs-a')!.estiramiento!.musculos).toBe('cuádriceps, aductores, glúteos y gemelos');
     expect(seriesPorGrupo([t.routines.find((r) => r.id === 'push-a')!])).toMatchObject({ Pecho: 9, Hombros: 3, Tríceps: 3 });
+  });
+});
+
+describe('ola 19 · Upper y Lower propias', () => {
+  const t = emptyTrain();
+  const r = (id: string) => t.routines.find((x) => x.id === id)!;
+  const ids = (id: string) => r(id).exercises.map((e) => e.id);
+  const UPPER = ['Pecho', 'Espalda', 'Hombros', 'Bíceps', 'Tríceps'];
+  const PIERNA = ['Cuádriceps', 'Isquiotibiales', 'Glúteos', 'Aductores', 'Gemelos'];
+  /** Cuántas rutinas de la semana (lunes a viernes) trabajan cada grupo, con la A o con la B. */
+  const sesiones = (v: 'A' | 'B') => {
+    const dia = (slot: string) => (slot === 'upper' || slot === 'lower' ? r(slot) : r(`${slot}-${v.toLowerCase()}`));
+    const out: Record<string, number> = {};
+    for (const rr of ['pull', 'legs', 'push', 'upper', 'lower'].map(dia)) for (const g of new Set(rr.exercises.map((e) => e.grupo!))) out[g] = (out[g] ?? 0) + 1;
+    return out;
+  };
+  const series = (v: 'A' | 'B') => {
+    const dia = (slot: string) => (slot === 'upper' || slot === 'lower' ? r(slot) : r(`${slot}-${v.toLowerCase()}`));
+    return seriesPorGrupo(['pull', 'legs', 'push', 'upper', 'lower'].map(dia));
+  };
+
+  it('Upper es el jueves y Lower el viernes, con tu estilo: tempo 2-1-2, RIR 2-1-0 y 8 a 12 repeticiones', () => {
+    expect(r('upper').exercises.every((e) => e.tempo === '2-1-2')).toBe(true);
+    expect(r('upper').exercises.filter((e) => e.sets === 3).every((e) => e.rir!.join('') === '210')).toBe(true);
+    expect(r('upper').exercises.filter((e) => e.kind === 'torso').every((e) => e.repMin === 8 && e.repMax === 12)).toBe(true);
+    expect(r('lower').exercises.every((e) => e.rir!.length === e.sets && e.rir![e.rir!.length - 1] === 0)).toBe(true);
+    expect(plannedFor(t, '2026-11-19').routine?.name).toBe('Upper');
+    expect(plannedFor(t, '2026-11-20').routine?.name).toBe('Lower');
+  });
+
+  it('otros ángulos: Upper no repite ningún ejercicio de Push ni de Pull; Lower solo repite la extensión y los aductores', () => {
+    const ppl = ['push-a', 'push-b', 'pull-a', 'pull-b'].flatMap(ids);
+    expect(ids('upper').filter((x) => ppl.includes(x))).toEqual([]);
+    const legs = ['legs-a', 'legs-b'].flatMap(ids);
+    expect(ids('lower').filter((x) => legs.includes(x))).toEqual(['extension-cuadriceps', 'aductores']);
+  });
+
+  it('cada músculo del torso se entrena dos veces por semana, con la A o con la B', () => {
+    for (const v of ['A', 'B'] as const) for (const g of UPPER) expect(sesiones(v)[g], `${g} en la semana ${v}`).toBeGreaterThanOrEqual(2);
+  });
+
+  it('cada músculo de la pierna se entrena todas las semanas y dos veces al alternar Legs A o B con Lower', () => {
+    for (const g of PIERNA) {
+      const a = sesiones('A')[g] ?? 0;
+      const b = sesiones('B')[g] ?? 0;
+      expect(a, `${g} A`).toBeGreaterThanOrEqual(1);
+      expect(b, `${g} B`).toBeGreaterThanOrEqual(1);
+      expect(Math.max(a, b), `${g}`).toBeGreaterThanOrEqual(2);
+    }
+  });
+
+  it('el volumen semanal no deja ningún músculo atrás: 6 series o más en los grandes y 3 o más en todos', () => {
+    for (const v of ['A', 'B'] as const) {
+      const s = series(v);
+      for (const g of [...UPPER, 'Cuádriceps', 'Isquiotibiales']) expect(s[g], `${g} ${v}`).toBeGreaterThanOrEqual(6);
+      expect(Object.entries(s).filter(([, n]) => n < 3)).toEqual([]);
+    }
+  });
+
+  it('Upper y Lower entran en las dos horas del bloque y llevan calentamiento y estiramiento', () => {
+    for (const id of ['upper', 'lower']) {
+      expect(pasaDelLimite(r(id))).toBe(false);
+      expect(r(id).calentamiento!.length).toBeGreaterThan(0);
+      expect(r(id).estiramiento!.musculos).toBeTruthy();
+    }
   });
 });

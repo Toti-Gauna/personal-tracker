@@ -1,6 +1,6 @@
 {
  "version": 1,
- "nota": "Rutinas de entreno de Toti (ola 19). Fuente: docs/prompts/rutinas-entrenamiento.md. Los descansos (segundos) y el tipo de progresión de cada ejercicio son propios; el resto sale del texto original. Upper y Lower las diseñó Trazo.",
+ "nota": "Rutinas de entreno de Toti (ola 19). Fuente: docs/prompts/rutinas-entrenamiento.md. Los descansos (segundos) y el tipo de progresión de cada ejercicio son propios; el resto sale del texto original. Upper y Lower las diseñó Trazo con el estilo de Toti (tempo 2-1-2, RIR 2-1-0, 8 a 12 repeticiones), con otros ángulos que Push, Pull y Legs.",
  "rutinas": [
   {
    "id": "push-a",
@@ -1214,6 +1214,473 @@
     "musculos": "isquiotibiales, glúteos, gemelos y cadera",
     "guia": "30 s por músculo, sin dolor intenso",
     "objetivo": "Movilidad y recuperación"
+   }
+  },
+  {
+   "id": "upper",
+   "slot": "upper",
+   "nombre": "Upper",
+   "enfoque": "Torso completo, otros ángulos",
+   "calentamiento": [
+    {
+     "id": "face-pull",
+     "nombre": "Face Pull en polea",
+     "series": 1,
+     "reps": "15",
+     "rir": [
+      4
+     ],
+     "min": 2,
+     "tempo": "2-1-2",
+     "tempoDesc": "2s tracción — 1s retracción — 2s retorno",
+     "posicion": "Polea a la cara — codos altos — torso erguido",
+     "rirGuia": "Muy liviano, solo activación",
+     "tips": "enfocar retracción escapular",
+     "musculos": "Deltoide posterior, trapecio medio",
+     "objetivo": "Activar hombro posterior y estabilidad escapular"
+    },
+    {
+     "id": "rot-ext",
+     "nombre": "Rotación externa en polea",
+     "series": 2,
+     "reps": "15–20",
+     "rir": [
+      3,
+      3
+     ],
+     "min": 3,
+     "tempo": "2-1-2",
+     "posicion": "Codo pegado al torso — movimiento corto",
+     "rirGuia": "Técnico, no fatigante",
+     "tips": "control total",
+     "musculos": "Infraespinoso, redondo menor",
+     "objetivo": "Estabilidad hombro"
+    }
+   ],
+   "ejercicios": [
+    {
+     "id": "press-plano-neutro",
+     "nombre": "Press con mancuernas en banco plano, agarre neutro",
+     "grupo": "Pecho",
+     "series": 3,
+     "reps": [
+      8,
+      12
+     ],
+     "rir": [
+      2,
+      1,
+      0
+     ],
+     "tipo": "torso",
+     "descanso": 120,
+     "tempo": "2-1-2",
+     "posicion": "Banco plano — palmas enfrentadas — codos a 45°",
+     "rirGuia": "Última al fallo técnico",
+     "tips": "bajar hasta sentir el estiramiento del pecho",
+     "musculos": "Pectoral mayor, tríceps, deltoide anterior",
+     "objetivo": "Pecho medio con otro ángulo que el Push (inclinado)"
+    },
+    {
+     "id": "peck-deck",
+     "nombre": "Aperturas en peck deck",
+     "grupo": "Pecho",
+     "series": 3,
+     "reps": [
+      10,
+      15
+     ],
+     "rir": [
+      2,
+      1,
+      0
+     ],
+     "tipo": "aislamiento",
+     "descanso": 75,
+     "tempo": "2-1-2",
+     "posicion": "Espalda apoyada — codos a la altura del pecho",
+     "rirGuia": "Última al fallo",
+     "parciales": "3–5 cortas en contracción",
+     "tips": "squeeze de 1 s al juntar",
+     "musculos": "Pectoral mayor",
+     "objetivo": "Aislamiento pectoral con la máquina"
+    },
+    {
+     "id": "jalon-supino",
+     "nombre": "Jalón al pecho con agarre supino",
+     "grupo": "Espalda",
+     "series": 3,
+     "reps": [
+      8,
+      12
+     ],
+     "rir": [
+      2,
+      1,
+      0
+     ],
+     "tipo": "torso",
+     "descanso": 120,
+     "tempo": "2-1-2",
+     "posicion": "Agarre supino al ancho de hombros — pecho arriba — codos hacia abajo",
+     "rirGuia": "Última al fallo técnico",
+     "tips": "llevar la barra a la clavícula, sin balancear",
+     "musculos": "Dorsal ancho, bíceps, redondo mayor",
+     "objetivo": "Dorsal bajo y bíceps, otro ángulo que la dominada"
+    },
+    {
+     "id": "remo-unilateral-banco",
+     "nombre": "Remo unilateral con mancuerna apoyado en banco",
+     "grupo": "Espalda",
+     "series": 3,
+     "reps": [
+      8,
+      12
+     ],
+     "rir": [
+      2,
+      1,
+      0
+     ],
+     "tipo": "torso",
+     "descanso": 90,
+     "tempo": "2-1-2",
+     "posicion": "Pecho apoyado en el banco inclinado — codo pegado — hombro abajo",
+     "rirGuia": "Última al fallo técnico",
+     "tips": "tirar con el codo, no con la mano",
+     "musculos": "Dorsal ancho, romboides, trapecio medio",
+     "objetivo": "Espalda media sin cargar la lumbar"
+    },
+    {
+     "id": "press-militar-mancuernas",
+     "nombre": "Press militar sentado con mancuernas",
+     "grupo": "Hombros",
+     "series": 3,
+     "reps": [
+      8,
+      12
+     ],
+     "rir": [
+      2,
+      1,
+      0
+     ],
+     "tipo": "torso",
+     "descanso": 120,
+     "tempo": "2-1-2",
+     "posicion": "Respaldo a 80° — antebrazos verticales — core firme",
+     "rirGuia": "Última al fallo técnico",
+     "tips": "no arquear la lumbar",
+     "musculos": "Deltoide anterior y lateral, tríceps",
+     "objetivo": "Empuje vertical: el ángulo que Push no trabaja"
+    },
+    {
+     "id": "elevacion-lateral-polea",
+     "nombre": "Elevaciones laterales en polea, unilateral",
+     "grupo": "Hombros",
+     "series": 3,
+     "reps": [
+      12,
+      15
+     ],
+     "rir": [
+      2,
+      1,
+      0
+     ],
+     "tipo": "aislamiento",
+     "descanso": 60,
+     "tempo": "2-1-2",
+     "posicion": "Polea baja cruzada — torso levemente inclinado",
+     "rirGuia": "Última al fallo",
+     "tips": "tensión constante todo el recorrido",
+     "musculos": "Deltoide lateral",
+     "objetivo": "Hombro lateral con tensión continua"
+    },
+    {
+     "id": "curl-scott",
+     "nombre": "Curl en banco Scott con barra Z",
+     "grupo": "Bíceps",
+     "series": 3,
+     "reps": [
+      8,
+      12
+     ],
+     "rir": [
+      2,
+      1,
+      0
+     ],
+     "tipo": "aislamiento",
+     "descanso": 75,
+     "tempo": "2-1-2",
+     "posicion": "Axilas apoyadas — codos fijos — bajar casi completo",
+     "rirGuia": "Última al fallo técnico",
+     "parciales": "3–5 cortas finales",
+     "tips": "no rebotar abajo",
+     "musculos": "Bíceps (porción corta), braquial",
+     "objetivo": "Pico del bíceps"
+    },
+    {
+     "id": "triceps-sobre-cabeza",
+     "nombre": "Extensión de tríceps sobre la cabeza en polea",
+     "grupo": "Tríceps",
+     "series": 3,
+     "reps": [
+      8,
+      12
+     ],
+     "rir": [
+      2,
+      1,
+      0
+     ],
+     "tipo": "aislamiento",
+     "descanso": 75,
+     "tempo": "2-1-2",
+     "posicion": "De espaldas a la polea — codos junto a la cabeza",
+     "rirGuia": "Última al fallo técnico",
+     "tips": "estirar bien arriba, sin abrir los codos",
+     "musculos": "Tríceps (cabeza larga)",
+     "objetivo": "Cabeza larga: lo que el pressdown no alcanza"
+    }
+   ],
+   "estiramiento": {
+    "min": 10,
+    "musculos": "pecho, hombros, espalda, bíceps y tríceps",
+    "guia": "30 s por intervalo",
+    "objetivo": "Movilidad y recuperación"
+   }
+  },
+  {
+   "id": "lower",
+   "slot": "lower",
+   "nombre": "Lower",
+   "enfoque": "Piernas completas, otros ángulos",
+   "calentamiento": [
+    {
+     "id": "caminadora",
+     "nombre": "Caminadora inclinada",
+     "min": 5,
+     "tempo": "continuo estable",
+     "detalle": "Velocidad 3.5 — Inclinación máxima",
+     "posicion": "Postura erguida — core activo — no sostenerse fuerte de los apoyos",
+     "rirGuia": "Debe sentirse liviano. Respiración moderada",
+     "musculos": "Activación general tren inferior + cardiovascular",
+     "objetivo": "Elevar temperatura corporal y preparar articulaciones"
+    },
+    {
+     "id": "movilidad-piernas",
+     "nombre": "Movilidad dinámica de piernas",
+     "min": 5,
+     "pasos": [
+      "Balanceos frontales",
+      "Balanceos posteriores",
+      "Aperturas de cadera",
+      "Sentadilla profunda sin peso"
+     ],
+     "posicion": "Movimientos controlados",
+     "rirGuia": "Sin fatiga",
+     "tips": "priorizar rango",
+     "musculos": "Cadera, rodilla, tobillo",
+     "objetivo": "Lubricación articular"
+    }
+   ],
+   "ejercicios": [
+    {
+     "id": "prensa-45",
+     "nombre": "Prensa 45°",
+     "grupo": "Cuádriceps",
+     "series": 3,
+     "reps": [
+      8,
+      12
+     ],
+     "rir": [
+      2,
+      1,
+      0
+     ],
+     "tipo": "pierna",
+     "descanso": 150,
+     "tempo": "3-1-2",
+     "posicion": "Pies al ancho de hombros, a media altura — espalda y cadera pegadas",
+     "rirGuia": "Última al fallo técnico",
+     "parciales": "No usar",
+     "tips": "no bloquear las rodillas arriba",
+     "musculos": "Cuádriceps, glúteo mayor",
+     "objetivo": "Volumen de cuádriceps con la espalda apoyada"
+    },
+    {
+     "id": "sentadilla-bulgara",
+     "nombre": "Sentadilla búlgara con mancuernas",
+     "grupo": "Cuádriceps",
+     "series": 3,
+     "reps": [
+      8,
+      12
+     ],
+     "rir": [
+      2,
+      1,
+      0
+     ],
+     "tipo": "pierna",
+     "descanso": 150,
+     "tempo": "3-1-2",
+     "posicion": "Pie trasero en el banco — torso levemente inclinado — paso largo",
+     "rirGuia": "Última al fallo técnico, por pierna",
+     "tips": "empezar por la pierna más débil",
+     "musculos": "Cuádriceps, glúteo mayor, aductores",
+     "objetivo": "Pierna unilateral: estabilidad y rango largo",
+     "nota": "Las series son por pierna"
+    },
+    {
+     "id": "rumano-mancuernas",
+     "nombre": "Peso muerto rumano con mancuernas",
+     "grupo": "Isquiotibiales",
+     "series": 3,
+     "reps": [
+      8,
+      12
+     ],
+     "rir": [
+      2,
+      1,
+      0
+     ],
+     "tipo": "pierna",
+     "descanso": 150,
+     "tempo": "3-1-2",
+     "posicion": "Espalda neutra — cadera atrás — mancuernas pegadas a las piernas",
+     "rirGuia": "Última al fallo técnico sin perder lumbar",
+     "parciales": "No usar",
+     "tips": "bajar hasta sentir el stretch femoral",
+     "musculos": "Isquiotibiales, glúteo mayor, erectores",
+     "objetivo": "Isquios y glúteo con otra carga que el rumano con barra"
+    },
+    {
+     "id": "extension-cuadriceps",
+     "nombre": "Extensión de cuádriceps",
+     "grupo": "Cuádriceps",
+     "series": 3,
+     "reps": [
+      12,
+      20
+     ],
+     "rir": [
+      2,
+      1,
+      0
+     ],
+     "tipo": "aislamiento",
+     "descanso": 75,
+     "tempo": "2-2-3",
+     "posicion": "Rodilla alineada — espalda fija",
+     "rirGuia": "Última al fallo",
+     "tips": "squeeze de 1 s arriba",
+     "musculos": "Cuádriceps (vasto medial)",
+     "objetivo": "Detalle del cuádriceps"
+    },
+    {
+     "id": "curl-femoral-sentado",
+     "nombre": "Curl femoral sentado",
+     "grupo": "Isquiotibiales",
+     "series": 4,
+     "reps": [
+      10,
+      15
+     ],
+     "rir": [
+      2,
+      1,
+      1,
+      0
+     ],
+     "tipo": "aislamiento",
+     "descanso": 90,
+     "tempo": "2-1-3",
+     "posicion": "Respaldo ajustado — almohadilla sobre el tobillo — cadera fija",
+     "rirGuia": "Última al fallo",
+     "tips": "controlar la vuelta",
+     "musculos": "Isquiotibiales",
+     "objetivo": "Isquios con la cadera flexionada: otro ángulo que el curl tumbado"
+    },
+    {
+     "id": "patada-gluteo-polea",
+     "nombre": "Patada de glúteo en polea",
+     "grupo": "Glúteos",
+     "series": 3,
+     "reps": [
+      10,
+      15
+     ],
+     "rir": [
+      2,
+      1,
+      0
+     ],
+     "tipo": "aislamiento",
+     "descanso": 75,
+     "tempo": "2-1-2",
+     "posicion": "Tobillera — torso inclinado, apoyado — pierna casi extendida",
+     "rirGuia": "Última al fallo",
+     "parciales": "3–5 cortas arriba",
+     "tips": "no arquear la lumbar",
+     "musculos": "Glúteo mayor",
+     "objetivo": "Glúteo con tensión continua"
+    },
+    {
+     "id": "aductores",
+     "nombre": "Aductores en máquina",
+     "grupo": "Aductores",
+     "series": 3,
+     "reps": [
+      10,
+      15
+     ],
+     "rir": [
+      2,
+      1,
+      0
+     ],
+     "tipo": "aislamiento",
+     "descanso": 75,
+     "tempo": "2-1-2",
+     "posicion": "Espalda recta — cadera fija",
+     "rirGuia": "Última al fallo",
+     "musculos": "Aductor mayor, largo, corto y grácil",
+     "objetivo": "Densidad interna + estabilidad"
+    },
+    {
+     "id": "gemelos-sentado",
+     "nombre": "Gemelos sentado",
+     "grupo": "Gemelos",
+     "series": 3,
+     "reps": [
+      12,
+      20
+     ],
+     "rir": [
+      2,
+      1,
+      0
+     ],
+     "tipo": "aislamiento",
+     "descanso": 60,
+     "tempo": "2-2-3",
+     "posicion": "Rodillas a 90° — talones libres — rango máximo",
+     "rirGuia": "Última al fallo",
+     "tips": "pausa de 1 s abajo",
+     "musculos": "Sóleo",
+     "objetivo": "Sóleo: lo que los gemelos de pie no trabajan"
+    }
+   ],
+   "estiramiento": {
+    "min": 10,
+    "musculos": "cuádriceps, isquiotibiales, glúteos, aductores y gemelos",
+    "guia": "30 s por músculo, sin dolor intenso",
+    "objetivo": "Mejorar recuperación y movilidad"
    }
   }
  ]

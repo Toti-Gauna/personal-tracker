@@ -24,16 +24,19 @@ describe('ola 19 · lo guardado de antes pasa a las rutinas nuevas sin perder na
 
   it('archiva Push, Pull y Piernas (con su historial) y suma las seis nuevas; la semana de fábrica pasa a la nueva', () => {
     const s = migrate({ train: antes(), settings: null }).train;
-    expect(s.v).toBe(2);
+    expect(s.v).toBe(3);
     const vivas = s.routines.filter((r) => !r.archivada).map((r) => r.id);
-    expect(vivas).toEqual(['upper', 'lower', 'full', 'push-a', 'pull-a', 'push-b', 'pull-b', 'legs-a', 'legs-b']);
-    expect(s.routines.filter((r) => r.archivada).map((r) => r.id)).toEqual(['viejo-push', 'viejo-pull', 'viejo-legs']);
+    expect(vivas).toEqual(['full', 'push-a', 'pull-a', 'push-b', 'pull-b', 'legs-a', 'legs-b', 'upper', 'lower']);
+    expect(s.routines.filter((r) => r.archivada).map((r) => r.id)).toEqual(['viejo-push', 'viejo-pull', 'viejo-legs', 'viejo-upper', 'viejo-lower']);
+    // Upper y Lower nuevas reemplazan a las de la ola 5 (que quedan archivadas con lo suyo).
+    expect(s.routines.find((r) => r.id === 'upper')!.exercises).toHaveLength(8);
+    expect(s.routines.find((r) => r.id === 'lower')!.exercises).toHaveLength(8);
     expect(s.plan.days).toEqual(['pull', 'legs', 'push', 'upper', 'lower', null, null]);
     // El historial sigue apuntando a la rutina archivada.
     expect(s.sessions[0].routineId).toBe('viejo-legs');
     expect(s.leftovers).toEqual({ 'viejo-legs': ['legs-x'] });
     // Migrar de nuevo no duplica nada.
-    expect(migrate({ train: s, settings: null }).train.routines).toHaveLength(12);
+    expect(migrate({ train: s, settings: null }).train.routines).toHaveLength(14);
   });
 
   it('una semana propia conserva sus días y un entreno en curso sigue en su rutina', () => {
@@ -99,6 +102,13 @@ describe('ola 19 · la sesión: calentamiento, RIR y el día', () => {
     const cierre = day(D).blocks.find((b) => b.key === 'cierre')!;
     expect(cierre.title).toBe('Bañarse, estirar, comer y escribir');
     expect(cierre.tasks.map((x) => x.t)).toEqual(['Bañarse', 'Estirar: cuádriceps, aductores, glúteos y gemelos', 'Comer', 'Escribir']);
+  });
+
+  it('el jueves se estira lo de Upper y el viernes lo de Lower; el sábado no hay entreno que estirar', () => {
+    startDay('completo', '04:00', '2026-11-19');
+    startDay('completo', '04:00', '2026-11-20');
+    expect(day('2026-11-19').blocks.find((b) => b.key === 'cierre')!.tasks[1].t).toBe('Estirar: pecho, hombros, espalda, bíceps y tríceps');
+    expect(day('2026-11-20').blocks.find((b) => b.key === 'cierre')!.tasks[1].t).toBe('Estirar: cuádriceps, isquiotibiales, glúteos, aductores y gemelos');
   });
 
   it('el entreno de la rutina de búsqueda son 30 min de ida, 2 h y 30 de vuelta', () => {

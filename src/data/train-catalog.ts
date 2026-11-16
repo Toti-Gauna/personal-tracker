@@ -12,28 +12,13 @@ const routine = (id: string, name: string, desc: string, exercises: Exercise[]):
 
 /**
  * Ola 19 · las rutinas de Toti (data/entreno.json): Push, Pull y Legs en versión A y B. Se alternan por
- * semana (semanas impares del plan, la A; pares, la B). Upper, Lower y Full body siguen como estaban.
+ * semana (semanas impares del plan, la A; pares, la B). Upper y Lower van todas las semanas; Full body queda para ponerse al día.
  */
 export const rutinasDeToti = (): Routine[] => ENTRENO.rutinas.map((r) => rutinaDeJson(r, (p) => sid(p)));
 
-/** Rutinas de partida: las de Toti + Upper/Lower + Full body. Se editan en Editar rutina. */
+/** Rutinas de partida: las de Toti (con Upper y Lower) + Full body. Se editan en Editar rutina. */
 export const defaultRoutines = (): Routine[] => [
   ...rutinasDeToti(),
-  routine('upper', 'Upper', 'Torso completo, más volumen', [
-    ex('u-inclinado', 'Press inclinado', 4, 6, 8, 120, 'torso'),
-    ex('u-remo', 'Remo con barra', 4, 6, 8, 120, 'torso'),
-    ex('u-militar', 'Press militar', 3, 8, 10, 120, 'torso'),
-    ex('u-jalon', 'Jalón al pecho', 3, 10, 12, 90, 'torso'),
-    ex('u-curl', 'Curl con mancuernas', 3, 10, 12, 60, 'aislamiento'),
-    ex('u-triceps', 'Tríceps en polea', 3, 10, 12, 60, 'aislamiento'),
-  ]),
-  routine('lower', 'Lower', 'Piernas con foco en cadera', [
-    ex('l-pm', 'Peso muerto', 3, 5, 6, 180, 'pierna'),
-    ex('l-hip', 'Hip thrust', 4, 8, 10, 120, 'pierna'),
-    ex('l-bulgara', 'Sentadilla búlgara', 3, 8, 10, 120, 'pierna'),
-    ex('l-curl', 'Curl femoral', 3, 10, 12, 90, 'aislamiento'),
-    ex('l-gemelos', 'Gemelos', 4, 12, 15, 60, 'aislamiento'),
-  ]),
   routine('full', 'Full body', 'Si te atrasaste: 1 o 2 días cubren la semana', [
     ex('f-sentadilla', 'Sentadilla', 3, 6, 8, 150, 'pierna'),
     ex('f-banca', 'Press de banca', 3, 6, 8, 120, 'torso'),
@@ -44,8 +29,8 @@ export const defaultRoutines = (): Routine[] => [
   ]),
 ];
 
-/** Versión del estado de entreno: 2 = rutinas de Toti (ola 19). */
-export const ENTRENO_V = 2;
+/** Versión del estado de entreno: 2 = Push, Pull y Legs de Toti; 3 = también Upper y Lower nuevas (ola 19). */
+export const ENTRENO_V = 3;
 
 export const REST_DAY = 'descanso';
 export const REST_DAY_MIN = 45;
@@ -64,20 +49,22 @@ export const PLANS: Record<'ppl' | 'full', (string | null)[]> = {
  * se archivan con su historial y las nuevas (A y B) las reemplazan en la semana. No se borra nada.
  */
 export function migrarEntreno(t: TrainState): TrainState {
-  if ((t.v ?? 1) >= ENTRENO_V) return t;
-  const VIEJAS = ['push', 'pull', 'legs'];
+  const v = t.v ?? 1;
+  if (v >= ENTRENO_V) return t;
+  // Etapa 2: Push, Pull y Legs de la ola 5 → las de Toti. Etapa 3: Upper y Lower de la ola 5 → las nuevas.
+  const viejas = [...(v < 2 ? ['push', 'pull', 'legs'] : []), ...(v < 3 ? ['upper', 'lower'] : [])];
   const nuevo = (id: string) => `viejo-${id}`;
-  const routines = t.routines.map((r) => (VIEJAS.includes(r.id) && !r.slot ? { ...r, id: nuevo(r.id), archivada: true } : r));
+  const routines = t.routines.map((r) => (viejas.includes(r.id) && !r.slot ? { ...r, id: nuevo(r.id), archivada: true } : r));
   const faltan = rutinasDeToti().filter((r) => !routines.some((x) => x.id === r.id));
   return {
     ...t,
     v: ENTRENO_V,
     routines: [...routines, ...faltan],
-    // La plantilla de fábrica pasa a la semana nueva; una semana propia conserva sus días (push, pull y legs ya son los nuevos).
+    // La plantilla de fábrica pasa a la semana nueva; una semana propia conserva sus días (los ids de día ya son los nuevos).
     plan: t.plan.template === 'ppl' ? defaultPlan() : t.plan,
-    sessions: t.sessions.map((s) => (VIEJAS.includes(s.routineId) ? { ...s, routineId: nuevo(s.routineId) } : s)),
-    active: t.active && VIEJAS.includes(t.active.routineId) ? { ...t.active, routineId: nuevo(t.active.routineId) } : t.active,
-    leftovers: Object.fromEntries(Object.entries(t.leftovers).map(([k, v]) => [VIEJAS.includes(k) ? nuevo(k) : k, v])),
+    sessions: t.sessions.map((s) => (viejas.includes(s.routineId) ? { ...s, routineId: nuevo(s.routineId) } : s)),
+    active: t.active && viejas.includes(t.active.routineId) ? { ...t.active, routineId: nuevo(t.active.routineId) } : t.active,
+    leftovers: Object.fromEntries(Object.entries(t.leftovers).map(([k, val]) => [viejas.includes(k) ? nuevo(k) : k, val])),
   };
 }
 
