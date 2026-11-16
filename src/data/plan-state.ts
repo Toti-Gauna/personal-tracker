@@ -22,7 +22,20 @@ export interface ProyectoEstado {
   /** Un servidor MCP publicado y un agente con trazas por proyecto. */
   mcp?: boolean;
   agente?: boolean;
+  /**
+   * Ola 16c · puerta de evidencia: sin un número medido contra una referencia externa, un tercero
+   * que lo valide y un informe público, el proyecto no cierra.
+   */
+  evidencia?: Partial<Record<Evidencia, boolean>>;
 }
+
+export type Evidencia = 'medido' | 'validador' | 'informe';
+export const EVIDENCIAS: [Evidencia, string, string][] = [
+  ['medido', 'Número medido contra una referencia externa', 'La referencia de la ficha'],
+  ['validador', 'Un tercero que lo valida', 'Experto del rubro, PR aceptado o certificación; con una llamada de 30 min y un comentario escrito alcanza'],
+  ['informe', 'Informe público', 'Qué se midió, contra qué y qué salió'],
+];
+export const evidenciaCompleta = (p?: ProyectoEstado) => EVIDENCIAS.every(([k]) => !!p?.evidencia?.[k]);
 
 export interface HandyxSemana {
   horas?: number;

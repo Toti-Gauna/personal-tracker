@@ -66,6 +66,8 @@ export function PlanRuta({ day }: { day: DayLog }) {
         </a>
       )}
 
+      <a className="fila-link" href="#/metas/etapas">Las 4 etapas del plan extendido: hoy sos, alertas y decisiones <span aria-hidden="true">→</span></a>
+
       <div className="fila-t pr-t"><span className="etiqueta">Las seis ramas</span><a className="subrayado" href="#/metas/mapa">Ver el mapa →</a></div>
       <ul className="pr-ramas">
         {v.ramas.map((r) => (

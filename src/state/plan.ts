@@ -1,6 +1,6 @@
 /** Acciones del plan T+18 sobre el estado: contadores, respuestas, Handyx, eventos y más. */
 import { PLAN, semanaDelPlan, type Capa, type Entrevista, type EventoRama, type MetaGenerada, type Postulacion } from '../data/plan';
-import { proyectoVacio, type HandyxSemana, type Importacion, type PlanSettings, type PlanState, type TipoError } from '../data/plan-state';
+import { proyectoVacio, type Evidencia, type HandyxSemana, type Importacion, type PlanSettings, type PlanState, type TipoError } from '../data/plan-state';
 import { newId } from '../data/schedule';
 import { addDays, parseDate } from '../data/time';
 import type { Rama } from '../data/types';
@@ -13,6 +13,14 @@ export const lunesDe = (date: string) => addDays(date, -((parseDate(date).getDay
 
 function update(fn: (p: PlanState) => PlanState) {
   setState((s) => ({ ...s, plan: fn(s.plan) }));
+}
+
+/** Tilda o destilda una de las tres pruebas de evidencia de un proyecto. */
+export function toggleEvidencia(proyecto: string, k: Evidencia) {
+  update((p) => {
+    const cur = p.proyectos[proyecto] ?? proyectoVacio();
+    return { ...p, proyectos: { ...p.proyectos, [proyecto]: { ...cur, evidencia: { ...cur.evidencia, [k]: !cur.evidencia?.[k] } } } };
+  });
 }
 
 /** Prende o apaga las semanas extra de feature de un proyecto; el calendario se recalcula. */

@@ -120,3 +120,4 @@
 .re-nav a { color: var(--tinta); text-decoration: none; font-size: 14px; min-height: 44px; display: flex; align-items: center; }
 .pantalla.re h1 { font-size: clamp(30px, 9.5vw, 44px); overflow-wrap: anywhere; hyphens: auto; }
 .re-salida > p.mono { font-size: 12px; margin: 0; }
+.re .btn-borde { color: var(--tinta); text-decoration: none; display: grid; place-items: center; }

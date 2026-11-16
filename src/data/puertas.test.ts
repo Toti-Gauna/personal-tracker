@@ -13,8 +13,9 @@ describe('colchón (ola 16b: reemplaza a las semanas ganadas del calendario comp
 
   it('suma lo que un proyecto cierra antes de su meta y resta la semana de tope si se pasa', () => {
     const p = emptyPlan();
-    p.proyectos.P0 = { ...proyectoVacio(), examen: { fecha: '2026-11-29', puntaje: 90 } };
-    p.proyectos.P1 = { ...proyectoVacio(), examen: { fecha: '2026-12-10', puntaje: 90 }, tecnica: { diseno: true, ejercicios: 6, defensa: '2026-12-11' } };
+    const evidencia = { medido: true, validador: true, informe: true };
+    p.proyectos.P0 = { ...proyectoVacio(), examen: { fecha: '2026-11-29', puntaje: 90 }, evidencia };
+    p.proyectos.P1 = { ...proyectoVacio(), examen: { fecha: '2026-12-10', puntaje: 90 }, tecnica: { diseno: true, ejercicios: 6, defensa: '2026-12-11' }, evidencia };
     expect(cierreProyecto(p, 'P1')).toBe('2026-12-11');
     // P1 cerró 23 días antes de su meta (3 ene, con las 2 semanas de feature): 3 semanas ganadas.
     expect(semanasGanadas(p, '2026-12-14', T0).total).toBe(5);
@@ -22,6 +23,17 @@ describe('colchón (ola 16b: reemplaza a las semanas ganadas del calendario comp
     const q = emptyPlan();
     q.proyectos.P0 = p.proyectos.P0;
     expect(semanasGanadas(q, '2027-01-05', T0).total).toBe(1);
+  });
+
+  it('sin las tres pruebas de evidencia el proyecto no cierra (ola 16c)', () => {
+    const p = emptyPlan();
+    p.proyectos.P1 = { ...proyectoVacio(), examen: { fecha: '2026-12-10', puntaje: 95 }, tecnica: { diseno: true, ejercicios: 6, defensa: '2026-12-11' }, evidencia: { medido: true, validador: true } };
+    expect(cierreProyecto(p, 'P1')).toBeNull();
+    p.proyectos.P1.evidencia!.informe = true;
+    expect(cierreProyecto(p, 'P1')).toBe('2026-12-11');
+    // P0 tampoco cierra sin evidencia, aunque no lleve entrevista técnica.
+    p.proyectos.P0 = { ...proyectoVacio(), examen: { fecha: '2026-11-29', puntaje: 90 } };
+    expect(cierreProyecto(p, 'P0')).toBeNull();
   });
 
   it('sin la entrevista técnica completa el proyecto no se cierra', () => {

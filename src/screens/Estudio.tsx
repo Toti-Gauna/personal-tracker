@@ -13,8 +13,7 @@ import { startStudy } from '../ui/estudio-acciones';
 import { useStudyPlan, type Contenido } from '../ui/useStudy';
 import { BANDA_COLOR, banda, detalle, qFalla, ranking } from '../data/debiles';
 import { WeekChart } from '../ui/WeekChart';
-import { STUDY_ROADMAPS } from '../data/study-roadmap';
-import { CardRoadmap } from './RoadmapEstudio';
+import { CardMate } from './MatePlan';
 import '../styles/estudio.css';
 
 /** Qué pasa al tocar la casilla de un paso. */
@@ -122,7 +121,7 @@ export function Estudio({ day }: { day: DayLog }) {
         <span className="mono sub">tocá uno para ver todo</span>
       </div>
       <div className="re-cards">
-        {STUDY_ROADMAPS.map((r) => <CardRoadmap key={r.id} r={r} />)}
+        <CardMate day={day} />
         <a className="re-card otro" href="#/metas/ruta" style={{ ['--c' as string]: 'var(--ing)' }}>
           <span className="re-card-cab"><b>Programación</b><span className="mono sub">Plan T+18</span></span>
           <span className="sub">Los proyectos P0 a P10, con su línea de tiempo, están en Metas → Ruta.</span>

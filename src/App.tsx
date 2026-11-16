@@ -33,6 +33,7 @@ import { Actividad } from './screens/Actividad';
 import { ComoFunciona } from './screens/ComoFunciona';
 import { Estudio } from './screens/Estudio';
 import { RoadmapPantalla } from './screens/RoadmapEstudio';
+import { MatePlan } from './screens/MatePlan';
 import { SesionEstudio } from './screens/SesionEstudio';
 import { TesisPantalla } from './screens/TesisPantalla';
 import { Test } from './screens/Test';
@@ -87,7 +88,7 @@ export function App() {
       case 'pomodoros': contenido = <Pomodoros />; break;
       case 'json': contenido = <DiaJson day={day} />; break;
       case 'importar': contenido = <PlanImportar day={day} />; break;
-      case 'estudio': contenido = ruta.param?.startsWith('ruta') ? <RoadmapPantalla key={ruta.param} day={day} param={ruta.param} /> : <Estudio day={day} />; break;
+      case 'estudio': contenido = ruta.param?.startsWith('ruta') ? <RoadmapPantalla key={ruta.param} day={day} param={ruta.param} /> : ruta.param?.startsWith('mate') ? <MatePlan key={ruta.param} day={day} param={ruta.param} /> : <Estudio day={day} />; break;
       case 'sesion': contenido = <SesionEstudio key={ruta.param} day={day} id={ruta.param} />; break;
       case 'como': contenido = <ComoFunciona />; break;
       case 'actividad': contenido = <Actividad key={ruta.param ?? 'nueva'} id={ruta.param || undefined} />; break;
