@@ -5,7 +5,7 @@ Tracker personal de Toti: el día en horas, el estudio con su propio motor de re
 - **Diseño:** [canvas de Trazo](https://claude.ai/artifact/6Cc2E6aW2ViU5ikovpsRTy)
 - **Roadmap de estudio:** [ruta ML + DevSecOps](https://claude.ai/artifact/9PEokku7mBLZdCFJr1zqXP)
 - **Pantallas:** presentación `Trazo-pantallas.pptx` y su ZIP de imágenes (44 pantallas, 8 flujos).
-- **Estado:** olas 0 a 12b hechas y en `main`. Olas 0 a 16c hechas (la 15 quedó absorbida por la 16c). Olas 0 a 17 hechas. La ola 18 (todo lo pendiente en una sola) está planificada en §6 sexies. Este archivo es la fuente de verdad.
+- **Estado:** olas 0 a 12b hechas y en `main`. Olas 0 a 16c hechas (la 15 quedó absorbida por la 16c). Olas 0 a 17 hechas. Las olas 18 a 21 (arreglos y calendario, entreno, programación y metas por bloque, e inglés y orden de pantallas) están planificadas en §6 sexies. Este archivo es la fuente de verdad.
 
 ---
 
@@ -384,7 +384,10 @@ Desde el lunes 16 nov 2026 la prioridad es un trabajo remoto de USD 3.000 a 5.00
 | 16b · Plan T+18 extendido: calendario vivo | La app lee el calendario derivado en vez de las 78 semanas fijas, con migración sin romper `trazo.v1` (§6 quater) | Opus 5.5 · alto · *hecha* |
 | 16c · Plan T+18 extendido: matemática y vistas | Ventanas y puertas 85/65, línea de tiempo por etapas, panel "hoy sos", alertas y fichas de proyecto. **Absorbe la ola 15:** un solo roadmap de matemática (§6 quater) | Opus 5.5 · alto · *hecha* |
 | 17 · Rutina de las 08:00 y dormir a las 22:00 | Tercera opción en Buen día (levantarse a las 08:00) con su propio día; en la de las 04:00, entreno de 3 h (18:00 a 21:00), descanso de 21:00 a 22:00 y dormir siempre a las 22:00 (§6 quinquies) | Sonnet 5.5 · medio · *hecha* |
-| 18 · Todo junto | Una sola ola, en 9 pasos con un commit cada uno y un solo PR: arreglos de uso, calendario sin pausas, tus rutinas de entreno (PPL + Upper/Lower), Upper/Lower propias, unidades y libros, metas por bloque con JSON, roadmaps de programación e inglés y orden de pantallas (§6 sexies) | Opus 5.5 · alto |
+| 18 · Arreglos y calendario | Submetas en la meta principal, sin zoom al escribir, sin modo entrevista y calendario sin pausas (§6 sexies, pasos 1 y 2) | Sonnet 5.5 · medio |
+| 19 · Entreno | Tus rutinas (PPL + Upper/Lower, lunes a viernes), el horario de 18:00 a 22:00 y las Upper/Lower propias (§6 sexies, pasos 3 y 4) | Sonnet 5.5 · alto |
+| 20 · Programación y metas por bloque | Unidades por área y sistema de libros, metas por bloque con JSON y el roadmap de programación por proyectos (§6 sexies, pasos 5 a 7) | Opus 5.5 · alto |
+| 21 · Inglés y orden de pantallas | Roadmap de inglés con libros y curso de pronunciación, y una pasada de UX con subpáginas en Metas, Estudio y Hoy (§6 sexies, pasos 8 y 9) | Sonnet 5.5 · alto |
 
 ## 6 bis. Olas 9 a 12: mejoras de uso
 
@@ -615,7 +618,33 @@ Mismo flujo: una rama y un PR por ola; se mergea a `main` con el CI en verde.
 - **Horas por semana de la intensiva:** el entrenamiento pasa de 10 a 15 h.
 - 5 tests nuevos y 3 actualizados.
 
-## 6 sexies. Ola 18: todo lo pendiente en una sola
+## 6 sexies. Olas 18 a 21: lo pendiente, en cuatro olas
+
+Pedido del 2026-11-16: juntar las nueve olas que había planeado en pocas, pero no en una sola. Quedan **cuatro olas** que siguen el orden en que se necesitan unas a otras, con **un PR por ola** y **un commit por paso** (con sus tests). Cada paso deja la app funcionando.
+
+| Ola | Pasos | Modelo · esfuerzo |
+|---|---|---|
+| 18 · Arreglos y calendario | 1 y 2 | Sonnet 5.5 · medio |
+| 19 · Entreno | 3 y 4 | Sonnet 5.5 · alto |
+| 20 · Programación y metas por bloque | 5, 6 y 7 | Opus 5.5 · alto |
+| 21 · Inglés y orden de pantallas | 8 y 9 | Sonnet 5.5 · alto |
+
+La 20 va antes que la 21 porque el roadmap de inglés usa el sistema de libros y las metas por bloque.
+
+**Decidido (2026-11-16)**
+1. Es **08:00**, y solo cuando te levantás a esa hora: las opciones de 04:00 y 05:00 siguen en pie.
+2. La de las 08:00 vale también el **fin de semana** (el día libre sigue igual).
+3. **Dormir a las 22:00 en todas las rutinas**, por ahora.
+
+**Lo que quedó**
+- `data/routines.json` suma `tarde` (wake 08:00 y los 10 bloques de la tabla). Reusa los ids de siempre (`math`, `prog`, `ingles`, `entreno`…), así la sesión de estudio, las puertas, el entreno y las etiquetas funcionan igual. Se valida al cargar.
+- **Buen día:** tres opciones (04:00, 05:00 y 08:00) más "Otra hora". Si abrís Trazo desde las 07:30, propone la de las 08:00, y muestra el día completo en vez de solo la mañana.
+- **Búsqueda intensiva a las 04:00 y 05:00:** entreno de 18:00 a 21:00 (3 h), "Descansar y preparar mañana" de 21:00 a 22:00 y "Dormir a las 22:00". El fin de semana el descanso se estira hasta las 22:00.
+- **Otras rutinas:** lunes a viernes y con trabajo: desconexión de 20:00 a 21:00 y "Cerrar y preparar mañana" de 21:00 a 22:00. Fin de semana: la desconexión llega a las 22:00. Día libre: se duerme a las 22:00.
+- **Horas por semana de la intensiva:** el entrenamiento pasa de 10 a 15 h.
+- 5 tests nuevos y 3 actualizados.
+
+## 6 sexies. Olas 18 a 21: lo pendiente, en cuatro olas
 
 **Opus 5.5 · alto.** Pedido del 2026-11-16: juntar las olas 18 a 26 en una sola, para que sean menos y se terminen más rápido. Es **un solo PR**, con **9 pasos y un commit por paso** (con sus tests). Cada paso deja la app funcionando, así que si algo falla se corrige sin perder lo anterior. Lo anterior queda en `main` solo cuando el CI pasa entero.
 
@@ -626,11 +655,13 @@ Mismo flujo: una rama y un PR por ola; se mergea a `main` con el CI en verde.
 4. **Sin modo entrevista:** si hay una entrevista, se practica el día anterior con el pitch armado en el bloque de búsqueda laboral; si es en inglés, en ese mismo bloque.
 5. **"Meta padre"** es la meta principal con sus submetas: las metas numeradas de Hoy y las de Metas.
 6. **Entreno:** la semana es **PPL + Upper/Lower de lunes a viernes**; **sábado y domingo son libres**. Upper el jueves y Lower el viernes. Los estiramientos van de 21:00 a 22:00. "Abi" en el texto era una anotación, no un RIR. Se corrigen los dos detalles (dominada con agarre neutro y "Wrist extension" con extensores del antebrazo).
-7. **Una sola ola**, en lugar de nueve.
+7. **Cuatro olas**, en lugar de nueve.
 
 **Supuesto a confirmar:** como Pull, Legs y Push tienen versión A y versión B y ahora solo hay un día de cada una, **A y B se alternan por semana** (semanas impares del plan con las A, pares con las B). Upper y Lower son iguales todas las semanas. Si preferís otro criterio, se cambia en la semana de entreno.
 
-**Los 9 pasos**
+**Los 9 pasos, por ola**
+
+*Ola 18 · Arreglos y calendario*
 
 1. **Arreglos de uso.**
    - **Submetas en la meta principal:** cada meta abierta en Hoy suma **+ Agregar submeta** (con la hoja de la ola 10) y cada meta de Metas suma **+ Submeta**.
@@ -638,6 +669,8 @@ Mismo flujo: una rama y un PR por ola; se mergea a `main` con el CI en verde.
    - **Entrevista sin modo propio:** se saca el reemplazo del bloque de inglés y la partición de la búsqueda. El día anterior a una entrevista, la búsqueda laboral suma "Practicar la entrevista de mañana con el pitch armado" y, si es en inglés, "Practicarla en inglés". El aviso entre ramas pasa a decir lo mismo.
 
 2. **Calendario sin pausas.** Se sacan las 4 pausas. T+18 pasa del 20 al **6 de agosto de 2028** (90 semanas) y el plan termina el **21 de julio de 2030**; W1 pasa a ser del 1 al 21 de febrero de 2027 y Surco v1 arranca el 22 de febrero. Los dos "Descanso" se quedan. **Security+ (C2)** pasa al 31 de mayo a 20 de junio de 2027 y sigue terminando después del 11 de junio: depende de la versión que elijas el 22 de noviembre, y la alerta de decisión lo avisa.
+
+*Ola 19 · Entreno*
 
 3. **Entreno con tus rutinas.** Reemplazan a las de partida de la ola 5.
    - **Seis rutinas tuyas:** Pull A, Legs A, Push A, Pull B, Legs B y Push B.
@@ -649,20 +682,24 @@ Mismo flujo: una rama y un PR por ola; se mergea a `main` con el CI en verde.
 
 4. **Upper y Lower propias.** Armadas con tu estilo (tempo 2-1-2, RIR 2, 1 y 0, 8 a 12 repeticiones) y tus ejercicios, con otros ángulos que el Push, Pull y Legs de la misma semana, para que cada músculo se entrene dos veces por semana con un volumen parecido. Entran en una plantilla "PPL + Upper/Lower" que pasa a ser la de fábrica.
 
+*Ola 20 · Programación y metas por bloque*
+
 5. **Unidades por área y sistema de libros** (dentro del motor actual, 85 %). Matemática, 1 capítulo; programación, IA y DevSecOps, 1 bloque del curso (unas 4 partes); lenguajes, 1 capítulo, unidad o bloque; libros, cada 2 capítulos. En los libros: una micro-tesis por capítulo, un mini-test cada 2 capítulos, un test y la tesis final. Las micro-tesis pueden dar tarjetas.
 
 6. **Metas por bloque e importar JSON.** Cada proyecto, ventana, libro o unidad tiene sus metas propias (con submetas): se arman a mano, se tildan, editan y borran. También se **importan con un JSON** (formato documentado con ejemplo; Trazo valida línea por línea, muestra "Qué cambia" antes de guardar y conserva el avance) y se exportan las tuyas. Reusa el importador de la ola 8.
 
 7. **Roadmap de programación por proyectos.** La card "Programación" de Estudio deja de mandar a leer: pasa a ser un roadmap por proyectos con la estructura del de matemática ("Estás acá", "Hoy sos → Vas a ser" y la escalera de P0 a A7). La meta de programación de Hoy sale de las metas del proyecto en curso. Cada proyecto tiene **subpáginas** con botones: Resumen, Stack y tecnología nueva, Metas, Evidencia, Pieza matemática y Entrega. Las 12 ventanas de matemática suman su **nivel de salida** como lista de criterios que se tilda (por ejemplo, W1: resolver ecuaciones y desigualdades sin ayuda, graficar funciones y calcular varianza, percentiles y cuantiles).
 
+*Ola 21 · Inglés y orden de pantallas*
+
 8. **Roadmap de inglés.** Estudio → Inglés, con la misma estructura. Un libro por vez, todos los días, con el sistema de libros del paso 5: el primero es **Measure What Matters** (metas por capítulo, micro-tesis, mini-tests, test y tesis final); después, el **curso de pronunciación de Udemy** (secciones como unidades; **el enlace se carga desde la app y queda en el teléfono, no se commitea**, porque el repo es público y la dirección es de una cuenta de empresa) y al final **English Made Simple**. Los demás libros se cargan con JSON (paso 6). El bloque de inglés de Hoy pasa a ser la lectura del día.
 
 9. **Orden de pantallas.** Una pasada de UX sobre Metas, Estudio y Hoy: lo que ocupa una pantalla larga pasa a una pantalla liviana con botones a subpáginas, con el mismo criterio en los tres roadmaps. Ninguna pantalla pasa de unas 3 pantallas de scroll en el teléfono.
 
-**Aceptación general:** typecheck, tests y build en verde; cada paso probado en el navegador a 390 px, en claro y oscuro, sin desbordes; la app arranca con lo ya guardado.
+**Aceptación general:** typecheck, tests y build en verde en cada ola; cada paso probado en el navegador a 390 px, en claro y oscuro, sin desbordes; la app arranca con lo ya guardado.
 
-**A confirmar durante la ola**
-1. **Measure What Matters:** la cantidad de capítulos. Si no me la pasás, el libro se carga con el JSON del paso 6 y no frena nada.
+**A confirmar durante las olas**
+1. **Measure What Matters** (ola 21): la cantidad de capítulos. Si no me la pasás, el libro se carga con el JSON del paso 6 y no frena nada.
 2. **Los dos "Descanso"** (noviembre de 2028 y de 2029): se quedan salvo que digas lo contrario.
 3. **Security+:** la versión se decide el 22 de noviembre; no la resuelvo yo.
 
