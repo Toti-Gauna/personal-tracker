@@ -163,6 +163,8 @@ export interface FocusState {
   i: number;
   /** Epoch ms en que empezó el tramo actual (corrido por las pausas). */
   segStart: number;
+  /** Epoch ms en que empezó el foco (los guardados antes de la ola 14 no lo tienen). */
+  startedAt?: number;
   pausedAt: number | null;
   /** Sesión de estudio: un tramo por segmento, con su paso y su referencia. */
   tramos?: Tramo[];
