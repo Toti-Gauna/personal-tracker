@@ -17,6 +17,7 @@ import { RutaImpacto, SprintBusqueda } from './Sprint';
 import { RutaEvolucion } from './RutaEvolucion';
 import { RutaMapa } from './RutaMapa';
 import { PlanEtapas } from './PlanEtapas';
+import { Clipping } from './Clipping';
 import '../styles/metas.css';
 
 const TABS = [['ruta', 'Ruta'], ['semana', 'Semana'], ['mes', 'Mes'], ['bimestre', 'Bim.'], ['anio', 'Año']] as const;
@@ -38,6 +39,7 @@ export function Metas({ day, tab }: { day: DayLog; tab?: string }) {
   if (tab === 'trabajo') return <PlanBusqueda day={day} />;
   if (tab === 'ingles') return <PlanIngles day={day} />;
   if (tab === 'handyx') return <PlanHandyx day={day} />;
+  if (tab === 'clipping' || tab?.startsWith('clipping/')) return <Clipping day={day} sub={tab.split('/')[1]} />;
   if (tab === 'proyecto' || tab?.startsWith('proyecto/')) return <PlanProyecto key={tab} day={day} id={tab.split('/')[1]} />;
   return <MetasTabs day={day} tab={tab} />;
 }

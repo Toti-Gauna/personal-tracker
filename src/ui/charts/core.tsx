@@ -45,6 +45,8 @@ export function useDibujo<T extends Element>(deps: unknown[] = []) {
       });
       const crece = el.querySelectorAll('.crece');
       if (crece.length) gsap.from(crece, { scaleY: 0, transformOrigin: '50% 100%', duration: 0.6, stagger: 0.03, ease: 'power2.out', clearProps: 'transform' });
+      const creceX = el.querySelectorAll('.crece-x');
+      if (creceX.length) gsap.from(creceX, { scaleX: 0, transformOrigin: '0% 50%', duration: 0.6, stagger: 0.04, ease: 'power2.out', clearProps: 'transform' });
       const aparece = el.querySelectorAll('.aparece');
       if (aparece.length) gsap.from(aparece, { opacity: 0, duration: 0.5, delay: 0.3, clearProps: 'opacity' });
     }, el);

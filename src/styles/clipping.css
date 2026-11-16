@@ -1,0 +1,231 @@
+/* Ola 23 · Clipping: tablero premium con el acento de Eclipse, bordes finos y sin sombras. */
+.clip { position: relative; }
+.clip .topbar { margin-bottom: 12px; }
+.clip .topbar .mono { font-size: 11.5px; text-align: right; }
+.clip-h1 { margin: 6px 0 14px; font-size: clamp(32px, 9vw, 44px); }
+.clip-lead { font-size: 15px; margin: 0 0 16px; }
+
+/* Navegación entre subpáginas: chips con la marca que se desliza (Flip). */
+.clip-nav {
+  display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; margin: 0 calc(-1 * var(--gutter)) 18px;
+  padding: 2px var(--gutter) 6px; scroll-padding-inline: var(--gutter);
+}
+.clip-nav::-webkit-scrollbar { display: none; }
+.clip-nav a {
+  position: relative; flex: none; display: inline-grid; place-items: center; min-height: 40px; padding: 0 14px;
+  border: 1px solid var(--linea); border-radius: 999px; color: var(--sub); text-decoration: none; font-size: 14px; white-space: nowrap;
+}
+.clip-nav a > span:not(.clip-marca) { position: relative; z-index: 1; }
+.clip-nav a[aria-current='page'] { color: var(--papel); border-color: var(--c); font-weight: 600; }
+.clip-marca { position: absolute; inset: -1px; border-radius: 999px; background: var(--c); z-index: 0; }
+
+/* Portada */
+.clip-hero { border: 1px solid var(--tinta); border-radius: 16px; padding: 16px; display: grid; gap: 14px; margin: 4px 0 18px; }
+.clip-hero .etiqueta { color: var(--c); }
+.clip-hero-fila { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 12px; align-items: center; }
+.clip-grande { display: grid; gap: 4px; min-width: 0; }
+.clip-grande small { font-size: 13px; }
+.clip-grande b { font-size: clamp(40px, 13vw, 58px); line-height: 1; font-weight: 500; letter-spacing: -0.03em; font-variant-numeric: tabular-nums; color: var(--tinta); white-space: nowrap; }
+.clip-usd { font-size: 0.38em; color: var(--c); letter-spacing: 0.04em; vertical-align: 0.9em; }
+.clip-grande > span.mono { font-size: 12.5px; }
+.clip-hero .anillo { width: 104px; height: 104px; }
+.clip-perfiles b { font-size: 19px; }
+.clip-hero .chip-ritmo { justify-self: start; }
+
+.clip-ind { list-style: none; margin: 0 0 18px; padding: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.clip-ind li { border: 1px solid var(--linea); border-radius: 12px; padding: 12px; display: grid; gap: 4px; min-width: 0; }
+.clip-ind small { font-size: 12px; line-height: 1.25; }
+.clip-ind b { font-size: 26px; font-weight: 500; font-variant-numeric: tabular-nums; line-height: 1.1; }
+.clip-ind .spark { height: 26px; }
+
+.clip-puerta { border: 1px solid var(--linea); border-radius: 12px; padding: 14px; margin-bottom: 14px; display: grid; gap: 8px; --luz: var(--sub); }
+.clip-puerta.luz-verde { --luz: var(--salud); }
+.clip-puerta.luz-amarillo { --luz: var(--economia); }
+.clip-puerta.luz-rojo { --luz: var(--rutina); border-color: var(--rutina); }
+.clip-puerta-cab { display: flex; align-items: center; gap: 10px; }
+.clip-puerta-cab i { width: 12px; height: 12px; border-radius: 50%; background: var(--luz); flex: none; }
+.clip-puerta-cab .mono { margin-left: auto; font-size: 12px; color: var(--luz); }
+.clip-puerta ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; font-size: 14px; }
+.clip-puerta li { display: flex; justify-content: space-between; gap: 10px; }
+.clip-puerta li b { white-space: nowrap; }
+.clip-puerta li.ok b { color: var(--salud); }
+.clip-puerta li.no b { color: var(--rutina); }
+.clip-puerta p { margin: 0; font-size: 14px; }
+
+.clip-proy { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 4px 10px; padding: 14px; border: 1px solid var(--linea); border-radius: 12px; color: var(--tinta); text-decoration: none; margin-bottom: 18px; }
+.clip-proy .etiqueta { grid-column: 1 / -1; color: var(--c); }
+.clip-proy > span:not(.etiqueta):not(.clip-ir) { font-size: 15px; }
+.clip-ir { color: var(--sub); align-self: center; }
+
+.clip-botones { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 18px; }
+.clip-botones a { display: flex; justify-content: space-between; align-items: center; gap: 6px; min-height: 52px; padding: 0 14px; border: 1px solid var(--linea); border-radius: 10px; color: var(--tinta); text-decoration: none; font-size: 15px; }
+.clip-botones a span { color: var(--sub); }
+
+.clip-vacio { border: 1px dashed var(--c); border-radius: 12px; padding: 16px; display: grid; gap: 8px; margin-bottom: 18px; }
+.clip-vacio p { margin: 0; }
+.clip-btn { display: grid; place-items: center; text-decoration: none; }
+.clip-vacio-txt { font-size: 15px; }
+.clip-card .re-card-perfil b.mono { font-weight: 600; }
+
+/* Botón flotante "Registrar" */
+.clip-fab {
+  position: sticky; bottom: calc(var(--bar-h) + var(--safe-b) + 12px); margin: 18px 0 0 auto; z-index: 5;
+  display: flex; align-items: center; gap: 8px; min-height: 52px; padding: 0 22px; border-radius: 999px;
+  background: var(--c); color: #1a0d04; font-weight: 700; font-size: 16px;
+}
+.clip-fab span { font-size: 22px; line-height: 1; }
+
+/* Plan */
+.clip-obj { margin: 0 0 10px; }
+.clip-meses { list-style: none; margin: 0 0 14px; padding: 0; }
+.clip-meses li { display: grid; grid-template-columns: 30px minmax(0, 1fr) auto; gap: 10px; align-items: start; padding: 10px 0; border-bottom: 1px solid var(--linea); }
+.clip-mes-n { width: 26px; height: 26px; border-radius: 50%; border: 1.5px solid var(--linea); display: grid; place-items: center; font-size: 12px; }
+.clip-meses li.hecho .clip-mes-n { background: var(--c); border-color: var(--c); color: var(--papel); }
+.clip-meses li.actual .clip-mes-n { border-color: var(--c); color: var(--c); box-shadow: 0 0 0 4px color-mix(in srgb, var(--c) 25%, transparent); }
+.clip-mes-t { display: grid; gap: 2px; min-width: 0; }
+.clip-mes-t b { font-size: 15.5px; }
+.clip-mes-t small { font-size: 12.5px; }
+.clip-mes-usd { font-size: 15px; font-variant-numeric: tabular-nums; }
+.clip-meses li.actual .clip-mes-usd { color: var(--c); }
+.clip-hitos, .clip-lista, .clip-riesgos { margin: 6px 0 12px; padding-left: 18px; display: grid; gap: 6px; font-size: 14.5px; }
+.clip-hitos { list-style: none; padding: 0; }
+.clip-hitos li { display: grid; grid-template-columns: 58px minmax(0, 1fr); gap: 8px; }
+.clip-hitos li.hecho { color: var(--sub); }
+.clip-riesgos { list-style: none; padding: 0; gap: 10px; }
+.clip-riesgos li { display: grid; gap: 2px; padding: 10px 12px; border: 1px solid var(--linea); border-radius: 10px; }
+
+/* Registro */
+.clip-filtros { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+.clip-filtros label { display: grid; gap: 4px; font-size: 12px; color: var(--sub); min-width: 0; }
+.clip-filtros select { min-height: 44px; padding: 0 8px; }
+.clip-tot { font-size: 12.5px; margin: 12px 0; }
+.clip-filas { list-style: none; margin: 0 0 8px; padding: 0; }
+.clip-filas li { border-bottom: 1px solid var(--linea); }
+.clip-filas button { width: 100%; display: grid; grid-template-columns: 52px minmax(0, 1fr) auto; gap: 10px; align-items: center; min-height: 56px; padding: 8px 0; text-align: left; }
+.clip-f-fecha { font-size: 13px; color: var(--sub); }
+.clip-f-t { display: grid; gap: 2px; min-width: 0; }
+.clip-f-t b { font-weight: 500; font-size: 15px; font-variant-numeric: tabular-nums; }
+.clip-f-t small { font-size: 12.5px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.clip-f-usd { font-size: 14px; }
+.clip-json { min-height: 96px; margin-top: 10px; font-family: var(--font-mono); }
+.clip-errores { color: var(--rutina); font-size: 13px; padding-left: 18px; }
+
+/* Hoja Registrar y formularios */
+.hclip { display: grid; gap: 10px; }
+.hclip label { display: grid; gap: 4px; font-size: 13px; color: var(--sub); min-width: 0; }
+.hclip-dos { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.hclip select.campo-texto { min-height: 48px; }
+.hclip-mas { justify-self: start; min-height: 44px; font-size: 15px; }
+.hclip-extra { border: 1px solid var(--linea); border-radius: 10px; padding: 10px 12px 12px; margin: 0; display: grid; gap: 10px; }
+.hclip-extra legend { padding: 0 6px; }
+.hclip-error { color: var(--rutina); margin: 0; font-size: 14px; }
+.hclip .btn-principal { margin-top: 6px; }
+.hclip .btn-borde { margin-top: 0; }
+
+/* Cuentas, campañas y retainers */
+.clip-cuentas, .clip-camps { list-style: none; margin: 0 0 10px; padding: 0; display: grid; gap: 8px; }
+.clip-cuentas li, .clip-camps li { border: 1px solid var(--linea); border-radius: 12px; border-left: 4px solid var(--linea); }
+.clip-cuentas li.luz-ok, .clip-camps li.luz-ok { border-left-color: var(--salud); }
+.clip-cuentas li.luz-medio, .clip-camps li.luz-medio { border-left-color: var(--economia); }
+.clip-cuentas li.luz-mal, .clip-camps li.luz-mal { border-left-color: var(--rutina); }
+.clip-cuentas button, .clip-camps button { width: 100%; display: grid; gap: 4px; padding: 12px 14px; text-align: left; min-height: 56px; }
+.clip-cta-cab { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; }
+.clip-cta-cab b { font-size: 16px; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.clip-estado { font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--sub); flex: none; }
+.clip-camp-n { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px; margin-top: 6px; }
+.clip-camp-n span { display: grid; gap: 1px; }
+.clip-camp-n small { font-size: 11px; }
+.clip-camp-n b { font-size: 15px; font-variant-numeric: tabular-nums; }
+.clip-ranking { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 14px; }
+.clip-ranking > div { border: 1px solid var(--linea); border-radius: 10px; padding: 10px 12px; display: grid; gap: 4px; font-size: 13.5px; min-width: 0; }
+.clip-ranking .verde .etiqueta { color: var(--salud); }
+.clip-ranking .rojo .etiqueta { color: var(--rutina); }
+.clip-ranking .verde, .clip-ranking .rojo { color: var(--tinta) !important; }
+.clip-ranking b { font-weight: 500; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.clip-plataformas { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+.clip-plataformas li { display: grid; gap: 2px; padding-bottom: 10px; border-bottom: 1px solid var(--linea); }
+.clip-plataformas .mono { font-size: 13px; color: var(--c); }
+.clip-fijo { border: 1px solid var(--tinta); border-radius: 14px; padding: 14px 16px; display: grid; gap: 2px; margin-bottom: 18px; }
+.clip-fijo b { font-size: 40px; font-weight: 500; font-variant-numeric: tabular-nums; line-height: 1.1; }
+.clip-embudo-pros, .clip-embudo { list-style: none; margin: 8px 0 12px; padding: 0; display: grid; gap: 10px; }
+.clip-embudo-pros li, .clip-embudo li { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 4px 10px; align-items: center; }
+.clip-embudo-pros li > span:first-child, .clip-emb-t { font-size: 14.5px; }
+.clip-emb-b { grid-column: 1 / -1; height: 10px; border-radius: 5px; background: var(--linea); overflow: hidden; grid-row: 2; }
+.clip-emb-b i { display: block; height: 100%; background: var(--c); border-radius: 5px; }
+.clip-embudo small, .clip-embudo-pros small { font-size: 12px; grid-row: 1; grid-column: 2; }
+.clip-pros-btn { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 16px; }
+.clip-pros-btn .btn-borde { margin-top: 0; font-size: 15px; display: grid; place-items: center; line-height: 1.2; padding: 6px; }
+.clip-pros-btn .btn-borde .mono { font-size: 11.5px; font-weight: 400; }
+
+/* Nichos, rutina y semana 1 */
+.clip-nichos { list-style: none; margin: 0 0 14px; padding: 0; display: grid; gap: 8px; --luz: var(--sub); }
+.clip-nichos li { border: 1px solid var(--linea); border-radius: 12px; padding: 12px 14px; display: grid; gap: 4px; font-size: 14.5px; }
+.clip-nichos li.luz-ok { --luz: var(--salud); }
+.clip-nichos li.luz-medio { --luz: var(--economia); }
+.clip-nichos li.luz-mal { --luz: var(--rutina); }
+.clip-nicho-cab { display: flex; align-items: center; gap: 10px; }
+.clip-nicho-cab i { width: 12px; height: 12px; border-radius: 50%; background: var(--luz); }
+.clip-nicho-cab .mono { margin-left: auto; font-size: 12px; color: var(--luz); }
+.clip-rutina { list-style: none; margin: 8px 0 20px; padding: 0; display: grid; gap: 8px; }
+.clip-rutina button { width: 100%; display: grid; grid-template-columns: 28px minmax(0, 1fr) auto; gap: 12px; align-items: start; padding: 12px 14px; border: 1px solid var(--linea); border-radius: 12px; text-align: left; min-height: 56px; }
+.clip-rutina li.hoy button { border-color: var(--c); }
+.clip-rutina button span:nth-child(2) { display: grid; gap: 2px; }
+.clip-rutina small { font-size: 13.5px; }
+.clip-check { width: 24px; height: 24px; border: 1.5px solid var(--linea); border-radius: 6px; display: grid; place-items: center; font-size: 15px; }
+.clip-rutina li.ok .clip-check { background: var(--c); border-color: var(--c); color: var(--papel); }
+.clip-rutina li.ok b { text-decoration: line-through; color: var(--sub); }
+.clip-hoy { font-size: 11px; color: var(--c); text-transform: uppercase; letter-spacing: 0.1em; }
+.clip-gta { border: 1px solid var(--c); border-radius: 12px; padding: 14px; margin-bottom: 16px; }
+.clip-gta .etiqueta { color: var(--c); }
+.clip-gta p { margin: 6px 0 0; font-size: 15px; }
+.clip-sem1 { list-style: none; margin: 0 0 16px; padding: 0; display: grid; }
+.clip-sem1 li { display: grid; grid-template-columns: 84px minmax(0, 1fr); gap: 10px; padding: 12px 0; border-bottom: 1px solid var(--linea); font-size: 15px; }
+.clip-sem1 li.hecho { color: var(--sub); }
+.clip-sem1 li.actual .mono { color: var(--c); font-weight: 700; }
+
+/* Métricas y gráficos */
+.clip-periodo { margin-top: 0; }
+.clip-camino { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 14px; align-items: center; }
+.clip-camino p { margin: 0 0 6px; font-size: 15px; }
+.clip-camino .mono { font-size: 12px; }
+.clip-ch .clip-meta { fill: color-mix(in srgb, var(--sub) 18%, transparent); }
+.clip-ch .clip-meta.actual { fill: color-mix(in srgb, var(--c) 22%, transparent); stroke: var(--c); stroke-width: 1; stroke-dasharray: 3 3; }
+.clip-ch .clip-cob { fill: color-mix(in srgb, var(--c) 70%, transparent); }
+.clip-ch .clip-cob.ok { fill: var(--c); }
+.clip-curva { fill: none; stroke-width: 1.6; stroke-linecap: round; }
+.clip-curva.base { stroke: var(--tinta); }
+.clip-curva.opt { stroke: var(--salud); stroke-dasharray: 5 4; }
+.clip-curva.cons { stroke: var(--rutina); stroke-dasharray: 2 4; }
+.clip-techo { stroke: var(--tinta); stroke-width: 1; stroke-dasharray: 6 3; }
+.clip-techo-t { fill: var(--tinta); font: 600 10.5px var(--font-mono); }
+.clip-piso { stroke-width: 1.2; stroke-dasharray: 4 3; }
+.clip-piso.p80 { stroke: var(--salud); }
+.clip-piso.p70 { stroke: var(--rutina); }
+.clip-et { fill: var(--tinta); font: 12px var(--font-text); }
+.clip-v { fill: var(--sub); font: 11px var(--font-mono); }
+.clip-pista { fill: color-mix(in srgb, var(--linea) 55%, transparent); }
+.clip-barra { fill: var(--c); }
+.clip-barra.bajo { fill: var(--rutina); }
+.clip-tarifa { fill: var(--papel); stroke: var(--tinta); stroke-width: 2; }
+.clip-escalon { fill: none; stroke: var(--sub); stroke-width: 1.6; stroke-dasharray: 4 3; }
+.clip-conc { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+.clip-conc-t { display: flex; justify-content: space-between; gap: 10px; font-size: 14px; }
+.clip-conc-t span { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.clip-conc-b { position: relative; display: block; height: 10px; background: var(--linea); border-radius: 5px; margin-top: 4px; }
+.clip-conc-b i { display: block; height: 100%; border-radius: 5px; background: var(--c); }
+.clip-conc-b em { position: absolute; top: -4px; bottom: -4px; left: var(--max); width: 0; border-left: 1.5px dashed var(--tinta); }
+.clip-conc li.pasa b { color: var(--rutina); }
+.clip-conc li.pasa .clip-conc-b i { background: var(--rutina); }
+
+/* Escritorio: portada y gráficos en dos columnas. */
+@media (min-width: 1100px) {
+  .pantalla.clip { max-width: 1120px; }
+  .clip-cuerpo:has(.clip-hero) { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); column-gap: 32px; align-content: start; }
+  .clip-cuerpo:has(.clip-hero) > * { grid-column: 1; }
+  .clip-cuerpo:has(.clip-hero) > .clip-ind, .clip-cuerpo:has(.clip-hero) > .clip-puerta, .clip-cuerpo:has(.clip-hero) > .clip-proy, .clip-cuerpo:has(.clip-hero) > .clip-botones, .clip-cuerpo:has(.clip-hero) > .clip-vacio { grid-column: 2; }
+  .clip-cuerpo:has(.clip-hero) > .clip-ind { grid-row: 1 / span 3; align-self: start; }
+  .clip-cuerpo:has(.clip-periodo) { display: grid; grid-template-columns: 1fr 1fr; column-gap: 24px; align-content: start; }
+  .clip-cuerpo:has(.clip-periodo) > .clip-h1, .clip-cuerpo:has(.clip-periodo) > .clip-periodo, .clip-cuerpo:has(.clip-periodo) > .clip-tot { grid-column: 1 / -1; }
+  .clip-fab { position: fixed; right: 32px; bottom: 32px; }
+}
+.clip .re-semaforo li { color: var(--tinta) !important; }

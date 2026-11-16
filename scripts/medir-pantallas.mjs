@@ -23,7 +23,23 @@ const RUTAS = [
   'metas/trabajo', 'metas/ingles', 'metas/handyx', 'metas/proyecto/P1', 'entreno', 'entreno-semana', 'entreno-motor', 'entreno-peso',
   'perfil', 'ajustes', 'ajustes-rutinas', 'ajustes-datos', 'avance', 'unidades', 'como', 'repaso', 'flojo', 'tarjetas', 'motor', 'pomodoros', 'json', 'importar',
   'cierre', 'actividad', 'meta-nueva/semana',
+  // Ola 23 · el apartado Clipping (con una planilla de ejemplo cargada).
+  'metas/clipping', 'metas/clipping/plan', 'metas/clipping/registro', 'metas/clipping/metricas', 'metas/clipping/cuentas',
+  'metas/clipping/campanas', 'metas/clipping/retainers', 'metas/clipping/nichos', 'metas/clipping/riesgos', 'metas/clipping/semana1',
 ];
+
+/** Planilla de ejemplo del clipping: 3 campañas, 4 cuentas, un retainer y 14 días de registro. */
+function planillaDemo(hoy) {
+  const d = (n) => { const x = new Date(`${hoy}T12:00:00`); x.setDate(x.getDate() - n); return x.toISOString().slice(0, 10); };
+  const campanas = [
+    { id: 'k1', nombre: 'GTA 6 · streamer', plataforma: 'Whop Content Rewards', nicho: 'Videojuegos', tarifa: 1.5, tope: 50, estado: 'activa', desde: d(14) },
+    { id: 'k2', nombre: 'Podcast semanal', plataforma: 'Vyro', nicho: 'Podcasts', tarifa: 1.1, estado: 'activa', desde: d(14) },
+    { id: 'k3', nombre: 'Estreno de serie', plataforma: 'Clipster', nicho: 'Películas y series', tarifa: 0.9, estado: 'probando', desde: d(10) },
+  ];
+  const cuentas = ['gta.cortes', 'pod.clips', 'stream.top', 'series.cut'].map((alias, i) => ({ id: `c${i}`, alias, red: ['TikTok', 'Reels', 'Shorts', 'TikTok'][i], nicho: campanas[i % 3].nicho, estado: i < 3 ? 'activa' : 'calentando', desde: d(15) }));
+  const registro = Array.from({ length: 14 }, (_, i) => ({ id: `r${i}`, fecha: d(13 - i), cuenta: `c${i % 3}`, campana: `k${(i % 3) + 1}`, clips: 4 + (i % 3), views: 6000 + i * 900, mas1000: 2 + (i % 2), aprobados: 4, ...(i < 9 ? { cobrado: Math.round((6000 + i * 900) * (0.7 + (i % 3) * 0.2)) / 1000 } : { estimado: 7 }) }));
+  return { cuentas, campanas, registro, retainers: [{ id: 't1', nombre: 'Streamer mediano', estado: 'prueba', usdMes: 300, desde: d(3) }], prospeccion: {}, rutina: {} };
+}
 
 const browser = await chromium.launch();
 const page = await (await browser.newContext({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 1 })).newPage();
@@ -35,6 +51,10 @@ await page.getByRole('button', { name: /Empezar/ }).click();
 await page.waitForTimeout(500);
 await page.getByRole('button', { name: /Empezar el día/ }).click();
 await page.waitForTimeout(1000);
+await page.evaluate((planilla) => {
+  const s = JSON.parse(localStorage.getItem('trazo.v1'));
+  localStorage.setItem('trazo.v1', JSON.stringify({ ...s, clipping: planilla }));
+}, planillaDemo(new Date().toISOString().slice(0, 10)));
 
 const filas = [];
 for (const ruta of RUTAS) {
