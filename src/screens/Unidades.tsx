@@ -10,7 +10,7 @@ import '../styles/estudio.css';
 export function Unidades({ day }: { day: DayLog }) {
   const study = useStore((s) => s.study);
   const settings = useStore((s) => s.settings)!;
-  const conUnidades = study.activities.filter((a) => a.units?.length);
+  const conUnidades = study.activities.filter((a) => a.units?.length && !a.archivada);
   const [tab, setTab] = useState(conUnidades[0]?.id);
   const a = conUnidades.find((x) => x.id === tab) ?? conUnidades[0];
   const names = useStore((s) => s.goals.bimesterNames);

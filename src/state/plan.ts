@@ -23,6 +23,16 @@ export function toggleEvidencia(proyecto: string, k: Evidencia) {
   });
 }
 
+/** Ola 20 · tilda o destilda un criterio del nivel de salida de una ventana (W1 → índice). */
+export function tildarSalida(ventana: string, i: number) {
+  update((p) => {
+    const cur = new Set(p.salida?.[ventana] ?? []);
+    if (cur.has(i)) cur.delete(i);
+    else cur.add(i);
+    return { ...p, salida: { ...(p.salida ?? {}), [ventana]: [...cur].sort((a, b) => a - b) } };
+  });
+}
+
 /** Prende o apaga las semanas extra de feature de un proyecto; el calendario se recalcula. */
 export function setExtraBloque(id: string, prendido: boolean) {
   update((p) => {

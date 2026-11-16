@@ -115,7 +115,12 @@
      "P3"
     ],
     "perfil": "Algebraico",
-    "fase": "M2"
+    "fase": "M2",
+    "salida": [
+     "Resolver ecuaciones y desigualdades (lineales, cuadráticas y con valor absoluto) sin ayuda",
+     "Graficar funciones lineales, cuadráticas, exponenciales y logarítmicas a mano",
+     "Calcular media, varianza, desvío, percentiles y cuantiles de un conjunto de datos"
+    ]
    }
   },
   {
@@ -239,7 +244,13 @@
      "P6"
     ],
     "perfil": "Calculista",
-    "fase": "M3"
+    "fase": "M3",
+    "salida": [
+     "Derivar con regla de la cadena, producto y cociente sin ayuda",
+     "Encontrar máximos y mínimos de una función y explicar el resultado",
+     "Operar vectores y matrices: producto punto, producto de matrices y transpuesta",
+     "Explicar el gradiente como la dirección de máximo crecimiento"
+    ]
    }
   },
   {
@@ -332,7 +343,13 @@
      "P8"
     ],
     "perfil": "Probabilista para IA",
-    "fase": "M4"
+    "fase": "M4",
+    "salida": [
+     "Calcular probabilidades condicionales y aplicar Bayes en un problema real",
+     "Usar las distribuciones normal, binomial y Poisson con su esperanza y varianza",
+     "Resolver una EDO de primer orden y simularla con Euler o RK2",
+     "Plantear una optimización con restricciones y resolverla con descenso de gradiente"
+    ]
    }
   },
   {
@@ -429,7 +446,13 @@
     "habilita": [
      "S1"
     ],
-    "perfil": "Criptógrafo aplicado"
+    "perfil": "Criptógrafo aplicado",
+    "salida": [
+     "Hacer demostraciones por inducción y por contradicción",
+     "Calcular con aritmética modular: inversos, exponenciación rápida y MCD extendido",
+     "Explicar RSA y Diffie-Hellman con un ejemplo hecho a mano",
+     "Contar combinaciones y permutaciones en problemas de seguridad"
+    ]
    }
   },
   {
@@ -589,7 +612,13 @@
      "Q2"
     ],
     "perfil": "Quant: estadística y series de tiempo",
-    "fase": "M4"
+    "fase": "M4",
+    "salida": [
+     "Estimar parámetros por máxima verosimilitud con su intervalo de confianza",
+     "Hacer un test de hipótesis y corregir por comparaciones múltiples",
+     "Ajustar un modelo ARIMA a una serie y validarlo fuera de muestra",
+     "Armar una cartera de mínima varianza con dos o más activos"
+    ]
    }
   },
   {
@@ -676,7 +705,13 @@
      "Q3",
      "Q4"
     ],
-    "perfil": "Quant: cálculo estocástico y derivados"
+    "perfil": "Quant: cálculo estocástico y derivados",
+    "salida": [
+     "Explicar el movimiento browniano y aplicar el lema de Itô a un caso simple",
+     "Valuar una opción europea con Black-Scholes y con un árbol binomial",
+     "Calcular las griegas (delta, gamma y vega) y explicar qué cubren",
+     "Simular precios con Monte Carlo y comparar contra la fórmula cerrada"
+    ]
    }
   },
   {
@@ -745,7 +780,13 @@
      "Q5",
      "Q6"
     ],
-    "perfil": "Quant: optimización y ML financiero"
+    "perfil": "Quant: optimización y ML financiero",
+    "salida": [
+     "Reconocer si un problema es convexo y plantear su forma estándar",
+     "Escribir el dual y las condiciones KKT de un problema chico",
+     "Optimizar una cartera con restricciones con un solver",
+     "Validar un modelo de ML financiero con validación cruzada purgada"
+    ]
    }
   },
   {
@@ -831,7 +872,12 @@
      "A1"
     ],
     "perfil": "Físico general",
-    "fase": "M7"
+    "fase": "M7",
+    "salida": [
+     "Plantear y resolver problemas de cinemática y dinámica con las leyes de Newton",
+     "Aplicar conservación de energía y de momento",
+     "Resolver EDOs de segundo orden (oscilador amortiguado) a mano y numéricamente"
+    ]
    }
   },
   {
@@ -888,7 +934,12 @@
      "A2"
     ],
     "perfil": "Mecánico",
-    "fase": "M8"
+    "fase": "M8",
+    "salida": [
+     "Hacer el diagrama de cuerpo libre y resolver el equilibrio de una estructura",
+     "Calcular tensiones y deformaciones en barras y vigas simples",
+     "Resolver sistemas lineales grandes con factorización LU y explicar el condicionamiento"
+    ]
    }
   },
   {
@@ -950,7 +1001,13 @@
      "A3"
     ],
     "perfil": "Termofluidista",
-    "fase": "M9"
+    "fase": "M9",
+    "salida": [
+     "Aplicar la primera y la segunda ley de la termodinámica a un ciclo",
+     "Usar Bernoulli y la ecuación de continuidad en un ducto",
+     "Explicar sustentación y resistencia con los coeficientes de un perfil",
+     "Resolver la ecuación del calor en 1D con diferencias finitas"
+    ]
    }
   },
   {
@@ -1003,7 +1060,12 @@
      "A4"
     ],
     "perfil": "Control y estimación",
-    "fase": "M10"
+    "fase": "M10",
+    "salida": [
+     "Modelar un sistema con función de transferencia y analizar su estabilidad",
+     "Diseñar un PID y ajustar su respuesta al escalón",
+     "Implementar un filtro de Kalman para estimar posición y velocidad"
+    ]
    }
   },
   {
@@ -1057,7 +1119,12 @@
      "A6"
     ],
     "perfil": "Pre-aeroespacial",
-    "fase": "M10"
+    "fase": "M10",
+    "salida": [
+     "Calcular una órbita a partir de su estado (elementos orbitales)",
+     "Calcular el delta-v de una transferencia de Hohmann",
+     "Aplicar la ecuación del cohete de Tsiolkovsky a una misión simple"
+    ]
    }
   },
   {

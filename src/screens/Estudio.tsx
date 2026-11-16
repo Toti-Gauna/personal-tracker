@@ -15,6 +15,7 @@ import { BANDA_COLOR, banda, detalle, qFalla, ranking } from '../data/debiles';
 import { WeekChart } from '../ui/WeekChart';
 import { CardMate } from './MatePlan';
 import { CardLibro } from './Libro';
+import { CardProg } from './ProgPlan';
 import { capsTexto, microFaltantes } from '../data/libros';
 import { getState } from '../state/store';
 import { toast } from '../ui/avisos';
@@ -136,11 +137,7 @@ export function Estudio({ day }: { day: DayLog }) {
       <div className="re-cards">
         <CardMate day={day} />
         <CardLibro />
-        <a className="re-card otro" href="#/metas/ruta" style={{ ['--c' as string]: 'var(--ing)' }}>
-          <span className="re-card-cab"><b>Programación</b><span className="mono sub">Plan T+18</span></span>
-          <span className="sub">Los proyectos P0 a P10, con su línea de tiempo, están en Metas → Ruta.</span>
-          <span className="mono sub re-card-pie">ver la ruta →</span>
-        </a>
+        <CardProg day={day} />
       </div>
 
       <div className="fila-t">

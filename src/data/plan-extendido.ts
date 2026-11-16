@@ -69,6 +69,8 @@ export interface MateTramo {
   perfil: string;
   /** Fase de M0 a M10 (data/study-roadmaps.json) que aporta el material de refuerzo extra. */
   fase?: string;
+  /** Ola 20 · nivel de salida de una ventana: criterios que se tildan antes del test de la puerta. */
+  salida?: string[];
 }
 
 export interface CertInfo {

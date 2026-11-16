@@ -66,8 +66,10 @@ export const DEFAULT_ACTIVITIES: Activity[] = [
     final: { title: 'Examen de aritmética', desc: '40 ejercicios mixtos de todas las unidades, sin apuntes. Aprobás con 85 %.' },
   },
   {
+    // Ola 20: la programación se aprende por proyectos (Estudio → Programación). Queda archivada:
+    // no entra en el día, pero lo que ya estudiaste y sus repasos siguen.
     id: 'prog-b1', title: 'Python y FastAPI', front: 'prog', type: 'curso', perSession: 1, total: 7, unit: 'unidades',
-    days: TODOS, block: 'prog', engine: true, progress: 0, units: PROG_B1, unitLabel: 'Unidad', testMode: 'app',
+    days: TODOS, block: 'prog', engine: true, progress: 0, units: PROG_B1, unitLabel: 'Unidad', testMode: 'app', area: 'programacion', archivada: true,
     final: { title: 'Complia Pro', desc: 'El producto del bimestre publicado, con README en inglés y demo de 2 minutos.' },
   },
   {

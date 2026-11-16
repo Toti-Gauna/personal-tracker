@@ -39,6 +39,17 @@ export const avanceBloque = (ms: MetaBloque[] = []) => ({ hechas: ms.filter(meta
 export const slug = (t: string) =>
   t.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 48) || 'meta';
 
+/**
+ * Lo que entra como tareas en la meta de programación de Hoy: lo pendiente del proyecto en curso
+ * (la primera submeta sin tildar de cada meta, o la meta si no tiene submetas), hasta `n`.
+ */
+export function tareasDeBloque(ms: MetaBloque[] = [], n = 2): string[] {
+  return ms.filter((m) => !metaCumplida(m)).map((m) => {
+    const s = m.subs?.find((x) => !x.hecho);
+    return s ? `${m.texto}: ${s.t}` : m.texto;
+  }).slice(0, n);
+}
+
 // ——— JSON ———
 
 export interface ImportMetas { tipo: 'metas-bloque'; bloque: string; metas: { id: string; texto: string; subs: string[] }[] }

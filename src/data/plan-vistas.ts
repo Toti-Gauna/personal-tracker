@@ -6,7 +6,7 @@
  * - La línea de tiempo por etapas, el panel "hoy sos" y las alertas.
  */
 import { EXTRAS_APAGADOS, PLAN, T0_PLAN, fechas } from './plan';
-import { PLAN_EXT, calendario, type BloqueExt, type BloqueFechado, type MateTramo, type RolRefuerzo } from './plan-extendido';
+import { PLAN_EXT, bloqueExtPorId, calendario, type BloqueExt, type BloqueFechado, type MateTramo, type RolRefuerzo } from './plan-extendido';
 import type { PlanState } from './plan-state';
 import { cierreProyecto, puertaAprobada } from './puertas';
 import { daysBetween } from './time';
@@ -162,3 +162,15 @@ const fmt = (d: string) => `${Number(d.slice(8))} ${MES[Number(d.slice(5, 7)) - 
 
 /** Un bloque del plan extendido por id, con fechas (para las fichas de las etapas 3 y 4). */
 export const bloqueConFechas = (id: string, t0 = T0_PLAN): (BloqueFechado & BloqueExt) | undefined => calendarioCompleto(t0).find((b) => b.id === id);
+
+// ——— Ola 20 · nivel de salida de las ventanas ———
+
+/** Los criterios del nivel de salida de una ventana (W1 a WA5). */
+export const salidaDe = (id: string): string[] => bloqueExtPorId(id)?.mate?.salida ?? [];
+
+/** Cuántos criterios de salida tildaste. Sirve de chequeo antes del test de la puerta (el test sigue mandando: 85 %). */
+export function avanceSalida(plan: Pick<PlanState, 'salida'>, id: string) {
+  const total = salidaDe(id).length;
+  const hechos = (plan.salida?.[id] ?? []).filter((i) => i < total).length;
+  return { hechos, total, completo: total > 0 && hechos === total };
+}

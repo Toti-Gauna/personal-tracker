@@ -6,7 +6,8 @@ import { DEFAULT_BLOCK_PRESETS, DEFAULT_PRESETS } from '../data/defaults';
 import { buildBlocks, newId, planDay } from '../data/schedule';
 import { routineFor } from '../data/routines';
 import { emptyPlan, DEFAULT_PLAN_SETTINGS, type PlanSettings, type PlanState } from '../data/plan-state';
-import { semanaDelPlan, ventanaW } from '../data/plan';
+import { semanaDelPlan, tramoActivo, ventanaW } from '../data/plan';
+import { tareasDeBloque } from '../data/metas-bloque';
 import { addDays, dateKey } from '../data/time';
 import { emptyStudy } from '../data/study-catalog';
 import { defaultGoals, emptyGoals, RAMA_DE_SEMILLA, REEMPLAZADAS_POR_PLAN } from '../data/goals-catalog';
@@ -112,12 +113,17 @@ export function useStore<T>(sel: (s: State) => T): T {
 }
 
 /**
- * Ola 20: el sistema de libros suma Measure What Matters (si no estaba) y cada actividad conocida
- * toma su área (CONAMAT, matemática). Lo estudiado no se toca.
+ * Ola 20: el sistema de libros suma Measure What Matters (si no estaba), cada actividad conocida toma
+ * su área (CONAMAT, matemática) y "Python y FastAPI" se archiva. Lo estudiado no se toca.
  */
 function migrateStudy(st: StudyState): StudyState {
   const mwm = emptyStudy().activities.find((a) => a.libro === 'mwm')!;
-  let activities = st.activities.map((a) => (a.id === 'conamat' && !a.area ? { ...a, area: 'matematica' as const } : a));
+  let activities = st.activities.map((a) => {
+    if (a.id === 'conamat' && !a.area) return { ...a, area: 'matematica' as const };
+    // La programación pasa a aprenderse por proyectos: la lectura de Python y FastAPI se archiva (lo estudiado queda).
+    if (a.id === 'prog-b1' && a.archivada === undefined) return { ...a, area: 'programacion' as const, archivada: true };
+    return a;
+  });
   if (!activities.some((a) => a.libro === 'mwm' || a.id === mwm.id)) activities = [...activities, mwm];
   return { ...st, activities };
 }
@@ -178,7 +184,12 @@ export function startDay(routine: RoutineId, wake: string, date = dateKey()) {
     const puerta = puertaBloqueando(date, s.plan, t0) ?? undefined;
     const ventana = ventanaW(date, t0).ahora?.id ?? puerta;
     const entrevista = entrevistaCerca(s.plan, date);
-    const blocks = buildBlocks(planDay(date, routine, wake, dayType, { ventana, entrevista, puerta }), carry).map((b) => (refs[b.key] ? { ...b, ...refs[b.key] } : b));
+    // Ola 20: la meta de programación sale de las metas del proyecto en curso (si las hay).
+    const proyecto = tramoActivo(date, t0).id;
+    const delProyecto = tareasDeBloque(s.plan.metasBloque?.[proyecto]);
+    const blocks = buildBlocks(planDay(date, routine, wake, dayType, { ventana, entrevista, puerta }), carry)
+      .map((b) => (refs[b.key] ? { ...b, ...refs[b.key] } : b))
+      .map((b) => (b.rama === 'programacion' && delProyecto.length ? { ...b, tasks: [...delProyecto.map((t) => ({ id: newId(), t: `${proyecto} · ${t}`, done: false })), ...b.tasks] } : b));
     const day: DayLog = { date, wake, routine, dayType, ...(ventana ? { ventana } : {}), blocks, notes: [], focus: [] };
     return { ...s, days: { ...s.days, [date]: day }, carry: restCarry };
   });

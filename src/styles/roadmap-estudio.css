@@ -121,3 +121,8 @@
 .pantalla.re h1 { font-size: clamp(30px, 9.5vw, 44px); overflow-wrap: anywhere; hyphens: auto; }
 .re-salida > p.mono { font-size: 12px; margin: 0; }
 .re .btn-borde { color: var(--tinta); text-decoration: none; display: grid; place-items: center; }
+
+/* Ola 20 · subpáginas de un proyecto (Estudio → Programación) */
+.prog-subs { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin: 20px 0; }
+.prog-subs .btn-borde { margin: 0; display: flex; align-items: center; justify-content: center; text-align: center; min-height: 56px; padding: 10px 12px; text-decoration: none; color: var(--tinta); overflow-wrap: anywhere; }
+@media (min-width: 720px) { .prog-subs { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
