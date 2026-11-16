@@ -1,0 +1,148 @@
+{
+  "version": 1,
+  "t0": "2026-11-16",
+  "titulo": "Roadmap Clipper 12 meses: de 0 a USD 10k/mes",
+  "metaFinal": 10000,
+  "datosA": "datos a julio–noviembre 2026",
+  "resumen": "USD 10k por mes es alcanzable pero queda en el rango alto: con un pago neto de unos USD 1,20 por 1.000 views son unas 8,3 millones de views verificadas por mes. Es un negocio de volumen: se vuelve semi-pasivo recién con el pipeline automatizado y la edición delegada. El fijo real son los retainers.",
+  "cobro": "Se cobra por cada 1.000 views verificadas de clips aprobados, con tope por clip y hasta que se agote el presupuesto de la campaña.",
+  "expectativas": [
+    "Tarifas: la mediana listada en Whop Content Rewards es USD 1,09 por 1.000 views (707 campañas, 10 nov 2026) y en YouTube USD 1,43. El rango general va de USD 0,20 a 6.",
+    "Qué ganan los clippers: USD 100 a 500 por mes al arrancar, USD 1.000 a 3.000 con volumen diario constante y USD 10k o más solo el 1 % superior (OpenClip, orden de magnitud).",
+    "Proyección: el caso base cruza USD 10k recién en el mes 13 o 14; el optimista lo hace en el mes 10 y el conservador no llega en el año."
+  ],
+  "umbrales": {
+    "pagoFase2": 0.8,
+    "pct1000Fase2": 0.4,
+    "pagoMes6": 0.7,
+    "concentracionMax": 0.3,
+    "viewsPorClipObjetivo": 3500,
+    "viewsMesObjetivo": 8300000
+  },
+  "fases": [
+    {
+      "n": 1,
+      "nombre": "Arranque y primeros ingresos",
+      "meses": [1, 3],
+      "objetivo": "Validar qué nichos pagan, llegar a USD 700 en el mes 3 y conseguir el primer retainer.",
+      "criterios": [
+        "Pago real de USD 0,80 o más por 1.000 views",
+        "Al menos 40 % de los clips con más de 1.000 views"
+      ],
+      "siNo": "Si no se cumple, repetir el mes 3 ajustando nichos y ganchos."
+    },
+    {
+      "n": 2,
+      "nombre": "Escala con herramientas propias",
+      "meses": [4, 6],
+      "objetivo": "Pasar de 5 a 20 clips por día sin duplicar las horas y llegar a USD 2.800 en el mes 6.",
+      "criterios": [
+        "Revisión de mitad de año: pago real de USD 0,70 o más por 1.000 views",
+        "Si baja de USD 0,70, cambiar de campañas antes de escalar más"
+      ],
+      "siNo": "Cambiar de campañas antes de sumar cuentas."
+    },
+    {
+      "n": 3,
+      "nombre": "Granja y camino a USD 10k",
+      "meses": [7, 12],
+      "objetivo": "Llegar a 40 cuentas y 80 clips por día con 1 a 2 horas diarias propias, y cerrar el mes 12 cerca de USD 9.000.",
+      "criterios": [
+        "Ninguna campaña ni plataforma por encima del 30 % del ingreso",
+        "Views promedio por clip camino a 3.500"
+      ],
+      "siNo": "Diversificar en 6 a 8 campañas y 2 o 3 retainers."
+    }
+  ],
+  "meses": [
+    { "n": 1, "meta": 150, "cuentas": 3, "clipsDia": 5, "titulo": "Aprender haciendo, a mano", "foco": "Semana 1 con foco en GTA 6 (jueves 19). 3 cuentas, 5 clips por día cortados a mano y 2 o 3 nichos para comparar.", "tareas": ["5 clips a mano en 3 cuentas", "Anotar views, aprobaciones y pago real por campaña"], "metrica": "Pago real por 1.000 views y tasa de aprobación por campaña" },
+    { "n": 2, "meta": 350, "cuentas": 5, "clipsDia": 8, "titulo": "Primera automatización", "foco": "Dashboard v1 (views por cuenta, campaña y clip, y pago estimado) y pipeline v1 (transcripción, momentos, corte vertical con subtítulos). Revisión humana siempre antes de publicar.", "tareas": ["8 clips en 5 cuentas", "Dashboard v1 y pipeline v1"] },
+    { "n": 3, "meta": 700, "cuentas": 8, "clipsDia": 16, "titulo": "Primer retainer", "foco": "Quedarse con los 2 nichos que mejor pagan, portfolio de 10 clips con sus views y 20 mensajes a streamers o podcasters medianos con un mes de prueba.", "tareas": ["16 clips en 8 cuentas", "Mensajes de prospección (20 en el mes)"] },
+    { "n": 4, "meta": 1200, "cuentas": 12, "clipsDia": 24, "titulo": "Dashboard v2 y tendencias", "foco": "Alertas de campañas nuevas con buen pago, comparación de nichos y costo por hora. Motor de tendencias v1. Segundo retainer.", "tareas": ["24 clips en 12 cuentas", "Dashboard v2 y motor de tendencias v1"] },
+    { "n": 5, "meta": 1900, "cuentas": 15, "clipsDia": 30, "titulo": "Pipeline v2 y programador", "foco": "Puntaje de gancho, subtítulos con estilo propio por cuenta, render único por cuenta y un programador que reparte horarios.", "tareas": ["30 clips en 15 cuentas", "Pipeline v2 y programador"] },
+    { "n": 6, "meta": 2800, "cuentas": 20, "clipsDia": 40, "titulo": "Primer editor y revisión", "foco": "Primera persona de edición (USD 150 a 300 por mes) para calidad y subida. Revisión de mitad de año: con menos de USD 0,70 por 1.000 views, cambiar de campañas. Desde acá, 10 a 15 % del tiempo a 2 o 3 canales propios.", "tareas": ["40 clips en 20 cuentas", "Revisión de mitad de año"] },
+    { "n": 7, "meta": 3800, "cuentas": 25, "clipsDia": 50, "titulo": "Pipeline v3", "foco": "Control de calidad automático y detección de duplicados entre cuentas.", "tareas": ["50 clips en 25 cuentas", "Pipeline v3"] },
+    { "n": 8, "meta": 4800, "cuentas": 25, "clipsDia": 50, "titulo": "Segundo editor", "foco": "Segundo editor y la granja estable en 25 cuentas.", "tareas": ["50 clips en 25 cuentas", "Sumar el segundo editor"] },
+    { "n": 9, "meta": 5800, "cuentas": 32, "clipsDia": 64, "titulo": "Diversificar", "foco": "6 a 8 campañas y 2 o 3 retainers para que ninguna fuente supere el 30 % del ingreso.", "tareas": ["64 clips en 32 cuentas", "6 a 8 campañas activas"] },
+    { "n": 10, "meta": 6800, "cuentas": 32, "clipsDia": 64, "titulo": "Concentración bajo control", "foco": "Sostener la diversificación; el escenario optimista cruza USD 10k este mes.", "tareas": ["64 clips en 32 cuentas", "Ninguna fuente arriba del 30 %"] },
+    { "n": 11, "meta": 8000, "cuentas": 40, "clipsDia": 80, "titulo": "Reinvertir", "foco": "40 cuentas. Reinvertir en los nichos con mejor pago real.", "tareas": ["80 clips en 40 cuentas", "Reinvertir en los mejores nichos"] },
+    { "n": 12, "meta": 9000, "cuentas": 40, "clipsDia": 80, "titulo": "Recortar y cerrar el año", "foco": "Recortar los nichos de bajo rendimiento y cerrar cerca de USD 9.000 (caso base).", "tareas": ["80 clips en 40 cuentas", "Recortar lo que rinde menos"] }
+  ],
+  "hitos": [
+    { "id": "gta6", "fecha": "2026-11-19", "texto": "GTA 6: buscar campañas autorizadas", "tipo": "commit" },
+    { "id": "usd-150", "mes": 1, "fin": true, "texto": "USD 150 en el mes 1", "tipo": "commit" },
+    { "id": "dashboard-v1", "mes": 2, "texto": "Dashboard v1 y pipeline v1", "tipo": "commit" },
+    { "id": "usd-350", "mes": 2, "fin": true, "texto": "USD 350 en el mes 2", "tipo": "commit" },
+    { "id": "retainer-1", "mes": 3, "texto": "Primer retainer (20 mensajes y un mes de prueba)", "tipo": "commit" },
+    { "id": "usd-700", "mes": 3, "fin": true, "texto": "USD 700 · ¿pasa a la fase 2?", "tipo": "grande" },
+    { "id": "dashboard-v2", "mes": 4, "texto": "Dashboard v2, tendencias v1 y segundo retainer", "tipo": "commit" },
+    { "id": "pipeline-v2", "mes": 5, "texto": "Pipeline v2 y programador", "tipo": "commit" },
+    { "id": "editor-1", "mes": 6, "texto": "Primer editor", "tipo": "commit" },
+    { "id": "revision-6", "mes": 6, "fin": true, "texto": "Revisión del mes 6: USD 2.800 y pago real ≥ 0,70", "tipo": "grande" },
+    { "id": "pipeline-v3", "mes": 7, "texto": "Pipeline v3", "tipo": "commit" },
+    { "id": "editor-2", "mes": 8, "texto": "Segundo editor", "tipo": "commit" },
+    { "id": "diversificar", "mes": 9, "texto": "6 a 8 campañas y 2 o 3 retainers", "tipo": "commit" },
+    { "id": "cuentas-40", "mes": 11, "texto": "40 cuentas", "tipo": "commit" },
+    { "id": "usd-9000", "mes": 12, "fin": true, "texto": "Cierre del año: USD 9.000 (base)", "tipo": "grande" }
+  ],
+  "plataformas": [
+    { "nombre": "Whop Content Rewards", "tarifa": "USD 0,50–1,50 (promedio ~1)", "nota": "La más grande; ingreso gratis y sin audiencia; tope por clip y comisión" },
+    { "nombre": "Vyro", "tarifa": "~USD 3 en destacadas (reseñas)", "nota": "Paga hasta agotar el pozo; verificar la tarifa vigente" },
+    { "nombre": "Clipster", "tarifa": "USD 0,30–2", "nota": "Tarifa fijada por campaña" },
+    { "nombre": "ClipAffiliates", "tarifa": "USD 0,50–3", "nota": "Cifras de la propia plataforma" },
+    { "nombre": "Clipping.net / Reach.cat", "tarifa": "USD 0,40–3 / 1–6", "nota": "Probar antes de depender" }
+  ],
+  "nichos": [
+    { "nombre": "Streamers", "fuente": "Campañas del propio streamer", "riesgo": "bajo", "como": "Mejor punto de partida; pagan constante" },
+    { "nombre": "Podcasts", "fuente": "Campañas de podcasters y redes", "riesgo": "bajo", "como": "Buen nicho para retainers" },
+    { "nombre": "Videojuegos", "fuente": "Streamers y publishers", "riesgo": "medio", "como": "Seguir las políticas de cada publisher; verificar para GTA 6" },
+    { "nombre": "Películas y series", "fuente": "Estudios y distribuidores", "riesgo": "alto", "como": "Solo con campañas oficiales; los cortes sin permiso caen por copyright" }
+  ],
+  "derechos": "El cobro depende de que la fuente esté autorizada por una campaña. Sin autorización: strike, baja del clip y views que no se pagan. Las campañas de apuestas pagan más pero son categoría restringida y tienen exposición legal: no están en el plan.",
+  "reglasCuentas": [
+    "Una identidad por cuenta: su nicho, su estilo de subtítulos, su ritmo y sus horarios.",
+    "Nunca el mismo archivo en dos cuentas: cada una lleva su propio corte, encuadre y subtítulos.",
+    "No subir todo de golpe: 8 clips seguidos en una hora se leen como spam. Espaciar y programar.",
+    "Agregar valor: edición, subtítulos y buen gancho rinden más que un corte crudo.",
+    "Solo views orgánicas: nada de views compradas ni bots.",
+    "Un ban cuesta más que la cuenta: crecer por etapas."
+  ],
+  "riesgos": [
+    { "riesgo": "Tarifas a la baja", "planB": "Retainers y canales propios, que no dependen del pozo de una campaña." },
+    { "riesgo": "Baneos o reach suprimido", "planB": "Crecer por etapas, un render por cuenta, nunca todas con el mismo patrón." },
+    { "riesgo": "Concentración", "planB": "Ninguna campaña ni plataforma por encima del 30 % del ingreso." },
+    { "riesgo": "Tiempo", "planB": "El plan T+18 y la búsqueda siguen: el clipping queda en su bloque (1 h 30 de lunes a viernes y 2 h el fin de semana)." },
+    { "riesgo": "Impuestos y cobros", "planB": "Los pagos llegan en dólares desde el exterior: consultar con un contador cómo declararlos. Trazo no calcula nada fiscal." }
+  ],
+  "rutina": [
+    { "id": "lunes", "dias": [1], "titulo": "Lunes · revisar", "texto": "Revisar el dashboard, pausar lo que paga menos de lo esperado y sumar campañas nuevas." },
+    { "id": "producir", "dias": [2, 3, 4], "titulo": "Martes a jueves · producir", "texto": "Producción y publicación, 2 bloques diarios." },
+    { "id": "viernes", "dias": [5], "titulo": "Viernes · decidir", "texto": "Pago real por 1.000 views por campaña y decidir qué se escala." },
+    { "id": "finde", "dias": [6, 0], "titulo": "Fin de semana · pipeline y prospección", "texto": "Mejoras al pipeline (1 a 2 h) y prospección de retainers." }
+  ],
+  "semana1": [
+    { "desde": "2026-11-16", "hasta": "2026-11-17", "texto": "Crear cuentas en 4 o 5 plataformas y leer las reglas de 10 campañas (tope por clip, mínimo de views, plataformas aceptadas, fuente permitida)." },
+    { "desde": "2026-11-17", "hasta": "2026-11-18", "texto": "Crear 3 cuentas base (TikTok, Reels, Shorts) por nicho y calentarlas mirando y publicando contenido propio." },
+    { "desde": "2026-11-18", "hasta": "2026-11-20", "texto": "Elegir 3 campañas (GTA 6 incluido) y publicar 3 a 5 clips por día cortados a mano." },
+    { "desde": "2026-11-21", "hasta": "2026-11-22", "texto": "Planilla con views, aprobaciones y pago real por campaña; descartar lo que paga menos de lo esperado." }
+  ],
+  "gta6": "GTA 6 sale el jueves 19 de noviembre de 2026 en PS5 y Xbox Series X|S. Para cobrar hacen falta campañas de streamers y creadores que clipeen GTA 6: no hay garantía de que existan el día 1, así que revisá las listas desde hoy. Clipear gameplay de terceros sin campaña autorizada es riesgo de strike.",
+  "stack": [
+    "Dashboard (mes 2): views por cuenta y campaña, pago estimado contra cobrado, alertas de campañas nuevas.",
+    "Ingesta y transcripción con marcas de tiempo, solo de fuentes autorizadas.",
+    "Selector de momentos: puntúa el gancho (primeros 2 segundos), humor, polémica y cierre.",
+    "Renderizador: corte vertical, subtítulos y encuadre distintos por cuenta.",
+    "Motor de tendencias con RAG: qué clipear hoy y con qué formato.",
+    "Programador: reparte publicaciones por cuenta y horario."
+  ],
+  "reglaDeOro": "La revisión humana antes de publicar se mantiene siempre.",
+  "fuentes": [
+    "Content Rewards: CPM de 707 campañas, 10 nov 2026",
+    "Content Rewards: tarifas de YouTube, 10 nov 2026",
+    "OpenClip: cuánto ganan los clippers, múltiples cuentas y baneos",
+    "ClipAffiliates: CPM 2026",
+    "FindClout: Clipster",
+    "Creative AI News: Shorts originales",
+    "Red Bull: GTA 6, 19 nov 2026"
+  ]
+}
