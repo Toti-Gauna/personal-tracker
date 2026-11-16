@@ -150,3 +150,9 @@
   .pantalla.despertar-pantalla { max-width: 560px; margin-inline: auto; }
   .despertar-pie { margin-inline: -32px; padding-inline: 32px; }
 }
+
+/* Ola 17: tres opciones en Buen día (04:00, 05:00 y 08:00) */
+.rutinas { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+.rutina-op { padding: 12px 10px; }
+.rutina-hora { font-size: 26px; }
+.rutina-op .sub { font-size: 13px; }

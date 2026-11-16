@@ -5,7 +5,7 @@ Tracker personal de Toti: el día en horas, el estudio con su propio motor de re
 - **Diseño:** [canvas de Trazo](https://claude.ai/artifact/6Cc2E6aW2ViU5ikovpsRTy)
 - **Roadmap de estudio:** [ruta ML + DevSecOps](https://claude.ai/artifact/9PEokku7mBLZdCFJr1zqXP)
 - **Pantallas:** presentación `Trazo-pantallas.pptx` y su ZIP de imágenes (44 pantallas, 8 flujos).
-- **Estado:** olas 0 a 12b hechas y en `main`. Olas 0 a 16c hechas (la 15 quedó absorbida por la 16c). La ola 17 (rutina de las 08:00 y dormir a las 22:00) está planificada en §6 quinquies. Este archivo es la fuente de verdad.
+- **Estado:** olas 0 a 12b hechas y en `main`. Olas 0 a 16c hechas (la 15 quedó absorbida por la 16c). La ola 17 (rutina de las 08:00 y dormir a las 22:00) está hecha. No quedan olas planificadas. Este archivo es la fuente de verdad.
 
 ---
 
@@ -344,7 +344,7 @@ Seis ramas que salen de main (Trazo) el lunes de T0 y vuelven a juntarse 78 sema
 
 Desde el lunes 16 nov 2026 la prioridad es un trabajo remoto de USD 3.000 a 5.000 por mes. **Esta sección reemplaza las "Rutinas del día" de la ola 8** mientras el modo esté activo.
 
-- **Modo `busqueda-intensiva`** (Ajustes → Plan T+18): rutinas `busqueda-intensiva` (lunes a viernes, 10 metas) y `busqueda-intensiva-finde` (8 metas), arrancan a las 04:30 (día corto 05:30; la cadena de la mañana es matemática y programación). Sin día libre: queda en "ninguno" y el anterior se guarda. Horas por semana: matemática 14, programación 25,5, inglés 11,5, búsqueda 10,5, clipping 10,5, entrenamiento 10. Desactivarlo vuelve exactamente a la rutina y al día libre de antes.
+- **Modo `busqueda-intensiva`** (Ajustes → Plan T+18): rutinas `busqueda-intensiva` (lunes a viernes, 10 metas) y `busqueda-intensiva-finde` (8 metas), arrancan a las 04:30 (día corto 05:30; la cadena de la mañana es matemática y programación). Sin día libre: queda en "ninguno" y el anterior se guarda. Horas por semana: matemática 14, programación 25,5, inglés 11,5, búsqueda 10,5, clipping 10,5, entrenamiento 15 (desde la ola 17, 3 h por día). Desactivarlo vuelve exactamente a la rutina y al día libre de antes.
 - **Sprint de 14 días** (`#/metas/sprint`, 10.2): si el día 14 no hay oferta, el sprint se renueva; la búsqueda no se cierra. Metas del embudo editables (supuestos). Qué cambia en la ruta (`#/metas/impacto`, 10.3).
 - **Pausa (stand-by)**, concepto genérico (`Pausa` en `plan-state.ts`): una rama o área en pausa no aparece en Hoy ni genera avisos, metas ni contadores; nada se borra (`guardado` es una foto). En el mapa va punteada y tenue desde la pausa; sus cortes se corren +N días con la fecha original tachada; Handyx abre en modo lectura con "Retomar". Pausas iniciales: Handyx y ventas desde T0.
 - **Clipping**: bloque sin rama, con el color de Eclipse; en el mapa tiene su propia columna.
@@ -383,7 +383,7 @@ Desde el lunes 16 nov 2026 la prioridad es un trabajo remoto de USD 3.000 a 5.00
 | 16a · Plan T+18 extendido: datos | `data/plan-extendido.json` (56 bloques en 4 etapas), validador y fechas derivadas con extras por bloque y atrasos que consume el colchón; sin tocar pantallas (§6 quater) | Opus 5.5 · alto |
 | 16b · Plan T+18 extendido: calendario vivo | La app lee el calendario derivado en vez de las 78 semanas fijas, con migración sin romper `trazo.v1` (§6 quater) | Opus 5.5 · alto · *hecha* |
 | 16c · Plan T+18 extendido: matemática y vistas | Ventanas y puertas 85/65, línea de tiempo por etapas, panel "hoy sos", alertas y fichas de proyecto. **Absorbe la ola 15:** un solo roadmap de matemática (§6 quater) | Opus 5.5 · alto · *hecha* |
-| 17 · Rutina de las 08:00 y dormir a las 22:00 | Tercera opción en Buen día (levantarse a las 08:00) con su propio día; en la de las 04:00, entreno de 3 h (18:00 a 21:00), descanso de 21:00 a 22:00 y dormir siempre a las 22:00 (§6 quinquies) | Sonnet 5.5 · medio |
+| 17 · Rutina de las 08:00 y dormir a las 22:00 | Tercera opción en Buen día (levantarse a las 08:00) con su propio día; en la de las 04:00, entreno de 3 h (18:00 a 21:00), descanso de 21:00 a 22:00 y dormir siempre a las 22:00 (§6 quinquies) | Sonnet 5.5 · medio · *hecha* |
 
 ## 6 bis. Olas 9 a 12: mejoras de uso
 
@@ -576,7 +576,7 @@ Mismo flujo: una rama y un PR por ola; se mergea a `main` con el CI en verde.
 
 ## 6 quinquies. Ola 17: rutina de las 08:00 y dormir a las 22:00
 
-**Sonnet 5.5 · medio.** Pedido del 2026-11-16.
+**Sonnet 5.5 · medio.** Pedido del 2026-11-16. *Hecha.*
 
 **Hoy** (búsqueda intensiva, lunes a viernes): rutina 04:00, matemática 04:30, programación 06:30, Abi 08:30, trabajo 10:00, caso 12:00, inglés 13:30, búsqueda 15:00, clipping 16:30, entreno 18:00 a 20:00, cierre 20:00 a 21:00 y dormir a las 21:00.
 
@@ -601,10 +601,18 @@ Mismo flujo: una rama y un PR por ola; se mergea a `main` con el CI en verde.
 - **Lo que sale en la de las 08:00:** clipping y el caso para entrevistas no entran (la programación del mediodía queda como un solo bloque). La matemática pasa a la tarde, así que su etiqueta de Hoy y la sesión de estudio la siguen igual.
 - **Datos:** `data/routines.json` (la variante de las 08:00 y los horarios nuevos), validación y tests; los días ya guardados no cambian.
 
-**A confirmar**
-1. "8pm" se tomó como **08:00** (la rutina arranca a las 08:00).
-2. ¿La de las 08:00 vale también el fin de semana, o solo de lunes a viernes?
-3. ¿Dormir a las 22:00 vale para todas las rutinas (fin de semana, con trabajo y día libre) o solo para la de lunes a viernes?
+**Decidido (2026-11-16)**
+1. Es **08:00**, y solo cuando te levantás a esa hora: las opciones de 04:00 y 05:00 siguen en pie.
+2. La de las 08:00 vale también el **fin de semana** (el día libre sigue igual).
+3. **Dormir a las 22:00 en todas las rutinas**, por ahora.
+
+**Lo que quedó**
+- `data/routines.json` suma `tarde` (wake 08:00 y los 10 bloques de la tabla). Reusa los ids de siempre (`math`, `prog`, `ingles`, `entreno`…), así la sesión de estudio, las puertas, el entreno y las etiquetas funcionan igual. Se valida al cargar.
+- **Buen día:** tres opciones (04:00, 05:00 y 08:00) más "Otra hora". Si abrís Trazo desde las 07:30, propone la de las 08:00, y muestra el día completo en vez de solo la mañana.
+- **Búsqueda intensiva a las 04:00 y 05:00:** entreno de 18:00 a 21:00 (3 h), "Descansar y preparar mañana" de 21:00 a 22:00 y "Dormir a las 22:00". El fin de semana el descanso se estira hasta las 22:00.
+- **Otras rutinas:** lunes a viernes y con trabajo: desconexión de 20:00 a 21:00 y "Cerrar y preparar mañana" de 21:00 a 22:00. Fin de semana: la desconexión llega a las 22:00. Día libre: se duerme a las 22:00.
+- **Horas por semana de la intensiva:** el entrenamiento pasa de 10 a 15 h.
+- 5 tests nuevos y 3 actualizados.
 
 En el día a día alcanza con **Haiku 5.5 · bajo**: pegás el JSON del cierre y queda commiteado en `data/days/`.
 

@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import raw from '../../data/routines.json';
 import { blockDone, mejoraDia, valorMeta } from './mejora';
-import { DAY_ROUTINES, ajustarDia, dateKeyIn, dayTypeOf, metasOf, planRoutine, routineErrors, routineFor, validateRoutines, wakeRange } from './routines';
+import { DAY_ROUTINES, DAY_TYPES, ROUTINES_FILE, ajustarDia, dateKeyIn, dayTypeOf, metasOf, planRoutine, routineErrors, routineFor, validateRoutines, wakeRange } from './routines';
 import { buildBlocks, planDay } from './schedule';
 import { toMin } from './time';
 
@@ -71,7 +71,7 @@ describe('qué rutina toca', () => {
     expect(viernes.map((b) => [b.n, b.start, b.title, b.rama ?? '—'])).toEqual([
       [1, '04:00', 'Rutina de la mañana', 'main'], [2, '04:30', 'Matemática · CONAMAT', 'matematica'], [3, '06:30', 'Programación', 'programacion'],
       [4, '08:30', 'Acompañar a Abi y correr', 'salud'], [5, '10:00', 'Trabajo actual', '—'], [6, '12:00', 'Búsqueda laboral', 'trabajo'],
-      [7, '13:30', 'Handyx', 'handyx'], [8, '16:30', 'Programación · tarde', 'programacion'], [9, '19:00', 'Entrenamiento', 'salud'], [10, '20:30', 'Cerrar y preparar mañana', 'main'],
+      [7, '13:30', 'Handyx', 'handyx'], [8, '16:30', 'Programación · tarde', 'programacion'], [9, '19:00', 'Entrenamiento', 'salud'], [10, '21:00', 'Cerrar y preparar mañana', 'main'],
     ]);
     const sabado = buildBlocks(planDay(SABADO, 'completo'));
     expect(sabado.map((b) => [b.n, b.start, b.key])).toEqual([[1, '04:30', 'math'], [2, '06:30', 'prog'], [3, '08:30', 'abi'], [4, '10:00', 'prog-2'], [5, '12:00', 'handyx'], [6, '15:00', 'busqueda']]);
@@ -145,3 +145,43 @@ describe('ventana W y entrevista cercana', () => {
     expect(p).toMatchObject({ busqueda: '12:00+45', 'ingles-entrevista': '12:45+45', handyx: '13:30+180' });
   });
 });
+
+describe('ola 17: rutina de las 08:00 y dormir a las 22:00', () => {
+  it('levantándote a las 08:00, el día es otro: 9 metas con las horas pedidas', () => {
+    const d = buildBlocks(planDay(VIERNES, 'tarde', undefined, 'busqueda-intensiva'));
+    expect(d.map((b) => [b.start, b.min, b.key])).toEqual([
+      ['08:00', 30, 'rutina'], ['08:30', 90, 'abi'], ['10:00', 120, 'trabajo'], ['12:00', 90, 'prog'], ['13:30', 90, 'busqueda'],
+      ['15:00', 90, 'math'], ['16:30', 90, 'ingles'], ['18:00', 180, 'entreno'], ['21:00', 60, 'cierre'], ['22:00', 600, 'sueno'],
+    ]);
+    // Los ids son los de siempre: la sesión de estudio, el entreno y las puertas funcionan igual.
+    expect(d.find((b) => b.key === 'math')!.rama).toBe('matematica');
+    expect(d.find((b) => b.key === 'entreno')!.kind).toBe('entreno');
+  });
+
+  it('vale también el fin de semana; el día libre sigue igual', () => {
+    expect(planDay(SABADO, 'tarde', undefined, 'busqueda-intensiva-finde')[0].start).toBe('08:00');
+    expect(buildBlocks(planDay(MARTES, 'tarde', undefined, 'libre')).map((b) => b.title)).toEqual(['Repasos · 20 min', 'Entrenamiento suave']);
+  });
+
+  it('a las 04:00 la rutina queda igual, con el entreno de 3 h y dormir a las 22:00', () => {
+    const p = planRoutine('busqueda-intensiva', 'completo');
+    const b = (id: string) => p.find((x) => x.block.id === id)!;
+    expect([b('entreno').start, b('entreno').min, b('cierre').start, b('cierre').min, b('sueno').start]).toEqual(['18:00', 180, '21:00', 60, '22:00']);
+    expect(p[0].start).toBe('04:00');
+  });
+
+  it('todas las rutinas duermen a las 22:00', () => {
+    for (const t of DAY_TYPES) expect([t, ROUTINES_FILE.dayRoutines[t].blocks.find((x) => x.id === 'sueno')?.start]).toEqual([t, '22:00']);
+    expect(ROUTINES_FILE.tarde.blocks.find((x) => x.id === 'sueno')!.start).toBe('22:00');
+  });
+
+  it('la validación revisa la rutina de las 08:00', () => {
+    const roto = structuredClone(ROUTINES_FILE) as unknown as { tarde: { wake: string; blocks: { start: string }[] } };
+    roto.tarde.blocks[0].start = '07:00';
+    expect(routineErrors(roto).join()).toMatch(/tarde: el primer bloque tiene que empezar a la hora de levantarse/);
+    const sin = structuredClone(ROUTINES_FILE) as unknown as Record<string, unknown>;
+    delete sin.tarde;
+    expect(routineErrors(sin).join()).toMatch(/falta "tarde"/);
+  });
+});
+

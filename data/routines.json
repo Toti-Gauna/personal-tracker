@@ -164,7 +164,7 @@
      "id": "desconexion",
      "label": "Desconexión",
      "start": "20:00",
-     "end": "20:30",
+     "end": "21:00",
      "area": "rutina",
      "kind": "fixed",
      "focus": false,
@@ -174,8 +174,8 @@
      "id": "cierre",
      "label": "Cerrar y preparar mañana",
      "short": "el cierre",
-     "start": "20:30",
-     "end": "21:00",
+     "start": "21:00",
+     "end": "22:00",
      "area": "rutina",
      "kind": "fixed",
      "focus": false,
@@ -188,7 +188,7 @@
     {
      "id": "sueno",
      "label": "Sueño",
-     "start": "21:00",
+     "start": "22:00",
      "end": "04:00",
      "area": "rutina",
      "kind": "fixed",
@@ -320,7 +320,7 @@
      "id": "desconexion",
      "label": "Desconexión",
      "start": "20:30",
-     "end": "21:00",
+     "end": "22:00",
      "area": "rutina",
      "kind": "fixed",
      "focus": false,
@@ -329,7 +329,7 @@
     {
      "id": "sueno",
      "label": "Sueño",
-     "start": "21:00",
+     "start": "22:00",
      "end": "04:00",
      "area": "rutina",
      "kind": "fixed",
@@ -474,7 +474,7 @@
      "id": "desconexion",
      "label": "Desconexión",
      "start": "20:00",
-     "end": "20:30",
+     "end": "21:00",
      "area": "rutina",
      "kind": "fixed",
      "focus": false,
@@ -484,8 +484,8 @@
      "id": "cierre",
      "label": "Cerrar y preparar mañana",
      "short": "el cierre",
-     "start": "20:30",
-     "end": "21:00",
+     "start": "21:00",
+     "end": "22:00",
      "area": "rutina",
      "kind": "fixed",
      "focus": false,
@@ -498,7 +498,7 @@
     {
      "id": "sueno",
      "label": "Sueño",
-     "start": "21:00",
+     "start": "22:00",
      "end": "04:00",
      "area": "rutina",
      "kind": "fixed",
@@ -552,7 +552,7 @@
     {
      "id": "sueno",
      "label": "Sueño",
-     "start": "21:00",
+     "start": "22:00",
      "end": "04:00",
      "area": "rutina",
      "kind": "fixed",
@@ -709,7 +709,7 @@
      "label": "Entrenamiento",
      "short": "el entreno",
      "start": "18:00",
-     "end": "20:00",
+     "end": "21:00",
      "area": "salud",
      "kind": "fixed",
      "focus": true,
@@ -721,10 +721,10 @@
     },
     {
      "id": "cierre",
-     "label": "Descansar · cierre de 5 min",
+     "label": "Descansar y preparar mañana",
      "short": "el cierre",
-     "start": "20:00",
-     "end": "21:00",
+     "start": "21:00",
+     "end": "22:00",
      "area": "rutina",
      "kind": "fixed",
      "focus": false,
@@ -736,9 +736,9 @@
     },
     {
      "id": "sueno",
-     "label": "Dormir a las 21:00",
+     "label": "Dormir a las 22:00",
      "short": "dormir",
-     "start": "21:00",
+     "start": "22:00",
      "end": "04:00",
      "area": "rutina",
      "kind": "fixed",
@@ -882,10 +882,10 @@
     },
     {
      "id": "cierre",
-     "label": "Descansar · cierre de 5 min a las 20:00",
+     "label": "Descansar · cierre de 5 min a las 21:00",
      "short": "el descanso",
      "start": "17:00",
-     "end": "21:00",
+     "end": "22:00",
      "area": "rutina",
      "kind": "fixed",
      "focus": false,
@@ -897,9 +897,9 @@
     },
     {
      "id": "sueno",
-     "label": "Dormir a las 21:00",
+     "label": "Dormir a las 22:00",
      "short": "dormir",
-     "start": "21:00",
+     "start": "22:00",
      "end": "04:00",
      "area": "rutina",
      "kind": "fixed",
@@ -911,5 +911,160 @@
     }
    ]
   }
+ },
+ "tarde": {
+  "wake": "08:00",
+  "label": "Día tarde · te levantaste a las 08:00",
+  "blocks": [
+   {
+    "id": "rutina",
+    "label": "Rutina de la mañana",
+    "short": "la rutina",
+    "start": "08:00",
+    "end": "08:30",
+    "area": "rutina",
+    "kind": "flex",
+    "focus": false,
+    "rama": "main",
+    "tasks": [
+     "Agua y cama hecha",
+     "Movilidad 10 min"
+    ]
+   },
+   {
+    "id": "abi",
+    "label": "Acompañar a Abi y correr",
+    "short": "Abi",
+    "start": "08:30",
+    "end": "10:00",
+    "area": "salud",
+    "kind": "fixed",
+    "focus": false,
+    "rama": "salud",
+    "tasks": [
+     "Correr y ducha"
+    ]
+   },
+   {
+    "id": "trabajo",
+    "label": "Trabajo actual",
+    "short": "el trabajo",
+    "start": "10:00",
+    "end": "12:00",
+    "area": "economia",
+    "kind": "fixed",
+    "focus": true,
+    "tasks": [
+     "Tarea principal del trabajo"
+    ]
+   },
+   {
+    "id": "prog",
+    "label": "Programación · CV y portfolio (P0)",
+    "short": "programación",
+    "start": "12:00",
+    "end": "13:30",
+    "area": "ing",
+    "kind": "fixed",
+    "focus": true,
+    "rama": "programacion",
+    "tasks": [
+     "Tarea del portfolio (P0)",
+     "Commit y nota para la revisión"
+    ]
+   },
+   {
+    "id": "busqueda",
+    "label": "Búsqueda laboral",
+    "short": "la búsqueda",
+    "start": "13:30",
+    "end": "15:00",
+    "area": "rutina",
+    "kind": "fixed",
+    "focus": true,
+    "rama": "trabajo",
+    "tasks": [
+     "5 postulaciones a medida",
+     "5 mensajes directos",
+     "CV, LinkedIn o revisión de mercado"
+    ]
+   },
+   {
+    "id": "math",
+    "label": "Matemática · CONAMAT",
+    "short": "matemática",
+    "start": "15:00",
+    "end": "16:30",
+    "area": "ing",
+    "kind": "fixed",
+    "focus": true,
+    "rama": "matematica",
+    "tasks": [
+     "Repaso de tarjetas",
+     "Capítulo del día",
+     "Test del capítulo"
+    ]
+   },
+   {
+    "id": "ingles",
+    "label": "Inglés · modo entrevista",
+    "short": "inglés",
+    "start": "16:30",
+    "end": "18:00",
+    "area": "ing",
+    "kind": "fixed",
+    "focus": true,
+    "rama": "ingles",
+    "tasks": [
+     "Respuestas ensayadas en voz alta",
+     "Pitch de 60 s",
+     "Una historia STAR"
+    ]
+   },
+   {
+    "id": "entreno",
+    "label": "Entrenamiento",
+    "short": "el entreno",
+    "start": "18:00",
+    "end": "21:00",
+    "area": "salud",
+    "kind": "fixed",
+    "focus": true,
+    "rama": "salud",
+    "tasks": [
+     "Caminata y movilidad",
+     "Rutina del día"
+    ]
+   },
+   {
+    "id": "cierre",
+    "label": "Descansar y preparar mañana",
+    "short": "el cierre",
+    "start": "21:00",
+    "end": "22:00",
+    "area": "rutina",
+    "kind": "fixed",
+    "focus": false,
+    "rama": "main",
+    "tasks": [
+     "Cerrar el día en 5 min",
+     "Preparar mañana"
+    ]
+   },
+   {
+    "id": "sueno",
+    "label": "Dormir a las 22:00",
+    "short": "dormir",
+    "start": "22:00",
+    "end": "08:00",
+    "area": "rutina",
+    "kind": "fixed",
+    "focus": false,
+    "rama": "salud",
+    "tasks": [
+     "En la cama a las 21:00"
+    ]
+   }
+  ]
  }
 }
