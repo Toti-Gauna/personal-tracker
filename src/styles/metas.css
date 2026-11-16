@@ -142,3 +142,22 @@
 .subs-lista li { display: grid; grid-template-columns: 24px minmax(0, 1fr) auto; gap: 10px; align-items: center; min-height: 48px; border-bottom: 1px solid var(--linea); }
 .subs-agregar { margin-top: 12px; width: 100%; background: transparent; font: inherit; cursor: pointer; }
 .aviso-pausa { margin: 10px 0 0; padding: 10px 12px; border: 1px solid var(--eclipse); border-radius: 8px; color: var(--tinta); font-size: 14px; }
+
+/* Ola 20 · metas por bloque */
+.mb { margin: 18px 0; }
+.mb .fila-t { margin-bottom: 6px; }
+.mb-barra { display: block; height: 4px; border-radius: 2px; background: var(--linea); overflow: hidden; margin-bottom: 6px; }
+.mb-barra span { display: block; height: 100%; background: var(--c, var(--tinta)); }
+.mb-lista { list-style: none; margin: 0; padding: 0; }
+.mb-lista > li { border-top: 1px solid var(--linea); padding: 6px 0; }
+.mb-fila { display: flex; align-items: center; gap: 14px; min-height: 48px; }
+.mb-t { flex: 1; min-width: 0; overflow-wrap: anywhere; cursor: pointer; text-align: left; }
+.mb-editable { text-decoration: underline dotted; text-underline-offset: 4px; }
+.mb-cont { width: 44px; flex: none; text-align: center; color: var(--sub); font-size: 13px; }
+.mb-subs { list-style: none; margin: 0 0 0 30px; padding: 0; }
+.mb-subs li { display: flex; align-items: center; gap: 12px; min-height: 44px; }
+.mb-subs label { flex: 1; min-width: 0; cursor: pointer; overflow-wrap: anywhere; }
+.mb-add-sub { margin-left: 58px; min-height: 36px; color: var(--sub); font-size: 14px; }
+.mb-add-sub:hover { color: var(--tinta); }
+.mb-acciones { display: flex; flex-wrap: wrap; gap: 8px 18px; margin-top: 10px; font-size: 14px; }
+.mb .mg-add-sub { margin-top: 10px; }

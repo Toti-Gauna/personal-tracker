@@ -58,7 +58,14 @@ export interface Libro {
 }
 
 export const LIBROS: Libro[] = (raw as { libros: Libro[] }).libros;
-export const libroPorId = (id: string) => LIBROS.find((l) => l.id === id);
+
+/** Libros cargados con JSON (metas por bloque, tipo "libro"). El store los aplica al cargar y al cambiar. */
+let PROPIOS: (Libro & { propio: true })[] = [];
+export function aplicarLibrosPropios(ls: Libro[] = []) {
+  PROPIOS = ls.map((l) => ({ ...l, propio: true as const }));
+}
+export const libroPorId = (id: string): (Libro & { propio?: boolean }) | undefined => LIBROS.find((l) => l.id === id) ?? PROPIOS.find((l) => l.id === id);
+export const todosLosLibros = (): (Libro & { propio?: boolean })[] => [...LIBROS, ...PROPIOS];
 
 /** Las unidades del libro: las del JSON o, sin ellas, de a 2 capítulos. */
 export function unidadesDe(l: Libro): UnidadLibro[] {

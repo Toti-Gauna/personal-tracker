@@ -1,6 +1,6 @@
 import type { Srs } from './fsrs';
 import type { Area } from './types';
-import type { AreaEstudio, FinalLibro, MicroTesis } from './libros';
+import type { AreaEstudio, FinalLibro, Libro, MicroTesis } from './libros';
 
 export interface Front {
   id: string;
@@ -198,6 +198,8 @@ export interface StudyState {
   finales?: Record<string, FinalLibro>;
   /** Ola 20: lectura de apoyo de un libro ("act:recurso" → fecha). */
   recursosLeidos?: Record<string, string>;
+  /** Ola 20: libros cargados con JSON (capítulos y unidades). */
+  librosPropios?: Libro[];
 }
 
 /**

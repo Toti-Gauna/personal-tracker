@@ -9,7 +9,10 @@ import { guardarArtefacto, marcarRecurso } from '../state/study';
 import { Casilla } from '../ui/Casilla';
 import { MicroTesis } from '../ui/MicroTesis';
 import { toast } from '../ui/avisos';
+import { MetasBloque } from '../ui/MetasBloque';
+import { empezarLibro } from '../state/metas-bloque';
 import '../styles/estudio.css';
+import '../styles/metas.css';
 
 const dm = (d: string) => fmtFecha(d).split(' ').slice(1, 3).join(' ').toLowerCase();
 
@@ -49,6 +52,13 @@ export function LibroPantalla({ day, id }: { day: DayLog; id: string }) {
           <span><b className="mono">{tarjetas}</b> tarjetas</span>
         </div>
       </section>
+
+      {a.archivada && (
+        <div className="libro-empezar">
+          <p className="sub">Este libro está cargado pero todavía no entra en tu día.</p>
+          <button className="btn-principal" onClick={() => empezarLibro(id)}>Empezar este libro</button>
+        </div>
+      )}
 
       <details className="libro-como">
         <summary>Cómo se estudia un libro</summary>
@@ -111,6 +121,8 @@ export function LibroPantalla({ day, id }: { day: DayLog; id: string }) {
           </ul>
         </section>
       )}
+
+      <MetasBloque bloque={`libro:${id}`} date={day.date} titulo="Metas del libro" vacio="Sin metas propias todavía: las del libro son leer, micro-tesis, mini-tests y el cierre." />
 
       <section className="libro-cierre" aria-label="Cierre del libro">
         <div className="fila-t"><span className="etiqueta">Cierre del libro</span><span className="mono sub">{[e.finalAprobado, e.tesisFinal, e.artefacto].filter(Boolean).length} de 3</span></div>

@@ -14,7 +14,9 @@ import { useStore } from '../state/store';
 import { Casilla } from '../ui/Casilla';
 import { EvidenciaProyecto, FichaBloque } from '../ui/FichaBloque';
 import { bloqueConFechas } from '../data/plan-vistas';
+import { MetasBloque } from '../ui/MetasBloque';
 import '../styles/etapas.css';
+import '../styles/metas.css';
 
 const TIPOS: [TipoError, string, string][] = [
   ['concepto', 'concepto', 'var(--rutina)'],
@@ -83,6 +85,7 @@ export function PlanProyecto({ day, id }: { day: DayLog; id?: string }) {
       )}
 
       <FichaBloque id={t.id} />
+      <MetasBloque bloque={t.id} date={date} titulo={`Metas de ${t.id}`} />
       {t.tipo === 'proyecto' && <EvidenciaProyecto id={t.id} />}
 
       {t.tipo === 'ventana' && (
