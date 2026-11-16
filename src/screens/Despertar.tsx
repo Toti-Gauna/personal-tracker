@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react';
 import { dayNumber } from '../data/derive';
 import { tituloDeBloque } from '../data/etiquetas';
-import { DAY_ROUTINES, isMeta, wakeDe, planRoutine, routineFor, wakeRange, type DayType } from '../data/routines';
+import { DAY_ROUTINES, TARDE, isMeta, wakeDe, planRoutine, routineFor, wakeRange, type DayType } from '../data/routines';
 import { fmtDur, fmtFecha, nowMin, toHHMM, toMin } from '../data/time';
 import type { RoutineId } from '../data/types';
 import { planSettings, startDay, useStore } from '../state/store';
@@ -10,7 +10,7 @@ import '../styles/hoy.css';
 
 const STEP = 10;
 
-const MODOS = [['completo', 'Día completo'], ['corto', 'Día corto']] as const;
+const MODOS = [['completo', 'Día completo'], ['corto', 'Día corto'], ['tarde', 'Día tarde']] as const;
 
 function defaultChoice(now: number, t: DayType): { r: RoutineId; otra: number } {
   const { min, max } = wakeRange(t);
@@ -18,6 +18,8 @@ function defaultChoice(now: number, t: DayType): { r: RoutineId; otra: number } 
   const otra = toMin(w.completo) + 40;
   if (now <= toMin(w.completo) + 30) return { r: 'completo', otra };
   if (now <= toMin(w.corto) + 30) return { r: 'corto', otra };
+  // Ola 17: si abrís Trazo desde las 07:30 en adelante, propone la rutina de las 08:00.
+  if (t !== 'libre' && now >= toMin(TARDE.wake) - 30) return { r: 'tarde', otra };
   const rounded = Math.floor(now / STEP) * STEP;
   return { r: 'otra', otra: Math.min(max, Math.max(min, rounded)) };
 }
@@ -37,13 +39,16 @@ export function Despertar({ date }: { date: string }) {
   const range = wakeRange(tipo);
 
   const WAKE = wakeDe(tipo);
-  const wake = choice === 'otra' ? toHHMM(otra) : WAKE[choice];
+  const horaDe = (id: 'completo' | 'corto' | 'tarde') => (id === 'tarde' ? TARDE.wake : WAKE[id]);
+  const wake = choice === 'otra' ? toHHMM(otra) : horaDe(choice);
   const plan = planRoutine(tipo, choice, wake);
   const firstFixed = plan.findIndex((p) => p.block.kind === 'fixed');
-  const manana = plan.slice(0, firstFixed + 1);
+  const manana = choice === 'tarde' ? plan.filter((p) => p.block.id !== 'sueno') : plan.slice(0, firstFixed + 1);
   const metas = plan.filter((p) => isMeta(p.block)).length;
-  const desc = (id: 'completo' | 'corto') => {
-    const m = planRoutine(tipo, id).slice(0, firstFixed).filter((p) => isMeta(p.block));
+  const desc = (id: 'completo' | 'corto' | 'tarde') => {
+    if (id === 'tarde') return 'Abi y trabajo a la mañana; el estudio, a la tarde';
+    const pr = planRoutine(tipo, id);
+    const m = pr.slice(0, pr.findIndex((p) => p.block.kind === 'fixed')).filter((p) => isMeta(p.block));
     const txt = m.map((p) => `${p.block.short ?? p.block.label.toLowerCase()} ${fmtDur(p.min)}`).join(' y ');
     return txt[0].toUpperCase() + txt.slice(1);
   };
@@ -60,7 +65,7 @@ export function Despertar({ date }: { date: string }) {
           <h1 id="desp-t" className="titulo desp-t">¿A qué hora te levantaste?</h1>
 
           <div className="rutinas" role="radiogroup" aria-label="Rutina del día">
-            {MODOS.map(([id, name]) => (
+            {MODOS.filter(([id]) => id !== 'tarde' || tipo !== 'libre').map(([id, name]) => (
               <button
                 key={id}
                 role="radio"
@@ -68,7 +73,7 @@ export function Despertar({ date }: { date: string }) {
                 className="rutina-op"
                 onClick={() => setChoice(id)}
               >
-                <span className={`rutina-hora mono${choice === id ? ' resaltado' : ''}`} style={{ ['--c' as string]: 'var(--economia)' }}>{WAKE[id]}</span>
+                <span className={`rutina-hora mono${choice === id ? ' resaltado' : ''}`} style={{ ['--c' as string]: 'var(--economia)' }}>{horaDe(id)}</span>
                 <b>{name}</b>
                 <span className="sub">{desc(id)}</span>
               </button>
@@ -87,7 +92,7 @@ export function Despertar({ date }: { date: string }) {
             </div>
           </div>
 
-          <div className="etiqueta manana-t">Así queda tu mañana · {rutina.label.toLowerCase()}, {metas} metas</div>
+          <div className="etiqueta manana-t">{choice === 'tarde' ? `Así queda tu día · ${TARDE.label.toLowerCase()}, ${metas} metas` : `Así queda tu mañana · ${rutina.label.toLowerCase()}, ${metas} metas`}</div>
           <ul className="manana">
             {manana.map((p) => (
               <li key={p.block.id}>

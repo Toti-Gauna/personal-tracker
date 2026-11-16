@@ -63,6 +63,11 @@ export interface RoutinesFile {
   /** Día libre de fábrica (ISO: 2 = martes). Se cambia en Ajustes. */
   diaLibre: number;
   dayRoutines: Record<DayType, DayRoutineDef>;
+  /**
+   * Ola 17: si te levantás a las 08:00, el día tiene su propia rutina (vale cualquier día menos el
+   * libre): mañana con Abi y trabajo, y a la tarde programación, búsqueda, matemática e inglés.
+   */
+  tarde: { wake: string; label: string; blocks: RoutineBlock[] };
 }
 
 const AREAS: Area[] = ['ing', 'handyx', 'eclipse', 'salud', 'rutina', 'economia'];
@@ -90,8 +95,25 @@ export function routineErrors(x: unknown): string[] {
       if (dias.has(d)) err.push(`${t}: el día ${d} ya está en otra rutina`);
       dias.add(d);
     }
+    err.push(...bloquesErrors(t, r.blocks));
+  }
+  for (let d = 1; d <= 7; d++) if (!dias.has(d)) err.push(`el día ${d} no tiene rutina`);
+  if (!f.tarde) err.push('falta "tarde" (la rutina de las 08:00)');
+  else {
+    if (!HHMM.test(f.tarde.wake ?? '')) err.push('"tarde.wake" no es HH:MM');
+    if (!f.tarde.label) err.push('tarde: falta "label"');
+    err.push(...bloquesErrors('tarde', f.tarde.blocks));
+    if (f.tarde.blocks?.[0] && f.tarde.blocks[0].start !== f.tarde.wake) err.push('tarde: el primer bloque tiene que empezar a la hora de levantarse');
+  }
+  return err;
+}
+
+function bloquesErrors(t: string, blocks: RoutineBlock[] | undefined): string[] {
+  const err: string[] = [];
+  {
+    const r = { blocks: blocks! };
     const ids = new Set<string>();
-    if (!Array.isArray(r.blocks) || !r.blocks.length) { err.push(`${t}: no tiene bloques`); continue; }
+    if (!Array.isArray(r.blocks) || !r.blocks.length) return [`${t}: no tiene bloques`];
     r.blocks.forEach((b, i) => {
       const at = `${t}.${b?.id ?? i}`;
       if (!b.id) err.push(`${at}: falta "id"`);
@@ -111,7 +133,6 @@ export function routineErrors(x: unknown): string[] {
     });
     if (!r.blocks.some((b) => b.kind === 'fixed')) err.push(`${t}: necesita al menos un bloque fijo`);
   }
-  for (let d = 1; d <= 7; d++) if (!dias.has(d)) err.push(`el día ${d} no tiene rutina`);
   return err;
 }
 
@@ -126,6 +147,7 @@ export const ROUTINES_FILE: RoutinesFile = validateRoutines(raw);
 export const DAY_ROUTINES = ROUTINES_FILE.dayRoutines;
 export const TIMEZONE = ROUTINES_FILE.timezone;
 export const WAKE = ROUTINES_FILE.wake;
+export const TARDE = ROUTINES_FILE.tarde;
 
 /** Fecha (YYYY-MM-DD) de un instante en la zona horaria de las rutinas. */
 export function dateKeyIn(now: Date, tz = TIMEZONE) {
@@ -209,9 +231,11 @@ export function wakeRange(t: DayType, file: RoutinesFile = ROUTINES_FILE) {
  *   (despertar) mantiene su duración. Los fijos y lo que viene después no se tocan.
  */
 export function planRoutine(t: DayType, mode: RoutineId, wakeHHMM?: string, file: RoutinesFile = ROUTINES_FILE): PlannedRoutineBlock[] {
+  // Ola 17: a las 08:00 el día es otro, con los horarios del JSON tal cual (el día libre sigue igual).
+  if (mode === 'tarde' && t !== 'libre') return file.tarde.blocks.map((b) => ({ block: b, start: b.start, min: blockMin(b) }));
   const bl = file.dayRoutines[t].blocks;
   const w = wakeDe(t, file);
-  const wake = toMin(mode === 'otra' ? wakeHHMM ?? w.completo : w[mode]);
+  const wake = toMin(mode === 'otra' ? wakeHHMM ?? w.completo : w[mode === 'tarde' ? 'completo' : mode]);
   const m = morning(bl);
   const fijo = toMin(bl[m.length].start);
   const dur = new Map(bl.map((b) => [b.id, blockMin(b)]));

@@ -40,7 +40,8 @@ export interface BlockTemplate {
   tasks: string[];
 }
 
-export type RoutineId = 'completo' | 'corto' | 'otra';
+/** Modo del Buen día: 04:00 completo, 05:00 corto, 08:00 tarde (ola 17) u otra hora. */
+export type RoutineId = 'completo' | 'corto' | 'tarde' | 'otra';
 
 
 /** Vínculo opcional con un ítem del roadmap (data/roadmap.json). */
