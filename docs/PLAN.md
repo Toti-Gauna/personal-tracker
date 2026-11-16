@@ -5,7 +5,7 @@ Tracker personal de Toti: el día en horas, el estudio con su propio motor de re
 - **Diseño:** [canvas de Trazo](https://claude.ai/artifact/6Cc2E6aW2ViU5ikovpsRTy)
 - **Roadmap de estudio:** [ruta ML + DevSecOps](https://claude.ai/artifact/9PEokku7mBLZdCFJr1zqXP)
 - **Pantallas:** presentación `Trazo-pantallas.pptx` y su ZIP de imágenes (44 pantallas, 8 flujos).
-- **Estado:** olas 0 a 12b hechas y en `main`. Olas 0 a 16c hechas (la 15 quedó absorbida por la 16c). Olas 0 a 17 hechas. Las olas 18 a 24 (arreglos de uso, calendario sin pausas, unidades por área, metas por bloque con JSON, roadmaps de programación y de inglés, y orden de pantallas) están planificadas en §6 sexies. Este archivo es la fuente de verdad.
+- **Estado:** olas 0 a 12b hechas y en `main`. Olas 0 a 16c hechas (la 15 quedó absorbida por la 16c). Olas 0 a 17 hechas. Las olas 18 a 26 (arreglos de uso, calendario sin pausas, unidades por área, metas por bloque con JSON, roadmaps de programación y de inglés, orden de pantallas, entreno con tus rutinas y Upper/Lower propias) están planificadas en §6 sexies. Este archivo es la fuente de verdad.
 
 ---
 
@@ -391,6 +391,8 @@ Desde el lunes 16 nov 2026 la prioridad es un trabajo remoto de USD 3.000 a 5.00
 | 22 · Roadmap de programación por proyectos | Estudio con la programación aprendida haciendo proyectos, subpáginas por proyecto y niveles de salida de las ventanas (§6 sexies) | Opus 5.5 · alto |
 | 23 · Roadmap de inglés | Un libro por vez con el método de libros (Measure What Matters), curso de pronunciación y "English Made Simple" (§6 sexies) | Sonnet 5.5 · alto |
 | 24 · Orden de pantallas | Pasada de UX en Metas, Estudio y Hoy: pantallas livianas con subpáginas y botones (§6 sexies) | Sonnet 5.5 · medio |
+| 25 · Entreno con tus rutinas | Tus 6 rutinas (Push A y B, Pull A y B, Legs A y B) con tempo, RIR por serie, guías, parciales y dropsets; semana nueva; bloque de entreno de 3 h (caminata, 2 h y caminata) y 21:00 a 22:00 para bañarte, estirar, comer y escribir (§6 sexies) | Sonnet 5.5 · alto |
+| 26 · Upper/Lower propias | Rutinas Upper y Lower armadas con tu estilo y tus ejercicios, como plantilla alternativa de la semana (§6 sexies) | Opus 5.5 · medio |
 
 ## 6 bis. Olas 9 a 12: mejoras de uso
 
@@ -674,6 +676,32 @@ Pedido del 2026-11-16, después de probar la app en el teléfono, con las decisi
 1. ¿Los dos "Descanso" (DES3 y DES4, de 1 semana) también se sacan, o se quedan? Por defecto se quedan.
 2. ¿Cuántos capítulos tiene Measure What Matters?
 3. La versión de Security+ (SY0-801 o SY0-701) se decide el 22 de noviembre; no la resuelvo yo.
+
+**Ola 25 · Entreno con tus rutinas** (Sonnet 5.5 · alto)
+
+Pedido del 2026-11-16. Las rutinas de partida de la ola 5 (Push, Pull, Piernas, Upper, Lower y Full body) las había armado yo como punto de partida; se reemplazan por las tuyas.
+- **Seis rutinas:** Pull A (lunes), Legs A (martes), Push A (miércoles), Pull B (viernes), Legs B (sábado) y Push B (domingo). El jueves queda libre.
+- **Semana nueva:** una plantilla "PPL × 2" con esos días, que pasa a ser la de fábrica. Las plantillas viejas se pueden elegir.
+- **Más datos por ejercicio:** hoy la app guarda series, repeticiones, descanso y tipo. Se suman el **tempo** (2-1-2, con su descripción), el **RIR objetivo por serie** (por ejemplo 2, 1 y 0), la guía de posicionamiento, la guía de RIR, los parciales y el dropset, los consejos, los músculos trabajados, el objetivo y el grupo (Chest, Shoulders, Tríceps, Abs…). Los pesos de arranque que están entre paréntesis (40 kg en la dominada, 10 kg en el curl y el encogimiento) pasan a ser el peso inicial y salen del nombre.
+- **Calentamiento y estiramientos:** el calentamiento (Face Pull, rotación externa, caminadora y movilidad) es una lista que se tilda dentro de la sesión.
+- **Sesión:** cada serie muestra su RIR objetivo y el tempo; un botón "Cómo se hace" abre una hoja con la guía, los consejos y los músculos. Además del peso y las repeticiones se puede anotar el RIR que te quedó. El motor de doble progresión sigue igual.
+- **El horario:** el bloque de 18:00 a 21:00 pasa a ser la caminata de ida (30 min), el entreno (2 h) y la caminata de vuelta (30 min). Cada rutina estima su tiempo y avisa si pasa de las 2 h.
+- **De 21:00 a 22:00:** el bloque pasa a ser "Bañarse, estirar, comer y escribir", con esas cuatro tareas (el estiramiento con los músculos del día), y de ahí a dormir a las 22:00. Reemplaza a "Descansar y preparar mañana".
+- **Lo guardado no se pierde:** las sesiones, los récords y los pesos siguen con los ejercicios de antes; las rutinas viejas se archivan.
+- **Fuente:** el texto de tus rutinas se guarda en `docs/prompts/rutinas-entrenamiento.md` al arrancar la ola.
+- **Aceptación:** las seis rutinas se ven completas en la sesión de entreno, con las series, el tempo y el RIR de cada ejercicio, y la semana arranca con Pull A el lunes.
+
+**Ola 26 · Upper/Lower propias** (Opus 5.5 · medio)
+- Dos rutinas, Upper y Lower, armadas con tu estilo (tempo 2-1-2, RIR 2, 1 y 0, 8 a 12 repeticiones) y con tus ejercicios, y repartidas de modo que cada músculo reciba un volumen semanal parecido al que recibe con tus Push, Pull y Legs.
+- Entran como una plantilla alternativa de la semana ("Upper / Lower"), por ejemplo para una semana con menos días.
+- **A confirmar antes:** cuántos días a la semana y cuándo se usarían.
+
+**A confirmar (entreno)**
+1. **El jueves:** ¿queda libre, con caminata de 45 min como el descanso activo de hoy, o es el día de Upper o Lower?
+2. **Upper/Lower:** ¿como plantilla alternativa de 4 días, o para el jueves de tu semana?
+3. **Los estiramientos** que cierran cada rutina: los puse dentro del bloque de 21:00 a 22:00. ¿Está bien, o los querés al final del entreno?
+4. **"RIR 4 - Abi":** ¿qué indica? ¿Es el RIR de Abi, o que ese ejercicio lo hace ella también? Hoy la sesión en pareja lleva el peso de cada uno por separado.
+5. **Dos detalles de tu texto:** la dominada dice "agarre neutro" en el título y "agarre prono" en la guía, y "Wrist extension" dice que trabaja los flexores del antebrazo (la extensión trabaja los extensores). ¿Los dejo como están o los corrijo?
 
 En el día a día alcanza con **Haiku 5.5 · bajo**: pegás el JSON del cierre y queda commiteado en `data/days/`.
 
