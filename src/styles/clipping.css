@@ -124,14 +124,15 @@
 
 /* Cuentas, campañas y retainers */
 .clip-cuentas, .clip-camps { list-style: none; margin: 0 0 10px; padding: 0; display: grid; gap: 8px; }
-.clip-cuentas li, .clip-camps li { border: 1px solid var(--linea); border-radius: 12px; border-left: 4px solid var(--linea); }
-.clip-cuentas li.luz-ok, .clip-camps li.luz-ok { border-left-color: var(--salud); }
-.clip-cuentas li.luz-medio, .clip-camps li.luz-medio { border-left-color: var(--economia); }
-.clip-cuentas li.luz-mal, .clip-camps li.luz-mal { border-left-color: var(--rutina); }
+.clip-cuentas li, .clip-camps li { border: 1px solid var(--linea); border-radius: 12px; --luz: var(--sub); }
+.clip-cuentas li.luz-ok, .clip-camps li.luz-ok { --luz: var(--salud); }
+.clip-cuentas li.luz-medio, .clip-camps li.luz-medio { --luz: var(--economia); }
+.clip-cuentas li.luz-mal, .clip-camps li.luz-mal { --luz: var(--rutina); }
 .clip-cuentas button, .clip-camps button { width: 100%; display: grid; gap: 4px; padding: 12px 14px; text-align: left; min-height: 56px; }
 .clip-cta-cab { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; }
 .clip-cta-cab b { font-size: 16px; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.clip-estado { font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--sub); flex: none; }
+.clip-estado { font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--sub); flex: none; display: inline-flex; align-items: center; gap: 6px; }
+.clip-estado::before { content: ''; width: 8px; height: 8px; border-radius: 50%; background: var(--luz, var(--sub)); }
 .clip-camp-n { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px; margin-top: 6px; }
 .clip-camp-n span { display: grid; gap: 1px; }
 .clip-camp-n small { font-size: 11px; }
