@@ -386,7 +386,7 @@ Desde el lunes 16 nov 2026 la prioridad es un trabajo remoto de USD 3.000 a 5.00
 | 17 · Rutina de las 08:00 y dormir a las 22:00 | Tercera opción en Buen día (levantarse a las 08:00) con su propio día; en la de las 04:00, entreno de 3 h (18:00 a 21:00), descanso de 21:00 a 22:00 y dormir siempre a las 22:00 (§6 quinquies) | Sonnet 5.5 · medio · *hecha* |
 | 18 · Arreglos y calendario | Submetas en la meta principal, sin zoom al escribir, sin modo entrevista y calendario sin pausas (§6 sexies, pasos 1 y 2) | Sonnet 5.5 · medio |
 | 19 · Entreno | Tus rutinas (PPL + Upper/Lower, lunes a viernes), el horario de 18:00 a 22:00 y las Upper/Lower propias (§6 sexies, pasos 3 y 4) | Sonnet 5.5 · alto |
-| 20 · Programación y metas por bloque | Unidades por área y sistema de libros, metas por bloque con JSON y el roadmap de programación por proyectos (§6 sexies, pasos 5 a 7) | Opus 5.5 · alto |
+| 20 · Programación y metas por bloque | Unidades por área y sistema de libros (con tarjetas, test y tesis; carga *Measure What Matters* con sus 21 capítulos), metas por bloque con JSON y el roadmap de programación por proyectos (§6 sexies, pasos 5 a 7) | Opus 5.5 · alto |
 | 21 · Idiomas y libros | Roadmap maestro v3: un idioma por año durante 6 años (inglés, francés, italiano, alemán, japonés y chino), 12 libros de consolidación, la biblioteca de 42 libros y el ascenso a C1, dentro de Estudio (§6 sexies, paso 8) | Opus 5.5 · alto |
 | 22 · Orden de pantallas | Pasada de UX en Metas, Estudio y Hoy: pantallas livianas con subpáginas y botones, también en los roadmaps de matemática, programación e idiomas (§6 sexies, paso 9) | Sonnet 5.5 · medio |
 
@@ -631,95 +631,136 @@ Pedido del 2026-11-16: juntar las nueve olas que había planeado en pocas, pero 
 | 21 · Idiomas y libros | 8 | Opus 5.5 · alto |
 | 22 · Orden de pantallas | 9 | Sonnet 5.5 · medio |
 
-La 20 va antes que la 21 porque el roadmap de idiomas usa el sistema de libros y las metas por bloque que se construyen en la 20. La 22 va última porque ordena las pantallas de los tres roadmaps.
+La 20 va antes que la 21 porque el roadmap de idiomas usa el sistema de libros y las metas por bloque que se construyen en la 20. La 22 va última porque ordena las pantallas de los tres roadmaps. La 19 no depende de ninguna otra: puede ir antes o después de la 20 (ver "A decidir" al final).
 
 **Decidido (2026-11-16)**
-1. Es **08:00**, y solo cuando te levantás a esa hora: las opciones de 04:00 y 05:00 siguen en pie.
-2. La de las 08:00 vale también el **fin de semana** (el día libre sigue igual).
-3. **Dormir a las 22:00 en todas las rutinas**, por ahora.
-
-**Lo que quedó**
-- `data/routines.json` suma `tarde` (wake 08:00 y los 10 bloques de la tabla). Reusa los ids de siempre (`math`, `prog`, `ingles`, `entreno`…), así la sesión de estudio, las puertas, el entreno y las etiquetas funcionan igual. Se valida al cargar.
-- **Buen día:** tres opciones (04:00, 05:00 y 08:00) más "Otra hora". Si abrís Trazo desde las 07:30, propone la de las 08:00, y muestra el día completo en vez de solo la mañana.
-- **Búsqueda intensiva a las 04:00 y 05:00:** entreno de 18:00 a 21:00 (3 h), "Descansar y preparar mañana" de 21:00 a 22:00 y "Dormir a las 22:00". El fin de semana el descanso se estira hasta las 22:00.
-- **Otras rutinas:** lunes a viernes y con trabajo: desconexión de 20:00 a 21:00 y "Cerrar y preparar mañana" de 21:00 a 22:00. Fin de semana: la desconexión llega a las 22:00. Día libre: se duerme a las 22:00.
-- **Horas por semana de la intensiva:** el entrenamiento pasa de 10 a 15 h.
-- 5 tests nuevos y 3 actualizados.
-
-## 6 sexies. Olas 18 a 21: lo pendiente, en cuatro olas
-
-**Opus 5.5 · alto.** Pedido del 2026-11-16: juntar las olas 18 a 26 en una sola, para que sean menos y se terminen más rápido. Es **un solo PR**, con **9 pasos y un commit por paso** (con sus tests). Cada paso deja la app funcionando, así que si algo falla se corrige sin perder lo anterior. Lo anterior queda en `main` solo cuando el CI pasa entero.
-
-**Decidido (2026-11-16)**
-1. **Corte de 85 %** en todo (tests, puertas, semáforo). El 90 % del texto de estudio no se usa.
-2. **Se conserva el sistema de estudio actual** (día 1 estudiar, día 2 test, día 3 tesis, repasos a +8, +22 y +61 y repaso adaptativo). Solo se toman las unidades por área y el sistema de libros.
+1. **Corte de 85 % en todo**: tests, puertas, semáforo, **idiomas y libros**. El 90 % de los textos de estudio no se usa. Los simulacros de Cambridge se miden contra su propia escala (sobre 180).
+2. **Se conserva el sistema de estudio actual** (día 1 estudiar, día 2 test, día 3 tesis, repasos a +8, +22 y +61, tarjetas FSRS y tope de 20 min de repaso). Solo se suman las unidades por área y el sistema de libros, **que usa ese mismo motor**: tarjetas (los "ankis"), test y tesis.
 3. **Las pausas no existen:** se sacan del calendario. Los stand-by de Handyx y ventas son otra cosa y se quedan.
 4. **Sin modo entrevista:** si hay una entrevista, se practica el día anterior con el pitch armado en el bloque de búsqueda laboral; si es en inglés, en ese mismo bloque.
 5. **"Meta padre"** es la meta principal con sus submetas: las metas numeradas de Hoy y las de Metas.
 6. **Entreno:** la semana es **PPL + Upper/Lower de lunes a viernes**; **sábado y domingo son libres**. Upper el jueves y Lower el viernes. Los estiramientos van de 21:00 a 22:00. "Abi" en el texto era una anotación, no un RIR. Se corrigen los dos detalles (dominada con agarre neutro y "Wrist extension" con extensores del antebrazo).
-7. **Cuatro olas**, en lugar de nueve.
+7. **Idiomas:** el roadmap se adapta **solo a la rutina de búsqueda intensiva** (lunes a viernes y fin de semana) y mantiene las **11,5 h por semana**. La rutina "con trabajo" se arma más adelante, cuando haya trabajo, **y también va a conservar las 11,5 h**; hasta entonces no se toca.
+8. **El año 2 (francés) arranca el 27 de diciembre de 2027**, como dice el roadmap, aunque sea unos 8 meses antes de T+18.
+9. **Ensayo y examen trimestral** cada 13 semanas desde el inicio de cada año, y la **tesis anual** en la última semana del año.
+10. **Capítulos:** pasaste el índice de *Measure What Matters* (ya está en `docs/prompts/measure-what-matters-indice.md`: 21 capítulos y 5 recursos). Los demás libros se cargan con el JSON del paso 6.
+11. **Cinco olas** (18 a 22), no una sola ni nueve.
 
 **Supuesto a confirmar:** como Pull, Legs y Push tienen versión A y versión B y ahora solo hay un día de cada una, **A y B se alternan por semana** (semanas impares del plan con las A, pares con las B). Upper y Lower son iguales todas las semanas. Si preferís otro criterio, se cambia en la semana de entreno.
 
-**Los 9 pasos, por ola**
+---
 
-*Ola 18 · Arreglos y calendario*
+### Ola 18 · Arreglos y calendario (Sonnet 5.5 · medio)
 
-1. **Arreglos de uso.**
-   - **Submetas en la meta principal:** cada meta abierta en Hoy suma **+ Agregar submeta** (con la hoja de la ola 10) y cada meta de Metas suma **+ Submeta**.
-   - **Sin zoom al escribir en el teléfono:** todos los campos pasan a 16 px o más y la hoja se acomoda sobre el teclado sin cortarse. El zoom de accesibilidad con pellizco se conserva.
-   - **Entrevista sin modo propio:** se saca el reemplazo del bloque de inglés y la partición de la búsqueda. El día anterior a una entrevista, la búsqueda laboral suma "Practicar la entrevista de mañana con el pitch armado" y, si es en inglés, "Practicarla en inglés". El aviso entre ramas pasa a decir lo mismo.
+**Paso 1 · Arreglos de uso**
 
-2. **Calendario sin pausas.** Se sacan las 4 pausas. T+18 pasa del 20 al **6 de agosto de 2028** (90 semanas) y el plan termina el **21 de julio de 2030**; W1 pasa a ser del 1 al 21 de febrero de 2027 y Surco v1 arranca el 22 de febrero. Los dos "Descanso" se quedan. **Security+ (C2)** pasa al 31 de mayo a 20 de junio de 2027 y sigue terminando después del 11 de junio: depende de la versión que elijas el 22 de noviembre, y la alerta de decisión lo avisa.
+- **Submetas en la meta principal.** Cada meta abierta en Hoy suma **+ Agregar submeta** (con la hoja de la ola 10) y cada meta de Metas suma **+ Submeta**. Mismos datos que hoy (`submetas` de la meta); la meta padre muestra "2 de 5" y se completa sola cuando están todas.
+- **Sin zoom al escribir en el teléfono.** Todos los campos pasan a **16 px o más** (el zoom de iOS se dispara por debajo de eso) y la hoja se acomoda sobre el teclado sin cortarse. El zoom de accesibilidad con pellizco se conserva: **no** se bloquea con `maximum-scale` ni `user-scalable=no`.
+- **Entrevista sin modo propio.** Se saca el reemplazo "Inglés · modo entrevista" y la partición de la búsqueda (`ajustarDia` en `routines.ts`). El día anterior a una entrevista, el bloque de búsqueda laboral suma "Practicar la entrevista de mañana con el pitch armado" y, si es en inglés, "Practicarla en inglés" en ese mismo bloque. El aviso entre ramas pasa a decir lo mismo. (El bloque de inglés de la intensiva queda con su texto actual hasta la ola 21.)
+- *Tests:* submetas en Hoy y Metas, tamaño de campos (no hay `font-size` < 16 px en inputs, textareas y selects), la hoja con el teclado, y el día anterior a una entrevista con y sin inglés.
 
-*Ola 19 · Entreno*
+**Paso 2 · Calendario sin pausas**
 
-3. **Entreno con tus rutinas.** Reemplazan a las de partida de la ola 5.
-   - **Seis rutinas tuyas:** Pull A, Legs A, Push A, Pull B, Legs B y Push B.
-   - **Semana:** lunes Pull, martes Legs, miércoles Push, jueves Upper, viernes Lower; sábado y domingo libres. A y B alternan por semana. La rutina de las 08:00 de sábado y domingo no lleva entreno.
-   - **Más datos por ejercicio:** tempo con su descripción, RIR objetivo por serie, guía de posicionamiento, guía de RIR, parciales, dropset, consejos, músculos, objetivo y grupo. Los pesos de arranque entre paréntesis (40 kg en la dominada, 10 kg en el curl y el encogimiento) pasan a ser el peso inicial y salen del nombre.
-   - **Sesión:** cada serie muestra su RIR y el tempo; "Cómo se hace" abre la guía, los consejos y los músculos; el calentamiento es una lista que se tilda; se puede anotar el RIR que te quedó. La doble progresión sigue igual.
-   - **El horario:** de 18:00 a 21:00 son 30 min de caminata de ida, 2 h de entreno y 30 min de vuelta; cada rutina estima su tiempo y avisa si pasa de las 2 h. De **21:00 a 22:00:** "Bañarse, estirar, comer y escribir" (el estiramiento con los músculos del día) y de ahí a dormir a las 22:00.
-   - **Lo guardado no se pierde:** las sesiones, los récords y los pesos siguen; las rutinas viejas se archivan. El texto de tus rutinas se guarda en `docs/prompts/rutinas-entrenamiento.md`.
+- Se sacan las 4 pausas de fin de año (PAU1 a PAU4) de `data/plan-extendido.json` y el alias `PAU1: 'pausa'` de `plan.ts`. Los bimestres, los hitos anclados y los textos que decían "pausa de fin de año" se actualizan.
+- **Fechas nuevas:** T+18 pasa del 20 al **6 de agosto de 2028** (90 semanas) y el plan termina el **21 de julio de 2030**; W1 pasa a ser del 1 al 21 de febrero de 2027 y Surco v1 arranca el 22 de febrero. Los dos "Descanso" se quedan. **Security+ (C2)** pasa al 31 de mayo a 20 de junio de 2027 y sigue terminando después del 11 de junio: depende de la versión que elijas el 22 de noviembre, y la alerta de decisión lo avisa.
+- Las extras apagables y el colchón siguen igual. Se actualiza la tabla de `docs/prompts/plan-t18-extendido.md` y los tests que comparan fechas.
+- *Tests:* fechas derivadas de las 90 semanas, hitos y bimestres sin pausa, alertas, y "la app arranca con lo guardado" (un estado guardado con las pausas encendidas o apagadas no rompe).
 
-4. **Upper y Lower propias.** Armadas con tu estilo (tempo 2-1-2, RIR 2, 1 y 0, 8 a 12 repeticiones) y tus ejercicios, con otros ángulos que el Push, Pull y Legs de la misma semana, para que cada músculo se entrene dos veces por semana con un volumen parecido. Entran en una plantilla "PPL + Upper/Lower" que pasa a ser la de fábrica.
+---
 
-*Ola 20 · Programación y metas por bloque*
+### Ola 19 · Entreno (Sonnet 5.5 · alto)
 
-5. **Unidades por área y sistema de libros** (dentro del motor actual, 85 %). Matemática, 1 capítulo; programación, IA y DevSecOps, 1 bloque del curso (unas 4 partes); lenguajes, 1 capítulo, unidad o bloque; libros, cada 2 capítulos. En los libros: una micro-tesis por capítulo, un mini-test cada 2 capítulos, un test y la tesis final. Las micro-tesis pueden dar tarjetas.
+**Paso 3 · Entreno con tus rutinas.** Reemplazan a las de partida de la ola 5.
 
-6. **Metas por bloque e importar JSON.** Cada proyecto, ventana, libro o unidad tiene sus metas propias (con submetas): se arman a mano, se tildan, editan y borran. También se **importan con un JSON** (formato documentado con ejemplo; Trazo valida línea por línea, muestra "Qué cambia" antes de guardar y conserva el avance) y se exportan las tuyas. Reusa el importador de la ola 8.
+- **Seis rutinas tuyas:** Pull A, Legs A, Push A, Pull B, Legs B y Push B. El texto completo que pasaste se guarda en `docs/prompts/rutinas-entrenamiento.md` al arrancar.
+- **Semana:** lunes Pull, martes Legs, miércoles Push, jueves Upper, viernes Lower; **sábado y domingo libres**, también en la rutina de las 08:00. A y B alternan por semana.
+- **Más datos por ejercicio** (`src/data/train-types.ts`): tempo con su descripción, RIR objetivo por serie, guía de posicionamiento, guía de RIR, parciales, dropset, consejos, músculos, objetivo y grupo. Los pesos de arranque entre paréntesis (40 kg en la dominada, 10 kg en el curl y el encogimiento) pasan a ser el **peso inicial** y salen del nombre.
+- **Sesión:** cada serie muestra su RIR y el tempo; **"Cómo se hace"** abre una hoja con la guía, los consejos y los músculos; el calentamiento es una lista que se tilda; se puede anotar el **RIR que te quedó** (opcional). La doble progresión sigue igual.
+- **El horario:** de 18:00 a 21:00 son 30 min de caminata de ida, **2 h de entreno** y 30 min de vuelta; cada rutina estima su tiempo y **avisa si pasa de las 2 h**. De **21:00 a 22:00:** "Bañarse, estirar, comer y escribir" (el estiramiento con los músculos del día) y de ahí a dormir a las 22:00.
+- **Lo guardado no se pierde:** las sesiones, los récords y los pesos siguen; las rutinas viejas se archivan; `migrate()` convierte lo que haga falta.
+- *Tests:* validación de las 6 rutinas, el calendario A/B, semana con sábado y domingo libres, estimación de tiempo y aviso de más de 2 h, migración del estado viejo y la hoja "Cómo se hace".
 
-7. **Roadmap de programación por proyectos.** La card "Programación" de Estudio deja de mandar a leer: pasa a ser un roadmap por proyectos con la estructura del de matemática ("Estás acá", "Hoy sos → Vas a ser" y la escalera de P0 a A7). La meta de programación de Hoy sale de las metas del proyecto en curso. Cada proyecto tiene **subpáginas** con botones: Resumen, Stack y tecnología nueva, Metas, Evidencia, Pieza matemática y Entrega. Las 12 ventanas de matemática suman su **nivel de salida** como lista de criterios que se tilda (por ejemplo, W1: resolver ecuaciones y desigualdades sin ayuda, graficar funciones y calcular varianza, percentiles y cuantiles).
+**Paso 4 · Upper y Lower propias.** Las diseño con tu estilo (tempo 2-1-2, RIR 2, 1 y 0, 8 a 12 repeticiones) y tus ejercicios, con **otros ángulos** que el Push, Pull y Legs de la misma semana, para que cada músculo se entrene dos veces por semana con un volumen parecido. Entran en una plantilla **"PPL + Upper/Lower"** que pasa a ser la de fábrica. Una prueba cuenta las series por músculo y por semana para que no quede ninguno por debajo del resto.
 
-*Ola 21 · Idiomas y libros*
+---
 
-8. **Idiomas y libros: el roadmap maestro v3** (16 nov 2026). Reemplaza al "roadmap de inglés" que tenía previsto: el inglés es el año 1 de un roadmap de **un idioma por año durante 6 años**. El texto completo se guarda en `docs/prompts/roadmap-idiomas-libros.md` al arrancar la ola.
-   - **Estudio → Idiomas**, con la estructura de Matemática y Programación: "Estás acá", "Hoy sos → Vas a ser" (el nivel de cada idioma) y la escalera de los 6 años. Tiene subpáginas: cada año, cada idioma, la biblioteca de libros y el ascenso a C1.
-   - **Año 1 · Inglés (58 semanas, del 16 nov 2026 al 26 dic 2027):** 6 semanas de *Measure What Matters* (16 nov a 27 dic; hito: tesis final y 3 min hablados sin leer), 6 del curso de pronunciación de Udemy más pronunciación aplicada (28 dic a 7 feb; grabación de control del 90 %), 7 de *English Made Simple* y *English Grammar in Use* (8 feb a 28 mar; test y simulacro diagnóstico), 20 de preparación de Cambridge C1 Advanced (29 mar a 15 ago; simulacros sobre 180; se suma *Advanced Grammar in Use*), 7 de colchón y examen real (16 ago a 3 oct; fecha a confirmar) y 12 de consolidación con *Make It Stick* y *Getting to Yes* (4 oct a 26 dic). Las fechas se derivan de las semanas, como el calendario de programación.
-   - **Años 2 a 6** (francés, italiano, alemán, japonés y chino; el año 2 arranca el 27 dic 2027 y el 6 termina el 19 dic 2032): etapa inicial de 40 semanas igual para todos (libro "Made Simple" o "Demystified" 5 sem, libro de gramática 11, curso de pronunciación de Udemy 3, pronunciación aplicada 5, y preparación y examen del nivel del año 16) más 12 semanas de consolidación con 2 libros. Exámenes: DELF B1, CILS o PLIDA B1, Goethe A2, JLPT N4 y HSK 2 a 3. Cada idioma se estudia con material en el anterior.
-   - **Los 12 libros de la Fase A**, 2 por año: *Make It Stick* y *Getting to Yes*; *How to Read a Book* y *Thinking, Fast and Slow*; *Influence* y *Basic Economics*; *The Effective Executive* y *The Intelligent Investor*; *High Output Management* y *Good Strategy Bad Strategy*; *Rhetoric* y *Disciplined Entrepreneurship*.
-   - **Biblioteca de 42 libros núcleo** en 6 bloques de 7 (pensar y negociar, comunicación y ventas, economía e inversión, poder y política, gestión y estrategia, fundar y construir riqueza), con su estado (pendiente, leyendo o terminado) y los 13 opcionales aparte. Los 30 que no son de la Fase A se leen en la Fase B, en el orden de los bloques.
-   - **Fase B (desde el año 7):** el ascenso a C1 de cada idioma, con 40 % de las horas para libros y 60 % para el ascenso: italiano C1 en nov 2033, francés C1 en abr 2035, alemán C1 en ago 2037, los 42 libros en jun 2040, japonés N1 en oct 2041 y chino HSK 6 en feb 2045. Se muestran como hitos con su certificación.
-   - **Cada libro** usa el sistema de libros del paso 5 (unidad de 2 capítulos, micro-tesis por capítulo, mini-test, test y tesis final) y suma un **artefacto** (framework, análisis, política o speech): sin artefacto no cuenta como terminado, como la evidencia de un proyecto. **Cada trimestre** hay un ensayo integrador y un examen trimestral, y **cada año** una tesis anual.
-   - **Integración con el plan T+18:** la rama de inglés del plan (hoy "modo entrevista", "bloque diario de 45 min" y "examen C1" en T+18) pasa a leer este roadmap: las fases del año 1 reemplazan a esas, el bloque de inglés de Hoy dice lo que toca esa semana (lectura, pronunciación, gramática o preparación de Cambridge), el hito T+18 ya no dice "examen C1" porque el examen cae en 2027, y los exámenes entran a las alertas como las certificaciones.
-   - **Horas:** el roadmap supone 11,5 h por semana (5 × 1 h 30 más 2 × 2 h). Coincide con el bloque de inglés de la búsqueda intensiva (1 h 30 de lunes a viernes y 2 h el sábado y el domingo). La app muestra las horas planificadas contra las del bloque.
-   - **Sin verificar (se queda así hasta que lo confirmes):** el curso de Udemy de inglés, los capítulos de *English Made Simple*, la disponibilidad actual de los recursos de cada idioma, los niveles estimados por año y los avales académicos de los libros. El **enlace del curso de Udemy se carga desde la app y queda en el teléfono, no se commitea.** Costos y fechas de los exámenes: sin verificar.
+### Ola 20 · Programación y metas por bloque (Opus 5.5 · alto)
 
-*Ola 22 · Orden de pantallas*
+**Paso 5 · Unidades por área y sistema de libros** (dentro del motor actual, 85 %)
 
-9. **Orden de pantallas.** Una pasada de UX sobre Metas, Estudio y Hoy: lo que ocupa una pantalla larga pasa a una pantalla liviana con botones a subpáginas, con el mismo criterio en los tres roadmaps. Ninguna pantalla pasa de unas 3 pantallas de scroll en el teléfono.
+| Área | Una unidad es |
+|---|---|
+| Matemática | 1 capítulo |
+| Programación, IA y DevSecOps | 1 bloque del curso (unas 4 partes) |
+| Lenguajes | 1 capítulo, unidad o bloque |
+| **Libros** | **2 capítulos** |
+
+- **Sistema de libros.** Cada libro (`data/libros.json`) tiene capítulos y recursos. Por unidad de 2 capítulos: lectura con una **micro-tesis por capítulo** (una frase en tus palabras), **tarjetas** (los "ankis") que salen de las micro-tesis y de lo que marques, un **mini-test** de la unidad y la **tesis de la unidad** a los 3 días. Al terminar el libro: **test final**, **tesis final** y el **artefacto** (framework, análisis, política o speech): sin artefacto no cuenta como terminado, como la evidencia de un proyecto. Repasos a +8, +22 y +61 y tope de 20 min de repaso, como siempre.
+- **El primer libro es *Measure What Matters*** (el que ya estás leyendo desde hoy): 21 capítulos y 5 recursos del índice que pasaste, en 11 unidades (7 en la parte 1 y 4 en la parte 2; ver `docs/prompts/measure-what-matters-indice.md`). Los demás libros entran sin capítulos, con el estado "capítulos sin cargar", y se llenan con el JSON del paso 6.
+- Vale para las demás áreas con la misma regla de unidad: el plan de hoy en Estudio dice "Unidad 3 de 11 · caps. 5 y 6".
+- *Tests:* reparto de las 11 unidades dentro de las 6 semanas, unidad impar (cap. 21 con el Resource 1), corte de 85 % en el mini-test y el final, micro-tesis que generan tarjetas, libro sin artefacto no cuenta como terminado, y las otras áreas conservan lo que ya tienen.
+
+**Paso 6 · Metas por bloque e importar JSON**
+
+- Cada proyecto, ventana, libro o unidad tiene **sus metas propias** (con submetas): se arman a mano, se tildan, editan y borran.
+- **Importar con un JSON:** formato documentado con ejemplo en `docs/`; Trazo valida **línea por línea**, muestra **"Qué cambia"** antes de guardar y conserva el avance. También sirve para cargar **los capítulos de un libro**, y se **exportan** las tuyas. Reusa el importador de la ola 8.
+- *Tests:* validación con errores por línea, "Qué cambia" (agrega, cambia, saca), importación repetida (no duplica) y exportar → importar da lo mismo.
+
+**Paso 7 · Roadmap de programación por proyectos**
+
+- La card "Programación" de Estudio deja de mandar a leer el Tutorial de Python y pasa a ser un **roadmap por proyectos**, con la estructura del de matemática: "Estás acá", "Hoy sos → Vas a ser" y la escalera de P0 a A7. La meta de programación de Hoy sale de las metas del proyecto en curso (paso 6). Se saca la actividad `prog-b1` ("Python y FastAPI") de `study-catalog.ts` sin perder lo ya estudiado.
+- Cada proyecto tiene **subpáginas** con botones: **Resumen, Stack y tecnología nueva, Metas, Evidencia, Pieza matemática y Entrega**. En P0 se arman las metas.
+- Las **12 ventanas de matemática** suman su **nivel de salida** como lista de criterios que se tilda (por ejemplo, W1: resolver ecuaciones y desigualdades sin ayuda, graficar funciones y calcular varianza, percentiles y cuantiles).
+- *Tests:* "Estás acá" por fecha, criterios tildables que alimentan la puerta de la ventana, y las subpáginas por ruta (`#/estudio/prog/P0/metas`).
+
+---
+
+### Ola 21 · Idiomas y libros (Opus 5.5 · alto)
+
+**Paso 8 · El roadmap maestro v3.** Reemplaza al "roadmap de inglés" que tenía previsto: el inglés es el año 1 de un roadmap de **un idioma por año durante 6 años**. El texto completo se guarda en `docs/prompts/roadmap-idiomas-libros.md` al arrancar la ola. Datos en `data/idiomas.json` y `data/libros.json`, módulo `src/data/idiomas.ts` (tipos, validación, fechas derivadas de las semanas, como `calendario()` de programación).
+
+- **Estudio → Idiomas**, con la estructura de Matemática y Programación: "Estás acá", "Hoy sos → Vas a ser" (el nivel de cada idioma) y la escalera de los 6 años. Subpáginas: cada año, cada idioma, la biblioteca de libros y el ascenso a C1.
+- **Año 1 · Inglés (58 semanas, del 16 nov 2026 al 26 dic 2027):**
+
+| Fase | Semanas | Fechas | Hito |
+|---|---|---|---|
+| *Measure What Matters* | 6 | 16 nov – 27 dic | Tesis final y 3 min hablados sin leer |
+| Pronunciación (curso de Udemy) y aplicada | 6 | 28 dic – 7 feb | Grabación de control (85 %) |
+| *English Made Simple* y *English Grammar in Use* | 7 | 8 feb – 28 mar | Test y simulacro diagnóstico |
+| Preparación de Cambridge C1 Advanced (más *Advanced Grammar in Use*) | 20 | 29 mar – 15 ago | Simulacros sobre 180 |
+| Colchón y examen real | 7 | 16 ago – 3 oct | Examen (fecha a confirmar) |
+| Consolidación con *Make It Stick* y *Getting to Yes* | 12 | 4 oct – 26 dic | Tesis anual |
+
+- **Años 2 a 6** (francés, italiano, alemán, japonés y chino; el año 2 arranca el 27 dic 2027 y el 6 termina el 19 dic 2032): etapa inicial de **40 semanas** igual para todos (libro "Made Simple" o "Demystified" 5 sem, libro de gramática 11, curso de pronunciación de Udemy 3, pronunciación aplicada 5, y preparación y examen del nivel del año 16) más **12 semanas de consolidación** con 2 libros. Exámenes: DELF B1, CILS o PLIDA B1, Goethe A2, JLPT N4 y HSK 2 a 3. Cada idioma se estudia con material en el anterior.
+- **Los 12 libros de la Fase A**, 2 por año: *Make It Stick* y *Getting to Yes*; *How to Read a Book* y *Thinking, Fast and Slow*; *Influence* y *Basic Economics*; *The Effective Executive* y *The Intelligent Investor*; *High Output Management* y *Good Strategy Bad Strategy*; *Rhetoric* y *Disciplined Entrepreneurship*.
+- **Biblioteca de 42 libros núcleo** en 6 bloques de 7 (pensar y negociar, comunicación y ventas, economía e inversión, poder y política, gestión y estrategia, fundar y construir riqueza), con su estado (pendiente, leyendo o terminado) y los **13 opcionales** aparte. Los 30 que no son de la Fase A se leen en la Fase B, en el orden de los bloques. *Measure What Matters* es el libro 0 del año 1 y ya llega cargado con sus capítulos desde la ola 20.
+- **Fase B (desde el año 7):** el ascenso a C1 de cada idioma, con 40 % de las horas para libros y 60 % para el ascenso: italiano C1 en nov 2033, francés C1 en abr 2035, alemán C1 en ago 2037, los 42 libros en jun 2040, japonés N1 en oct 2041 y chino HSK 6 en feb 2045. Se muestran como hitos con su certificación.
+- **Cada libro** usa el sistema de libros del paso 5 y suma un **artefacto**. **Cada trimestre** (cada 13 semanas desde el inicio del año) hay un **ensayo integrador** y un **examen trimestral**, y **en la última semana del año** una **tesis anual**. Aparecen en el calendario y en las alertas.
+- **Integración con el plan T+18:** la rama de inglés del plan (hoy "modo entrevista", "bloque diario de 45 min" y "examen C1" en `data/plan.json`) pasa a leer este roadmap: las fases del año 1 reemplazan a esas, el bloque de inglés de Hoy dice lo que toca esa semana (lectura, pronunciación, gramática o preparación de Cambridge), el hito T+18 **ya no dice "examen C1"** porque el examen cae en 2027, y los exámenes entran a las alertas como las certificaciones.
+- **Horas y rutina (solo búsqueda intensiva):** el roadmap supone **11,5 h por semana** (5 × 1 h 30 y 2 × 2 h). Coincide con el bloque de inglés de la intensiva: 1 h 30 de lunes a viernes (13:30 a 15:00 si te levantás a las 04:00 o 05:00, 16:30 a 18:00 si es a las 08:00) y 2 h el sábado y el domingo (12:00 a 14:00). Ese bloque deja de llamarse "modo entrevista" y pasa a "Inglés · *lo que toca esta semana*" con sus tareas. Las horas planificadas se muestran contra las del bloque. **La rutina "con trabajo" no se toca**; se arma después, con las 11,5 h, cuando haya trabajo.
+- **Sin verificar (se queda así hasta que lo confirmes):** el curso de Udemy de inglés, los capítulos de *English Made Simple*, la disponibilidad actual de los recursos de cada idioma, los niveles estimados por año y los avales académicos de los libros. El **enlace del curso de Udemy se carga desde la app y queda en el teléfono, no se commitea** (el repo es público). Costos y fechas de los exámenes: sin verificar.
+- *Tests:* las fechas del año 1 (58 semanas) y de los años 2 a 6, el 19 dic 2032, el reparto de las 11,5 h, trimestres cada 13 semanas, hito T+18 sin "examen C1", alertas de exámenes, libro sin artefacto, y la biblioteca (42 + 13).
+
+---
+
+### Ola 22 · Orden de pantallas (Sonnet 5.5 · medio)
+
+**Paso 9 · Orden de pantallas.** Una pasada de UX sobre Metas, Estudio y Hoy: lo que ocupa una pantalla larga pasa a una **pantalla liviana con botones a subpáginas**, con el mismo criterio en los tres roadmaps (matemática, programación e idiomas). **Ninguna pantalla pasa de unas 3 pantallas de scroll** en el teléfono: una prueba de Playwright a 390 px lo mide. Se arregla también lo pendiente de §3 bis (títulos largos de meta con puntos suspensivos y "Mejora de hoy" en dos líneas).
+
+---
 
 **Aceptación general:** typecheck, tests y build en verde en cada ola; cada paso probado en el navegador a 390 px, en claro y oscuro, sin desbordes; la app arranca con lo ya guardado.
 
-**A confirmar durante las olas**
-1. **Corte de 85 % o 90 % en idiomas y libros.** El roadmap de idiomas dice "test ≥ 90 %", pero decidimos 85 % en todo. Sigo con 85 % salvo que digas otra cosa; los simulacros de Cambridge se miden contra su escala.
-2. **Horas cuando entre el trabajo (ola 21).** La rutina "con trabajo" tiene solo 45 min de inglés por día (unas 3,75 h por semana, no 11,5). El roadmap supone 11,5 h todos los años. ¿Mantenemos el bloque de 1 h 30 y los 2 h del fin de semana también con trabajo?
-3. **El año 2 (francés) arranca el 27 de diciembre de 2027**, unos 8 meses antes de T+18 (6 de agosto de 2028), mientras estás en ciberseguridad y quant. El propio documento propone correr todo si querés que empiecen después. ¿Arranca igual?
-4. **Ensayo y examen trimestral y tesis anual:** el documento no dice cuándo. Propongo cada 13 semanas desde el inicio de cada año y la tesis en la última semana del año.
-5. **Capítulos de cada libro** (empezando por *Measure What Matters*): si no me los pasás, se cargan con el JSON del paso 6 y no frena nada.
-6. **Los dos "Descanso"** (noviembre de 2028 y de 2029) se quedan salvo que digas lo contrario.
-7. **Security+:** la versión (SY0-801 o SY0-701) se decide el 22 de noviembre; no la resuelvo yo.
+**A decidir (con recomendación)**
+1. **Orden de la 19 y la 20.** *Measure What Matters* ya corre desde hoy (16 nov a 27 dic) y el motor de libros recién llega con la ola 20. **Recomiendo 18 → 20 → 19 → 21 → 22**: así el libro actual usa el motor lo antes posible y las semanas que pasen mientras tanto se absorben (los atrasos los absorbe el colchón de la etapa). Si querés primero el entreno, se hace 18 → 19 → 20 y el libro se estudia a mano unos días.
+2. **A y B por semana** (supuesto de arriba): ¿lo dejamos así?
+3. **Los dos "Descanso"** (noviembre de 2028 y de 2029) se quedan salvo que digas lo contrario.
+4. **Security+:** la versión (SY0-801 o SY0-701) se decide el 22 de noviembre; no la resuelvo yo.
+5. **Artefacto de *Measure What Matters*:** propongo un marco de OKR propio para el trimestre; ¿te sirve o preferís otro?
+
+**Más adelante (sin ola todavía)**
+- **Rutina "con trabajo":** se arma cuando haya trabajo, conservando las 11,5 h de idiomas.
+- **Capítulos de los otros 41 libros:** se cargan con el JSON del paso 6 a medida que los empieces.
 
 En el día a día alcanza con **Haiku 5.5 · bajo**: pegás el JSON del cierre y queda commiteado en `data/days/`.
 
