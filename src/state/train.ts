@@ -1,9 +1,9 @@
 import { newId } from '../data/schedule';
 import { weekday } from '../data/study';
 import {
-  adjustDays, exercisesMin, history, isDeloadWeek, nextTarget, orderFor, rangeKey, rangeOf, recordsFor, sessionsInWeek,
+  adjustDays, history, isDeloadWeek, nextTarget, orderFor, rangeKey, rangeOf, recordsFor, sessionsInWeek,
 } from '../data/train';
-import { PLANS } from '../data/train-catalog';
+import { PLANS, RULES } from '../data/train-catalog';
 import type { ActiveSession, Exercise, Medida, Routine, Run, SetLog, Template, TrainState, Who } from '../data/train-types';
 import { getState, setState, updateDay } from './store';
 
@@ -29,8 +29,8 @@ export function startTraining(routineId: string, date: string, partner: boolean)
   const deload = isDeloadWeek(t.sessions, date);
   const draft = Object.fromEntries(athletes.map((w) => [w, draftFor(t, w, first, 0, deload)]));
   const a: ActiveSession = {
-    routineId, date, startedAt: Date.now(), athletes, order, idx: 0, sets: [], draft, who: 'me',
-    restMode: 'each', rest: {}, limitMin: exercisesMin(r), noLimit: false, deload,
+    routineId, date, startedAt: Date.now(), athletes, order, idx: 0, sets: [], draft, who: 'me', warmDone: [],
+    restMode: 'each', rest: {}, limitMin: RULES.limiteMin, noLimit: false, deload,
   };
   update((x) => ({ ...x, active: a }));
 }
@@ -55,6 +55,25 @@ export function goToExercise(idx: number) {
   const e = exerciseAt(a, r, idx);
   const draft = Object.fromEntries(a.athletes.map((w) => [w, draftFor(t, w, e, setsFor(a, w, e.id).length, a.deload)]));
   patchActive((x) => ({ ...x, idx, draft, who: a.athletes.find((w) => !doneWith({ ...a, idx }, e, w)) ?? 'me' }));
+}
+
+/** Tilda (o destilda) un paso del calentamiento. */
+export function tildarCalentamiento(id: string) {
+  patchActive((a) => {
+    const hechos = new Set(a.warmDone ?? []);
+    if (hechos.has(id)) hechos.delete(id);
+    else hechos.add(id);
+    return { ...a, warmDone: [...hechos] };
+  });
+}
+
+/** El RIR que te quedó en la serie que vas a marcar (opcional): volver a tocarlo lo saca. */
+export function setRir(who: Who, rir: number) {
+  patchActive((a) => {
+    const d = a.draft[who] ?? { kg: 0, reps: 0 };
+    const { rir: actual, ...resto } = d;
+    return { ...a, draft: { ...a.draft, [who]: actual === rir ? resto : { ...resto, rir } } };
+  });
 }
 
 export function setWho(who: Who) {
@@ -82,7 +101,7 @@ export function logSet(now = Date.now()) {
   const d = a.draft[who];
   if (!d || doneWith(a, e, who)) return;
   const i = setsFor(a, who, e.id).length + 1;
-  const sets: SetLog[] = [...a.sets, { ex: e.id, who, i, kg: d.kg, reps: d.reps }];
+  const sets: SetLog[] = [...a.sets, { ex: e.id, who, i, kg: d.kg, reps: d.reps, ...(d.rir != null ? { rir: d.rir } : {}) }];
   const na: ActiveSession = { ...a, sets };
   const rest = { ...a.rest };
   const restMs = e.rest * 1000;
@@ -103,7 +122,7 @@ export function logSet(now = Date.now()) {
 export function undoLastSet() {
   patchActive((a) => {
     const last = a.sets[a.sets.length - 1];
-    return last ? { ...a, sets: a.sets.slice(0, -1), who: last.who, draft: { ...a.draft, [last.who]: { kg: last.kg, reps: last.reps } } } : a;
+    return last ? { ...a, sets: a.sets.slice(0, -1), who: last.who, draft: { ...a.draft, [last.who]: { kg: last.kg, reps: last.reps, ...(last.rir != null ? { rir: last.rir } : {}) } } } : a;
   });
 }
 

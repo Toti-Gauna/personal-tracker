@@ -8,12 +8,13 @@ import { routineFor } from '../data/routines';
 import { emptyPlan, DEFAULT_PLAN_SETTINGS, type PlanSettings, type PlanState } from '../data/plan-state';
 import { semanaDelPlan, tramoActivo, ventanaW } from '../data/plan';
 import { tareasDeBloque } from '../data/metas-bloque';
+import { plannedFor } from '../data/train';
 import { addDays, dateKey } from '../data/time';
 import { emptyStudy } from '../data/study-catalog';
 import { defaultGoals, emptyGoals, RAMA_DE_SEMILLA, REEMPLAZADAS_POR_PLAN } from '../data/goals-catalog';
 import type { Goal, GoalsState } from '../data/goals-types';
 import { periodKey } from '../data/goals';
-import { emptyTrain } from '../data/train-catalog';
+import { emptyTrain, migrarEntreno } from '../data/train-catalog';
 import { emptyRuta, refsForDay, type RutaState } from '../data/ruta';
 import { applySettings } from './apply';
 import { aplicarCalendario } from '../data/plan';
@@ -62,7 +63,7 @@ export function migrate(parsed: any): State {
   const base = emptyStudy();
   const study = parsed.study ? migrateStudy({ ...base, ...parsed.study, attempts: parsed.study.attempts ?? [], rules: { ...base.rules, ...parsed.study.rules, pesos: { ...base.rules.pesos, ...parsed.study.rules?.pesos } } }) : base;
   const goals = parsed.goals ? { ...emptyGoals(), ...parsed.goals } : null;
-  const train = parsed.train ? { ...emptyTrain(), ...parsed.train } : emptyTrain();
+  const train = parsed.train ? migrarEntreno({ ...emptyTrain(), ...parsed.train, ...(parsed.train.v ? {} : { v: undefined }) }) : emptyTrain();
   const ruta = { ...emptyRuta(), ...(parsed.ruta ?? {}) };
   // Ola 8: el plan T+18 arranca vacío; los días ya guardados no cambian.
   let plan = { ...emptyPlan(), ...(parsed.plan ?? {}) };
@@ -187,9 +188,12 @@ export function startDay(routine: RoutineId, wake: string, date = dateKey()) {
     // Ola 20: la meta de programación sale de las metas del proyecto en curso (si las hay).
     const proyecto = tramoActivo(date, t0).id;
     const delProyecto = tareasDeBloque(s.plan.metasBloque?.[proyecto]);
+    // Ola 19: el estiramiento de las 21:00 a 22:00 lleva los músculos de la rutina del día.
+    const estirar = plannedFor(s.train, date, t0 ?? T0_PLAN).routine?.estiramiento?.musculos;
     const blocks = buildBlocks(planDay(date, routine, wake, dayType, { ventana, entrevista, puerta }), carry)
       .map((b) => (refs[b.key] ? { ...b, ...refs[b.key] } : b))
-      .map((b) => (b.rama === 'programacion' && delProyecto.length ? { ...b, tasks: [...delProyecto.map((t) => ({ id: newId(), t: `${proyecto} · ${t}`, done: false })), ...b.tasks] } : b));
+      .map((b) => (b.rama === 'programacion' && delProyecto.length ? { ...b, tasks: [...delProyecto.map((t) => ({ id: newId(), t: `${proyecto} · ${t}`, done: false })), ...b.tasks] } : b))
+      .map((b) => (b.key === 'cierre' && estirar ? { ...b, tasks: b.tasks.map((x) => (x.t === 'Estirar' ? { ...x, t: `Estirar: ${estirar}` } : x)) } : b));
     const day: DayLog = { date, wake, routine, dayType, ...(ventana ? { ventana } : {}), blocks, notes: [], focus: [] };
     return { ...s, days: { ...s.days, [date]: day }, carry: restCarry };
   });

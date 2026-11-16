@@ -1,3 +1,4 @@
+import { T0_PLAN } from './plan';
 import { REST_DAY, REST_DAY_MIN, RULES } from './train-catalog';
 import type { Exercise, Medida, Routine, Run, RunKind, SetLog, TrainRecord, TrainSession, TrainState, Who } from './train-types';
 import { addDays, daysBetween } from './time';
@@ -10,10 +11,19 @@ export const exerciseMin = (e: Exercise) => (e.sets * (RULES.setSec + e.rest)) /
 /** Lo de los ejercicios, redondeado a 5 min: es el tiempo del bloque de entreno. */
 export const exercisesMin = (r: Routine) => Math.max(5, Math.round(r.exercises.reduce((s, e) => s + exerciseMin(e), 0) / 5) * 5);
 export const stepsMin = (xs: { min: number }[]) => xs.reduce((s, x) => s + x.min, 0);
-export const totalMin = (r: Routine) => stepsMin(r.before) + exercisesMin(r) + stepsMin(r.after);
+/** El calentamiento de una rutina, en minutos. */
+export const warmMin = (r: Routine) => Math.round((r.calentamiento ?? []).reduce((s, w) => s + w.min, 0));
+/** Lo que dura el entrenamiento de verdad: calentamiento y ejercicios (sin las caminatas). */
+export const trainingMin = (r: Routine) => warmMin(r) + exercisesMin(r);
+/** Con las dos caminatas: la ida y la vuelta. */
+export const totalMin = (r: Routine) => stepsMin(r.before) + trainingMin(r) + stepsMin(r.after);
+/** ¿Pasa de las 2 h del bloque? Se avisa antes de empezar. */
+export const pasaDelLimite = (r: Routine) => trainingMin(r) > RULES.limiteMin;
 
 /** "3 × 6-8 · 2 min" / "3 × 12 · 90 s". */
-export const setsLabel = (e: Exercise) => `${e.sets} × ${e.repMin === e.repMax ? e.repMin : `${e.repMin}-${e.repMax}`}`;
+export const setsLabel = (e: Exercise) => `${e.sets} × ${e.repMin === e.repMax ? e.repMin : `${e.repMin}-${e.repMax}`}${e.unidad === 's' ? ' s' : ''}`;
+/** "RIR 2-1-0". */
+export const rirLabel = (e: Pick<Exercise, 'rir'>) => (e.rir?.length ? `RIR ${e.rir.join('-')}` : '');
 export const restLabel = (s: number) => (s >= 120 && s % 60 === 0 ? `${s / 60} min` : `${s} s`);
 export const clock = (s: number) => `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}`;
 
@@ -76,7 +86,10 @@ const round05 = (x: number) => Math.round(x * 2) / 2;
 export function nextTarget(h: Hist[], e: Exercise, range: [number, number], deload = false): Target {
   const [lo, hi] = range;
   const n = e.sets;
-  if (!h.length) return { kg: 0, reps: Array(n).fill(lo), kind: 'nuevo', note: 'elegí tu peso' };
+  if (!h.length) {
+    const kg = e.pesoInicial ?? 0;
+    return { kg, reps: Array(n).fill(lo), kind: 'nuevo', note: kg ? `arrancá con ${fmtKg(kg)} kg` : e.corporal ? 'peso corporal' : 'elegí tu peso' };
+  }
   const last = h[h.length - 1];
   const reps = Array.from({ length: n }, (_, i) => Math.min(hi, last.reps[i] ?? lo));
   if (deload) {
@@ -134,12 +147,31 @@ export const sessionsInWeek = (t: Pick<TrainState, 'sessions'>, date: string) =>
   return t.sessions.filter((s) => s.date >= m && s.date <= e);
 };
 
-/** Lo planeado para una fecha: la rutina, o el descanso activo. */
-export function plannedFor(t: Pick<TrainState, 'plan' | 'routines'>, date: string) {
+/**
+ * Pull, Legs y Push tienen versión A y B y se alternan por semana: la semana del plan que arranca el
+ * lunes de T0 es la 1 (A); las impares, A; las pares, B.
+ */
+export function esSemanaA(date: string, t0 = T0_PLAN) {
+  const sem = Math.floor(daysBetween(monday(t0), monday(date)) / 7);
+  return ((sem % 2) + 2) % 2 === 0;
+}
+
+/** La rutina de un día de la semana: la que tiene ese id o, si es un día (push), la A o la B de esta semana. */
+export function rutinaDelDia(routines: Routine[], id: string | null, date: string, t0 = T0_PLAN): Routine | null {
+  if (!id) return null;
+  const vivas = routines.filter((r) => !r.archivada);
+  const directa = vivas.find((r) => r.id === id);
+  if (directa) return directa;
+  const vs = vivas.filter((r) => r.slot === id && r.variante);
+  return vs.find((r) => r.variante === (esSemanaA(date, t0) ? 'A' : 'B')) ?? vs[0] ?? null;
+}
+
+/** Lo planeado para una fecha: la rutina, el descanso activo o un día libre. */
+export function plannedFor(t: Pick<TrainState, 'plan' | 'routines'>, date: string, t0 = T0_PLAN) {
   const id = t.plan.days[weekday(date)];
-  if (id === REST_DAY) return { rest: true as const, routine: null, id };
-  const routine = t.routines.find((r) => r.id === id) ?? null;
-  return { rest: false as const, routine, id };
+  if (id === REST_DAY) return { rest: true as const, libre: false as const, routine: null, id };
+  const routine = rutinaDelDia(t.routines, id, date, t0);
+  return { rest: false as const, libre: !id, routine, id };
 }
 
 /**
@@ -224,3 +256,46 @@ export function medidasPendientes(medidas: Medida[], date: string) {
  */
 export const debePreguntarPeso = (t: Pick<TrainState, 'weights' | 'pesoPreguntado' | 'active'>, date: string) =>
   !t.pesoPreguntado.includes(date) && !t.weights.some((w) => w.date === date) && !t.active;
+
+// ——— Ola 19: la ficha de cada ejercicio y los días de la semana ———
+
+/** "2-1-2" → "2 s bajando — 1 s de pausa — 2 s subiendo". */
+export function tempoTexto(tempo: string) {
+  const [a, b, c] = tempo.split('-');
+  return `${a} s bajando — ${b} s de pausa — ${c} s subiendo`;
+}
+
+/** Lo que muestra "Cómo se hace": solo las filas que el ejercicio trae. */
+export function ficha(e: Pick<Exercise, 'tempo' | 'tempoDesc' | 'rir' | 'rirGuia' | 'posicion' | 'parciales' | 'dropset' | 'tips' | 'musculos' | 'objetivo' | 'nota'>): [string, string][] {
+  const mayus = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
+  const rows: [string, string | undefined][] = [
+    ['Tempo', e.tempo ? `${e.tempo} · ${e.tempoDesc ?? tempoTexto(e.tempo)}` : undefined],
+    ['RIR por serie', e.rir?.length ? `${e.rir.join(' · ')}${e.rirGuia ? ` — ${e.rirGuia}` : ''}` : e.rirGuia],
+    ['Posicionamiento', e.posicion],
+    ['Parciales', e.parciales],
+    ['Dropset', e.dropset],
+    ['Consejo', e.tips ? mayus(e.tips) : undefined],
+    ['Músculos', e.musculos],
+    ['Objetivo', e.objetivo],
+    ['Nota', e.nota],
+  ];
+  return rows.filter((r): r is [string, string] => !!r[1]);
+}
+
+/** Qué se puede poner en un día de la semana: cada día (Pull, Legs, Push) una sola vez, con su A y B por semana. */
+export function opcionesDia(routines: Routine[]): { id: string; nombre: string; alterna: boolean }[] {
+  const out: { id: string; nombre: string; alterna: boolean }[] = [];
+  for (const r of routines.filter((x) => !x.archivada)) {
+    if (r.slot && r.variante) {
+      if (!out.some((o) => o.id === r.slot)) out.push({ id: r.slot, nombre: r.name.replace(/ [AB]$/, ''), alterna: true });
+    } else out.push({ id: r.id, nombre: r.name, alterna: false });
+  }
+  return out;
+}
+
+/** Cuántas series por semana lleva cada grupo muscular, sumando los entrenos de la semana tipo (cada día cuenta una vez). */
+export function seriesPorGrupo(rutinas: Routine[]): Record<string, number> {
+  const out: Record<string, number> = {};
+  for (const r of rutinas) for (const e of r.exercises) if (e.grupo) out[e.grupo] = (out[e.grupo] ?? 0) + e.sets;
+  return out;
+}

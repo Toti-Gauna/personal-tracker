@@ -195,3 +195,27 @@
 .rest-card.late { animation: late 0.6s ease-in-out 5 alternate; }
 @keyframes late { from { transform: scale(1); } to { transform: scale(1.03); } }
 @media (prefers-reduced-motion: reduce) { .rest-card.late { animation: none; } }
+
+/* Ola 19 · calentamiento, RIR y "Cómo se hace" */
+.calentamiento { margin: 14px 0; border: 1px solid var(--linea); border-radius: var(--radius); padding: 0 14px; }
+.calentamiento summary { display: flex; align-items: center; justify-content: space-between; gap: 10px; min-height: 48px; cursor: pointer; }
+.calentamiento ul { list-style: none; margin: 0 0 10px; padding: 0; }
+.calentamiento li { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 12px; min-height: 52px; border-top: 1px solid var(--linea); padding: 6px 0; }
+.calentamiento label { display: grid; gap: 2px; cursor: pointer; min-width: 0; }
+.calentamiento label small { color: var(--sub); font-size: 13px; overflow-wrap: anywhere; }
+.ej-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 14px; margin: 2px 0 10px; }
+.rir-fila { display: grid; gap: 6px; margin: 8px 0 12px; }
+.rir-chips { display: flex; gap: 8px; }
+.rir-chips button { flex: 1; min-height: 44px; border: 1px solid var(--linea); border-radius: 10px; font-family: var(--font-mono); font-size: 16px; }
+.rir-chips button[aria-pressed='true'] { background: var(--tinta); color: var(--papel); border-color: var(--tinta); }
+.ficha { display: grid; gap: 12px; margin: 10px 0 16px; }
+.ficha div { display: grid; gap: 2px; }
+.ficha dt { font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--sub); }
+.ficha dd { margin: 0; font-size: 16px; line-height: 1.4; overflow-wrap: anywhere; }
+.ficha-pasos { margin: 6px 0 12px; padding-left: 20px; display: grid; gap: 2px; }
+.ficha-resumen { margin: 0 0 8px; }
+.aviso-limite { margin: 8px 0; padding: 10px 12px; border-left: 3px solid var(--rutina); background: color-mix(in srgb, var(--rutina) 10%, transparent); font-size: 14px; }
+.nota-estira { margin: 8px 0 14px; }
+.rut-t small { font-size: 0.5em; font-weight: 400; color: var(--sub); }
+.sesion-entreno .ej-t { font-size: clamp(28px, 8.5vw, 40px); overflow-wrap: anywhere; }
+.rut-enfoque { margin: -4px 0 10px; }

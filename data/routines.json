@@ -715,13 +715,14 @@
      "focus": true,
      "rama": "salud",
      "tasks": [
-      "Caminata y movilidad",
-      "Rutina del día"
+      "Caminar 30 min de ida",
+      "Entrenar: la rutina del día (2 h)",
+      "Caminar 30 min de vuelta"
      ]
     },
     {
      "id": "cierre",
-     "label": "Descansar y preparar mañana",
+     "label": "Bañarse, estirar, comer y escribir",
      "short": "el cierre",
      "start": "21:00",
      "end": "22:00",
@@ -730,8 +731,10 @@
      "focus": false,
      "rama": "main",
      "tasks": [
-      "Cerrar el día en 5 min",
-      "Preparar mañana"
+      "Bañarse",
+      "Estirar",
+      "Comer",
+      "Escribir"
      ]
     },
     {
@@ -745,7 +748,7 @@
      "focus": false,
      "rama": "salud",
      "tasks": [
-      "En la cama a las 21:00"
+      "En la cama a las 22:00"
      ]
     }
    ]
@@ -906,7 +909,7 @@
      "focus": false,
      "rama": "salud",
      "tasks": [
-      "En la cama a las 21:00"
+      "En la cama a las 22:00"
      ]
     }
    ]
@@ -1032,13 +1035,14 @@
     "focus": true,
     "rama": "salud",
     "tasks": [
-     "Caminata y movilidad",
-     "Rutina del día"
+     "Caminar 30 min de ida",
+     "Entrenar: la rutina del día (2 h)",
+     "Caminar 30 min de vuelta"
     ]
    },
    {
     "id": "cierre",
-    "label": "Descansar y preparar mañana",
+    "label": "Bañarse, estirar, comer y escribir",
     "short": "el cierre",
     "start": "21:00",
     "end": "22:00",
@@ -1047,8 +1051,10 @@
     "focus": false,
     "rama": "main",
     "tasks": [
-     "Cerrar el día en 5 min",
-     "Preparar mañana"
+     "Bañarse",
+     "Estirar",
+     "Comer",
+     "Escribir"
     ]
    },
    {
@@ -1062,7 +1068,7 @@
     "focus": false,
     "rama": "salud",
     "tasks": [
-     "En la cama a las 21:00"
+     "En la cama a las 22:00"
     ]
    }
   ]

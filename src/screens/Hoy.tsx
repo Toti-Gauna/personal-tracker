@@ -126,7 +126,7 @@ export function Hoy({ day }: { day: DayLog }) {
           // Una meta de estudio abre su sesión de estudio; el resto, elegir pomodoro.
           const act = b.kind === 'estudio' ? activitiesFor(study, day.date).find((a) => a.block === b.key) : undefined;
           // La meta de entreno abre la sesión de entreno (o Entreno, si hoy no hay rutina).
-          const hoyRut = b.kind === 'entreno' ? plannedFor(train, day.date).routine : null;
+          const hoyRut = b.kind === 'entreno' ? plannedFor(train, day.date, settings.startDate || undefined).routine : null;
           const entrenando = b.kind === 'entreno' && train.active?.date === day.date;
           const entrenado = b.kind === 'entreno' && !entrenando && train.sessions.some((s) => s.date === day.date);
           const destino = b.kind === 'entreno'

@@ -18,8 +18,9 @@ const EJEMPLO = [
 export function MotorEntreno({ day }: { day: DayLog }) {
   const t = useStore((s) => s.train);
   const names = useStore((s) => s.settings!.names);
-  const plan = plannedFor(t, day.date);
-  const r = plan.routine ?? t.routines.find((x) => x.id === t.sessions[t.sessions.length - 1]?.routineId) ?? t.routines[0];
+  const t0 = useStore((s) => s.settings?.startDate) || undefined;
+  const plan = plannedFor(t, day.date, t0);
+  const r = plan.routine ?? t.routines.find((x) => x.id === t.sessions[t.sessions.length - 1]?.routineId) ?? t.routines.find((x) => !x.archivada) ?? t.routines[0];
   const whos = t.active?.athletes ?? t.sessions[t.sessions.length - 1]?.athletes ?? (['me', 'partner'] as const);
   const prox = nextFor(t, r, [...whos], day.date);
   const hay = t.sessions.length > 0;
