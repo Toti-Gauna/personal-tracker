@@ -3,6 +3,7 @@ import { AREAS } from '../data/defaults';
 import { fmtPct } from '../data/mejora';
 import { DAY_ROUTINES, DAY_TYPES, WAKE, blockMin, isMeta, metasOf } from '../data/routines';
 import { fmtDur } from '../data/time';
+import { Plegable } from '../ui/Plegable';
 import { getState, resetState, setState, useStore } from '../state/store';
 import { markBackup, setNames } from '../state/profile';
 import { reviewsJson, testsJson } from '../data/debiles';
@@ -29,8 +30,9 @@ export function AjustesRutinas() {
         const metas = metasOf(t);
         let n = 0;
         return (
-          <section key={t} className="rutina-aj" aria-labelledby={`rut-${t}`}>
-            <div className="fila-t"><h2 id={`rut-${t}`} className="titulo">{r.label}</h2><span className="mono sub">{r.days ? r.days.map((d) => ISO[d]).join(' ') : r.libre ? 'día libre' : 'desde T+2'}</span></div>
+          <Plegable key={t} id={`rutina:${t}`} titulo={r.label} resumen={`${metas.length} metas`} abierto={t === DAY_TYPES[0]}>
+          <section className="rutina-aj" aria-label={r.label}>
+            <div className="fila-t"><span className="mono sub">{r.days ? r.days.map((d) => ISO[d]).join(' ') : r.libre ? 'día libre' : 'desde T+2'}</span></div>
             <p className="sub rd-res">{metas.length} {metas.length === 1 ? 'meta' : 'metas'} · cada una vale {fmtPct(1 / metas.length, 3).replace(/,?0+$/, '')} %</p>
             <ol className="rd-bloques">
               {r.blocks.map((b) => {
@@ -46,6 +48,7 @@ export function AjustesRutinas() {
               })}
             </ol>
           </section>
+          </Plegable>
         );
       })}
       <p className="sub nota-izq">Para cambiar horarios o bloques, se edita data/routines.json en el repo.</p>

@@ -18,7 +18,7 @@
   display: grid; grid-template-columns: 1fr auto auto; align-items: center; gap: 12px;
   border: 1px solid var(--linea); border-radius: 10px; padding: 14px 16px; margin-bottom: 16px;
 }
-.mejora b { display: block; font-weight: 600; }
+.mejora b { display: block; font-weight: 600; white-space: nowrap; }
 .mejora small { display: block; color: var(--sub); font-size: 13px; white-space: nowrap; }
 .mejora > div:first-child { min-width: 0; }
 .mejora-seg { display: flex; gap: 3px; }
@@ -50,9 +50,10 @@
 }
 .meta.hecha .meta-check { background: var(--c); }
 .meta-n { color: var(--sub); font-size: 14px; text-align: center; }
-.meta-tit { display: flex; align-items: baseline; min-width: 0; }
-.meta-nombre { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 18px; }
-.meta-hora { flex: none; margin-left: 11px; font-size: 12px; color: var(--sub); white-space: nowrap; }
+.meta-tit { display: flex; align-items: flex-start; min-width: 0; }
+/* Ola 22: el título largo pasa a dos líneas y recién después se corta con elipsis; la hora no baja de línea. */
+.meta-nombre { min-width: 0; overflow: hidden; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; line-clamp: 2; overflow-wrap: anywhere; font-size: 18px; line-height: 1.2; }
+.meta-hora { flex: none; margin-left: 11px; margin-top: 5px; font-size: 12px; color: var(--sub); white-space: nowrap; }
 .meta-cont { font-size: 14px; color: var(--sub); padding-left: 8px; }
 .meta.hecha .meta-nombre { color: var(--sub); }
 .meta.abierta .meta-nombre, .meta.activa .meta-nombre { color: var(--tinta); text-decoration: underline; text-decoration-thickness: 2px; text-decoration-color: var(--c); text-underline-offset: 5px; }

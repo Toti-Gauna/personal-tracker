@@ -7,6 +7,7 @@ import { PLAN, T0_PLAN } from '../data/plan';
 import { PLAN_EXT, ROL_REFUERZO } from '../data/plan-extendido';
 import { PUERTA, TEXTO_LUZ, estadoEn, perfilMate, refuerzoPara, rutaMate, type ItemMate } from '../data/plan-vistas';
 import { puertaAprobada } from '../data/puertas';
+import { EscaleraCompacta } from '../ui/EscaleraCompacta';
 import type { DayLog } from '../data/types';
 import { useStore } from '../state/store';
 import { NivelSalida } from '../ui/FichaBloque';
@@ -76,28 +77,22 @@ export function MatePlan({ day, param }: { day: DayLog; param: string }) {
       </section>
 
       <span className="etiqueta">La escalera · las ventanas van siempre antes del proyecto que las pide</span>
-      <ol className="re-tl">
-        {porEtapa.flatMap((xs) => xs.map((x, i) => {
+      <EscaleraCompacta etiqueta="Escalera de matemática por etapa" color="var(--economia)" grupos={porEtapa.map((xs) => ({
+        id: `mate:etapa:${xs[0].etapa}`,
+        titulo: ETAPA[xs[0].etapa],
+        resumen: `${xs.filter((x) => estadoEn(x, day.date) === 'hecho').length} de ${xs.length} tramos`,
+        abierto: false,
+        items: xs.map((x) => {
           const est = estadoEn(x, day.date);
           const gate = PLAN.programacion.puertas[x.id];
           const ok = gate ? puertaAprobada(plan, x.id) : null;
-          return (
-            <li key={x.id} className={est === 'hecho' ? 'cerrada' : est}>
-              {i === 0 && <div className="re-anio"><b>{ETAPA[x.etapa]}</b></div>}
-              <a href={`#/estudio/mate/${x.id}`} aria-current={est === 'actual' ? 'step' : undefined}>
-                <span className="re-nodo" aria-hidden="true">{est === 'hecho' ? '✓' : ''}</span>
-                <span className="re-tl-cuerpo">
-                  <span className="mono re-tl-et">{x.id} · {f(x.inicio)} a {f(x.fin)} · {x.semanas} sem{est === 'actual' ? ' · estás acá' : ''}{gate ? ` · puerta de ${gate}${ok ? ' aprobada' : ''}` : ''}</span>
-                  <b>{x.tipo === 'ventana' ? x.nombre : x.principal.join(' y ')}</b>
-                  <span className="re-tl-perfil"><span className={est === 'actual' ? 'resaltado' : ''}>{x.perfil}</span></span>
-                  <span className="sub re-tl-libros">Habilita: {x.habilita.join(', ')}</span>
-                </span>
-                <span className="re-tl-ir" aria-hidden="true">→</span>
-              </a>
-            </li>
-          );
-        }))}
-      </ol>
+          return {
+            id: x.id, href: `#/estudio/mate/${x.id}`, estado: est, aqui: est === 'actual',
+            titulo: `${x.id} · ${x.tipo === 'ventana' ? x.nombre : x.principal.join(' y ')}`,
+            sub: `${f(x.inicio)} a ${f(x.fin)} · ${x.semanas} sem${gate ? ` · puerta de ${gate}${ok ? ' aprobada' : ''}` : ''}`,
+          };
+        }),
+      }))} />
 
       <a className="fila-link" href="#/estudio/ruta/matematica">Material de refuerzo: M0 a M10 por fases <span aria-hidden="true">→</span></a>
     </main>

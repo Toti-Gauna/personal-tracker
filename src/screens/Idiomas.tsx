@@ -15,6 +15,7 @@ import type { DayLog } from '../data/types';
 import { lunesDe } from '../state/plan';
 import { guardarEnlaceIdioma, useStore } from '../state/store';
 import { toast } from '../ui/avisos';
+import { Plegable } from '../ui/Plegable';
 import '../styles/estudio.css';
 import '../styles/roadmap-estudio.css';
 
@@ -231,17 +232,17 @@ function BibliotecaPantalla({ day }: { day: DayLog }) {
       {mwm && <a className="fila-link" href="#/estudio/libro/mwm">Libro inicial: {mwm.titulo} <span aria-hidden="true">→</span></a>}
       <p className="sub">Para cargar los capítulos de un libro, pegá en <a className="subrayado" href="#/importar">Importar</a> un JSON con <code>"tipo": "libro"</code> y el id que figura acá (por ejemplo <code>make-it-stick</code>).</p>
 
-      <span className="etiqueta">Fase A · 2 libros por año</span>
-      <ol className="id-bib">{anios.flatMap((a) => todos.filter((l) => l.faseA === a.n)).map(fila)}</ol>
-
+      <Plegable id="bib:faseA" titulo="Fase A · 2 libros por año" resumen={`${todos.filter((l) => l.faseA && estadoBiblioteca(study, l.id).estado === 'terminado').length} de 12`} color={COLOR} abierto>
+        <ol className="id-bib">{anios.flatMap((a) => todos.filter((l) => l.faseA === a.n)).map(fila)}</ol>
+      </Plegable>
       {BIBLIOTECA.bloques.map((b) => (
-        <section key={b.n} aria-label={b.nombre}>
-          <span className="etiqueta">Bloque {b.n} · {b.nombre}</span>
+        <Plegable key={b.n} id={`bib:bloque:${b.n}`} titulo={`Bloque ${b.n} · ${b.nombre}`} resumen={`${b.libros.filter((l) => estadoBiblioteca(study, l.id).estado === 'terminado').length} de ${b.libros.length}`} color={COLOR}>
           <ol className="id-bib">{b.libros.map(fila)}</ol>
-        </section>
+        </Plegable>
       ))}
-      <span className="etiqueta">Opcionales · fuera del núcleo</span>
-      <ol className="id-bib">{BIBLIOTECA.opcionales.map(fila)}</ol>
+      <Plegable id="bib:opcionales" titulo="Opcionales · fuera del núcleo" resumen={`${BIBLIOTECA.opcionales.length} libros`} color={COLOR}>
+        <ol className="id-bib">{BIBLIOTECA.opcionales.map(fila)}</ol>
+      </Plegable>
       <p className="sub">Los 30 que no son de la Fase A se leen en la Fase B (desde el año 7), en el orden de los bloques. Hoy: {day.date < anios[anios.length - 1].fin ? 'Fase A' : 'Fase B'}.</p>
     </main>
   );

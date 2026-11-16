@@ -22,6 +22,7 @@ import { addProgress, deleteGoal, renameBimester, stepOf } from '../state/goals'
 import { togglePasoMapa, marcarHito, moverHito, confirmarMetas, editarMeta, editarMetaFija, ensayarRespuesta, lunesDe, sumarContador, sumarHandyx, sumarHechoMeta } from '../state/plan';
 import { planSettings, useStore } from '../state/store';
 import { Calendario } from '../ui/Calendario';
+import { Plegable } from '../ui/Plegable';
 import { Casilla } from '../ui/Casilla';
 import { GoalRow } from '../ui/GoalRow';
 import { usePlanVista } from '../ui/usePlan';
@@ -60,9 +61,9 @@ function HitosRango({ desde, hasta, date }: { desde: string; hasta: string; date
   const t0 = useStore((s) => s.settings?.startDate);
   const hs = hitosEntre(date, desde, hasta, plan.hitos ?? {}, t0);
   if (!hs.length) return null;
+  const vencidos = hs.filter((h) => h.estado === 'vencido').length;
   return (
-    <>
-      <div className="etiqueta pp-sec">Hitos del período</div>
+    <Plegable id={`hitos:${desde}`} titulo="Hitos del período" resumen={`${hs.filter((h) => h.estado === 'hecho').length} de ${hs.length}${vencidos ? ` · ${vencidos} vencido${vencidos === 1 ? '' : 's'}` : ''}`} abierto={vencidos > 0}>
       <ul className="mp-hitos">
         {hs.map((h) => {
           const c = h.rama === 'main' ? 'var(--tinta)' : colorMapa(h.rama);
@@ -78,7 +79,7 @@ function HitosRango({ desde, hasta, date }: { desde: string; hasta: string; date
           );
         })}
       </ul>
-    </>
+    </Plegable>
   );
 }
 
@@ -90,16 +91,14 @@ function MapaPortfolio() {
   const pasos = useStore((s) => s.plan.mapaPortfolio) ?? {};
   const n = PASOS_MAPA.filter(([k]) => pasos[k]).length;
   return (
-    <section className="mg-grupo mp-grupo" style={{ ['--c' as string]: RAMA_COLOR.programacion }}>
-      <div className="mp-rama-cab"><span className="mono mp-rama">programacion · meta</span><span className="mono sub">{n}/{PASOS_MAPA.length}</span></div>
-      <div className="mg-grupo-cab"><h2 className="resaltado">Mapa de proyectos del portfolio</h2></div>
+    <Plegable id="mapa-portfolio" titulo="Mapa de proyectos del portfolio" kicker="programacion · meta" resumen={`${n}/${PASOS_MAPA.length}`} color={RAMA_COLOR.programacion}>
       <ul className="mp-hitos">
         {PASOS_MAPA.map(([k, t]) => (
           <li key={k}><Casilla checked={!!pasos[k]} label={`${t}: marcar`} onChange={() => togglePasoMapa(k)} /><div><span>{t}</span></div></li>
         ))}
       </ul>
       <p className="sub">Cada proyecto que cierra actualiza su nodo (estado, tecnologías, qué reutiliza). Prompt 23.</p>
-    </section>
+    </Plegable>
   );
 }
 
@@ -249,36 +248,39 @@ export function SemanaPlan({ day, editar }: { day: DayLog; editar: boolean }) {
 
       <ComoSumar />
 
-      {ORDEN.map((r) => {
-        const ms = metas.filter((m) => m.rama === r);
-        const gs = personales.filter((g) => g.rama === r);
-        if (!ms.length && !gs.length) return null;
-        const etapa = v.ramas.find((x) => x.rama === r);
+      {/* Ola 22: cada rama es una sección plegable; al entrar queda abierta la primera. */}
+      {(() => {
+        let primero = true;
+        const abierto = () => { const v0 = primero; primero = false; return v0; };
         return (
-          <section key={r} className="mg-grupo mp-grupo" style={{ ['--c' as string]: RAMA_COLOR[r] }}>
-            <div className="mp-rama-cab"><span className="mono mp-rama">{r}</span><span className="mono sub">{lado[r]}</span></div>
-            <div className="mg-grupo-cab"><h2 className="resaltado">{etapa?.titulo ?? r}</h2></div>
-            <ul className="mg-lista">
-              {ms.map((m) => <MetaPlanFila key={m.id} m={m} tipo="semanas" clave={l} base={metas} desde={l} hasta={d7} date={date} ctx={ctx} editar={editar} />)}
-              {gs.map((g) => <GoalRow key={g.id} g={g} date={date} editar={editar} />)}
-            </ul>
-          </section>
+          <>
+            {ORDEN.map((r) => {
+              const ms = metas.filter((m) => m.rama === r);
+              const gs = personales.filter((g) => g.rama === r);
+              if (!ms.length && !gs.length) return null;
+              const etapa = v.ramas.find((x) => x.rama === r);
+              return (
+                <Plegable key={r} id={`semana:${r}`} kicker={r} titulo={etapa?.titulo ?? r} resumen={`${ms.length + gs.length} · ${lado[r]}`} color={RAMA_COLOR[r]} abierto={abierto()}>
+                  <ul className="mg-lista">
+                    {ms.map((m) => <MetaPlanFila key={m.id} m={m} tipo="semanas" clave={l} base={metas} desde={l} hasta={d7} date={date} ctx={ctx} editar={editar} />)}
+                    {gs.map((g) => <GoalRow key={g.id} g={g} date={date} editar={editar} />)}
+                  </ul>
+                </Plegable>
+              );
+            })}
+            {metas.some((m) => !m.rama) && (
+              <Plegable id="semana:clipping" kicker="clipping · fuera del plan" titulo="Clipping" resumen="1 h 30 por día" color={AREAS.eclipse.css} abierto={abierto()}>
+                <ul className="mg-lista">{metas.filter((m) => !m.rama).map((m) => <MetaPlanFila key={m.id} m={m} tipo="semanas" clave={l} base={metas} desde={l} hasta={d7} date={date} ctx={ctx} editar={editar} />)}</ul>
+              </Plegable>
+            )}
+            {[...grupos.entries()].map(([nombre, gs]) => (
+              <Plegable key={nombre} id={`semana:area:${nombre}`} kicker="área · fuera del plan" titulo={nombre} resumen={`${gs.length}`} color={AREAS[gs[0].area].css} abierto={abierto()}>
+                <ul className="mg-lista">{gs.map((g) => <GoalRow key={g.id} g={g} date={date} editar={editar} />)}</ul>
+              </Plegable>
+            ))}
+          </>
         );
-      })}
-      {metas.some((m) => !m.rama) && (
-        <section className="mg-grupo mp-grupo" style={{ ['--c' as string]: AREAS.eclipse.css }}>
-          <div className="mp-rama-cab"><span className="mono mp-rama">clipping · fuera del plan</span><span className="mono sub">1 h 30 por día</span></div>
-          <div className="mg-grupo-cab"><h2 className="resaltado">Clipping</h2></div>
-          <ul className="mg-lista">{metas.filter((m) => !m.rama).map((m) => <MetaPlanFila key={m.id} m={m} tipo="semanas" clave={l} base={metas} desde={l} hasta={d7} date={date} ctx={ctx} editar={editar} />)}</ul>
-        </section>
-      )}
-      {[...grupos.entries()].map(([nombre, gs]) => (
-        <section key={nombre} className="mg-grupo mp-grupo" style={{ ['--c' as string]: AREAS[gs[0].area].css }}>
-          <div className="mp-rama-cab"><span className="mono mp-rama">área · fuera del plan</span></div>
-          <div className="mg-grupo-cab"><h2 className="resaltado">{nombre}</h2></div>
-          <ul className="mg-lista">{gs.map((g) => <GoalRow key={g.id} g={g} date={date} editar={editar} />)}</ul>
-        </section>
-      ))}
+      })()}
       {!(ctx.plan.mapaPortfolio && PASOS_MAPA.every(([k]) => ctx.plan.mapaPortfolio![k])) && <MapaPortfolio />}
       <HitosRango desde={l} hasta={d7} date={date} />
       <StandBy plan={ctx.plan} date={date} />
@@ -408,6 +410,7 @@ export function BimestrePlan({ day, editar, elegido }: { day: DayLog; editar: bo
       </div>
       <div className="sub semanas-leyenda mono">{b.leyenda.join(' · ')}</div>
 
+      <Plegable id="bim:carriles" titulo="Las ramas del bimestre" resumen={`${filas.length} ramas`} abierto>
       <div className="carriles">
         {filas.map((f) => (
           <section key={f.rama} className="carril" style={{ ['--c' as string]: RAMA_COLOR[f.rama] }}>
@@ -422,6 +425,7 @@ export function BimestrePlan({ day, editar, elegido }: { day: DayLog; editar: bo
           </section>
         ))}
       </div>
+      </Plegable>
       {editar && <p className="sub nota-izq">Vacío vuelve al texto del plan.</p>}
 
       {n === 1 && <MapaPortfolio />}

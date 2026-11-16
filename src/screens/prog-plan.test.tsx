@@ -75,8 +75,9 @@ describe('programación por proyectos', () => {
     render(<ProgPlan day={day()} param="prog" />);
     expect(screen.getByRole('heading', { name: 'Programación' })).toBeInTheDocument();
     expect(screen.getByText('Recién empezás')).toBeInTheDocument();
-    const lista = document.querySelector('.re-tl') as HTMLElement;
-    const ids = within(lista).getAllByRole('link').map((a) => a.getAttribute('href')!.split('/').pop());
+    const ids = [...document.querySelectorAll('.esc-lista a')].map((a) => a.getAttribute('href')!.split('/').pop());
+    // Ola 22: solo la etapa en curso viene abierta; las otras, plegadas.
+    expect([...document.querySelectorAll('.esc details')].map((d) => (d as HTMLDetailsElement).open)).toEqual([true, false, false, false]);
     expect(ids[0]).toBe('P0');
     expect(ids).toContain('A7');
     expect(ids).toContain('W1');

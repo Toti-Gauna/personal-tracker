@@ -5,7 +5,7 @@ Tracker personal de Toti: el día en horas, el estudio con su propio motor de re
 - **Diseño:** [canvas de Trazo](https://claude.ai/artifact/6Cc2E6aW2ViU5ikovpsRTy)
 - **Roadmap de estudio:** [ruta ML + DevSecOps](https://claude.ai/artifact/9PEokku7mBLZdCFJr1zqXP)
 - **Pantallas:** presentación `Trazo-pantallas.pptx` y su ZIP de imágenes (44 pantallas, 8 flujos).
-- **Estado:** olas 0 a 12b hechas y en `main`. Olas 0 a 16c hechas (la 15 quedó absorbida por la 16c). Olas 0 a 21 hechas. Las olas 22 y 23 (orden de pantallas y clipping) están planificadas en §6 sexies. Este archivo es la fuente de verdad.
+- **Estado:** olas 0 a 12b hechas y en `main`. Olas 0 a 16c hechas (la 15 quedó absorbida por la 16c). Olas 0 a 22 hechas. La ola 23 (clipping) está planificada en §6 sexies. Este archivo es la fuente de verdad.
 
 ---
 
@@ -200,7 +200,7 @@ Aplica a Hoy y a cualquier vista que muestre la lista de metas del día (Escrito
 - El contador (0/1, 2/3) queda pegado al borde derecho.
 - Al liberar la columna izquierda, checkbox y línea de tiempo se corren a la izquierda: se conserva el margen de 16 px y número y checkbox quedan alineados entre filas.
 - En la meta activa la hora sigue en el mismo lugar y se mantiene la etiqueta `AHORA · 07:00 · QUEDAN 1 H 30`.
-- Si el título es largo, se corta con elipsis: la hora nunca baja de línea ni tapa el contador. A 390 px de ancho no hay desborde.
+- Si el título es largo, pasa a **dos líneas** y recién después se corta con elipsis (ola 22): la hora nunca baja de línea ni tapa el contador. A 390 px de ancho no hay desborde.
 - Se revisa en modo claro y oscuro.
 
 ## 4. Motor de repaso: reglas
@@ -388,7 +388,7 @@ Desde el lunes 16 nov 2026 la prioridad es un trabajo remoto de USD 3.000 a 5.00
 | 19 · Entreno | *Hecha.* Tus rutinas (PPL + Upper/Lower, lunes a viernes), el horario de 18:00 a 22:00 y las Upper/Lower propias (§6 sexies, pasos 3 y 4) | Sonnet 5.5 · alto |
 | 20 · Programación y metas por bloque | *Hecha.* Unidades por área y sistema de libros (con tarjetas, test y tesis; carga *Measure What Matters* con sus 21 capítulos), metas por bloque con JSON y el roadmap de programación por proyectos (§6 sexies, pasos 5 a 7) | Opus 5.5 · alto |
 | 21 · Idiomas y libros | *Hecha.* Roadmap maestro v3: un idioma por año durante 6 años (inglés, francés, italiano, alemán, japonés y chino), 12 libros de consolidación, la biblioteca de 42 libros y el ascenso a C1, dentro de Estudio (§6 sexies, paso 8) | Opus 5.5 · alto |
-| 22 · Orden de pantallas | Pasada de UX en Metas, Estudio y Hoy: pantallas livianas con subpáginas y botones, también en los roadmaps de matemática, programación e idiomas (§6 sexies, paso 9) | Sonnet 5.5 · medio |
+| 22 · Orden de pantallas | *Hecha.* Pasada de UX en Metas, Estudio y Hoy: secciones plegables y escalera compacta; ninguna de las 49 pantallas pasa de 3,2 pantallas de scroll a 390 px (§6 sexies, paso 9) | Sonnet 5.5 · medio |
 | 23 · Clipping | Roadmap Clipper de 12 meses (de 0 a USD 10k/mes) con su propio apartado en Metas: plan, registro, cuentas, campañas, retainers, métricas y gráficos, y una UX/UI premium; se integra con Hoy, el mapa y las alertas (§6 sexies, pasos 10 a 12) | Opus 5.5 · alto |
 
 ## 6 bis. Olas 9 a 12: mejoras de uso
@@ -712,7 +712,7 @@ La 20 va antes que la 21 porque el roadmap de idiomas usa el sistema de libros y
 - **Metas por bloque:** `plan.metasBloque` (proyecto, ventana, certificación, `libro:<id>` o `libro:<id>:<unidad>`), con submetas; componente `MetasBloque` en el proyecto (Metas y Estudio) y en el libro. Importar acepta `"tipo": "metas-bloque"` y `"tipo": "libro"` (validación por línea, Qué cambia y avance conservado); Exportar JSON devuelve el mismo formato. Formato en `docs/metas-por-bloque.md`.
 - **Programación por proyectos:** `#/estudio/prog` (Estás acá, Hoy sos → Vas a ser y la escalera de P0 a A7) y `#/estudio/prog/<id>/<subpágina>` (Resumen, Stack y tecnología nueva, Metas, Evidencia, Pieza matemática y Entrega). "Python y FastAPI" (`prog-b1`) quedó archivada: no entra al día y sus repasos siguen. La meta de programación de Hoy suma hasta 2 metas pendientes del proyecto en curso.
 - **Nivel de salida:** las 12 ventanas tienen sus criterios en `data/plan-extendido.json` (`mate.salida`, propuestos por mí salvo el ejemplo de W1). Se tildan en la ventana (Matemática y Metas) y en la pieza matemática del proyecto que habilita. Son el chequeo antes del test: la puerta la sigue aprobando el test con 85 %, y si aprobaste con criterios sin tildar, avisa.
-- Pendiente para la ola 22: la escalera de programación ocupa unas 7 pantallas de scroll (son 50 bloques); se va a plegar por etapa.
+- La escalera de programación (50 bloques) se plegó por etapa en la ola 22.
 
 **Paso 5 · Unidades por área y sistema de libros** (dentro del motor actual, 85 %)
 
@@ -752,7 +752,7 @@ La 20 va antes que la 21 porque el roadmap de idiomas usa el sistema de libros y
 - **Hoy:** el bloque de idiomas dice lo que toca esa semana ("Inglés · Measure What Matters", después "Inglés · Pronunciación"…) con las tareas de la fase. Metas del mes: 11,5 h por semana y el hito de la fase que cierra; el simulacro de Cambridge entra como chequeo de la semana 20 a la 46.
 - **Alertas** (en Metas → Etapas): el examen del año desde 8 semanas antes (fecha, sede y costo sin verificar), el trimestre en 7 días y la tesis anual en 14.
 - **Enlace de Udemy:** se carga en la pantalla del idioma y queda en el teléfono (estado local `idiomas.enlaces`), nunca en el repo. Solo acepta `https://`.
-- Pendiente para la ola 22: la biblioteca ocupa unas 5 pantallas de scroll; se va a plegar por bloque.
+- La biblioteca se plegó por bloque en la ola 22.
 
 **Paso 8 · El roadmap maestro v3.** Reemplaza al "roadmap de inglés" que tenía previsto: el inglés es el año 1 de un roadmap de **un idioma por año durante 6 años**. El texto completo se guarda en `docs/prompts/roadmap-idiomas-libros.md` al arrancar la ola. Datos en `data/idiomas.json` y `data/libros.json`, módulo `src/data/idiomas.ts` (tipos, validación, fechas derivadas de las semanas, como `calendario()` de programación).
 
@@ -780,9 +780,16 @@ La 20 va antes que la 21 porque el roadmap de idiomas usa el sistema de libros y
 
 ---
 
-### Ola 22 · Orden de pantallas (Sonnet 5.5 · medio)
+### Ola 22 · Orden de pantallas (Sonnet 5.5 · medio) · *Hecha*
 
 **Paso 9 · Orden de pantallas.** Una pasada de UX sobre Metas, Estudio y Hoy: lo que ocupa una pantalla larga pasa a una **pantalla liviana con botones a subpáginas**, con el mismo criterio en los tres roadmaps (matemática, programación e idiomas). **Ninguna pantalla pasa de unas 3 pantallas de scroll** en el teléfono: una prueba de Playwright a 390 px lo mide. Se arregla también lo pendiente de §3 bis (títulos largos de meta con puntos suspensivos y "Mejora de hoy" en dos líneas).
+
+**Lo que quedó:** 433 tests pasando (8 nuevos).
+- **Medición:** `npm run pantallas` (`scripts/medir-pantallas.mjs`) recorre 49 rutas a 390×844 con Playwright, mide cuántas pantallas de alto ocupa cada una y falla si pasa del presupuesto (3,2 por defecto) o si hay desborde horizontal. Necesita Playwright y un `vite preview` levantado; no corre en el CI. Antes: programación 7, rutinas 6, biblioteca, Semana, Bimestre y proyecto P1 5,3, Cómo funciona 4,2, Ajustes 4, matemática y Mes 3,9, libro 3,7, evolución 3,6. Ahora: todas ≤ 3,1 (con los datos de demo; con muchas metas cargadas crecen).
+- **Secciones plegables** (`src/ui/Plegable.tsx`, `<details>` nativo): lo que abriste o cerraste se recuerda por sección (`localStorage`, `trazo.plegables`). Solo viene abierta la primera sección o la que tiene lo urgente.
+- **Escalera compacta** (`EscaleraCompacta`): un grupo por etapa en programación y matemática; solo la etapa en curso viene abierta y cada fila muestra fechas, semanas y avance.
+- **Aplicado en:** Metas (Semana por rama, Bimestre, hitos, mapa), proyecto de programación (estándar, tiempo real, revisiones, examen, entrevista, portfolio, ficha y puerta de evidencia), libro, biblioteca de idiomas, Cómo funciona, Ajustes y rutinas, y las cards de Evolución (`Card` acepta `plegable`).
+- **Hoy (§3 bis):** el título de la meta pasa a dos líneas y recién después se corta; "Mejora de hoy" no se parte.
 
 ---
 

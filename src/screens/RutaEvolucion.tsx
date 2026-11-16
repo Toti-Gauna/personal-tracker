@@ -62,20 +62,20 @@ export function RutaEvolucion({ day }: { day: DayLog }) {
         </div>
       </Card>
 
-      <Card title="Constancia" aside="15 semanas">
+      <Card title="Constancia" aside="15 semanas" plegable={{ id: 'evo:constancia' }}>
         <Heatmap cells={heat} weeks={15} />
         <div className="heat-pie"><span className="sub">Cada cuadrado es un día; las filas, de lunes a domingo. El martes es libre: si no hay registro, no cuenta como falta.</span></div>
         <TablaSR caption="Constancia por día" head={['Día', 'Nivel']} rows={heat.filter((c) => !c.futuro).map((c) => [c.date, c.libre ? 'libre' : c.level == null ? 'sin registro' : String(c.level)])} />
       </Card>
 
-      <Card title="Mes a mes" aside="horas y metas cumplidas">
+      <Card title="Mes a mes" aside="horas y metas cumplidas" plegable={{ id: 'evo:mes' }}>
         <MesAMes months={meses} />
         <Leyenda items={[{ label: 'matemática', color: 'var(--ing)', kind: 'area' }, { label: 'programación', color: 'var(--salud)', kind: 'area' }, { label: '% de metas', color: 'var(--economia)', kind: 'linea' }]} />
         <TablaSR caption="Horas y metas por mes" head={['Mes', 'Matemática (h)', 'Programación (h)', 'Metas']} rows={meses.map((m) => [m.label, num(m.math, 1), num(m.prog, 1), m.metas == null ? '—' : pct(m.metas)])} />
         <p className="sub r-vacio">{ultMes?.metas != null ? `${ultMes.label[0].toUpperCase() + ultMes.label.slice(1)} va con ${pct(ultMes.metas)} de metas cumplidas.` : 'Los meses se llenan a medida que cargás días.'}</p>
       </Card>
 
-      <Card title="Bimestre a bimestre" aside="avance acumulado de la ruta">
+      <Card title="Bimestre a bimestre" aside="avance acumulado de la ruta" plegable={{ id: 'evo:bim' }}>
         <RutaChart plan={rc.plan} real={rc.real} certs={rc.certs} />
         <Leyenda items={[{ label: 'real', color: 'var(--ing)', kind: 'area' }, { label: 'plan', color: 'var(--sub)', kind: 'punteada' }, { label: 'certificación', color: 'var(--rutina)', kind: 'linea' }]} />
         <TablaSR caption="Avance acumulado por bimestre" head={['Bimestre', 'Plan', 'Real']} rows={rc.plan.slice(1).map((x, i) => [`B${i + 1}`, pct(x), rc.real[i + 1] != null ? pct(rc.real[i + 1], 1) : '—'])} />
@@ -86,7 +86,7 @@ export function RutaEvolucion({ day }: { day: DayLog }) {
         </div>
       </Card>
 
-      <Card title="Año a año" aside="competencias">
+      <Card title="Año a año" aside="competencias" plegable={{ id: 'evo:anio' }}>
         <Radar axes={ejes} series={[
           { label: 'meta del año 3', values: a3, className: 'rd-a3' },
           { label: 'meta del año 1', values: a1, className: 'rd-a1' },
@@ -97,7 +97,7 @@ export function RutaEvolucion({ day }: { day: DayLog }) {
         <p className="sub r-vacio">Cada eje sube con lo que cerrás: capítulos y exámenes para matemática, productos y piezas desde cero para ML y producto, certificaciones para cloud y seguridad, placas y equipos para hardware.</p>
       </Card>
 
-      <Card title="Lo que construiste">
+      <Card title="Lo que construiste" plegable={{ id: 'evo:construiste' }}>
         <div className="lo-construido">
           {hechos.map((h) => (
             <div key={h.label} style={{ ['--c' as string]: h.color }}>
