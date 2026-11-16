@@ -135,7 +135,7 @@ function ProyectoProg({ day, id, sub }: { day: DayLog; id: string; sub: Sub }) {
       <div className="kicker">{id === actual.id ? 'Estás acá' : est === 'hecho' ? 'Cerrado' : est === 'actual' ? 'En curso' : 'Todavía no'} · {f(b.inicio)} a {f(b.fin)}{semana ? ` · semana ${semana} de ${b.semanas}` : ''}</div>
       <header>
         <h1 className="titulo">{sub === 'resumen' ? b.nombre : SUBPAGINAS.find(([k]) => k === sub)![1]}</h1>
-        <p>{sub === 'resumen' ? [b.ficha?.rubro, TIPO[b.tipo]].filter(Boolean).join(' · ') : `${id} · ${b.nombre}`}</p>
+        <p>{sub === 'resumen' ? `${id} · ${TIPO[b.tipo]} · ${b.semanas} ${b.semanas === 1 ? 'semana' : 'semanas'}` : `${id} · ${b.nombre}`}</p>
       </header>
 
       {sub === 'resumen' && (
