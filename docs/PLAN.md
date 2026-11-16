@@ -5,7 +5,7 @@ Tracker personal de Toti: el día en horas, el estudio con su propio motor de re
 - **Diseño:** [canvas de Trazo](https://claude.ai/artifact/6Cc2E6aW2ViU5ikovpsRTy)
 - **Roadmap de estudio:** [ruta ML + DevSecOps](https://claude.ai/artifact/9PEokku7mBLZdCFJr1zqXP)
 - **Pantallas:** presentación `Trazo-pantallas.pptx` y su ZIP de imágenes (44 pantallas, 8 flujos).
-- **Estado:** olas 0 a 12b hechas y en `main`. Las olas 13 a 16 (check-ins de salud, arreglos de Hoy, un solo roadmap de matemática y el Plan T+18 extendido) están planificadas en §6 ter y §6 quater. Este archivo es la fuente de verdad.
+- **Estado:** olas 0 a 12b hechas y en `main`. La ola 16a (datos del Plan T+18 extendido) está hecha; quedan las olas 13 a 15, 16b y 16c, planificadas en §6 ter y §6 quater. Este archivo es la fuente de verdad.
 
 ---
 
@@ -380,7 +380,9 @@ Desde el lunes 16 nov 2026 la prioridad es un trabajo remoto de USD 3.000 a 5.00
 | 13 · Check-ins de salud | Peso al entrar a Entreno la primera vez del día, registro de corridas (minutos, km, sensación) y medidas mensuales (§6 ter) | Sonnet 5.5 · alto |
 | 14 · Arreglos de Hoy | Aviso de bloque pasado que cuenta mal, títulos de meta cortados, toast que tapa el título y marcadores del mapa sin atenuar (§6 ter) | Sonnet 5.5 · medio |
 | 15 · Un solo roadmap de matemática | Unificar Estudio (M0 a M10) con la Ruta y el plan, duraciones y actividades para M2 en adelante (§6 ter) | Opus 5.5 · alto |
-| 16 · Plan T+18 extendido | Programación y matemática en 4 etapas: 171 semanas base (196 con extras de feature), 27 proyectos, 12 ventanas y 7 certificaciones, con fechas derivadas, puertas 85/65 y vistas nuevas (§6 quater) | Opus 5.5 · alto |
+| 16a · Plan T+18 extendido: datos | `data/plan-extendido.json` (56 bloques en 4 etapas), validador y fechas derivadas con extras por bloque y atrasos que consume el colchón; sin tocar pantallas (§6 quater) | Opus 5.5 · alto |
+| 16b · Plan T+18 extendido: calendario vivo | La app lee el calendario derivado en vez de las 78 semanas fijas, con migración sin romper `trazo.v1` (§6 quater) | Opus 5.5 · alto |
+| 16c · Plan T+18 extendido: matemática y vistas | Ventanas y puertas 85/65, línea de tiempo por etapas, panel "hoy sos", alertas y fichas de proyecto (§6 quater) | Opus 5.5 · alto |
 
 ## 6 bis. Olas 9 a 12: mejoras de uso
 
@@ -468,7 +470,12 @@ Mismo flujo: una rama y un PR por ola; se mergea a `main` con el CI en verde.
 
 ## 6 quater. Ola 16: Plan T+18 extendido
 
-**Opus 5.5 · alto.** Es la ola más grande: se hace por pasos, con un commit por paso. Si pesa demasiado, se parte en 16a (datos, fechas y migración) y 16b (matemática, puertas y vistas). *A confirmar.*
+**Opus 5.5 · alto.** Es la ola más grande, así que se parte en tres PRs que se pueden mergear solos:
+- **16a · datos** (*hecha*): el calendario como datos, validado, con fechas derivadas. No cambia ninguna pantalla.
+- **16b · calendario vivo:** la app deja de leer las 78 semanas fijas y lee el calendario derivado; migración.
+- **16c · matemática y vistas:** ventanas y puertas con semáforo 85/65, línea de tiempo por etapas, panel "hoy sos", alertas y fichas de proyecto.
+
+**Decisiones tomadas (2026-11-16):** las semanas extra de feature vienen **prendidas por defecto** (calendario de 196 semanas); se apagan por bloque. La ola se parte como arriba. El prompt completo se guardó en `docs/prompts/plan-t18-extendido.md`.
 
 **Fuente de verdad:** el prompt "Plan T+18 extendido (programación + matemática)", con los dos roadmaps completos. Se adjunta al arrancar la ola y se guarda en `docs/prompts/plan-t18-extendido.md`.
 
@@ -486,7 +493,7 @@ Mismo flujo: una rama y un PR por ola; se mergea a `main` con el CI en verde.
 6. Capital real: nada hasta cumplir una puerta escrita (12 semanas o más de paper trading, resultados netos de costos con intervalo de confianza, kill-switch probado y límite de pérdida fijado antes). No es asesoramiento financiero.
 7. Hacking solo sobre lo propio o con permiso escrito; sectores regulados solo con modelos educativos y datos públicos o sintéticos.
 
-**Pasos** (un commit por paso, con tests)
+**Pasos** (un commit por paso, con tests; los pasos 1 a 3 son la 16a, el 4 la 16b y del 5 al 7 la 16c)
 1. **Diagnóstico y esquema:** qué existe, qué cambia, cómo se migra y qué se asume (se devuelve antes de escribir código).
 2. **Datos:** `data/plan-extendido.json` con etapas y bloques (id, etapa, tipo, semanas base, semanas extra, depende de, estado) y un validador. Tests: ids únicos, referencias rotas, ciclos, fechas coherentes y sumas por etapa (53, 25, 38 y 55 en base).
 3. **Fechas derivadas:** inicio más la suma de semanas en orden. Cambiar una duración recalcula todo lo que sigue, y la feature extra se prende o apaga por bloque.
@@ -494,6 +501,16 @@ Mismo flujo: una rama y un PR por ola; se mergea a `main` con el CI en verde.
 5. **Matemática:** ventanas y puertas con semáforo 85 / 65, libro de refuerzo por tipo de error y retest.
 6. **Vistas:** línea de tiempo a escala con la etapa actual, panel "hoy sos" con el último perfil desbloqueado y el siguiente, y alertas de vencimiento de certificaciones y cierre de ventanas.
 7. **Proyecto:** ficha con checklist de evidencia, pieza matemática y perfil al terminar.
+
+**Ola 16a · lo que quedó y decisiones**
+- **Archivos:** `data/plan-extendido.json` (56 bloques: 27 proyectos, 12 ventanas, 7 certificaciones, pausas, colchón y cierres, en 4 etapas), `src/data/plan-extendido.ts` (tipos, validador y calendario derivado) y `src/data/plan-extendido.test.ts`. El JSON se generó leyendo la tabla del prompt, no a mano.
+- **Fechas derivadas:** no están en el JSON. `calendario()` suma semanas desde T0 en orden. Opciones: `extras` (`true` por defecto, `false`, o un mapa por bloque) y `atrasos` por bloque.
+- **Atrasos y colchón:** un atraso en una ventana o proyecto corre las fechas siguientes, pero el colchón de la etapa se lo come hasta sus 2 semanas; solo lo que sobra corre la etapa siguiente. Un colchón consumido del todo dura 0 semanas.
+- **Validador:** ids únicos, referencias rotas, una ventana siempre antes del proyecto que la pide y que sea una ventana, ciclos, etapas en orden, extras solo en proyectos, `t0` lunes y sumas por etapa (53, 25, 38 y 55 en base; 11, 3, 6 y 5 de extras). Corre al cargar, como `roadmap.json`.
+- **Prueba clave:** el test lee la tabla de `docs/prompts/plan-t18-extendido.md` y compara las fechas derivadas de los 56 bloques, sin extras y con extras, más el fin de cada etapa. Coinciden todas.
+- **Contra lo que ya está:** todos los proyectos y certificaciones de `plan.json` están con la misma duración base; las etapas 1 y 2 suman sus 78 semanas. Lo que cambia (W1 de 2 a 3 semanas, W2 de 3 a 4, W3 de 2 a 4 y el colchón de 6 a 2) está cubierto por un test, para que la 16b lo tenga presente.
+- **Todavía no se usa:** ninguna pantalla ni `plan.ts` lee el archivo nuevo. Eso es la 16b.
+- **Pendiente para las fichas de proyecto (16c):** feature diferencial, tecnología nueva, pieza matemática, validador y evidencia de cada proyecto, que hoy están solo en el prompt.
 
 **Cómo encaja con lo que ya está**
 - **Etapas 1 y 2 = 78 semanas base, igual que hoy.** Hoy el plan tiene 78 semanas: 53 de programación (19 tramos) y 25 de "Margen". La etapa 2 de ciberseguridad ocupa justo ese margen, y el hito T+18 es el cierre de la etapa 2.
