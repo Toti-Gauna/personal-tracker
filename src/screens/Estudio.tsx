@@ -13,6 +13,8 @@ import { startStudy } from '../ui/estudio-acciones';
 import { useStudyPlan, type Contenido } from '../ui/useStudy';
 import { BANDA_COLOR, banda, detalle, qFalla, ranking } from '../data/debiles';
 import { WeekChart } from '../ui/WeekChart';
+import { STUDY_ROADMAPS } from '../data/study-roadmap';
+import { CardRoadmap } from './RoadmapEstudio';
 import '../styles/estudio.css';
 
 /** Qué pasa al tocar la casilla de un paso. */
@@ -112,11 +114,24 @@ export function Estudio({ day }: { day: DayLog }) {
     <main className="pantalla estudio">
       <header>
         <h1 className="titulo">Estudio</h1>
-        <p>Hoy tenés {plan.contenidos.length} {plan.contenidos.length === 1 ? 'contenido' : 'contenidos'} y {fmtDur(plan.total)} de estudio. Elegí uno para ver qué te falta.</p>
+        <p>Arriba, tus roadmaps: en qué fase estás y qué perfil vas a tener. Abajo, lo que toca hoy: {plan.contenidos.length} {plan.contenidos.length === 1 ? 'contenido' : 'contenidos'} y {fmtDur(plan.total)} de estudio.</p>
       </header>
 
       <div className="fila-t">
-        <span className="etiqueta">Hoy</span>
+        <span className="etiqueta">Tus roadmaps</span>
+        <span className="mono sub">tocá uno para ver todo</span>
+      </div>
+      <div className="re-cards">
+        {STUDY_ROADMAPS.map((r) => <CardRoadmap key={r.id} r={r} />)}
+        <a className="re-card otro" href="#/metas/ruta" style={{ ['--c' as string]: 'var(--ing)' }}>
+          <span className="re-card-cab"><b>Programación</b><span className="mono sub">Plan T+18</span></span>
+          <span className="sub">Los proyectos P0 a P10, con su línea de tiempo, están en Metas → Ruta.</span>
+          <span className="mono sub re-card-pie">ver la ruta →</span>
+        </a>
+      </div>
+
+      <div className="fila-t">
+        <span className="etiqueta">Lo de hoy</span>
         <span className="mono sub">{plan.stepsDone} de {plan.stepsTotal} hecho · falta {fmtDur(plan.falta)}</span>
       </div>
       <div className="contenidos" role="tablist" aria-label="Contenidos de hoy">
