@@ -5,6 +5,7 @@
  * derivan sumando semanas, con las semanas extra de feature prendidas salvo que se apaguen).
  * Todo se cuenta en semanas desde T0 (settings.startDate, o el T0 del plan si no hay).
  */
+import { fasesParaElPlan } from './idiomas';
 import raw from '../../data/plan.json';
 import { PLAN_EXT, calendario } from './plan-extendido';
 import { RAMAS } from './ramas';
@@ -179,14 +180,15 @@ interface PlanFile {
   };
   matematica: { tramos: TramoMate[]; corte: number };
   trabajo: { fases: Fase[]; embudo: { semanas: number; postulaciones: number; mensajes: number; entrevistas: [number, number]; ofertas: [number, number] }; porDia: { postulaciones: number; mensajes: number }; postsPorSemana: number };
-  ingles: { fases: Fase[]; respuestas: string[]; minutosDiarios: number };
+  /** Ola 21: las fases salen de data/idiomas.json (las pone aplicarCalendario); `respuestas` es el kit de entrevista. */
+  ingles: { fases: Fase[]; respuestas: string[]; minutosDiarios: number; nota?: string };
   handyx: { cortes: CorteHandyx[]; horasPorDia: number; horasPorSemana: number; metricas: string[] };
   salud: { componentes: { id: string; nombre: string; texto: string }[] };
   metasBimestre: Record<Rama, string[]>;
   nombresBimestre: string[];
   metasAnio: { anio1: MetaAnio[]; tramoFinal: MetaAnio[] };
   semana: { busqueda: SemanaMeta[]; conTrabajo: SemanaMeta[] };
-  chequeosMensuales: { rama: Rama; texto: string; desdeSemana?: number }[];
+  chequeosMensuales: { rama: Rama; texto: string; desdeSemana?: number; hastaSemana?: number }[];
   etapaActual: {
     mes: { desde: number; hasta: number; titulo: string; metas: { rama: Rama; texto: string }[] };
     semana: { semana: number; titulo: string; metas: { rama: Rama; dias: number[]; texto: string }[] };
@@ -335,8 +337,17 @@ export function aplicarCalendario(apagados: readonly string[] = []) {
     prog.push(progAuto(desde, hasta));
   }
   PLAN.nombresBimestre = nombres;
+  // Ola 21: la rama de idiomas lee el roadmap maestro v3 (mismo T0): sus fases y lo de cada bimestre.
+  PLAN.ingles.fases = fasesParaElPlan(SEMANAS);
+  const ing: string[] = [];
+  for (let n = 1; n <= BIMESTRES; n++) {
+    const desde = (n - 1) * SEMANAS_BIM + 1;
+    const hasta = Math.min(SEMANAS, n * SEMANAS_BIM);
+    const fs = PLAN.ingles.fases.filter((f) => f.hasta >= desde && f.desde <= hasta).map((f) => f.nombre);
+    ing.push(fs.length > 1 ? `${fs.slice(0, -1).join(', ')} y ${fs[fs.length - 1]}` : fs[0] ?? '');
+  }
   for (const r of Object.keys(BASE_METAS_BIM) as Rama[]) {
-    const base = r === 'programacion' ? prog : BASE_METAS_BIM[r];
+    const base = r === 'programacion' ? prog : r === 'ingles' ? ing : BASE_METAS_BIM[r];
     PLAN.metasBimestre[r] = Array.from({ length: BIMESTRES }, (_, i) => base[Math.min(i, base.length - 1)]);
   }
 }
@@ -449,7 +460,9 @@ export function entregasDelPlan(t0 = T0_PLAN): Entrega[] {
       out.push({ de: 'matematica', a: 'programacion', fecha: inicioSemana(t.desde, t0), texto: `Ventana ${t.id} de ${t.hasta - t.desde + 1} semanas: la base de ${sig ? nombreTramo(sig, false) : 'lo que sigue'}` });
     }
   }
-  out.push({ de: 'trabajo', a: 'ingles', fecha: inicioSemana(hitoSemana('T+2'), t0), texto: 'Trabajo nuevo: empieza el bloque diario hacia el C1' });
+  // Ola 21: el examen de Cambridge C1 (fin de su fase) entra al CV.
+  const c1 = PLAN.ingles.fases.find((f) => f.id === 'a1-examen');
+  if (c1) out.push({ de: 'ingles', a: 'trabajo', fecha: finSemana(c1.hasta, t0), texto: 'Cambridge C1 Advanced: el certificado entra al CV y a LinkedIn' });
   return out.sort((a, b) => a.fecha.localeCompare(b.fecha));
 }
 
@@ -530,7 +543,7 @@ export function etapas(fecha: string, t0 = T0_PLAN): Etapa[] {
   const ingl: Etapa = {
     rama: 'ingles',
     titulo: ing.nombre,
-    sub: ing.id === 'entrevista' ? 'Después, bloque diario al C1' : PLAN.metasBimestre.ingles[b.n - 1],
+    sub: ing.texto,
     lado: `sem ${s - ing.desde + 1}/${ing.hasta - ing.desde + 1}`,
     avance: (s - ing.desde + 1) / (ing.hasta - ing.desde + 1),
   };

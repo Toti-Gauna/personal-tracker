@@ -5,6 +5,7 @@
  *   refuerzo por tipo de error.
  * - La línea de tiempo por etapas, el panel "hoy sos" y las alertas.
  */
+import { alertasIdiomas } from './idiomas';
 import { EXTRAS_APAGADOS, PLAN, T0_PLAN, fechas } from './plan';
 import { PLAN_EXT, bloqueExtPorId, calendario, type BloqueExt, type BloqueFechado, type MateTramo, type RolRefuerzo } from './plan-extendido';
 import type { PlanState } from './plan-state';
@@ -123,7 +124,7 @@ export function hoySos(hoy: string, plan: PlanState, t0 = T0_PLAN) {
 
 export interface Alerta {
   id: string;
-  tipo: 'cert' | 'ventana' | 'decision';
+  tipo: 'cert' | 'ventana' | 'decision' | 'idioma';
   titulo: string;
   texto: string;
   href?: string;
@@ -154,6 +155,8 @@ export function alertas(hoy: string, plan: PlanState, t0 = T0_PLAN): Alerta[] {
   for (const d of PLAN_EXT.decisiones) {
     if (d.fecha && d.fecha >= hoy && daysBetween(hoy, d.fecha) <= 14) out.push({ id: `dec-${d.id}`, tipo: 'decision', fecha: d.fecha, titulo: `Decisión el ${fmt(d.fecha)}`, texto: d.texto });
   }
+  // Ola 21: exámenes de idiomas, trimestres y tesis anual.
+  for (const a of alertasIdiomas(hoy, t0)) out.push({ ...a, tipo: 'idioma' });
   return out.sort((a, b) => a.fecha.localeCompare(b.fecha));
 }
 

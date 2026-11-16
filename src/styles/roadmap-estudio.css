@@ -126,3 +126,23 @@
 .prog-subs { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin: 20px 0; }
 .prog-subs .btn-borde { margin: 0; display: flex; align-items: center; justify-content: center; text-align: center; min-height: 56px; padding: 10px 12px; text-decoration: none; color: var(--tinta); overflow-wrap: anywhere; }
 @media (min-width: 720px) { .prog-subs { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+
+/* Ola 21 · Idiomas y libros */
+.id-alertas { margin: 4px 0 18px; }
+.id-fases { list-style: none; margin: 8px 0 20px; padding: 0; display: grid; gap: 10px; }
+.id-fases > li { display: grid; gap: 4px; padding: 12px 14px; border: 1px solid var(--linea); border-left: 3px solid var(--linea); border-radius: var(--radius); overflow-wrap: anywhere; }
+.id-fases > li.actual { border-left-color: var(--c); }
+.id-fases > li.hecho { opacity: 0.7; }
+.id-fases > li .subrayado { justify-self: start; }
+.id-libros { list-style: none; margin: 4px 0 0; padding: 0; display: grid; gap: 4px; }
+.id-enlace { display: flex; flex-wrap: wrap; gap: 6px 14px; align-items: center; }
+.id-enlace-form { display: grid; gap: 6px; margin-top: 6px; }
+.id-enlace-form .btn-borde { margin-top: 0; }
+.id-eventos { list-style: none; margin: 8px 0 12px; padding: 0; }
+.id-eventos li { display: grid; grid-template-columns: minmax(96px, auto) minmax(0, 1fr); gap: 12px; padding: 10px 0; border-top: 1px solid var(--linea); font-size: 15px; }
+.id-eventos li.pasado { opacity: 0.55; }
+.id-bib { list-style: none; margin: 8px 0 20px; padding: 0; }
+.id-bib li { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 4px 12px; padding: 10px 0; border-top: 1px solid var(--linea); }
+.id-bib li.terminado .id-bib-t { text-decoration: line-through; text-decoration-color: var(--c); }
+.id-bib-t { min-width: 0; overflow-wrap: anywhere; }
+.id-hito { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 12px; align-items: start; padding: 8px 0; }

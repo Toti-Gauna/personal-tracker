@@ -98,7 +98,7 @@ describe('qué toca en cada fecha', () => {
   it('16 nov 2026: semana 1, B1, P0 consolidación', () => {
     expect(caso('2026-11-16')).toEqual({ semana: 1, bim: 'B1 · semana 1 de 9', tramo: 'P0 1/2' });
     expect(faseTrabajo('2026-11-16').id).toBe('busqueda');
-    expect(faseIngles('2026-11-16').id).toBe('entrevista');
+    expect(faseIngles('2026-11-16')).toMatchObject({ id: 'a1-mwm', nombre: 'Measure What Matters', desde: 1, hasta: 6 });
     expect(corteHandyx('2026-11-16')).toMatchObject({ id: 'lanzar', semana: 1, semanas: 13 });
   });
 
@@ -126,9 +126,10 @@ describe('qué toca en cada fecha', () => {
     expect(etapas('2027-11-15')[4].titulo).toBe('Según la decisión');
   });
 
-  it('14 may 2028: semana 78, B9, la CKA de la etapa 2 y examen C1', () => {
+  it('14 may 2028: semana 78, B9, la CKA de la etapa 2 y francés', () => {
     expect(caso('2028-05-14')).toEqual({ semana: 78, bim: 'B9 · semana 6 de 9', tramo: 'C5 2/2' });
-    expect(faseIngles('2028-05-14').id).toBe('c1');
+    // Ola 21: en mayo de 2028 es el año 2 (francés), pronunciación aplicada.
+    expect(faseIngles('2028-05-14')).toMatchObject({ id: 'a2-aplicada', nombre: 'Francés · Pronunciación aplicada' });
   });
 
   it('6 ago 2028: semana 90, el cierre de T+18', () => {
@@ -157,10 +158,12 @@ describe('entregas y metas de la semana', () => {
   it('las entregas entre ramas salen del plan', () => {
     expect(proximasEntregas('2026-12-14', 4).map((e) => [e.fecha, `${e.de}→${e.a}`, e.texto])).toEqual([
       ['2027-01-03', 'programacion→trabajo', 'Faro v1 entra al portfolio con tráiler y landing'],
-      ['2027-01-11', 'trabajo→ingles', 'Trabajo nuevo: empieza el bloque diario hacia el C1'],
       ['2027-01-31', 'programacion→trabajo', 'Escudo entra al portfolio con tráiler y landing'],
       ['2027-02-01', 'matematica→programacion', 'Ventana W1 de 3 semanas: la base de Surco v1'],
+      ['2027-03-21', 'programacion→trabajo', 'Surco v1 entra al portfolio con tráiler y landing'],
     ]);
+    // Ola 21: el Cambridge C1 entra al CV cuando termina su fase de examen.
+    expect(entregasDelPlan().find((e) => e.de === 'ingles')).toMatchObject({ a: 'trabajo', fecha: '2027-10-03' });
     expect(entregasDelPlan().length).toBeGreaterThan(10);
   });
 

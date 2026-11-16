@@ -36,8 +36,10 @@ describe('mapa · hitos y stand-by (Ola 8b)', () => {
     const h = f.filter((x) => x.hitoId);
     // Ola 18 (sin pausas): Escudo cierra el 31 de enero y W1 queda lista el 21 de feb, así que entra en el
     // primer trimestre; Surco v1 arranca (22 feb) y cierra (21 mar) y pasan al segundo. Quedan 28 de los 30.
-    expect(h).toHaveLength(28);
-    expect(HITOS).toHaveLength(30);
+    // Ola 21: entran los hitos de idiomas del 27 dic (Measure What Matters) y el 7 feb (pronunciación); sale el viejo "B2 sólido".
+    expect(h).toHaveLength(29);
+    expect(HITOS).toHaveLength(33);
+    expect(h.filter((x) => x.rama === 'ingles').map((x) => x.hitoId)).toEqual(['ingles-83', 'ingles-41']);
     const fechas = h.map((x) => x.fecha);
     expect([...fechas].sort().reverse()).toEqual(fechas);
     expect(h[h.length - 1]).toMatchObject({ fecha: '2026-11-16', rama: 'main', hito: 'T+0' });

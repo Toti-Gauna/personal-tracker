@@ -15,7 +15,8 @@ describe('metas generadas desde el plan', () => {
     expect(s5.find((m) => m.clave === 'casillas:P1')?.meta).toBe(6);
     const s20 = metasSemanaGeneradas('2027-04-01', T0);
     expect(s20.find((m) => m.clave === 'postulaciones')).toBeUndefined();
-    expect(s20.find((m) => m.clave === 'horas-ingles')?.meta).toBe(5.25);
+    // Ola 21: idiomas mantiene las 11,5 h por semana del roadmap.
+    expect(s20.find((m) => m.clave === 'horas-ingles')?.meta).toBe(11.5);
     expect(metasSemanaGeneradas('2026-11-10', T0)).toEqual([]);
   });
 
@@ -38,9 +39,20 @@ describe('metas generadas desde el plan', () => {
     expect(metasMesGeneradas('2028-09-01', T0)).toEqual([]);
   });
 
-  it('los simulacros del C1 entran como chequeo en los últimos meses', () => {
-    const abr = metasMesGeneradas('2028-04-10', T0);
-    expect(abr.some((m) => m.origen === 'chequeo' && m.texto === 'Simulacro del C1')).toBe(true);
+  it('los simulacros de Cambridge C1 entran como chequeo durante la preparación (semanas 20 a 46), no después', () => {
+    const chequeo = (f: string) => metasMesGeneradas(f, T0).some((m) => m.origen === 'chequeo' && m.texto === 'Simulacro de Cambridge C1 (sobre 180)');
+    expect(chequeo('2027-05-10')).toBe(true);
+    expect(chequeo('2027-09-10')).toBe(true);
+    expect(chequeo('2026-12-10')).toBe(false);
+    expect(chequeo('2028-04-10')).toBe(false);
+  });
+
+  it('idiomas en el mes: las 11,5 h por semana y el hito de la fase que cierra', () => {
+    const dic = metasMesGeneradas('2026-12-10', T0);
+    expect(dic.find((m) => m.id === 'm-ing')).toMatchObject({ rama: 'ingles', unidad: 'h', meta: 50.9 });
+    expect(dic.find((m) => m.id === 'm-idioma-a1-mwm')?.texto).toBe('Measure What Matters: tesis final + 3 min hablados sin leer');
+    const oct = metasMesGeneradas('2027-10-10', T0);
+    expect(oct.some((m) => m.id === 'm-idioma-a1-examen')).toBe(true);
   });
 
   it('lo que cierra en diciembre y enero: la entrevista, la entrega de Faro v1 y la de Escudo (sin pausa)', () => {

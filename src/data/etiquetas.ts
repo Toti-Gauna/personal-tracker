@@ -3,6 +3,7 @@
  * título del bloque de programación con el proyecto activo.
  */
 import { AREAS } from './defaults';
+import { faseIdiomaEn, tituloIdiomaDelDia } from './idiomas';
 import { PLAN, bimestreDelPlan, enPlan, corteHandyx, faseTrabajo, nombreTramo, tramoActivo, ventanaW } from './plan';
 import type { PlanState } from './plan-state';
 import { RAMA_COLOR } from './ramas';
@@ -20,6 +21,8 @@ export function colorDeBloque(b: Pick<Block, 'rama' | 'area'>, delPlan: boolean)
 
 /** Título que se muestra: el bloque de programación lleva el proyecto activo ("Programación · Faro v1"). */
 export function tituloDeBloque(b: Pick<Block, 'rama' | 'key' | 'title'>, date: string, t0?: string) {
+  // Ola 21: el bloque de idiomas dice lo que toca esa semana ("Inglés · Measure What Matters").
+  if (b.key === 'ingles') return tituloIdiomaDelDia(date, t0);
   if (b.rama !== 'programacion' || b.key !== 'prog') return b.title;
   return programacionDelPlan(date, t0) ?? b.title;
 }
@@ -70,7 +73,7 @@ export function etiquetaDeBloque(b: Block, { day, t0, plan, study }: Ctx): strin
       return `trabajo · semana ${s} de ${f.hasta} · ${fmtDur(b.min)} hoy`;
     }
     case 'ingles': {
-      return `ingles · ${PLAN.metasBimestre.ingles[bim.n - 1].toLowerCase()}`;
+      { const f = faseIdiomaEn(date, t0); return `ingles · ${f.nombre.toLowerCase()} · semana ${f.semana} de ${f.semanas}`; }
     }
     case 'handyx': {
       const c = corteHandyx(date, t0);

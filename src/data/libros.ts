@@ -212,3 +212,34 @@ export const UNIDAD_POR_AREA: Record<AreaEstudio, { nombre: string; unidad: stri
   libro: { nombre: 'Libros', unidad: '2 capítulos', label: 'Unidad' },
 };
 export const AREAS_ESTUDIO = Object.keys(UNIDAD_POR_AREA) as AreaEstudio[];
+
+// ——— Ola 21 · la biblioteca: 42 libros núcleo en 6 bloques de 7 y 13 opcionales ———
+
+export interface LibroBiblioteca { id: string; titulo: string; aval?: string; faseA?: number }
+export interface Biblioteca { criterio: string; bloques: { n: number; nombre: string; libros: LibroBiblioteca[] }[]; opcionales: LibroBiblioteca[] }
+
+export const BIBLIOTECA = (raw as { biblioteca: Biblioteca }).biblioteca;
+export const nucleo = () => BIBLIOTECA.bloques.flatMap((b) => b.libros.map((l) => ({ ...l, bloque: b.n })));
+export const libroDeBiblioteca = (id: string) => [...nucleo(), ...BIBLIOTECA.opcionales].find((l) => l.id === id);
+
+/** Estado de un libro de la biblioteca: el del sistema de libros si ya tiene capítulos; si no, pendiente. */
+export function estadoBiblioteca(st: StudyState, id: string): { estado: EstadoLibro; conCapitulos: boolean } {
+  const l = libroPorId(id);
+  if (!l) return { estado: 'pendiente', conCapitulos: false };
+  const a = st.activities.find((x) => x.id === actIdDeLibro(id));
+  return { estado: a ? estadoLibro(st, l).estado : 'pendiente', conCapitulos: true };
+}
+
+export function validarBiblioteca(b: Biblioteca = BIBLIOTECA): string[] {
+  const e: string[] = [];
+  const ids = new Set<string>();
+  for (const l of [...b.bloques.flatMap((x) => x.libros), ...b.opcionales]) {
+    if (ids.has(l.id)) e.push(`biblioteca: libro repetido ${l.id}`);
+    ids.add(l.id);
+  }
+  if (b.bloques.length !== 6 || b.bloques.some((x) => x.libros.length !== 7)) e.push('biblioteca: son 6 bloques de 7 libros');
+  const fa = b.bloques.flatMap((x) => x.libros).filter((l) => l.faseA);
+  if (fa.length !== 12) e.push(`biblioteca: la Fase A tiene 12 libros (hay ${fa.length})`);
+  for (let y = 1; y <= 6; y++) if (fa.filter((l) => l.faseA === y).length !== 2) e.push(`biblioteca: el año ${y} tiene 2 libros`);
+  return e;
+}

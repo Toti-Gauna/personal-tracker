@@ -255,11 +255,8 @@ export function PlanIngles({ day }: { day: DayLog }) {
   const fases = PLAN.ingles.fases;
   const ent = plan.entrevistas.filter((x) => x.fecha >= date).sort((a, b) => a.fecha.localeCompare(b.fecha))[0];
   const ens = plan.respuestas.filter((r) => r.veces > 0).length;
-  const bloque = day.blocks.find((b) => b.key === 'ingles');
   const [texto, setTexto] = useState('');
   const [tipo, setTipo] = useState(TIPOS_FALLA[0]);
-  const finPlan = finSemana(PLAN.semanas, t0);
-  const mesFin = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'][Number(finPlan.slice(5, 7)) - 1];
   const ensayar = () => {
     const r = [...plan.respuestas].sort((a, b) => a.veces - b.veces)[0];
     ensayarRespuesta(date, r?.id);
@@ -269,20 +266,21 @@ export function PlanIngles({ day }: { day: DayLog }) {
   return (
     <main className="pantalla plan-rama" style={{ ['--c' as string]: RAMA_COLOR.ingles }}>
       <Top rama="ingles" lado={f.nombre.toLowerCase()} />
-      <h1 className="titulo">Inglés</h1>
-      <p className="pp-que">Hasta conseguir el trabajo, entrevistas. Después, {PLAN.ingles.minutosDiarios} min por día hacia el C1 Advanced, con el examen en {mesFin} de {finPlan.slice(0, 4)}.</p>
+      <h1 className="titulo">Idiomas</h1>
+      <p className="pp-que">Un idioma por año: inglés hasta el Cambridge C1 y, desde el 27 de diciembre de 2027, francés. Ahora: {f.nombre.toLowerCase()}. {f.texto}</p>
+      <a className="fila-link" href="#/estudio/idiomas">El roadmap completo de idiomas y libros <span aria-hidden="true">→</span></a>
 
       <div className="pi-fases">
-        {fases.map((x, i) => (
+        {fases.map((x) => (
           <div key={x.id} className={x.id === f.id ? 'on' : ''}>
-            <span className="mono sub">{x.id === f.id ? 'ahora' : i === fases.length - 1 ? `${mesFin.slice(0, 3)} ${finPlan.slice(0, 4)}` : `desde ${fechaCorta(inicioSemana(x.desde, t0))}`}</span>
+            <span className="mono sub">{x.id === f.id ? 'ahora' : `desde ${fechaCorta(inicioSemana(x.desde, t0))}`}</span>
             <b>{x.nombre}</b>
           </div>
         ))}
       </div>
 
       <div className="fila-t pp-sec">
-        <span className="etiqueta">{ent ? `Respuestas para el ${diaSemanaCorto(ent.fecha)} ${Number(ent.fecha.slice(8))}` : 'Respuestas ensayadas'}</span>
+        <span className="etiqueta">{ent ? `Respuestas para el ${diaSemanaCorto(ent.fecha)} ${Number(ent.fecha.slice(8))}` : 'Kit de entrevista · respuestas ensayadas'}</span>
         <span className="mono sub">{ens} de {plan.respuestas.length}</span>
       </div>
       <ul className="pi-resp">
@@ -294,12 +292,8 @@ export function PlanIngles({ day }: { day: DayLog }) {
           </li>
         ))}
       </ul>
-      {bloque ? (
-        <a className="btn-principal pi-btn" href={`#/elegir/${bloque.key}`}>Ensayar en voz alta · {bloque.min} min</a>
-      ) : (
-        <button className="btn-principal pi-btn" onClick={ensayar}>Ensayar en voz alta</button>
-      )}
-      <p className="sub">Cada vez que tildás una, suma un ensayo (también desde Hoy: «+1 Respuesta ensayada»).</p>
+      <button className="btn-principal pi-btn" onClick={ensayar}>Ensayar en voz alta</button>
+      <p className="sub">Se practica en el bloque de búsqueda laboral, sobre todo el día antes de una entrevista. Cada vez que tildás una, suma un ensayo.</p>
 
       <div className="etiqueta pp-sec">Lo que falló · ya es tarjeta</div>
       <ul className="pi-fallas">
@@ -314,12 +308,6 @@ export function PlanIngles({ day }: { day: DayLog }) {
       </form>
       <p className="sub">Entran al mismo motor de repaso que matemática: escalera +1, +3, +7, +21, +60.</p>
 
-      {fases[1] && (
-        <div className="pr-card pp-cerrar">
-          <span className="etiqueta">Desde el trabajo nuevo · {fechaCorta(inicioSemana(fases[1].desde, t0))}</span>
-          <p>{fases[1].texto} {fases[2] ? fases[2].texto : ''}</p>
-        </div>
-      )}
     </main>
   );
 }
