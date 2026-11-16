@@ -35,7 +35,8 @@ const subscribe = (f: () => void) => {
 /** Toast arriba, 4 s, con sonido. */
 export function toast(t: Omit<Toast, 'id'>, sound = true) {
   const id = ++seq;
-  toasts = [...toasts, { ...t, id }];
+  // Como mucho 3 a la vez: el más viejo se va.
+  toasts = [...toasts, { ...t, id }].slice(-3);
   emit();
   if (sound) play(t.evento ?? 'pomodoro');
   setTimeout(() => dismiss(id), 4000);

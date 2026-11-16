@@ -23,7 +23,8 @@ describe('Hoy', () => {
     expect(partes).toEqual(['meta-check', 'meta-n mono', 'meta-tit', 'meta-cont mono']);
     const tit = fila.querySelector('.meta-tit')!;
     expect(tit.children[0]).toHaveTextContent('Acompañar a Abi y correr');
-    expect(tit.children[1]).toHaveTextContent('08:30–10:00');
+    // La fila lleva solo la hora de inicio (el rango completo va al abrir la meta).
+    expect(tit.children[1]).toHaveTextContent(/^08:30$/);
     expect(fila.querySelector('.meta-cont')).toHaveTextContent('0/1');
   });
 

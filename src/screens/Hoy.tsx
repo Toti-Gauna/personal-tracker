@@ -35,9 +35,10 @@ function frase(blocks: Block[], now: number) {
 function estado(b: Block, now: number) {
   const s = toMin(b.start);
   const e = blockEnd(b);
-  if (now >= s && now < e) return `Ahora · ${toHHMM(now)} · quedan ${fmtDur(remainingMin(b, now))}`;
-  if (now < s) return `Empieza ${b.start} · ${fmtDur(b.min)}`;
-  return `Terminó ${toHHMM(e)} · ${fmtDur(b.min)}`;
+  const rango = `${b.start}–${toHHMM(e % (24 * 60))}`;
+  if (now >= s && now < e) return `Ahora · ${toHHMM(now)} · quedan ${fmtDur(remainingMin(b, now))} · ${rango}`;
+  if (now < s) return `Empieza ${b.start} · ${fmtDur(b.min)} · ${rango}`;
+  return `Terminó ${toHHMM(e)} · ${fmtDur(b.min)} · ${rango}`;
 }
 
 export function Hoy({ day }: { day: DayLog }) {
@@ -138,7 +139,7 @@ export function Hoy({ day }: { day: DayLog }) {
                 <span className="meta-n mono">{b.n}</span>
                 <span className="meta-tit">
                   <span className="meta-nombre">{tituloDeBloque(b, day.date, settings.startDate)}</span>
-                  <span className="meta-hora mono">{b.start}–{toHHMM(blockEnd(b) % (24 * 60))}</span>
+                  <span className="meta-hora mono">{b.start}</span>
                 </span>
                 <span className="meta-cont mono" aria-label={`${done} de ${b.tasks.length} tareas`}>{done}/{b.tasks.length}</span>
               </button>

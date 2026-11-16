@@ -97,13 +97,18 @@ export const nombreRama = (r: Rama | 'main') => RAMA_NOMBRE[r];
 /**
  * Entre 04:30 y 21:00 no hay hueco: si el foco sigue después de la hora de fin de su bloque,
  * Hoy avisa cuánto se pasó y que el siguiente se acorta (los fijos no se corren).
+ * `inicioFoco` (minutos del día en que empezó el foco) evita avisar de un bloque que ya había
+ * terminado cuando entraste en foco.
  */
-export function avisoPasado(day: DayLog, focoKey: string | undefined, ahora: number): Aviso | null {
+export function avisoPasado(day: DayLog, focoKey: string | undefined, ahora: number, inicioFoco?: number): Aviso | null {
   if (!focoKey) return null;
   const i = day.blocks.findIndex((b) => b.key === focoKey);
   if (i < 0) return null;
   const b = day.blocks[i];
   const fin = toMin(b.start) + b.min;
+  // Pasarse es seguir después de la hora de fin de un foco que empezó antes. Si el foco arrancó
+  // cuando el bloque ya había terminado, no es que te pasaste: llegaste tarde.
+  if (inicioFoco != null && inicioFoco >= fin) return null;
   const pasado = ahora - fin;
   if (pasado < 1) return null;
   const sig = day.blocks[i + 1];

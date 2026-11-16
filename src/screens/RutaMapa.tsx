@@ -71,6 +71,8 @@ export function RutaMapa({ day }: { day: DayLog }) {
       : `Las ramas salen de main el ${fechaCorta(filas[filas.length - 1].fecha)} y vuelven a juntarse en mayo de 2028. Lo hecho va en trazo lleno; lo que viene, punteado.`;
 
   const fSel = filas.find((f) => f.id === sel);
+  /** Con una rama elegida, lo que no es de ella (ni entrega ni recibe de ella) se atenúa. */
+  const atenuada = (f: Fila) => ramaF != null && f.tipo !== 'gap' && f.tipo !== 'head' && f.rama !== ramaF && f.desde !== ramaF && f.a !== ramaF && f.rama !== 'main';
   const etiqueta = (f: Fila) => {
     if (f.tipo === 'hito') return `${f.hito} · ${f.hito === 'T+18' ? `${MESES[Number(f.fecha.slice(5, 7)) - 1]} ${f.fecha.slice(0, 4)}` : fechaCorta(f.fecha)}`;
     if (f.tipo === 'head') return `HEAD · hoy ${fechaCorta(f.fecha)}`;
@@ -100,7 +102,7 @@ export function RutaMapa({ day }: { day: DayLog }) {
             const yp = yPausa(r);
             const corte = yp == null ? 0 : yp;
             return (
-              <g key={r} style={{ stroke: colorMapa(r) }}>
+              <g key={r} style={{ stroke: colorMapa(r), opacity: ramaF && r !== ramaF ? 0.28 : 1 }}>
                 <clipPath id={`pas-${r}`}><rect x="0" y={Math.max(headY, corte)} width={W + 8} height={H} /></clipPath>
                 <clipPath id={`fut-${r}`}><rect x="0" y={corte} width={W + 8} height={Math.max(0, headY - corte)} /></clipPath>
                 <path d={d} className="mp-linea dibujo" clipPath={`url(#pas-${r})`} />
@@ -116,11 +118,11 @@ export function RutaMapa({ day }: { day: DayLog }) {
           })}
           {/* entregas entre ramas: curva S del color de la que entrega */}
           {filas.map((f, i) => (f.a && f.rama !== 'main' ? (
-            <path key={`e-${f.id}`} d={`M${x(f.rama)},${cy(i)} C${x(f.rama)},${cy(i) - FILA * 0.5} ${x(f.a)},${cy(i) - FILA * 0.4} ${x(f.a)},${cy(i) - FILA * 0.85}`} className={`mp-linea${f.futuro ? ' futuro' : ''}`} style={{ stroke: colorMapa(f.rama) }} />
+            <path key={`e-${f.id}`} d={`M${x(f.rama)},${cy(i)} C${x(f.rama)},${cy(i) - FILA * 0.5} ${x(f.a)},${cy(i) - FILA * 0.4} ${x(f.a)},${cy(i) - FILA * 0.85}`} className={`mp-linea${f.futuro ? ' futuro' : ''}`} style={{ stroke: colorMapa(f.rama), opacity: atenuada(f) ? 0.28 : 1 }} />
           ) : null))}
           {/* flechas de hitos: la rama que entrega llega a este hito desde abajo */}
           {filas.map((f, i) => (f.desde && f.rama !== 'main' ? (
-            <path key={`d-${f.id}`} d={`M${x(f.desde)},${cy(i) + FILA * 0.8} C${x(f.desde)},${cy(i) + FILA * 0.35} ${x(f.rama)},${cy(i) + FILA * 0.45} ${x(f.rama)},${cy(i) + 7}`} className={`mp-linea flecha${f.futuro ? ' futuro' : ''}`} style={{ stroke: colorMapa(f.desde) }} />
+            <path key={`d-${f.id}`} d={`M${x(f.desde)},${cy(i) + FILA * 0.8} C${x(f.desde)},${cy(i) + FILA * 0.35} ${x(f.rama)},${cy(i) + FILA * 0.45} ${x(f.rama)},${cy(i) + 7}`} className={`mp-linea flecha${f.futuro ? ' futuro' : ''}`} style={{ stroke: colorMapa(f.desde), opacity: atenuada(f) ? 0.28 : 1 }} />
           ) : null))}
           {/* commits, hitos grandes (rombo) y hitos de main */}
           {filas.map((f, i) => {
@@ -130,13 +132,13 @@ export function RutaMapa({ day }: { day: DayLog }) {
             const cls = `mp-commit${sel === f.id ? ' sel' : ''}${f.futuro || f.estado === 'vencido' ? ' futuro' : ''}${f.standby ? ' standby' : ''}${f.estado === 'vencido' ? ' vencido' : ''}`;
             if (f.hitoTipo === 'grande') {
               const s = 13;
-              return <rect key={f.id} x={cx - s / 2} y={cy(i) - s / 2} width={s} height={s} transform={`rotate(45 ${cx} ${cy(i)})`} className={`${cls} rombo`} style={{ ['--c' as string]: c }} />;
+              return <rect key={f.id} x={cx - s / 2} y={cy(i) - s / 2} width={s} height={s} transform={`rotate(45 ${cx} ${cy(i)})`} className={`${cls} rombo`} style={{ ['--c' as string]: c, opacity: atenuada(f) ? 0.28 : 1 }} />;
             }
             const s = f.tipo === 'head' ? 14 : f.tipo === 'hito' ? 13 : 10;
             return (
               <g key={f.id}>
                 {f.tipo === 'head' && <circle cx={cx} cy={cy(i)} r={15} className="mp-halo" />}
-                <rect x={cx - s / 2} y={cy(i) - s / 2} width={s} height={s} rx={3} className={cls} style={{ ['--c' as string]: c }} />
+                <rect x={cx - s / 2} y={cy(i) - s / 2} width={s} height={s} rx={3} className={cls} style={{ ['--c' as string]: c, opacity: atenuada(f) ? 0.28 : 1 }} />
               </g>
             );
           })}
@@ -147,7 +149,6 @@ export function RutaMapa({ day }: { day: DayLog }) {
           {filas.map((f) => {
             const c = f.rama === 'main' ? 'var(--tinta)' : colorMapa(f.rama);
             const resaltar = f.tipo === 'head' || (f.hitoTipo === 'grande' && f.estado !== 'vencido');
-            const atenuada = ramaF != null && f.tipo !== 'gap' && f.tipo !== 'head' && f.rama !== ramaF && f.desde !== ramaF && f.a !== ramaF && f.rama !== 'main';
             const cuerpo = (
               <>
                 <span className="mono mf-et">{etiqueta(f)}{f.desde ? <span className="sub"> ← {RAMA_NOMBRE[f.desde].toLowerCase()}</span> : null}</span>
@@ -155,7 +156,7 @@ export function RutaMapa({ day }: { day: DayLog }) {
               </>
             );
             return (
-              <li key={f.id} className={`mf-${f.tipo}${f.standby ? ' standby' : ''}${f.estado === 'vencido' ? ' vencido' : ''}${sel === f.id ? ' sel' : ''}${atenuada ? ' atenuada' : ''}`} style={{ ['--c' as string]: c }}>
+              <li key={f.id} className={`mf-${f.tipo}${f.standby ? ' standby' : ''}${f.estado === 'vencido' ? ' vencido' : ''}${sel === f.id ? ' sel' : ''}${atenuada(f) ? ' atenuada' : ''}`} style={{ ['--c' as string]: c }}>
                 {f.tipo === 'gap' ? cuerpo : (
                   <button className="mf-boton" aria-pressed={sel === f.id} onClick={() => setSel(sel === f.id ? null : f.id)}>{cuerpo}</button>
                 )}

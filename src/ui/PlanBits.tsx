@@ -1,5 +1,6 @@
 /** Piezas del plan T+18 que se repiten: avisos entre ramas, contadores, etiqueta de rama. */
 import { avisoPasado, avisosEntreRamas } from '../data/avisos';
+import { focusStartedAt } from '../data/focus';
 import { enPausa } from '../data/plan-state';
 import { metasSemanaPlan } from '../data/plan';
 import { RAMA_COLOR } from '../data/ramas';
@@ -26,9 +27,10 @@ export function AvisosRamas({ date, day }: { date: string; day?: DayLog }) {
   const plan = useStore((s) => s.plan);
   const settings = useStore((s) => s.settings);
   const focoKey = useStore((s) => s.focus?.key);
+  const focoInicio = useStore((s) => (s.focus ? focusStartedAt(s.focus) : undefined));
   useNow(30000);
   const cfg = planSettings(settings);
-  const pasado = day ? avisoPasado(day, focoKey, nowMin()) : null;
+  const pasado = day ? avisoPasado(day, focoKey, nowMin(), focoInicio != null ? nowMin(new Date(focoInicio)) : undefined) : null;
   const avisos = [...(pasado ? [pasado] : []), ...avisosEntreRamas(date, plan, cfg, settings?.startDate)];
   if (!avisos.length) return null;
   const pasar = () => {

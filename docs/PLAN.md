@@ -463,13 +463,19 @@ Mismo flujo: una rama y un PR por ola; se mergea a `main` con el CI en verde.
   - **Datos:** `TrainState` suma `runs`, `medidas` y `pesoPreguntado`; los guardados viejos arrancan vacíos. 16 tests nuevos.
 - **Pendiente a propósito:** pedir el peso solo los domingos en Ajustes (hoy es todos los días, salteable); minutos de otras actividades de cardio distintas de correr.
 
-**Ola 14 · Arreglos de Hoy** (Sonnet 5.5 · medio)
+**Ola 14 · Arreglos de Hoy** (Sonnet 5.5 · medio) — *hecha*
 
 - **Aviso de bloque pasado:** si entrás en foco en un bloque que ya terminó, Hoy dice "Matemática se pasó 644 min" y acorta el siguiente a 0. Tiene que contar desde que empezó el foco, no desde el fin del bloque (`avisoPasado` en `src/data/avisos.ts`), con test.
 - **Títulos de meta cortados** ("Matemática · CON…"): el rango "07:55-08:10" ocupa mucho. En la fila va solo la hora de inicio (§3 bis) y el rango completo al abrirla.
 - **Toast inicial:** el "Sello nuevo" tapa el título al entrar; baja de la zona del título o espera a que termine la entrada.
 - **Mapa (pendiente de la ola 11):** el filtro por rama también atenúa los marcadores del dibujo, no solo las filas.
-- **Aceptación:** a 390 px los títulos de las 10 metas de Hoy se leen enteros o casi, sin desbordes, en claro y oscuro.
+- **Aceptación:** a 390 px los títulos de las 10 metas de Hoy se leen enteros o casi, sin desbordes, en claro y oscuro. *Hecho:* sin desbordes y los títulos medianos se leen enteros; los muy largos ("Programación · Consolidación", "Acompañar a Abi y correr") siguen cortándose con elipsis, como pide §3 bis.
+- **Lo que quedó:**
+  - **Aviso de bloque pasado:** el foco guarda cuándo empezó (`startedAt`; los guardados antes se estiman desde el tramo actual) y `avisoPasado` no avisa si el foco arrancó cuando el bloque ya había terminado: eso es llegar tarde, no pasarse. Con foco que empezó a tiempo y siguió después del fin, avisa igual.
+  - **Fila de meta:** lleva solo la hora de inicio (Geist Mono, `--sub`, a la derecha del título). El rango completo ("04:30–06:30") va en la línea de arriba al abrir la meta.
+  - **Toasts:** pasan abajo, encima de la barra o del mini reproductor, con un máximo de 3 a la vez, y nunca tapan el título. En escritorio salen abajo a la derecha del riel. Quedan por debajo de los modales y las hojas.
+  - **Mapa:** el filtro por rama atenúa también los marcadores, las líneas de las otras ramas, las entregas y las flechas.
+  - 8 tests nuevos.
 
 **Ola 15 · Un solo roadmap de matemática** (Opus 5.5 · alto) — *necesita una decisión antes de arrancar*
 
@@ -547,7 +553,7 @@ En el día a día alcanza con **Haiku 5.5 · bajo**: pegás el JSON del cierre y
 
 **Criterios de aceptación de los cambios transversales**
 
-- La hora queda a la derecha del título en todas las filas de metas; número y checkbox no se mueven de lugar.
+- La hora queda a la derecha del título en todas las filas de metas (solo la de inicio; el rango va al abrir la meta); número y checkbox no se mueven de lugar.
 - En el estudio, ningún paso del día muestra la tesis del capítulo nuevo.
 - Las duraciones de la sesión suman lo que dice el botón de foco.
 - Modo claro y oscuro revisados; sin desbordes a 390 px.

@@ -3,8 +3,15 @@ import type { FocusState, Seg } from './types';
 const MS = 60000;
 
 export function startFocus(date: string, key: string, plan: string, segs: Seg[], now: number): FocusState {
-  return { date, key, plan, segs, i: 0, segStart: now, pausedAt: null };
+  return { date, key, plan, segs, i: 0, segStart: now, pausedAt: null, startedAt: now };
 }
+
+/**
+ * Cuándo empezó el foco. Los guardados antes de la ola 14 no traen `startedAt`: se estima desde
+ * el tramo actual restándole lo que duraron los anteriores.
+ */
+export const focusStartedAt = (s: FocusState) =>
+  s.startedAt ?? s.segStart - s.segs.slice(0, s.i).reduce((a, x) => a + x.min, 0) * MS;
 
 const at = (s: FocusState, now: number) => s.pausedAt ?? now;
 
