@@ -8,7 +8,7 @@ const WEEK: Seed[] = [
   { title: 'Demos terminadas', area: 'eclipse', group: 'Eclipse', horizon: 'semana', type: 'numero', target: 12, unit: 'demos' },
   { title: 'Especialistas', rama: 'handyx', area: 'handyx', group: 'Handyx', horizon: 'semana', type: 'numero', target: 56, unit: 'especialistas' },
   { title: 'Usuarios', rama: 'handyx', area: 'handyx', group: 'Handyx', horizon: 'semana', type: 'numero', target: 100, unit: 'usuarios', quick: true, quickLabel: 'Usuario Handyx' },
-  { title: 'Correr', rama: 'salud', area: 'salud', group: 'Salud', horizon: 'semana', type: 'contador', target: 7, unit: 'veces' },
+  { title: 'Correr', rama: 'salud', area: 'salud', group: 'Salud', horizon: 'semana', type: 'contador', target: 7, unit: 'veces', auto: { kind: 'correr' } },
   { title: 'Comer sano', rama: 'salud', area: 'salud', group: 'Salud', horizon: 'semana', type: 'contador', target: 7, unit: 'días' },
 ];
 

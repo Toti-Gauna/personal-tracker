@@ -49,6 +49,7 @@ import { usePendientes } from './ui/useStudy';
 import { PantallaPendiente } from './screens/Seccion';
 import { useStore } from './state/store';
 import { Avisos } from './ui/avisos';
+import { Checkins } from './ui/checkins';
 import { useFocusRunner } from './ui/useFocusRunner';
 import { useSealSync } from './ui/useSealSync';
 import { ensureDayRefs, ensureWeek } from './state/ruta';
@@ -137,6 +138,7 @@ export function App() {
       {conBarra && !presentacion && <SideNav activa={ruta.seccion} pendientes={pendientes} />}
       {conBarra && !presentacion && <BottomBar activa={activaBarra} pendientes={pendientes} />}
       <Avisos />
+      {settings && <Checkins />}
       {cargando && <Splash onFin={fin} />}
     </div>
   );

@@ -9,7 +9,8 @@ export function DiaJson({ day }: { day: DayLog }) {
   const settings = useStore((s) => s.settings)!;
   const days = useStore((s) => s.days);
   const names = useStore((s) => s.goals.bimesterNames);
-  const texto = JSON.stringify(dayJson(day, settings, days, names), null, 2);
+  const train = useStore((s) => s.train);
+  const texto = JSON.stringify(dayJson(day, settings, days, names, train), null, 2);
   const archivo = `${day.date}.json`;
 
   const copiar = async () => {

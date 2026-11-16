@@ -13,6 +13,9 @@ import { useStore } from '../state/store';
 import { Calendario } from '../ui/Calendario';
 import { Sello } from '../ui/Sello';
 import { StudyChart, barras, type Periodo } from '../ui/WeekChart';
+import { runWeek } from '../data/train';
+import { CorridasChart } from '../ui/CorridasChart';
+import '../styles/checkins.css';
 import '../styles/avance.css';
 
 const PERIODOS: [Periodo, string][] = [['semana', 'Semana'], ['mes', 'Mes'], ['anio', 'Año']];
@@ -126,6 +129,12 @@ export function Avance({ day, presentacion }: { day: DayLog; presentacion: boole
             })}
           </ul>
         </section>
+        {mostrarPeso && (
+          <section className="tarjeta-av" aria-labelledby="av-corr">
+            <div className="fila-t"><span className="etiqueta" id="av-corr">Corridas</span><span className="mono sub">{s.train.runs.length ? `${runWeek(s.train.runs, date).min} min esta semana` : 'sin registros'}</span></div>
+            <CorridasChart runs={s.train.runs} hoy={date} />
+          </section>
+        )}
         {mostrarPeso && (
           <section className="tarjeta-av" aria-labelledby="av-peso">
             <div className="fila-t"><span className="etiqueta" id="av-peso">Peso</span><span className="mono sub">meta {fmtKg(s.train.goalKg)} kg</span></div>

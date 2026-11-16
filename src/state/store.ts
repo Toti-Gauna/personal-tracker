@@ -113,6 +113,8 @@ function migrateGoals(g: GoalsState): GoalsState {
     goals: g.goals.filter((x) => !reemplazada(x)).map((x) => (x.rama || !x.id.startsWith('g-seed') || !RAMA_DE_SEMILLA[x.title] ? x : { ...x, rama: RAMA_DE_SEMILLA[x.title] })).map((x) => {
       if (x.auto) return x;
       if (x.title === 'Entrenar' && x.horizon === 'semana') return { ...x, auto: { kind: 'entreno' }, quick: false };
+      // Ola 13: Correr sale solo de las corridas registradas.
+      if (x.title === 'Correr' && x.horizon === 'semana') return { ...x, auto: { kind: 'correr' }, quick: false };
       if (x.title === 'Entrenamientos' && x.horizon === 'mes') return { ...x, auto: { kind: 'entreno' } };
       if (x.title === 'Llegar a 95 kg entrenando 6 días' && x.horizon === 'anio') return { ...x, auto: { kind: 'peso' } };
       return x;
