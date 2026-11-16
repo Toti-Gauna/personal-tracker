@@ -5,7 +5,7 @@ Tracker personal de Toti: el día en horas, el estudio con su propio motor de re
 - **Diseño:** [canvas de Trazo](https://claude.ai/artifact/6Cc2E6aW2ViU5ikovpsRTy)
 - **Roadmap de estudio:** [ruta ML + DevSecOps](https://claude.ai/artifact/9PEokku7mBLZdCFJr1zqXP)
 - **Pantallas:** presentación `Trazo-pantallas.pptx` y su ZIP de imágenes (44 pantallas, 8 flujos).
-- **Estado:** olas 0 a 12b hechas y en `main`. Olas 0 a 16c hechas (la 15 quedó absorbida por la 16c). Olas 0 a 17 hechas. Las olas 18 a 23 (arreglos de uso, sistema de estudio nuevo, metas por bloque con JSON, roadmaps de programación y de inglés, y orden de pantallas) están planificadas en §6 sexies. Este archivo es la fuente de verdad.
+- **Estado:** olas 0 a 12b hechas y en `main`. Olas 0 a 16c hechas (la 15 quedó absorbida por la 16c). Olas 0 a 17 hechas. Las olas 18 a 24 (arreglos de uso, calendario sin pausas, unidades por área, metas por bloque con JSON, roadmaps de programación y de inglés, y orden de pantallas) están planificadas en §6 sexies. Este archivo es la fuente de verdad.
 
 ---
 
@@ -384,12 +384,13 @@ Desde el lunes 16 nov 2026 la prioridad es un trabajo remoto de USD 3.000 a 5.00
 | 16b · Plan T+18 extendido: calendario vivo | La app lee el calendario derivado en vez de las 78 semanas fijas, con migración sin romper `trazo.v1` (§6 quater) | Opus 5.5 · alto · *hecha* |
 | 16c · Plan T+18 extendido: matemática y vistas | Ventanas y puertas 85/65, línea de tiempo por etapas, panel "hoy sos", alertas y fichas de proyecto. **Absorbe la ola 15:** un solo roadmap de matemática (§6 quater) | Opus 5.5 · alto · *hecha* |
 | 17 · Rutina de las 08:00 y dormir a las 22:00 | Tercera opción en Buen día (levantarse a las 08:00) con su propio día; en la de las 04:00, entreno de 3 h (18:00 a 21:00), descanso de 21:00 a 22:00 y dormir siempre a las 22:00 (§6 quinquies) | Sonnet 5.5 · medio · *hecha* |
-| 18 · Arreglos de uso | Submetas en cualquier meta (Hoy y Metas) y sin zoom al escribir en el teléfono (§6 sexies) | Sonnet 5.5 · medio |
-| 19 · Sistema de estudio nuevo | Unidad por área, test al día siguiente con corte de 90 %, repaso y re-test, tesis al día siguiente y repetición a los 3 días (§6 sexies) | Opus 5.5 · alto |
-| 20 · Metas por bloque e importar JSON | Armar tus propias metas en cada proyecto, ventana o libro, e insertar las que te pase con un JSON (§6 sexies) | Sonnet 5.5 · alto |
-| 21 · Roadmap de programación por proyectos | Estudio con la programación aprendida haciendo proyectos, subpáginas por proyecto y niveles de salida de las ventanas (§6 sexies) | Opus 5.5 · alto |
-| 22 · Roadmap de inglés | Un libro por vez con el método de libros (Measure What Matters), curso de pronunciación y "English Made Simple" (§6 sexies) | Sonnet 5.5 · alto |
-| 23 · Orden de pantallas | Pasada de UX en Metas, Estudio y Hoy: pantallas más livianas con subpáginas y botones (§6 sexies) | Sonnet 5.5 · medio |
+| 18 · Arreglos de uso | Submetas en cualquier meta principal (Hoy y Metas), sin zoom al escribir en el teléfono y sin "modo entrevista" (se practica en la búsqueda laboral el día anterior) (§6 sexies) | Sonnet 5.5 · medio |
+| 19 · Calendario sin pausas | Se sacan las 4 pausas del calendario: T+18 pasa al 6 de agosto de 2028 y el plan termina el 21 de julio de 2030 (§6 sexies) | Sonnet 5.5 · medio |
+| 20 · Unidades por área y sistema de libros | Unidad de avance por área y libros con micro-tesis por capítulo, mini-test cada 2 capítulos, test y tesis final, dentro del motor de estudio que ya tenés (85 %) (§6 sexies) | Sonnet 5.5 · alto |
+| 21 · Metas por bloque e importar JSON | Armar tus propias metas en cada proyecto, ventana o libro, e insertar las que te pase con un JSON (§6 sexies) | Sonnet 5.5 · alto |
+| 22 · Roadmap de programación por proyectos | Estudio con la programación aprendida haciendo proyectos, subpáginas por proyecto y niveles de salida de las ventanas (§6 sexies) | Opus 5.5 · alto |
+| 23 · Roadmap de inglés | Un libro por vez con el método de libros (Measure What Matters), curso de pronunciación y "English Made Simple" (§6 sexies) | Sonnet 5.5 · alto |
+| 24 · Orden de pantallas | Pasada de UX en Metas, Estudio y Hoy: pantallas livianas con subpáginas y botones (§6 sexies) | Sonnet 5.5 · medio |
 
 ## 6 bis. Olas 9 a 12: mejoras de uso
 
@@ -620,52 +621,59 @@ Mismo flujo: una rama y un PR por ola; se mergea a `main` con el CI en verde.
 - **Horas por semana de la intensiva:** el entrenamiento pasa de 10 a 15 h.
 - 5 tests nuevos y 3 actualizados.
 
-## 6 sexies. Olas 18 a 23: arreglos de uso, sistema de estudio, roadmaps de programación e inglés
+## 6 sexies. Olas 18 a 24: arreglos de uso, calendario sin pausas, unidades por área, roadmaps de programación e inglés
 
-Pedido del 2026-11-16, después de probar la app en el teléfono. Mismo flujo: una rama y un PR por ola; se mergea a `main` con el CI en verde. Orden recomendado: 18, 19, 20, 21, 22 y 23.
+Pedido del 2026-11-16, después de probar la app en el teléfono, con las decisiones del mismo día. Mismo flujo: una rama y un PR por ola; se mergea a `main` con el CI en verde. Orden recomendado: 18 a 24.
+
+**Decidido (2026-11-16)**
+1. **Corte de 85 %:** se queda en todo (tests, puertas de las ventanas, semáforo). El 90 % del texto de estudio no se usa.
+2. **Se conserva el sistema de estudio que ya está en Trazo** (día 1 estudiar, día 2 test, día 3 tesis, repasos a +8, +22 y +61 y repaso adaptativo). No se cambia el motor. De lo nuevo solo se toman las **unidades por área** y el **sistema de libros**.
+3. **Las pausas no existen:** se sacan del calendario. Los stand-by de Handyx y ventas son otra cosa y se quedan.
+4. **Sin modo entrevista:** si hay una entrevista, se practica el día anterior con el pitch armado en el bloque de búsqueda laboral; si la entrevista es en inglés, se practica en ese mismo bloque. El bloque de inglés pasa a ser lectura (ola 23).
+5. **"Meta padre" es la meta principal con sus submetas:** las metas numeradas de Hoy y las de Metas.
 
 **Ola 18 · Arreglos de uso** (Sonnet 5.5 · medio)
-- **Submetas en cualquier meta:** hoy no se puede sumar un paso a una meta de Hoy (solo desde la pantalla Foco) ni a una meta que ya existe en Metas. Cada meta abierta en Hoy suma **+ Agregar tarea** con la hoja de la ola 10, y cada meta de Metas suma **+ Submeta**. Se pueden quitar y reordenar.
-- **Sin zoom al escribir:** en el teléfono, tocar un campo con letra menor a 16 px hace zoom y deforma la hoja (los campos de distancia, medidas, notas y búsqueda). Todos los campos pasan a 16 px o más y el visor bloquea el zoom automático, sin quitar el zoom de accesibilidad con pellizco. La hoja se acomoda sobre el teclado y no queda cortada a la derecha.
-- **Aceptación:** una captura a 390 px con el teclado abierto se ve como la imagen 3 del pedido, sin zoom ni cortes.
+- **Submetas en la meta principal:** hoy no se puede sumar un paso a una meta de Hoy (solo desde Foco) ni a una de Metas que ya existe. Cada meta abierta en Hoy suma **+ Agregar submeta** con la hoja de la ola 10, y cada meta de Metas suma **+ Submeta**. Se pueden quitar.
+- **Sin zoom al escribir:** en el teléfono, tocar un campo con letra de menos de 16 px hace zoom y deforma la hoja (distancia, medidas, notas, búsqueda). Todos los campos pasan a 16 px o más y la hoja se acomoda sobre el teclado sin cortarse a la derecha. El zoom de accesibilidad con pellizco se conserva.
+- **Entrevista sin modo propio:** se saca el reemplazo del bloque de inglés por un simulacro y el bloque "Inglés · modo entrevista" que partía la búsqueda. El día anterior a una entrevista, el bloque de **búsqueda laboral** suma "Practicar la entrevista de mañana con el pitch armado" y, si es en inglés, "Practicarla en inglés". El aviso entre ramas pasa a decir lo mismo y se avisa el día anterior.
+- **Aceptación:** una captura a 390 px con el teclado abierto se ve sin zoom ni cortes; una entrevista cargada para mañana agrega la práctica a la búsqueda de hoy.
 
-**Ola 19 · Sistema de estudio nuevo** (Opus 5.5 · alto)
-- **Unidad de avance por área:** matemática, 1 capítulo; programación, IA y DevSecOps, 1 bloque del curso (unas 4 partes); libros, cada 2 capítulos leídos más una micro-tesis por capítulo; lenguajes, 1 capítulo, unidad o bloque.
-- **Test al día siguiente (o el día asignado).** Se aprueba con **más de 90 %**. Si no, el resto del bloque de ese día se usa para repasar los temas débiles y al día siguiente hay re-test.
-- **Tesis al día siguiente de aprobar:** por capítulo (matemática y lenguajes), por bloque (programación), micro-tesis por capítulo y tesis final del libro completo (libros).
-- **Repetición espaciada a los 3 días de la tesis:** leer la tesis, repasar los conceptos clave, ver ejemplos y hacer práctica activa según el área (ejercicios, código, speaking o writing). Los errores se registran.
-- **Convivencia:** el motor actual (corte de 85 %, escalera 0, +1, +3, +7, +21, +60 con FSRS para las tarjetas) cambia. Las tarjetas y el repaso del día siguen; la regla de aprobación, los días de tesis y el repaso pasan a las de este sistema. Migración sin perder lo guardado.
-- **Decisiones abiertas:** ver "A confirmar".
+**Ola 19 · Calendario sin pausas** (Sonnet 5.5 · medio)
+- Se sacan las 4 pausas ("Pausa de fin de año") de `data/plan-extendido.json`. Los dos "Descanso" (DES3 y DES4) se quedan hasta que se decida. Las etapas pasan a 52, 24, 38 y 55 semanas base.
+- **Efecto:** con las semanas extra de feature, T+18 pasa del 20 al **6 de agosto de 2028** (90 semanas) y el plan termina el **21 de julio de 2030**. Se corren todas las fechas que siguen a la primera pausa: W1 pasa a ser del 1 al 21 de febrero de 2027 y Surco v1 arranca el 22 de febrero.
+- **Security+ (C2) pasa al 31 de mayo a 20 de junio de 2027.** Sigue terminando después del 11 de junio, cuando se retira la versión SY0-701. No se resuelve en el código: depende de la decisión del 22 de noviembre (con SY0-801 no hay problema). La alerta de decisión lo avisa.
+- Se actualizan los textos que dicen "pausa de fin de año", los hitos anclados, los bimestres y los tests con fechas.
 
-**Ola 20 · Metas por bloque e importar JSON** (Sonnet 5.5 · alto)
-- Cada proyecto, ventana, libro o unidad tiene su lista de metas propias: se arman a mano (con submetas) y se pueden tildar, editar y borrar. En P0, por ejemplo, armás las que consideres para tener un buen camino.
-- **Importar con JSON:** pegás un JSON con las metas de un bloque (el formato queda documentado y con ejemplo), Trazo valida línea por línea, muestra "Qué cambia" antes de guardar y deja el avance de lo que ya había. Reusa el importador de la ola 8. Sirve para todos los bloques y para que yo te pase metas ya armadas.
-- **Aceptación:** una meta importada aparece en su bloque y en Hoy cuando toca, y se puede exportar el JSON de las tuyas.
+**Ola 20 · Unidades por área y sistema de libros** (Sonnet 5.5 · alto)
+- **Unidad de avance por área**, dentro del motor actual (85 %): matemática, 1 capítulo; programación, IA y DevSecOps, 1 bloque del curso (unas 4 partes); lenguajes, 1 capítulo, unidad o bloque; libros, cada 2 capítulos.
+- **Sistema de libros:** por cada capítulo, una micro-tesis; cada 2 capítulos, un mini-test; al terminar el libro, un test y la tesis final. Las micro-tesis pueden dar tarjetas, como la tesis de hoy.
+- Se agregan al catálogo de Estudio los libros como actividades con sus unidades, y el motor los programa igual que el resto.
+- **Aceptación:** un libro de 10 capítulos genera 10 micro-tesis, 5 mini-tests, un test y una tesis final, con sus fechas.
 
-**Ola 21 · Roadmap de programación por proyectos** (Opus 5.5 · alto)
-- **Estudio:** la card "Programación" deja de mandar a leer ("Python Tutorial, secciones 3 a 5, de corrido"). Pasa a ser un roadmap por proyectos, con la misma estructura que el de matemática: "Estás acá", "Hoy sos → Vas a ser" y la escalera de P0 a A7 con sus etapas. Se aprende haciendo: la meta de programación de Hoy sale de las metas del proyecto en curso, no de un curso de lectura.
-- **Subpáginas por proyecto**, con botones desde una pantalla liviana: Resumen, Stack y tecnología nueva, Metas del proyecto (ola 20), Evidencia (número medido, validador e informe), Pieza matemática y Entrega. Una sola cosa por pantalla.
-- **Datos nuevos:** el texto actualizado del plan trae, por proyecto, el stack y lo que contiene, y por ventana el contenido y el **nivel de salida** (por ejemplo, W1: resolver ecuaciones y desigualdades sin ayuda, graficar funciones y calcular varianza, percentiles y cuantiles). El nivel de salida de cada ventana pasa a ser una lista de criterios que se tilda, y se ve en la pantalla de la ventana.
-- **Correcciones al calendario (a confirmar):** (1) las pausas se llaman "Pausa de fin de año" pero solo la primera cae en esa época (4 a 10 de ene de 2027); las otras caen el 13 de mar de 2028, el 30 de abr de 2029 y el 10 de jun de 2030. (2) Security+ (C2) va del 7 al 27 de jun de 2027 y la versión SY0-701 se retira el 11 de jun.
+**Ola 21 · Metas por bloque e importar JSON** (Sonnet 5.5 · alto)
+- Cada proyecto, ventana, libro o unidad tiene su lista de metas propias: se arman a mano (con submetas), se tildan, editan y borran. En P0, por ejemplo, armás las que consideres para tener un buen camino.
+- **Importar con JSON:** pegás un JSON con las metas de un bloque (el formato queda documentado con un ejemplo), Trazo valida línea por línea, muestra "Qué cambia" antes de guardar y conserva el avance de lo que ya había. Reusa el importador de la ola 8. Sirve para todos los bloques y para que yo te pase metas ya armadas. También se puede exportar el JSON de las tuyas.
+- **Aceptación:** una meta importada aparece en su bloque y en Hoy cuando toca.
 
-**Ola 22 · Roadmap de inglés** (Sonnet 5.5 · alto)
-- **Estudio → Inglés**, con la misma estructura que Matemática y Programación.
-- **Libros:** leés un libro por vez, todos los días, hasta terminarlo, con el método de libros de la ola 19: metas por capítulo, micro-tesis por capítulo, mini-test cada 2 capítulos, test, tesis y tesis final.
-- **El primero es "Measure What Matters"**, con sus metas por capítulo, micro-tesis, mini-tests, test y tesis. Después van los demás libros que me pases (la lista se carga desde un JSON, ola 20).
+**Ola 22 · Roadmap de programación por proyectos** (Opus 5.5 · alto)
+- **Estudio:** la card "Programación" deja de mandar a leer ("Python Tutorial, secciones 3 a 5, de corrido"). Pasa a ser un roadmap por proyectos con la estructura del de matemática: "Estás acá", "Hoy sos → Vas a ser" y la escalera de P0 a A7 por etapa. Se aprende haciendo: la meta de programación de Hoy sale de las metas del proyecto en curso (ola 21), no de un curso de lectura.
+- **Subpáginas por proyecto**, con botones desde una pantalla liviana: Resumen, Stack y tecnología nueva, Metas del proyecto, Evidencia (número medido, validador e informe), Pieza matemática y Entrega.
+- **Datos nuevos del texto actualizado:** por proyecto, el stack y lo que contiene; por ventana, el contenido y el **nivel de salida** (por ejemplo, W1: resolver ecuaciones y desigualdades sin ayuda, graficar funciones y calcular varianza, percentiles y cuantiles). El nivel de salida pasa a ser una lista de criterios que se tilda y se ve en la pantalla de cada ventana.
+
+**Ola 23 · Roadmap de inglés** (Sonnet 5.5 · alto)
+- **Estudio → Inglés**, con la estructura de Matemática y Programación. El bloque de inglés de Hoy pasa a ser la lectura del día.
+- **Libros:** un libro por vez, todos los días, hasta terminarlo, con el sistema de libros de la ola 20. El primero es **Measure What Matters**, con metas por capítulo, micro-tesis, mini-tests, test y tesis final. Después van los demás libros que me pases (se cargan con JSON, ola 21).
 - **Curso de pronunciación en inglés (Udemy):** secciones como unidades con su práctica de speaking. **El enlace del curso se carga desde la app y queda en el teléfono: no se commitea**, porque el repo es público y la dirección es de una cuenta de empresa.
 - **Al final, "English Made Simple"**, con el mismo sistema de libros.
-- **A confirmar:** cuántos capítulos tiene el libro y en qué bloque del día va (hoy el bloque de inglés es "modo entrevista").
 
-**Ola 23 · Orden de pantallas** (Sonnet 5.5 · medio)
-- Una pasada de UX sobre Metas, Estudio y Hoy: lo que hoy ocupa una pantalla larga pasa a una pantalla liviana con botones a subpáginas (más información sin saturar). Mismo criterio para los roadmaps de matemática, programación e inglés.
+**Ola 24 · Orden de pantallas** (Sonnet 5.5 · medio)
+- Una pasada de UX sobre Metas, Estudio y Hoy: lo que hoy ocupa una pantalla larga pasa a una pantalla liviana con botones a subpáginas (más información sin saturar), con el mismo criterio en los roadmaps de matemática, programación e inglés.
 - **Aceptación:** ninguna pantalla pasa de unas 3 pantallas de scroll en el teléfono; lo demás vive en una subpágina con su botón y su "volver".
 
 **A confirmar**
-1. **90 % o 85 %:** el sistema nuevo aprueba con más de 90 %; el plan viene con 85 % (tests, puertas de las ventanas, semáforo). ¿El 90 % reemplaza al 85 % en todo, o solo en el sistema de libros, inglés y programación?
-2. **Repetición:** ¿la repetición a los 3 días de la tesis reemplaza a la escalera +7, +21 y +60, o queda una sola repetición?
-3. **Pausas y Security+:** ¿las renombro "Pausa" y reordeno el calendario para que C2 quede antes del 11 de junio, o decidís primero la versión (SY0-801 o 701) el 22 de noviembre?
-4. **Inglés:** cuántos capítulos tiene Measure What Matters, y en qué bloque del día va la lectura.
-5. **"Meta padre":** lo tomé como las metas numeradas de Hoy (cada una con sus tareas) y las metas de Metas. Si te referías a otra cosa, decime.
+1. ¿Los dos "Descanso" (DES3 y DES4, de 1 semana) también se sacan, o se quedan? Por defecto se quedan.
+2. ¿Cuántos capítulos tiene Measure What Matters?
+3. La versión de Security+ (SY0-801 o SY0-701) se decide el 22 de noviembre; no la resuelvo yo.
 
 En el día a día alcanza con **Haiku 5.5 · bajo**: pegás el JSON del cierre y queda commiteado en `data/days/`.
 
