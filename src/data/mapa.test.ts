@@ -6,15 +6,15 @@ import { emptyStudy } from './study-catalog';
 describe('mapa en ramas', () => {
   it('arriba T+18, abajo T+0 y HEAD en hoy; lo que viene después de HEAD es futuro', () => {
     const f = filasMapa('2026-12-14', 'mes', emptyPlan(), emptyStudy());
-    expect(f[0]).toMatchObject({ hito: 'T+18', fecha: '2028-05-14' });
+    expect(f[0]).toMatchObject({ hito: 'T+18', fecha: '2028-08-20' });
     expect(f[f.length - 1]).toMatchObject({ hito: 'T+0', fecha: '2026-11-16' });
     const head = f.findIndex((x) => x.tipo === 'head');
-    expect(f[head].texto).toBe('Faro v1 · semana 3 de 3');
+    expect(f[head].texto).toBe('Faro v1 · semana 3 de 5');
     expect(f.slice(1, head).every((x) => x.futuro || x.tipo === 'gap')).toBe(true);
     expect(f.slice(head + 1).every((x) => !x.futuro)).toBe(true);
-    // Este mes incluye T+2 (11 ene) y la entrega de Faro v1 (20 dic).
+    // Este mes incluye T+2 (11 ene) y la entrega de Faro v1 (3 ene, con las semanas de feature).
     expect(f.some((x) => x.hito === 'T+2')).toBe(true);
-    expect(f.some((x) => x.a === 'trabajo' && x.fecha === '2026-12-20')).toBe(true);
+    expect(f.some((x) => x.a === 'trabajo' && x.fecha === '2027-01-03')).toBe(true);
     // Ordenadas de la más nueva a la más vieja.
     const fechas = f.filter((x) => x.tipo !== 'gap').map((x) => x.fecha);
     expect([...fechas].sort().reverse()).toEqual(fechas);
@@ -30,19 +30,24 @@ describe('mapa en ramas', () => {
 });
 
 describe('mapa · hitos y stand-by (Ola 8b)', () => {
-  it('Trimestre: los 30 hitos iniciales, ordenados por fecha, con clipping y rombos', async () => {
+  it('Trimestre: los hitos iniciales, ordenados por fecha, con clipping y rombos', async () => {
     const { HITOS } = await import('./hitos');
     const f = filasMapa('2026-11-15', 'trimestre', emptyPlan(), emptyStudy(), '2026-11-16');
     const h = f.filter((x) => x.hitoId);
-    expect(h).toHaveLength(30);
+    // Ola 16b: W1 lista (28 feb), Surco v1 arranca (1 mar) y cierra (28 mar) siguen a su tramo y
+    // pasan al segundo trimestre; en el primero quedan 27 de los 30.
+    expect(h).toHaveLength(27);
     expect(HITOS).toHaveLength(30);
     const fechas = h.map((x) => x.fecha);
     expect([...fechas].sort().reverse()).toEqual(fechas);
     expect(h[h.length - 1]).toMatchObject({ fecha: '2026-11-16', rama: 'main', hito: 'T+0' });
-    expect(h[0]).toMatchObject({ fecha: '2027-02-21', rama: 'programacion', hitoTipo: 'grande' });
-    expect(h.find((x) => x.fecha === '2027-02-01')).toMatchObject({ rama: 'programacion', desde: 'matematica' });
+    expect(h.find((x) => x.hitoId === 'programacion-62')).toMatchObject({ fecha: '2027-02-07', rama: 'programacion', hitoTipo: 'grande' });
+    const t2 = filasMapa('2027-03-01', 'trimestre', emptyPlan(), emptyStudy(), '2026-11-16').filter((x) => x.hitoId);
+    expect(t2.find((x) => x.hitoId === 'programacion-77')).toMatchObject({ fecha: '2027-03-01', rama: 'programacion', desde: 'matematica' });
+    expect(t2.find((x) => x.hitoId === 'programacion-97')).toMatchObject({ fecha: '2027-03-28', hitoTipo: 'grande' });
+    expect(t2.find((x) => x.hitoId === 'matematica-76')).toMatchObject({ fecha: '2027-02-28' });
     expect(h.filter((x) => x.rama === 'clipping')).toHaveLength(3);
-    expect(h.filter((x) => x.hitoTipo === 'grande')).toHaveLength(11);
+    expect(h.filter((x) => x.hitoTipo === 'grande')).toHaveLength(9);
     expect(f[0].hito).toBe('T+18');
   });
 

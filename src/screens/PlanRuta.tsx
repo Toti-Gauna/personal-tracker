@@ -37,7 +37,7 @@ export function PlanRuta({ day }: { day: DayLog }) {
         <span className="mono"><b>{v.semana}</b> / {SEMANAS}</span>
         <span className="mono sub">B{v.bim.n} · {v.nombreBim} · {fechaLarga(date)}</span>
       </div>
-      <div className="pr-segs" role="img" aria-label={`Semana ${v.semana} de ${SEMANAS}`}>
+      <div className="pr-segs" role="img" aria-label={`Semana ${v.semana} de ${SEMANAS}`} style={{ ['--n' as string]: SEMANAS }}>
         {Array.from({ length: SEMANAS }, (_, i) => {
           const n = i + 1;
           return <span key={n} className={`${n < v.semana ? 'pasada' : n === v.semana ? 'actual' : ''}${marcas.has(n) ? ' hito' : ''}`} />;
@@ -55,7 +55,7 @@ export function PlanRuta({ day }: { day: DayLog }) {
 
       <a className="pr-ganadas" href="#/metas/proyecto">
         <b className="mono">{ganadas.total > 0 ? '+' : ''}{ganadas.total}</b>
-        <span><b>semanas ganadas</b><small className="sub">Programación en {FIN_PROGRAMACION} semanas en vez de {PLAN.programacion.semanasOriginal}{ganadas.proyectos ? ` · ${ganadas.proyectos > 0 ? '+' : ''}${ganadas.proyectos} por proyectos` : ''}{ganadas.puertas ? ` · −${ganadas.puertas} por puertas de matemática` : ''}</small></span>
+        <span><b>{Math.abs(ganadas.total) === 1 ? 'semana' : 'semanas'} de colchón</b><small className="sub">{ganadas.base} al final de la etapa 1; una puerta de matemática sin aprobar lo consume{ganadas.proyectos ? ` · ${ganadas.proyectos > 0 ? '+' : ''}${ganadas.proyectos} por proyectos` : ''}{ganadas.puertas ? ` · −${ganadas.puertas} por puertas` : ''}</small></span>
       </a>
 
       {sprint && (

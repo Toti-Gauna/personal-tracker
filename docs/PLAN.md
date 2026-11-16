@@ -5,7 +5,7 @@ Tracker personal de Toti: el día en horas, el estudio con su propio motor de re
 - **Diseño:** [canvas de Trazo](https://claude.ai/artifact/6Cc2E6aW2ViU5ikovpsRTy)
 - **Roadmap de estudio:** [ruta ML + DevSecOps](https://claude.ai/artifact/9PEokku7mBLZdCFJr1zqXP)
 - **Pantallas:** presentación `Trazo-pantallas.pptx` y su ZIP de imágenes (44 pantallas, 8 flujos).
-- **Estado:** olas 0 a 12b hechas y en `main`. La ola 16a (datos del Plan T+18 extendido) está hecha; quedan las olas 13 a 15, 16b y 16c, planificadas en §6 ter y §6 quater. Este archivo es la fuente de verdad.
+- **Estado:** olas 0 a 12b hechas y en `main`. Olas 13, 14, 16a y 16b hechas; queda la 16c (que absorbe la 15), planificada en §6 quater. Este archivo es la fuente de verdad.
 
 ---
 
@@ -379,10 +379,10 @@ Desde el lunes 16 nov 2026 la prioridad es un trabajo remoto de USD 3.000 a 5.00
 | 12b · Estudio: pantallas | Estudio como cards de roadmap, timeline de fases con "Estás acá" y perfil por fase (§6 bis) | Opus 5.5 · alto |
 | 13 · Check-ins de salud | Peso al entrar a Entreno la primera vez del día, registro de corridas (minutos, km, sensación) y medidas mensuales (§6 ter) | Sonnet 5.5 · alto |
 | 14 · Arreglos de Hoy | Aviso de bloque pasado que cuenta mal, títulos de meta cortados, toast que tapa el título y marcadores del mapa sin atenuar (§6 ter) | Sonnet 5.5 · medio |
-| 15 · Un solo roadmap de matemática | Unificar Estudio (M0 a M10) con la Ruta y el plan, duraciones y actividades para M2 en adelante (§6 ter) | Opus 5.5 · alto |
+| 15 · Un solo roadmap de matemática | *Absorbida por la 16c* (decisión del 2026-11-16): la matemática del Plan T+18 extendido (ventanas basadas en CONAMAT) pasa a ser el roadmap único (§6 ter) | — |
 | 16a · Plan T+18 extendido: datos | `data/plan-extendido.json` (56 bloques en 4 etapas), validador y fechas derivadas con extras por bloque y atrasos que consume el colchón; sin tocar pantallas (§6 quater) | Opus 5.5 · alto |
-| 16b · Plan T+18 extendido: calendario vivo | La app lee el calendario derivado en vez de las 78 semanas fijas, con migración sin romper `trazo.v1` (§6 quater) | Opus 5.5 · alto |
-| 16c · Plan T+18 extendido: matemática y vistas | Ventanas y puertas 85/65, línea de tiempo por etapas, panel "hoy sos", alertas y fichas de proyecto (§6 quater) | Opus 5.5 · alto |
+| 16b · Plan T+18 extendido: calendario vivo | La app lee el calendario derivado en vez de las 78 semanas fijas, con migración sin romper `trazo.v1` (§6 quater) | Opus 5.5 · alto · *hecha* |
+| 16c · Plan T+18 extendido: matemática y vistas | Ventanas y puertas 85/65, línea de tiempo por etapas, panel "hoy sos", alertas y fichas de proyecto. **Absorbe la ola 15:** un solo roadmap de matemática (§6 quater) | Opus 5.5 · alto |
 
 ## 6 bis. Olas 9 a 12: mejoras de uso
 
@@ -477,7 +477,7 @@ Mismo flujo: una rama y un PR por ola; se mergea a `main` con el CI en verde.
   - **Mapa:** el filtro por rama atenúa también los marcadores, las líneas de las otras ramas, las entregas y las flechas.
   - 8 tests nuevos.
 
-**Ola 15 · Un solo roadmap de matemática** (Opus 5.5 · alto) — *necesita una decisión antes de arrancar*
+**Ola 15 · Un solo roadmap de matemática** — *absorbida por la 16c* (decisión del 2026-11-16). Lo de abajo queda como contexto; se resuelve dentro de la 16c.
 
 - **Hoy conviven dos:** Estudio usa el roadmap M0 a M10 (`data/study-roadmaps.json`); la Ruta y el plan siguen con CONAMAT de B1 a B6 (`data/roadmap.json`, `data/plan.json`).
 - **A decidir:** cuál manda, y las duraciones (las fases suman 45 a 57 meses; el cronograma del texto habla de 33).
@@ -487,7 +487,7 @@ Mismo flujo: una rama y un PR por ola; se mergea a `main` con el CI en verde.
 
 **Opus 5.5 · alto.** Es la ola más grande, así que se parte en tres PRs que se pueden mergear solos:
 - **16a · datos** (*hecha*): el calendario como datos, validado, con fechas derivadas. No cambia ninguna pantalla.
-- **16b · calendario vivo:** la app deja de leer las 78 semanas fijas y lee el calendario derivado; migración.
+- **16b · calendario vivo** (*hecha*): la app deja de leer las 78 semanas fijas y lee el calendario derivado; migración.
 - **16c · matemática y vistas:** ventanas y puertas con semáforo 85/65, línea de tiempo por etapas, panel "hoy sos", alertas y fichas de proyecto.
 
 **Decisiones tomadas (2026-11-16):** las semanas extra de feature vienen **prendidas por defecto** (calendario de 196 semanas); se apagan por bloque. La ola se parte como arriba. El prompt completo se guardó en `docs/prompts/plan-t18-extendido.md`.
@@ -527,12 +527,26 @@ Mismo flujo: una rama y un PR por ola; se mergea a `main` con el CI en verde.
 - **Todavía no se usa:** ninguna pantalla ni `plan.ts` lee el archivo nuevo. Eso es la 16b.
 - **Pendiente para las fichas de proyecto (16c):** feature diferencial, tecnología nueva, pieza matemática, validador y evidencia de cada proyecto, que hoy están solo en el prompt.
 
+**Ola 16b · lo que quedó y decisiones**
+- **T+18 = cierre de la etapa 2, derivado.** `SEMANAS` deja de ser 78 fijo: con las semanas extra de feature son **92** (T+18 el 20 ago 2028); sin ningún extra vuelven a ser 78 (14 may 2028). T+0, T+2 y T+12 son fechas de calendario y no se mueven.
+- **Calendario vivo:** `src/data/plan.ts` arma `TRAMOS` con las etapas 1 y 2 del calendario derivado (29 tramos) y conserva el detalle de `plan.json` (qué, stack, perfil, industria). Los ids que cambiaron se mapean: `pausa` → `PAU1` y `colchon` → `COL`. Las etapas 3 y 4 quedan para la línea de tiempo de la 16c.
+- **Recalcular:** `aplicarCalendario(apagados)` recalcula todo (tramos, semanas, bimestres, T+18, matemática y bimestres). Corre al cargar y cada vez que cambia `plan.extrasApagados`. Los valores exportados son `let`, así que todas las pantallas ven el calendario nuevo sin cambiar cómo los leen.
+- **Extras por proyecto:** Ajustes → Plan T+18 → "Semanas extra por feature", con un interruptor por proyecto (P1 a P10 y S1 a S3) y la fecha de T+18 que resulta. Se guarda en `plan.extrasApagados` y sobrevive a recargar.
+- **Matemática:** las ventanas (W1 a W4) salen del calendario y los tramos diarios llenan los huecos. W1 ahora dura 3 semanas, W2 4 y W3 4, y se suma W4 (habilita S1). Los libros siguen siendo los de `plan.json`; alinearlos con el prompt es la 16c.
+- **Bimestres:** pasan a ser 11 (el último de 2 semanas). B1 conserva "El despegue"; los demás nombres y la meta de programación de cada bimestre salen de lo que cae en él ("Escudo y Surco v1", "P2 Escudo, W1 y P3 Surco v1"), porque los de antes describían el calendario comprimido. Las metas de las otras ramas siguen las del plan; en B10 y B11 repiten las de B9. Los nombres que renombraste a mano se respetan.
+- **Hitos anclados:** los de programación y la ventana W1 siguen a su tramo (P1 cierra el 3 ene 2027, P2 el 7 feb, W1 el 28 feb y Surco v1 arranca el 1 mar y cierra el 28 mar). En la pestaña Trimestre quedan 27 de los 30 hitos iniciales; los otros 3 pasan al segundo trimestre.
+- **Colchón en vez de semanas ganadas:** como la etapa 2 ocupa el margen viejo, la tarjeta de la Ruta muestra el colchón (2 semanas al final de la etapa 1), más lo que adelantan los proyectos y menos lo que atrasan las puertas de matemática.
+- **Portfolio agéntico:** los contadores de Perfil cuentan 14 proyectos (P0 a P10 y S1 a S3).
+- **Textos:** "vuelven en mayo de 2028" pasa a salir de la fecha de T+18 ("agosto de 2028"); la tira de semanas de la Ruta y la grilla de bimestres se adaptan a la cantidad.
+- **Migración:** la clave sigue siendo `trazo.v1`. El avance guardado por proyecto, ventana e hito usa los mismos ids; lo único nuevo es `plan.extrasApagados`, opcional.
+- **Tests:** 25 tests tenían las fechas del calendario comprimido; se reescribieron contra el calendario nuevo (las fechas salen de la tabla del prompt). Se sumaron tests del recálculo al apagar extras, de los tramos de matemática y de los bimestres.
+
 **Cómo encaja con lo que ya está**
 - **Etapas 1 y 2 = 78 semanas base, igual que hoy.** Hoy el plan tiene 78 semanas: 53 de programación (19 tramos) y 25 de "Margen". La etapa 2 de ciberseguridad ocupa justo ese margen, y el hito T+18 es el cierre de la etapa 2.
 - **Cambia en la etapa 1:** W1 pasa de 2 a 3 semanas, W2 de 3 a 4, W3 de 2 a 4 y el colchón de 6 a 2. Cada proyecto con feature suma 1 o 2 semanas.
 - **Con extras, T+18 se mueve** de mayo de 2028 al 20 de agosto de 2028 (+14 semanas), y la app lo dice en muchos textos.
 - **Impacto en el código:** 13 archivos leen `SEMANAS`, `TRAMOS` o `FIN_PROGRAMACION`, y el mapa, la Ruta, Hoy y los hitos dependen de eso.
-- **Matemática:** es un tercer roadmap, de ventanas y basado en CONAMAT como el de `plan.json`. Absorbe o redefine la ola 15 (un solo roadmap de matemática). *A confirmar.*
+- **Matemática:** es un tercer roadmap, de ventanas y basado en CONAMAT como el de `plan.json`. **La 16c absorbe la ola 15** (decidido el 2026-11-16): el roadmap de matemática de este plan pasa a ser el único, Estudio y la Ruta lo leen, y M0 a M10 (`data/study-roadmaps.json`) queda como material de refuerzo por tipo de error.
 
 **Aceptación**
 - Validador de JSON con tests, y tests del recálculo de fechas y de la regla 85 / 65.

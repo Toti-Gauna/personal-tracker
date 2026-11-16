@@ -4,7 +4,7 @@
 .pr-semana .mono:first-child { font-size: 20px; color: var(--sub); }
 .pr-semana b { font-size: 34px; font-weight: 400; color: var(--tinta); }
 .pr-semana .sub { font-size: 12.5px; text-align: right; }
-.pr-segs { display: grid; grid-template-columns: repeat(78, 1fr); gap: 1px; align-items: end; height: 14px; margin-bottom: 10px; }
+.pr-segs { display: grid; grid-template-columns: repeat(var(--n, 92), minmax(0, 1fr)); gap: 1px; align-items: end; height: 14px; margin-bottom: 10px; }
 .pr-segs span { height: 7px; background: var(--linea); }
 .pr-segs span.pasada { background: var(--tinta); }
 .pr-segs span.actual { background: var(--economia); }
@@ -91,7 +91,7 @@
 .mp-sig p { margin: 8px 0 0; }
 .mp-final h3 { font-size: 24px; margin: 8px 0 6px; }
 .mp-final p { margin: 0; }
-.mp-bims { display: grid; grid-template-columns: repeat(9, minmax(0, 1fr)); gap: 4px; margin-top: 22px; }
+.mp-bims { display: grid; grid-template-columns: repeat(var(--n, 9), minmax(0, 1fr)); gap: 4px; margin-top: 22px; }
 .mp-bims button { min-height: 44px; border: 1px solid var(--linea); font-family: var(--font-mono); font-size: 13px; color: var(--sub); padding: 0; }
 .mp-bims button.actual { color: var(--tinta); border-color: var(--sub); }
 .mp-bims button[aria-selected='true'] { background: var(--tinta); color: var(--papel); border-color: var(--tinta); font-weight: 700; }

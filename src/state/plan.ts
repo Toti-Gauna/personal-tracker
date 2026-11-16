@@ -15,6 +15,16 @@ function update(fn: (p: PlanState) => PlanState) {
   setState((s) => ({ ...s, plan: fn(s.plan) }));
 }
 
+/** Prende o apaga las semanas extra de feature de un proyecto; el calendario se recalcula. */
+export function setExtraBloque(id: string, prendido: boolean) {
+  update((p) => {
+    const set = new Set(p.extrasApagados ?? []);
+    if (prendido) set.delete(id);
+    else set.add(id);
+    return { ...p, extrasApagados: [...set].sort() };
+  });
+}
+
 function evento(p: PlanState, rama: Rama, fecha: string, texto: string): PlanState {
   const e: EventoRama = { id: `e${newId()}`, rama, fecha, texto, origen: 'registro' };
   return { ...p, eventos: [...p.eventos, e] };

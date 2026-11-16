@@ -79,6 +79,8 @@ export interface PlanState {
   pausas: Pausa[];
   /** Hitos marcados como hechos o movidos de fecha: id → estado. */
   hitos: Record<string, { hecho?: string; fecha?: string }>;
+  /** Ola 16b: proyectos con las semanas extra de feature apagadas (por defecto van prendidas). */
+  extrasApagados?: string[];
   /** Meta "Mapa de proyectos del portfolio": 4 pasos (Trazo guarda la meta; el diseño es tuyo). */
   mapaPortfolio?: Record<string, boolean>;
   /** Revisión de mercado: ofertas cargadas y % de ofertas que piden cada proyecto movible. */

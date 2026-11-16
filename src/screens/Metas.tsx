@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { averagePct, monthLabel, periodRange, ratio } from '../data/goals';
 import type { Horizon } from '../data/goals-types';
 import { avanceMeta, metasSemanaGeneradas } from '../data/metas-plan';
-import { BIMESTRES, SEMANAS, SEMANAS_BIM, T0_PLAN, enPlan, faseTrabajo, finSemana } from '../data/plan';
+import { BIMESTRES, PLAN, SEMANAS, SEMANAS_BIM, T0_PLAN, enPlan, faseTrabajo, fechaHito, finSemana } from '../data/plan';
 import { RAMA_COLOR, RAMA_NOMBRE, RAMAS } from '../data/ramas';
 import { addDays, parseDate } from '../data/time';
 import type { DayLog } from '../data/types';
@@ -54,7 +54,7 @@ function MetasTabs({ day, tab }: { day: DayLog; tab?: string }) {
   // Línea de resumen de cada pestaña.
   let linea = '';
   if (actual === 'ruta') {
-    linea = 'Plan T+18: seis ramas que salen de Trazo y vuelven en mayo de 2028, con perfil senior en ML, DevSecOps y cloud.';
+    linea = `Plan T+18: seis ramas que salen de Trazo y vuelven en ${mesAnio(fechaHito(PLAN.hitos.find((h) => h.id === 'T+18')!, t0))}, con perfil senior en ML, DevSecOps, cloud y seguridad.`;
   } else if (actual === 'semana') {
     const fase = faseTrabajo(date, t0);
     const l = lunesDe(date);
