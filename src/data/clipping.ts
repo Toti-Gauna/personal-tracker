@@ -161,3 +161,22 @@ export function diasDelMes(n: number, date: string, t0 = CLIP.t0) {
   const hechos = date < a ? 0 : date >= b ? total : Math.round((Date.parse(date) - Date.parse(a)) / 864e5) + 1;
   return { total, hechos };
 }
+
+/**
+ * Lo que pide el plan entre dos fechas, día por día: clips (clips por día del mes del roadmap) y USD
+ * (la meta del mes prorrateada). Antes del mes 1 cuenta como mes 1; después del 12, como el 12.
+ */
+export function planEntre(desde: string, hasta: string, t0 = CLIP.t0) {
+  let clips = 0;
+  let usd = 0;
+  for (let d = desde; d <= hasta; d = addDays(d, 1)) {
+    const n = Math.min(Math.max(mesDe(d, t0), 1), MESES_CLIP);
+    const m = CLIP.meses[n - 1];
+    clips += m.clipsDia;
+    usd += m.meta / diasDelMes(n, d, t0).total;
+  }
+  return { clips, usd: Math.round(usd) };
+}
+
+/** El mes del roadmap para una fecha, dentro de 1 a 12 (para los textos de Hoy y las metas). */
+export const mesClipEn = (date: string, t0 = CLIP.t0) => CLIP.meses[Math.min(Math.max(mesDe(date, t0), 1), MESES_CLIP) - 1];

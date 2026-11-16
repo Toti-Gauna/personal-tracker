@@ -15,6 +15,8 @@ import { Sello } from '../ui/Sello';
 import { StudyChart, barras, type Periodo } from '../ui/WeekChart';
 import { runWeek } from '../data/train';
 import { CorridasChart } from '../ui/CorridasChart';
+import { mesClipEn, mesDe as mesClipDe } from '../data/clipping';
+import { ingresoMes } from '../data/clipping-metricas';
 import '../styles/checkins.css';
 import '../styles/avance.css';
 
@@ -94,6 +96,18 @@ export function Avance({ day, presentacion }: { day: DayLog; presentacion: boole
         <section className="tarjeta-av" aria-labelledby="av-metas">
           <div className="fila-t"><span className="etiqueta" id="av-metas">Metas del año</span><span className="mono sub">año 1</span></div>
           <ul className="av-metas">
+            {mesClipDe(date) >= 1 && mesClipDe(date) <= 12 && (() => {
+              // Ola 23: lo cobrado del clipping en el mes del roadmap.
+              const n = mesClipDe(date);
+              const v = ingresoMes(s.clipping, n);
+              const meta = mesClipEn(date).meta;
+              return (
+                <li style={{ ['--c' as string]: 'var(--eclipse)' }}>
+                  <div><i /><span>Clipping · mes {n} del roadmap</span><b className="mono">USD {Math.round(v)}/{meta}</b></div>
+                  <span className="mg-barra"><span style={{ width: `${ratio(v, meta) * 100}%` }} /></span>
+                </li>
+              );
+            })()}
             {anio.map((g) => {
               const v = valueOf(g, date, ctx);
               const oculto = privada(g);

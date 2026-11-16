@@ -9,6 +9,7 @@ import { emptyPlan, DEFAULT_PLAN_SETTINGS, type PlanSettings, type PlanState } f
 import { semanaDelPlan, tramoActivo, ventanaW } from '../data/plan';
 import { tareasDeBloque } from '../data/metas-bloque';
 import { faseIdiomaEn } from '../data/idiomas';
+import { mesClipEn, mesDe as mesClipDe } from '../data/clipping';
 import { plannedFor } from '../data/train';
 import { addDays, dateKey } from '../data/time';
 import { emptyStudy } from '../data/study-catalog';
@@ -201,7 +202,9 @@ export function startDay(routine: RoutineId, wake: string, date = dateKey()) {
       .map((b) => (b.rama === 'programacion' && delProyecto.length ? { ...b, tasks: [...delProyecto.map((t) => ({ id: newId(), t: `${proyecto} · ${t}`, done: false })), ...b.tasks] } : b))
       .map((b) => (b.key === 'cierre' && estirar ? { ...b, tasks: b.tasks.map((x) => (x.t === 'Estirar' ? { ...x, t: `Estirar: ${estirar}` } : x)) } : b))
       // Ola 21: el bloque de idiomas trae las tareas de la fase de esta semana (salvo lo que pasó de ayer).
-      .map((b) => (b.key === 'ingles' ? { ...b, tasks: [...faseIdiomaEn(date, t0 ?? T0_PLAN).tareas.map((t) => ({ id: newId(), t, done: false })), ...b.tasks.filter((x) => (carry.ingles ?? []).includes(x.t))] } : b));
+      .map((b) => (b.key === 'ingles' ? { ...b, tasks: [...faseIdiomaEn(date, t0 ?? T0_PLAN).tareas.map((t) => ({ id: newId(), t, done: false })), ...b.tasks.filter((x) => (carry.ingles ?? []).includes(x.t))] } : b))
+      // Ola 23: de lunes a viernes, el clipping trae las tareas del mes del roadmap; el finde, pipeline y prospección.
+      .map((b) => (b.key === 'clipping' && b.min <= 90 && mesClipDe(date) >= 1 && mesClipDe(date) <= 12 ? { ...b, tasks: [...mesClipEn(date).tareas.map((t) => ({ id: newId(), t, done: false })), ...b.tasks.filter((x) => (carry.clipping ?? []).includes(x.t))] } : b));
     const day: DayLog = { date, wake, routine, dayType, ...(ventana ? { ventana } : {}), blocks, notes: [], focus: [] };
     return { ...s, days: { ...s.days, [date]: day }, carry: restCarry };
   });

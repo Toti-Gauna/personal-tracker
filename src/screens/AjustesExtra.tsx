@@ -80,6 +80,9 @@ export function AjustesDatos({ today }: { today: string }) {
   const input = useRef<HTMLInputElement>(null);
   const tarjetas = useStore((s) => s.study.cards.length);
   const dias = useStore((s) => Object.keys(s.days).length);
+  const clipFilas = useStore((s) => s.clipping.registro.length);
+  const clipCamp = useStore((s) => s.clipping.campanas.length);
+  const clipCuentas = useStore((s) => s.clipping.cuentas.length);
   const sesiones = useStore((s) => s.train.sessions.length);
 
   const bajar = () => {
@@ -130,6 +133,7 @@ export function AjustesDatos({ today }: { today: string }) {
         <div><b className="mono">{tarjetas}</b><span>tarjetas</span></div>
         <div><b className="mono">{sesiones}</b><span>entrenos</span></div>
       </div>
+      <p className="sub">Incluye la planilla del clipping: {clipFilas} {clipFilas === 1 ? 'fila' : 'filas'}, {clipCamp} {clipCamp === 1 ? 'campaña' : 'campañas'} y {clipCuentas} {clipCuentas === 1 ? 'cuenta' : 'cuentas'}. También se exporta sola desde Metas → Clipping → Registro.</p>
       <p className="sub">{settings.lastBackup ? `Última copia: ${settings.lastBackup}.` : 'Todavía no hiciste ninguna copia.'}</p>
       <button className="btn-principal" onClick={bajar}>Descargar copia</button>
       <button className="btn-borde" onClick={() => input.current?.click()}>Restaurar desde un archivo</button>

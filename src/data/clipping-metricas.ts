@@ -3,6 +3,7 @@
  * Regla del pago real: sale solo de las filas con cobro cargado (cobrado ÷ views verificadas × 1.000).
  */
 import { CLIP, curva, diasDelMes, faseDe, finMes, inicioMes, mesDe, mesPlan, MESES_CLIP } from './clipping';
+import { daysBetween } from './time';
 import type { ClippingState, FilaClip, Retainer } from './clipping-state';
 import { addDays } from './time';
 import type { DayLog } from './types';
@@ -314,4 +315,42 @@ export function rangoPeriodo(p: '30' | '90' | 'todo', date: string, st?: Clippin
     return { desde: primera < date ? primera : date, hasta: date };
   }
   return { desde: addDays(date, -(Number(p) - 1)), hasta: date };
+}
+
+/** Clips publicados entre dos fechas según la planilla. */
+export const clipsEntre = (st: ClippingState, desde: string, hasta: string) => totales(filas(st, { desde, hasta })).clips;
+
+/** USD cobrados entre dos fechas: filas con cobro y retainers prorrateados. */
+export const usdEntre = (st: ClippingState, desde: string, hasta: string) => r2(totales(filas(st, { desde, hasta })).cobrado + usdRetainers(st, { desde, hasta }));
+
+export interface AlertaClip { id: string; titulo: string; texto: string; fecha: string; href: string }
+
+/**
+ * Ola 23 · alertas del clipping para el panel de Etapas: revisar campañas cada lunes, el pago real cada
+ * viernes, fin de fase (7 días antes), la revisión del mes 6 (14 días antes), concentración por encima
+ * del 30 % (desde la fase 3) y la compuerta en rojo. Solo durante los 12 meses.
+ */
+export function alertasClipping(hoy: string, st: ClippingState): AlertaClip[] {
+  const n = mesDe(hoy);
+  if (n < 1 || n > MESES_CLIP) return [];
+  const out: AlertaClip[] = [];
+  const dow = new Date(`${hoy}T12:00:00`).getDay();
+  const href = '#/metas/clipping';
+  if (dow === 1) out.push({ id: 'clip-lunes', fecha: hoy, href: `${href}/campanas`, titulo: 'Clipping · lunes: revisá las campañas', texto: 'Pausá lo que paga menos de lo esperado y sumá campañas nuevas.' });
+  if (dow === 5) {
+    const p = pagoReal(filas(st, { desde: addDays(hoy, -6), hasta: hoy }));
+    out.push({ id: 'clip-viernes', fecha: hoy, href: `${href}/metricas`, titulo: `Clipping · viernes: pago real ${p == null ? 'sin cobros esta semana' : `USD ${p.toFixed(2).replace('.', ',')} por 1.000 views`}`, texto: 'Mirá el pago real por campaña y decidí qué se escala.' });
+  }
+  const fa = faseDe(n)!;
+  const finFase = finMes(fa.meses[1]);
+  if (daysBetween(hoy, finFase) <= 7) out.push({ id: `clip-fase-${fa.n}`, fecha: finFase, href: `${href}/plan`, titulo: `Clipping · la fase ${fa.n} cierra el ${finFase.slice(8, 10)}/${finFase.slice(5, 7)}`, texto: fa.criterios.join(' · ') });
+  const fin6 = finMes(6);
+  if (hoy <= fin6 && daysBetween(hoy, fin6) <= 14) out.push({ id: 'clip-revision-6', fecha: fin6, href: `${href}/metricas`, titulo: 'Clipping · revisión del mes 6', texto: `Si el pago real baja de USD ${CLIP.umbrales.pagoMes6.toFixed(2).replace('.', ',')} por 1.000 views, cambiá de campañas antes de escalar.` });
+  if (fa.n === 3) {
+    const c = concentracion(st, { desde: addDays(hoy, -29), hasta: hoy });
+    if (c.peor && c.peor.pct > CLIP.umbrales.concentracionMax) out.push({ id: 'clip-conc', fecha: hoy, href: `${href}/metricas`, titulo: `Clipping · ${c.peor.nombre} es el ${Math.round(c.peor.pct * 100)} % del ingreso`, texto: 'Ninguna campaña ni plataforma por encima del 30 %: diversificá.' });
+  }
+  const q = compuerta(st, hoy);
+  if (q?.luz === 'rojo') out.push({ id: 'clip-compuerta', fecha: hoy, href, titulo: `Clipping · ${q.titulo.toLowerCase()} en rojo`, texto: q.texto });
+  return out;
 }

@@ -109,7 +109,8 @@ function useCtx(): CtxPlan & { goals: Goal[]; intensiva: boolean } {
   const train = useStore((s) => s.train);
   const settings = useStore((s) => s.settings);
   const goals = useStore((s) => s.goals.goals);
-  return { plan, days, study, train, goals, t0: settings?.startDate ?? T0_PLAN, t2: planSettings(settings).t2, intensiva: planSettings(settings).modo === 'busqueda-intensiva' };
+  const clipping = useStore((s) => s.clipping);
+  return { plan, days, study, train, goals, clipping, t0: settings?.startDate ?? T0_PLAN, t2: planSettings(settings).t2, intensiva: planSettings(settings).modo === 'busqueda-intensiva' };
 }
 
 const colorDe = (m: { rama?: Rama; area?: keyof typeof AREAS }) => (m.rama ? RAMA_COLOR[m.rama] : m.area ? AREAS[m.area].css : 'var(--sub)');
@@ -269,7 +270,7 @@ export function SemanaPlan({ day, editar }: { day: DayLog; editar: boolean }) {
               );
             })}
             {metas.some((m) => !m.rama) && (
-              <Plegable id="semana:clipping" kicker="clipping · fuera del plan" titulo="Clipping" resumen="1 h 30 por día" color={AREAS.eclipse.css} abierto={abierto()}>
+              <Plegable id="semana:clipping" kicker="clipping · fuera del plan" titulo="Clipping" resumen="1 h 30 de lunes a viernes y 2 h el finde" color={AREAS.eclipse.css} abierto={abierto()}>
                 <ul className="mg-lista">{metas.filter((m) => !m.rama).map((m) => <MetaPlanFila key={m.id} m={m} tipo="semanas" clave={l} base={metas} desde={l} hasta={d7} date={date} ctx={ctx} editar={editar} />)}</ul>
               </Plegable>
             )}
@@ -340,9 +341,18 @@ export function MesPlan({ day, editar }: { day: DayLog; editar: boolean }) {
         <p className="sub mp-nota">Trazo armó estas metas desde el plan. Confirmalas, cambialas o borralas con «Editar metas».</p>
       )}
       <ul className="mg-lista">
-        {metas.map((m) => <MetaPlanFila key={m.id} m={m} tipo="meses" clave={key} base={metas} desde={a} hasta={b} date={date} ctx={ctx} editar={editar} conOrigen />)}
+        {metas.filter((m) => m.area !== 'eclipse').map((m) => <MetaPlanFila key={m.id} m={m} tipo="meses" clave={key} base={metas} desde={a} hasta={b} date={date} ctx={ctx} editar={editar} conOrigen />)}
         {personales.map((g) => <GoalRow key={g.id} g={g} date={date} editar={editar} sub={`${g.rama ?? (g.group ?? AREAS[g.area].name)} · tuya`} />)}
       </ul>
+      {/* Ola 23: las metas del clipping del mes (clips y USD del roadmap) van en su sección. */}
+      {metas.some((m) => m.area === 'eclipse') && (
+        <Plegable id="mes:clipping" kicker="clipping · roadmap" titulo="Clipping" resumen={`${metas.filter((m) => m.area === 'eclipse').length} metas`} color={AREAS.eclipse.css}>
+          <ul className="mg-lista">
+            {metas.filter((m) => m.area === 'eclipse').map((m) => <MetaPlanFila key={m.id} m={m} tipo="meses" clave={key} base={metas} desde={a} hasta={b} date={date} ctx={ctx} editar={editar} conOrigen />)}
+          </ul>
+          <a className="fila-link" href="#/metas/clipping">El tablero del clipping <span aria-hidden="true">→</span></a>
+        </Plegable>
+      )}
       {!metas.length && !personales.length && <p className="sub vacio">Este mes no hay metas del plan.</p>}
       <HitosRango desde={a} hasta={b} date={date} />
       <StandBy plan={ctx.plan} date={date} />

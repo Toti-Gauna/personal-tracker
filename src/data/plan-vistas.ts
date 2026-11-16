@@ -11,6 +11,8 @@ import { PLAN_EXT, bloqueExtPorId, calendario, type BloqueExt, type BloqueFechad
 import type { PlanState } from './plan-state';
 import { cierreProyecto, puertaAprobada } from './puertas';
 import { daysBetween } from './time';
+import { alertasClipping } from './clipping-metricas';
+import type { ClippingState } from './clipping-state';
 
 /** Regla del plan: 85 % o más aprueba y pasa a la tesis; 65 a 84 % refuerzo y retest; menos, vuelve. */
 export const PUERTA = { verde: 0.85, amarillo: 0.65 };
@@ -124,7 +126,7 @@ export function hoySos(hoy: string, plan: PlanState, t0 = T0_PLAN) {
 
 export interface Alerta {
   id: string;
-  tipo: 'cert' | 'ventana' | 'decision' | 'idioma';
+  tipo: 'cert' | 'ventana' | 'decision' | 'idioma' | 'clipping';
   titulo: string;
   texto: string;
   href?: string;
@@ -135,7 +137,7 @@ export interface Alerta {
  * Alertas: certificaciones que empiezan en 8 semanas o menos (o en curso), ventanas que cierran en
  * 7 días o menos sin la puerta aprobada y decisiones abiertas con fecha en 14 días o menos.
  */
-export function alertas(hoy: string, plan: PlanState, t0 = T0_PLAN): Alerta[] {
+export function alertas(hoy: string, plan: PlanState, t0 = T0_PLAN, clipping?: ClippingState): Alerta[] {
   const cal = calendarioCompleto(t0);
   const out: Alerta[] = [];
   for (const b of cal) {
@@ -157,6 +159,8 @@ export function alertas(hoy: string, plan: PlanState, t0 = T0_PLAN): Alerta[] {
   }
   // Ola 21: exámenes de idiomas, trimestres y tesis anual.
   for (const a of alertasIdiomas(hoy, t0)) out.push({ ...a, tipo: 'idioma' });
+  // Ola 23: las del clipping (lunes, viernes, fin de fase, mes 6, concentración y compuerta).
+  if (clipping) for (const a of alertasClipping(hoy, clipping)) out.push({ ...a, tipo: 'clipping' });
   return out.sort((a, b) => a.fecha.localeCompare(b.fecha));
 }
 

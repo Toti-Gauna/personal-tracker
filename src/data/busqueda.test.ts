@@ -31,7 +31,8 @@ describe('búsqueda intensiva', () => {
     expect(horas('programacion')).toBe(25.5);
     expect(horas('ingles')).toBe(11.5);
     expect(horas('trabajo')).toBe(10.5);
-    expect(horas('clipping')).toBe(10.5);
+    // Ola 23: 1 h 30 de lunes a viernes y 2 h el sábado y el domingo.
+    expect(horas('clipping')).toBe(11.5);
   });
 
   it('el día corto y "Otra hora" recorren solo la mañana (rutina, matemática y programación)', () => {
@@ -97,7 +98,9 @@ describe('pausas en metas, cortes y avisos', () => {
     const s = metasSemanaGeneradas('2026-11-23', '2026-11-16', { intensiva: true, pausa });
     expect(s.some((m) => m.rama === 'handyx')).toBe(false);
     expect(s.find((m) => m.clave === 'horas-prog')?.meta).toBe(25.5);
-    expect(s.find((m) => m.clave === 'horas-clipping')?.meta).toBe(10.5);
+    expect(s.find((m) => m.clave === 'horas-clipping')?.meta).toBe(11.5);
+    // Ola 23: los clips de la semana salen del mes 1 del roadmap (5 por día).
+    expect(s.find((m) => m.clave === 'clips')).toMatchObject({ meta: 35, nota: 'mes 1 del roadmap · 5 por día' });
     const normal = metasSemanaGeneradas('2026-11-23', '2026-11-16');
     expect(normal.some((m) => m.rama === 'handyx')).toBe(true);
     const ene = metasMesGeneradas('2027-02-01', '2026-11-16', undefined, { intensiva: true, pausa });
@@ -135,7 +138,7 @@ describe('sprint e impacto', () => {
 
   it('horas por semana de la intensiva y el lanzamiento de Handyx según cuándo entre el trabajo', async () => {
     const { horasSemana, escenariosHandyx } = await import('./sprint');
-    expect(horasSemana('busqueda-intensiva', 'busqueda-intensiva-finde')).toMatchObject({ Programación: 25.5, Matemática: 14, Inglés: 11.5, Búsqueda: 10.5, Clipping: 10.5, Entrenamiento: 15, Handyx: 0 });
+    expect(horasSemana('busqueda-intensiva', 'busqueda-intensiva-finde')).toMatchObject({ Programación: 25.5, Matemática: 14, Inglés: 11.5, Búsqueda: 10.5, Clipping: 11.5, Entrenamiento: 15, Handyx: 0 });
     expect(escenariosHandyx('2026-11-16', '2026-11-16').map((e) => e.lanza)).toEqual(['2027-03-14', '2027-04-11', '2027-05-09']);
   });
 });

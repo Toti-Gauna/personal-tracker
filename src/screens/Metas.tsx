@@ -62,7 +62,7 @@ function MetasTabs({ day, tab }: { day: DayLog; tab?: string }) {
   } else if (actual === 'semana') {
     const fase = faseTrabajo(date, t0);
     const l = lunesDe(date);
-    const ctx = { plan, days, study: getState().study, train: getState().train, t0 };
+    const ctx = { plan, days, study: getState().study, train: getState().train, clipping: getState().clipping, t0 };
     const metas = plan.semanas[l]?.metas ?? metasSemanaGeneradas(date, t0, { intensiva: planSettings(settings).modo === 'busqueda-intensiva', pausa: plan });
     const porRama = RAMAS.map((r) => {
       const ms = metas.filter((m) => m.rama === r && m.meta);
