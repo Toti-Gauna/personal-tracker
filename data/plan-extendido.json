@@ -1,0 +1,538 @@
+{
+ "version": 1,
+ "t0": "2026-11-16",
+ "etapas": [
+  {
+   "n": 1,
+   "nombre": "Núcleo",
+   "perfil": "Senior ML + DevSecOps + Cloud",
+   "semanasBase": 53,
+   "semanasExtra": 11
+  },
+  {
+   "n": 2,
+   "nombre": "Ciberseguridad",
+   "perfil": "Senior con foco en seguridad",
+   "semanasBase": 25,
+   "semanasExtra": 3
+  },
+  {
+   "n": 3,
+   "nombre": "Quant trading",
+   "perfil": "Quant Trading Engineer / ML Quant",
+   "semanasBase": 38,
+   "semanasExtra": 6
+  },
+  {
+   "n": 4,
+   "nombre": "Ingeniería aeroespacial",
+   "perfil": "Aerospace Software Engineer",
+   "semanasBase": 55,
+   "semanasExtra": 5
+  }
+ ],
+ "bloques": [
+  {
+   "id": "P0",
+   "etapa": 1,
+   "tipo": "proyecto",
+   "nombre": "Consolidación",
+   "base": 2,
+   "extra": 0
+  },
+  {
+   "id": "P1",
+   "etapa": 1,
+   "tipo": "proyecto",
+   "nombre": "Faro v1 · petróleo",
+   "base": 3,
+   "extra": 2
+  },
+  {
+   "id": "PAU1",
+   "etapa": 1,
+   "tipo": "pausa",
+   "nombre": "Pausa de fin de año",
+   "base": 1,
+   "extra": 0
+  },
+  {
+   "id": "P2",
+   "etapa": 1,
+   "tipo": "proyecto",
+   "nombre": "Escudo · medicina",
+   "base": 3,
+   "extra": 1
+  },
+  {
+   "id": "W1",
+   "etapa": 1,
+   "tipo": "ventana",
+   "nombre": "Ventana W1 · matemática",
+   "base": 3,
+   "extra": 0
+  },
+  {
+   "id": "P3",
+   "etapa": 1,
+   "tipo": "proyecto",
+   "nombre": "Surco v1 · agro",
+   "base": 3,
+   "extra": 1,
+   "dependeDe": [
+    "W1"
+   ]
+  },
+  {
+   "id": "C1",
+   "etapa": 1,
+   "tipo": "cert",
+   "nombre": "AWS Solutions Architect Associate",
+   "base": 2,
+   "extra": 0
+  },
+  {
+   "id": "P4",
+   "etapa": 1,
+   "tipo": "proyecto",
+   "nombre": "Estación v1 · espacio",
+   "base": 4,
+   "extra": 1
+  },
+  {
+   "id": "P5",
+   "etapa": 1,
+   "tipo": "proyecto",
+   "nombre": "Faro v2 · petróleo",
+   "base": 2,
+   "extra": 1
+  },
+  {
+   "id": "C2",
+   "etapa": 1,
+   "tipo": "cert",
+   "nombre": "CompTIA Security+",
+   "base": 3,
+   "extra": 0
+  },
+  {
+   "id": "W2",
+   "etapa": 1,
+   "tipo": "ventana",
+   "nombre": "Ventana W2 · matemática",
+   "base": 4,
+   "extra": 0
+  },
+  {
+   "id": "P6",
+   "etapa": 1,
+   "tipo": "proyecto",
+   "nombre": "Lupa v1 · aeroespacial",
+   "base": 4,
+   "extra": 1,
+   "dependeDe": [
+    "W2"
+   ]
+  },
+  {
+   "id": "P7",
+   "etapa": 1,
+   "tipo": "proyecto",
+   "nombre": "Surco v2 · agro",
+   "base": 2,
+   "extra": 1
+  },
+  {
+   "id": "C3",
+   "etapa": 1,
+   "tipo": "cert",
+   "nombre": "AWS Machine Learning Engineer Associate",
+   "base": 2,
+   "extra": 0
+  },
+  {
+   "id": "W3",
+   "etapa": 1,
+   "tipo": "ventana",
+   "nombre": "Ventana W3 · matemática",
+   "base": 4,
+   "extra": 0
+  },
+  {
+   "id": "P8",
+   "etapa": 1,
+   "tipo": "proyecto",
+   "nombre": "Núcleo · nuclear",
+   "base": 2,
+   "extra": 1,
+   "dependeDe": [
+    "W3"
+   ],
+   "alternativa": "red teaming de agentes"
+  },
+  {
+   "id": "P9",
+   "etapa": 1,
+   "tipo": "proyecto",
+   "nombre": "Lupa v2 · aeroespacial",
+   "base": 3,
+   "extra": 1
+  },
+  {
+   "id": "P10",
+   "etapa": 1,
+   "tipo": "proyecto",
+   "nombre": "Estación v2 · espacio",
+   "base": 4,
+   "extra": 1
+  },
+  {
+   "id": "COL",
+   "etapa": 1,
+   "tipo": "colchon",
+   "nombre": "Colchón y salto senior",
+   "base": 2,
+   "extra": 0
+  },
+  {
+   "id": "W4",
+   "etapa": 2,
+   "tipo": "ventana",
+   "nombre": "Ventana W4 · matemática discreta y cripto",
+   "base": 2,
+   "extra": 0
+  },
+  {
+   "id": "S1",
+   "etapa": 2,
+   "tipo": "proyecto",
+   "nombre": "Cripta",
+   "base": 2,
+   "extra": 1,
+   "dependeDe": [
+    "W4"
+   ]
+  },
+  {
+   "id": "PAU2",
+   "etapa": 2,
+   "tipo": "pausa",
+   "nombre": "Pausa de fin de año",
+   "base": 1,
+   "extra": 0
+  },
+  {
+   "id": "S2",
+   "etapa": 2,
+   "tipo": "proyecto",
+   "nombre": "Bastión",
+   "base": 4,
+   "extra": 1
+  },
+  {
+   "id": "C4",
+   "etapa": 2,
+   "tipo": "cert",
+   "nombre": "PNPT",
+   "base": 3,
+   "extra": 0
+  },
+  {
+   "id": "C5",
+   "etapa": 2,
+   "tipo": "cert",
+   "nombre": "CKA",
+   "base": 2,
+   "extra": 0
+  },
+  {
+   "id": "C6",
+   "etapa": 2,
+   "tipo": "cert",
+   "nombre": "CKS",
+   "base": 3,
+   "extra": 0
+  },
+  {
+   "id": "S3",
+   "etapa": 2,
+   "tipo": "proyecto",
+   "nombre": "Centinela",
+   "base": 4,
+   "extra": 1
+  },
+  {
+   "id": "C7",
+   "etapa": 2,
+   "tipo": "cert",
+   "nombre": "AWS Security Specialty",
+   "base": 3,
+   "extra": 0
+  },
+  {
+   "id": "CIE2",
+   "etapa": 2,
+   "tipo": "cierre",
+   "nombre": "Cierre de T+18",
+   "base": 1,
+   "extra": 0
+  },
+  {
+   "id": "WQ1",
+   "etapa": 3,
+   "tipo": "ventana",
+   "nombre": "Ventana WQ1 · estadística, series de tiempo, portafolios",
+   "base": 3,
+   "extra": 0
+  },
+  {
+   "id": "Q1",
+   "etapa": 3,
+   "tipo": "proyecto",
+   "nombre": "Ábaco",
+   "base": 4,
+   "extra": 1,
+   "dependeDe": [
+    "WQ1"
+   ]
+  },
+  {
+   "id": "Q2",
+   "etapa": 3,
+   "tipo": "proyecto",
+   "nombre": "Brújula",
+   "base": 4,
+   "extra": 1,
+   "dependeDe": [
+    "WQ1"
+   ],
+   "alternativa": "réplica de papers"
+  },
+  {
+   "id": "DES3",
+   "etapa": 3,
+   "tipo": "pausa",
+   "nombre": "Descanso",
+   "base": 1,
+   "extra": 0
+  },
+  {
+   "id": "WQ2",
+   "etapa": 3,
+   "tipo": "ventana",
+   "nombre": "Ventana WQ2 · cálculo estocástico y derivados",
+   "base": 4,
+   "extra": 0
+  },
+  {
+   "id": "Q3",
+   "etapa": 3,
+   "tipo": "proyecto",
+   "nombre": "Prisma",
+   "base": 4,
+   "extra": 1,
+   "dependeDe": [
+    "WQ2"
+   ]
+  },
+  {
+   "id": "Q4",
+   "etapa": 3,
+   "tipo": "proyecto",
+   "nombre": "Libro",
+   "base": 4,
+   "extra": 1,
+   "dependeDe": [
+    "WQ2"
+   ]
+  },
+  {
+   "id": "WQ3",
+   "etapa": 3,
+   "tipo": "ventana",
+   "nombre": "Ventana WQ3 · optimización convexa y ML financiero",
+   "base": 2,
+   "extra": 0
+  },
+  {
+   "id": "Q5",
+   "etapa": 3,
+   "tipo": "proyecto",
+   "nombre": "Tablero",
+   "base": 5,
+   "extra": 1,
+   "dependeDe": [
+    "WQ3"
+   ]
+  },
+  {
+   "id": "PAU3",
+   "etapa": 3,
+   "tipo": "pausa",
+   "nombre": "Pausa de fin de año",
+   "base": 1,
+   "extra": 0
+  },
+  {
+   "id": "Q6",
+   "etapa": 3,
+   "tipo": "proyecto",
+   "nombre": "Nexo",
+   "base": 4,
+   "extra": 1,
+   "dependeDe": [
+    "WQ3"
+   ],
+   "alternativa": "pipeline de datos de mercado"
+  },
+  {
+   "id": "CIE3",
+   "etapa": 3,
+   "tipo": "cierre",
+   "nombre": "Cierre y puerta de capital real",
+   "base": 2,
+   "extra": 0
+  },
+  {
+   "id": "WA1",
+   "etapa": 4,
+   "tipo": "ventana",
+   "nombre": "Ventana WA1 · física y EDOs",
+   "base": 4,
+   "extra": 0
+  },
+  {
+   "id": "A1",
+   "etapa": 4,
+   "tipo": "proyecto",
+   "nombre": "Trayectoria",
+   "base": 5,
+   "extra": 1,
+   "dependeDe": [
+    "WA1"
+   ]
+  },
+  {
+   "id": "WA2",
+   "etapa": 4,
+   "tipo": "ventana",
+   "nombre": "Ventana WA2 · estática, materiales, álgebra lineal numérica",
+   "base": 3,
+   "extra": 0
+  },
+  {
+   "id": "A2",
+   "etapa": 4,
+   "tipo": "proyecto",
+   "nombre": "Cuerda",
+   "base": 5,
+   "extra": 1,
+   "dependeDe": [
+    "WA2"
+   ]
+  },
+  {
+   "id": "DES4",
+   "etapa": 4,
+   "tipo": "pausa",
+   "nombre": "Descanso",
+   "base": 1,
+   "extra": 0
+  },
+  {
+   "id": "WA3",
+   "etapa": 4,
+   "tipo": "ventana",
+   "nombre": "Ventana WA3 · termodinámica, fluidos, PDEs",
+   "base": 4,
+   "extra": 0
+  },
+  {
+   "id": "A3",
+   "etapa": 4,
+   "tipo": "proyecto",
+   "nombre": "Túnel",
+   "base": 6,
+   "extra": 0,
+   "dependeDe": [
+    "WA3"
+   ],
+   "recortable": true
+  },
+  {
+   "id": "WA4",
+   "etapa": 4,
+   "tipo": "ventana",
+   "nombre": "Ventana WA4 · control y estimación",
+   "base": 3,
+   "extra": 0
+  },
+  {
+   "id": "A4",
+   "etapa": 4,
+   "tipo": "proyecto",
+   "nombre": "Rumbo",
+   "base": 5,
+   "extra": 1,
+   "dependeDe": [
+    "WA4"
+   ]
+  },
+  {
+   "id": "WA5",
+   "etapa": 4,
+   "tipo": "ventana",
+   "nombre": "Ventana WA5 · mecánica orbital y propulsión",
+   "base": 2,
+   "extra": 0
+  },
+  {
+   "id": "A5",
+   "etapa": 4,
+   "tipo": "proyecto",
+   "nombre": "Órbita",
+   "base": 4,
+   "extra": 1,
+   "dependeDe": [
+    "WA5"
+   ]
+  },
+  {
+   "id": "A6",
+   "etapa": 4,
+   "tipo": "proyecto",
+   "nombre": "Cohete",
+   "base": 4,
+   "extra": 0,
+   "dependeDe": [
+    "WA5"
+   ],
+   "alternativa": "contribuciones open source",
+   "recortable": true
+  },
+  {
+   "id": "PAU4",
+   "etapa": 4,
+   "tipo": "pausa",
+   "nombre": "Pausa de fin de año",
+   "base": 1,
+   "extra": 0
+  },
+  {
+   "id": "A7",
+   "etapa": 4,
+   "tipo": "proyecto",
+   "nombre": "Horizonte",
+   "base": 6,
+   "extra": 1
+  },
+  {
+   "id": "CIE4",
+   "etapa": 4,
+   "tipo": "cierre",
+   "nombre": "Cierre y decisión sobre el título",
+   "base": 2,
+   "extra": 0
+  }
+ ]
+}
