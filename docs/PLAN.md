@@ -5,7 +5,7 @@ Tracker personal de Toti: el día en horas, el estudio con su propio motor de re
 - **Diseño:** [canvas de Trazo](https://claude.ai/artifact/6Cc2E6aW2ViU5ikovpsRTy)
 - **Roadmap de estudio:** [ruta ML + DevSecOps](https://claude.ai/artifact/9PEokku7mBLZdCFJr1zqXP)
 - **Pantallas:** presentación `Trazo-pantallas.pptx` y su ZIP de imágenes (44 pantallas, 8 flujos).
-- **Estado:** olas 0 a 12b hechas y en `main`. Olas 0 a 16c hechas (la 15 quedó absorbida por la 16c). Olas 0 a 17 hechas. Las olas 18 a 21 (arreglos y calendario, entreno, programación y metas por bloque, e inglés y orden de pantallas) están planificadas en §6 sexies. Este archivo es la fuente de verdad.
+- **Estado:** olas 0 a 12b hechas y en `main`. Olas 0 a 16c hechas (la 15 quedó absorbida por la 16c). Olas 0 a 17 hechas. Las olas 18 a 22 (arreglos y calendario, entreno, programación y metas por bloque, idiomas y libros, y orden de pantallas) están planificadas en §6 sexies. Este archivo es la fuente de verdad.
 
 ---
 
@@ -387,7 +387,8 @@ Desde el lunes 16 nov 2026 la prioridad es un trabajo remoto de USD 3.000 a 5.00
 | 18 · Arreglos y calendario | Submetas en la meta principal, sin zoom al escribir, sin modo entrevista y calendario sin pausas (§6 sexies, pasos 1 y 2) | Sonnet 5.5 · medio |
 | 19 · Entreno | Tus rutinas (PPL + Upper/Lower, lunes a viernes), el horario de 18:00 a 22:00 y las Upper/Lower propias (§6 sexies, pasos 3 y 4) | Sonnet 5.5 · alto |
 | 20 · Programación y metas por bloque | Unidades por área y sistema de libros, metas por bloque con JSON y el roadmap de programación por proyectos (§6 sexies, pasos 5 a 7) | Opus 5.5 · alto |
-| 21 · Inglés y orden de pantallas | Roadmap de inglés con libros y curso de pronunciación, y una pasada de UX con subpáginas en Metas, Estudio y Hoy (§6 sexies, pasos 8 y 9) | Sonnet 5.5 · alto |
+| 21 · Idiomas y libros | Roadmap maestro v3: un idioma por año durante 6 años (inglés, francés, italiano, alemán, japonés y chino), 12 libros de consolidación, la biblioteca de 42 libros y el ascenso a C1, dentro de Estudio (§6 sexies, paso 8) | Opus 5.5 · alto |
+| 22 · Orden de pantallas | Pasada de UX en Metas, Estudio y Hoy: pantallas livianas con subpáginas y botones, también en los roadmaps de matemática, programación e idiomas (§6 sexies, paso 9) | Sonnet 5.5 · medio |
 
 ## 6 bis. Olas 9 a 12: mejoras de uso
 
@@ -618,18 +619,19 @@ Mismo flujo: una rama y un PR por ola; se mergea a `main` con el CI en verde.
 - **Horas por semana de la intensiva:** el entrenamiento pasa de 10 a 15 h.
 - 5 tests nuevos y 3 actualizados.
 
-## 6 sexies. Olas 18 a 21: lo pendiente, en cuatro olas
+## 6 sexies. Olas 18 a 22: lo pendiente, en cinco olas
 
-Pedido del 2026-11-16: juntar las nueve olas que había planeado en pocas, pero no en una sola. Quedan **cuatro olas** que siguen el orden en que se necesitan unas a otras, con **un PR por ola** y **un commit por paso** (con sus tests). Cada paso deja la app funcionando.
+Pedido del 2026-11-16: juntar las nueve olas que había planeado en pocas, pero no en una sola. Quedan **cinco olas** (la última se sumó con el roadmap de idiomas) que siguen el orden en que se necesitan unas a otras, con **un PR por ola** y **un commit por paso** (con sus tests). Cada paso deja la app funcionando.
 
 | Ola | Pasos | Modelo · esfuerzo |
 |---|---|---|
 | 18 · Arreglos y calendario | 1 y 2 | Sonnet 5.5 · medio |
 | 19 · Entreno | 3 y 4 | Sonnet 5.5 · alto |
 | 20 · Programación y metas por bloque | 5, 6 y 7 | Opus 5.5 · alto |
-| 21 · Inglés y orden de pantallas | 8 y 9 | Sonnet 5.5 · alto |
+| 21 · Idiomas y libros | 8 | Opus 5.5 · alto |
+| 22 · Orden de pantallas | 9 | Sonnet 5.5 · medio |
 
-La 20 va antes que la 21 porque el roadmap de inglés usa el sistema de libros y las metas por bloque.
+La 20 va antes que la 21 porque el roadmap de idiomas usa el sistema de libros y las metas por bloque que se construyen en la 20. La 22 va última porque ordena las pantallas de los tres roadmaps.
 
 **Decidido (2026-11-16)**
 1. Es **08:00**, y solo cuando te levantás a esa hora: las opciones de 04:00 y 05:00 siguen en pie.
@@ -690,18 +692,34 @@ La 20 va antes que la 21 porque el roadmap de inglés usa el sistema de libros y
 
 7. **Roadmap de programación por proyectos.** La card "Programación" de Estudio deja de mandar a leer: pasa a ser un roadmap por proyectos con la estructura del de matemática ("Estás acá", "Hoy sos → Vas a ser" y la escalera de P0 a A7). La meta de programación de Hoy sale de las metas del proyecto en curso. Cada proyecto tiene **subpáginas** con botones: Resumen, Stack y tecnología nueva, Metas, Evidencia, Pieza matemática y Entrega. Las 12 ventanas de matemática suman su **nivel de salida** como lista de criterios que se tilda (por ejemplo, W1: resolver ecuaciones y desigualdades sin ayuda, graficar funciones y calcular varianza, percentiles y cuantiles).
 
-*Ola 21 · Inglés y orden de pantallas*
+*Ola 21 · Idiomas y libros*
 
-8. **Roadmap de inglés.** Estudio → Inglés, con la misma estructura. Un libro por vez, todos los días, con el sistema de libros del paso 5: el primero es **Measure What Matters** (metas por capítulo, micro-tesis, mini-tests, test y tesis final); después, el **curso de pronunciación de Udemy** (secciones como unidades; **el enlace se carga desde la app y queda en el teléfono, no se commitea**, porque el repo es público y la dirección es de una cuenta de empresa) y al final **English Made Simple**. Los demás libros se cargan con JSON (paso 6). El bloque de inglés de Hoy pasa a ser la lectura del día.
+8. **Idiomas y libros: el roadmap maestro v3** (16 nov 2026). Reemplaza al "roadmap de inglés" que tenía previsto: el inglés es el año 1 de un roadmap de **un idioma por año durante 6 años**. El texto completo se guarda en `docs/prompts/roadmap-idiomas-libros.md` al arrancar la ola.
+   - **Estudio → Idiomas**, con la estructura de Matemática y Programación: "Estás acá", "Hoy sos → Vas a ser" (el nivel de cada idioma) y la escalera de los 6 años. Tiene subpáginas: cada año, cada idioma, la biblioteca de libros y el ascenso a C1.
+   - **Año 1 · Inglés (58 semanas, del 16 nov 2026 al 26 dic 2027):** 6 semanas de *Measure What Matters* (16 nov a 27 dic; hito: tesis final y 3 min hablados sin leer), 6 del curso de pronunciación de Udemy más pronunciación aplicada (28 dic a 7 feb; grabación de control del 90 %), 7 de *English Made Simple* y *English Grammar in Use* (8 feb a 28 mar; test y simulacro diagnóstico), 20 de preparación de Cambridge C1 Advanced (29 mar a 15 ago; simulacros sobre 180; se suma *Advanced Grammar in Use*), 7 de colchón y examen real (16 ago a 3 oct; fecha a confirmar) y 12 de consolidación con *Make It Stick* y *Getting to Yes* (4 oct a 26 dic). Las fechas se derivan de las semanas, como el calendario de programación.
+   - **Años 2 a 6** (francés, italiano, alemán, japonés y chino; el año 2 arranca el 27 dic 2027 y el 6 termina el 19 dic 2032): etapa inicial de 40 semanas igual para todos (libro "Made Simple" o "Demystified" 5 sem, libro de gramática 11, curso de pronunciación de Udemy 3, pronunciación aplicada 5, y preparación y examen del nivel del año 16) más 12 semanas de consolidación con 2 libros. Exámenes: DELF B1, CILS o PLIDA B1, Goethe A2, JLPT N4 y HSK 2 a 3. Cada idioma se estudia con material en el anterior.
+   - **Los 12 libros de la Fase A**, 2 por año: *Make It Stick* y *Getting to Yes*; *How to Read a Book* y *Thinking, Fast and Slow*; *Influence* y *Basic Economics*; *The Effective Executive* y *The Intelligent Investor*; *High Output Management* y *Good Strategy Bad Strategy*; *Rhetoric* y *Disciplined Entrepreneurship*.
+   - **Biblioteca de 42 libros núcleo** en 6 bloques de 7 (pensar y negociar, comunicación y ventas, economía e inversión, poder y política, gestión y estrategia, fundar y construir riqueza), con su estado (pendiente, leyendo o terminado) y los 13 opcionales aparte. Los 30 que no son de la Fase A se leen en la Fase B, en el orden de los bloques.
+   - **Fase B (desde el año 7):** el ascenso a C1 de cada idioma, con 40 % de las horas para libros y 60 % para el ascenso: italiano C1 en nov 2033, francés C1 en abr 2035, alemán C1 en ago 2037, los 42 libros en jun 2040, japonés N1 en oct 2041 y chino HSK 6 en feb 2045. Se muestran como hitos con su certificación.
+   - **Cada libro** usa el sistema de libros del paso 5 (unidad de 2 capítulos, micro-tesis por capítulo, mini-test, test y tesis final) y suma un **artefacto** (framework, análisis, política o speech): sin artefacto no cuenta como terminado, como la evidencia de un proyecto. **Cada trimestre** hay un ensayo integrador y un examen trimestral, y **cada año** una tesis anual.
+   - **Integración con el plan T+18:** la rama de inglés del plan (hoy "modo entrevista", "bloque diario de 45 min" y "examen C1" en T+18) pasa a leer este roadmap: las fases del año 1 reemplazan a esas, el bloque de inglés de Hoy dice lo que toca esa semana (lectura, pronunciación, gramática o preparación de Cambridge), el hito T+18 ya no dice "examen C1" porque el examen cae en 2027, y los exámenes entran a las alertas como las certificaciones.
+   - **Horas:** el roadmap supone 11,5 h por semana (5 × 1 h 30 más 2 × 2 h). Coincide con el bloque de inglés de la búsqueda intensiva (1 h 30 de lunes a viernes y 2 h el sábado y el domingo). La app muestra las horas planificadas contra las del bloque.
+   - **Sin verificar (se queda así hasta que lo confirmes):** el curso de Udemy de inglés, los capítulos de *English Made Simple*, la disponibilidad actual de los recursos de cada idioma, los niveles estimados por año y los avales académicos de los libros. El **enlace del curso de Udemy se carga desde la app y queda en el teléfono, no se commitea.** Costos y fechas de los exámenes: sin verificar.
+
+*Ola 22 · Orden de pantallas*
 
 9. **Orden de pantallas.** Una pasada de UX sobre Metas, Estudio y Hoy: lo que ocupa una pantalla larga pasa a una pantalla liviana con botones a subpáginas, con el mismo criterio en los tres roadmaps. Ninguna pantalla pasa de unas 3 pantallas de scroll en el teléfono.
 
 **Aceptación general:** typecheck, tests y build en verde en cada ola; cada paso probado en el navegador a 390 px, en claro y oscuro, sin desbordes; la app arranca con lo ya guardado.
 
 **A confirmar durante las olas**
-1. **Measure What Matters** (ola 21): la cantidad de capítulos. Si no me la pasás, el libro se carga con el JSON del paso 6 y no frena nada.
-2. **Los dos "Descanso"** (noviembre de 2028 y de 2029): se quedan salvo que digas lo contrario.
-3. **Security+:** la versión se decide el 22 de noviembre; no la resuelvo yo.
+1. **Corte de 85 % o 90 % en idiomas y libros.** El roadmap de idiomas dice "test ≥ 90 %", pero decidimos 85 % en todo. Sigo con 85 % salvo que digas otra cosa; los simulacros de Cambridge se miden contra su escala.
+2. **Horas cuando entre el trabajo (ola 21).** La rutina "con trabajo" tiene solo 45 min de inglés por día (unas 3,75 h por semana, no 11,5). El roadmap supone 11,5 h todos los años. ¿Mantenemos el bloque de 1 h 30 y los 2 h del fin de semana también con trabajo?
+3. **El año 2 (francés) arranca el 27 de diciembre de 2027**, unos 8 meses antes de T+18 (6 de agosto de 2028), mientras estás en ciberseguridad y quant. El propio documento propone correr todo si querés que empiecen después. ¿Arranca igual?
+4. **Ensayo y examen trimestral y tesis anual:** el documento no dice cuándo. Propongo cada 13 semanas desde el inicio de cada año y la tesis en la última semana del año.
+5. **Capítulos de cada libro** (empezando por *Measure What Matters*): si no me los pasás, se cargan con el JSON del paso 6 y no frena nada.
+6. **Los dos "Descanso"** (noviembre de 2028 y de 2029) se quedan salvo que digas lo contrario.
+7. **Security+:** la versión (SY0-801 o SY0-701) se decide el 22 de noviembre; no la resuelvo yo.
 
 En el día a día alcanza con **Haiku 5.5 · bajo**: pegás el JSON del cierre y queda commiteado en `data/days/`.
 
