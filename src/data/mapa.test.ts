@@ -37,8 +37,9 @@ describe('mapa · hitos y stand-by (Ola 8b)', () => {
     // Ola 18 (sin pausas): Escudo cierra el 31 de enero y W1 queda lista el 21 de feb, así que entra en el
     // primer trimestre; Surco v1 arranca (22 feb) y cierra (21 mar) y pasan al segundo. Quedan 28 de los 30.
     // Ola 21: entran los hitos de idiomas del 27 dic (Measure What Matters) y el 7 feb (pronunciación); sale el viejo "B2 sólido".
-    expect(h).toHaveLength(29);
-    expect(HITOS).toHaveLength(33);
+    // Ola 23: los 3 hitos viejos de clipping dejan lugar a los 15 del Roadmap Clipper (6 caen en el trimestre).
+    expect(h).toHaveLength(32);
+    expect(HITOS).toHaveLength(45);
     expect(h.filter((x) => x.rama === 'ingles').map((x) => x.hitoId)).toEqual(['ingles-83', 'ingles-41']);
     const fechas = h.map((x) => x.fecha);
     expect([...fechas].sort().reverse()).toEqual(fechas);
@@ -48,7 +49,7 @@ describe('mapa · hitos y stand-by (Ola 8b)', () => {
     expect(t2.find((x) => x.hitoId === 'programacion-77')).toMatchObject({ fecha: '2027-02-22', rama: 'programacion', desde: 'matematica' });
     expect(t2.find((x) => x.hitoId === 'programacion-97')).toMatchObject({ fecha: '2027-03-21', hitoTipo: 'grande' });
     expect(h.find((x) => x.hitoId === 'matematica-76')).toMatchObject({ fecha: '2027-02-21' });
-    expect(h.filter((x) => x.rama === 'clipping')).toHaveLength(3);
+    expect(h.filter((x) => x.rama === 'clipping').map((x) => x.hitoId).reverse()).toEqual(['clip-gta6', 'clip-usd-150', 'clip-dashboard-v1', 'clip-usd-350', 'clip-retainer-1', 'clip-usd-700']);
     expect(h.filter((x) => x.hitoTipo === 'grande')).toHaveLength(10); // con W1 lista (21 feb)
     expect(f[0].hito).toBe('T+18');
   });

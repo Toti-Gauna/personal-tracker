@@ -217,7 +217,7 @@ function Linea({ t0 }: { t0: string }) {
     { n: 'programación', c: RAMA_COLOR.programacion, segs: prog.map((t) => ({ a: inicioSemana(t.desde, t0), b: finSemana(t.hasta, t0) < fin ? finSemana(t.hasta, t0) : fin, t: t.tipo === 'ventana' ? t.id : t.id === 'P0' ? 'P0' : nombreTramo(t, false) })) },
     { n: 'matemática', c: RAMA_COLOR.matematica, segs: [{ a: t0, b: fin, t: 'Aritmética → Álgebra · 2 h por día' }] },
     { n: 'handyx', c: RAMA_COLOR.handyx, segs: [{ a: t0, b: t2, t: 'stand-by hasta el trabajo', sb: true }, { a: t2, b: fin, sb: true }] },
-    { n: 'eclipse', c: 'var(--eclipse)', segs: [{ a: t0, b: fin, t: 'clipping 1 h 30 por día' }] },
+    { n: 'eclipse', c: 'var(--eclipse)', segs: [{ a: t0, b: fin, t: 'clipping 1 h 30 por día y 2 h el finde' }] },
   ];
   const FH = 34;
   return (

@@ -13,6 +13,8 @@ import { getState, useStore } from '../state/store';
 import { closeDay, reopenDay } from '../state/profile';
 import { toast } from '../ui/avisos';
 import { Casilla } from '../ui/Casilla';
+import { mesClipEn, mesDe as mesClipDe } from '../data/clipping';
+import { ingresoMes, totales } from '../data/clipping-metricas';
 import '../styles/perfil.css';
 
 const num = (n: number, d = 2) => n.toFixed(d).replace('.', ',');
@@ -23,6 +25,7 @@ export function Cierre({ day }: { day: DayLog }) {
   const days = useStore((s) => s.days);
   const names = useStore((s) => s.goals.bimesterNames);
   const train = useStore((s) => s.train);
+  const clipping = useStore((s) => s.clipping);
   const cerrado = !!day.closed;
   const mejora = mejoraDia(day);
   const ayer = mejoraAyer(days, day.date);
@@ -56,15 +59,15 @@ export function Cierre({ day }: { day: DayLog }) {
 
   const bim = bimester(settings.startDate, day.date, names);
   const json = useMemo(() => {
-    const j = dayJson({ ...day, closed: day.closed ?? { at: toHHMM(nowMin()), xp, score, victoria, manana } }, settings, days, names, train);
+    const j = dayJson({ ...day, closed: day.closed ?? { at: toHHMM(nowMin()), xp, score, victoria, manana } }, settings, days, names, train, clipping);
     return JSON.stringify(j, null, 2);
-  }, [day, settings, days, names, xp, score, victoria, manana]);
+  }, [day, settings, days, names, xp, score, victoria, manana, clipping]);
 
   const cerrar = async () => {
     const nuevos = closeDay(day.date, { victoria, manana, carry: [...pasar], score });
     // El JSON se arma después de cerrar, con lo que pasó a mañana ya sacado del día.
     const s = getState();
-    const final = JSON.stringify(dayJson(s.days[day.date], s.settings!, s.days, s.goals.bimesterNames, s.train), null, 2);
+    const final = JSON.stringify(dayJson(s.days[day.date], s.settings!, s.days, s.goals.bimesterNames, s.train, s.clipping), null, 2);
     try {
       await navigator.clipboard.writeText(final + '\n');
       toast({ title: 'JSON copiado · día cerrado', sub: `Pegalo como data/days/${day.date}.json`, color: 'var(--economia)' }, false);
@@ -112,6 +115,12 @@ export function Cierre({ day }: { day: DayLog }) {
         </div>
       </div>
       <div className="fila-t resumen-linea mono"><span className="sub">{hechas} de {total} tareas · {Math.round(score * 100)} %</span><span>+{cerrado ? day.closed!.xp : xp} XP · racha {racha(days, day.date)}</span></div>
+      {mesClipDe(day.date) >= 1 && mesClipDe(day.date) <= 12 && (
+        <a className="fila-t resumen-linea mono cierre-clip" href="#/metas/clipping">
+          <span className="sub">Clipping hoy · {totales(clipping.registro.filter((f) => f.fecha === day.date)).clips} clips</span>
+          <span>mes {mesClipDe(day.date)}: USD {Math.round(ingresoMes(clipping, mesClipDe(day.date))).toLocaleString('es-AR')} de {mesClipEn(day.date).meta.toLocaleString('es-AR')}</span>
+        </a>
+      )}
 
       <ul className="areas-barras">
         {porArea.map(([a, v]) => (

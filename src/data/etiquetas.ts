@@ -4,6 +4,7 @@
  */
 import { AREAS } from './defaults';
 import { faseIdiomaEn, tituloIdiomaDelDia } from './idiomas';
+import { mesClipEn, mesDe as mesClipDe } from './clipping';
 import { PLAN, bimestreDelPlan, enPlan, corteHandyx, faseTrabajo, nombreTramo, tramoActivo, ventanaW } from './plan';
 import type { PlanState } from './plan-state';
 import { RAMA_COLOR } from './ramas';
@@ -23,6 +24,8 @@ export function colorDeBloque(b: Pick<Block, 'rama' | 'area'>, delPlan: boolean)
 export function tituloDeBloque(b: Pick<Block, 'rama' | 'key' | 'title'>, date: string, t0?: string) {
   // Ola 21: el bloque de idiomas dice lo que toca esa semana ("Inglés · Measure What Matters").
   if (b.key === 'ingles') return tituloIdiomaDelDia(date, t0);
+  // Ola 23: el clipping dice el mes del Roadmap Clipper ("Clipping · Mes 1").
+  if (b.key === 'clipping' && mesClipDe(date) >= 1 && mesClipDe(date) <= 12) return `Clipping · Mes ${mesClipDe(date)}`;
   if (b.rama !== 'programacion' || b.key !== 'prog') return b.title;
   return programacionDelPlan(date, t0) ?? b.title;
 }
@@ -46,7 +49,7 @@ export interface Ctx {
 /** "programacion · P1 · semana 3 de 4", "trabajo · semana 4 de 8 · 45 min hoy", "fuera del plan". */
 export function etiquetaDeBloque(b: Block, { day, t0, plan, study }: Ctx): string | null {
   if (!day.dayType) return null; // días de antes del plan
-  if (!b.rama) return b.key === 'clipping' ? 'clipping · 1 h 30 por día' : 'fuera del plan';
+  if (!b.rama) return b.key === 'clipping' ? etiquetaClipping(day.date) : 'fuera del plan';
   const date = day.date;
   const bim = bimestreDelPlan(date, t0);
   switch (b.rama) {
@@ -82,4 +85,12 @@ export function etiquetaDeBloque(b: Block, { day, t0, plan, study }: Ctx): strin
     case 'salud':
       return b.kind === 'entreno' ? 'salud · fuerza' : `salud · ${PLAN.metasBimestre.salud[bim.n - 1].toLowerCase()}`;
   }
+}
+
+/** "clipping · mes 1 · 5 clips/día · 3 cuentas" (ola 23). */
+function etiquetaClipping(date: string) {
+  const n = mesClipDe(date);
+  if (n < 1 || n > 12) return 'clipping · fuera del roadmap';
+  const m = mesClipEn(date);
+  return `clipping · mes ${n} · ${m.clipsDia} clips/día · ${m.cuentas} cuentas`;
 }

@@ -157,3 +157,4 @@
 .rutina-op { padding: 12px 10px; }
 .rutina-hora { font-size: 26px; }
 .rutina-op .sub { font-size: 13px; }
+.meta-det .btn-registrar { border-color: var(--c); color: var(--tinta); }

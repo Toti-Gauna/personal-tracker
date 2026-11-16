@@ -18,11 +18,12 @@ const TIPO: Record<string, string> = { proyecto: 'proyecto', ventana: 'ventana d
 export function PlanEtapas({ day }: { day: DayLog }) {
   const t0 = useStore((s) => s.settings?.startDate) ?? T0_PLAN;
   const plan = useStore((s) => s.plan);
+  const clipping = useStore((s) => s.clipping);
   const hoy = day.date;
   const etapas = lineaEtapas(hoy, t0);
   const total = etapas.reduce((s, e) => s + e.semanas, 0);
   const sos = hoySos(hoy, plan, t0);
-  const al = alertas(hoy, plan, t0);
+  const al = alertas(hoy, plan, t0, clipping);
   return (
     <main className="pantalla et-pag">
       <div className="topbar"><a className="volver" href="#/metas">Ruta</a><span className="mono sub">{total} semanas · {f(etapas[0].inicio)} a {f(etapas[3].fin)}</span></div>

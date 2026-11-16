@@ -9,6 +9,7 @@ import { emptyPlan, DEFAULT_PLAN_SETTINGS, type PlanSettings, type PlanState } f
 import { semanaDelPlan, tramoActivo, ventanaW } from '../data/plan';
 import { tareasDeBloque } from '../data/metas-bloque';
 import { faseIdiomaEn } from '../data/idiomas';
+import { mesClipEn, mesDe as mesClipDe } from '../data/clipping';
 import { plannedFor } from '../data/train';
 import { addDays, dateKey } from '../data/time';
 import { emptyStudy } from '../data/study-catalog';
@@ -23,6 +24,7 @@ import { aplicarLibrosPropios } from '../data/libros';
 import type { TrainState } from '../data/train-types';
 import type { StudyState } from '../data/study-types';
 import { emptyEstudioRuta, type EstudioRutaState } from '../data/study-roadmap';
+import { emptyClipping, migrarClipping, type ClippingState } from '../data/clipping-state';
 import type { Block, DayLog, FocusEntry, FocusState, Preset, RoutineId, Settings } from '../data/types';
 
 export interface State {
@@ -41,12 +43,14 @@ export interface State {
   estudioRuta: EstudioRutaState;
   /** Ola 21: enlaces de los cursos de idiomas (Udemy). Quedan en el teléfono: no van al repo. */
   idiomas: { enlaces: Record<string, string> };
+  /** Ola 23: la planilla del clipping (cuentas, campañas, registro, retainers, prospección y rutina). */
+  clipping: ClippingState;
   /** Sellos ganados: id → fecha. */
   profile: { seals: Record<string, string>; /** Sellos cuya pantalla de logro ya viste. */ seen: string[] };
 }
 
 const KEY = 'trazo.v1';
-const empty = (): State => ({ settings: null, days: {}, focus: null, carry: {}, study: emptyStudy(), goals: emptyGoals(), train: emptyTrain(), ruta: emptyRuta(), plan: emptyPlan(), estudioRuta: emptyEstudioRuta(), idiomas: { enlaces: {} }, profile: { seals: {}, seen: [] } });
+const empty = (): State => ({ settings: null, days: {}, focus: null, carry: {}, study: emptyStudy(), goals: emptyGoals(), train: emptyTrain(), ruta: emptyRuta(), plan: emptyPlan(), estudioRuta: emptyEstudioRuta(), idiomas: { enlaces: {} }, clipping: emptyClipping(), profile: { seals: {}, seen: [] } });
 
 function load(): State {
   try {
@@ -74,7 +78,7 @@ export function migrate(parsed: any): State {
   // (con Handyx y ventas en pausa desde T0); si ya se decidió, se respeta.
   let settings = parsed.settings ?? null;
   if (settings && settings.plan?.modo === undefined) ({ settings, plan } = aplicarIntensiva(settings, plan, settings.startDate || T0_PLAN));
-  return { ...empty(), ...parsed, settings, study, train, ruta, plan, estudioRuta: { ...emptyEstudioRuta(), ...(parsed.estudioRuta ?? {}) }, idiomas: { enlaces: {}, ...(parsed.idiomas ?? {}) }, profile: { seals: {}, seen: Object.keys(parsed.profile?.seals ?? {}), ...(parsed.profile ?? {}) }, goals: migrateGoals(goals ?? seedGoals(parsed.settings?.startDate ?? dateKey())) };
+  return { ...empty(), ...parsed, settings, study, train, ruta, plan, estudioRuta: { ...emptyEstudioRuta(), ...(parsed.estudioRuta ?? {}) }, idiomas: { enlaces: {}, ...(parsed.idiomas ?? {}) }, clipping: migrarClipping(parsed.clipping), profile: { seals: {}, seen: Object.keys(parsed.profile?.seals ?? {}), ...(parsed.profile ?? {}) }, goals: migrateGoals(goals ?? seedGoals(parsed.settings?.startDate ?? dateKey())) };
 }
 
 let state: State = load();
@@ -198,7 +202,9 @@ export function startDay(routine: RoutineId, wake: string, date = dateKey()) {
       .map((b) => (b.rama === 'programacion' && delProyecto.length ? { ...b, tasks: [...delProyecto.map((t) => ({ id: newId(), t: `${proyecto} · ${t}`, done: false })), ...b.tasks] } : b))
       .map((b) => (b.key === 'cierre' && estirar ? { ...b, tasks: b.tasks.map((x) => (x.t === 'Estirar' ? { ...x, t: `Estirar: ${estirar}` } : x)) } : b))
       // Ola 21: el bloque de idiomas trae las tareas de la fase de esta semana (salvo lo que pasó de ayer).
-      .map((b) => (b.key === 'ingles' ? { ...b, tasks: [...faseIdiomaEn(date, t0 ?? T0_PLAN).tareas.map((t) => ({ id: newId(), t, done: false })), ...b.tasks.filter((x) => (carry.ingles ?? []).includes(x.t))] } : b));
+      .map((b) => (b.key === 'ingles' ? { ...b, tasks: [...faseIdiomaEn(date, t0 ?? T0_PLAN).tareas.map((t) => ({ id: newId(), t, done: false })), ...b.tasks.filter((x) => (carry.ingles ?? []).includes(x.t))] } : b))
+      // Ola 23: de lunes a viernes, el clipping trae las tareas del mes del roadmap; el finde, pipeline y prospección.
+      .map((b) => (b.key === 'clipping' && b.min <= 90 && mesClipDe(date) >= 1 && mesClipDe(date) <= 12 ? { ...b, tasks: [...mesClipEn(date).tareas.map((t) => ({ id: newId(), t, done: false })), ...b.tasks.filter((x) => (carry.clipping ?? []).includes(x.t))] } : b));
     const day: DayLog = { date, wake, routine, dayType, ...(ventana ? { ventana } : {}), blocks, notes: [], focus: [] };
     return { ...s, days: { ...s.days, [date]: day }, carry: restCarry };
   });

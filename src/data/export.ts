@@ -2,10 +2,13 @@ import { bimestreDelPlan, enPlan, etapas, semanaDelPlan } from './plan';
 import { bimester, dayNumber, mejoraAcumulada, mejoraAyer } from './derive';
 import { blockDone, mejoraDia, round } from './mejora';
 import type { TrainState } from './train-types';
+import type { ClippingState } from './clipping-state';
+import { mesDe as mesClipDe } from './clipping';
+import { ingresoMes, totales } from './clipping-metricas';
 import type { DayLog, Settings } from './types';
 
 /** JSON del día: lo que se pega y se commitea en data/days/AAAA-MM-DD.json. */
-export function dayJson(day: DayLog, settings: Settings, days: Record<string, DayLog>, names: Record<number, string> = {}, train?: Pick<TrainState, 'weights' | 'runs' | 'medidas'>) {
+export function dayJson(day: DayLog, settings: Settings, days: Record<string, DayLog>, names: Record<number, string> = {}, train?: Pick<TrainState, 'weights' | 'runs' | 'medidas'>, clipping?: ClippingState) {
   const b = bimester(settings.startDate, day.date, names);
   return {
     date: day.date,
@@ -28,6 +31,7 @@ export function dayJson(day: DayLog, settings: Settings, days: Record<string, Da
     ...(day.closed ? { cierre: { at: day.closed.at, score: round(day.closed.score), xp: day.closed.xp, victoria: day.closed.victoria, manana: day.closed.manana } } : {}),
     ...planDelDia(day.date, settings.startDate),
     ...(train ? { salud: saludDelDia(day.date, train) } : {}),
+    ...(clipping ? clippingDelDia(day.date, clipping) : {}),
     mejora: {
       hoy: round(mejoraDia(day)),
       ayer: round(mejoraAyer(days, day.date)),
@@ -59,4 +63,13 @@ function planDelDia(date: string, t0: string) {
       ramas: Object.fromEntries(etapas(date, t0).map((e) => [e.rama, { etapa: e.titulo, lado: e.lado }])),
     },
   };
+}
+
+/** Ola 23: lo del clipping de ese día (solo si cargaste algo) y lo cobrado en el mes del roadmap. */
+function clippingDelDia(date: string, c: ClippingState) {
+  const fs = c.registro.filter((f) => f.fecha === date);
+  if (!fs.length) return {};
+  const t = totales(fs);
+  const n = mesClipDe(date);
+  return { clipping: { clips: t.clips, views: t.views, cobrado: Math.round(t.cobrado * 100) / 100, ...(n >= 1 && n <= 12 ? { mes: n, cobradoMes: ingresoMes(c, n) } : {}) } };
 }

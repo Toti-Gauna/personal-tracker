@@ -7,6 +7,7 @@ import { fmtFecha } from '../data/time';
 import type { DayLog } from '../data/types';
 import { DeA } from '../ui/PlanBits';
 import { usePlanVista } from '../ui/usePlan';
+import { CardClipping } from './Clipping';
 import '../styles/plan.css';
 
 const MESES = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'];
@@ -65,6 +66,8 @@ export function PlanRuta({ day }: { day: DayLog }) {
           <span className="sub">Handyx y ventas en stand-by hasta que entre el trabajo · ver el sprint →</span>
         </a>
       )}
+
+      <CardClipping date={date} />
 
       <a className="fila-link" href="#/metas/etapas">Las 4 etapas del plan extendido: hoy sos, alertas y decisiones <span aria-hidden="true">→</span></a>
 

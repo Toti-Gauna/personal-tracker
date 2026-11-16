@@ -1,3 +1,4 @@
+import { useState } from 'react';
 /** Piezas del plan T+18 que se repiten: avisos entre ramas, contadores, etiqueta de rama. */
 import { avisoPasado, avisosEntreRamas } from '../data/avisos';
 import { focusStartedAt } from '../data/focus';
@@ -10,6 +11,9 @@ import { desactivarIntensiva, lunesDe, contador, ensayarRespuesta, setPlanSettin
 import { planSettings, useStore } from '../state/store';
 import { toast } from './avisos';
 import { useNow } from './useNow';
+import { HojaClip } from './HojaClip';
+import { planEntre } from '../data/clipping';
+import { clipsEntre } from '../data/clipping-metricas';
 
 export const ramaColor = (r: RamaOMain) => RAMA_COLOR[r];
 
@@ -72,12 +76,17 @@ export function SumarPlan({ date }: { date: string }) {
   const ensayadas = plan.respuestas.filter((r) => r.veces > 0).length;
   const ops = plan.handyx[lunesDe(date)]?.operaciones ?? 0;
   const intensiva = useStore((s) => planSettings(s.settings).modo === 'busqueda-intensiva');
+  // Ola 23: los clips salen de la planilla del clipping; el botón abre la hoja Registrar.
+  const clipping = useStore((s) => s.clipping);
+  const [hojaClip, setHojaClip] = useState(false);
+  const l = lunesDe(date);
+  const clipsSem = clipsEntre(clipping, l, addDays(l, 6)) + contador(plan, date, 'clips');
   const items: { id: string; label: string; v: number; meta?: number; rama: RamaOMain; color?: string; run: () => void }[] = [
     { id: 'postulaciones', label: intensiva ? '+1 Postulación a medida' : '+1 Postulación', v: contador(plan, date, 'postulaciones'), meta: metas.postulaciones, rama: 'trabajo', run: () => sumarContador(date, 'postulaciones') },
     { id: 'respuestas', label: '+1 Respuesta ensayada', v: ensayadas, meta: plan.respuestas.length, rama: 'ingles', run: () => ensayarRespuesta(date) },
     // Una rama en pausa no genera contadores nuevos.
     ...(enPausa(plan, 'handyx', date) ? [] : [{ id: 'operaciones', label: '+1 Operación Handyx', v: ops, rama: 'handyx' as RamaOMain, run: () => sumarHandyx(date, { operaciones: 1 }) }]),
-    ...(intensiva ? [{ id: 'clips', label: '+1 Clip publicado', v: contador(plan, date, 'clips'), meta: 25, rama: 'main' as RamaOMain, color: 'var(--eclipse)', run: () => sumarContador(date, 'clips') }] : []),
+    ...(intensiva ? [{ id: 'clips', label: 'Registrar clips', v: clipsSem, meta: planEntre(l, addDays(l, 6)).clips, rama: 'main' as RamaOMain, color: 'var(--eclipse)', run: () => setHojaClip(true) }] : []),
     { id: 'entrenos', label: '+1 Entrené', v: sesiones + contador(plan, date, 'entrenos'), meta: metas.entrenos, rama: 'salud', run: () => sumarContador(date, 'entrenos') },
   ];
   return (
@@ -91,6 +100,7 @@ export function SumarPlan({ date }: { date: string }) {
           </button>
         ))}
       </div>
+      {hojaClip && <HojaClip date={date} onCerrar={() => setHojaClip(false)} />}
     </section>
   );
 }

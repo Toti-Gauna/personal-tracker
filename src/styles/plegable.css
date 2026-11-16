@@ -11,7 +11,6 @@
 .plegable[open] > summary .pleg-flecha { transform: rotate(-135deg) translateY(-2px); }
 .plegable > summary:focus-visible { outline: 2px solid var(--c, var(--tinta)); outline-offset: 2px; }
 .pleg-cuerpo { padding: 0 0 16px; }
-.plegable[style*='--c'] { border-left: 3px solid var(--c); padding-left: 12px; }
 @media (prefers-reduced-motion: reduce) { .pleg-flecha { transition: none; } }
 
 /* Escalera compacta (roadmaps) */

@@ -8,7 +8,8 @@
  */
 import { T0_PLAN, TRAMOS } from './plan';
 import type { PlanState } from './plan-state';
-import { addDays } from './time';
+import { addDays, daysBetween } from './time';
+import { CLIP, hitosClip } from './clipping';
 import type { Rama } from './types';
 
 export type RamaMapa = Rama | 'clipping';
@@ -54,14 +55,11 @@ export const HITOS: HitoRama[] = [
   { id: 'trabajo-6', rama: 'trabajo', dia: 6, texto: 'Mercado revisado: orden confirmado', tipo: 'grande' },
   { id: 'programacion-13', rama: 'programacion', dia: 13, texto: 'P0 cerrado: portfolio, Trazo, RAG y MCP', tipo: 'grande' , ancla: { tramo: 'P0', borde: 'fin' } },
   { id: 'trabajo-13', rama: 'trabajo', dia: 13, texto: 'Fin de la intensiva: 70 + 70', tipo: 'grande', desde: 'programacion' },
-  { id: 'clipping-13', rama: 'clipping', dia: 13, texto: '50 clips publicados', tipo: 'commit' },
   { id: 'ingles-16', rama: 'trabajo', dia: 16, texto: 'Pitch de 60 s y 6 historias STAR', tipo: 'commit' },
-  { id: 'clipping-20', rama: 'clipping', dia: 20, texto: 'Primer pago cobrado', tipo: 'commit' },
   { id: 'trabajo-24', rama: 'trabajo', dia: 24, texto: 'Primera entrevista con recruiter', tipo: 'grande', desde: 'ingles' },
   { id: 'matematica-27', rama: 'matematica', dia: 27, texto: 'Aritmética · caps. 1 a 4 aprobados', tipo: 'commit' },
   { id: 'programacion-27', rama: 'programacion', dia: 27, texto: 'Faro v1: API Spring Boot y servicio RAG conectados', tipo: 'commit' },
   { id: 'salud-27', rama: 'salud', dia: 27, texto: '4 semanas sin faltar al entreno', tipo: 'commit' },
-  { id: 'clipping-28', rama: 'clipping', dia: 28, texto: 'Revisión: ¿US$ 100 cobrados?', tipo: 'grande' },
   { id: 'programacion-34', rama: 'programacion', dia: 34, texto: 'P1 · Faro v1 cerrado con Spring Boot y MCP', tipo: 'grande' , ancla: { tramo: 'P1', borde: 'fin' } },
   { id: 'trabajo-34', rama: 'trabajo', dia: 34, texto: 'Un proceso en etapa técnica', tipo: 'grande', desde: 'programacion' },
   { id: 'programacion-42', rama: 'programacion', dia: 42, texto: 'P2 · Escudo arranca (Go)', tipo: 'commit' , ancla: { tramo: 'P2', borde: 'inicio' } },
@@ -79,6 +77,8 @@ export const HITOS: HitoRama[] = [
   { id: 'programacion-77', rama: 'programacion', dia: 77, texto: 'P3 · Surco v1 arranca (ML clásico)', tipo: 'commit', desde: 'matematica' , ancla: { tramo: 'P3', borde: 'inicio' } },
   { id: 'salud-83', rama: 'salud', dia: 83, texto: 'Control de peso y medidas', tipo: 'commit' },
   { id: 'programacion-97', rama: 'programacion', dia: 97, texto: 'P3 · Surco v1 cerrado con visor 3D', tipo: 'grande' , ancla: { tramo: 'P3', borde: 'fin' } },
+  // Ola 23: los hitos del Roadmap Clipper reemplazan a los de 50 clips, primer pago y USD 100.
+  ...hitosClip().map((h): HitoRama => ({ id: `clip-${h.id}`, rama: 'clipping', dia: daysBetween(CLIP.t0, h.fechaReal), texto: h.texto, tipo: h.tipo })),
 ];
 
 export type EstadoHito = 'hecho' | 'vencido' | 'pendiente';

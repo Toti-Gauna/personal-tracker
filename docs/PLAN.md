@@ -5,7 +5,7 @@ Tracker personal de Toti: el día en horas, el estudio con su propio motor de re
 - **Diseño:** [canvas de Trazo](https://claude.ai/artifact/6Cc2E6aW2ViU5ikovpsRTy)
 - **Roadmap de estudio:** [ruta ML + DevSecOps](https://claude.ai/artifact/9PEokku7mBLZdCFJr1zqXP)
 - **Pantallas:** presentación `Trazo-pantallas.pptx` y su ZIP de imágenes (44 pantallas, 8 flujos).
-- **Estado:** olas 0 a 12b hechas y en `main`. Olas 0 a 16c hechas (la 15 quedó absorbida por la 16c). Olas 0 a 22 hechas. La ola 23 (clipping) está planificada en §6 sexies. Este archivo es la fuente de verdad.
+- **Estado:** olas 0 a 12b hechas y en `main`. Olas 0 a 16c hechas (la 15 quedó absorbida por la 16c). Olas 0 a 23 hechas: el plan de olas de §6 sexies quedó completo. Este archivo es la fuente de verdad.
 
 ---
 
@@ -389,7 +389,7 @@ Desde el lunes 16 nov 2026 la prioridad es un trabajo remoto de USD 3.000 a 5.00
 | 20 · Programación y metas por bloque | *Hecha.* Unidades por área y sistema de libros (con tarjetas, test y tesis; carga *Measure What Matters* con sus 21 capítulos), metas por bloque con JSON y el roadmap de programación por proyectos (§6 sexies, pasos 5 a 7) | Opus 5.5 · alto |
 | 21 · Idiomas y libros | *Hecha.* Roadmap maestro v3: un idioma por año durante 6 años (inglés, francés, italiano, alemán, japonés y chino), 12 libros de consolidación, la biblioteca de 42 libros y el ascenso a C1, dentro de Estudio (§6 sexies, paso 8) | Opus 5.5 · alto |
 | 22 · Orden de pantallas | *Hecha.* Pasada de UX en Metas, Estudio y Hoy: secciones plegables y escalera compacta; ninguna de las 49 pantallas pasa de 3,2 pantallas de scroll a 390 px (§6 sexies, paso 9) | Sonnet 5.5 · medio |
-| 23 · Clipping | Roadmap Clipper de 12 meses (de 0 a USD 10k/mes) con su propio apartado en Metas: plan, registro, cuentas, campañas, retainers, métricas y gráficos, y una UX/UI premium; se integra con Hoy, el mapa y las alertas (§6 sexies, pasos 10 a 12) | Opus 5.5 · alto |
+| 23 · Clipping | *Hecha.* Roadmap Clipper de 12 meses (de 0 a USD 10k/mes) con su propio apartado en Metas: plan, registro, cuentas, campañas, retainers, métricas y gráficos, y una UX/UI premium; se integra con Hoy, el mapa y las alertas (§6 sexies, pasos 10 a 12) | Opus 5.5 · alto |
 
 ## 6 bis. Olas 9 a 12: mejoras de uso
 
@@ -793,9 +793,15 @@ La 20 va antes que la 21 porque el roadmap de idiomas usa el sistema de libros y
 
 ---
 
-### Ola 23 · Clipping (Opus 5.5 · alto)
+### Ola 23 · Clipping (Opus 5.5 · alto) · *Hecha*
 
 Pedido del 2026-11-16: integrar el **Roadmap Clipper de 12 meses (de 0 a USD 10k/mes)** y darle **su propio apartado en Metas**, con la estructura de los roadmaps de matemática y programación, **métricas, gráficos** y una **UX/UI pulida, fluida y premium**. Va **última**. El texto completo se guarda en `docs/prompts/roadmap-clipping.md` (ya está). Un PR, **tres pasos** y un commit por paso.
+
+**Lo que quedó:** 465 tests pasando (32 nuevos) y tres commits, uno por paso.
+- **Datos y motor (paso 10):** `data/clipping.json` validado al cargar (`src/data/clipping.ts`): 12 meses con meta, cuentas y clips por día (5, 8, 16, 24, 30, 40, 50, 50, 64, 64, 80 y 80), 3 fases con criterios de paso, 15 hitos, plataformas, nichos, riesgos, rutina, semana 1 y fuentes. El mes *n* arranca el 16. Escenarios: base = metas del texto (cruza USD 10k en el mes 13 extrapolando), optimista hasta 1,5 veces desde el mes 3 (cruza en el mes 10), conservador 60 % desde el mes 3 (no llega). La planilla vive en el estado (`clipping`, con `migrarClipping`); métricas puras en `src/data/clipping-metricas.ts`. **Regla del pago real:** sale solo de las filas con cobro cargado (cobrado ÷ views verificadas × 1.000; sin verificadas, cuentan las views). Los retainers activos suman su fijo a cada mes que cubren; la prueba no cobra.
+- **El apartado (paso 11):** `#/metas/clipping` con Resumen (cobrado con cuenta animada, anillo, 4 indicadores con mini gráfico, compuerta y proyección), Plan (fases plegables, la actual abierta), Registro (filtros, edición, exportar e importar JSON con validación por línea), Métricas (período 30/90/todo; ingreso mensual con las 3 curvas, camino a USD 10k, pago real por campaña con pisos 0,80 y 0,70, embudo, granja contra el plan, concentración, actividad, USD por hora y views por clip, cada uno con tabla para lector de pantalla), Cuentas, Campañas (ranking seguir y dejar), Retainers (embudo de prospección), Nichos y derechos, Riesgos y rutina (rutina semanal tildable) y Semana 1 (se oculta después del mes 1). Hoja **Registrar** en 3 toques (clips, views, guardar) que recuerda cuenta y campaña, acepta fechas pasadas y deja **Deshacer**. Card en la pestaña Ruta.
+- **Integración (paso 12):** el bloque de Hoy se llama "Clipping · Mes N", trae las tareas del mes (de lunes a viernes) y un botón **Registrar clips y views**; "Sumar a la semana" cuenta los clips de la planilla. El finde de la intensiva pasa a 2 h (15:30 a 17:30, pipeline y prospección): 11,5 h por semana. Metas de la semana y del mes: clips del mes del roadmap (día por día) y, en el mes, "Cobrado del clipping" (la meta prorrateada). Mapa: los 3 hitos viejos se van y entran los 15 del roadmap. Alertas en Etapas (lunes, viernes, fin de fase, revisión del mes 6, concentración y compuerta en rojo). Avance (línea del mes), cierre del día, JSON del día (solo si cargaste algo) y copia de seguridad. `npm run pantallas` mide también las 10 subpáginas con una planilla de ejemplo: 59 pantallas, todas ≤ 3,1.
+- **Sin verificar:** tarifas, plataformas y proyecciones del texto (se muestran con "datos a julio–noviembre 2026"). Trazo no publica ni entra a ninguna plataforma.
 
 **Qué es y qué no es en Trazo.** Trazo es **la planilla y el tablero**: registrás lo que publicás y cobrás, y la app calcula, grafica y avisa. **No** automatiza ni publica nada, no entra a las plataformas ni a las cuentas, y el pipeline y el dashboard de views del roadmap (Next.js, Node, TypeScript) son **tus apps aparte**. Lo que se registra acá es, tal cual dice el roadmap, "el esquema de datos del dashboard": se exporta en JSON para sembrarlo cuando lo armes (mes 2). Las tarifas, plataformas y proyecciones salen del texto: se muestran con su fecha ("datos a julio–noviembre 2026") y la etiqueta **sin verificar**. Tampoco hay nada de apuestas, bots ni views compradas: el roadmap los deja afuera y la app no los registra.
 

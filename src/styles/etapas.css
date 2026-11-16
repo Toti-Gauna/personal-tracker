@@ -45,3 +45,4 @@
 
 /* Ola 20 · nivel de salida de una ventana */
 .salida { margin: 12px 0; }
+.et-alerta.clipping { --c: var(--eclipse); }

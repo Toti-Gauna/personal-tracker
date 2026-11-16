@@ -14,6 +14,7 @@ import { Marca } from '../ui/Marca';
 import { colorDeBloque, etiquetaDeBloque, tituloDeBloque } from '../data/etiquetas';
 import { AvisosRamas, SumarPlan } from '../ui/PlanBits';
 import { HojaSubmeta } from '../ui/HojaSubmeta';
+import { HojaClip } from '../ui/HojaClip';
 import { Tareas } from '../ui/Tareas';
 import { useNow } from '../ui/useNow';
 import '../styles/hoy.css';
@@ -70,6 +71,7 @@ export function Hoy({ day }: { day: DayLog }) {
   const [abierta, setAbierta] = useState<string | null>(() => (cur ?? upcoming)?.key ?? null);
   // La meta numerada a la que se le agregan submetas (sus tareas).
   const [subDe, setSubDe] = useState<string | null>(null);
+  const [hojaClip, setHojaClip] = useState(false);
   const bloqueSub = subDe ? day.blocks.find((x) => x.key === subDe) : undefined;
 
   const tareas = day.blocks.flatMap((b) => b.tasks);
@@ -153,6 +155,7 @@ export function Hoy({ day }: { day: DayLog }) {
                   <div className="kicker">{estado(b, now)}</div>
                   <Tareas date={day.date} block={b} />
                   <button type="button" className="sub-add" aria-label={`Agregar submeta a ${tituloDeBloque(b, day.date, settings.startDate)}`} onClick={() => setSubDe(b.key)}>+ Agregar submeta</button>
+                  {b.key === 'clipping' && <button className="btn-borde btn-registrar" onClick={() => setHojaClip(true)}>Registrar clips y views</button>}
                   {b.focus !== false && <button className="btn-foco" onClick={() => ir(destino)}>
                     {b.kind === 'entreno' ? (entrenando ? 'Volver al entreno' : entrenado ? 'Ver el entreno de hoy' : hoyRut ? `Entrar en foco · ${hoyRut.name}` : 'Entrar en foco · entreno') : enFoco ? 'Volver al foco' : act ? 'Entrar en foco · sesión de estudio' : 'Entrar en foco'}
                   </button>}
@@ -164,6 +167,7 @@ export function Hoy({ day }: { day: DayLog }) {
       </ol>
 
       <SumarPlan date={day.date} />
+      {hojaClip && <HojaClip date={day.date} onCerrar={() => setHojaClip(false)} />}
       <a className="fila-link importar-link" href="#/importar">Importar JSON de Claude <span aria-hidden="true">→</span></a>
 
       <a className={`cierre-link${day.closed ? ' cerrado' : ''}`} href="#/cierre">

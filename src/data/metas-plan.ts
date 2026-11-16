@@ -4,6 +4,9 @@
  * los cambia o los borra. Nada se carga 18 meses antes: todo se calcula al abrir el período.
  */
 import { IDIOMAS, calendarioIdiomas } from './idiomas';
+import { mesClipEn, mesDe as mesClipDe, planEntre } from './clipping';
+import { clipsEntre, usdEntre } from './clipping-metricas';
+import type { ClippingState } from './clipping-state';
 import {
   PLAN, SEMANAS, SEMANAS_BIM, TRAMOS, bimestreDelPlan, corteHandyx, faseIngles, faseTrabajo, fechaCorta, fechaHito, finSemana, hitoSemana,
   inicioSemana, metasSemanaPlan, tramoEnSemana, nombreTramo, semanaDelPlan, T0_PLAN, tramoActivo, type MetaGenerada, type Tramo,
@@ -25,6 +28,8 @@ export interface CtxPlan {
   t0?: string;
   /** Fecha en que se marcó T+2 (Ajustes). */
   t2?: string;
+  /** Ola 23: la planilla del clipping (los clips y lo cobrado salen de ahí). */
+  clipping?: ClippingState;
 }
 
 const lunes = (d: string) => addDays(d, -((parseDate(d).getDay() + 6) % 7));
@@ -96,6 +101,9 @@ export function avanceMeta(m: MetaGenerada, desde: string, hasta: string, c: Ctx
     const ex = c.plan.proyectos[k.slice(7)]?.examen;
     return { v: ex && ex.puntaje >= 85 ? 1 : 0, auto: true };
   }
+  // Ola 23: los clips y lo cobrado salen de la planilla del clipping (más lo que sumaste a mano).
+  if (k === 'usd-clipping') return { v: c.clipping ? usdEntre(c.clipping, desde, hasta) : 0, auto: true };
+  if (k === 'clips') return { v: (c.clipping ? clipsEntre(c.clipping, desde, hasta) : 0) + sumaContador(c.plan, k, desde, hasta), auto: false };
   if (k === 'entrenos') return { v: c.train.sessions.filter((s) => s.date >= desde && s.date <= hasta).length, auto: true };
   if (k === 'caps') return { v: capsAprobados(c.study, desde, hasta), auto: true };
   if (k === 'kit') return { v: c.plan.respuestas.filter((r) => r.veces > 0).length, auto: false };
@@ -143,7 +151,8 @@ export interface OpcionesPlan {
 /**
  * Los contadores semanales de la búsqueda intensiva (Ola 8b): 70 a medida y 70 mensajes en
  * las dos semanas del sprint, y las horas de la tabla (matemática 14, programación 25,5,
- * inglés 11,5, búsqueda 10,5, clipping 10,5, entrenamiento 10).
+ * inglés 11,5, búsqueda 10,5, clipping 11,5, entrenamiento 10). Los clips de la semana salen del mes del
+ * Roadmap Clipper (ola 23): clips por día del mes × 7.
  */
 export const SEMANA_INTENSIVA: (Omit<MetaGenerada, 'id' | 'origen'> & { clave: string })[] = [
   { rama: 'trabajo', texto: 'Postulaciones a medida', meta: 35, clave: 'postulaciones', nota: '5 por día' },
@@ -155,8 +164,9 @@ export const SEMANA_INTENSIVA: (Omit<MetaGenerada, 'id' | 'origen'> & { clave: s
   // Ola 18/21: la entrevista se practica en el bloque de búsqueda laboral.
   { rama: 'trabajo', texto: 'Respuestas ensayadas', meta: 10, clave: 'respuestas' },
   { rama: 'trabajo', texto: 'Simulacro de entrevista', meta: 1, clave: 'simulada' },
-  { area: 'eclipse', texto: 'Horas de clipping', meta: 10.5, unidad: 'h', clave: 'horas-clipping' },
-  { area: 'eclipse', texto: 'Clips publicados', meta: 25, clave: 'clips' },
+  // Ola 23: 1 h 30 de lunes a viernes y 2 h el sábado y el domingo; los clips salen del mes del roadmap.
+  { area: 'eclipse', texto: 'Horas de clipping', meta: 11.5, unidad: 'h', clave: 'horas-clipping' },
+  { area: 'eclipse', texto: 'Clips publicados', meta: 35, clave: 'clips' },
   { rama: 'salud', texto: 'Entrenamientos', meta: 5, clave: 'entrenos' },
 ];
 
@@ -164,11 +174,18 @@ export const SEMANA_INTENSIVA: (Omit<MetaGenerada, 'id' | 'origen'> & { clave: s
 export const sinPausa = (ms: MetaGenerada[], fecha: string, pausa?: Pick<PlanState, 'pausas'>) =>
   pausa ? ms.filter((m) => !(m.rama && enPausa(pausa, m.rama, fecha)) && !(m.clave === 'ventas' && enPausa(pausa, 'ventas', fecha))) : ms;
 
+/** Ola 23: los clips de la semana según el mes del Roadmap Clipper (clips por día × 7). */
+function clipsDeLaSemana(fecha: string) {
+  const l = lunes(fecha);
+  const m = mesClipEn(l);
+  return { meta: planEntre(l, addDays(l, 6)).clips, nota: `mes ${Math.max(1, Math.min(12, mesClipDe(l)))} del roadmap · ${m.clipsDia} por día` };
+}
+
 export function metasSemanaGeneradas(fecha: string, t0 = T0_PLAN, op: OpcionesPlan = {}): MetaGenerada[] {
   const s = semanaDelPlan(fecha, t0);
   if (s < 1 || s > SEMANAS) return [];
   const base: MetaGenerada[] = op.intensiva
-    ? SEMANA_INTENSIVA.map((x) => ({ ...x, id: `s-${x.clave}`, origen: 'plan' as const }))
+    ? SEMANA_INTENSIVA.map((x) => ({ ...x, id: `s-${x.clave}`, origen: 'plan' as const, ...(x.clave === 'clips' ? clipsDeLaSemana(fecha) : {}) }))
     : metasSemanaPlan(fecha, t0).map((x) => ({ id: `s-${x.id}`, rama: x.rama, texto: x.texto, meta: x.meta, unidad: x.unidad || undefined, clave: x.id, origen: 'plan' }));
   const out = sinPausa(base, fecha, op.pausa);
   const t = tramoActivo(fecha, t0);
@@ -292,7 +309,12 @@ export function metasMesGeneradas(fecha: string, t0 = T0_PLAN, study?: StudyStat
     // Salud.
     push({ id: 'm-entreno', rama: 'salud', texto: 'Entrenar 6 de 7 días', meta: Math.round((dias * 6) / 7), clave: 'entrenos' });
   }
-  if (op.intensiva) push({ id: 'm-clips', area: 'eclipse', texto: 'Clips publicados', meta: Math.round((25 * dias) / 7), clave: 'clips' });
+  if (op.intensiva) {
+    // Ola 23: clips y USD del Roadmap Clipper, día por día del mes (el mes del roadmap arranca el 16).
+    const pc = planEntre(a, b);
+    push({ id: 'm-clips', area: 'eclipse', texto: 'Clips publicados', meta: pc.clips, clave: 'clips', nota: 'según el mes del roadmap' });
+    push({ id: 'm-usd-clip', area: 'eclipse', texto: 'Cobrado del clipping', meta: pc.usd, unidad: 'USD', clave: 'usd-clipping', nota: 'la meta del roadmap, prorrateada' });
+  }
   // Chequeos mensuales.
   const sFin = semanaDelPlan(b, t0);
   const sIni = semanaDelPlan(a, t0);
