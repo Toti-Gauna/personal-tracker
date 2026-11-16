@@ -12,6 +12,7 @@ import { dateKey } from '../data/time';
 import { renameBimester } from '../state/goals';
 import { setAreaName } from '../state/profile';
 import { toast } from '../ui/avisos';
+import { Plegable } from '../ui/Plegable';
 import '../styles/perfil.css';
 
 const TEMAS: [ThemePref, string][] = [['dark', 'Oscuro'], ['light', 'Claro'], ['system', 'Sistema']];
@@ -59,7 +60,7 @@ export function Ajustes() {
         {TEMAS.map(([id, n]) => <button key={id} role="radio" aria-checked={tema === id} onClick={() => { setTema(id); applyTheme(id); }}>{n}</button>)}
       </div>
 
-      <div className="fila-t aj-t"><span className="etiqueta">Nombres de los bimestres</span><span className="sub nota-der">lo que significa para vos</span></div>
+      <Plegable id="aj:bimestres" titulo="Nombres de los bimestres" resumen={`${Object.values(names).filter((x) => x?.trim()).length} propios`}>
       <ol className="bim-lista">
         {Array.from({ length: BIMESTRES }, (_, i) => ({ n: i + 1, name: PLAN.nombresBimestre[i] ?? `B${i + 1}` })).map((b) => {
           const propio = names[b.n]?.trim();
@@ -80,6 +81,7 @@ export function Ajustes() {
           );
         })}
       </ol>
+      </Plegable>
 
       <div className="etiqueta aj-t">Áreas</div>
       <div className="chips">
@@ -122,8 +124,7 @@ function PlanT18() {
   const decision = PLAN.hitos.find((h) => h.id === 'T+12')!;
   const fechaDecision = (() => { const d = new Date(t0 + 'T12:00'); d.setDate(d.getDate() + (decision.semana - 1) * 7); return dateKey(d); })();
   return (
-    <>
-      <div className="etiqueta aj-t">Plan T+18</div>
+    <Plegable id="aj:plan" titulo="Plan T+18" resumen={intensiva ? 'búsqueda intensiva' : 'rutina con trabajo'}>
       <ul className="aj-plan">
         <li>
           <span><b>Búsqueda intensiva</b><small>{intensiva ? `Activa · Handyx y ventas en stand-by. Al apagarla vuelve la rutina ${cfg.previo?.rutina === 'con-trabajo' ? 'con trabajo' : 'buscando trabajo'} y el día libre.` : 'Rutinas de búsqueda todos los días, sin día libre; Handyx y ventas en pausa sin borrar nada.'}</small></span>
@@ -173,7 +174,7 @@ function PlanT18() {
         {RAMAS.map((r) => <span key={r} className="mono"><i style={{ background: RAMA_COLOR[r] }} />{r}</span>)}
       </div>
       <p className="sub nota-izq">Cada rama tiene su color en Hoy, Metas y el mapa; main es Trazo.</p>
-    </>
+    </Plegable>
   );
 }
 

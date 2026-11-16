@@ -5,7 +5,8 @@
  */
 import { useState } from 'react';
 import { PLAN, TRAMOS, diaSemanaCorto, fechaCorta, fechas, nombreTramo, proyectos, semanaDelPlan, siguienteTramo, T0_PLAN, tramoActivo, tramoPorId, type Capa } from '../data/plan';
-import { proyectoVacio, type TipoError } from '../data/plan-state';
+import { EVIDENCIAS, proyectoVacio, type TipoError } from '../data/plan-state';
+import { Plegable } from '../ui/Plegable';
 import { RAMA_COLOR } from '../data/ramas';
 import type { DayLog } from '../data/types';
 import { guardarExamen, marcarCapa, setTecnica, sumarRevision, sumarTiempo, toggleAgentico } from '../state/plan';
@@ -84,9 +85,9 @@ export function PlanProyecto({ day, id }: { day: DayLog; id?: string }) {
         </>
       )}
 
-      <FichaBloque id={t.id} />
       <MetasBloque bloque={t.id} date={date} titulo={`Metas de ${t.id}`} />
-      {t.tipo === 'proyecto' && <EvidenciaProyecto id={t.id} />}
+      <Plegable id={`proy:${t.id}:ficha`} titulo="Ficha" resumen={t.tipo === 'cert' ? 'costo y versión' : 'feature, tecnología, validador'} color={RAMA_COLOR.programacion}><FichaBloque id={t.id} /></Plegable>
+      {t.tipo === 'proyecto' && <Plegable id={`proy:${t.id}:evidencia`} titulo="Puerta de evidencia" resumen={`${EVIDENCIAS.filter(([k]) => p.evidencia?.[k]).length} de 3`}><EvidenciaProyecto id={t.id} /></Plegable>}
 
       {t.tipo === 'ventana' && (
         <>
@@ -99,7 +100,7 @@ export function PlanProyecto({ day, id }: { day: DayLog; id?: string }) {
 
       {conEstandar && (
         <>
-          <div className="fila-t pp-sec"><span className="etiqueta">Estándar de entrega</span><span className="mono sub">{hechas} de {capas.length}</span></div>
+          <Plegable id={`proy:${t.id}:estandar`} titulo="Estándar de entrega" resumen={`${hechas} de ${capas.length}`} color={RAMA_COLOR.programacion}>
           <ul className="pp-capas">
             {capas.map((c) => (
               <li key={c.id}>
@@ -111,6 +112,7 @@ export function PlanProyecto({ day, id }: { day: DayLog; id?: string }) {
               </li>
             ))}
           </ul>
+          </Plegable>
           <Tiempo id={t.id} tiempo={p.tiempo} />
         </>
       )}
@@ -150,8 +152,7 @@ function Tiempo({ id, tiempo }: { id: string; tiempo: { nucleo: number; producto
   const total = tiempo.nucleo + tiempo.producto + tiempo.lanzamiento;
   const plan = PLAN.programacion.presupuesto;
   return (
-    <>
-      <div className="fila-t pp-sec"><span className="etiqueta">Tiempo real contra {plan.nucleo} / {plan.producto} / {plan.lanzamiento}</span><span className="mono sub">{Math.round((total / 60) * 10) / 10} h</span></div>
+    <Plegable id={`proy:${id}:tiempo`} titulo={`Tiempo real contra ${plan.nucleo} / ${plan.producto} / ${plan.lanzamiento}`} resumen={`${Math.round((total / 60) * 10) / 10} h`}>
       <ul className="pp-tiempo">
         {CATS.map(([k, nombre, color]) => {
           const pct = total ? Math.round((tiempo[k] / total) * 100) : 0;
@@ -168,7 +169,7 @@ function Tiempo({ id, tiempo }: { id: string; tiempo: { nucleo: number; producto
         })}
       </ul>
       <p className="sub">La línea punteada es el plan. Si el tiempo no alcanza, se recorta producto, nunca tests ni seguridad.</p>
-    </>
+    </Plegable>
   );
 }
 
@@ -183,8 +184,8 @@ function Revisiones({ id, date, revisiones }: { id: string; date: string; revisi
     setTexto('');
   };
   return (
-    <>
-      <div className="fila-t pp-sec"><span className="etiqueta">Revisiones conmigo</span><a className="subrayado" href="#/flojo">Puntos débiles →</a></div>
+    <Plegable id={`proy:${id}:revisiones`} titulo="Revisiones conmigo" resumen={lista.length ? `${lista.length} cargada${lista.length === 1 ? '' : 's'}` : 'ninguna'}>
+      <a className="subrayado" href="#/flojo">Puntos débiles →</a>
       <ul className="pp-revs">
         {lista.map((r, k) => {
           const tp = TIPOS.find((x) => x[0] === r.tipo)!;
@@ -205,7 +206,7 @@ function Revisiones({ id, date, revisiones }: { id: string; date: string; revisi
         </div>
         <button type="submit" className="btn-borde" disabled={!texto.trim()}>Agregar revisión</button>
       </form>
-    </>
+    </Plegable>
   );
 }
 
@@ -213,14 +214,13 @@ function Examen({ id, date, examen }: { id: string; date: string; examen?: { fec
   const [v, setV] = useState('');
   const n = Number(v);
   return (
-    <>
-      <div className="fila-t pp-sec"><span className="etiqueta">Examen</span>{examen && <span className="mono" style={{ color: examen.puntaje >= 85 ? 'var(--salud)' : 'var(--rutina)' }}>{examen.puntaje} % · {fechaCorta(examen.fecha)}</span>}</div>
+    <Plegable id={`proy:${id}:examen`} titulo="Examen" resumen={examen ? `${examen.puntaje} % · ${fechaCorta(examen.fecha)}` : 'sin cargar'} abierto>
       <form className="pp-examen" onSubmit={(e) => { e.preventDefault(); if (n >= 0 && n <= 100 && v !== '') { guardarExamen(id, date, n); setV(''); } }}>
         <input className="campo-texto mono" inputMode="numeric" value={v} onChange={(e) => setV(e.target.value.replace(/\D/g, '').slice(0, 3))} placeholder="Puntaje" aria-label="Puntaje del examen (0 a 100)" />
         <button type="submit" className="btn-borde" disabled={v === '' || n > 100}>{examen ? 'Cambiar' : 'Guardar'}</button>
       </form>
       <p className="sub">{id.startsWith('W') ? 'Con 85 % o más la puerta queda aprobada.' : 'Con 85 % o más y la entrevista técnica completa, el proyecto queda cerrado.'} También entra con el JSON del examen (Importar JSON).</p>
-    </>
+    </Plegable>
   );
 }
 
@@ -250,8 +250,7 @@ function Tecnica({ id, date }: { id: string; date: string }) {
   const n = t.ejercicios ?? 0;
   const completa = !!(t.diseno && n >= cfg.ejercicios[0] && t.defensa);
   return (
-    <>
-      <div className="fila-t pp-sec"><span className="etiqueta">Entrevista técnica del proyecto</span><span className="mono sub">{completa ? 'completa' : `${[t.diseno, n >= cfg.ejercicios[0], t.defensa].filter(Boolean).length} de 3`}</span></div>
+    <Plegable id={`proy:${id}:tecnica`} titulo="Entrevista técnica del proyecto" resumen={completa ? 'completa' : `${[t.diseno, n >= cfg.ejercicios[0], t.defensa].filter(Boolean).length} de 3`}>
       <ul className="pp-capas">
         <li>
           <Casilla checked={!!t.diseno} label="Documento de diseño: marcar" onChange={() => setTecnica(id, { diseno: !t.diseno })} />
@@ -271,7 +270,7 @@ function Tecnica({ id, date }: { id: string; date: string }) {
         </li>
       </ul>
       <p className="sub">El proyecto no se marca como cerrado sin estos tres.</p>
-    </>
+    </Plegable>
   );
 }
 
@@ -279,13 +278,12 @@ function Tecnica({ id, date }: { id: string; date: string }) {
 function Agentico({ id }: { id: string }) {
   const p = useStore((s) => s.plan.proyectos[id]);
   return (
-    <>
-      <div className="etiqueta pp-sec">Portfolio agéntico</div>
+    <Plegable id={`proy:${id}:agentico`} titulo="Portfolio agéntico" resumen={`${[p?.mcp, p?.agente].filter(Boolean).length} de 2`}>
       <ul className="pp-capas">
         <li><Casilla checked={!!p?.mcp} label="Servidor MCP publicado: marcar" onChange={() => toggleAgentico(id, 'mcp')} /><div><b>Servidor MCP publicado</b><p className="sub">Herramientas tipadas, 5 tests, 10 evals y README con instalación en una línea (prompt 22).</p></div></li>
         <li><Casilla checked={!!p?.agente} label="Agente con trazas: marcar" onChange={() => toggleAgentico(id, 'agente')} /><div><b>Agente con trazas</b><p className="sub">Con tokens, latencia y costo a la vista; suma a "Preguntale a mis proyectos".</p></div></li>
       </ul>
-    </>
+    </Plegable>
   );
 }
 

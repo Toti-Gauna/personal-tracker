@@ -1,3 +1,4 @@
+import { Plegable } from '../Plegable';
 import { useLayoutEffect, useRef, type ReactNode } from 'react';
 import gsap from 'gsap';
 import { reducedMotion } from '../../lib/motion';
@@ -74,7 +75,10 @@ export function Leyenda({ items }: { items: { label: string; color: string; kind
   );
 }
 
-export const Card = ({ title, aside, children, className = '' }: { title?: string; aside?: ReactNode; children: ReactNode; className?: string }) => (
+/** Ola 22: con `plegable`, la tarjeta es una sección que se abre y se cierra (y recuerda cómo la dejaste). */
+export const Card = ({ title, aside, children, className = '', plegable }: { title?: string; aside?: ReactNode; children: ReactNode; className?: string; plegable?: { id: string; abierto?: boolean } }) => plegable && title ? (
+  <Plegable id={plegable.id} titulo={title} resumen={aside} abierto={plegable.abierto} className={`r-card-pleg ${className}`}>{children}</Plegable>
+) : (
   <section className={`r-card ${className}`}>
     {(title || aside) && <div className="r-card-cab">{title && <h2>{title}</h2>}{aside && <span className="sub">{aside}</span>}</div>}
     {children}

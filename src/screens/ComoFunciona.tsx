@@ -1,5 +1,6 @@
 import { DIA, LADDER, MAX_TRIES, PASS, REST_TEST, REVIEW_CAP, TEST_MIN, TEST_PREV } from '../data/study-catalog';
 import { shorter } from '../state/study';
+import { Plegable } from '../ui/Plegable';
 import '../styles/estudio.css';
 
 const pct = Math.round(PASS * 100);
@@ -35,13 +36,12 @@ const DIA_TIPO: [string, string, string, number][] = [
 
 function Caja({ n, titulo, nota, intro, reglas }: { n: number; titulo: string; nota: string; intro: string; reglas: [string, string][] }) {
   return (
-    <section className="paso-caja">
-      <h2><span className="n">{n}</span>{titulo}<small>{nota}</small></h2>
+    <Plegable id={`como:${n}`} titulo={`${n} · ${titulo}`} resumen={nota} abierto={n === 1}>
       <p>{intro}</p>
       <dl className="reglas">
         {reglas.map(([t, d]) => <div key={t}><dt>{t}</dt><dd>{d}</dd></div>)}
       </dl>
-    </section>
+    </Plegable>
   );
 }
 
@@ -87,20 +87,22 @@ export function ComoFunciona() {
           ['Se saltea si', 'no vence nada. Hay días sin repaso.'],
         ]} />
 
-      <div className="etiqueta como-t">Un día cualquiera: cada fase, un capítulo distinto</div>
+      <Plegable id="como:dia" titulo="Un día cualquiera" resumen="cada fase, un capítulo distinto">
       <ol className="escalera dia-tipo">
         {DIA_TIPO.map(([f, t, s2, m], i) => (
           <li key={i}><span className="dia">{f || '·'}</span><span>{t}<small>{s2}</small></span><span className="mono sub">{m} min</span></li>
         ))}
       </ol>
+      </Plegable>
 
-      <div className="etiqueta como-t">Ejemplo: un capítulo, dos meses</div>
+      <Plegable id="como:ejemplo" titulo="Un capítulo, dos meses" resumen="ejemplo">
       <ol className="escalera">
         {EJEMPLO.map(([d, t, s2, m], i) => (
           <li key={i} className={i < 2 ? 'cero' : ''}><span className="dia">{d}</span><span>{t}<small>{s2}</small></span><span className="mono sub">{m} min</span></li>
         ))}
       </ol>
       <p className="sub">Después del test, repetís unos {repetir} minutos repartidos en dos meses. Si algún día sale menos de 70 %, se agrega una relectura corta y el próximo repaso llega antes.</p>
+      </Plegable>
       <a className="caja-link" href="#/motor">Ajustar el motor: tope, retención, nuevas por día <span aria-hidden="true">→</span></a>
     </main>
   );

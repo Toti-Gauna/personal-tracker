@@ -10,6 +10,7 @@ import { Casilla } from '../ui/Casilla';
 import { MicroTesis } from '../ui/MicroTesis';
 import { toast } from '../ui/avisos';
 import { MetasBloque } from '../ui/MetasBloque';
+import { Plegable } from '../ui/Plegable';
 import { empezarLibro } from '../state/metas-bloque';
 import '../styles/estudio.css';
 import '../styles/metas.css';
@@ -74,8 +75,7 @@ export function LibroPantalla({ day, id }: { day: DayLog; id: string }) {
         const dePrte = us.filter((u) => !p.n || l.capitulos.find((c) => c.n === u.caps[0])?.parte === p.n);
         if (!dePrte.length) return null;
         return (
-          <section key={p.n} aria-label={p.titulo || 'Unidades'}>
-            {p.titulo && <div className="fila-t"><span className="etiqueta">Parte {p.n} · {p.titulo}</span></div>}
+          <Plegable key={p.n} id={`libro:${id}:parte:${p.n}`} titulo={p.titulo ? `Parte ${p.n} · ${p.titulo}` : 'Unidades'} resumen={`${dePrte.filter((u) => e.actual ? u.n < e.actual.n : true).length} de ${dePrte.length}`} color={color} abierto={!e.actual ? p.n === (l.partes?.length ?? 0) : dePrte.some((u) => u.n === e.actual!.n)}>
             <ol className="libro-unid">
               {dePrte.map((u) => {
                 const st = unitStatus(a, study, u.n, day.date);
@@ -101,13 +101,12 @@ export function LibroPantalla({ day, id }: { day: DayLog; id: string }) {
                 );
               })}
             </ol>
-          </section>
+          </Plegable>
         );
       })}
 
       {!!l.recursos?.length && (
-        <section aria-label="Lectura de apoyo">
-          <div className="fila-t"><span className="etiqueta">Lectura de apoyo · sin test</span></div>
+        <Plegable id={`libro:${id}:apoyo`} titulo="Lectura de apoyo" resumen={`${l.recursos.filter((r) => study.recursosLeidos?.[`${actId}:${r.id}`]).length} de ${l.recursos.length} · sin test`}>
           <ul className="libro-rec">
             {l.recursos.map((r) => {
               const leido = study.recursosLeidos?.[`${actId}:${r.id}`];
@@ -119,7 +118,7 @@ export function LibroPantalla({ day, id }: { day: DayLog; id: string }) {
               );
             })}
           </ul>
-        </section>
+        </Plegable>
       )}
 
       <MetasBloque bloque={`libro:${id}`} date={day.date} titulo="Metas del libro" vacio="Sin metas propias todavía: las del libro son leer, micro-tesis, mini-tests y el cierre." />

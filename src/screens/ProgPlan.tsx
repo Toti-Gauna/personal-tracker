@@ -15,6 +15,7 @@ import { useStore } from '../state/store';
 import { Casilla } from '../ui/Casilla';
 import { EvidenciaProyecto, FichaBloque, NivelSalida } from '../ui/FichaBloque';
 import { MetasBloque } from '../ui/MetasBloque';
+import { EscaleraCompacta } from '../ui/EscaleraCompacta';
 import '../styles/estudio.css';
 import '../styles/roadmap-estudio.css';
 import '../styles/etapas.css';
@@ -89,28 +90,22 @@ export function ProgPlan({ day, param }: { day: DayLog; param: string }) {
       </section>
 
       <span className="etiqueta">La escalera · de P0 a A7</span>
-      <ol className="re-tl">
-        {porEtapa.flatMap((xs) => xs.map((x, i) => {
+      <EscaleraCompacta etiqueta="Escalera de proyectos por etapa" color={COLOR} grupos={porEtapa.map((xs, k) => ({
+        id: `prog:etapa:${k + 1}`,
+        titulo: ETAPA[k + 1],
+        resumen: `${xs.filter((x) => (x.tipo === 'proyecto' ? cierreProyecto(plan, x.id) : estadoEn(x, day.date) === 'hecho')).length} de ${xs.length} · ${xs.reduce((a, x) => a + x.semanas, 0)} sem`,
+        abierto: false,
+        items: xs.map((x) => {
           const est = x.tipo === 'proyecto' && cierreProyecto(plan, x.id) ? 'hecho' : estadoEn(x, day.date);
           const av = avanceBloque(plan.metasBloque?.[x.id]);
           const sal = x.tipo === 'ventana' ? avanceSalida(plan, x.id) : null;
-          return (
-            <li key={x.id} className={est === 'hecho' ? 'cerrada' : est}>
-              {i === 0 && <div className="re-anio"><b>{ETAPA[x.etapa]}</b></div>}
-              <a href={`#/estudio/prog/${x.id}`} aria-current={x.id === actual.id ? 'step' : undefined}>
-                <span className="re-nodo" aria-hidden="true">{est === 'hecho' ? '✓' : ''}</span>
-                <span className="re-tl-cuerpo">
-                  <span className="mono re-tl-et">{x.id} · {f(x.inicio)} a {f(x.fin)} · {x.semanas} sem{x.id === actual.id ? ' · estás acá' : ''}</span>
-                  <b>{x.nombre}</b>
-                  <span className="re-tl-perfil"><span className={x.id === actual.id ? 'resaltado' : ''}>{x.ficha?.perfil ?? x.mate?.perfil ?? TIPO[x.tipo]}</span></span>
-                  {(av.total > 0 || sal) && <span className="sub re-tl-libros">{[av.total ? `metas ${av.hechas} de ${av.total}` : '', sal ? `salida ${sal.hechos} de ${sal.total}` : ''].filter(Boolean).join(' · ')}</span>}
-                </span>
-                <span className="re-tl-ir" aria-hidden="true">→</span>
-              </a>
-            </li>
-          );
-        }))}
-      </ol>
+          return {
+            id: x.id, href: `#/estudio/prog/${x.id}`, estado: est, aqui: x.id === actual.id,
+            titulo: `${x.id} · ${x.nombre}`,
+            sub: [`${f(x.inicio)} a ${f(x.fin)}`, `${x.semanas} sem`, av.total ? `metas ${av.hechas}/${av.total}` : '', sal ? `salida ${sal.hechos}/${sal.total}` : ''].filter(Boolean).join(' · '),
+          };
+        }),
+      }))} />
     </main>
   );
 }
