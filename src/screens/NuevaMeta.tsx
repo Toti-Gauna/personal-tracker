@@ -10,7 +10,7 @@ import { addGoal } from '../state/goals';
 import { useStore } from '../state/store';
 import { newId } from '../data/schedule';
 import { toast } from '../ui/avisos';
-import { Hoja } from '../ui/Hoja';
+import { HojaSubmeta } from '../ui/HojaSubmeta';
 import '../styles/estudio.css';
 import '../styles/metas.css';
 
@@ -36,19 +36,12 @@ export function NuevaMeta({ today, horizon }: { today: string; horizon?: string 
   const areaEnPausa = area === 'eclipse' && enPausa(plan, 'ventas', today);
   const [subs, setSubs] = useState<{ id: string; t: string }[]>([]);
   const [hoja, setHoja] = useState(false);
-  const [nueva, setNueva] = useState('');
   const [diaria, setDiaria] = useState(false);
 
   const conSubs = subs.length > 0;
   const porDia = diaria && h === 'semana' && !conSubs && tipo !== 'tarea';
   const target = conSubs ? subs.length : tipo === 'tarea' ? 1 : porDia ? Math.min(7, Number(meta.replace(',', '.')) || 0) : Number(meta.replace(',', '.')) || 0;
   const valida = titulo.trim() && target > 0;
-  const agregarSub = () => {
-    const t = nueva.trim();
-    if (!t) return;
-    setSubs((x) => [...x, { id: newId(), t }]);
-    setNueva('');
-  };
   const guardar = () => {
     if (!valida) return;
     addGoal({ title: titulo.trim(), area, horizon: h, type: tipo, target, subs, daily: porDia, unit: tipo === 'tarea' ? undefined : unidad.trim() || undefined, quick: quick && tipo !== 'tarea' && !conSubs && !porDia && (h === 'dia' || h === 'semana'), ...(rama ? { rama } : {}) }, today);
@@ -101,15 +94,7 @@ export function NuevaMeta({ today, horizon }: { today: string; horizon?: string 
       <button type="button" className="nueva-meta-btn subs-agregar" onClick={() => setHoja(true)}>+ Agregar submeta</button>
       <p className="sub nota-izq">{conSubs ? `La meta se cumple al hacer las ${subs.length} submetas.` : 'Pasos más chicos que se tildan dentro de la meta. Sin submetas, elegís el tipo abajo.'}</p>
 
-      {hoja && (
-        <Hoja titulo="Nueva submeta" kicker={titulo.trim() || 'Submeta'} color={AREAS[area].css} onCerrar={() => setHoja(false)}>
-          <form onSubmit={(e) => { e.preventDefault(); agregarSub(); }}>
-            <input className="campo-texto" autoFocus value={nueva} onChange={(e) => setNueva(e.target.value)} placeholder="Ej.: Cocinar en casa" aria-label="Nombre de la submeta" />
-            <button className="btn-principal" type="submit" style={{ marginTop: 14 }} disabled={!nueva.trim()}>Agregar y otra</button>
-            <button className="btn-borde" type="button" onClick={() => { agregarSub(); setHoja(false); }}>{nueva.trim() ? 'Agregar y cerrar' : 'Listo'}</button>
-          </form>
-        </Hoja>
-      )}
+      {hoja && <HojaSubmeta kicker={titulo.trim() || 'Submeta'} color={AREAS[area].css} onAgregar={(t) => setSubs((x) => [...x, { id: newId(), t }])} onCerrar={() => setHoja(false)} />}
 
       {!conSubs && <span className="etiqueta">Tipo</span>}
       {!conSubs && <div className="tipos" role="radiogroup" aria-label="Tipo">

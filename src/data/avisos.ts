@@ -33,16 +33,20 @@ export function capasFaltantes(p: PlanState, proyectoId: string): { id: Capa; no
 
 export function avisosEntreRamas(date: string, p: PlanState, cfg: PlanSettings, t0?: string): Aviso[] {
   const out: Aviso[] = [];
-  // Entrevista a 3 días o menos: la búsqueda se parte y el inglés pasa a modo entrevista.
+  // Entrevista a 3 días o menos: el día anterior se practica en el bloque de búsqueda laboral (sin modo propio).
   const ent = p.entrevistas.filter((e) => e.fecha >= date && e.fecha <= addDays(date, 3)).sort((a, b) => a.fecha.localeCompare(b.fecha))[0];
   if (ent) {
+    const enIngles = /ingl[eé]s/i.test(ent.modalidad ?? '');
+    const practica = `practicar la entrevista${ent.empresa ? ` en ${ent.empresa}` : ''} con el pitch armado${enIngles ? ' y en inglés' : ''}`;
     out.push({
       id: `ent-${ent.id}`, de: 'trabajo', a: 'ingles',
       titulo: `Entrevista ${ent.fecha === date ? 'hoy' : elDia(ent.fecha)}${ent.hora ? ` a las ${ent.hora}` : ''}`,
-      texto: cfg.modo === 'busqueda-intensiva'
-        ? `El bloque de inglés pasa a simulacro de esta entrevista${ent.empresa ? ` en ${ent.empresa}` : ''}: ${ent.rol}.`
-        : 'El bloque de búsqueda se parte: 45 min de postulaciones y 45 de respuestas en voz alta.',
-      href: '#/metas/ingles',
+      texto: ent.fecha === date
+        ? `Hoy es la entrevista (${ent.rol}). Lo que practicaste ayer queda en el bloque de búsqueda laboral.`
+        : ent.fecha === addDays(date, 1)
+          ? `Hoy, en el bloque de búsqueda laboral: ${practica}. ${ent.rol}.`
+          : `El día anterior, el bloque de búsqueda laboral suma ${practica}. ${ent.rol}.`,
+      href: '#/metas/trabajo',
     });
   }
   // Proyecto que cierra en 14 días o menos con el estándar sin completar.

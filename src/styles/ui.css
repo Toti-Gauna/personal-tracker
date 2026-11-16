@@ -75,6 +75,7 @@
   background: transparent;
   color: var(--tinta);
   font: inherit;
+  font-size: 16px;
 }
 .campo-texto::placeholder { color: var(--sub); }
 
@@ -107,10 +108,12 @@
   position: fixed; inset: 0; z-index: 55;
   background: color-mix(in srgb, #000 55%, transparent);
   display: flex; align-items: flex-end; justify-content: center;
+  /* La hoja queda por encima del teclado del teléfono (useTeclado escribe --teclado). */
+  padding-bottom: var(--teclado, 0px);
   animation: fondo-in 0.2s ease-out;
 }
 .modal {
-  width: 100%; max-width: 560px; max-height: 90dvh; overflow-y: auto;
+  width: 100%; max-width: 560px; max-height: calc(90dvh - var(--teclado, 0px)); overflow-y: auto;
   background: var(--papel);
   border: 1px solid var(--linea);
   border-bottom: 0;
