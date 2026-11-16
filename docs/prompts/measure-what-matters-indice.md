@@ -49,5 +49,5 @@ No se commitea ningún texto del libro: solo los títulos y subtítulos del índ
 
 - **Unidades de 2 capítulos** (11): 1–2, 3–4, 5–6, 7–8, 9–10, 11–12, 13–14 (parte 1, 7 unidades), 15–16, 17–18, 19–20 y 21 más el Resource 1 (parte 2, 4 unidades). Los Resources 2 a 5 y el Foreword son lectura de apoyo: se tildan, sin test.
 - Cuatro capítulos son los "superpoderes" (4, 7, 10 y 12): la teoría. El resto son casos; en la tesis de cada unidad el caso se resume en una línea y la teoría se escribe completa.
-- **Artefacto propuesto** (a confirmar): un marco de OKR propio para el trimestre (objetivos con resultados clave y puntaje), que se puede importar a Metas con el JSON de la ola 20.
+- **Artefacto:** por ahora no hay (decidido el 2026-11-16: primero se lee el libro y después se aplica). Se define al terminarlo; si es un marco de OKR propio, se puede importar a Metas con el JSON de la ola 20.
 - Hito del bloque: tesis final del libro y 3 minutos hablados en inglés sin leer.

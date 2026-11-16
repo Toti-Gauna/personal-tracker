@@ -5,7 +5,7 @@ Tracker personal de Toti: el día en horas, el estudio con su propio motor de re
 - **Diseño:** [canvas de Trazo](https://claude.ai/artifact/6Cc2E6aW2ViU5ikovpsRTy)
 - **Roadmap de estudio:** [ruta ML + DevSecOps](https://claude.ai/artifact/9PEokku7mBLZdCFJr1zqXP)
 - **Pantallas:** presentación `Trazo-pantallas.pptx` y su ZIP de imágenes (44 pantallas, 8 flujos).
-- **Estado:** olas 0 a 12b hechas y en `main`. Olas 0 a 16c hechas (la 15 quedó absorbida por la 16c). Olas 0 a 17 hechas. Las olas 18 a 22 (arreglos y calendario, entreno, programación y metas por bloque, idiomas y libros, y orden de pantallas) están planificadas en §6 sexies. Este archivo es la fuente de verdad.
+- **Estado:** olas 0 a 12b hechas y en `main`. Olas 0 a 16c hechas (la 15 quedó absorbida por la 16c). Olas 0 a 17 hechas. Las olas 18 a 23 (arreglos y calendario, entreno, programación y metas por bloque, idiomas y libros, orden de pantallas y clipping) están planificadas en §6 sexies. Este archivo es la fuente de verdad.
 
 ---
 
@@ -389,6 +389,7 @@ Desde el lunes 16 nov 2026 la prioridad es un trabajo remoto de USD 3.000 a 5.00
 | 20 · Programación y metas por bloque | Unidades por área y sistema de libros (con tarjetas, test y tesis; carga *Measure What Matters* con sus 21 capítulos), metas por bloque con JSON y el roadmap de programación por proyectos (§6 sexies, pasos 5 a 7) | Opus 5.5 · alto |
 | 21 · Idiomas y libros | Roadmap maestro v3: un idioma por año durante 6 años (inglés, francés, italiano, alemán, japonés y chino), 12 libros de consolidación, la biblioteca de 42 libros y el ascenso a C1, dentro de Estudio (§6 sexies, paso 8) | Opus 5.5 · alto |
 | 22 · Orden de pantallas | Pasada de UX en Metas, Estudio y Hoy: pantallas livianas con subpáginas y botones, también en los roadmaps de matemática, programación e idiomas (§6 sexies, paso 9) | Sonnet 5.5 · medio |
+| 23 · Clipping | Roadmap Clipper de 12 meses (de 0 a USD 10k/mes) con su propio apartado en Metas: plan, registro, cuentas, campañas, retainers, métricas y gráficos, y una UX/UI premium; se integra con Hoy, el mapa y las alertas (§6 sexies, pasos 10 a 12) | Opus 5.5 · alto |
 
 ## 6 bis. Olas 9 a 12: mejoras de uso
 
@@ -619,9 +620,9 @@ Mismo flujo: una rama y un PR por ola; se mergea a `main` con el CI en verde.
 - **Horas por semana de la intensiva:** el entrenamiento pasa de 10 a 15 h.
 - 5 tests nuevos y 3 actualizados.
 
-## 6 sexies. Olas 18 a 22: lo pendiente, en cinco olas
+## 6 sexies. Olas 18 a 23: lo pendiente, en seis olas
 
-Pedido del 2026-11-16: juntar las nueve olas que había planeado en pocas, pero no en una sola. Quedan **cinco olas** (la última se sumó con el roadmap de idiomas) que siguen el orden en que se necesitan unas a otras, con **un PR por ola** y **un commit por paso** (con sus tests). Cada paso deja la app funcionando.
+Pedido del 2026-11-16: juntar las nueve olas que había planeado en pocas, pero no en una sola. Quedan **seis olas** (la 21 se sumó con el roadmap de idiomas y la 23 con el de clipping) que siguen el orden en que se necesitan unas a otras, con **un PR por ola** y **un commit por paso** (con sus tests). Cada paso deja la app funcionando.
 
 | Ola | Pasos | Modelo · esfuerzo |
 |---|---|---|
@@ -630,8 +631,9 @@ Pedido del 2026-11-16: juntar las nueve olas que había planeado en pocas, pero 
 | 20 · Programación y metas por bloque | 5, 6 y 7 | Opus 5.5 · alto |
 | 21 · Idiomas y libros | 8 | Opus 5.5 · alto |
 | 22 · Orden de pantallas | 9 | Sonnet 5.5 · medio |
+| 23 · Clipping | 10, 11 y 12 | Opus 5.5 · alto |
 
-La 20 va antes que la 21 porque el roadmap de idiomas usa el sistema de libros y las metas por bloque que se construyen en la 20. La 22 va última porque ordena las pantallas de los tres roadmaps. La 19 no depende de ninguna otra: puede ir antes o después de la 20 (ver "A decidir" al final).
+La 20 va antes que la 21 porque el roadmap de idiomas usa el sistema de libros y las metas por bloque que se construyen en la 20. La 22 va última porque ordena las pantallas de los tres roadmaps. La 19 no depende de ninguna otra. **Orden elegido (2026-11-16): 18 → 20 → 19 → 21 → 22 → 23**, así *Measure What Matters*, que ya corre desde hoy, usa el motor de libros lo antes posible. La 23 va **última por pedido**; se arma con los criterios de la 22 (pantallas livianas con subpáginas) desde el principio.
 
 **Decidido (2026-11-16)**
 1. **Corte de 85 % en todo**: tests, puertas, semáforo, **idiomas y libros**. El 90 % de los textos de estudio no se usa. Los simulacros de Cambridge se miden contra su propia escala (sobre 180).
@@ -644,9 +646,13 @@ La 20 va antes que la 21 porque el roadmap de idiomas usa el sistema de libros y
 8. **El año 2 (francés) arranca el 27 de diciembre de 2027**, como dice el roadmap, aunque sea unos 8 meses antes de T+18.
 9. **Ensayo y examen trimestral** cada 13 semanas desde el inicio de cada año, y la **tesis anual** en la última semana del año.
 10. **Capítulos:** pasaste el índice de *Measure What Matters* (ya está en `docs/prompts/measure-what-matters-indice.md`: 21 capítulos y 5 recursos). Los demás libros se cargan con el JSON del paso 6.
-11. **Cinco olas** (18 a 22), no una sola ni nueve.
+11. **Seis olas** (18 a 23), no una sola ni nueve. La última es **Clipping**.
+12. **Orden de las olas:** 18 → 20 → 19 → 21 → 22 → 23 ("como vos digas": la recomendación se adopta).
+13. **A y B del entreno alternan por semana** (una semana A, la otra B).
+14. **Artefacto de *Measure What Matters*:** por ahora no. Primero se lee el libro y después se aplica; el hito del bloque queda en la tesis final y los 3 min hablados, y el artefacto se define al terminarlo.
+15. **Los dos "Descanso"** de noviembre de 2028 y 2029 se quedan. **Security+:** la versión la decidís vos el 22 de noviembre.
 
-**Supuesto a confirmar:** como Pull, Legs y Push tienen versión A y versión B y ahora solo hay un día de cada una, **A y B se alternan por semana** (semanas impares del plan con las A, pares con las B). Upper y Lower son iguales todas las semanas. Si preferís otro criterio, se cambia en la semana de entreno.
+**A y B** (confirmado): como Pull, Legs y Push tienen versión A y versión B y hay un solo día de cada una, se alternan por semana (semanas impares del plan con las A, pares con las B). Upper y Lower son iguales todas las semanas.
 
 ---
 
@@ -695,7 +701,7 @@ La 20 va antes que la 21 porque el roadmap de idiomas usa el sistema de libros y
 | Lenguajes | 1 capítulo, unidad o bloque |
 | **Libros** | **2 capítulos** |
 
-- **Sistema de libros.** Cada libro (`data/libros.json`) tiene capítulos y recursos. Por unidad de 2 capítulos: lectura con una **micro-tesis por capítulo** (una frase en tus palabras), **tarjetas** (los "ankis") que salen de las micro-tesis y de lo que marques, un **mini-test** de la unidad y la **tesis de la unidad** a los 3 días. Al terminar el libro: **test final**, **tesis final** y el **artefacto** (framework, análisis, política o speech): sin artefacto no cuenta como terminado, como la evidencia de un proyecto. Repasos a +8, +22 y +61 y tope de 20 min de repaso, como siempre.
+- **Sistema de libros.** Cada libro (`data/libros.json`) tiene capítulos y recursos. Por unidad de 2 capítulos: lectura con una **micro-tesis por capítulo** (una frase en tus palabras), **tarjetas** (los "ankis") que salen de las micro-tesis y de lo que marques, un **mini-test** de la unidad y la **tesis de la unidad** a los 3 días. Al terminar el libro: **test final**, **tesis final** y el **artefacto** (framework, análisis, política o speech): sin artefacto no cuenta como terminado, como la evidencia de un proyecto (**excepto *Measure What Matters***: primero se lee y el artefacto se define al terminarlo). Repasos a +8, +22 y +61 y tope de 20 min de repaso, como siempre.
 - **El primer libro es *Measure What Matters*** (el que ya estás leyendo desde hoy): 21 capítulos y 5 recursos del índice que pasaste, en 11 unidades (7 en la parte 1 y 4 en la parte 2; ver `docs/prompts/measure-what-matters-indice.md`). Los demás libros entran sin capítulos, con el estado "capítulos sin cargar", y se llenan con el JSON del paso 6.
 - Vale para las demás áreas con la misma regla de unidad: el plan de hoy en Estudio dice "Unidad 3 de 11 · caps. 5 y 6".
 - *Tests:* reparto de las 11 unidades dentro de las 6 semanas, unidad impar (cap. 21 con el Resource 1), corte de 85 % en el mini-test y el final, micro-tesis que generan tarjetas, libro sin artefacto no cuenta como terminado, y las otras áreas conservan lo que ya tienen.
@@ -735,7 +741,7 @@ La 20 va antes que la 21 porque el roadmap de idiomas usa el sistema de libros y
 - **Los 12 libros de la Fase A**, 2 por año: *Make It Stick* y *Getting to Yes*; *How to Read a Book* y *Thinking, Fast and Slow*; *Influence* y *Basic Economics*; *The Effective Executive* y *The Intelligent Investor*; *High Output Management* y *Good Strategy Bad Strategy*; *Rhetoric* y *Disciplined Entrepreneurship*.
 - **Biblioteca de 42 libros núcleo** en 6 bloques de 7 (pensar y negociar, comunicación y ventas, economía e inversión, poder y política, gestión y estrategia, fundar y construir riqueza), con su estado (pendiente, leyendo o terminado) y los **13 opcionales** aparte. Los 30 que no son de la Fase A se leen en la Fase B, en el orden de los bloques. *Measure What Matters* es el libro 0 del año 1 y ya llega cargado con sus capítulos desde la ola 20.
 - **Fase B (desde el año 7):** el ascenso a C1 de cada idioma, con 40 % de las horas para libros y 60 % para el ascenso: italiano C1 en nov 2033, francés C1 en abr 2035, alemán C1 en ago 2037, los 42 libros en jun 2040, japonés N1 en oct 2041 y chino HSK 6 en feb 2045. Se muestran como hitos con su certificación.
-- **Cada libro** usa el sistema de libros del paso 5 y suma un **artefacto**. **Cada trimestre** (cada 13 semanas desde el inicio del año) hay un **ensayo integrador** y un **examen trimestral**, y **en la última semana del año** una **tesis anual**. Aparecen en el calendario y en las alertas.
+- **Cada libro** usa el sistema de libros del paso 5 y suma un **artefacto** (en *Measure What Matters* se define después de leerlo). **Cada trimestre** (cada 13 semanas desde el inicio del año) hay un **ensayo integrador** y un **examen trimestral**, y **en la última semana del año** una **tesis anual**. Aparecen en el calendario y en las alertas.
 - **Integración con el plan T+18:** la rama de inglés del plan (hoy "modo entrevista", "bloque diario de 45 min" y "examen C1" en `data/plan.json`) pasa a leer este roadmap: las fases del año 1 reemplazan a esas, el bloque de inglés de Hoy dice lo que toca esa semana (lectura, pronunciación, gramática o preparación de Cambridge), el hito T+18 **ya no dice "examen C1"** porque el examen cae en 2027, y los exámenes entran a las alertas como las certificaciones.
 - **Horas y rutina (solo búsqueda intensiva):** el roadmap supone **11,5 h por semana** (5 × 1 h 30 y 2 × 2 h). Coincide con el bloque de inglés de la intensiva: 1 h 30 de lunes a viernes (13:30 a 15:00 si te levantás a las 04:00 o 05:00, 16:30 a 18:00 si es a las 08:00) y 2 h el sábado y el domingo (12:00 a 14:00). Ese bloque deja de llamarse "modo entrevista" y pasa a "Inglés · *lo que toca esta semana*" con sus tareas. Las horas planificadas se muestran contra las del bloque. **La rutina "con trabajo" no se toca**; se arma después, con las 11,5 h, cuando haya trabajo.
 - **Sin verificar (se queda así hasta que lo confirmes):** el curso de Udemy de inglés, los capítulos de *English Made Simple*, la disponibilidad actual de los recursos de cada idioma, los niveles estimados por año y los avales académicos de los libros. El **enlace del curso de Udemy se carga desde la app y queda en el teléfono, no se commitea** (el repo es público). Costos y fechas de los exámenes: sin verificar.
@@ -749,14 +755,84 @@ La 20 va antes que la 21 porque el roadmap de idiomas usa el sistema de libros y
 
 ---
 
-**Aceptación general:** typecheck, tests y build en verde en cada ola; cada paso probado en el navegador a 390 px, en claro y oscuro, sin desbordes; la app arranca con lo ya guardado.
+### Ola 23 · Clipping (Opus 5.5 · alto)
 
-**A decidir (con recomendación)**
-1. **Orden de la 19 y la 20.** *Measure What Matters* ya corre desde hoy (16 nov a 27 dic) y el motor de libros recién llega con la ola 20. **Recomiendo 18 → 20 → 19 → 21 → 22**: así el libro actual usa el motor lo antes posible y las semanas que pasen mientras tanto se absorben (los atrasos los absorbe el colchón de la etapa). Si querés primero el entreno, se hace 18 → 19 → 20 y el libro se estudia a mano unos días.
-2. **A y B por semana** (supuesto de arriba): ¿lo dejamos así?
-3. **Los dos "Descanso"** (noviembre de 2028 y de 2029) se quedan salvo que digas lo contrario.
-4. **Security+:** la versión (SY0-801 o SY0-701) se decide el 22 de noviembre; no la resuelvo yo.
-5. **Artefacto de *Measure What Matters*:** propongo un marco de OKR propio para el trimestre; ¿te sirve o preferís otro?
+Pedido del 2026-11-16: integrar el **Roadmap Clipper de 12 meses (de 0 a USD 10k/mes)** y darle **su propio apartado en Metas**, con la estructura de los roadmaps de matemática y programación, **métricas, gráficos** y una **UX/UI pulida, fluida y premium**. Va **última**. El texto completo se guarda en `docs/prompts/roadmap-clipping.md` (ya está). Un PR, **tres pasos** y un commit por paso.
+
+**Qué es y qué no es en Trazo.** Trazo es **la planilla y el tablero**: registrás lo que publicás y cobrás, y la app calcula, grafica y avisa. **No** automatiza ni publica nada, no entra a las plataformas ni a las cuentas, y el pipeline y el dashboard de views del roadmap (Next.js, Node, TypeScript) son **tus apps aparte**. Lo que se registra acá es, tal cual dice el roadmap, "el esquema de datos del dashboard": se exporta en JSON para sembrarlo cuando lo armes (mes 2). Las tarifas, plataformas y proyecciones salen del texto: se muestran con su fecha ("datos a julio–noviembre 2026") y la etiqueta **sin verificar**. Tampoco hay nada de apuestas, bots ni views compradas: el roadmap los deja afuera y la app no los registra.
+
+**Paso 10 · Datos y motor**
+
+- **`data/clipping.json`** (validado al cargar, como el plan extendido): los 12 meses con su meta en USD (150, 350, 700, 1.200, 1.900, 2.800, 3.800, 4.800, 5.800, 6.800, 8.000 y 9.000), cuentas y clips por día de cada mes, las 3 fases con su objetivo y **criterios de paso**, los hitos (retainers, editores, dashboard v1 y v2, pipeline v1 a v3, revisión del mes 6), la tabla de plataformas, nichos y derechos, riesgos con plan B, rutina semanal, la lista de la semana 1 con fechas (GTA 6 el jueves 19 de noviembre de 2026) y las fuentes.
+- **Calendario derivado:** el mes *n* arranca el **16** (mes 1: 16 nov a 15 dic de 2026; mes 12: 16 oct a 15 nov de 2027), como el plan extendido. "Estás acá" sale de la fecha.
+- **Estado nuevo** (`src/state/clipping.ts`, con `migrate()`): **cuentas** (alias, plataforma, nicho, estado: calentando, activa, pausada o baneada), **campañas** (nombre, plataforma, nicho, tarifa listada, tope por clip, fuente permitida, estado), **registro** de clips o de totales por día (fecha, cuenta, campaña, clips publicados, views, views verificadas, aprobados, pago estimado, pago cobrado), **retainers** y **prospección** (mensajes enviados, pruebas, activos, USD por mes). Todo acepta **fechas pasadas**: así se carga lo que hiciste antes de que llegue la ola. Se exporta e importa con JSON (reusa el importador de la ola 8 y la validación línea por línea de la ola 20).
+- **Métricas puras** (`src/data/clipping-metricas.ts`, con tests):
+  - **Pago real por 1.000 views** global y por campaña, contra la tarifa listada (la brecha).
+  - **Tasa de aprobación** por campaña.
+  - **% de clips con más de 1.000 views** y **views promedio por clip** (contra las 3.500 que pide el mes 12).
+  - **USD por hora trabajada**, con las horas del bloque de clipping que ya mide Trazo.
+  - **USD del mes contra la meta**, acumulado y ritmo.
+  - **Concentración:** ninguna campaña ni plataforma por encima del **30 %** del ingreso.
+  - **Cuentas activas y clips por día contra el plan.**
+  - **Proyección:** en qué mes cruzás USD 10k con tu ritmo real (el base del roadmap dice mes 13 a 14) y las **tres curvas** (base, optimista y conservadora).
+  - **Compuertas:** fase 1 a fase 2 si el pago real es de **USD 0,80** o más por 1.000 views y al menos el **40 %** de los clips pasa las 1.000 views; en el mes 6, si el pago real baja de **USD 0,70**, aviso de cambiar de campañas antes de escalar. Mismo semáforo que las puertas de matemática (verde, amarillo, rojo).
+
+**Paso 11 · El apartado "Clipping" en Metas** (`#/metas/clipping`, con subpáginas `#/metas/clipping/<sub>`). Entra con una card en la pestaña Ruta, al lado de las demás, y usa el área Eclipse como color. Cada pantalla es liviana (criterio de la ola 22: ninguna pasa de unas 3 pantallas de scroll) y las demás van **detrás de botones**.
+
+| Subpágina | Qué muestra |
+|---|---|
+| **Resumen** (la portada) | "Estás acá" (mes y fase) y **"Hoy sos → Vas a ser"** (lo cobrado este mes contra la meta y el USD 10k). Número grande de lo cobrado con anillo de progreso, cuatro indicadores con su mini gráfico (pago real por 1.000 views, aprobación, clips por día y cuentas), el semáforo de la compuerta de la fase y los botones al resto. |
+| **Plan** | La escalera de 12 meses con la meta de cada uno, las 3 fases con su objetivo y sus criterios de paso, y los hitos. El mes actual abierto, los demás plegados. |
+| **Registro** | La planilla: cargar clips, views y pagos, ver y editar lo cargado, filtrar por cuenta, campaña y mes. |
+| **Métricas** | Todos los gráficos de abajo, con selector de período (30 días, 90 días o todo). |
+| **Cuentas** | La granja: una tarjeta por cuenta (identidad, nicho, estilo, estado, su ritmo) y el crecimiento contra el plan (3, 5, 8, 12, 15, 20, 25, 32 y 40). Con las reglas de identidad y de no repetir archivos como recordatorio. |
+| **Campañas** | Campañas y plataformas: tarifa listada contra pago real, tope por clip, fuente permitida, estado, y la tabla de plataformas de la semana 1 (con "sin verificar"). Ranking de lo que conviene seguir y de lo que hay que dejar. |
+| **Retainers** | El embudo de prospección (20 mensajes a streamers y podcasters medianos en el mes 3, pruebas, retainers activos) y el "fijo" mensual de cada uno. |
+| **Nichos y derechos** | La tabla de nichos con su semáforo de riesgo (streamers y podcasts bajo, videojuegos medio, películas y series alto) y cómo encararlo. |
+| **Riesgos y rutina** | Los riesgos con su plan B y la **rutina semanal** (lunes revisar, martes a jueves producir, viernes decidir qué escalar, fin de semana pipeline y prospección) que se tilda. |
+| **Semana 1** | La lista de 7 días con fechas, con el aviso de GTA 6 (19 de noviembre) y la advertencia de strike. Se oculta sola después del mes 1. |
+
+**Gráficos** (SVG propios sobre `src/ui/charts`, con tabla accesible para lector de pantalla y animación de dibujo):
+1. **Ingreso mensual:** barras de lo cobrado contra la meta, con las tres curvas del roadmap por encima y la línea de USD 10k; mes actual resaltado.
+2. **Camino a USD 10k:** anillo con el avance y la proyección de en qué mes se cruza.
+3. **Pago real por 1.000 views:** una barra por campaña, la tarifa listada como punto y las líneas del piso de USD 0,80 y 0,70.
+4. **Embudo:** clips publicados, aprobados, con más de 1.000 views y pagados.
+5. **Cuentas activas y clips por día contra el plan** (escalera).
+6. **Concentración por campaña, plataforma y nicho,** con la línea del 30 %.
+7. **Calendario de actividad:** clips por día (mapa de calor, el mismo de la ola 3).
+8. **USD por hora trabajada** por semana.
+9. **Views por clip:** distribución, contra las 3.500 de objetivo.
+10. **Mini gráficos** en cada indicador.
+
+**UX/UI premium** (reglas del sistema de diseño de §2: sin sombras, bordes finos, claro y oscuro):
+- **Portada tipo tablero:** número grande con cuenta animada (GSAP; respeta "reducir movimiento"), anillo de progreso y cifras con números tabulares; el color del área Eclipse como acento y el resto neutro.
+- **Cargar en 3 toques:** el botón "Registrar" abre una hoja (la de la ola 10) que recuerda la última cuenta y campaña, con teclado numérico, campos de 16 px o más y "Deshacer" en el aviso.
+- **Fluida:** transiciones entre subpáginas con Flip, las listas se reordenan animadas, los gráficos se dibujan al entrar y los datos pesados se calculan una sola vez por cambio.
+- **Estados vacíos que guían:** sin datos, cada pantalla muestra la primera acción ("Cargá tu primera campaña") y el gráfico con la curva del plan en gris.
+- **Escritorio:** dos columnas (portada y gráficos) con el riel de las pantallas anchas; en el teléfono, una columna a 390 px sin desbordes.
+- **Accesible:** contraste en claro y oscuro, tablas para cada gráfico y tamaños táctiles de 44 px.
+
+**Paso 12 · Integración con el resto de Trazo**
+
+- **Hoy:** el bloque "Clipping" muestra el mes y la tarea que toca ("Mes 1 · 5 clips a mano, 3 cuentas") y un botón **Registrar** que abre la hoja; las metas del día salen del plan del mes.
+- **Metas semanales generadas:** "Horas de clipping" y "Clips publicados" (hoy 10,5 h y 25 por semana, fijos) pasan a salir del mes del roadmap (clips por día × días) y de las horas del bloque.
+- **Mapa de la ruta:** los hitos viejos del ramal de clipping (50 clips el día 13, primer pago el 20 y "¿US$ 100 cobrados?" el 28) se reemplazan por los del roadmap con fechas propias: GTA 6, USD 150, 350 y 700, primer retainer, dashboard v1, revisión del mes 6 y los demás.
+- **Alertas:** campañas para revisar cada lunes, "pago real por 1.000 views" cada viernes, fin de fase, revisión del mes 6, concentración por encima del 30 % y compuerta en rojo. Entran al mismo panel que las de las certificaciones.
+- **Avance:** una línea con lo cobrado del mes en la vista de avance y el resumen del cierre.
+- **Datos:** `data/clipping.json` y el estado nuevo entran en el JSON de exportación y en "Datos" de Ajustes; la app arranca con lo ya guardado.
+- *Tests:* validación del plan, calendario de los 12 meses (16 de cada mes), todas las métricas con casos de borde (sin views, sin cobros, una sola campaña), compuertas 0,80 y 0,70, concentración del 30 %, proyección del mes 10 a 14, registro con fechas pasadas, importar y exportar, migración del estado viejo, hitos nuevos en el mapa, alertas y las pantallas a 390 px en claro y oscuro.
+
+**Para decidir antes de arrancar la 23**
+1. **Horas.** El roadmap pide **2 a 3 h diarias** de clipping, y la rutina de búsqueda intensiva tiene **1 h 30 por día** (10,5 h por semana) en las de las 04:00 y las 05:00, y **ninguna** en la de las 08:00. Recomiendo **dejar las 1 h 30 de lunes a viernes** (alcanzan para los 5 clips a mano de los meses 1 y 2) y sumar, el fin de semana, **1 a 2 h de "Pipeline y prospección"** sacadas del descanso largo del sábado y el domingo, como dice la rutina semanal del roadmap. Para la de las 08:00 no hay hueco hoy (el día está lleno de 08:00 a 21:00): ¿le saco algo o queda sin clipping?
+2. **Clips por día.** El texto se contradice: la fase 2 dice "pasar de 5 a 20 clips por día", pero la tabla de la granja dice 16 en el mes 3 y 30 en el mes 5. Uso la **tabla** (cuentas × 2 clips por día) salvo que digas otra cosa.
+3. **Escenarios.** El roadmap no da los números del optimista y el conservador. Propongo: **base** = las metas del texto (USD 9.000 en el mes 12, cruza USD 10k en el mes 13 a 14); **optimista** = hasta 1,5 veces el base hacia el mes 10, así cruza USD 10k en el mes 10; **conservador** = 60 % del base desde el mes 3 (USD 5.400 en el mes 12). Son supuestos míos y se ajustan con tu planilla real desde el mes 2.
+4. **Mes 12 en USD 9.000.** El título dice "0 a USD 10k" pero el caso base cierra el año en USD 9.000: la app muestra los 12 meses del roadmap y la proyección sigue hasta el mes 14.
+5. **GTA 6 (jueves 19) y el mes 1 pasan antes de que esta ola esté lista.** Por eso el registro acepta fechas pasadas. Si querés llevarlo desde ya, hasta entonces alcanza con la lista de la semana 1 del propio texto.
+6. **Impuestos.** El texto recomienda consultar a un contador cómo declarar cobros en dólares desde el exterior; Trazo lo deja como recordatorio en "Riesgos" y no calcula nada fiscal.
+
+---
+
+**Aceptación general:** typecheck, tests y build en verde en cada ola; cada paso probado en el navegador a 390 px, en claro y oscuro, sin desbordes; la app arranca con lo ya guardado.
 
 **Más adelante (sin ola todavía)**
 - **Rutina "con trabajo":** se arma cuando haya trabajo, conservando las 11,5 h de idiomas.
