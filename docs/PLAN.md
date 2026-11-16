@@ -5,7 +5,7 @@ Tracker personal de Toti: el día en horas, el estudio con su propio motor de re
 - **Diseño:** [canvas de Trazo](https://claude.ai/artifact/6Cc2E6aW2ViU5ikovpsRTy)
 - **Roadmap de estudio:** [ruta ML + DevSecOps](https://claude.ai/artifact/9PEokku7mBLZdCFJr1zqXP)
 - **Pantallas:** presentación `Trazo-pantallas.pptx` y su ZIP de imágenes (44 pantallas, 8 flujos).
-- **Estado:** olas 0 a 12b hechas y en `main`. Olas 0 a 16c hechas (la 15 quedó absorbida por la 16c). Olas 0 a 17 hechas. Las olas 18 a 23 (arreglos y calendario, entreno, programación y metas por bloque, idiomas y libros, orden de pantallas y clipping) están planificadas en §6 sexies. Este archivo es la fuente de verdad.
+- **Estado:** olas 0 a 12b hechas y en `main`. Olas 0 a 16c hechas (la 15 quedó absorbida por la 16c). Olas 0 a 18 hechas. Las olas 19 a 23 (entreno, programación y metas por bloque, idiomas y libros, orden de pantallas y clipping) están planificadas en §6 sexies. Este archivo es la fuente de verdad.
 
 ---
 
@@ -384,7 +384,7 @@ Desde el lunes 16 nov 2026 la prioridad es un trabajo remoto de USD 3.000 a 5.00
 | 16b · Plan T+18 extendido: calendario vivo | La app lee el calendario derivado en vez de las 78 semanas fijas, con migración sin romper `trazo.v1` (§6 quater) | Opus 5.5 · alto · *hecha* |
 | 16c · Plan T+18 extendido: matemática y vistas | Ventanas y puertas 85/65, línea de tiempo por etapas, panel "hoy sos", alertas y fichas de proyecto. **Absorbe la ola 15:** un solo roadmap de matemática (§6 quater) | Opus 5.5 · alto · *hecha* |
 | 17 · Rutina de las 08:00 y dormir a las 22:00 | Tercera opción en Buen día (levantarse a las 08:00) con su propio día; en la de las 04:00, entreno de 3 h (18:00 a 21:00), descanso de 21:00 a 22:00 y dormir siempre a las 22:00 (§6 quinquies) | Sonnet 5.5 · medio · *hecha* |
-| 18 · Arreglos y calendario | Submetas en la meta principal, sin zoom al escribir, sin modo entrevista y calendario sin pausas (§6 sexies, pasos 1 y 2) | Sonnet 5.5 · medio |
+| 18 · Arreglos y calendario | *Hecha.* Submetas en la meta principal, sin zoom al escribir, sin modo entrevista y calendario sin pausas (§6 sexies, pasos 1 y 2) | Sonnet 5.5 · medio |
 | 19 · Entreno | Tus rutinas (PPL + Upper/Lower, lunes a viernes), el horario de 18:00 a 22:00 y las Upper/Lower propias (§6 sexies, pasos 3 y 4) | Sonnet 5.5 · alto |
 | 20 · Programación y metas por bloque | Unidades por área y sistema de libros (con tarjetas, test y tesis; carga *Measure What Matters* con sus 21 capítulos), metas por bloque con JSON y el roadmap de programación por proyectos (§6 sexies, pasos 5 a 7) | Opus 5.5 · alto |
 | 21 · Idiomas y libros | Roadmap maestro v3: un idioma por año durante 6 años (inglés, francés, italiano, alemán, japonés y chino), 12 libros de consolidación, la biblioteca de 42 libros y el ascenso a C1, dentro de Estudio (§6 sexies, paso 8) | Opus 5.5 · alto |
@@ -656,7 +656,13 @@ La 20 va antes que la 21 porque el roadmap de idiomas usa el sistema de libros y
 
 ---
 
-### Ola 18 · Arreglos y calendario (Sonnet 5.5 · medio)
+### Ola 18 · Arreglos y calendario (Sonnet 5.5 · medio) · *Hecha*
+
+**Lo que quedó:** 352 tests pasando (11 nuevos y los de fechas reescritos).
+- **Submetas:** `addSub` y `removeSub` en `src/state/goals.ts` (solo metas manuales y sin tira diaria); hoja compartida `HojaSubmeta` (Nueva meta, Metas y Hoy). En Hoy la submeta es una tarea más de la meta numerada (`addTask`).
+- **Sin zoom:** regla base `input, textarea, select { font-size: 16px }`, `.campo-texto`, `.celda input` y el editor de JSON a 16 px; `src/styles/zoom.test.ts` falla si algún campo baja de 16 px o si el viewport bloquea el pellizco. `useTeclado` deja la hoja sobre el teclado (`--teclado`).
+- **Entrevista:** `ajustarDia` ya no reemplaza ni parte nada; `entrevistaCerca` mira solo el día siguiente y marca si es en inglés (por la modalidad). El aviso entre ramas lleva a `#/metas/trabajo`. El bloque de inglés de la intensiva conserva su texto hasta la ola 21.
+- **Calendario:** se sacaron PAU1 a PAU4 y el tipo de tramo `pausa` pasó a `descanso` (DES3 y DES4). 90 semanas con extras, 76 sin ninguno; `docs/prompts/plan-t18-extendido.md` regenerado (52 bloques, 167 semanas base y 192 con extras).
 
 **Paso 1 · Arreglos de uso**
 
@@ -774,7 +780,7 @@ Pedido del 2026-11-16: integrar el **Roadmap Clipper de 12 meses (de 0 a USD 10k
   - **USD del mes contra la meta**, acumulado y ritmo.
   - **Concentración:** ninguna campaña ni plataforma por encima del **30 %** del ingreso.
   - **Cuentas activas y clips por día contra el plan.**
-  - **Proyección:** en qué mes cruzás USD 10k con tu ritmo real (el base del roadmap dice mes 13 a 14) y las **tres curvas** (base, optimista y conservadora).
+  - **Proyección a 12 meses** (se cuentan 12, no 14): cuánto vas a cobrar en el mes 12 con tu ritmo real y cuánto falta para USD 10k, con las **tres curvas** (base, optimista y conservadora).
   - **Compuertas:** fase 1 a fase 2 si el pago real es de **USD 0,80** o más por 1.000 views y al menos el **40 %** de los clips pasa las 1.000 views; en el mes 6, si el pago real baja de **USD 0,70**, aviso de cambiar de campañas antes de escalar. Mismo semáforo que las puertas de matemática (verde, amarillo, rojo).
 
 **Paso 11 · El apartado "Clipping" en Metas** (`#/metas/clipping`, con subpáginas `#/metas/clipping/<sub>`). Entra con una card en la pestaña Ruta, al lado de las demás, y usa el área Eclipse como color. Cada pantalla es liviana (criterio de la ola 22: ninguna pasa de unas 3 pantallas de scroll) y las demás van **detrás de botones**.
@@ -794,7 +800,7 @@ Pedido del 2026-11-16: integrar el **Roadmap Clipper de 12 meses (de 0 a USD 10k
 
 **Gráficos** (SVG propios sobre `src/ui/charts`, con tabla accesible para lector de pantalla y animación de dibujo):
 1. **Ingreso mensual:** barras de lo cobrado contra la meta, con las tres curvas del roadmap por encima y la línea de USD 10k; mes actual resaltado.
-2. **Camino a USD 10k:** anillo con el avance y la proyección de en qué mes se cruza.
+2. **Camino a USD 10k:** anillo con el avance y la proyección del mes 12 (cuánto falta para USD 10k).
 3. **Pago real por 1.000 views:** una barra por campaña, la tarifa listada como punto y las líneas del piso de USD 0,80 y 0,70.
 4. **Embudo:** clips publicados, aprobados, con más de 1.000 views y pagados.
 5. **Cuentas activas y clips por día contra el plan** (escalera).
@@ -822,13 +828,13 @@ Pedido del 2026-11-16: integrar el **Roadmap Clipper de 12 meses (de 0 a USD 10k
 - **Datos:** `data/clipping.json` y el estado nuevo entran en el JSON de exportación y en "Datos" de Ajustes; la app arranca con lo ya guardado.
 - *Tests:* validación del plan, calendario de los 12 meses (16 de cada mes), todas las métricas con casos de borde (sin views, sin cobros, una sola campaña), compuertas 0,80 y 0,70, concentración del 30 %, proyección del mes 10 a 14, registro con fechas pasadas, importar y exportar, migración del estado viejo, hitos nuevos en el mapa, alertas y las pantallas a 390 px en claro y oscuro.
 
-**Para decidir antes de arrancar la 23**
-1. **Horas.** El roadmap pide **2 a 3 h diarias** de clipping, y la rutina de búsqueda intensiva tiene **1 h 30 por día** (10,5 h por semana) en las de las 04:00 y las 05:00, y **ninguna** en la de las 08:00. Recomiendo **dejar las 1 h 30 de lunes a viernes** (alcanzan para los 5 clips a mano de los meses 1 y 2) y sumar, el fin de semana, **1 a 2 h de "Pipeline y prospección"** sacadas del descanso largo del sábado y el domingo, como dice la rutina semanal del roadmap. Para la de las 08:00 no hay hueco hoy (el día está lleno de 08:00 a 21:00): ¿le saco algo o queda sin clipping?
-2. **Clips por día.** El texto se contradice: la fase 2 dice "pasar de 5 a 20 clips por día", pero la tabla de la granja dice 16 en el mes 3 y 30 en el mes 5. Uso la **tabla** (cuentas × 2 clips por día) salvo que digas otra cosa.
-3. **Escenarios.** El roadmap no da los números del optimista y el conservador. Propongo: **base** = las metas del texto (USD 9.000 en el mes 12, cruza USD 10k en el mes 13 a 14); **optimista** = hasta 1,5 veces el base hacia el mes 10, así cruza USD 10k en el mes 10; **conservador** = 60 % del base desde el mes 3 (USD 5.400 en el mes 12). Son supuestos míos y se ajustan con tu planilla real desde el mes 2.
-4. **Mes 12 en USD 9.000.** El título dice "0 a USD 10k" pero el caso base cierra el año en USD 9.000: la app muestra los 12 meses del roadmap y la proyección sigue hasta el mes 14.
-5. **GTA 6 (jueves 19) y el mes 1 pasan antes de que esta ola esté lista.** Por eso el registro acepta fechas pasadas. Si querés llevarlo desde ya, hasta entonces alcanza con la lista de la semana 1 del propio texto.
-6. **Impuestos.** El texto recomienda consultar a un contador cómo declarar cobros en dólares desde el exterior; Trazo lo deja como recordatorio en "Riesgos" y no calcula nada fiscal.
+**Decidido para la 23 (2026-11-16)**
+1. **Horas:** **1 h 30 de clipping por día de lunes a viernes y 2 h el sábado y el domingo** (hoy son 1 h 30 los dos días; el fin de semana pasa a 2 h con pipeline y prospección). La rutina de las 08:00 no tiene hueco y queda sin clipping por ahora.
+2. **Clips por día:** se usa la opción más recomendable para llegar a la meta de cada mes: **la tabla de la granja** (cuentas × 2 clips por día: 5, 8, 16, 24, 30, 40, 50, 64 y 80 clips por día según el mes), no el "de 5 a 20" de la fase 2.
+3. **Escenarios** (confirmado): **base** = las metas del texto (USD 9.000 en el mes 12); **optimista** = hasta 1,5 veces el base hacia el mes 10, así cruza USD 10k en el mes 10; **conservador** = 60 % del base desde el mes 3 (USD 5.400 en el mes 12). Son supuestos míos y se ajustan con tu planilla real desde el mes 2.
+4. **12 meses, no 14:** la app muestra y proyecta los 12 meses del roadmap (el caso base cierra en USD 9.000).
+5. **GTA 6 (jueves 19) y el mes 1** pasan antes de que esta ola esté lista: el registro acepta fechas pasadas (confirmado).
+6. **Impuestos:** queda como recordatorio de consultar a un contador en "Riesgos" y no calcula nada fiscal (confirmado).
 
 ---
 
