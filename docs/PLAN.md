@@ -5,7 +5,7 @@ Tracker personal de Toti: el día en horas, el estudio con su propio motor de re
 - **Diseño:** [canvas de Trazo](https://claude.ai/artifact/6Cc2E6aW2ViU5ikovpsRTy)
 - **Roadmap de estudio:** [ruta ML + DevSecOps](https://claude.ai/artifact/9PEokku7mBLZdCFJr1zqXP)
 - **Pantallas:** presentación `Trazo-pantallas.pptx` y su ZIP de imágenes (44 pantallas, 8 flujos).
-- **Estado:** olas 0 a 12b hechas y en `main`. Olas 0 a 16c hechas (la 15 quedó absorbida por la 16c). No quedan olas planificadas. Este archivo es la fuente de verdad.
+- **Estado:** olas 0 a 12b hechas y en `main`. Olas 0 a 16c hechas (la 15 quedó absorbida por la 16c). La ola 17 (rutina de las 08:00 y dormir a las 22:00) está planificada en §6 quinquies. Este archivo es la fuente de verdad.
 
 ---
 
@@ -383,6 +383,7 @@ Desde el lunes 16 nov 2026 la prioridad es un trabajo remoto de USD 3.000 a 5.00
 | 16a · Plan T+18 extendido: datos | `data/plan-extendido.json` (56 bloques en 4 etapas), validador y fechas derivadas con extras por bloque y atrasos que consume el colchón; sin tocar pantallas (§6 quater) | Opus 5.5 · alto |
 | 16b · Plan T+18 extendido: calendario vivo | La app lee el calendario derivado en vez de las 78 semanas fijas, con migración sin romper `trazo.v1` (§6 quater) | Opus 5.5 · alto · *hecha* |
 | 16c · Plan T+18 extendido: matemática y vistas | Ventanas y puertas 85/65, línea de tiempo por etapas, panel "hoy sos", alertas y fichas de proyecto. **Absorbe la ola 15:** un solo roadmap de matemática (§6 quater) | Opus 5.5 · alto · *hecha* |
+| 17 · Rutina de las 08:00 y dormir a las 22:00 | Tercera opción en Buen día (levantarse a las 08:00) con su propio día; en la de las 04:00, entreno de 3 h (18:00 a 21:00), descanso de 21:00 a 22:00 y dormir siempre a las 22:00 (§6 quinquies) | Sonnet 5.5 · medio |
 
 ## 6 bis. Olas 9 a 12: mejoras de uso
 
@@ -572,6 +573,38 @@ Mismo flujo: una rama y un PR por ola; se mergea a `main` con el CI en verde.
 - Marco legal e impositivo de trading desde Argentina antes de capital real.
 - Alinear las páginas del canvas visual de Trazo con este calendario.
 - Si una carrera universitaria entra al plan: hoy no, camino autodidacta.
+
+## 6 quinquies. Ola 17: rutina de las 08:00 y dormir a las 22:00
+
+**Sonnet 5.5 · medio.** Pedido del 2026-11-16.
+
+**Hoy** (búsqueda intensiva, lunes a viernes): rutina 04:00, matemática 04:30, programación 06:30, Abi 08:30, trabajo 10:00, caso 12:00, inglés 13:30, búsqueda 15:00, clipping 16:30, entreno 18:00 a 20:00, cierre 20:00 a 21:00 y dormir a las 21:00.
+
+**Qué cambia**
+- **Levantarse a las 04:00:** queda igual, salvo el final del día. El entreno pasa de 2 h a 3 h (18:00 a 21:00), "Descansar y preparar mañana" va de 21:00 a 22:00 y se duerme a las 22:00.
+- **Levantarse a las 08:00** (tercera opción en Buen día, junto a 04:00 y 05:00):
+
+| Hora | Bloque |
+|---|---|
+| 08:00 – 08:30 | Rutina de la mañana |
+| 08:30 – 10:00 | Acompañar a Abi y correr |
+| 10:00 – 12:00 | Trabajo |
+| 12:00 – 13:30 | Programación |
+| 13:30 – 15:00 | Búsqueda laboral |
+| 15:00 – 16:30 | Matemática |
+| 16:30 – 18:00 | Inglés |
+| 18:00 – 21:00 | Entrenamiento |
+| 21:00 – 22:00 | Descansar y preparar mañana |
+| 22:00 | Dormir |
+
+- **Dormir a las 22:00 siempre:** el check de dormir de Hoy pasa a las 22:00.
+- **Lo que sale en la de las 08:00:** clipping y el caso para entrevistas no entran (la programación del mediodía queda como un solo bloque). La matemática pasa a la tarde, así que su etiqueta de Hoy y la sesión de estudio la siguen igual.
+- **Datos:** `data/routines.json` (la variante de las 08:00 y los horarios nuevos), validación y tests; los días ya guardados no cambian.
+
+**A confirmar**
+1. "8pm" se tomó como **08:00** (la rutina arranca a las 08:00).
+2. ¿La de las 08:00 vale también el fin de semana, o solo de lunes a viernes?
+3. ¿Dormir a las 22:00 vale para todas las rutinas (fin de semana, con trabajo y día libre) o solo para la de lunes a viernes?
 
 En el día a día alcanza con **Haiku 5.5 · bajo**: pegás el JSON del cierre y queda commiteado en `data/days/`.
 
