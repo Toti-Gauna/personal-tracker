@@ -1,14 +1,16 @@
 import { AREAS } from '../data/defaults';
 import { ratio, valueOf } from '../data/goals';
 import type { Goal } from '../data/goals-types';
+import { useState } from 'react';
 import { useStore } from '../state/store';
 import { periodKey } from '../data/goals';
 import { addDays } from '../data/time';
 import { runWeek } from '../data/train';
-import { addProgress, deleteGoal, stepOf, toggleGoal, toggleMark, toggleSub } from '../state/goals';
+import { aceptaSubs, addProgress, addSub, deleteGoal, removeSub, stepOf, toggleGoal, toggleMark, toggleSub } from '../state/goals';
 import { dateKey } from '../data/time';
 import { Casilla } from './Casilla';
 import { abrirCorrida } from './checkins';
+import { HojaSubmeta } from './HojaSubmeta';
 
 const fmt = (n: number) => String(n).replace('.', ',');
 const DIAS = ['L', 'M', 'X', 'J', 'V', 'S', 'D'];
@@ -26,6 +28,7 @@ export function GoalRow({ g, date, editar, sub }: { g: Goal; date: string; edita
   const conSubs = !!g.subs?.length;
   const porDia = !!g.daily && manual;
   const hechas = new Set(g.subDone?.[periodKey(g.horizon, date)] ?? []);
+  const [hoja, setHoja] = useState(false);
   const lunes = periodKey('semana', date);
   const hoy = dateKey();
   return (
@@ -51,16 +54,31 @@ export function GoalRow({ g, date, editar, sub }: { g: Goal; date: string; edita
       ) : (
         <span className="mg-auto mono" title="Se suma solo">auto</span>
       )}
-      {!editar && conSubs && (
+      {conSubs && (
         <ul className="mg-extra mg-subs" aria-label={`Submetas de ${g.title}`}>
           {g.subs!.map((x) => (
             <li key={x.id}>
-              <Casilla id={`s-${g.id}-${x.id}`} checked={hechas.has(x.id)} label={x.t} onChange={() => toggleSub(g.id, date, x.id)} />
-              <label htmlFor={`s-${g.id}-${x.id}`}><span className={`trazo${hechas.has(x.id) ? ' on' : ''}`}>{x.t}</span></label>
+              {editar ? (
+                <>
+                  <span className={`trazo${hechas.has(x.id) ? ' on' : ''}`}>{x.t}</span>
+                  <button className="borrar" type="button" aria-label={`Quitar la submeta ${x.t}`} onClick={() => removeSub(g.id, date, x.id)}>Quitar</button>
+                </>
+              ) : (
+                <>
+                  <Casilla id={`s-${g.id}-${x.id}`} checked={hechas.has(x.id)} label={x.t} onChange={() => toggleSub(g.id, date, x.id)} />
+                  <label htmlFor={`s-${g.id}-${x.id}`}><span className={`trazo${hechas.has(x.id) ? ' on' : ''}`}>{x.t}</span></label>
+                </>
+              )}
             </li>
           ))}
         </ul>
       )}
+      {aceptaSubs(g) && (
+        <div className="mg-extra mg-add">
+          <button type="button" className="mg-add-sub" aria-label={`Agregar submeta a ${g.title}`} onClick={() => setHoja(true)}>{conSubs ? '+ Submeta' : '+ Agregar submeta'}</button>
+        </div>
+      )}
+      {hoja && <HojaSubmeta kicker={g.title} color={AREAS[g.area].css} onAgregar={(t) => addSub(g.id, date, t)} onCerrar={() => setHoja(false)} />}
       {!editar && porDia && (
         <div className="mg-extra mg-dias" role="group" aria-label={`Días de ${g.title}`}>
           {DIAS.map((l, i) => {

@@ -140,9 +140,17 @@ describe('ventana W y entrevista cercana', () => {
     expect(p.some((x) => x.block.rama === 'programacion')).toBe(false);
   });
 
-  it('con una entrevista a 3 días o menos, la búsqueda se parte en 45 + 45 de inglés', () => {
-    const p = horario(ajustarDia(planRoutine('weekday', 'completo'), { entrevista: true }));
-    expect(p).toMatchObject({ busqueda: '12:00+45', 'ingles-entrevista': '12:45+45', handyx: '13:30+180' });
+  it('sin modo entrevista: la búsqueda no se parte y suma practicar la de mañana', () => {
+    const base = planRoutine('weekday', 'completo');
+    const p = ajustarDia(base, { entrevista: { rol: 'AI Engineer', empresa: 'Acme', ingles: true } });
+    expect(horario(p)).toEqual(horario(base));
+    expect(p.some((x) => x.block.id === 'ingles-entrevista')).toBe(false);
+    const tareas = p.find((x) => x.block.id === 'busqueda')!.block.tasks!;
+    expect(tareas.slice(0, 2)).toEqual(['Practicar la entrevista de mañana de AI Engineer en Acme con el pitch armado', 'Practicarla en inglés']);
+    expect(tareas).toContain('5 postulaciones');
+    // Sin entrevista en inglés, no hay la segunda tarea.
+    const sin = ajustarDia(base, { entrevista: { rol: 'AI Engineer', ingles: false } });
+    expect(sin.find((x) => x.block.id === 'busqueda')!.block.tasks).not.toContain('Practicarla en inglés');
   });
 });
 

@@ -171,10 +171,13 @@ export function startDay(routine: RoutineId, wake: string, date = dateKey()) {
 /** Ajustes del plan con los valores de fábrica. */
 export const planSettings = (st: Settings | null): PlanSettings => ({ ...DEFAULT_PLAN_SETTINGS, ...(st?.plan ?? {}) });
 
-/** ¿Hay una entrevista cargada entre hoy y dentro de 3 días? */
-export function entrevistaCerca(p: PlanState, date: string): { rol: string; empresa?: string } | false {
-  const e = p.entrevistas.filter((x) => x.fecha >= date && x.fecha <= addDays(date, 3)).sort((a, b) => a.fecha.localeCompare(b.fecha))[0];
-  return e ? { rol: e.rol, ...(e.empresa ? { empresa: e.empresa } : {}) } : false;
+/** ¿La entrevista es en inglés? Se lee de la modalidad ("remoto · entrevista técnica en inglés"). */
+export const entrevistaEnIngles = (e: { modalidad?: string }) => /ingl[eé]s/i.test(e.modalidad ?? '');
+
+/** ¿Hay una entrevista cargada para mañana? Ese día se practica en el bloque de búsqueda laboral. */
+export function entrevistaCerca(p: PlanState, date: string): { rol: string; empresa?: string; ingles: boolean } | false {
+  const e = p.entrevistas.find((x) => x.fecha === addDays(date, 1));
+  return e ? { rol: e.rol, ...(e.empresa ? { empresa: e.empresa } : {}), ingles: entrevistaEnIngles(e) } : false;
 }
 
 /** Semana del plan para una fecha, con el T0 de los ajustes. */

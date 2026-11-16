@@ -47,12 +47,18 @@ describe('búsqueda intensiva', () => {
     expect(d.blocks.map((b) => b.key)).toEqual(['rutina', 'math', 'prog', 'abi', 'caso', 'ingles', 'busqueda', 'clipping', 'cierre', 'sueno']);
   });
 
-  it('con una entrevista a 3 días, inglés pasa a simulacro de esa entrevista', () => {
-    getState().plan.entrevistas.push({ id: 'e1', fecha: '2026-11-19', rol: 'AI Engineer', empresa: 'Acme', prep: {} });
+  it('el día anterior a una entrevista, la búsqueda suma practicarla (y en inglés); sin modo propio', () => {
+    getState().plan.entrevistas.push({ id: 'e1', fecha: '2026-11-19', rol: 'AI Engineer', empresa: 'Acme', modalidad: 'remoto · entrevista técnica en inglés', prep: {} });
+    startDay('completo', '04:30', '2026-11-18');
+    const b = getState().days['2026-11-18'].blocks;
+    expect(b.find((x) => x.key === 'ingles')!.title).not.toMatch(/simulacro/);
+    expect(b.some((x) => x.key === 'ingles-entrevista')).toBe(false);
+    const busq = b.find((x) => x.key === 'busqueda')!;
+    expect(busq.min).toBe(90);
+    expect(busq.tasks.map((t) => t.t).slice(0, 2)).toEqual(['Practicar la entrevista de mañana de AI Engineer en Acme con el pitch armado', 'Practicarla en inglés']);
+    // Con 3 días de anticipación todavía no se practica: es solo el aviso.
     startDay('completo', '04:30', '2026-11-17');
-    const ing = getState().days['2026-11-17'].blocks.find((b) => b.key === 'ingles')!;
-    expect(ing.title).toBe('Inglés · simulacro de AI Engineer en Acme');
-    expect(getState().days['2026-11-17'].blocks.find((b) => b.key === 'busqueda')!.min).toBe(90);
+    expect(getState().days['2026-11-17'].blocks.find((x) => x.key === 'busqueda')!.tasks.some((t) => /Practicar la entrevista/.test(t.t))).toBe(false);
   });
 
   it('desactivar vuelve exactamente a la rutina anterior y no borra nada de Handyx', () => {

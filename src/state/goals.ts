@@ -46,6 +46,48 @@ export function addProgress(id: string, date: string, delta: number) {
   );
 }
 
+/** ¿Se le pueden agregar submetas? Solo a las manuales: ni las automáticas ni las de una tira por día. */
+export const aceptaSubs = (g: Goal) => !g.auto && !g.daily;
+
+/**
+ * Agrega una submeta a una meta que ya existe (la "meta padre"). La meta pasa a cumplirse al hacer todas
+ * las submetas: el avance del período de `date` es cuántas van; el de otros períodos no se toca.
+ */
+export function addSub(id: string, date: string, texto: string) {
+  const t = texto.trim();
+  if (!t) return;
+  update((gs) =>
+    gs.map((g) => {
+      if (g.id !== id || !aceptaSubs(g)) return g;
+      const subs = [...(g.subs ?? []), { id: newId(), t }];
+      const key = periodKey(g.horizon, date);
+      const hechas = (g.subDone?.[key] ?? []).filter((x) => subs.some((y) => y.id === x));
+      return {
+        ...g, type: 'contador', target: subs.length, unit: g.subs?.length ? g.unit : 'pasos', step: undefined, quick: undefined,
+        subs, subDone: { ...g.subDone, [key]: hechas }, progress: { ...g.progress, [key]: hechas.length },
+      };
+    }),
+  );
+}
+
+/** Saca una submeta. Si era la última, la meta vuelve a ser una tarea simple. */
+export function removeSub(id: string, date: string, subId: string) {
+  update((gs) =>
+    gs.map((g) => {
+      if (g.id !== id || !g.subs) return g;
+      const subs = g.subs.filter((x) => x.id !== subId);
+      const key = periodKey(g.horizon, date);
+      if (!subs.length) {
+        const { subs: _s, subDone: _d, ...resto } = g;
+        return { ...resto, type: 'tarea', target: 1, unit: undefined, progress: { ...g.progress, [key]: 0 } };
+      }
+      const subDone = Object.fromEntries(Object.entries(g.subDone ?? {}).map(([k, ids]) => [k, ids.filter((x) => x !== subId)]));
+      const n = (subDone[key] ?? []).length;
+      return { ...g, subs, target: subs.length, subDone, progress: { ...g.progress, [key]: n } };
+    }),
+  );
+}
+
 /** Tilda una submeta del período de `date` y deja el avance en cuántas van. */
 export function toggleSub(id: string, date: string, subId: string) {
   update((gs) =>

@@ -59,7 +59,7 @@ export function PlanBusqueda({ day }: { day: DayLog }) {
   ];
   const prox = plan.entrevistas.filter((x) => x.fecha >= date).sort((a, b) => a.fecha.localeCompare(b.fecha))[0];
   const pasadas = plan.entrevistas.filter((x) => x.fecha < date).sort((a, b) => b.fecha.localeCompare(a.fecha));
-  const hoyIngles = day.blocks.some((b) => b.key === 'ingles-entrevista');
+  const practicaHoy = day.blocks.find((b) => b.key === 'busqueda')?.tasks.some((t) => /^Practicar la entrevista de mañana/.test(t.t));
   const [nueva, setNueva] = useState<'post' | 'ent' | null>(null);
 
   return (
@@ -68,7 +68,7 @@ export function PlanBusqueda({ day }: { day: DayLog }) {
       <h1 className="titulo">{f.id === 'busqueda' ? 'Búsqueda' : 'Trabajo'}</h1>
       <p className="pp-que">
         {f.id === 'busqueda'
-          ? `Meta: remoto de USD 3.000 a 5.000 para el ${fechaCorta(t2)}. 1 h 30 por día${hoyIngles ? '; hoy, 45 min, porque el resto va a inglés' : ''}.`
+          ? `Meta: remoto de USD 3.000 a 5.000 para el ${fechaCorta(t2)}. 1 h 30 por día${practicaHoy ? '; hoy suma practicar la entrevista de mañana' : ''}.`
           : `${f.texto} Búsqueda 2 h por semana; en B5 y B6, postular a AI/ML Engineer.`}
       </p>
 
@@ -81,7 +81,7 @@ export function PlanBusqueda({ day }: { day: DayLog }) {
       <p className="mono sub pb-meta">meta de {e.semanas} semanas: {e.postulaciones} · {e.mensajes} · {e.entrevistas[0]} a {e.entrevistas[1]} entrevistas · {e.ofertas[0]} o {e.ofertas[1]} ofertas</p>
 
       {prox ? <ProximaEntrevista e={prox} /> : (
-        <div className="pr-card pb-ent"><span className="etiqueta">Próxima entrevista</span><p className="sub">Ninguna cargada. Cuando te citen, cargala acá: Trazo arma la preparación y el inglés de esos días.</p></div>
+        <div className="pr-card pb-ent"><span className="etiqueta">Próxima entrevista</span><p className="sub">Ninguna cargada. Cuando te citen, cargala acá: el día anterior, el bloque de búsqueda suma practicarla con el pitch armado (y en inglés, si es en inglés).</p></div>
       )}
       {nueva === 'ent' ? <FormEntrevista date={date} onListo={() => setNueva(null)} /> : <button className="btn-borde pb-btn" onClick={() => setNueva('ent')}>+ Entrevista</button>}
 
@@ -255,7 +255,7 @@ export function PlanIngles({ day }: { day: DayLog }) {
   const fases = PLAN.ingles.fases;
   const ent = plan.entrevistas.filter((x) => x.fecha >= date).sort((a, b) => a.fecha.localeCompare(b.fecha))[0];
   const ens = plan.respuestas.filter((r) => r.veces > 0).length;
-  const bloque = day.blocks.find((b) => b.key === 'ingles-entrevista' || b.key === 'ingles');
+  const bloque = day.blocks.find((b) => b.key === 'ingles');
   const [texto, setTexto] = useState('');
   const [tipo, setTipo] = useState(TIPOS_FALLA[0]);
   const finPlan = finSemana(PLAN.semanas, t0);

@@ -45,7 +45,7 @@ describe('matemática: un solo roadmap (absorbe la ola 15)', () => {
     expect(r.map((x) => x.id)).toEqual(['m1', 'W1', 'm2', 'W2', 'm3', 'W3', 'm4', 'W4', 'm5', 'WQ1', 'WQ2', 'WQ3', 'WA1', 'WA2', 'WA3', 'WA4', 'WA5']);
     for (let i = 1; i < r.length; i++) expect(r[i].inicio > r[i - 1].fin).toBe(true);
     expect(r[0]).toMatchObject({ tipo: 'diario', inicio: '2026-11-16', perfil: 'Aritmético', principal: ['CONAMAT Aritmética y Álgebra'] });
-    expect(r.find((x) => x.id === 'W1')).toMatchObject({ inicio: '2027-02-08', fin: '2027-02-28', habilita: ['P3'], perfil: 'Algebraico' });
+    expect(r.find((x) => x.id === 'W1')).toMatchObject({ inicio: '2027-02-01', fin: '2027-02-21', habilita: ['P3'], perfil: 'Algebraico' });
     expect(r.find((x) => x.id === 'WA5')).toMatchObject({ etapa: 4, habilita: ['A5', 'A6'] });
   });
 
@@ -81,11 +81,11 @@ describe('matemática: un solo roadmap (absorbe la ola 15)', () => {
 });
 
 describe('etapas, hoy sos y alertas', () => {
-  it('cuatro etapas con sus semanas (64, 28, 44 y 60 con extras) y la actual marcada', () => {
+  it('cuatro etapas con sus semanas (63, 27, 43 y 59 con extras, sin pausas) y la actual marcada', () => {
     const e = lineaEtapas('2027-03-01', T0);
-    expect(e.map((x) => x.semanas)).toEqual([64, 28, 44, 60]);
+    expect(e.map((x) => x.semanas)).toEqual([63, 27, 43, 59]);
     expect(e.map((x) => x.estado)).toEqual(['actual', 'proximo', 'proximo', 'proximo']);
-    expect(e[3]).toMatchObject({ fin: '2030-08-18', perfil: 'Aerospace Software Engineer' });
+    expect(e[3]).toMatchObject({ fin: '2030-07-21', perfil: 'Aerospace Software Engineer' });
   });
 
   it('hoy sos: el último proyecto cerrado; vas a ser: el que sigue', () => {
@@ -100,15 +100,15 @@ describe('etapas, hoy sos y alertas', () => {
     expect(a[0]).toMatchObject({ tipo: 'decision', titulo: 'Decisión el 22 nov 2026' });
     const c1 = alertas('2027-02-15', emptyPlan(), T0).find((x) => x.id === 'cert-C1')!;
     expect(c1.texto).toMatch(/Costo sin verificar/);
-    expect(alertas('2027-02-22', emptyPlan(), T0).find((x) => x.id === 'vent-W1')).toMatchObject({ titulo: 'W1 cierra el 28 feb 2027' });
-    const aprobada = { ...emptyPlan(), proyectos: { W1: { ...proyectoVacio(), examen: { fecha: '2027-02-20', puntaje: 90 } } } };
-    expect(alertas('2027-02-22', aprobada, T0).some((x) => x.id === 'vent-W1')).toBe(false);
+    expect(alertas('2027-02-15', emptyPlan(), T0).find((x) => x.id === 'vent-W1')).toMatchObject({ titulo: 'W1 cierra el 21 feb 2027' });
+    const aprobada = { ...emptyPlan(), proyectos: { W1: { ...proyectoVacio(), examen: { fecha: '2027-02-12', puntaje: 90 } } } };
+    expect(alertas('2027-02-15', aprobada, T0).some((x) => x.id === 'vent-W1')).toBe(false);
   });
 
   it('apagar extras se refleja también en las etapas 3 y 4', () => {
     try {
       aplicarCalendario(['P1']);
-      expect(lineaEtapas('2027-03-01', T0)[3].fin).toBe('2030-08-04');
+      expect(lineaEtapas('2027-03-01', T0)[3].fin).toBe('2030-07-07');
     } finally {
       aplicarCalendario([]);
     }

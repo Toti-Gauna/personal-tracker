@@ -30,8 +30,8 @@ describe('data/plan-extendido.json', () => {
     expect(validar(raw)).toEqual([]);
   });
 
-  it('tiene los 56 bloques de la tabla, en el mismo orden y con las mismas semanas', () => {
-    expect(TABLA).toHaveLength(56);
+  it('tiene los 52 bloques de la tabla, en el mismo orden y con las mismas semanas', () => {
+    expect(TABLA).toHaveLength(52);
     expect(PLAN_EXT.bloques.map((b) => b.id)).toEqual(TABLA.map((f) => f.id));
     for (const f of TABLA) {
       const b = PLAN_EXT.bloques.find((x) => x.id === f.id)!;
@@ -39,12 +39,12 @@ describe('data/plan-extendido.json', () => {
     }
   });
 
-  it('las semanas por etapa suman 53, 25, 38 y 55 (171) y 11, 3, 6 y 5 de extras (196)', () => {
-    expect(PLAN_EXT.etapas.map((e) => e.semanasBase)).toEqual([53, 25, 38, 55]);
+  it('las semanas por etapa suman 52, 24, 37 y 54 (167) y 11, 3, 6 y 5 de extras (192), sin pausas', () => {
+    expect(PLAN_EXT.etapas.map((e) => e.semanasBase)).toEqual([52, 24, 37, 54]);
     expect(PLAN_EXT.etapas.map((e) => e.semanasExtra)).toEqual([11, 3, 6, 5]);
     const base = calendario(PLAN_EXT, { extras: false });
-    expect(totalSemanas(base)).toBe(171);
-    expect(totalSemanas(calendario())).toBe(196);
+    expect(totalSemanas(base)).toBe(167);
+    expect(totalSemanas(calendario())).toBe(192);
   });
 
   it('27 proyectos, 12 ventanas y 7 certificaciones', () => {
@@ -82,8 +82,8 @@ describe('calendario derivado', () => {
 
   it('el fin de cada etapa es el del prompt', () => {
     const fin = (o: Parameters<typeof calendario>[1]) => [1, 2, 3, 4].map((n) => finEtapa(calendario(PLAN_EXT, o), n));
-    expect(fin({ extras: false })).toEqual(['2027-11-21', '2028-05-14', '2029-02-04', '2030-02-24']);
-    expect(fin({ extras: true })).toEqual(['2028-02-06', '2028-08-20', '2029-06-24', '2030-08-18']);
+    expect(fin({ extras: false })).toEqual(['2027-11-14', '2028-04-30', '2029-01-14', '2030-01-27']);
+    expect(fin({ extras: true })).toEqual(['2028-01-30', '2028-08-06', '2029-06-03', '2030-07-21']);
   });
 
   it('es continuo: cada bloque empieza el lunes siguiente al fin del anterior', () => {
@@ -101,10 +101,10 @@ describe('calendario derivado', () => {
     expect(sin.find((b) => b.id === 'P1')!.semanas).toBe(3);
     expect(con.find((b) => b.id === 'P1')!.semanas).toBe(5);
     expect(sin.find((b) => b.id === 'P2')!.desde).toBe(con.find((b) => b.id === 'P2')!.desde - 2);
-    expect(totalSemanas(sin)).toBe(194);
+    expect(totalSemanas(sin)).toBe(190);
     // Con extras apagados en general, uno prendido suma solo el suyo.
-    expect(totalSemanas(calendario(PLAN_EXT, { extras: false }))).toBe(171);
-    expect(totalSemanas(calendario(PLAN_EXT, { extras: { P1: true }, atrasos: {} }))).toBe(196);
+    expect(totalSemanas(calendario(PLAN_EXT, { extras: false }))).toBe(167);
+    expect(totalSemanas(calendario(PLAN_EXT, { extras: { P1: true }, atrasos: {} }))).toBe(192);
   });
 
   it('un atraso en una ventana se descuenta del colchón y las fechas siguientes se corren solas', () => {
@@ -147,7 +147,7 @@ describe('calendario derivado', () => {
     const cal = calendario();
     expect(bloqueEn(cal, '2026-11-16')!.id).toBe('P0');
     expect(bloqueEn(cal, '2026-12-30')!.id).toBe('P1'); // con extras P1 dura hasta el 3 de enero
-    expect(bloqueEn(cal, '2027-01-05')!.id).toBe('PAU1');
+    expect(bloqueEn(cal, '2027-01-05')!.id).toBe('P2'); // sin pausa de fin de año: Escudo arranca el 4 de enero
     expect(bloqueEn(cal, '2026-11-15')).toBeNull();
     expect(bloqueEn(cal, '2031-01-01')).toBeNull();
     expect(semanaDe('2026-11-16')).toBe(1);
@@ -158,7 +158,7 @@ describe('calendario derivado', () => {
   it('el plan puede arrancar otro lunes', () => {
     const cal = calendario(PLAN_EXT, { t0: '2026-11-23' });
     expect(cal[0].inicio).toBe('2026-11-23');
-    expect(cal[cal.length - 1].fin).toBe('2030-08-25');
+    expect(cal[cal.length - 1].fin).toBe('2030-07-28');
   });
 });
 
@@ -203,7 +203,7 @@ describe('validar', () => {
     d.bloques.find((b) => b.id === 'W1')!.base = 4;
     d.bloques.find((b) => b.id === 'P5')!.extra = 3;
     const e = validar(d).join('\n');
-    expect(e).toMatch(/etapa 1: las semanas base suman 54 y dice 53/);
+    expect(e).toMatch(/etapa 1: las semanas base suman 53 y dice 52/);
     expect(e).toMatch(/etapa 1: las semanas extra suman 13 y dice 11/);
   });
 
@@ -239,8 +239,10 @@ describe('contra el plan que ya está en la app (data/plan.json)', () => {
     }
   });
 
-  it('las etapas 1 y 2 suman las 78 semanas del plan actual', () => {
-    expect(PLAN_EXT.etapas[0].semanasBase + PLAN_EXT.etapas[1].semanasBase).toBe((plan as { semanas: number }).semanas);
+  it('las etapas 1 y 2 suman 76 semanas base (52 + 24) y no hay ninguna pausa', () => {
+    expect(PLAN_EXT.etapas[0].semanasBase + PLAN_EXT.etapas[1].semanasBase).toBe(76);
+    expect(PLAN_EXT.bloques.filter((b) => b.id.startsWith('PAU') || (b.tipo as string) === 'pausa')).toEqual([]);
+    expect(PLAN_EXT.bloques.filter((b) => b.tipo === 'descanso').map((b) => b.id)).toEqual(['DES3', 'DES4']);
   });
 
   it('lo que cambia: las ventanas se alargan y el colchón baja (documentado en PLAN.md §6 quater)', () => {

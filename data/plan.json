@@ -1,6 +1,6 @@
 {
  "t0": "2026-11-16",
- "semanas": 78,
+ "semanas": 77,
  "semanasPorBimestre": 9,
  "ramas": [
   {
@@ -112,18 +112,9 @@
     "tope": 4
    },
    {
-    "id": "pausa",
-    "desde": 6,
-    "hasta": 6,
-    "tipo": "pausa",
-    "nombre": "Pausa de fin de año",
-    "que": "Descanso y repasos",
-    "meta": 1
-   },
-   {
     "id": "P2",
-    "desde": 7,
-    "hasta": 9,
+    "desde": 6,
+    "hasta": 8,
     "tipo": "proyecto",
     "nombre": "Escudo",
     "industria": "medicina",
@@ -141,8 +132,8 @@
    },
    {
     "id": "W1",
-    "desde": 10,
-    "hasta": 11,
+    "desde": 9,
+    "hasta": 10,
     "tipo": "ventana",
     "nombre": "Ventana de matemática",
     "que": "Álgebra y estadística básica",
@@ -150,8 +141,8 @@
    },
    {
     "id": "P3",
-    "desde": 12,
-    "hasta": 14,
+    "desde": 11,
+    "hasta": 13,
     "tipo": "proyecto",
     "nombre": "Surco",
     "version": "v1",
@@ -171,8 +162,8 @@
    },
    {
     "id": "C1",
-    "desde": 15,
-    "hasta": 16,
+    "desde": 14,
+    "hasta": 15,
     "tipo": "cert",
     "nombre": "AWS Solutions Architect – Associate",
     "corto": "AWS SAA",
@@ -182,8 +173,8 @@
    },
    {
     "id": "P4",
-    "desde": 17,
-    "hasta": 20,
+    "desde": 16,
+    "hasta": 19,
     "tipo": "proyecto",
     "nombre": "Estación",
     "version": "v1",
@@ -202,8 +193,8 @@
    },
    {
     "id": "P5",
-    "desde": 21,
-    "hasta": 22,
+    "desde": 20,
+    "hasta": 21,
     "tipo": "proyecto",
     "nombre": "Faro",
     "version": "v2",
@@ -225,8 +216,8 @@
    },
    {
     "id": "C2",
-    "desde": 23,
-    "hasta": 25,
+    "desde": 22,
+    "hasta": 24,
     "tipo": "cert",
     "nombre": "CompTIA Security+",
     "corto": "Security+",
@@ -236,8 +227,8 @@
    },
    {
     "id": "W2",
-    "desde": 26,
-    "hasta": 28,
+    "desde": 25,
+    "hasta": 27,
     "tipo": "ventana",
     "nombre": "Ventana de matemática",
     "que": "Cálculo diferencial, vectores y matrices",
@@ -245,8 +236,8 @@
    },
    {
     "id": "P6",
-    "desde": 29,
-    "hasta": 32,
+    "desde": 28,
+    "hasta": 31,
     "tipo": "proyecto",
     "nombre": "Lupa",
     "version": "v1",
@@ -266,8 +257,8 @@
    },
    {
     "id": "P7",
-    "desde": 33,
-    "hasta": 34,
+    "desde": 32,
+    "hasta": 33,
     "tipo": "proyecto",
     "nombre": "Surco",
     "version": "v2",
@@ -286,8 +277,8 @@
    },
    {
     "id": "C3",
-    "desde": 35,
-    "hasta": 36,
+    "desde": 34,
+    "hasta": 35,
     "tipo": "cert",
     "nombre": "AWS Machine Learning Engineer – Associate",
     "corto": "AWS ML Engineer",
@@ -297,8 +288,8 @@
    },
    {
     "id": "W3",
-    "desde": 37,
-    "hasta": 38,
+    "desde": 36,
+    "hasta": 37,
     "tipo": "ventana",
     "nombre": "Ventana de matemática",
     "que": "Probabilidad y optimización",
@@ -306,8 +297,8 @@
    },
    {
     "id": "P8",
-    "desde": 39,
-    "hasta": 40,
+    "desde": 38,
+    "hasta": 39,
     "tipo": "proyecto",
     "nombre": "Núcleo",
     "industria": "nuclear",
@@ -325,8 +316,8 @@
    },
    {
     "id": "P9",
-    "desde": 41,
-    "hasta": 43,
+    "desde": 40,
+    "hasta": 42,
     "tipo": "proyecto",
     "nombre": "Lupa",
     "version": "v2",
@@ -346,8 +337,8 @@
    },
    {
     "id": "P10",
-    "desde": 44,
-    "hasta": 47,
+    "desde": 43,
+    "hasta": 46,
     "tipo": "proyecto",
     "nombre": "Estación",
     "version": "v2",
@@ -366,8 +357,8 @@
    },
    {
     "id": "colchon",
-    "desde": 48,
-    "hasta": 53,
+    "desde": 47,
+    "hasta": 52,
     "tipo": "colchon",
     "nombre": "Colchón",
     "que": "Atrasos de las puertas de matemática, entrevistas senior y C1",

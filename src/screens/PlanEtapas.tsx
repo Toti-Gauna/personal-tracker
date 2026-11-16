@@ -13,7 +13,7 @@ import '../styles/etapas.css';
 
 const MES = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'];
 const f = (d: string) => `${Number(d.slice(8))} ${MES[Number(d.slice(5, 7)) - 1]} ${d.slice(0, 4)}`;
-const TIPO: Record<string, string> = { proyecto: 'proyecto', ventana: 'ventana de matemática', cert: 'certificación', pausa: 'pausa', colchon: 'colchón', cierre: 'cierre' };
+const TIPO: Record<string, string> = { proyecto: 'proyecto', ventana: 'ventana de matemática', cert: 'certificación', descanso: 'descanso', colchon: 'colchón', cierre: 'cierre' };
 
 export function PlanEtapas({ day }: { day: DayLog }) {
   const t0 = useStore((s) => s.settings?.startDate) ?? T0_PLAN;
@@ -76,7 +76,7 @@ export function PlanEtapas({ day }: { day: DayLog }) {
       ))}
 
       <div className="et-ley mono" aria-hidden="true">
-        {['proyecto', 'ventana', 'cert', 'pausa', 'colchon', 'cierre'].map((t) => <span key={t}><i className={`et-b ${t}`} />{TIPO[t]}</span>)}
+        {['proyecto', 'ventana', 'cert', 'descanso', 'colchon', 'cierre'].map((t) => <span key={t}><i className={`et-b ${t}`} />{TIPO[t]}</span>)}
       </div>
 
       <section className="et-dec" aria-labelledby="et-dec-t">

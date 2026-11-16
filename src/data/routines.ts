@@ -284,15 +284,15 @@ export interface Ajustes {
   /** Ventana de matemática en curso ("W1"): los bloques de programación pasan a matemática. */
   ventana?: string;
   /**
-   * Entrevista a 3 días o menos. Si la rutina tiene bloque de inglés (búsqueda intensiva), ese
-   * bloque pasa a simulacro de esa entrevista; si no, la búsqueda se parte en búsqueda e inglés.
+   * Hay una entrevista mañana. El bloque de búsqueda laboral suma practicarla con el pitch armado
+   * (y en inglés, si la entrevista es en inglés). No hay un modo propio.
    */
-  entrevista?: boolean | { rol: string; empresa?: string };
+  entrevista?: { rol: string; empresa?: string; ingles?: boolean } | false;
   /** Puerta de matemática sin aprobar ("W1"): el proyecto no arranca y programación pasa a matemática pura. */
   puerta?: string;
 }
 
-/** Aplica la ventana W y la entrevista cercana al día ya armado. */
+/** Aplica la ventana W, la puerta y la práctica de la entrevista de mañana al día ya armado. */
 export function ajustarDia(plan: PlannedRoutineBlock[], a: Ajustes): PlannedRoutineBlock[] {
   let out = plan;
   if (a.puerta) {
@@ -304,23 +304,13 @@ export function ajustarDia(plan: PlannedRoutineBlock[], a: Ajustes): PlannedRout
       ? { ...p, block: { ...p.block, label: `Matemática · ventana ${a.ventana}`, short: 'matemática', rama: 'matematica', tasks: ['Repaso de tarjetas', `Capítulo de la ventana ${a.ventana}`, 'Ejercicios del capítulo'] } }
       : p));
   }
-  if (a.entrevista && out.some((p) => p.block.id === 'ingles')) {
-    const e = typeof a.entrevista === 'object' ? a.entrevista : null;
-    const de = e ? `${e.rol}${e.empresa ? ` en ${e.empresa}` : ''}` : 'la entrevista';
-    out = out.map((p) => (p.block.id === 'ingles'
-      ? { ...p, block: { ...p.block, label: `Inglés · simulacro de ${de}`, tasks: [`Simulacro completo: ${de}`, 'Grabarte y anotar lo que falló', 'Preguntas para ellos'] } }
-      : p));
-  } else if (a.entrevista) {
-    out = out.flatMap((p) => {
-      if (p.block.id !== 'busqueda' || p.min < 60) return [p];
-      const mitad = Math.round(p.min / 2 / 5) * 5;
-      const hh = (m: number) => `${String(Math.floor(m / 60) % 24).padStart(2, '0')}:${String(m % 60).padStart(2, '0')}`;
-      const inicio2 = toMin(p.start) + mitad;
-      return [
-        { ...p, min: mitad, block: { ...p.block, tasks: ['5 postulaciones'] } },
-        { start: hh(inicio2), min: p.min - mitad, block: { id: 'ingles-entrevista', label: 'Inglés · modo entrevista', short: 'inglés', start: hh(inicio2), end: p.block.end, area: 'ing' as Area, kind: p.block.kind, focus: true, rama: 'ingles' as RamaOMain, tasks: ['Respuestas ensayadas en voz alta', 'Pitch de 60 s'] } },
-      ];
-    });
+  // Sin modo entrevista: el día anterior, la búsqueda suma practicar la entrevista con el pitch armado
+  // (y en inglés si la entrevista es en inglés). Nada se reemplaza ni se parte.
+  if (a.entrevista) {
+    const e = a.entrevista;
+    const de = e.empresa ? ` de ${e.rol} en ${e.empresa}` : e.rol ? ` de ${e.rol}` : '';
+    const practica = [`Practicar la entrevista de mañana${de} con el pitch armado`, ...(e.ingles ? ['Practicarla en inglés'] : [])];
+    out = out.map((p) => (p.block.id === 'busqueda' ? { ...p, block: { ...p.block, tasks: [...practica, ...(p.block.tasks ?? [])] } } : p));
   }
   return out;
 }

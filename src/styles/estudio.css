@@ -128,7 +128,7 @@
 .celda b { font-weight: 500; font-size: 14px; }
 .celda.mal { border-color: var(--rutina); background: color-mix(in srgb, var(--rutina) 12%, transparent); }
 label.celda { cursor: text; align-content: start; gap: 2px; }
-.celda input { width: 100%; min-width: 0; border: 0; background: transparent; color: var(--tinta); font-size: 15px; padding: 0; outline: none; }
+.celda input { width: 100%; min-width: 0; border: 0; background: transparent; color: var(--tinta); font-size: 16px; padding: 0; outline: none; }
 .celda:focus-within { border-color: var(--tinta); }
 .ejercicios { list-style: none; margin: 0 0 4px; padding: 0; }
 .ejercicios li { display: grid; grid-template-columns: 36px minmax(0, 1fr); gap: 6px; padding: 10px 0; border-bottom: 1px solid var(--linea); font-size: 16px; line-height: 1.4; }

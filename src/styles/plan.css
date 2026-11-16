@@ -219,9 +219,9 @@
 .nm-ramas button:disabled { opacity: 0.35; }
 .pim-json { display: grid; grid-template-columns: auto minmax(0, 1fr); border: 1px solid var(--linea); border-radius: 8px; background: color-mix(in srgb, var(--tinta) 4%, var(--papel)); overflow: hidden; }
 .pim-json.con-error { border-color: var(--rutina); }
-.pim-num { display: grid; align-content: start; padding: 14px 6px 14px 10px; font-size: 13px; line-height: 1.55; color: var(--sub); text-align: right; user-select: none; border-right: 1px solid var(--linea); }
+.pim-num { display: grid; align-content: start; padding: 14px 6px 14px 10px; font-size: 16px; line-height: 1.55; color: var(--sub); text-align: right; user-select: none; border-right: 1px solid var(--linea); }
 .pim-num .mal { color: var(--papel); background: var(--rutina); border-radius: 3px; padding: 0 3px; }
-.pim-json textarea { border: 0; background: transparent; color: var(--tinta); font-size: 13px; line-height: 1.55; padding: 14px 12px; resize: vertical; white-space: pre; overflow-x: auto; min-height: 200px; width: 100%; box-sizing: border-box; }
+.pim-json textarea { border: 0; background: transparent; color: var(--tinta); font-size: 16px; line-height: 1.55; padding: 14px 12px; resize: vertical; white-space: pre; overflow-x: auto; min-height: 200px; width: 100%; box-sizing: border-box; }
 .pim-json textarea:focus { outline: 2px solid var(--c); outline-offset: -2px; }
 .pim-estado { font-size: 13px; margin: 10px 0 0; overflow-wrap: anywhere; }
 .pim-cambios { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--linea); }

@@ -13,10 +13,10 @@ import type { Area, Rama } from './types';
 
 // ——— Tipos ———
 
-export type TipoTramo = 'proyecto' | 'cert' | 'ventana' | 'pausa' | 'colchon' | 'cierre';
+export type TipoTramo = 'proyecto' | 'cert' | 'ventana' | 'descanso' | 'colchon' | 'cierre';
 export type Capa = 'ux' | 'tresd' | 'animacion' | 'docs' | 'venta' | 'ingenieria';
 
-/** Un tramo de la rama programación: proyecto, certificación, ventana de matemática, pausa o colchón. */
+/** Un tramo de la rama programación: proyecto, certificación, ventana de matemática, descanso o colchón. */
 export interface Tramo {
   id: string;
   desde: number;
@@ -215,12 +215,12 @@ export const SEMANAS_BIM = PLAN.semanasPorBimestre;
 /** Los tramos tal como estaban en data/plan.json: el detalle (qué, stack, perfil, estándar). */
 const BASE_TRAMOS: Tramo[] = PLAN.programacion.tramos.map((t) => ({ ...t }));
 /** Los ids que cambiaron en el plan extendido. */
-const ALIAS: Record<string, string> = { PAU1: 'pausa', COL: 'colchon' };
+const ALIAS: Record<string, string> = { COL: 'colchon' };
 const BASE_MATE: TramoMate[] = PLAN.matematica.tramos.map((t) => ({ ...t }));
 const BASE_NOMBRES = [...PLAN.nombresBimestre];
 const BASE_METAS_BIM = Object.fromEntries(Object.entries(PLAN.metasBimestre).map(([k, v]) => [k, [...v]])) as Record<Rama, string[]>;
 
-/** Semanas del plan hasta T+18 (cierre de la etapa 2): 92 con todos los extras, 78 sin ninguno. */
+/** Semanas del plan hasta T+18 (cierre de la etapa 2): 90 con todos los extras, 76 sin ninguno (sin pausas). */
 export let SEMANAS = PLAN.semanas;
 export let BIMESTRES = Math.ceil(SEMANAS / SEMANAS_BIM);
 export let TRAMOS: Tramo[] = PLAN.programacion.tramos;
@@ -255,7 +255,7 @@ function nombreAuto(desde: number, hasta: number) {
 
 /** Lo de programación de un bimestre: "P2 Escudo, W1 y P3 Surco v1". */
 function progAuto(desde: number, hasta: number) {
-  const ts = TRAMOS.filter((t) => t.hasta >= desde && t.desde <= hasta && t.tipo !== 'pausa');
+  const ts = TRAMOS.filter((t) => t.hasta >= desde && t.desde <= hasta);
   const ns = ts.map((t) => (t.tipo === 'proyecto' ? `${t.id} ${t.nombre}${t.version ? ` ${t.version}` : ''}` : t.tipo === 'cert' ? t.corto ?? t.nombre : t.tipo === 'colchon' ? 'colchón' : t.tipo === 'cierre' ? 'cierre de T+18' : t.id));
   return ns.length > 1 ? `${ns.slice(0, -1).join(', ')} y ${ns[ns.length - 1]}` : ns[0] ?? '';
 }
@@ -378,7 +378,7 @@ export const tramoDelAnio = (bimestre: number) => (bimestre <= 6 ? 'anio1' : 'fi
 
 // ——— Programación ———
 
-/** El tramo de programación activo (proyecto, certificación, ventana, pausa o colchón). */
+/** El tramo de programación activo (proyecto, certificación, ventana, descanso o colchón). */
 export function tramoActivo(fecha: string, t0 = T0_PLAN) {
   const s = Math.max(1, Math.min(SEMANAS, semanaDelPlan(fecha, t0)));
   const t = tramoEnSemana(s);
@@ -394,8 +394,8 @@ export const tramoPorId = (id: string) => TRAMOS.find((t) => t.id === id);
 export const nombreTramo = (t: Tramo, conIndustria = true) =>
   t.tipo === 'cert' ? t.corto ?? t.nombre : `${t.nombre}${t.version ? ` ${t.version}` : ''}${conIndustria && t.industria ? ` · ${t.industria}` : ''}`;
 
-/** El siguiente tramo con trabajo después de uno (saltea la pausa de fin de año). */
-export const siguienteTramo = (id: string) => TRAMOS.slice(TRAMOS.findIndex((t) => t.id === id) + 1).find((t) => t.tipo !== 'pausa');
+/** El siguiente tramo con trabajo después de uno (saltea los descansos). */
+export const siguienteTramo = (id: string) => TRAMOS.slice(TRAMOS.findIndex((t) => t.id === id) + 1).find((t) => t.tipo !== 'descanso');
 
 /** La ventana de matemática en curso, o la próxima. */
 export function ventanaW(fecha: string, t0 = T0_PLAN) {
@@ -461,7 +461,7 @@ export const proximasEntregas = (fecha: string, n = 4, extra: Entrega[] = [], t0
 export function eventosDelPlan(t0 = T0_PLAN): EventoRama[] {
   const out: EventoRama[] = PLAN.hitos.map((h) => ({ id: `hito-${h.id}`, rama: 'main' as const, fecha: fechaHito(h, t0), texto: h.texto, origen: 'plan' as const }));
   for (const t of TRAMOS) {
-    if (t.tipo === 'pausa' || t.tipo === 'colchon') continue;
+    if (t.tipo === 'descanso' || t.tipo === 'colchon') continue;
     out.push({ id: `fin-${t.id}`, rama: t.tipo === 'ventana' ? 'matematica' : 'programacion', fecha: finSemana(t.hasta, t0), texto: t.tipo === 'ventana' ? `${t.id} · ${t.que.toLowerCase()}` : `${t.id} · ${nombreTramo(t)} cerrado`, origen: 'plan' });
   }
   for (const c of PLAN.handyx.cortes) out.push({ id: `handyx-${c.id}`, rama: 'handyx', fecha: finSemana(c.hasta, t0), texto: `Corte · ${c.nombre}`, origen: 'plan' });

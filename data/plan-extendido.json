@@ -6,28 +6,28 @@
    "n": 1,
    "nombre": "Núcleo",
    "perfil": "Senior ML + DevSecOps + Cloud",
-   "semanasBase": 53,
+   "semanasBase": 52,
    "semanasExtra": 11
   },
   {
    "n": 2,
    "nombre": "Ciberseguridad",
    "perfil": "Senior con foco en seguridad",
-   "semanasBase": 25,
+   "semanasBase": 24,
    "semanasExtra": 3
   },
   {
    "n": 3,
    "nombre": "Quant trading",
    "perfil": "Quant Trading Engineer / ML Quant",
-   "semanasBase": 38,
+   "semanasBase": 37,
    "semanasExtra": 6
   },
   {
    "n": 4,
    "nombre": "Ingeniería aeroespacial",
    "perfil": "Aerospace Software Engineer",
-   "semanasBase": 55,
+   "semanasBase": 54,
    "semanasExtra": 5
   }
  ],
@@ -66,14 +66,6 @@
     "validador": "Ingeniero de reservorios o de cumplimiento",
     "perfil": "Full-stack AI Engineer"
    }
-  },
-  {
-   "id": "PAU1",
-   "etapa": 1,
-   "tipo": "pausa",
-   "nombre": "Pausa de fin de año",
-   "base": 1,
-   "extra": 0
   },
   {
    "id": "P2",
@@ -463,15 +455,6 @@
    }
   },
   {
-   "id": "PAU2",
-   "etapa": 2,
-   "tipo": "pausa",
-   "nombre": "Pausa de fin de año",
-   "base": 1,
-   "extra": 0,
-   "que": "Pausa de fin de año"
-  },
-  {
    "id": "S2",
    "etapa": 2,
    "tipo": "proyecto",
@@ -654,7 +637,7 @@
   {
    "id": "DES3",
    "etapa": 3,
-   "tipo": "pausa",
+   "tipo": "descanso",
    "nombre": "Descanso",
    "base": 1,
    "extra": 0
@@ -784,14 +767,6 @@
     "validador": "Trader o quant",
     "perfil": "Quant Trading Engineer"
    }
-  },
-  {
-   "id": "PAU3",
-   "etapa": 3,
-   "tipo": "pausa",
-   "nombre": "Pausa de fin de año",
-   "base": 1,
-   "extra": 0
   },
   {
    "id": "Q6",
@@ -939,7 +914,7 @@
   {
    "id": "DES4",
    "etapa": 4,
-   "tipo": "pausa",
+   "tipo": "descanso",
    "nombre": "Descanso",
    "base": 1,
    "extra": 0
@@ -1124,14 +1099,6 @@
     "validador": "Ingeniero del rubro",
     "perfil": "Systems / MDO Engineer"
    }
-  },
-  {
-   "id": "PAU4",
-   "etapa": 4,
-   "tipo": "pausa",
-   "nombre": "Pausa de fin de año",
-   "base": 1,
-   "extra": 0
   },
   {
    "id": "A7",

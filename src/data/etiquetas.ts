@@ -70,11 +70,6 @@ export function etiquetaDeBloque(b: Block, { day, t0, plan, study }: Ctx): strin
       return `trabajo · semana ${s} de ${f.hasta} · ${fmtDur(b.min)} hoy`;
     }
     case 'ingles': {
-      const ent = plan.entrevistas.filter((e) => e.fecha >= date).sort((x, y) => x.fecha.localeCompare(y.fecha))[0];
-      if (b.key === 'ingles-entrevista' && ent) {
-        const [dia, n] = fmtFecha(ent.fecha).split(' ');
-        return `ingles · entrevista del ${dia.slice(0, 3).toLowerCase()} ${n}`;
-      }
       return `ingles · ${PLAN.metasBimestre.ingles[bim.n - 1].toLowerCase()}`;
     }
     case 'handyx': {
