@@ -14,6 +14,11 @@ import { useStudyPlan, type Contenido } from '../ui/useStudy';
 import { BANDA_COLOR, banda, detalle, qFalla, ranking } from '../data/debiles';
 import { WeekChart } from '../ui/WeekChart';
 import { CardMate } from './MatePlan';
+import { CardLibro } from './Libro';
+import { CardProg } from './ProgPlan';
+import { capsTexto, microFaltantes } from '../data/libros';
+import { getState } from '../state/store';
+import { toast } from '../ui/avisos';
 import '../styles/estudio.css';
 
 /** Qué pasa al tocar la casilla de un paso. */
@@ -25,7 +30,16 @@ function tocar(date: string, s: PlanStep, done: boolean) {
     if (s.kind === 'cold' && !done) return ir(`recall/${a}`);
     return done ? uncompleteReview(date, a) : completeReview(date, a);
   }
-  if (tipo === 'learn' && !done) return completeLearn(date, a, b ? Number(b) : undefined);
+  if (tipo === 'learn' && !done) {
+    // Un libro no se da por estudiado sin la micro-tesis de cada capítulo de la unidad.
+    const act = getState().study.activities.find((x) => x.id === a);
+    const falta = act?.libro && b ? microFaltantes(getState().study, act, Number(b)) : [];
+    if (act?.libro && falta.length) {
+      toast({ title: `Falta la micro-tesis del ${capsTexto(falta)}`, sub: 'Una frase por capítulo, en el libro', color: 'var(--handyx)' }, false);
+      return ir(`estudio/libro/${act.libro}`);
+    }
+    return completeLearn(date, a, b ? Number(b) : undefined);
+  }
   if (tipo === 'test') return ir(`test/${a}/${b}`);
 }
 
@@ -122,11 +136,8 @@ export function Estudio({ day }: { day: DayLog }) {
       </div>
       <div className="re-cards">
         <CardMate day={day} />
-        <a className="re-card otro" href="#/metas/ruta" style={{ ['--c' as string]: 'var(--ing)' }}>
-          <span className="re-card-cab"><b>Programación</b><span className="mono sub">Plan T+18</span></span>
-          <span className="sub">Los proyectos P0 a P10, con su línea de tiempo, están en Metas → Ruta.</span>
-          <span className="mono sub re-card-pie">ver la ruta →</span>
-        </a>
+        <CardLibro />
+        <CardProg day={day} />
       </div>
 
       <div className="fila-t">

@@ -1,0 +1,274 @@
+{
+ "version": 1,
+ "nota": "Libros del sistema de libros (ola 20). Solo títulos del índice, nunca texto del libro. Los demás libros se cargan con el JSON de metas por bloque (tipo libro).",
+ "libros": [
+  {
+   "id": "mwm",
+   "titulo": "Measure What Matters",
+   "autor": "John Doerr",
+   "idioma": "en",
+   "contexto": "Año 1 · inglés · fase 1 (16 nov a 27 dic 2026)",
+   "partes": [
+    {
+     "n": 1,
+     "titulo": "OKRs in Action"
+    },
+    {
+     "n": 2,
+     "titulo": "The New World of Work"
+    }
+   ],
+   "capitulos": [
+    {
+     "n": 1,
+     "titulo": "Google, Meet OKRs",
+     "sub": "How OKRs came to Google, and the superpowers they convey.",
+     "parte": 1
+    },
+    {
+     "n": 2,
+     "titulo": "The Father of OKRs",
+     "sub": "Andy Grove creates and inculcates a new way of structured goal setting.",
+     "parte": 1
+    },
+    {
+     "n": 3,
+     "titulo": "Operation Crush: An Intel Story",
+     "sub": "How OKRs won the microprocessor wars.",
+     "parte": 1
+    },
+    {
+     "n": 4,
+     "titulo": "Superpower #1: Focus and Commit to Priorities",
+     "sub": "OKRs help us choose what matters most.",
+     "parte": 1,
+     "teoria": true
+    },
+    {
+     "n": 5,
+     "titulo": "Focus: The Remind Story",
+     "sub": "Brett Kopf used OKRs to overcome attention deficit disorder.",
+     "parte": 1
+    },
+    {
+     "n": 6,
+     "titulo": "Commit: The Nuna Story",
+     "sub": "Jini Kim's personal commitment to transform health care.",
+     "parte": 1
+    },
+    {
+     "n": 7,
+     "titulo": "Superpower #2: Align and Connect for Teamwork",
+     "sub": "Public, transparent OKRs spark and strengthen collaboration.",
+     "parte": 1,
+     "teoria": true
+    },
+    {
+     "n": 8,
+     "titulo": "Align: The MyFitnessPal Story",
+     "sub": "Alignment via OKRs is more challenging—and rewarding—than Mike Lee anticipated.",
+     "parte": 1
+    },
+    {
+     "n": 9,
+     "titulo": "Connect: The Intuit Story",
+     "sub": "Atticus Tysen uses OKR transparency to fortify a software pioneer's open culture.",
+     "parte": 1
+    },
+    {
+     "n": 10,
+     "titulo": "Superpower #3: Track for Accountability",
+     "sub": "OKRs help us monitor progress and course-correct.",
+     "parte": 1,
+     "teoria": true
+    },
+    {
+     "n": 11,
+     "titulo": "Track: The Gates Foundation Story",
+     "sub": "A $20 billion start-up wields OKRs to fight devastating diseases.",
+     "parte": 1
+    },
+    {
+     "n": 12,
+     "titulo": "Superpower #4: Stretch for Amazing",
+     "sub": "OKRs empower us to achieve the seemingly impossible.",
+     "parte": 1,
+     "teoria": true
+    },
+    {
+     "n": 13,
+     "titulo": "Stretch: The Google Chrome Story",
+     "sub": "CEO Sundar Pichai uses OKRs to build the world's leading web browser.",
+     "parte": 1
+    },
+    {
+     "n": 14,
+     "titulo": "Stretch: The YouTube Story",
+     "sub": "CEO Susan Wojcicki and an audacious billion-hour goal.",
+     "parte": 1
+    },
+    {
+     "n": 15,
+     "titulo": "Continuous Performance Management: OKRs and CFRs",
+     "sub": "How conversations, feedback, and recognition help to achieve excellence.",
+     "parte": 2
+    },
+    {
+     "n": 16,
+     "titulo": "Ditching Annual Performance Reviews: The Adobe Story",
+     "sub": "Adobe affirms core values with conversations and feedback.",
+     "parte": 2
+    },
+    {
+     "n": 17,
+     "titulo": "Baking Better Every Day: The Zume Pizza Story",
+     "sub": "A robotics pioneer leverages OKRs for teamwork and leadership—and to create the perfect pizza.",
+     "parte": 2
+    },
+    {
+     "n": 18,
+     "titulo": "Culture",
+     "sub": "OKRs catalyze culture; CFRs nourish it.",
+     "parte": 2
+    },
+    {
+     "n": 19,
+     "titulo": "Culture Change: The Lumeris Story",
+     "sub": "Overcoming OKR resistance with a culture makeover.",
+     "parte": 2
+    },
+    {
+     "n": 20,
+     "titulo": "Culture Change: Bono's ONE Campaign Story",
+     "sub": "The world's greatest rock star deploys OKRs to save lives in Africa.",
+     "parte": 2
+    },
+    {
+     "n": 21,
+     "titulo": "The Goals to Come",
+     "parte": 2
+    }
+   ],
+   "recursos": [
+    {
+     "id": "foreword",
+     "titulo": "Foreword: Larry Page"
+    },
+    {
+     "id": "R1",
+     "titulo": "Resource 1: Google's OKR Playbook"
+    },
+    {
+     "id": "R2",
+     "titulo": "Resource 2: A Typical OKR Cycle"
+    },
+    {
+     "id": "R3",
+     "titulo": "Resource 3: All Talk: Performance Conversations"
+    },
+    {
+     "id": "R4",
+     "titulo": "Resource 4: In Sum"
+    },
+    {
+     "id": "R5",
+     "titulo": "Resource 5: For Further Reading"
+    }
+   ],
+   "unidades": [
+    {
+     "n": 1,
+     "caps": [
+      1,
+      2
+     ]
+    },
+    {
+     "n": 2,
+     "caps": [
+      3,
+      4
+     ]
+    },
+    {
+     "n": 3,
+     "caps": [
+      5,
+      6
+     ]
+    },
+    {
+     "n": 4,
+     "caps": [
+      7,
+      8
+     ]
+    },
+    {
+     "n": 5,
+     "caps": [
+      9,
+      10
+     ]
+    },
+    {
+     "n": 6,
+     "caps": [
+      11,
+      12
+     ]
+    },
+    {
+     "n": 7,
+     "caps": [
+      13,
+      14
+     ]
+    },
+    {
+     "n": 8,
+     "caps": [
+      15,
+      16
+     ]
+    },
+    {
+     "n": 9,
+     "caps": [
+      17,
+      18
+     ]
+    },
+    {
+     "n": 10,
+     "caps": [
+      19,
+      20
+     ]
+    },
+    {
+     "n": 11,
+     "caps": [
+      21
+     ],
+     "recursos": [
+      "R1"
+     ]
+    }
+   ],
+   "test": {
+    "preguntas": 8,
+    "min": 15
+   },
+   "final": {
+    "preguntas": 20,
+    "min": 40
+   },
+   "artefacto": {
+    "cuando": "despues",
+    "nota": "Por ahora no: primero se lee el libro y después se aplica. Se define al terminarlo."
+   },
+   "hito": "Tesis final del libro y 3 minutos hablados en inglés sin leer"
+  }
+ ]
+}

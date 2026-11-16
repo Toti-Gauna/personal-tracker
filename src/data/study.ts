@@ -3,6 +3,7 @@ import { CARD_SEC, DIA, LADDER, PASS, REST_TEST, REVIEW_CAP, TEST_MIN, TEST_PREV
 import { DAY, retrievability } from './fsrs';
 import type { Activity, Card, ErrType, ReviewItem, ReviewKind, Step, StudyState, TestResult, Tramo, Unit, UnitState } from './study-types';
 import { addDays, dateKey, parseDate } from './time';
+import { libroCerrado } from './libros';
 import type { Preset, Seg } from './types';
 
 /** 0 = lunes … 6 = domingo. */
@@ -16,9 +17,9 @@ export const actShort = (a: Activity) => a.title.split(' · ').pop()!.trim();
 export const unitState = (st: StudyState, actId: string, n: number): UnitState =>
   st.units[actId]?.[n] ?? { tests: [] };
 
-/** Actividades que tocan hoy. */
+/** Actividades que tocan hoy (sin las archivadas ni los libros ya cerrados). */
 export const activitiesFor = (st: StudyState, date: string) =>
-  st.activities.filter((a) => a.days.includes(weekday(date)));
+  st.activities.filter((a) => !a.archivada && a.days.includes(weekday(date)) && !libroCerrado(st, a));
 
 /**
  * La unidad que se estudia hoy: la que estudiaste hoy (para que el plan no cambie al
@@ -237,7 +238,7 @@ export function planActivity(a: Activity, ctx: PlanCtx): Tramo[] {
     };
   });
   const unit = focusUnit(a, study, date);
-  if (a.units && !unit && a.final && !testHoy.length && a.units.every((u) => unitState(study, a.id, u.n).approvedOn || unitState(study, a.id, u.n).flojo)) {
+  if (a.units && !unit && a.final && !testHoy.length && !study.finales?.[a.id]?.aprobadoOn && a.units.every((u) => unitState(study, a.id, u.n).approvedOn || unitState(study, a.id, u.n).flojo)) {
     tests.push({ step: 'test', kind: 'test', title: a.final.title, paso: a.final.title, sub: `Test · ${a.final.desc}`, min: 60, ref: `test:${a.id}:final`, activityId: a.id, paper });
   }
 

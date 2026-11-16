@@ -81,7 +81,7 @@ export function lineaDeClave(texto: string, clave: string, n = 0, despuesDe?: st
 }
 
 /** Línea del error de sintaxis según el mensaje del navegador. */
-function lineaDeSintaxis(texto: string, msg: string) {
+export function lineaDeSintaxis(texto: string, msg: string) {
   const lc = /line (\d+) column (\d+)/i.exec(msg);
   if (lc) return Number(lc[1]);
   const p = /position (\d+)/i.exec(msg);

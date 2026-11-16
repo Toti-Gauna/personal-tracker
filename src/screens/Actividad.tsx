@@ -9,6 +9,7 @@ import { ir } from '../lib/routes';
 import { useStore } from '../state/store';
 import { addFront, deleteActivity, saveActivity } from '../state/study';
 import { toast } from '../ui/avisos';
+import { AREAS_ESTUDIO, UNIDAD_POR_AREA } from '../data/libros';
 import '../styles/estudio.css';
 
 const TIPOS: { id: ActType; name: string; unit: string }[] = [
@@ -63,6 +64,14 @@ export function Actividad({ id }: { id?: string }) {
           </form>
         )}
       </div>
+
+      <span className="etiqueta">Área · qué es una unidad</span>
+      <div className="chips" role="radiogroup" aria-label="Área">
+        {AREAS_ESTUDIO.map((x) => (
+          <button key={x} role="radio" aria-checked={a.area === x} onClick={() => set({ area: a.area === x ? undefined : x, unitLabel: a.units ? a.unitLabel : UNIDAD_POR_AREA[x].label })}>{UNIDAD_POR_AREA[x].nombre}</button>
+        ))}
+      </div>
+      <p className="sub nota-izq">{a.area ? `Una unidad es ${UNIDAD_POR_AREA[a.area].unidad}: se estudia, al día siguiente el test (85 %) y después la tesis.` : 'Matemática, 1 capítulo; programación, 1 bloque del curso; lenguajes, 1 capítulo o unidad; libros, 2 capítulos.'}</p>
 
       {!prev?.units && (
         <>

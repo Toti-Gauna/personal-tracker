@@ -12,9 +12,11 @@ import { guardarExamen, marcarCapa, setTecnica, sumarRevision, sumarTiempo, togg
 import { atrasoPuerta, puertaAprobada } from '../data/puertas';
 import { useStore } from '../state/store';
 import { Casilla } from '../ui/Casilla';
-import { EvidenciaProyecto, FichaBloque } from '../ui/FichaBloque';
+import { EvidenciaProyecto, FichaBloque, NivelSalida } from '../ui/FichaBloque';
 import { bloqueConFechas } from '../data/plan-vistas';
+import { MetasBloque } from '../ui/MetasBloque';
 import '../styles/etapas.css';
+import '../styles/metas.css';
 
 const TIPOS: [TipoError, string, string][] = [
   ['concepto', 'concepto', 'var(--rutina)'],
@@ -83,11 +85,13 @@ export function PlanProyecto({ day, id }: { day: DayLog; id?: string }) {
       )}
 
       <FichaBloque id={t.id} />
+      <MetasBloque bloque={t.id} date={date} titulo={`Metas de ${t.id}`} />
       {t.tipo === 'proyecto' && <EvidenciaProyecto id={t.id} />}
 
       {t.tipo === 'ventana' && (
         <>
           <p className="sub">Los bloques de programación pasan a matemática: el avance se registra en <a className="subrayado" href="#/unidades">Unidades</a>.</p>
+          <NivelSalida id={t.id} />
           <Puerta id={t.id} date={date} />
         </>
       )}

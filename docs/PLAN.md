@@ -5,7 +5,7 @@ Tracker personal de Toti: el día en horas, el estudio con su propio motor de re
 - **Diseño:** [canvas de Trazo](https://claude.ai/artifact/6Cc2E6aW2ViU5ikovpsRTy)
 - **Roadmap de estudio:** [ruta ML + DevSecOps](https://claude.ai/artifact/9PEokku7mBLZdCFJr1zqXP)
 - **Pantallas:** presentación `Trazo-pantallas.pptx` y su ZIP de imágenes (44 pantallas, 8 flujos).
-- **Estado:** olas 0 a 12b hechas y en `main`. Olas 0 a 16c hechas (la 15 quedó absorbida por la 16c). Olas 0 a 18 hechas. Las olas 19 a 23 (entreno, programación y metas por bloque, idiomas y libros, orden de pantallas y clipping) están planificadas en §6 sexies. Este archivo es la fuente de verdad.
+- **Estado:** olas 0 a 12b hechas y en `main`. Olas 0 a 16c hechas (la 15 quedó absorbida por la 16c). Olas 0 a 18 y 20 hechas. Las olas 19, 21, 22 y 23 (entreno, idiomas y libros, orden de pantallas y clipping) están planificadas en §6 sexies. Este archivo es la fuente de verdad.
 
 ---
 
@@ -386,7 +386,7 @@ Desde el lunes 16 nov 2026 la prioridad es un trabajo remoto de USD 3.000 a 5.00
 | 17 · Rutina de las 08:00 y dormir a las 22:00 | Tercera opción en Buen día (levantarse a las 08:00) con su propio día; en la de las 04:00, entreno de 3 h (18:00 a 21:00), descanso de 21:00 a 22:00 y dormir siempre a las 22:00 (§6 quinquies) | Sonnet 5.5 · medio · *hecha* |
 | 18 · Arreglos y calendario | *Hecha.* Submetas en la meta principal, sin zoom al escribir, sin modo entrevista y calendario sin pausas (§6 sexies, pasos 1 y 2) | Sonnet 5.5 · medio |
 | 19 · Entreno | Tus rutinas (PPL + Upper/Lower, lunes a viernes), el horario de 18:00 a 22:00 y las Upper/Lower propias (§6 sexies, pasos 3 y 4) | Sonnet 5.5 · alto |
-| 20 · Programación y metas por bloque | Unidades por área y sistema de libros (con tarjetas, test y tesis; carga *Measure What Matters* con sus 21 capítulos), metas por bloque con JSON y el roadmap de programación por proyectos (§6 sexies, pasos 5 a 7) | Opus 5.5 · alto |
+| 20 · Programación y metas por bloque | *Hecha.* Unidades por área y sistema de libros (con tarjetas, test y tesis; carga *Measure What Matters* con sus 21 capítulos), metas por bloque con JSON y el roadmap de programación por proyectos (§6 sexies, pasos 5 a 7) | Opus 5.5 · alto |
 | 21 · Idiomas y libros | Roadmap maestro v3: un idioma por año durante 6 años (inglés, francés, italiano, alemán, japonés y chino), 12 libros de consolidación, la biblioteca de 42 libros y el ascenso a C1, dentro de Estudio (§6 sexies, paso 8) | Opus 5.5 · alto |
 | 22 · Orden de pantallas | Pasada de UX en Metas, Estudio y Hoy: pantallas livianas con subpáginas y botones, también en los roadmaps de matemática, programación e idiomas (§6 sexies, paso 9) | Sonnet 5.5 · medio |
 | 23 · Clipping | Roadmap Clipper de 12 meses (de 0 a USD 10k/mes) con su propio apartado en Metas: plan, registro, cuentas, campañas, retainers, métricas y gráficos, y una UX/UI premium; se integra con Hoy, el mapa y las alertas (§6 sexies, pasos 10 a 12) | Opus 5.5 · alto |
@@ -696,7 +696,14 @@ La 20 va antes que la 21 porque el roadmap de idiomas usa el sistema de libros y
 
 ---
 
-### Ola 20 · Programación y metas por bloque (Opus 5.5 · alto)
+### Ola 20 · Programación y metas por bloque (Opus 5.5 · alto) · *Hecha*
+
+**Lo que quedó:** 379 tests pasando (27 nuevos).
+- **Sistema de libros:** `data/libros.json` (Measure What Matters: 21 capítulos, 6 recursos, 11 unidades) y `src/data/libros.ts` (validador, unidades del motor, estado del libro). El libro es una actividad del motor en el bloque de inglés, todos los días (`libro-mwm`). La micro-tesis de cada capítulo queda como punto de la unidad (el cold recall de mañana compara contra eso) y, si querés, como tarjeta; sin las micro-tesis de la unidad, el estudio del día no se cierra. Cierre: test final (`#/test/libro-mwm/final`), tesis final al día siguiente y artefacto; sin artefacto queda "leído". Pantalla `#/estudio/libro/mwm` y card "Libros" en Estudio. En la actividad se elige el **área** (qué es una unidad).
+- **Metas por bloque:** `plan.metasBloque` (proyecto, ventana, certificación, `libro:<id>` o `libro:<id>:<unidad>`), con submetas; componente `MetasBloque` en el proyecto (Metas y Estudio) y en el libro. Importar acepta `"tipo": "metas-bloque"` y `"tipo": "libro"` (validación por línea, Qué cambia y avance conservado); Exportar JSON devuelve el mismo formato. Formato en `docs/metas-por-bloque.md`.
+- **Programación por proyectos:** `#/estudio/prog` (Estás acá, Hoy sos → Vas a ser y la escalera de P0 a A7) y `#/estudio/prog/<id>/<subpágina>` (Resumen, Stack y tecnología nueva, Metas, Evidencia, Pieza matemática y Entrega). "Python y FastAPI" (`prog-b1`) quedó archivada: no entra al día y sus repasos siguen. La meta de programación de Hoy suma hasta 2 metas pendientes del proyecto en curso.
+- **Nivel de salida:** las 12 ventanas tienen sus criterios en `data/plan-extendido.json` (`mate.salida`, propuestos por mí salvo el ejemplo de W1). Se tildan en la ventana (Matemática y Metas) y en la pieza matemática del proyecto que habilita. Son el chequeo antes del test: la puerta la sigue aprobando el test con 85 %, y si aprobaste con criterios sin tildar, avisa.
+- Pendiente para la ola 22: la escalera de programación ocupa unas 7 pantallas de scroll (son 50 bloques); se va a plegar por etapa.
 
 **Paso 5 · Unidades por área y sistema de libros** (dentro del motor actual, 85 %)
 

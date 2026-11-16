@@ -6,7 +6,8 @@ import { DEFAULT_BLOCK_PRESETS, DEFAULT_PRESETS } from '../data/defaults';
 import { buildBlocks, newId, planDay } from '../data/schedule';
 import { routineFor } from '../data/routines';
 import { emptyPlan, DEFAULT_PLAN_SETTINGS, type PlanSettings, type PlanState } from '../data/plan-state';
-import { semanaDelPlan, ventanaW } from '../data/plan';
+import { semanaDelPlan, tramoActivo, ventanaW } from '../data/plan';
+import { tareasDeBloque } from '../data/metas-bloque';
 import { addDays, dateKey } from '../data/time';
 import { emptyStudy } from '../data/study-catalog';
 import { defaultGoals, emptyGoals, RAMA_DE_SEMILLA, REEMPLAZADAS_POR_PLAN } from '../data/goals-catalog';
@@ -16,6 +17,7 @@ import { emptyTrain } from '../data/train-catalog';
 import { emptyRuta, refsForDay, type RutaState } from '../data/ruta';
 import { applySettings } from './apply';
 import { aplicarCalendario } from '../data/plan';
+import { aplicarLibrosPropios } from '../data/libros';
 import type { TrainState } from '../data/train-types';
 import type { StudyState } from '../data/study-types';
 import { emptyEstudioRuta, type EstudioRutaState } from '../data/study-roadmap';
@@ -58,7 +60,7 @@ function load(): State {
 export function migrate(parsed: any): State {
   // Migración: la ola 1 no tenía estudio y la ola 2 no tenía reglas, registro ni puntos.
   const base = emptyStudy();
-  const study = parsed.study ? { ...base, ...parsed.study, attempts: parsed.study.attempts ?? [], rules: { ...base.rules, ...parsed.study.rules, pesos: { ...base.rules.pesos, ...parsed.study.rules?.pesos } } } : base;
+  const study = parsed.study ? migrateStudy({ ...base, ...parsed.study, attempts: parsed.study.attempts ?? [], rules: { ...base.rules, ...parsed.study.rules, pesos: { ...base.rules.pesos, ...parsed.study.rules?.pesos } } }) : base;
   const goals = parsed.goals ? { ...emptyGoals(), ...parsed.goals } : null;
   const train = parsed.train ? { ...emptyTrain(), ...parsed.train } : emptyTrain();
   const ruta = { ...emptyRuta(), ...(parsed.ruta ?? {}) };
@@ -74,6 +76,7 @@ export function migrate(parsed: any): State {
 let state: State = load();
 applySettings(state.settings);
 aplicarCalendario(state.plan.extrasApagados ?? []);
+aplicarLibrosPropios(state.study.librosPropios);
 const subs = new Set<() => void>();
 
 export const getState = () => state;
@@ -81,7 +84,9 @@ export const getState = () => state;
 export function setState(fn: (s: State) => State) {
   const prev = state.settings;
   const prevExtras = state.plan.extrasApagados;
+  const prevLibros = state.study.librosPropios;
   state = fn(state);
+  if (state.study.librosPropios !== prevLibros) aplicarLibrosPropios(state.study.librosPropios);
   if (state.settings !== prev) applySettings(state.settings);
   // Ola 16b: el calendario vivo se recalcula si cambian los extras de feature apagados.
   if (state.plan.extrasApagados !== prevExtras) aplicarCalendario(state.plan.extrasApagados ?? []);
@@ -94,6 +99,7 @@ export function resetState(s: State = empty()) {
   state = s;
   applySettings(s.settings);
   aplicarCalendario(s.plan.extrasApagados ?? []);
+  aplicarLibrosPropios(s.study.librosPropios);
   subs.forEach((f) => f());
 }
 
@@ -104,6 +110,22 @@ const subscribe = (f: () => void) => {
 
 export function useStore<T>(sel: (s: State) => T): T {
   return useSyncExternalStore(subscribe, () => sel(state), () => sel(state));
+}
+
+/**
+ * Ola 20: el sistema de libros suma Measure What Matters (si no estaba), cada actividad conocida toma
+ * su área (CONAMAT, matemática) y "Python y FastAPI" se archiva. Lo estudiado no se toca.
+ */
+function migrateStudy(st: StudyState): StudyState {
+  const mwm = emptyStudy().activities.find((a) => a.libro === 'mwm')!;
+  let activities = st.activities.map((a) => {
+    if (a.id === 'conamat' && !a.area) return { ...a, area: 'matematica' as const };
+    // La programación pasa a aprenderse por proyectos: la lectura de Python y FastAPI se archiva (lo estudiado queda).
+    if (a.id === 'prog-b1' && a.archivada === undefined) return { ...a, area: 'programacion' as const, archivada: true };
+    return a;
+  });
+  if (!activities.some((a) => a.libro === 'mwm' || a.id === mwm.id)) activities = [...activities, mwm];
+  return { ...st, activities };
 }
 
 /**
@@ -162,7 +184,12 @@ export function startDay(routine: RoutineId, wake: string, date = dateKey()) {
     const puerta = puertaBloqueando(date, s.plan, t0) ?? undefined;
     const ventana = ventanaW(date, t0).ahora?.id ?? puerta;
     const entrevista = entrevistaCerca(s.plan, date);
-    const blocks = buildBlocks(planDay(date, routine, wake, dayType, { ventana, entrevista, puerta }), carry).map((b) => (refs[b.key] ? { ...b, ...refs[b.key] } : b));
+    // Ola 20: la meta de programación sale de las metas del proyecto en curso (si las hay).
+    const proyecto = tramoActivo(date, t0).id;
+    const delProyecto = tareasDeBloque(s.plan.metasBloque?.[proyecto]);
+    const blocks = buildBlocks(planDay(date, routine, wake, dayType, { ventana, entrevista, puerta }), carry)
+      .map((b) => (refs[b.key] ? { ...b, ...refs[b.key] } : b))
+      .map((b) => (b.rama === 'programacion' && delProyecto.length ? { ...b, tasks: [...delProyecto.map((t) => ({ id: newId(), t: `${proyecto} · ${t}`, done: false })), ...b.tasks] } : b));
     const day: DayLog = { date, wake, routine, dayType, ...(ventana ? { ventana } : {}), blocks, notes: [], focus: [] };
     return { ...s, days: { ...s.days, [date]: day }, carry: restCarry };
   });

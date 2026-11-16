@@ -3,6 +3,7 @@
  * cada rama y la importación de JSON). Nada de esto viene con números de ejemplo.
  */
 import type { Capa, Entrevista, EventoRama, MetaGenerada, Postulacion, RespuestaEnsayada } from './plan';
+import type { MetaBloque } from './metas-bloque';
 import { PLAN } from './plan';
 import type { Rama } from './types';
 
@@ -100,6 +101,10 @@ export interface PlanState {
   mercado?: { ofertas?: number; pct?: Record<string, number>; decidido?: string };
   /** Sprint de búsqueda (10.2): metas del embudo editadas y casillas de CV, LinkedIn y caso. */
   sprint?: { metas?: Partial<Record<'aMedida' | 'mensajes' | 'respuestas' | 'recruiter' | 'tecnica' | 'oferta', number>>; checks?: Record<string, boolean> };
+  /** Ola 20: metas propias de cada bloque (proyecto, ventana, certificación, libro o unidad), con submetas. */
+  metasBloque?: Record<string, MetaBloque[]>;
+  /** Ola 20: criterios del nivel de salida tildados por ventana (W1 → índices). */
+  salida?: Record<string, number[]>;
 }
 
 export const emptyPlan = (): PlanState => ({

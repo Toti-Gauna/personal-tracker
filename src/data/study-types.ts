@@ -1,5 +1,6 @@
 import type { Srs } from './fsrs';
 import type { Area } from './types';
+import type { AreaEstudio, FinalLibro, Libro, MicroTesis } from './libros';
 
 export interface Front {
   id: string;
@@ -44,6 +45,12 @@ export interface Activity {
   testMode: 'app' | 'papel';
   /** Pomodoro para estudiar el capítulo (id de preset). Sin valor, 50/10. */
   pomodoro?: string;
+  /** Ola 20: qué es una unidad según el área (matemática 1 capítulo, libros 2…). */
+  area?: AreaEstudio;
+  /** Ola 20: el libro de data/libros.json (sistema de libros). */
+  libro?: string;
+  /** Ola 20: ya no entra en el día, pero sus repasos y su historial siguen (por ejemplo, prog-b1). */
+  archivada?: boolean;
 }
 
 export type ErrType = 'concepto' | 'tecnica' | 'descuido' | 'enunciado';
@@ -185,6 +192,14 @@ export interface StudyState {
   points: Record<string, string[]>;
   /** Intentos de cold recall y ejercicios: alimentan los puntos débiles. */
   attempts: Attempt[];
+  /** Ola 20: micro-tesis por capítulo de un libro ("act:cap"). */
+  microtesis?: Record<string, MicroTesis>;
+  /** Ola 20: el cierre de cada libro (test final, tesis final y artefacto), por actividad. */
+  finales?: Record<string, FinalLibro>;
+  /** Ola 20: lectura de apoyo de un libro ("act:recurso" → fecha). */
+  recursosLeidos?: Record<string, string>;
+  /** Ola 20: libros cargados con JSON (capítulos y unidades). */
+  librosPropios?: Libro[];
 }
 
 /**

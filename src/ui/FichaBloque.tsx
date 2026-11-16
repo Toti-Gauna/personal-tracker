@@ -1,7 +1,8 @@
 import { EVIDENCIAS, evidenciaCompleta } from '../data/plan-state';
 import { bloqueExtPorId } from '../data/plan-extendido';
 import { RAMA_COLOR } from '../data/ramas';
-import { toggleEvidencia } from '../state/plan';
+import { tildarSalida, toggleEvidencia } from '../state/plan';
+import { avanceSalida, salidaDe } from '../data/plan-vistas';
 import { useStore } from '../state/store';
 import { Casilla } from './Casilla';
 
@@ -69,6 +70,37 @@ export function EvidenciaProyecto({ id }: { id: string }) {
         ))}
       </ul>
       <p className="sub">Sin estas tres, además de tests y seguridad, el proyecto no cierra.</p>
+    </section>
+  );
+}
+
+/**
+ * Ola 20 · nivel de salida de una ventana: lo que tenés que poder hacer al cerrarla, como lista que se
+ * tilda. Es el chequeo antes del test de la puerta; el test (85 %) sigue siendo el que aprueba.
+ */
+export function NivelSalida({ id }: { id: string }) {
+  const plan = useStore((s) => s.plan);
+  const crit = salidaDe(id);
+  if (!crit.length) return null;
+  const av = avanceSalida(plan, id);
+  const hechos = new Set(plan.salida?.[id] ?? []);
+  const examen = plan.proyectos[id]?.examen;
+  return (
+    <section className="salida" aria-label={`Nivel de salida de ${id}`}>
+      <div className="fila-t pp-sec"><span className="etiqueta">Nivel de salida · {id}</span><span className="mono sub">{av.hechos} de {av.total}</span></div>
+      <ul className="pp-capas">
+        {crit.map((c, i) => (
+          <li key={i}>
+            <Casilla checked={hechos.has(i)} label={c} onChange={() => tildarSalida(id, i)} />
+            <div><b className={hechos.has(i) ? 'resaltado' : ''} style={{ ['--c' as string]: 'var(--economia)' }}>{c}</b></div>
+          </li>
+        ))}
+      </ul>
+      <p className="sub">
+        {av.completo ? 'Nivel de salida completo: listo para el test de la puerta.'
+          : examen && examen.puntaje >= 85 ? `Puerta aprobada por el test (${examen.puntaje} %), pero te ${av.total - av.hechos === 1 ? 'falta 1 criterio' : `faltan ${av.total - av.hechos} criterios`} de salida: repasalos antes del proyecto.`
+          : 'Tildá cada criterio cuando lo puedas hacer sin ayuda; con todos, hacé el test de la puerta (85 %).'}
+      </p>
     </section>
   );
 }

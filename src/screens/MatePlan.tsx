@@ -9,6 +9,7 @@ import { PUERTA, TEXTO_LUZ, estadoEn, perfilMate, refuerzoPara, rutaMate, type I
 import { puertaAprobada } from '../data/puertas';
 import type { DayLog } from '../data/types';
 import { useStore } from '../state/store';
+import { NivelSalida } from '../ui/FichaBloque';
 import '../styles/estudio.css';
 import '../styles/roadmap-estudio.css';
 
@@ -123,6 +124,8 @@ function TramoMate({ it, items, day }: { it: ItemMate; items: ItemMate[]; day: D
         <ul className="re-mats re-nucleo">{it.principal.map((t) => <li key={t} className="re-mat"><b>{t}</b></li>)}</ul>
         <p className="sub">Habilita: {it.habilita.join(', ')}</p>
       </section>
+
+      {it.tipo === 'ventana' && <NivelSalida id={it.id} />}
 
       {gate && (
         <section className="re-sec">
