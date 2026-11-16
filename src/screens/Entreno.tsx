@@ -47,7 +47,7 @@ export function Entreno({ day }: { day: DayLog }) {
       <header>
         <h1 className="titulo">Entreno</h1>
         <p>
-          {hoy.routine ? `Hoy toca ${hoy.routine.name.toLowerCase()}${pareja ? ` con ${partner}` : ''}. ` : hoy.rest ? 'Hoy toca descanso activo: caminar 45 minutos. ' : hoy.libre ? 'Hoy es libre: sin entreno. ' : 'Hoy no hay entreno planeado. '}
+          {hoy.routine ? `Hoy toca ${hoy.routine.name}${pareja ? ` con ${partner}` : ''}. ` : hoy.rest ? 'Hoy toca descanso activo: caminar 45 minutos. ' : hoy.libre ? 'Hoy es libre: sin entreno. ' : 'Hoy no hay entreno planeado. '}
           Van {semana.length} de {planeadas} sesiones de la semana, plan {PLAN_NAME[t.plan.template]}.
         </p>
       </header>
@@ -77,7 +77,8 @@ export function Entreno({ day }: { day: DayLog }) {
       {hoy.routine && (
         <>
           <div className="fila-t hoy-toca"><span className="etiqueta" style={{ color: 'var(--salud)' }}>Hoy toca</span><span className="mono sub">~{fmtH(totalMin(hoy.routine))} con las caminatas</span></div>
-          <h2 className="titulo rut-t">{hoy.routine.name}{hoy.routine.slot && hoy.routine.desc ? <small> · {hoy.routine.desc.toLowerCase()}</small> : null}</h2>
+          <h2 className="titulo rut-t">{hoy.routine.name}</h2>
+          {hoy.routine.slot && hoy.routine.desc && <p className="sub rut-enfoque">Enfoque: {hoy.routine.desc[0].toLowerCase() + hoy.routine.desc.slice(1)}</p>}
           {pasaDelLimite(hoy.routine) && (
             <p className="aviso-limite" role="status">Esta rutina lleva unos {fmtH(trainingMin(hoy.routine))} de entrenamiento y el bloque es de {fmtH(RULES.limiteMin)}: algo va a quedar para la próxima.</p>
           )}

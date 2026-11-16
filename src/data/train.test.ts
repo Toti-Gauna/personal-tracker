@@ -157,7 +157,7 @@ describe('ola 19 · las rutinas de Toti', () => {
     }
     const pullA = t.routines.find((r) => r.id === 'pull-a')!;
     const dom = pullA.exercises[0];
-    expect(dom).toMatchObject({ name: 'Dominada con agarre neutro al ancho de hombro', rir: [2, 1, 0], tempo: '2-1-2', pesoInicial: 40, corporal: true, repMin: 8, repMax: 12 });
+    expect(dom).toMatchObject({ name: 'Dominada con agarre neutro', rir: [2, 1, 0], tempo: '2-1-2', pesoInicial: 40, corporal: true, repMin: 8, repMax: 12 });
     expect(dom.posicion).toMatch(/agarre neutro/i);
     // Los pesos entre paréntesis salieron del nombre y son el peso inicial.
     expect(pullA.exercises.map((e) => e.name).join(' ')).not.toMatch(/\(\d+ ?kg/);

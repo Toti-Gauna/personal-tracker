@@ -227,7 +227,7 @@
    "ejercicios": [
     {
      "id": "dominada-neutra",
-     "nombre": "Dominada con agarre neutro al ancho de hombro",
+     "nombre": "Dominada con agarre neutro",
      "grupo": "Espalda",
      "series": 3,
      "reps": [
@@ -244,7 +244,7 @@
      "tempo": "2-1-2",
      "pesoInicial": 40,
      "corporal": true,
-     "posicion": "Agarre neutro — pecho al frente — core firme",
+     "posicion": "Agarre neutro al ancho de hombro — pecho al frente — core firme",
      "rirGuia": "Serie 3: fallo técnico completo",
      "parciales": "2–3 negativas controladas opcionales",
      "tips": "bajar lento, no balancear",
@@ -524,7 +524,7 @@
     },
     {
      "id": "elevacion-lateral-detras",
-     "nombre": "Elevación lateral con mancuernas, brazo detrás del torso",
+     "nombre": "Elevación lateral, brazo detrás del torso",
      "grupo": "Hombros",
      "series": 3,
      "reps": [
@@ -1260,7 +1260,7 @@
    "ejercicios": [
     {
      "id": "press-plano-neutro",
-     "nombre": "Press con mancuernas en banco plano, agarre neutro",
+     "nombre": "Press plano con mancuernas, agarre neutro",
      "grupo": "Pecho",
      "series": 3,
      "reps": [
@@ -1376,7 +1376,7 @@
     },
     {
      "id": "elevacion-lateral-polea",
-     "nombre": "Elevaciones laterales en polea, unilateral",
+     "nombre": "Elevación lateral en polea",
      "grupo": "Hombros",
      "series": 3,
      "reps": [
@@ -1423,7 +1423,7 @@
     },
     {
      "id": "triceps-sobre-cabeza",
-     "nombre": "Extensión de tríceps sobre la cabeza en polea",
+     "nombre": "Tríceps sobre la cabeza en polea",
      "grupo": "Tríceps",
      "series": 3,
      "reps": [

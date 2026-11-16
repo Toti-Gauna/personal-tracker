@@ -148,7 +148,8 @@ describe('ola 19 · pantallas', () => {
 
   it('Entreno: hoy toca Legs A con calentamiento, RIR y cuánto dura; la semana muestra Pull, Legs, Push, Upper, Lower y dos libres', () => {
     render(<Entreno day={day(D)} />);
-    expect(screen.getByText(/Hoy toca legs a/)).toBeInTheDocument();
+    expect(screen.getByText(/Hoy toca Legs A/)).toBeInTheDocument();
+    expect(screen.getByText('Enfoque: cuádriceps')).toBeInTheDocument();
     expect(screen.getByRole('heading', { name: /Legs A/ })).toBeInTheDocument();
     expect(screen.getByText(/Calentamiento · caminadora inclinada \+ movilidad dinámica de pierna/)).toBeInTheDocument();
     expect(screen.getByText('3 × 8-12 · RIR 2-1-0 · 3 min')).toBeInTheDocument();

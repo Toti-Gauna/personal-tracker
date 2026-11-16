@@ -217,3 +217,5 @@
 .aviso-limite { margin: 8px 0; padding: 10px 12px; border-left: 3px solid var(--rutina); background: color-mix(in srgb, var(--rutina) 10%, transparent); font-size: 14px; }
 .nota-estira { margin: 8px 0 14px; }
 .rut-t small { font-size: 0.5em; font-weight: 400; color: var(--sub); }
+.sesion-entreno .ej-t { font-size: clamp(28px, 8.5vw, 40px); overflow-wrap: anywhere; }
+.rut-enfoque { margin: -4px 0 10px; }

@@ -5,7 +5,7 @@ Tracker personal de Toti: el día en horas, el estudio con su propio motor de re
 - **Diseño:** [canvas de Trazo](https://claude.ai/artifact/6Cc2E6aW2ViU5ikovpsRTy)
 - **Roadmap de estudio:** [ruta ML + DevSecOps](https://claude.ai/artifact/9PEokku7mBLZdCFJr1zqXP)
 - **Pantallas:** presentación `Trazo-pantallas.pptx` y su ZIP de imágenes (44 pantallas, 8 flujos).
-- **Estado:** olas 0 a 12b hechas y en `main`. Olas 0 a 16c hechas (la 15 quedó absorbida por la 16c). Olas 0 a 18 y 20 hechas. Las olas 19, 21, 22 y 23 (entreno, idiomas y libros, orden de pantallas y clipping) están planificadas en §6 sexies. Este archivo es la fuente de verdad.
+- **Estado:** olas 0 a 12b hechas y en `main`. Olas 0 a 16c hechas (la 15 quedó absorbida por la 16c). Olas 0 a 20 hechas. Las olas 21, 22 y 23 (idiomas y libros, orden de pantallas y clipping) están planificadas en §6 sexies. Este archivo es la fuente de verdad.
 
 ---
 
@@ -385,7 +385,7 @@ Desde el lunes 16 nov 2026 la prioridad es un trabajo remoto de USD 3.000 a 5.00
 | 16c · Plan T+18 extendido: matemática y vistas | Ventanas y puertas 85/65, línea de tiempo por etapas, panel "hoy sos", alertas y fichas de proyecto. **Absorbe la ola 15:** un solo roadmap de matemática (§6 quater) | Opus 5.5 · alto · *hecha* |
 | 17 · Rutina de las 08:00 y dormir a las 22:00 | Tercera opción en Buen día (levantarse a las 08:00) con su propio día; en la de las 04:00, entreno de 3 h (18:00 a 21:00), descanso de 21:00 a 22:00 y dormir siempre a las 22:00 (§6 quinquies) | Sonnet 5.5 · medio · *hecha* |
 | 18 · Arreglos y calendario | *Hecha.* Submetas en la meta principal, sin zoom al escribir, sin modo entrevista y calendario sin pausas (§6 sexies, pasos 1 y 2) | Sonnet 5.5 · medio |
-| 19 · Entreno | Tus rutinas (PPL + Upper/Lower, lunes a viernes), el horario de 18:00 a 22:00 y las Upper/Lower propias (§6 sexies, pasos 3 y 4) | Sonnet 5.5 · alto |
+| 19 · Entreno | *Hecha.* Tus rutinas (PPL + Upper/Lower, lunes a viernes), el horario de 18:00 a 22:00 y las Upper/Lower propias (§6 sexies, pasos 3 y 4) | Sonnet 5.5 · alto |
 | 20 · Programación y metas por bloque | *Hecha.* Unidades por área y sistema de libros (con tarjetas, test y tesis; carga *Measure What Matters* con sus 21 capítulos), metas por bloque con JSON y el roadmap de programación por proyectos (§6 sexies, pasos 5 a 7) | Opus 5.5 · alto |
 | 21 · Idiomas y libros | Roadmap maestro v3: un idioma por año durante 6 años (inglés, francés, italiano, alemán, japonés y chino), 12 libros de consolidación, la biblioteca de 42 libros y el ascenso a C1, dentro de Estudio (§6 sexies, paso 8) | Opus 5.5 · alto |
 | 22 · Orden de pantallas | Pasada de UX en Metas, Estudio y Hoy: pantallas livianas con subpáginas y botones, también en los roadmaps de matemática, programación e idiomas (§6 sexies, paso 9) | Sonnet 5.5 · medio |
@@ -680,7 +680,16 @@ La 20 va antes que la 21 porque el roadmap de idiomas usa el sistema de libros y
 
 ---
 
-### Ola 19 · Entreno (Sonnet 5.5 · alto)
+### Ola 19 · Entreno (Sonnet 5.5 · alto) · *Hecha*
+
+**Lo que quedó:** 410 tests pasando (31 nuevos).
+- **Datos:** `data/entreno.json` (validado al cargar, `src/data/entreno-rutinas.ts`) con tus seis rutinas más Upper y Lower: tempo con su descripción, RIR por serie, guía de posicionamiento y de RIR, parciales, dropset, consejos, músculos, objetivo, grupo, peso inicial, peso corporal y segundos (dead hang). Tu texto está en `docs/prompts/rutinas-entrenamiento.md`. Los descansos entre series y el tipo de progresión (pierna, torso o aislamiento) los puse yo: se editan en Editar rutina.
+- **Semana:** lunes Pull, martes Legs, miércoles Push, jueves Upper, viernes Lower; sábado y domingo libres, también en la rutina de las 08:00 (esa tarde queda para descansar hasta las 22:00). El día guarda `pull`, `legs` o `push` y cada semana resuelve a la **A (semanas impares del plan) o la B (pares)**; Full body queda para ponerse al día.
+- **Sesión:** calentamiento que se tilda, "Cómo se hace" (ficha del ejercicio y del calentamiento), RIR objetivo por serie y el **RIR que te quedó** (opcional, se guarda en la serie); dominadas, dead hang y piernas colgado se marcan sin kilos y el dead hang cuenta segundos. El límite de la sesión son las 2 h del bloque.
+- **Horario:** 30 min de caminata de ida, hasta 2 h de entreno y 30 de vuelta (18:00 a 21:00); la rutina avisa si pasa de las 2 h. De 21:00 a 22:00 "Bañarse, estirar, comer y escribir", con el estiramiento de los músculos del día, y a dormir a las 22:00.
+- **Lo guardado no se pierde:** `migrarEntreno` archiva las rutinas de la ola 5 (`viejo-push`, `viejo-pull`, `viejo-legs`, `viejo-upper`, `viejo-lower`) con sus sesiones, y suma las nuevas; la semana de fábrica pasa a la nueva y una semana propia conserva sus días.
+- **Upper y Lower (paso 4):** con tu estilo (tempo 2-1-2, RIR 2-1-0, 8 a 12) y otros ángulos que Push, Pull y Legs (Upper no repite ningún ejercicio; Lower solo repite la extensión de cuádriceps y los aductores). El torso se entrena dos veces por semana con la A o la B. **Las piernas**, como Legs A y B alternan, se entrenan todas las semanas y dos veces cada dos semanas: cuádriceps y aductores dos veces en las semanas A, isquiotibiales y glúteos dos veces en las B.
+- **Supuestos a revisar:** el "(40 kg)" de la dominada lo cargué como peso inicial (si es la asistencia de la máquina, hay que invertirlo); "Wrist extension" trabaja extensores y la dominada es con agarre neutro (las dos correcciones que pediste); Upper y Lower, los estiramientos de Push y de Legs B y los descansos son míos.
 
 **Paso 3 · Entreno con tus rutinas.** Reemplazan a las de partida de la ola 5.
 
