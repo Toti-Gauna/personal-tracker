@@ -18,7 +18,7 @@
 .et-b.proyecto { background: var(--ing); }
 .et-b.ventana { background: var(--economia); }
 .et-b.cert { background: var(--handyx); }
-.et-b.pausa { background: var(--linea); color: var(--sub); }
+.et-b.descanso { background: var(--linea); color: var(--sub); }
 .et-b.colchon { background: var(--sub); }
 .et-b.cierre { background: var(--tinta); }
 .et-barra .et-b.hecho { opacity: 0.45; }

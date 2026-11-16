@@ -192,7 +192,7 @@ export function tituloSemana(fecha: string, entrevistas: { fecha: string }[], t0
   if (hito && hito.id !== 'T+0') return `La de ${hito.id}`;
   if (entrevistas.some((e) => e.fecha >= l && e.fecha <= d)) return 'La de la entrevista';
   const t = tramoActivo(fecha, t0);
-  if (t.tipo === 'pausa') return 'La pausa de fin de año';
+  if (t.tipo === 'descanso') return 'La del descanso';
   if (t.tipo === 'ventana') return `Ventana ${t.id}`;
   if (t.semana === t.semanas && t.tipo === 'proyecto') return `La entrega de ${nombreTramo(t, false)}`;
   if (t.semana === t.semanas && t.tipo === 'cert') return `El examen de ${t.corto ?? t.nombre}`;
@@ -219,7 +219,7 @@ export function cierraEnMes(fecha: string, entrevistas: { fecha: string; rol: st
     if (t.tipo === 'proyecto' && en(fin)) out.push({ fecha: fin, rama: 'programacion', texto: t.id === 'P0' ? 'P0 · consolidación cerrada' : `${nombreTramo(t, false)} entregado y examen de programación` });
     if (t.tipo === 'cert' && en(fin)) out.push({ fecha: fin, rama: 'programacion', texto: `Examen de ${t.corto ?? t.nombre}` });
     if (t.tipo === 'ventana' && en(ini)) out.push({ fecha: ini, rama: 'matematica', texto: `Empieza la ventana ${t.id} · ${t.hasta - t.desde + 1} semanas` });
-    if (t.tipo === 'pausa' && en(ini)) out.push({ fecha: ini, rama: null, texto: `${t.nombre} · semana ${t.desde}` });
+    if (t.tipo === 'descanso' && en(ini)) out.push({ fecha: ini, rama: null, texto: `${t.nombre} · semana ${t.desde}` });
   }
   for (const c of PLAN.handyx.cortes) { const f = finSemana(c.hasta, t0); if (en(f)) out.push({ fecha: f, rama: 'handyx', texto: `Handyx · corte: ${c.nombre.toLowerCase()}` }); }
   for (const h of PLAN.hitos) { const f = fechaHito(h, t0); if (en(f)) out.push({ fecha: f, rama: 'main', texto: `${h.id} · ${h.titulo}` }); }
@@ -258,7 +258,7 @@ export function metasMesGeneradas(fecha: string, t0 = T0_PLAN, study?: StudyStat
     const semanal = (id: string) => metasSemanaPlan(a, t0).find((x) => x.id === id)?.meta ?? 0;
     if (!cierran.length) {
       const t = tramoActivo(a, t0);
-      if (t.tipo !== 'pausa') push({ id: 'm-horas-prog', rama: 'programacion', texto: `Horas de programación · ${t.tipo === 'cert' ? t.corto ?? t.nombre : t.tipo === 'proyecto' ? nombreTramo(t, false) : t.nombre}`, meta: Math.round(semanal('horas-prog') * semanas), unidad: 'h', clave: 'horas-prog' });
+      if (t.tipo !== 'descanso') push({ id: 'm-horas-prog', rama: 'programacion', texto: `Horas de programación · ${t.tipo === 'cert' ? t.corto ?? t.nombre : t.tipo === 'proyecto' ? nombreTramo(t, false) : t.nombre}`, meta: Math.round(semanal('horas-prog') * semanas), unidad: 'h', clave: 'horas-prog' });
     }
     // Matemática: la ventana W o los capítulos del mes (uno cada 5 días).
     const w = TRAMOS.find((t) => t.tipo === 'ventana' && inicioSemana(t.desde, t0) <= b && finSemana(t.hasta, t0) >= a);
@@ -310,7 +310,7 @@ export function resumenMes(fecha: string, t0 = T0_PLAN, study?: StudyState) {
 
 /** Letra de cada semana del bimestre en la rama programación ("P0", "F", "—", "W"). */
 export function letraTramo(t: Tramo) {
-  if (t.tipo === 'pausa') return '—';
+  if (t.tipo === 'descanso') return '—';
   if (t.tipo === 'ventana') return 'W';
   if (t.tipo === 'cert') return 'C';
   if (t.tipo === 'colchon') return '·';
@@ -318,7 +318,7 @@ export function letraTramo(t: Tramo) {
   // P1 a P10 van con la inicial del producto (F, E, S…); P0 y los de la etapa 2 (S1 a S3), con su id.
   return t.id === 'P0' || !t.id.startsWith('P') ? t.id : t.nombre[0];
 }
-const nombreLeyenda = (t: Tramo) => (t.tipo === 'pausa' ? 'pausa' : t.id === 'P0' ? 'consolidación' : t.tipo === 'cert' ? t.corto ?? t.nombre : t.tipo === 'ventana' ? t.id : t.tipo === 'colchon' ? 'colchón' : t.tipo === 'cierre' ? 'cierre de T+18' : nombreTramo(t, false));
+const nombreLeyenda = (t: Tramo) => (t.tipo === 'descanso' ? 'descanso' : t.id === 'P0' ? 'consolidación' : t.tipo === 'cert' ? t.corto ?? t.nombre : t.tipo === 'ventana' ? t.id : t.tipo === 'colchon' ? 'colchón' : t.tipo === 'cierre' ? 'cierre de T+18' : nombreTramo(t, false));
 
 export function semanasDelBimestre(n: number, t0 = T0_PLAN) {
   const desde = (n - 1) * SEMANAS_BIM + 1;
@@ -364,7 +364,7 @@ export function filasBimestre(n: number, fecha: string, c: CtxPlan, editadas: Re
     let lado = futuro ? '' : `sem ${semBim}/${b.hasta - b.desde + 1}`;
     let avance = transcurrido;
     if (rama === 'programacion') {
-      const ts = TRAMOS.filter((t) => t.tipo !== 'pausa' && t.desde <= b.hasta && t.hasta >= b.desde);
+      const ts = TRAMOS.filter((t) => t.tipo !== 'descanso' && t.desde <= b.hasta && t.hasta >= b.desde);
       const cerrados = ts.filter((t) => finSemana(t.hasta, t0) < fecha).length;
       const partes = ts.slice(0, 3).map((t) => (t.hasta <= b.hasta ? `${nombreLeyenda(t)} ${t.tipo === 'proyecto' ? 'se entrega' : 'termina'} el ${fechaCorta(finSemana(t.hasta, t0))}` : `${nombreLeyenda(t)} empieza el ${fechaCorta(inicioSemana(t.desde, t0))}`));
       sub = partes.slice(-2).join('; ');

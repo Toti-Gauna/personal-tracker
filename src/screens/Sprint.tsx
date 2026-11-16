@@ -210,7 +210,7 @@ function Linea({ t0 }: { t0: string }) {
   const xd = (d: string) => X0 + Math.max(0, Math.min(91, (new Date(d + 'T12:00').getTime() - new Date(t0 + 'T12:00').getTime()) / 864e5)) * dx;
   const t2 = inicioSemana(PLAN.hitos.find((h) => h.id === 'T+2')!.semana, t0);
   const fin = addDays(t0, 91);
-  const prog = TRAMOS.filter((t) => inicioSemana(t.desde, t0) < fin && t.tipo !== 'pausa');
+  const prog = TRAMOS.filter((t) => inicioSemana(t.desde, t0) < fin && t.tipo !== 'descanso');
   const filas: { n: string; c: string; segs: { a: string; b: string; t?: string; sb?: boolean; ancho?: number }[] }[] = [
     { n: 'trabajo', c: RAMA_COLOR.trabajo, segs: [{ a: t0, b: addDays(t0, 13), t: 'sprint', ancho: 5 }, { a: addDays(t0, 14), b: fin, t: 'sigue hasta la oferta' }] },
     { n: 'inglés', c: RAMA_COLOR.ingles, segs: [{ a: t0, b: fin, t: 'ahora: 1 h 30 por día', ancho: 3 }] },

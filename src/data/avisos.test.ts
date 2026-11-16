@@ -40,8 +40,9 @@ describe('avisos entre ramas', () => {
   });
 
   it('ventana W que empieza en 7 días o menos → matematica → programacion', () => {
-    expect(avisosEntreRamas('2027-02-01', emptyPlan(), cfg).find((x) => x.de === 'matematica')).toMatchObject({ a: 'programacion', titulo: 'La ventana W1 empieza el lunes 8' });
-    expect(avisosEntreRamas('2027-01-31', emptyPlan(), cfg).some((x) => x.de === 'matematica')).toBe(false);
+    // Sin pausa de fin de año, W1 empieza el lunes 1 de febrero.
+    expect(avisosEntreRamas('2027-01-25', emptyPlan(), cfg).find((x) => x.de === 'matematica')).toMatchObject({ a: 'programacion', titulo: 'La ventana W1 empieza el lunes 1' });
+    expect(avisosEntreRamas('2027-01-24', emptyPlan(), cfg).some((x) => x.de === 'matematica')).toBe(false);
   });
 
   it('T+2 marcado con la rutina de búsqueda → pide pasar a la rutina con trabajo', () => {

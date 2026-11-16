@@ -9,8 +9,8 @@
 import raw from '../../data/plan-extendido.json';
 import { addDays, parseDate } from './time';
 
-export type TipoBloque = 'proyecto' | 'ventana' | 'cert' | 'pausa' | 'colchon' | 'cierre';
-export const TIPOS_BLOQUE: TipoBloque[] = ['proyecto', 'ventana', 'cert', 'pausa', 'colchon', 'cierre'];
+export type TipoBloque = 'proyecto' | 'ventana' | 'cert' | 'descanso' | 'colchon' | 'cierre';
+export const TIPOS_BLOQUE: TipoBloque[] = ['proyecto', 'ventana', 'cert', 'descanso', 'colchon', 'cierre'];
 
 export interface BloqueExt {
   id: string;

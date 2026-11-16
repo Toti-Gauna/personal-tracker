@@ -63,8 +63,8 @@ describe('puertas de matemática', () => {
     expect(puertaBloqueando('2027-03-09', getState().plan, T0)).toBeNull();
     startDay('completo', '04:30', '2027-03-09');
     expect(getState().days['2027-03-09'].blocks.find((b) => b.key === 'prog')!.rama).toBe('programacion');
-    // W1 cerró el 28 feb y se aprobó el 8 mar: 2 semanas que se descuentan del colchón.
-    expect(semanasGanadas(getState().plan, '2027-03-09', T0).puertas).toBe(2);
+    // W1 cerró el 21 feb (sin pausa de fin de año) y se aprobó el 8 mar: 3 semanas que se descuentan del colchón.
+    expect(semanasGanadas(getState().plan, '2027-03-09', T0).puertas).toBe(3);
   });
 
   it('P6 y P8 también tienen puerta (W2 y W3)', () => {

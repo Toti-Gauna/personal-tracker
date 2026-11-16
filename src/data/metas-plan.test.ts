@@ -43,11 +43,12 @@ describe('metas generadas desde el plan', () => {
     expect(abr.some((m) => m.origen === 'chequeo' && m.texto === 'Simulacro del C1')).toBe(true);
   });
 
-  it('lo que cierra en diciembre y enero: la entrevista, la entrega de Faro v1 y la pausa', () => {
+  it('lo que cierra en diciembre y enero: la entrevista, la entrega de Faro v1 y la de Escudo (sin pausa)', () => {
     const c = cierraEnMes('2026-12-01', [{ fecha: '2026-12-17', rol: 'AI Engineer' }], T0);
     expect(c.map((x) => [x.fecha, x.rama])).toEqual([['2026-12-17', 'trabajo']]);
     const e = cierraEnMes('2027-01-01', [], T0);
-    expect(e.slice(0, 2).map((x) => [x.fecha, x.rama])).toEqual([['2027-01-03', 'programacion'], ['2027-01-04', null]]);
+    expect(e.map((x) => [x.fecha, x.rama])).toEqual([['2027-01-03', 'programacion'], ['2027-01-11', 'main'], ['2027-01-31', 'programacion']]);
+    expect(e.some((x) => x.rama === null)).toBe(false);
   });
 
   it('los contadores suman lo de la semana; las horas también salen de las sesiones de foco', () => {
@@ -70,12 +71,12 @@ describe('proyecto', () => {
 });
 
 describe('bimestre y año', () => {
-  it('B1 tiene 9 semanas con P0, Faro (5 con la feature), la pausa y Escudo; el último, B11, tiene 2', () => {
+  it('B1 tiene 9 semanas con P0, Faro (5 con la feature) y Escudo, sin pausa; hay 10 bimestres de 9', () => {
     const b1 = semanasDelBimestre(1, T0);
-    expect(b1.semanas.map((s) => s.letra)).toEqual(['P0', 'P0', 'F', 'F', 'F', 'F', 'F', '—', 'E']);
+    expect(b1.semanas.map((s) => s.letra)).toEqual(['P0', 'P0', 'F', 'F', 'F', 'F', 'F', 'E', 'E']);
     expect(b1.fin).toBe('2027-01-17');
     expect(semanasDelBimestre(9, T0).semanas).toHaveLength(9);
-    expect(semanasDelBimestre(11, T0).semanas).toHaveLength(2);
+    expect(semanasDelBimestre(10, T0).semanas).toHaveLength(9);
   });
 
   it('los capítulos del bimestre salen del texto del plan', () => {

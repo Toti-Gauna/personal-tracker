@@ -44,8 +44,8 @@ export function PlanProyecto({ day, id }: { day: DayLog; id?: string }) {
   const numerados = proyectos().filter((x) => x.id !== 'P0');
   const n = numerados.findIndex((x) => x.id === t.id);
   const i = TRAMOS.findIndex((x) => x.id === t.id);
-  const ant = TRAMOS.slice(0, i).reverse().find((x) => x.tipo !== 'pausa' && x.tipo !== 'colchon');
-  const desp = TRAMOS.slice(i + 1).find((x) => x.tipo !== 'pausa');
+  const ant = TRAMOS.slice(0, i).reverse().find((x) => x.tipo !== 'descanso' && x.tipo !== 'colchon');
+  const desp = TRAMOS.slice(i + 1).find((x) => x.tipo !== 'descanso');
   const par = PLAN.programacion.pares.find((x) => x.includes(t.id));
   const otro = par ? tramoPorId(par[0] === t.id ? par[1] : par[0]) : undefined;
   const conEstandar = t.tipo === 'proyecto' && t.id !== 'P0';
@@ -91,7 +91,7 @@ export function PlanProyecto({ day, id }: { day: DayLog; id?: string }) {
           <Puerta id={t.id} date={date} />
         </>
       )}
-      {(t.tipo === 'pausa' || t.tipo === 'colchon') && <p className="sub">Sin entrega en esta etapa.</p>}
+      {(t.tipo === 'descanso' || t.tipo === 'colchon') && <p className="sub">Sin entrega en esta etapa.</p>}
 
       {conEstandar && (
         <>
