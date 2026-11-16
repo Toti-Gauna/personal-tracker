@@ -5,7 +5,7 @@ Tracker personal de Toti: el día en horas, el estudio con su propio motor de re
 - **Diseño:** [canvas de Trazo](https://claude.ai/artifact/6Cc2E6aW2ViU5ikovpsRTy)
 - **Roadmap de estudio:** [ruta ML + DevSecOps](https://claude.ai/artifact/9PEokku7mBLZdCFJr1zqXP)
 - **Pantallas:** presentación `Trazo-pantallas.pptx` y su ZIP de imágenes (44 pantallas, 8 flujos).
-- **Estado:** olas 0 a 12b hechas y en `main`. Olas 13, 14, 16a y 16b hechas; queda la 16c (que absorbe la 15), planificada en §6 quater. Este archivo es la fuente de verdad.
+- **Estado:** olas 0 a 12b hechas y en `main`. Olas 0 a 16c hechas (la 15 quedó absorbida por la 16c). No quedan olas planificadas. Este archivo es la fuente de verdad.
 
 ---
 
@@ -382,7 +382,7 @@ Desde el lunes 16 nov 2026 la prioridad es un trabajo remoto de USD 3.000 a 5.00
 | 15 · Un solo roadmap de matemática | *Absorbida por la 16c* (decisión del 2026-11-16): la matemática del Plan T+18 extendido (ventanas basadas en CONAMAT) pasa a ser el roadmap único (§6 ter) | — |
 | 16a · Plan T+18 extendido: datos | `data/plan-extendido.json` (56 bloques en 4 etapas), validador y fechas derivadas con extras por bloque y atrasos que consume el colchón; sin tocar pantallas (§6 quater) | Opus 5.5 · alto |
 | 16b · Plan T+18 extendido: calendario vivo | La app lee el calendario derivado en vez de las 78 semanas fijas, con migración sin romper `trazo.v1` (§6 quater) | Opus 5.5 · alto · *hecha* |
-| 16c · Plan T+18 extendido: matemática y vistas | Ventanas y puertas 85/65, línea de tiempo por etapas, panel "hoy sos", alertas y fichas de proyecto. **Absorbe la ola 15:** un solo roadmap de matemática (§6 quater) | Opus 5.5 · alto |
+| 16c · Plan T+18 extendido: matemática y vistas | Ventanas y puertas 85/65, línea de tiempo por etapas, panel "hoy sos", alertas y fichas de proyecto. **Absorbe la ola 15:** un solo roadmap de matemática (§6 quater) | Opus 5.5 · alto · *hecha* |
 
 ## 6 bis. Olas 9 a 12: mejoras de uso
 
@@ -488,7 +488,7 @@ Mismo flujo: una rama y un PR por ola; se mergea a `main` con el CI en verde.
 **Opus 5.5 · alto.** Es la ola más grande, así que se parte en tres PRs que se pueden mergear solos:
 - **16a · datos** (*hecha*): el calendario como datos, validado, con fechas derivadas. No cambia ninguna pantalla.
 - **16b · calendario vivo** (*hecha*): la app deja de leer las 78 semanas fijas y lee el calendario derivado; migración.
-- **16c · matemática y vistas:** ventanas y puertas con semáforo 85/65, línea de tiempo por etapas, panel "hoy sos", alertas y fichas de proyecto.
+- **16c · matemática y vistas** (*hecha*): ventanas y puertas con semáforo 85/65, línea de tiempo por etapas, panel "hoy sos", alertas y fichas de proyecto. Absorbe la ola 15.
 
 **Decisiones tomadas (2026-11-16):** las semanas extra de feature vienen **prendidas por defecto** (calendario de 196 semanas); se apagan por bloque. La ola se parte como arriba. El prompt completo se guardó en `docs/prompts/plan-t18-extendido.md`.
 
@@ -540,6 +540,16 @@ Mismo flujo: una rama y un PR por ola; se mergea a `main` con el CI en verde.
 - **Textos:** "vuelven en mayo de 2028" pasa a salir de la fecha de T+18 ("agosto de 2028"); la tira de semanas de la Ruta y la grilla de bimestres se adaptan a la cantidad.
 - **Migración:** la clave sigue siendo `trazo.v1`. El avance guardado por proyecto, ventana e hito usa los mismos ids; lo único nuevo es `plan.extrasApagados`, opcional.
 - **Tests:** 25 tests tenían las fechas del calendario comprimido; se reescribieron contra el calendario nuevo (las fechas salen de la tabla del prompt). Se sumaron tests del recálculo al apagar extras, de los tramos de matemática y de los bimestres.
+
+**Ola 16c · lo que quedó y decisiones**
+- **Datos** (`data/plan-extendido.json`, validados): ficha de los 27 proyectos (rubro, feature, tecnología nueva, visual, pieza matemática, referencia externa, validador y perfil), matemática de las 12 ventanas y de los tramos diarios (libro principal, refuerzo con su rol, qué habilita y perfil), las 7 certificaciones (costo tal cual el prompt y si está verificado; C1, C3 y C5 quedan "sin verificar"), los perfiles por hito y las decisiones abiertas como flags.
+- **Un solo roadmap de matemática (absorbe la ola 15):** Estudio → Matemática muestra los 17 tramos del plan (diarios y ventanas, de T+0 a WA5) por etapa, con "Estás acá", "Hoy sos → Vas a ser" y el detalle de cada tramo: qué libro manda, qué habilita, la puerta y qué refuerzo abrir según el error (concepto → intuición o curso, técnica y enunciado → banco, profundidad → libro duro). Los perfiles salen de M0 a M10 donde aplica (Aritmético, Precalculista, Calculista…) y se suman los nuevos (Criptógrafo aplicado, Quant…). M0 a M10 queda como "Material de refuerzo" enlazado desde cada tramo. Los libros del calendario vivo (Hoy, la Ruta) pasan a ser los del prompt.
+- **Semáforo 85/65 en todo:** la regla del plan (85 % aprueba y pasa a la tesis) reemplaza al 80 % que traía M0 a M10.
+- **Puertas:** salen de las dependencias del plan; se suma W4 → S1.
+- **Las 4 etapas** (`#/metas/etapas`, desde la Ruta): barras a escala de cada etapa con la actual marcada, el perfil al cerrarla y la lista de bloques; el panel "hoy sos" (último proyecto cerrado o hito pasado, y el que sigue); alertas de certificaciones en 8 semanas o menos (con costo y si falta verificar), de ventanas que cierran en 7 días sin la puerta aprobada y de decisiones con fecha en 14 días (Security+ el 22 nov); y las decisiones abiertas.
+- **Ficha de proyecto:** cada proyecto, certificación y ventana muestra su ficha. Los bloques de las etapas 3 y 4 tienen una ficha propia con sus fechas y los recordatorios (no es asesoramiento financiero; sin hardware real).
+- **Puerta de evidencia:** número medido contra una referencia externa, un tercero que lo valida y un informe público. Sin las tres, el proyecto no cierra (también P0).
+- 14 tests nuevos (fichas, validador, roadmap de matemática, refuerzo por error, perfiles, etapas, alertas y evidencia); se actualizaron 2.
 
 **Cómo encaja con lo que ya está**
 - **Etapas 1 y 2 = 78 semanas base, igual que hoy.** Hoy el plan tiene 78 semanas: 53 de programación (19 tramos) y 25 de "Margen". La etapa 2 de ciberseguridad ocupa justo ese margen, y el hito T+18 es el cierre de la etapa 2.

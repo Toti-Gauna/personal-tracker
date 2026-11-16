@@ -12,6 +12,9 @@ import { guardarExamen, marcarCapa, setTecnica, sumarRevision, sumarTiempo, togg
 import { atrasoPuerta, puertaAprobada } from '../data/puertas';
 import { useStore } from '../state/store';
 import { Casilla } from '../ui/Casilla';
+import { EvidenciaProyecto, FichaBloque } from '../ui/FichaBloque';
+import { bloqueConFechas } from '../data/plan-vistas';
+import '../styles/etapas.css';
 
 const TIPOS: [TipoError, string, string][] = [
   ['concepto', 'concepto', 'var(--rutina)'],
@@ -29,6 +32,8 @@ export function PlanProyecto({ day, id }: { day: DayLog; id?: string }) {
   const t0 = useStore((s) => s.settings?.startDate) ?? T0_PLAN;
   const estado = useStore((s) => s.plan.proyectos);
   const activo = tramoActivo(date, t0);
+  // Ola 16c: los bloques de las etapas 3 y 4 no están en el calendario vivo: tienen su ficha propia.
+  if (id && !tramoPorId(id) && bloqueConFechas(id, t0)) return <FichaExtendida id={id} t0={t0} />;
   const t = (id && tramoPorId(id)) || activo;
   const p = estado[t.id] ?? proyectoVacio();
   const { inicio, fin } = fechas(t.desde, t.hasta, t0);
@@ -76,6 +81,9 @@ export function PlanProyecto({ day, id }: { day: DayLog; id?: string }) {
           {t.perfil && <p className="pp-perfil">Perfil al cerrar: <b>{t.perfil}</b></p>}
         </>
       )}
+
+      <FichaBloque id={t.id} />
+      {t.tipo === 'proyecto' && <EvidenciaProyecto id={t.id} />}
 
       {t.tipo === 'ventana' && (
         <>
@@ -276,3 +284,26 @@ function Agentico({ id }: { id: string }) {
     </>
   );
 }
+
+const MESES = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'];
+const fl = (d: string) => `${Number(d.slice(8))} ${MESES[Number(d.slice(5, 7)) - 1]} ${d.slice(0, 4)}`;
+
+/** Ficha de un bloque de las etapas 3 y 4 (quant y aeroespacial). */
+function FichaExtendida({ id, t0 }: { id: string; t0: string }) {
+  const b = bloqueConFechas(id, t0)!;
+  const ETAPA = ['', 'núcleo', 'ciberseguridad', 'quant trading', 'ingeniería aeroespacial'];
+  return (
+    <main className="pantalla plan-proy">
+      <div className="topbar"><a className="volver" href="#/metas/etapas">Las 4 etapas</a><span className="mono" style={{ color: RAMA_COLOR.programacion }}>etapa {b.etapa} · {b.id}</span></div>
+      <span className="etiqueta">{[b.ficha?.rubro && !ETAPA[b.etapa].includes(b.ficha.rubro) ? b.ficha.rubro : null, `etapa ${b.etapa} · ${ETAPA[b.etapa]}`].filter(Boolean).join(' · ')}</span>
+      <h1 className="titulo pp-titulo"><span className="resaltado" style={{ ['--c' as string]: RAMA_COLOR.programacion }}>{b.nombre}</span></h1>
+      <div className="pp-cuando mono"><span><b>{b.semanas} semanas{b.extraAplicado ? ` (${b.base} + ${b.extraAplicado} de feature)` : ''}</b> · {fl(b.inicio)} — {fl(b.fin)}</span></div>
+      {b.dependeDe?.length ? <p className="sub">Va después de la ventana {b.dependeDe.join(' y ')}: sin aprobarla con 85 %, no arranca.</p> : null}
+      <FichaBloque id={b.id} />
+      {b.tipo === 'proyecto' && <EvidenciaProyecto id={b.id} />}
+      {b.etapa === 3 && <p className="sub">Plan de estudio e ingeniería, no asesoramiento financiero. Capital real: nada hasta cumplir la puerta escrita (12 semanas o más de paper trading, kill-switch probado y límite de pérdida fijado antes).</p>}
+      {b.etapa === 4 && <p className="sub">Modelos educativos y datos públicos o sintéticos; ningún modelo controla hardware real.</p>}
+    </main>
+  );
+}
+

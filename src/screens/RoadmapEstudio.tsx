@@ -171,9 +171,9 @@ function Semaforo({ r }: { r: RoadmapEstudio }) {
   const pct = (n: number) => `${Math.round(n * 100)} %`;
   return (
     <ul className="re-semaforo">
-      <li className="verde"><i /><b>{pct(r.semaforo.verde)} o más</b> {r.semaforo.textos.verde}</li>
-      <li className="amarillo"><i /><b>{pct(r.semaforo.amarillo)} a {pct(r.semaforo.verde - 0.01)}</b> {r.semaforo.textos.amarillo}</li>
-      <li className="rojo"><i /><b>Menos de {pct(r.semaforo.amarillo)}</b> {r.semaforo.textos.rojo}</li>
+      <li className="verde"><i /><span><b>{pct(r.semaforo.verde)} o más</b> {r.semaforo.textos.verde}</span></li>
+      <li className="amarillo"><i /><span><b>{pct(r.semaforo.amarillo)} a {pct(r.semaforo.verde - 0.01)}</b> {r.semaforo.textos.amarillo}</span></li>
+      <li className="rojo"><i /><span><b>Menos de {pct(r.semaforo.amarillo)}</b> {r.semaforo.textos.rojo}</span></li>
     </ul>
   );
 }
