@@ -5,7 +5,7 @@ Tracker personal de Toti: el día en horas, el estudio con su propio motor de re
 - **Diseño:** [canvas de Trazo](https://claude.ai/artifact/6Cc2E6aW2ViU5ikovpsRTy)
 - **Roadmap de estudio:** [ruta ML + DevSecOps](https://claude.ai/artifact/9PEokku7mBLZdCFJr1zqXP)
 - **Pantallas:** presentación `Trazo-pantallas.pptx` y su ZIP de imágenes (44 pantallas, 8 flujos).
-- **Estado:** olas 0 a 12b hechas y en `main`. Olas 0 a 16c hechas (la 15 quedó absorbida por la 16c). Olas 0 a 20 hechas. Las olas 21, 22 y 23 (idiomas y libros, orden de pantallas y clipping) están planificadas en §6 sexies. Este archivo es la fuente de verdad.
+- **Estado:** olas 0 a 12b hechas y en `main`. Olas 0 a 16c hechas (la 15 quedó absorbida por la 16c). Olas 0 a 21 hechas. Las olas 22 y 23 (orden de pantallas y clipping) están planificadas en §6 sexies. Este archivo es la fuente de verdad.
 
 ---
 
@@ -387,7 +387,7 @@ Desde el lunes 16 nov 2026 la prioridad es un trabajo remoto de USD 3.000 a 5.00
 | 18 · Arreglos y calendario | *Hecha.* Submetas en la meta principal, sin zoom al escribir, sin modo entrevista y calendario sin pausas (§6 sexies, pasos 1 y 2) | Sonnet 5.5 · medio |
 | 19 · Entreno | *Hecha.* Tus rutinas (PPL + Upper/Lower, lunes a viernes), el horario de 18:00 a 22:00 y las Upper/Lower propias (§6 sexies, pasos 3 y 4) | Sonnet 5.5 · alto |
 | 20 · Programación y metas por bloque | *Hecha.* Unidades por área y sistema de libros (con tarjetas, test y tesis; carga *Measure What Matters* con sus 21 capítulos), metas por bloque con JSON y el roadmap de programación por proyectos (§6 sexies, pasos 5 a 7) | Opus 5.5 · alto |
-| 21 · Idiomas y libros | Roadmap maestro v3: un idioma por año durante 6 años (inglés, francés, italiano, alemán, japonés y chino), 12 libros de consolidación, la biblioteca de 42 libros y el ascenso a C1, dentro de Estudio (§6 sexies, paso 8) | Opus 5.5 · alto |
+| 21 · Idiomas y libros | *Hecha.* Roadmap maestro v3: un idioma por año durante 6 años (inglés, francés, italiano, alemán, japonés y chino), 12 libros de consolidación, la biblioteca de 42 libros y el ascenso a C1, dentro de Estudio (§6 sexies, paso 8) | Opus 5.5 · alto |
 | 22 · Orden de pantallas | Pasada de UX en Metas, Estudio y Hoy: pantallas livianas con subpáginas y botones, también en los roadmaps de matemática, programación e idiomas (§6 sexies, paso 9) | Sonnet 5.5 · medio |
 | 23 · Clipping | Roadmap Clipper de 12 meses (de 0 a USD 10k/mes) con su propio apartado en Metas: plan, registro, cuentas, campañas, retainers, métricas y gráficos, y una UX/UI premium; se integra con Hoy, el mapa y las alertas (§6 sexies, pasos 10 a 12) | Opus 5.5 · alto |
 
@@ -743,7 +743,16 @@ La 20 va antes que la 21 porque el roadmap de idiomas usa el sistema de libros y
 
 ---
 
-### Ola 21 · Idiomas y libros (Opus 5.5 · alto)
+### Ola 21 · Idiomas y libros (Opus 5.5 · alto) · *Hecha*
+
+**Lo que quedó:** 425 tests pasando (15 nuevos).
+- **Datos:** `data/idiomas.json` (6 años, fases con semanas, recursos, hitos, tareas del bloque, exámenes, niveles esperados, Fase B, reglas, alertas y lo que está sin verificar) y la biblioteca en `data/libros.json` (42 núcleo en 6 bloques de 7, 12 de la Fase A y 13 opcionales). `src/data/idiomas.ts` los valida y calcula las fechas desde T0 (año 1: 16 nov 2026 a 26 dic 2027; año 6 hasta el 19 dic 2032). El texto original está en `docs/prompts/roadmap-idiomas-libros.md`.
+- **Estudio → Idiomas y libros** (`#/estudio/idiomas`): Estás acá, Hoy sos → Vas a ser (Inglés B1–B2 → C1), las horas (el roadmap pide 11,5 h; la búsqueda intensiva le da 11,5 h; las de esta semana salen del foco del bloque) y la escalera de los 6 años. Subpáginas: cada idioma (`#/estudio/idiomas/ingles`: fases con fechas, tareas, enlace de Udemy, libros de la consolidación, trimestres, tesis anual, examen y su C1 de la Fase B), la biblioteca y el ascenso a C1.
+- **Plan T+18:** la rama `ingles` pasa a llamarse **Idiomas** y lee el roadmap (fases, lo de cada bimestre, entregas: el Cambridge C1 entra al CV el 3 oct 2027). Se fueron "modo entrevista", "45 min por día" y "examen C1" del hito T+18 (ahora "Senior, inglés C1 y francés en marcha"). El kit de entrevista (respuestas y simulacros) pasa a la rama trabajo. Hitos nuevos del mapa: Measure What Matters (27 dic), pronunciación (7 feb), gramática (28 mar) y el examen de Cambridge (3 oct).
+- **Hoy:** el bloque de idiomas dice lo que toca esa semana ("Inglés · Measure What Matters", después "Inglés · Pronunciación"…) con las tareas de la fase. Metas del mes: 11,5 h por semana y el hito de la fase que cierra; el simulacro de Cambridge entra como chequeo de la semana 20 a la 46.
+- **Alertas** (en Metas → Etapas): el examen del año desde 8 semanas antes (fecha, sede y costo sin verificar), el trimestre en 7 días y la tesis anual en 14.
+- **Enlace de Udemy:** se carga en la pantalla del idioma y queda en el teléfono (estado local `idiomas.enlaces`), nunca en el repo. Solo acepta `https://`.
+- Pendiente para la ola 22: la biblioteca ocupa unas 5 pantallas de scroll; se va a plegar por bloque.
 
 **Paso 8 · El roadmap maestro v3.** Reemplaza al "roadmap de inglés" que tenía previsto: el inglés es el año 1 de un roadmap de **un idioma por año durante 6 años**. El texto completo se guarda en `docs/prompts/roadmap-idiomas-libros.md` al arrancar la ola. Datos en `data/idiomas.json` y `data/libros.json`, módulo `src/data/idiomas.ts` (tipos, validación, fechas derivadas de las semanas, como `calendario()` de programación).
 

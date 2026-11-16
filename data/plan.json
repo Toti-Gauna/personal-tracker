@@ -23,9 +23,9 @@
   },
   {
    "id": "ingles",
-   "nombre": "Inglés",
+   "nombre": "Idiomas",
    "color": "idi",
-   "contiene": "Modo entrevista, después bloque diario al C1"
+   "contiene": "Un idioma por año: inglés (año 1, Cambridge C1) y francés (año 2), con sus libros"
   },
   {
    "id": "handyx",
@@ -63,7 +63,7 @@
    "id": "T+18",
    "semana": 78,
    "fin": true,
-   "titulo": "Senior y examen C1",
+   "titulo": "Senior, inglés C1 y francés en marcha",
    "texto": "Todo vuelve a main: senior ML + DevSecOps + cloud"
   }
  ],
@@ -361,7 +361,7 @@
     "hasta": 52,
     "tipo": "colchon",
     "nombre": "Colchón",
-    "que": "Atrasos de las puertas de matemática, entrevistas senior y C1",
+    "que": "Atrasos de las puertas de matemática y entrevistas senior",
     "meta": 6
    }
   ],
@@ -564,29 +564,7 @@
   "postsPorSemana": 3
  },
  "ingles": {
-  "fases": [
-   {
-    "id": "entrevista",
-    "desde": 1,
-    "hasta": 8,
-    "nombre": "Modo entrevista",
-    "texto": "Pitch de 60 s y 2 min, 8 historias STAR, explicar 2 proyectos, simulada y vocabulario."
-   },
-   {
-    "id": "diario",
-    "desde": 9,
-    "hasta": 72,
-    "nombre": "Bloque diario 45 min",
-    "texto": "45 min por día hacia el C1 Advanced."
-   },
-   {
-    "id": "c1",
-    "desde": 73,
-    "hasta": 78,
-    "nombre": "Examen C1",
-    "texto": "Examen C1 Advanced."
-   }
-  ],
+  "fases": [],
   "respuestas": [
    "Tell me about yourself",
    "A project you are proud of",
@@ -599,7 +577,8 @@
    "Salary expectations",
    "Questions for the interviewer"
   ],
-  "minutosDiarios": 45
+  "minutosDiarios": 45,
+  "nota": "Las fases salen de data/idiomas.json (roadmap maestro v3, ola 21): src/data/idiomas.ts las pasa a semanas del plan."
  },
  "handyx": {
   "cortes": [
@@ -768,7 +747,7 @@
    },
    {
     "rama": "ingles",
-    "texto": "Entrevistas y diagnóstico C1"
+    "texto": "Cambridge C1 Advanced aprobado y tres libros con su tesis"
    },
    {
     "rama": "handyx",
@@ -794,7 +773,7 @@
    },
    {
     "rama": "ingles",
-    "texto": "Examen C1"
+    "texto": "Francés: rumbo al DELF B1"
    }
   ]
  },
@@ -850,7 +829,7 @@
     "unidad": "h"
    },
    {
-    "rama": "ingles",
+    "rama": "trabajo",
     "id": "respuestas",
     "texto": "Respuestas ensayadas",
     "meta": 10,
@@ -882,8 +861,8 @@
    {
     "rama": "ingles",
     "id": "horas-ingles",
-    "texto": "Horas de inglés",
-    "meta": 5.25,
+    "texto": "Horas de idiomas",
+    "meta": 11.5,
     "unidad": "h"
    },
    {
@@ -927,8 +906,9 @@
   },
   {
    "rama": "ingles",
-   "texto": "Simulacro del C1",
-   "desdeSemana": 61
+   "texto": "Simulacro de Cambridge C1 (sobre 180)",
+   "desdeSemana": 20,
+   "hastaSemana": 46
   }
  ],
  "etapaActual": {
@@ -951,7 +931,7 @@
     },
     {
      "rama": "ingles",
-     "texto": "Kit de entrevista listo (pitch, historias STAR y proyectos)"
+     "texto": "Measure What Matters: unidades con micro-tesis, tarjetas y la tesis final"
     },
     {
      "rama": "handyx",

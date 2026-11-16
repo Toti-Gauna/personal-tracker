@@ -35,7 +35,6 @@ export function usePlanVista(date: string) {
     // Un test de matemática bajo 85 % sin aprobar pone en riesgo el próximo proyecto.
     const flojo = conamat?.units?.map((x) => ({ n: x.n, t: unitState(st.study, conamat.id, x.n) })).find((x) => !x.t.approvedOn && x.t.tests.length && x.t.tests[x.t.tests.length - 1].score / x.t.tests[x.t.tests.length - 1].total < 0.85);
     const ent = st.plan.entrevistas.filter((e) => e.fecha >= date).sort((a, b) => a.fecha.localeCompare(b.fecha))[0];
-    const ensayadas = st.plan.respuestas.filter((r) => r.veces > 0).length;
     const sesiones = st.train.sessions.filter((s) => s.date >= lunesDe(date) && s.date <= addDays(lunesDe(date), 6)).length;
     const base = etapas(date, t0);
     const ramas: EtapaReal[] = base.map((e) => {
@@ -47,11 +46,6 @@ export function usePlanVista(date: string) {
         r.avance = total ? Math.max(0.02, aprobados / total) : 0;
       }
       if (e.rama === 'trabajo' && ent && semana < 9) r.sub = `Entrevista el ${['dom', 'lun', 'mar', 'mié', 'jue', 'vie', 'sáb'][new Date(ent.fecha + 'T12:00').getDay()]} ${Number(ent.fecha.slice(8))} · meta: remoto para el ${Number(addDays(t0 ?? PLAN.t0, 56).slice(8))} ene`;
-      if (e.rama === 'ingles' && e.titulo === 'Modo entrevista') {
-        r.sub = `${ensayadas} de ${st.plan.respuestas.length} respuestas ensayadas · después, bloque diario al C1`;
-        r.lado = `${ensayadas}/${st.plan.respuestas.length}`;
-        r.avance = Math.max(0.02, ensayadas / st.plan.respuestas.length);
-      }
       const pa = (st.plan.pausas ?? []).find((x) => x.objetivo === e.rama && x.desde <= date && (!x.hasta || x.hasta > date));
       if (pa) {
         r.pausa = pa.desde;

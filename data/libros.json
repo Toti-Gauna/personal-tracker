@@ -270,5 +270,289 @@
    },
    "hito": "Tesis final del libro y 3 minutos hablados en inglés sin leer"
   }
- ]
+ ],
+ "biblioteca": {
+  "criterio": "Autor o institución con aval académico (Nobel, Harvard, MIT, Pulitzer, textos universitarios o clásicos canónicos). Los avales están sin verificar.",
+  "bloques": [
+   {
+    "n": 1,
+    "nombre": "Pensar, decidir y negociar",
+    "libros": [
+     {
+      "id": "make-it-stick",
+      "titulo": "Make It Stick",
+      "faseA": 1
+     },
+     {
+      "id": "how-to-read-a-book",
+      "titulo": "How to Read a Book",
+      "faseA": 2
+     },
+     {
+      "id": "thinking-fast-and-slow",
+      "titulo": "Thinking, Fast and Slow",
+      "aval": "Nobel",
+      "faseA": 2
+     },
+     {
+      "id": "superforecasting",
+      "titulo": "Superforecasting"
+     },
+     {
+      "id": "getting-to-yes",
+      "titulo": "Getting to Yes",
+      "faseA": 1
+     },
+     {
+      "id": "difficult-conversations",
+      "titulo": "Difficult Conversations"
+     },
+     {
+      "id": "meditations",
+      "titulo": "Meditations"
+     }
+    ]
+   },
+   {
+    "n": 2,
+    "nombre": "Comunicación, ventas y marketing",
+    "libros": [
+     {
+      "id": "rhetoric",
+      "titulo": "Rhetoric",
+      "aval": "Aristóteles",
+      "faseA": 6
+     },
+     {
+      "id": "influence",
+      "titulo": "Influence",
+      "aval": "Cialdini",
+      "faseA": 3
+     },
+     {
+      "id": "emotions-revealed",
+      "titulo": "Emotions Revealed",
+      "aval": "Ekman"
+     },
+     {
+      "id": "spin-selling",
+      "titulo": "SPIN Selling"
+     },
+     {
+      "id": "how-brands-grow",
+      "titulo": "How Brands Grow"
+     },
+     {
+      "id": "made-to-stick",
+      "titulo": "Made to Stick"
+     },
+     {
+      "id": "nicomachean-ethics",
+      "titulo": "Nicomachean Ethics"
+     }
+    ]
+   },
+   {
+    "n": 3,
+    "nombre": "Economía e inversión",
+    "libros": [
+     {
+      "id": "basic-economics",
+      "titulo": "Basic Economics",
+      "faseA": 3
+     },
+     {
+      "id": "principles-of-economics",
+      "titulo": "Principles of Economics",
+      "aval": "Mankiw"
+     },
+     {
+      "id": "the-interpretation-of-financial-statements",
+      "titulo": "The Interpretation of Financial Statements"
+     },
+     {
+      "id": "the-intelligent-investor",
+      "titulo": "The Intelligent Investor",
+      "faseA": 4
+     },
+     {
+      "id": "a-random-walk-down-wall-street",
+      "titulo": "A Random Walk Down Wall Street"
+     },
+     {
+      "id": "the-essays-of-warren-buffett",
+      "titulo": "The Essays of Warren Buffett"
+     },
+     {
+      "id": "the-prince",
+      "titulo": "The Prince"
+     }
+    ]
+   },
+   {
+    "n": 4,
+    "nombre": "Poder y política",
+    "libros": [
+     {
+      "id": "the-dictator-s-handbook",
+      "titulo": "The Dictator's Handbook"
+     },
+     {
+      "id": "why-nations-fail",
+      "titulo": "Why Nations Fail",
+      "aval": "Nobel 2024"
+     },
+     {
+      "id": "the-righteous-mind",
+      "titulo": "The Righteous Mind"
+     },
+     {
+      "id": "the-origins-of-political-order",
+      "titulo": "The Origins of Political Order"
+     },
+     {
+      "id": "chip-war",
+      "titulo": "Chip War"
+     },
+     {
+      "id": "politik-als-beruf",
+      "titulo": "Politik als Beruf",
+      "aval": "Weber"
+     },
+     {
+      "id": "the-republic",
+      "titulo": "The Republic"
+     }
+    ]
+   },
+   {
+    "n": 5,
+    "nombre": "Gestión y estrategia",
+    "libros": [
+     {
+      "id": "the-effective-executive",
+      "titulo": "The Effective Executive",
+      "faseA": 4
+     },
+     {
+      "id": "high-output-management",
+      "titulo": "High Output Management",
+      "faseA": 5
+     },
+     {
+      "id": "good-strategy-bad-strategy",
+      "titulo": "Good Strategy Bad Strategy",
+      "faseA": 5
+     },
+     {
+      "id": "competitive-strategy",
+      "titulo": "Competitive Strategy"
+     },
+     {
+      "id": "competitive-advantage",
+      "titulo": "Competitive Advantage"
+     },
+     {
+      "id": "the-innovator-s-dilemma",
+      "titulo": "The Innovator's Dilemma"
+     },
+     {
+      "id": "the-book-of-five-rings",
+      "titulo": "The Book of Five Rings"
+     }
+    ]
+   },
+   {
+    "n": 6,
+    "nombre": "Fundar y construir riqueza",
+    "libros": [
+     {
+      "id": "disciplined-entrepreneurship",
+      "titulo": "Disciplined Entrepreneurship",
+      "aval": "MIT",
+      "faseA": 6
+     },
+     {
+      "id": "crossing-the-chasm",
+      "titulo": "Crossing the Chasm"
+     },
+     {
+      "id": "7-powers",
+      "titulo": "7 Powers"
+     },
+     {
+      "id": "the-outsiders",
+      "titulo": "The Outsiders"
+     },
+     {
+      "id": "the-prize",
+      "titulo": "The Prize",
+      "aval": "Pulitzer"
+     },
+     {
+      "id": "poor-charlie-s-almanack",
+      "titulo": "Poor Charlie's Almanack"
+     },
+     {
+      "id": "the-art-of-war",
+      "titulo": "The Art of War"
+     }
+    ]
+   }
+  ],
+  "opcionales": [
+   {
+    "id": "scout-mindset",
+    "titulo": "Scout Mindset"
+   },
+   {
+    "id": "never-split-the-difference",
+    "titulo": "Never Split the Difference"
+   },
+   {
+    "id": "economics-in-one-lesson",
+    "titulo": "Economics in One Lesson"
+   },
+   {
+    "id": "laws-of-human-nature",
+    "titulo": "Laws of Human Nature"
+   },
+   {
+    "id": "thinking-in-bets",
+    "titulo": "Thinking in Bets"
+   },
+   {
+    "id": "manager-s-path",
+    "titulo": "Manager's Path"
+   },
+   {
+    "id": "execution",
+    "titulo": "Execution"
+   },
+   {
+    "id": "the-mom-test",
+    "titulo": "The Mom Test"
+   },
+   {
+    "id": "titan",
+    "titulo": "Titan"
+   },
+   {
+    "id": "the-snowball",
+    "titulo": "The Snowball"
+   },
+   {
+    "id": "atomic-habits",
+    "titulo": "Atomic Habits"
+   },
+   {
+    "id": "psychology-of-money",
+    "titulo": "Psychology of Money"
+   },
+   {
+    "id": "zero-to-one",
+    "titulo": "Zero to One"
+   }
+  ]
+ }
 }

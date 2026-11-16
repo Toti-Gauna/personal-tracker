@@ -16,6 +16,7 @@ import { WeekChart } from '../ui/WeekChart';
 import { CardMate } from './MatePlan';
 import { CardLibro } from './Libro';
 import { CardProg } from './ProgPlan';
+import { CardIdiomas } from './Idiomas';
 import { capsTexto, microFaltantes } from '../data/libros';
 import { getState } from '../state/store';
 import { toast } from '../ui/avisos';
@@ -136,6 +137,7 @@ export function Estudio({ day }: { day: DayLog }) {
       </div>
       <div className="re-cards">
         <CardMate day={day} />
+        <CardIdiomas day={day} />
         <CardLibro />
         <CardProg day={day} />
       </div>

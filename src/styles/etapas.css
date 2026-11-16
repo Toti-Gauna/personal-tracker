@@ -8,6 +8,7 @@
 .et-alerta.cert { --c: var(--handyx); }
 .et-alerta.ventana { --c: var(--economia); }
 .et-alerta.decision { --c: var(--rutina); }
+.et-alerta.idioma { --c: var(--idi); }
 .et-alerta .sub { font-size: 14px; }
 .et-etapa { margin-top: 22px; }
 .et-etapa.hecho { opacity: 0.7; }

@@ -4,7 +4,7 @@ import type { Rama, RamaOMain } from './types';
 export const RAMAS: Rama[] = ['programacion', 'matematica', 'trabajo', 'ingles', 'handyx', 'salud'];
 
 export const RAMA_NOMBRE: Record<RamaOMain, string> = {
-  main: 'Trazo', programacion: 'Programación', matematica: 'Matemática', trabajo: 'Trabajo', ingles: 'Inglés', handyx: 'Handyx', salud: 'Salud',
+  main: 'Trazo', programacion: 'Programación', matematica: 'Matemática', trabajo: 'Trabajo', ingles: 'Idiomas', handyx: 'Handyx', salud: 'Salud',
 };
 
 /** Cada rama toma el color de un área; inglés tiene token propio (--idi) y main va en tinta. */

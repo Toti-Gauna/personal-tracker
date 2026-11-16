@@ -8,6 +8,7 @@ import { routineFor } from '../data/routines';
 import { emptyPlan, DEFAULT_PLAN_SETTINGS, type PlanSettings, type PlanState } from '../data/plan-state';
 import { semanaDelPlan, tramoActivo, ventanaW } from '../data/plan';
 import { tareasDeBloque } from '../data/metas-bloque';
+import { faseIdiomaEn } from '../data/idiomas';
 import { plannedFor } from '../data/train';
 import { addDays, dateKey } from '../data/time';
 import { emptyStudy } from '../data/study-catalog';
@@ -38,12 +39,14 @@ export interface State {
   plan: PlanState;
   /** Roadmaps de estudio (ola 12): criterios de salida y fases cerradas. */
   estudioRuta: EstudioRutaState;
+  /** Ola 21: enlaces de los cursos de idiomas (Udemy). Quedan en el teléfono: no van al repo. */
+  idiomas: { enlaces: Record<string, string> };
   /** Sellos ganados: id → fecha. */
   profile: { seals: Record<string, string>; /** Sellos cuya pantalla de logro ya viste. */ seen: string[] };
 }
 
 const KEY = 'trazo.v1';
-const empty = (): State => ({ settings: null, days: {}, focus: null, carry: {}, study: emptyStudy(), goals: emptyGoals(), train: emptyTrain(), ruta: emptyRuta(), plan: emptyPlan(), estudioRuta: emptyEstudioRuta(), profile: { seals: {}, seen: [] } });
+const empty = (): State => ({ settings: null, days: {}, focus: null, carry: {}, study: emptyStudy(), goals: emptyGoals(), train: emptyTrain(), ruta: emptyRuta(), plan: emptyPlan(), estudioRuta: emptyEstudioRuta(), idiomas: { enlaces: {} }, profile: { seals: {}, seen: [] } });
 
 function load(): State {
   try {
@@ -71,7 +74,7 @@ export function migrate(parsed: any): State {
   // (con Handyx y ventas en pausa desde T0); si ya se decidió, se respeta.
   let settings = parsed.settings ?? null;
   if (settings && settings.plan?.modo === undefined) ({ settings, plan } = aplicarIntensiva(settings, plan, settings.startDate || T0_PLAN));
-  return { ...empty(), ...parsed, settings, study, train, ruta, plan, estudioRuta: { ...emptyEstudioRuta(), ...(parsed.estudioRuta ?? {}) }, profile: { seals: {}, seen: Object.keys(parsed.profile?.seals ?? {}), ...(parsed.profile ?? {}) }, goals: migrateGoals(goals ?? seedGoals(parsed.settings?.startDate ?? dateKey())) };
+  return { ...empty(), ...parsed, settings, study, train, ruta, plan, estudioRuta: { ...emptyEstudioRuta(), ...(parsed.estudioRuta ?? {}) }, idiomas: { enlaces: {}, ...(parsed.idiomas ?? {}) }, profile: { seals: {}, seen: Object.keys(parsed.profile?.seals ?? {}), ...(parsed.profile ?? {}) }, goals: migrateGoals(goals ?? seedGoals(parsed.settings?.startDate ?? dateKey())) };
 }
 
 let state: State = load();
@@ -193,7 +196,9 @@ export function startDay(routine: RoutineId, wake: string, date = dateKey()) {
     const blocks = buildBlocks(planDay(date, routine, wake, dayType, { ventana, entrevista, puerta }), carry)
       .map((b) => (refs[b.key] ? { ...b, ...refs[b.key] } : b))
       .map((b) => (b.rama === 'programacion' && delProyecto.length ? { ...b, tasks: [...delProyecto.map((t) => ({ id: newId(), t: `${proyecto} · ${t}`, done: false })), ...b.tasks] } : b))
-      .map((b) => (b.key === 'cierre' && estirar ? { ...b, tasks: b.tasks.map((x) => (x.t === 'Estirar' ? { ...x, t: `Estirar: ${estirar}` } : x)) } : b));
+      .map((b) => (b.key === 'cierre' && estirar ? { ...b, tasks: b.tasks.map((x) => (x.t === 'Estirar' ? { ...x, t: `Estirar: ${estirar}` } : x)) } : b))
+      // Ola 21: el bloque de idiomas trae las tareas de la fase de esta semana (salvo lo que pasó de ayer).
+      .map((b) => (b.key === 'ingles' ? { ...b, tasks: [...faseIdiomaEn(date, t0 ?? T0_PLAN).tareas.map((t) => ({ id: newId(), t, done: false })), ...b.tasks.filter((x) => (carry.ingles ?? []).includes(x.t))] } : b));
     const day: DayLog = { date, wake, routine, dayType, ...(ventana ? { ventana } : {}), blocks, notes: [], focus: [] };
     return { ...s, days: { ...s.days, [date]: day }, carry: restCarry };
   });
@@ -292,4 +297,17 @@ export function setBlockPreset(key: string, id: string | null) {
     else delete bp[key];
     return { ...st, blockPresets: bp };
   });
+}
+
+/** Ola 21: guarda (o borra, con el texto vacío) el enlace de un curso de idiomas. Solo https. */
+export function guardarEnlaceIdioma(clave: string, url: string) {
+  const u = url.trim();
+  if (u && !/^https:\/\/\S+$/.test(u)) return false;
+  setState((s) => {
+    const enlaces = { ...s.idiomas.enlaces };
+    if (u) enlaces[clave] = u;
+    else delete enlaces[clave];
+    return { ...s, idiomas: { ...s.idiomas, enlaces } };
+  });
+  return true;
 }

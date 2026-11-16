@@ -3,6 +3,7 @@
  * editar); mes y semana se generan desde el plan para cualquier fecha y el usuario los confirma,
  * los cambia o los borra. Nada se carga 18 meses antes: todo se calcula al abrir el período.
  */
+import { IDIOMAS, calendarioIdiomas } from './idiomas';
 import {
   PLAN, SEMANAS, SEMANAS_BIM, TRAMOS, bimestreDelPlan, corteHandyx, faseIngles, faseTrabajo, fechaCorta, fechaHito, finSemana, hitoSemana,
   inicioSemana, metasSemanaPlan, tramoEnSemana, nombreTramo, semanaDelPlan, T0_PLAN, tramoActivo, type MetaGenerada, type Tramo,
@@ -150,9 +151,10 @@ export const SEMANA_INTENSIVA: (Omit<MetaGenerada, 'id' | 'origen'> & { clave: s
   { rama: 'trabajo', texto: 'Horas de búsqueda', meta: 10.5, unidad: 'h', clave: 'horas-busqueda' },
   { rama: 'programacion', texto: 'Horas de programación', meta: 25.5, unidad: 'h', clave: 'horas-prog' },
   { rama: 'matematica', texto: 'Horas de matemática', meta: 14, unidad: 'h', clave: 'horas-mate' },
-  { rama: 'ingles', texto: 'Horas de inglés', meta: 11.5, unidad: 'h', clave: 'horas-ingles' },
-  { rama: 'ingles', texto: 'Respuestas ensayadas', meta: 10, clave: 'respuestas' },
-  { rama: 'ingles', texto: 'Simulacro completo', meta: 1, clave: 'simulada' },
+  { rama: 'ingles', texto: 'Horas de idiomas', meta: 11.5, unidad: 'h', clave: 'horas-ingles' },
+  // Ola 18/21: la entrevista se practica en el bloque de búsqueda laboral.
+  { rama: 'trabajo', texto: 'Respuestas ensayadas', meta: 10, clave: 'respuestas' },
+  { rama: 'trabajo', texto: 'Simulacro de entrevista', meta: 1, clave: 'simulada' },
   { area: 'eclipse', texto: 'Horas de clipping', meta: 10.5, unidad: 'h', clave: 'horas-clipping' },
   { area: 'eclipse', texto: 'Clips publicados', meta: 25, clave: 'clips' },
   { rama: 'salud', texto: 'Entrenamientos', meta: 5, clave: 'entrenos' },
@@ -281,10 +283,9 @@ export function metasMesGeneradas(fecha: string, t0 = T0_PLAN, study?: StudyStat
       push({ id: 'm-sim', rama: 'trabajo', texto: 'Entrevistas simuladas', meta: Math.max(1, Math.round(diasBusqueda / 7)), clave: 'simulada' });
     }
     if (diasBusqueda < dias) push({ id: 'm-busq', rama: 'trabajo', texto: 'Horas de búsqueda', meta: Math.round(2 * ((dias - diasBusqueda) / 7)), unidad: 'h', clave: 'horas-busqueda' });
-    // Inglés: kit de entrevista mientras se busca; después, 45 min por día.
-    const ing = faseIngles(b, t0);
-    if (faseIngles(a, t0).id === 'entrevista') push({ id: 'm-kit', rama: 'ingles', texto: 'Kit de entrevista en inglés', meta: PLAN.ingles.respuestas.length, clave: 'kit' });
-    if (ing.id !== 'entrevista') push({ id: 'm-ing', rama: 'ingles', texto: 'Inglés 45 min por día', meta: Math.round(((PLAN.ingles.minutosDiarios * (dias - diasBusqueda)) / 60) * 10) / 10, unidad: 'h', clave: 'horas-ingles' });
+    // Idiomas (ola 21): las 11,5 h por semana del roadmap y el hito de la fase que cierra en el mes.
+    push({ id: 'm-ing', rama: 'ingles', texto: 'Horas de idiomas', meta: Math.round(((IDIOMAS.horasSemana * dias) / 7) * 10) / 10, unidad: 'h', clave: 'horas-ingles', nota: `${String(IDIOMAS.horasSemana).replace('.', ',')} h por semana` });
+    for (const f of calendarioIdiomas(t0)) if (f.fin >= a && f.fin <= b) push({ id: `m-idioma-${f.clave}`, rama: 'ingles', texto: `${f.nombre}: ${f.hito.charAt(0).toLowerCase()}${f.hito.slice(1)}` });
     // Handyx: el corte que cae en el mes y las horas.
     for (const c of PLAN.handyx.cortes) { const f = finSemana(c.hasta, t0); if (f >= a && f <= b) push({ id: `m-corte-${c.id}`, rama: 'handyx', texto: `Corte ${c.nombre.toLowerCase()} el ${fechaCorta(f)}: ${c.texto}` }); }
     if (corteHandyx(a, t0)) push({ id: 'm-hx', rama: 'handyx', texto: 'Horas de Handyx', meta: Math.round(semanal('horas-handyx') * semanas), unidad: 'h', clave: 'horas-handyx' });
@@ -294,7 +295,8 @@ export function metasMesGeneradas(fecha: string, t0 = T0_PLAN, study?: StudyStat
   if (op.intensiva) push({ id: 'm-clips', area: 'eclipse', texto: 'Clips publicados', meta: Math.round((25 * dias) / 7), clave: 'clips' });
   // Chequeos mensuales.
   const sFin = semanaDelPlan(b, t0);
-  PLAN.chequeosMensuales.filter((c) => !c.desdeSemana || sFin >= c.desdeSemana).forEach((c, i) => out.push({ id: `m-chq${i}`, rama: c.rama, texto: c.texto, meta: 1, origen: 'chequeo' }));
+  const sIni = semanaDelPlan(a, t0);
+  PLAN.chequeosMensuales.filter((c) => (!c.desdeSemana || sFin >= c.desdeSemana) && (!c.hastaSemana || sIni <= c.hastaSemana)).forEach((c, i) => out.push({ id: `m-chq${i}`, rama: c.rama, texto: c.texto, meta: 1, origen: 'chequeo' }));
   return sinPausa(out, a, op.pausa);
 }
 
@@ -387,13 +389,7 @@ export function filasBimestre(n: number, fecha: string, c: CtxPlan, editadas: Re
         avance = s / f.hasta;
       }
     } else if (rama === 'ingles') {
-      const f = faseIngles(b.inicio, t0);
-      if (f.id === 'entrevista') {
-        const ens = c.plan.respuestas.filter((r) => r.veces > 0).length;
-        sub = 'Pitch, historias STAR y tus proyectos';
-        lado = `${ens}/${c.plan.respuestas.length}`;
-        avance = ens / Math.max(1, c.plan.respuestas.length);
-      } else sub = f.texto;
+      sub = faseIngles(b.inicio, t0).texto;
     } else if (rama === 'handyx') {
       const prox = PLAN.handyx.cortes.find((x) => finSemana(x.hasta, t0) >= b.inicio);
       if (prox) {
@@ -478,8 +474,10 @@ export function filasAnio(fecha: string, c: CtxPlan, editadas: Record<string, st
       target = a?.units?.length || 69;
       nota = `${target} capítulos en B1 a B6 y las ventanas W1 y W2`;
     } else if (rama === 'ingles') {
-      v = c.plan.respuestas.filter((r) => r.veces > 0).length; target = c.plan.respuestas.length;
-      nota = `Después: ${PLAN.metasBimestre.ingles.slice(2, 6).join(', ').replace(/, ([^,]*)$/, ' y $1')}`;
+      // Ola 21: el año 1 de idiomas son sus 6 fases (hasta Cambridge C1 y la consolidación).
+      const a1 = calendarioIdiomas(t0).filter((f) => f.anio === 1);
+      v = a1.filter((f) => f.fin < fecha).length; target = a1.length;
+      nota = `Cambridge C1 entre el ${fechaCorta(a1.find((f) => f.tipo === 'examen')!.inicio)} y el ${fechaCorta(a1.find((f) => f.tipo === 'examen')!.fin)}; después, francés`;
     } else if (rama === 'handyx') {
       const p = personal.handyx;
       v = p?.v ?? Math.max(0, ...Object.values(c.plan.handyx).map((h) => h.clientes ?? 0)); target = p?.target ?? 100;
