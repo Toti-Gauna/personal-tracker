@@ -1,16 +1,19 @@
 /**
- * Plan T+18: seis ramas que salen de main (Trazo) en T0 y vuelven a juntarse 78 semanas
- * después. Fuente: data/plan.json. Todo se cuenta en semanas desde T0 (settings.startDate, o el
- * T0 del plan si no hay), así que las fechas se derivan acá y no hay fechas sueltas en pantallas.
+ * Plan T+18: seis ramas que salen de main (Trazo) en T0 y vuelven a juntarse en T+18, el cierre
+ * de la etapa 2 del Plan T+18 extendido. Fuentes: data/plan.json (las ramas, metas y textos) y,
+ * desde la ola 16b, data/plan-extendido.json (el calendario de programación: las fechas se
+ * derivan sumando semanas, con las semanas extra de feature prendidas salvo que se apaguen).
+ * Todo se cuenta en semanas desde T0 (settings.startDate, o el T0 del plan si no hay).
  */
 import raw from '../../data/plan.json';
+import { PLAN_EXT, calendario } from './plan-extendido';
 import { RAMAS } from './ramas';
 import { addDays, parseDate } from './time';
 import type { Area, Rama } from './types';
 
 // ——— Tipos ———
 
-export type TipoTramo = 'proyecto' | 'cert' | 'ventana' | 'pausa' | 'colchon';
+export type TipoTramo = 'proyecto' | 'cert' | 'ventana' | 'pausa' | 'colchon' | 'cierre';
 export type Capa = 'ux' | 'tresd' | 'animacion' | 'docs' | 'venta' | 'ingenieria';
 
 /** Un tramo de la rama programación: proyecto, certificación, ventana de matemática, pausa o colchón. */
@@ -33,6 +36,11 @@ export interface Tramo {
   que: string;
   stack?: string[];
   perfil?: string;
+  /** Ola 16b: etapa del Plan T+18 extendido (1 núcleo, 2 ciberseguridad). */
+  etapa?: number;
+  /** Semanas extra de feature que suma con la configuración actual, y las que podría sumar. */
+  extra?: number;
+  extraPosible?: number;
 }
 
 /** Un proyecto del plan con su estándar de entrega. */
@@ -196,19 +204,133 @@ export interface SemanaMeta {
 
 export const PLAN = raw as unknown as PlanFile;
 export const T0_PLAN = PLAN.t0;
-export const SEMANAS = PLAN.semanas;
 export const SEMANAS_BIM = PLAN.semanasPorBimestre;
-export const BIMESTRES = Math.ceil(SEMANAS / SEMANAS_BIM);
-export const TRAMOS = PLAN.programacion.tramos;
-/** Última semana del calendario de programación (53 desde la Ola 8b; antes, 78). */
-export const FIN_PROGRAMACION = TRAMOS[TRAMOS.length - 1].hasta;
+
+// ——— Calendario vivo (ola 16b) ———
+// Las fechas de programación salen de data/plan-extendido.json. Etapas 1 y 2 son el horizonte
+// de T+18; las 3 y 4 las muestra la línea de tiempo por etapas (16c). Estos valores son `let`:
+// `aplicarCalendario` los recalcula (por ejemplo, al apagar el extra de un proyecto) y todos los
+// que los importan ven el valor nuevo.
+
+/** Los tramos tal como estaban en data/plan.json: el detalle (qué, stack, perfil, estándar). */
+const BASE_TRAMOS: Tramo[] = PLAN.programacion.tramos.map((t) => ({ ...t }));
+/** Los ids que cambiaron en el plan extendido. */
+const ALIAS: Record<string, string> = { PAU1: 'pausa', COL: 'colchon' };
+const BASE_MATE: TramoMate[] = PLAN.matematica.tramos.map((t) => ({ ...t }));
+const BASE_NOMBRES = [...PLAN.nombresBimestre];
+const BASE_METAS_BIM = Object.fromEntries(Object.entries(PLAN.metasBimestre).map(([k, v]) => [k, [...v]])) as Record<Rama, string[]>;
+
+/** Semanas del plan hasta T+18 (cierre de la etapa 2): 92 con todos los extras, 78 sin ninguno. */
+export let SEMANAS = PLAN.semanas;
+export let BIMESTRES = Math.ceil(SEMANAS / SEMANAS_BIM);
+export let TRAMOS: Tramo[] = PLAN.programacion.tramos;
+/** Última semana del calendario de programación: el cierre de T+18. */
+export let FIN_PROGRAMACION = TRAMOS[TRAMOS.length - 1].hasta;
+/** Los ids de proyecto con el extra apagado (lo último que se aplicó). */
+export let EXTRAS_APAGADOS: readonly string[] = [];
+
 /**
- * Después del calendario de programación (semana 54 a 78) queda margen: matemática, inglés y
- * salud siguen hasta T+18. No es una fila del calendario (son 19), pero las pantallas lo usan.
+ * Después del calendario de programación queda margen hasta T+18. Desde la ola 16b el calendario
+ * llega hasta T+18 (la etapa 2 ocupa el margen viejo), así que el margen queda vacío; se deja por
+ * compatibilidad.
  */
-export const MARGEN: Tramo = { id: 'margen', desde: FIN_PROGRAMACION + 1, hasta: PLAN.semanas, tipo: 'colchon', nombre: 'Margen', que: 'Lo que sobra del calendario comprimido: entrevistas senior, C1 y lo que sumó la revisión de mercado' };
+export let MARGEN: Tramo = { id: 'margen', desde: FIN_PROGRAMACION + 1, hasta: SEMANAS, tipo: 'colchon', nombre: 'Margen', que: 'Lo que sobra del calendario' };
+
 /** El tramo de programación de una semana (o el margen después del calendario). */
 export const tramoEnSemana = (s: number) => TRAMOS.find((x) => s >= x.desde && s <= x.hasta) ?? (s > FIN_PROGRAMACION ? MARGEN : TRAMOS[0]);
+
+/** Nombre de un bimestre a partir de lo que hay en él: los dos primeros proyectos o certificaciones. */
+function nombreAuto(desde: number, hasta: number) {
+  const ts = TRAMOS.filter((t) => t.hasta >= desde && t.desde <= hasta && (t.tipo === 'proyecto' || t.tipo === 'cert' || t.tipo === 'cierre'));
+  const ns = ts.map((t) => (t.tipo === 'cert' ? t.corto ?? t.nombre : t.tipo === 'cierre' ? 'cierre de T+18' : `${t.nombre}${t.version ? ` ${t.version}` : ''}`));
+  const u = [...new Set(ns)].slice(0, 2);
+  return u.length ? u.join(' y ') : 'Colchón';
+}
+
+/** Lo de programación de un bimestre: "P2 Escudo, W1 y P3 Surco v1". */
+function progAuto(desde: number, hasta: number) {
+  const ts = TRAMOS.filter((t) => t.hasta >= desde && t.desde <= hasta && t.tipo !== 'pausa');
+  const ns = ts.map((t) => (t.tipo === 'proyecto' ? `${t.id} ${t.nombre}${t.version ? ` ${t.version}` : ''}` : t.tipo === 'cert' ? t.corto ?? t.nombre : t.tipo === 'colchon' ? 'colchón' : t.tipo === 'cierre' ? 'cierre de T+18' : t.id));
+  return ns.length > 1 ? `${ns.slice(0, -1).join(', ')} y ${ns[ns.length - 1]}` : ns[0] ?? '';
+}
+
+/**
+ * Recalcula el calendario vivo. `apagados`: proyectos sin las semanas extra de feature. Se llama
+ * al cargar el estado y cuando cambia `plan.extrasApagados`.
+ */
+export function aplicarCalendario(apagados: readonly string[] = []) {
+  const cal = calendario(PLAN_EXT, { extras: Object.fromEntries(apagados.map((id) => [id, false])) }).filter((b) => b.etapa <= 2);
+  TRAMOS = cal.map((b) => {
+    const base = BASE_TRAMOS.find((t) => t.id === b.id || t.id === ALIAS[b.id]);
+    const tipo = b.tipo as TipoTramo;
+    const t: Tramo = {
+      ...(base ?? {}),
+      id: b.id,
+      tipo,
+      nombre: base?.nombre ?? b.nombre,
+      desde: b.desde,
+      hasta: b.hasta,
+      que: base?.que ?? b.que ?? b.nombre,
+      meta: b.semanas,
+      etapa: b.etapa,
+      extra: b.extraAplicado,
+      extraPosible: b.extra,
+    };
+    if (base?.tope != null || tipo === 'proyecto') t.tope = b.semanas + 1;
+    else delete t.tope;
+    if (!base?.corto && b.corto) t.corto = b.corto;
+    if (!base?.perfil && b.perfil) t.perfil = b.perfil;
+    return t;
+  });
+  SEMANAS = TRAMOS[TRAMOS.length - 1].hasta;
+  FIN_PROGRAMACION = SEMANAS;
+  BIMESTRES = Math.ceil(SEMANAS / SEMANAS_BIM);
+  EXTRAS_APAGADOS = [...apagados];
+  MARGEN = { ...MARGEN, desde: FIN_PROGRAMACION + 1, hasta: SEMANAS };
+  PLAN.semanas = SEMANAS;
+  PLAN.programacion.tramos = TRAMOS;
+  // T+18 es el cierre de la etapa 2 (T+0, T+2 y T+12 son fechas de calendario y no se mueven).
+  PLAN.hitos = PLAN.hitos.map((h) => (h.id === 'T+18' ? { ...h, semana: SEMANAS, fin: true } : h));
+
+  // Matemática: las ventanas salen del calendario y los tramos diarios llenan los huecos.
+  const vents = TRAMOS.filter((t) => t.tipo === 'ventana');
+  const diarios = BASE_MATE.filter((m) => !vents.some((v) => v.id === m.id) && !BASE_TRAMOS.some((v) => v.id === m.id));
+  const mate: TramoMate[] = [];
+  let cursor = 1;
+  vents.forEach((v, k) => {
+    const d = diarios[Math.min(k, diarios.length - 1)];
+    if (v.desde > cursor) mate.push({ ...d, id: k < diarios.length ? d.id : `m${k + 1}`, desde: cursor, hasta: v.desde - 1 });
+    const bw = BASE_MATE.find((m) => m.id === v.id);
+    const bx = PLAN_EXT.bloques.find((x) => x.id === v.id);
+    mate.push({ ...(bw ?? { libros: bx?.libros ?? [v.que], habilita: bx?.habilita ?? '' }), id: v.id, desde: v.desde, hasta: v.hasta });
+    cursor = v.hasta + 1;
+  });
+  if (cursor <= SEMANAS) {
+    const k = vents.length;
+    const d = diarios[Math.min(k, diarios.length - 1)];
+    mate.push({ ...d, id: k < diarios.length ? d.id : `m${k + 1}`, desde: cursor, hasta: SEMANAS });
+  }
+  PLAN.matematica.tramos = mate;
+
+  // Bimestres: con el calendario nuevo cambia lo que cae en cada uno. B1 conserva su nombre
+  // ("El despegue"); los demás se arman con lo que hay de programación. Las metas de las otras
+  // ramas siguen las del plan y, en los bimestres que se suman, repiten la última.
+  const nombres: string[] = [];
+  const prog: string[] = [];
+  for (let n = 1; n <= BIMESTRES; n++) {
+    const desde = (n - 1) * SEMANAS_BIM + 1;
+    const hasta = Math.min(SEMANAS, n * SEMANAS_BIM);
+    nombres.push(n === 1 && BASE_NOMBRES[0] ? BASE_NOMBRES[0] : nombreAuto(desde, hasta));
+    prog.push(progAuto(desde, hasta));
+  }
+  PLAN.nombresBimestre = nombres;
+  for (const r of Object.keys(BASE_METAS_BIM) as Rama[]) {
+    const base = r === 'programacion' ? prog : BASE_METAS_BIM[r];
+    PLAN.metasBimestre[r] = Array.from({ length: BIMESTRES }, (_, i) => base[Math.min(i, base.length - 1)]);
+  }
+}
+
+aplicarCalendario();
 
 // ——— Fechas ———
 
@@ -221,7 +343,7 @@ export const finSemana = (n: number, t0 = T0_PLAN) => addDays(t0, n * 7 - 1);
 /** Rango de semanas en fechas. */
 export const fechas = (desde: number, hasta: number, t0 = T0_PLAN) => ({ inicio: inicioSemana(desde, t0), fin: finSemana(hasta, t0) });
 
-/** Semana del plan (1 a 78) de una fecha; 0 antes de T0 y 79 después del final. */
+/** Semana del plan (1 a SEMANAS) de una fecha; 0 antes de T0 y SEMANAS + 1 después del final. */
 export function semanaDelPlan(fecha: string, t0 = T0_PLAN) {
   const d = dias(t0, fecha);
   if (d < 0) return 0;
@@ -231,7 +353,7 @@ export function semanaDelPlan(fecha: string, t0 = T0_PLAN) {
 /** ¿Está dentro del plan? */
 export const enPlan = (fecha: string, t0 = T0_PLAN) => { const s = semanaDelPlan(fecha, t0); return s >= 1 && s <= SEMANAS; };
 
-/** Bimestre del plan (B1 a B9) y la semana dentro de él: "B1 · semana 5 de 9". B9 tiene 6 semanas. */
+/** Bimestre del plan y la semana dentro de él: "B1 · semana 5 de 9". El último puede ser más corto. */
 export function bimestreDelPlan(fecha: string, t0 = T0_PLAN) {
   const s = Math.max(1, Math.min(SEMANAS, semanaDelPlan(fecha, t0)));
   const n = Math.ceil(s / SEMANAS_BIM);

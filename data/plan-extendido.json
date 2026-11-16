@@ -200,7 +200,12 @@
    "tipo": "ventana",
    "nombre": "Ventana W4 · matemática discreta y cripto",
    "base": 2,
-   "extra": 0
+   "extra": 0,
+   "que": "Matemática discreta y criptografía",
+   "libros": [
+    "Lehman, Leighton y Meyer · Mathematics for Computer Science"
+   ],
+   "habilita": "S1"
   },
   {
    "id": "S1",
@@ -211,7 +216,9 @@
    "extra": 1,
    "dependeDe": [
     "W4"
-   ]
+   ],
+   "que": "Cifrado de sobre y gestión de secretos en Go o Rust: AWS KMS, rotación, mTLS interno y firma de artefactos",
+   "perfil": "Security Engineer (cripto y secretos)"
   },
   {
    "id": "PAU2",
@@ -219,7 +226,8 @@
    "tipo": "pausa",
    "nombre": "Pausa de fin de año",
    "base": 1,
-   "extra": 0
+   "extra": 0,
+   "que": "Pausa de fin de año"
   },
   {
    "id": "S2",
@@ -227,7 +235,9 @@
    "tipo": "proyecto",
    "nombre": "Bastión",
    "base": 4,
-   "extra": 1
+   "extra": 1,
+   "que": "Modelo de amenazas (STRIDE) y pentest de Faro, Escudo y Estación, con SAST, DAST y SCA en el pipeline",
+   "perfil": "Application Security Engineer"
   },
   {
    "id": "C4",
@@ -235,7 +245,9 @@
    "tipo": "cert",
    "nombre": "PNPT",
    "base": 3,
-   "extra": 0
+   "extra": 0,
+   "corto": "PNPT",
+   "que": "Practical Network Penetration Tester (TCM Security)"
   },
   {
    "id": "C5",
@@ -243,7 +255,9 @@
    "tipo": "cert",
    "nombre": "CKA",
    "base": 2,
-   "extra": 0
+   "extra": 0,
+   "corto": "CKA",
+   "que": "Certified Kubernetes Administrator, requisito de CKS"
   },
   {
    "id": "C6",
@@ -251,7 +265,9 @@
    "tipo": "cert",
    "nombre": "CKS",
    "base": 3,
-   "extra": 0
+   "extra": 0,
+   "corto": "CKS",
+   "que": "Certified Kubernetes Security Specialist"
   },
   {
    "id": "S3",
@@ -259,7 +275,9 @@
    "tipo": "proyecto",
    "nombre": "Centinela",
    "base": 4,
-   "extra": 1
+   "extra": 1,
+   "que": "Detección como código (Sigma y MITRE ATT&CK) sobre el colector de Faro v2, purple team y runbooks",
+   "perfil": "Detection & Response / Cloud Security Engineer"
   },
   {
    "id": "C7",
@@ -267,7 +285,9 @@
    "tipo": "cert",
    "nombre": "AWS Security Specialty",
    "base": 3,
-   "extra": 0
+   "extra": 0,
+   "corto": "AWS SCS",
+   "que": "AWS Security Specialty (SCS-C03)"
   },
   {
    "id": "CIE2",
@@ -275,7 +295,8 @@
    "tipo": "cierre",
    "nombre": "Cierre de T+18",
    "base": 1,
-   "extra": 0
+   "extra": 0,
+   "que": "Cierre de T+18: perfil senior con foco en seguridad"
   },
   {
    "id": "WQ1",

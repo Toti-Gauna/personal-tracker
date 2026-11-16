@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { RAMA_NOMBRE } from '../data/ramas';
 import type { RamaMapa } from '../data/hitos';
 import { COLUMNAS, colorMapa, filasMapa, type Fila, type Rango } from '../data/mapa';
-import { fechaCorta } from '../data/plan';
+import { PLAN, fechaCorta, fechaHito } from '../data/plan';
 import type { DayLog } from '../data/types';
 import { marcarHito, moverHito } from '../state/plan';
 import { useStore } from '../state/store';
@@ -68,7 +68,7 @@ export function RutaMapa({ day }: { day: DayLog }) {
     ? `Los hitos de cada rama del trimestre. El rombo marca un hito grande: cierra un proyecto, un libro o una etapa.${foco ? ' Handyx y Eclipse en stand-by; clipping tiene su propia rama.' : ''} Tocá un hito para marcarlo hecho.`
     : foco
       ? `Handyx y Eclipse quedan en stand-by desde el ${desdeTxt}. Las otras ramas van a fondo hasta que entre el trabajo. Lo hecho va en trazo lleno; lo que viene, punteado.`
-      : `Las ramas salen de main el ${fechaCorta(filas[filas.length - 1].fecha)} y vuelven a juntarse en mayo de 2028. Lo hecho va en trazo lleno; lo que viene, punteado.`;
+      : `Las ramas salen de main el ${fechaCorta(filas[filas.length - 1].fecha)} y vuelven a juntarse en T+18 (${fechaCorta(fechaHito(PLAN.hitos.find((h) => h.id === 'T+18')!, t0))} ${fechaHito(PLAN.hitos.find((h) => h.id === 'T+18')!, t0).slice(0, 4)}). Lo hecho va en trazo lleno; lo que viene, punteado.`;
 
   const fSel = filas.find((f) => f.id === sel);
   /** Con una rama elegida, lo que no es de ella (ni entrega ni recibe de ella) se atenúa. */

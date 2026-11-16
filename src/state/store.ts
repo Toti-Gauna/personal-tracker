@@ -15,6 +15,7 @@ import { periodKey } from '../data/goals';
 import { emptyTrain } from '../data/train-catalog';
 import { emptyRuta, refsForDay, type RutaState } from '../data/ruta';
 import { applySettings } from './apply';
+import { aplicarCalendario } from '../data/plan';
 import type { TrainState } from '../data/train-types';
 import type { StudyState } from '../data/study-types';
 import { emptyEstudioRuta, type EstudioRutaState } from '../data/study-roadmap';
@@ -72,14 +73,18 @@ export function migrate(parsed: any): State {
 
 let state: State = load();
 applySettings(state.settings);
+aplicarCalendario(state.plan.extrasApagados ?? []);
 const subs = new Set<() => void>();
 
 export const getState = () => state;
 
 export function setState(fn: (s: State) => State) {
   const prev = state.settings;
+  const prevExtras = state.plan.extrasApagados;
   state = fn(state);
   if (state.settings !== prev) applySettings(state.settings);
+  // Ola 16b: el calendario vivo se recalcula si cambian los extras de feature apagados.
+  if (state.plan.extrasApagados !== prevExtras) aplicarCalendario(state.plan.extrasApagados ?? []);
   try { localStorage.setItem(KEY, JSON.stringify(state)); } catch { /* sin storage */ }
   subs.forEach((f) => f());
 }
@@ -88,6 +93,7 @@ export function setState(fn: (s: State) => State) {
 export function resetState(s: State = empty()) {
   state = s;
   applySettings(s.settings);
+  aplicarCalendario(s.plan.extrasApagados ?? []);
   subs.forEach((f) => f());
 }
 

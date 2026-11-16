@@ -377,7 +377,7 @@ export function BimestrePlan({ day, editar, elegido }: { day: DayLog; editar: bo
 
   return (
     <>
-      <div className="mp-bims" role="tablist" aria-label="Bimestres del plan">
+      <div className="mp-bims" role="tablist" aria-label="Bimestres del plan" style={{ ['--n' as string]: BIMESTRES }}>
         {Array.from({ length: BIMESTRES }, (_, i) => i + 1).map((x) => (
           <button key={x} role="tab" aria-selected={x === n} className={x === actual ? 'actual' : ''} onClick={() => { setN(x); setEditando(null); }}>B{x}</button>
         ))}

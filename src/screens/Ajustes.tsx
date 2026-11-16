@@ -1,13 +1,13 @@
 import { DAY_ROUTINES, DAY_TYPES, metasOf } from '../data/routines';
 import { useEffect, useState } from 'react';
 import { AREAS, areaDefaultName} from '../data/defaults';
-import { BIMESTRES, PLAN, SEMANAS, T0_PLAN, fechaCorta } from '../data/plan';
+import { BIMESTRES, PLAN, SEMANAS, T0_PLAN, TRAMOS, fechaCorta, fechaHito } from '../data/plan';
 import { RAMA_COLOR, RAMAS } from '../data/ramas';
 import { DEFAULT_ALARMS } from '../data/sounds';
 import type { Area } from '../data/types';
 import { applyTheme, getThemePref, type ThemePref } from '../lib/theme';
 import { planSettings, useStore } from '../state/store';
-import { activarIntensiva, desactivarIntensiva, setInicioPlan, setPlanSettings } from '../state/plan';
+import { activarIntensiva, desactivarIntensiva, setExtraBloque, setInicioPlan, setPlanSettings } from '../state/plan';
 import { dateKey } from '../data/time';
 import { renameBimester } from '../state/goals';
 import { setAreaName } from '../state/profile';
@@ -137,6 +137,7 @@ function PlanT18() {
           <span><b>Inicio del plan</b><small>Semana 1 · {SEMANAS} semanas · {BIMESTRES} bimestres</small></span>
           <input className="campo-texto mono" type="date" value={t0} onChange={(e) => e.target.value && setInicioPlan(e.target.value)} aria-label="Inicio del plan" />
         </li>
+        <ExtrasFeature t0={t0} />
         <li>
           <span><b>Rutina del día</b><small>{intensiva ? 'La de la búsqueda intensiva mientras dure; al apagarla vuelve esta' : 'Cambia al marcar T+2 (con confirmación)'}</small></span>
           <div className="segmentado" role="radiogroup" aria-label="Rutina de lunes a viernes">
@@ -175,3 +176,25 @@ function PlanT18() {
     </>
   );
 }
+
+/** Ola 16b: las semanas extra por feature diferencial, prendidas por defecto y por proyecto. */
+function ExtrasFeature({ t0 }: { t0: string }) {
+  useStore((s) => s.plan.extrasApagados);
+  const ps = TRAMOS.filter((t) => t.tipo === 'proyecto' && (t.extraPosible ?? 0) > 0);
+  const t18 = fechaHito(PLAN.hitos.find((h) => h.id === 'T+18')!, t0);
+  const sumadas = ps.reduce((s, t) => s + (t.extra ?? 0), 0);
+  return (
+    <li className="aj-columna">
+      <span><b>Semanas extra por feature</b><small>{sumadas} de {ps.reduce((s, t) => s + (t.extraPosible ?? 0), 0)} sumadas · T+18 el {fechaCorta(t18)} {t18.slice(0, 4)}. Apagar una acorta el proyecto y corre todo lo que sigue.</small></span>
+      <ul className="aj-extras">
+        {ps.map((t) => (
+          <li key={t.id}>
+            <span><b className="mono">{t.id}</b> {t.nombre}{t.version ? ` ${t.version}` : ''}<small className="sub"> · +{t.extraPosible} sem</small></span>
+            <button role="switch" className="switch" aria-checked={(t.extra ?? 0) > 0} aria-label={`Semanas extra de ${t.id}`} onClick={() => setExtraBloque(t.id, !((t.extra ?? 0) > 0))} />
+          </li>
+        ))}
+      </ul>
+    </li>
+  );
+}
+

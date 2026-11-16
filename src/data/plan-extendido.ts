@@ -27,6 +27,13 @@ export interface BloqueExt {
   alternativa?: string;
   /** Si falta tiempo, se recorta este bloque. */
   recortable?: boolean;
+  /** Detalle para las pantallas (los bloques que no estaban en data/plan.json). */
+  que?: string;
+  corto?: string;
+  perfil?: string;
+  /** Ventanas: libros principales y qué proyecto habilitan. */
+  libros?: string[];
+  habilita?: string;
 }
 
 export interface EtapaExt {

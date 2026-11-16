@@ -20,16 +20,17 @@ describe('avisos entre ramas', () => {
   });
 
   it('proyecto que cierra en 14 días o menos con el estándar sin marcar → programacion → trabajo', () => {
-    const a = avisosEntreRamas('2026-12-14', emptyPlan(), cfg).find((x) => x.de === 'programacion')!;
-    expect(a).toMatchObject({ a: 'trabajo', titulo: 'Faro v1 se entrega el domingo 20', href: '#/metas/proyecto/P1' });
+    // Con las 2 semanas de feature, Faro v1 se entrega el domingo 3 de enero.
+    const a = avisosEntreRamas('2026-12-21', emptyPlan(), cfg).find((x) => x.de === 'programacion')!;
+    expect(a).toMatchObject({ a: 'trabajo', titulo: 'Faro v1 se entrega el domingo 3', href: '#/metas/proyecto/P1' });
     const listo = { ...emptyPlan(), proyectos: { P1: { estandar: { ux: true, tresd: true, animacion: true, docs: true, venta: true, ingenieria: true }, tiempo: { nucleo: 0, producto: 0, lanzamiento: 0 }, revisiones: [] } } };
-    expect(avisosEntreRamas('2026-12-14', listo, cfg).some((x) => x.de === 'programacion')).toBe(false);
-    expect(avisosEntreRamas('2026-12-05', emptyPlan(), cfg).some((x) => x.de === 'programacion')).toBe(false);
+    expect(avisosEntreRamas('2026-12-21', listo, cfg).some((x) => x.de === 'programacion')).toBe(false);
+    expect(avisosEntreRamas('2026-12-19', emptyPlan(), cfg).some((x) => x.de === 'programacion')).toBe(false);
   });
 
   it('ventana W que empieza en 7 días o menos → matematica → programacion', () => {
-    expect(avisosEntreRamas('2027-01-11', emptyPlan(), cfg).find((x) => x.de === 'matematica')).toMatchObject({ a: 'programacion', titulo: 'La ventana W1 empieza el lunes 18' });
-    expect(avisosEntreRamas('2027-01-10', emptyPlan(), cfg).some((x) => x.de === 'matematica')).toBe(false);
+    expect(avisosEntreRamas('2027-02-01', emptyPlan(), cfg).find((x) => x.de === 'matematica')).toMatchObject({ a: 'programacion', titulo: 'La ventana W1 empieza el lunes 8' });
+    expect(avisosEntreRamas('2027-01-31', emptyPlan(), cfg).some((x) => x.de === 'matematica')).toBe(false);
   });
 
   it('T+2 marcado con la rutina de búsqueda → pide pasar a la rutina con trabajo', () => {
@@ -47,7 +48,7 @@ describe('etiqueta de rama en Hoy', () => {
     const tag = (k: string) => etiquetaDeBloque(d.blocks.find((b) => b.key === k)!, { day: d, plan: p, study: emptyStudy() });
     expect(tag('rutina')).toBe('main · rutina');
     expect(tag('math')).toBe('matematica · Aritmética cap. 1 de 11');
-    expect(tag('prog')).toBe('programacion · P1 · semana 3 de 3');
+    expect(tag('prog')).toBe('programacion · P1 · semana 3 de 5');
     expect(tag('trabajo')).toBe('fuera del plan');
     expect(tag('busqueda')).toBe('trabajo · semana 5 de 8 · 45 min hoy');
     expect(tag('ingles-entrevista')).toBe('ingles · entrevista del jue 17');
