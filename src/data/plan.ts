@@ -239,6 +239,12 @@ export let MARGEN: Tramo = { id: 'margen', desde: FIN_PROGRAMACION + 1, hasta: S
 /** El tramo de programación de una semana (o el margen después del calendario). */
 export const tramoEnSemana = (s: number) => TRAMOS.find((x) => s >= x.desde && s <= x.hasta) ?? (s > FIN_PROGRAMACION ? MARGEN : TRAMOS[0]);
 
+/** Los libros de un tramo diario de matemática: los del plan extendido (ola 16c, un solo roadmap). */
+function conLibros(d: TramoMate, clave: string): TramoMate {
+  const x = PLAN_EXT.matematica?.diarios?.[clave];
+  return x ? { ...d, libros: x.principal, habilita: x.habilita.join(' y ') } : d;
+}
+
 /** Nombre de un bimestre a partir de lo que hay en él: los dos primeros proyectos o certificaciones. */
 function nombreAuto(desde: number, hasta: number) {
   const ts = TRAMOS.filter((t) => t.hasta >= desde && t.desde <= hasta && (t.tipo === 'proyecto' || t.tipo === 'cert' || t.tipo === 'cierre'));
@@ -299,18 +305,23 @@ export function aplicarCalendario(apagados: readonly string[] = []) {
   let cursor = 1;
   vents.forEach((v, k) => {
     const d = diarios[Math.min(k, diarios.length - 1)];
-    if (v.desde > cursor) mate.push({ ...d, id: k < diarios.length ? d.id : `m${k + 1}`, desde: cursor, hasta: v.desde - 1 });
+    if (v.desde > cursor) mate.push({ ...conLibros(d, k < diarios.length ? d.id : 'm4'), id: k < diarios.length ? d.id : `m${k + 1}`, desde: cursor, hasta: v.desde - 1 });
     const bw = BASE_MATE.find((m) => m.id === v.id);
     const bx = PLAN_EXT.bloques.find((x) => x.id === v.id);
-    mate.push({ ...(bw ?? { libros: bx?.libros ?? [v.que], habilita: bx?.habilita ?? '' }), id: v.id, desde: v.desde, hasta: v.hasta });
+    const base = bw ?? { id: v.id, desde: 0, hasta: 0, libros: bx?.libros ?? [v.que], habilita: bx?.habilita ?? '' };
+    mate.push({ ...base, ...(bx?.mate ? { libros: bx.mate.principal, habilita: bx.mate.habilita.join(' y ') } : {}), id: v.id, desde: v.desde, hasta: v.hasta });
     cursor = v.hasta + 1;
   });
   if (cursor <= SEMANAS) {
     const k = vents.length;
     const d = diarios[Math.min(k, diarios.length - 1)];
-    mate.push({ ...d, id: k < diarios.length ? d.id : `m${k + 1}`, desde: cursor, hasta: SEMANAS });
+    mate.push({ ...conLibros(d, k < diarios.length ? d.id : 'm4'), id: k < diarios.length ? d.id : `m${k + 1}`, desde: cursor, hasta: SEMANAS });
   }
   PLAN.matematica.tramos = mate;
+  // Ola 16c: las puertas salen del plan extendido (ventana → proyecto que no arranca sin aprobarla).
+  PLAN.programacion.puertas = Object.fromEntries(
+    PLAN_EXT.bloques.filter((b) => b.etapa <= 2 && b.tipo === 'proyecto' && b.dependeDe?.length).flatMap((b) => b.dependeDe!.map((w) => [w, b.id])),
+  );
 
   // Bimestres: con el calendario nuevo cambia lo que cae en cada uno. B1 conserva su nombre
   // ("El despegue"); los demás se arman con lo que hay de programación. Las metas de las otras

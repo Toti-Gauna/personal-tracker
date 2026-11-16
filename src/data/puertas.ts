@@ -11,7 +11,7 @@
  * que pasa la meta; puerta sin aprobar: cada semana se descuenta del colchón).
  */
 import { FIN_PROGRAMACION, PLAN, T0_PLAN, TRAMOS, finSemana, inicioSemana, semanaDelPlan, tramoActivo } from './plan';
-import type { PlanState } from './plan-state';
+import { evidenciaCompleta, type PlanState } from './plan-state';
 
 export const APROBAR = 85;
 const dias = (a: string, b: string) => Math.round((new Date(b + 'T12:00').getTime() - new Date(a + 'T12:00').getTime()) / 864e5);
@@ -60,6 +60,8 @@ export function cierreProyecto(plan: PlanState, id: string) {
   if (!p) return null;
   const ex = p.examen && p.examen.puntaje >= APROBAR ? p.examen.fecha : null;
   if (!ex) return null;
+  // Ola 16c: sin las tres pruebas de evidencia (número medido, validador e informe) no cierra.
+  if (!evidenciaCompleta(p)) return null;
   if (id === 'P0') return ex;
   if (!tecnicaCompleta(plan, id)) return null;
   return p.tecnica!.defensa! > ex ? p.tecnica!.defensa! : ex;

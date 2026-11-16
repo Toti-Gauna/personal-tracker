@@ -78,9 +78,9 @@ describe('validar', () => {
 });
 
 describe('semáforo y qué activar', () => {
-  it('80 % o más avanza, de 65 a 79 % activa complementario y debajo de 65 % vuelve', () => {
-    expect(semaforo(0.8, mate)).toBe('verde');
-    expect(semaforo(0.79, mate)).toBe('amarillo');
+  it('85 % o más avanza (la regla del plan, ola 16c), de 65 a 84 % activa complementario y debajo de 65 % vuelve', () => {
+    expect(semaforo(0.85, mate)).toBe('verde');
+    expect(semaforo(0.84, mate)).toBe('amarillo');
     expect(semaforo(0.65, mate)).toBe('amarillo');
     expect(semaforo(0.64, mate)).toBe('rojo');
   });

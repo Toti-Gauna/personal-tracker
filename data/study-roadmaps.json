@@ -58,10 +58,10 @@
     }
    ],
    "semaforo": {
-    "verde": 0.8,
+    "verde": 0.85,
     "amarillo": 0.65,
     "textos": {
-     "verde": "Avanzás.",
+     "verde": "Aprobás y pasás a la tesis.",
      "amarillo": "Activás un complementario según el tipo de error y retesteás.",
      "rojo": "No avanzás: volvés al tema."
     }
@@ -240,7 +240,7 @@
       "Resolver porcentajes",
       "Resolver ecuaciones lineales",
       "Factorizar expresiones básicas",
-      "Aprobar un examen mixto con 80 % o más"
+      "Aprobar un examen mixto con 85 % o más"
      ],
      "actividad": "conamat"
     },
@@ -370,7 +370,7 @@
       "Resolver trigonometría básica",
       "Usar logaritmos",
       "Graficar transformaciones",
-      "Aprobar un test mixto de precálculo con 80 % o más"
+      "Aprobar un test mixto de precálculo con 85 % o más"
      ]
     },
     {

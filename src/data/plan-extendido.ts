@@ -34,6 +34,53 @@ export interface BloqueExt {
   /** Ventanas: libros principales y qué proyecto habilitan. */
   libros?: string[];
   habilita?: string;
+  /** Ola 16c: ficha de un proyecto, matemática de una ventana y datos de una certificación. */
+  ficha?: Ficha;
+  mate?: MateTramo;
+  cert?: CertInfo;
+}
+
+/** Ficha de un proyecto: lo que lo hace distinto y cómo se prueba. */
+export interface Ficha {
+  rubro?: string;
+  tecnologiaNueva?: string;
+  feature?: string;
+  visual?: string;
+  /** La pieza matemática hecha a mano y contrastada con una referencia. */
+  pieza?: string;
+  /** Contra qué se mide (referencia externa). */
+  referencia?: string;
+  /** Quién lo valida (experto del rubro, PR aceptado o certificación). */
+  validador?: string;
+  perfil?: string;
+}
+
+/** Rol de un libro de refuerzo: se abre según el tipo de error. */
+export type RolRefuerzo = 'intuicion' | 'banco' | 'duro' | 'curso';
+export const ROL_REFUERZO: Record<RolRefuerzo, string> = { intuicion: 'Intuición', banco: 'Banco de ejercicios', duro: 'Libro duro', curso: 'Curso de apoyo' };
+
+/** Matemática de un tramo (ventana o diario): libro principal, refuerzo, qué habilita y el perfil. */
+export interface MateTramo {
+  nombre?: string;
+  principal: string[];
+  refuerzo: { titulo: string; rol: RolRefuerzo }[];
+  /** Ids de proyecto (ventanas) o texto (tramos diarios). */
+  habilita: string[];
+  perfil: string;
+  /** Fase de M0 a M10 (data/study-roadmaps.json) que aporta el material de refuerzo extra. */
+  fase?: string;
+}
+
+export interface CertInfo {
+  /** Costo tal como está en el prompt; sin valor, "sin verificar". */
+  costo?: string;
+  /** true si el precio y la versión se verificaron (el 15 nov 2026). */
+  verificado: boolean;
+  notas?: string;
+  /** Fecha de una decisión pendiente (Security+). */
+  decision?: string;
+  /** Certificación que exige antes (CKS exige CKA). */
+  requiere?: string;
 }
 
 export interface EtapaExt {
@@ -50,6 +97,17 @@ export interface PlanExtendido {
   t0: string;
   etapas: EtapaExt[];
   bloques: BloqueExt[];
+  /** El roadmap de matemática del plan: los tramos diarios (las ventanas van en sus bloques). */
+  matematica: {
+    principio: string;
+    /** Tipo de error → roles de refuerzo que se abren (concepto → intuición, técnica → banco…). */
+    reglaRefuerzo: Record<string, RolRefuerzo[]>;
+    diarios: Record<string, MateTramo & { nombre: string }>;
+  };
+  /** Perfiles vendibles por hito: el que tenés al cerrar ese bloque. */
+  perfilesHito: { despues: string; perfil: string; nota: string }[];
+  /** Decisiones abiertas: flags editables, no se resuelven en el código. */
+  decisiones: { id: string; texto: string; fecha?: string }[];
 }
 
 // ——— validación ———
@@ -99,6 +157,22 @@ export function validar(doc: unknown): string[] {
     estado.set(id, 2);
   };
   for (const b of bloques) visitar(b.id, []);
+
+  // Ola 16c: cada proyecto con su ficha, cada ventana con su matemática y cada certificación con sus datos.
+  for (const b of bloques) {
+    if (b.tipo === 'proyecto' && !b.ficha?.perfil) err.push(`${b.id}: proyecto sin ficha (perfil)`);
+    if (b.tipo === 'ventana') {
+      if (!b.mate?.principal?.length || !b.mate.perfil) err.push(`${b.id}: ventana sin libro principal o perfil`);
+      for (const h of b.mate?.habilita ?? []) {
+        const j = pos.get(h);
+        if (j == null) err.push(`${b.id}: habilita un bloque que no existe (${h})`);
+        else if (j <= pos.get(b.id)!) err.push(`${b.id}: habilita ${h}, que va antes`);
+      }
+    }
+    if (b.tipo === 'cert' && !b.cert) err.push(`${b.id}: certificación sin datos (costo y verificación)`);
+    if (b.cert?.requiere && !pos.has(b.cert.requiere)) err.push(`${b.id}: requiere una certificación que no existe (${b.cert.requiere})`);
+  }
+  for (const p of d?.perfilesHito ?? []) if (!pos.has(p.despues)) err.push(`perfil "${p.perfil}": el bloque ${p.despues} no existe`);
 
   // Sumas por etapa.
   for (const e of etapas) {
