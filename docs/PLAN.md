@@ -5,7 +5,7 @@ Tracker personal de Toti: el día en horas, el estudio con su propio motor de re
 - **Diseño:** [canvas de Trazo](https://claude.ai/artifact/6Cc2E6aW2ViU5ikovpsRTy)
 - **Roadmap de estudio:** [ruta ML + DevSecOps](https://claude.ai/artifact/9PEokku7mBLZdCFJr1zqXP)
 - **Pantallas:** presentación `Trazo-pantallas.pptx` y su ZIP de imágenes (44 pantallas, 8 flujos).
-- **Estado:** olas 0 a 8b hechas y en `main`. Las olas 9 a 12 (mejoras de uso) están planificadas en §6 bis. Este archivo es la fuente de verdad.
+- **Estado:** olas 0 a 12b hechas y en `main`. Las olas 13 a 15 (check-ins de salud, arreglos de Hoy y un solo roadmap de matemática) están planificadas en §6 ter. Este archivo es la fuente de verdad.
 
 ---
 
@@ -377,6 +377,9 @@ Desde el lunes 16 nov 2026 la prioridad es un trabajo remoto de USD 3.000 a 5.00
 | 11 · Mapa de hitos | El mapa no se reordena al seleccionar; leyenda, filtro por rama y detalle del hito (§6 bis) | Sonnet 5.5 · medio |
 | 12a · Estudio: datos del roadmap | `data/study-roadmap.json` con las fases M0 a M10, roles de materiales, protocolo y semáforo, y cálculo de "en qué fase estás" (§6 bis) | Opus 5.5 · alto |
 | 12b · Estudio: pantallas | Estudio como cards de roadmap, timeline de fases con "Estás acá" y perfil por fase (§6 bis) | Opus 5.5 · alto |
+| 13 · Check-ins de salud | Peso al entrar a Entreno la primera vez del día, registro de corridas (minutos, km, sensación) y medidas mensuales (§6 ter) | Sonnet 5.5 · alto |
+| 14 · Arreglos de Hoy | Aviso de bloque pasado que cuenta mal, títulos de meta cortados, toast que tapa el título y marcadores del mapa sin atenuar (§6 ter) | Sonnet 5.5 · medio |
+| 15 · Un solo roadmap de matemática | Unificar Estudio (M0 a M10) con la Ruta y el plan, duraciones y actividades para M2 en adelante (§6 ter) | Opus 5.5 · alto |
 
 ## 6 bis. Olas 9 a 12: mejoras de uso
 
@@ -434,6 +437,33 @@ Salen de usar la app en el teléfono. Una rama y un PR por ola; se mergea a `mai
 - **Fase:** qué libro manda, bloques con sus temas, qué activar según cómo falla un test, los demás materiales por rol, lo que no entra, el proyecto y los criterios de salida. Solo la fase actual se tilda; con todos tildados se cierra y suena el sello. La última cerrada se puede reabrir.
 
 **Decisiones abiertas:** nombres de los perfiles de cada fase (se derivan de la fase si no hay otros), y de dónde salen los roadmaps que no son de matemática. Si no hay más fuentes, la 12b arranca solo con matemática y deja la estructura lista.
+
+## 6 ter. Olas 13 a 15: lo que falta mejorar de lo que ya existe
+
+Mismo flujo: una rama y un PR por ola; se mergea a `main` con el CI en verde.
+
+**Ola 13 · Check-ins de salud** (Sonnet 5.5 · alto)
+
+- **Hoy:** el peso se carga a mano en Peso y nada lo pide; correr es un contador semanal `+1` sin tiempo ni distancia; el plan tiene hitos de "Control de peso y medidas", pero la app no guarda medidas.
+- **Peso al entrar a Entreno:** la primera vez de cada día se abre una hoja inferior, "¿Te pesaste hoy?", con el último peso precargado, `−`/`+` de a 0,1 kg, "Guardar" y "Hoy no". Aparece una sola vez por día, aunque la saltees. *A confirmar: todos los días (por defecto) o solo los domingos, con la opción en Ajustes.*
+- **Correr:** al tildar "Acompañar a Abi y correr" en Hoy o tocar `+1 Correr` se abre una hoja con minutos, km (opcional, con el ritmo calculado), tipo (suave, fondo o series) y cómo te sentiste (1 a 5). La meta semanal "Correr" pasa a sumarse sola con lo registrado y muestra los minutos de la semana. *A confirmar: si alcanzan esos datos.*
+- **Medidas:** cintura, pecho y brazo, opcionales en la hoja del peso, una vez por mes y alineadas con los hitos del plan.
+- **Datos:** `TrainState` suma `runs` y `medidas`; migración de lo guardado y tests. El JSON del día suma peso, corrida y medidas. Curva de corridas en Entreno y en Avance.
+- **Aceptación:** al entrar a Entreno por primera vez en el día aparece la hoja del peso y no vuelve a aparecer ese día; una corrida registrada suma a la meta semanal sin tocar `+1`.
+
+**Ola 14 · Arreglos de Hoy** (Sonnet 5.5 · medio)
+
+- **Aviso de bloque pasado:** si entrás en foco en un bloque que ya terminó, Hoy dice "Matemática se pasó 644 min" y acorta el siguiente a 0. Tiene que contar desde que empezó el foco, no desde el fin del bloque (`avisoPasado` en `src/data/avisos.ts`), con test.
+- **Títulos de meta cortados** ("Matemática · CON…"): el rango "07:55-08:10" ocupa mucho. En la fila va solo la hora de inicio (§3 bis) y el rango completo al abrirla.
+- **Toast inicial:** el "Sello nuevo" tapa el título al entrar; baja de la zona del título o espera a que termine la entrada.
+- **Mapa (pendiente de la ola 11):** el filtro por rama también atenúa los marcadores del dibujo, no solo las filas.
+- **Aceptación:** a 390 px los títulos de las 10 metas de Hoy se leen enteros o casi, sin desbordes, en claro y oscuro.
+
+**Ola 15 · Un solo roadmap de matemática** (Opus 5.5 · alto) — *necesita una decisión antes de arrancar*
+
+- **Hoy conviven dos:** Estudio usa el roadmap M0 a M10 (`data/study-roadmaps.json`); la Ruta y el plan siguen con CONAMAT de B1 a B6 (`data/roadmap.json`, `data/plan.json`).
+- **A decidir:** cuál manda, y las duraciones (las fases suman 45 a 57 meses; el cronograma del texto habla de 33).
+- **Qué sale:** la Ruta, Hoy (el capítulo del día) y el mapa leen el mismo roadmap; actividades de Estudio para M2 en adelante (Stewart, Strang, Blitzstein…), así esas fases también tienen evidencia; tests de que los dos lados coinciden.
 
 En el día a día alcanza con **Haiku 5.5 · bajo**: pegás el JSON del cierre y queda commiteado en `data/days/`.
 
