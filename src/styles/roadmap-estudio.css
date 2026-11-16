@@ -1,0 +1,122 @@
+/* Roadmaps de estudio (ola 12b): cards, "Estás acá", línea de tiempo de fases y detalle de fase. */
+
+/* Cards en Estudio */
+.re-cards { display: grid; gap: 10px; margin-bottom: 26px; }
+@media (min-width: 720px) { .re-cards { grid-template-columns: 1fr 1fr; } }
+.re-card {
+  display: grid; gap: 10px; padding: 14px 16px 14px 20px; position: relative;
+  border: 1px solid var(--linea); border-radius: 12px; color: var(--tinta); text-decoration: none;
+}
+.re-card::before { content: ''; position: absolute; left: 0; top: 14px; bottom: 14px; width: 4px; background: var(--c); }
+.re-card:active { border-color: var(--tinta); }
+.re-card-cab { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
+.re-card-cab b { font-size: 20px; }
+.re-card-cab .mono { font-size: 12px; }
+.re-card-ahora { display: grid; gap: 2px; }
+.re-card-ahora .etiqueta { color: var(--c); }
+.re-card-perfil { display: flex; flex-wrap: wrap; gap: 4px 10px; font-size: 15px; }
+.re-card-perfil b { color: var(--tinta); font-weight: 600; }
+.re-card-pie { font-size: 12px; }
+.re-card.otro { border-style: dashed; }
+
+/* Tira de fases */
+.re-tira { display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; gap: 3px; }
+.re-tira i { height: 8px; border: 1px solid var(--linea); }
+.re-tira i.cerrada { background: var(--c); border-color: var(--c); }
+.re-tira i.actual { background: color-mix(in srgb, var(--c) 45%, transparent); border-color: var(--c); }
+
+/* Estás acá */
+.re-aca { border: 1px solid var(--tinta); border-radius: 14px; padding: 16px; margin: 4px 0 26px; display: grid; gap: 12px; }
+.re-perfiles { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.re-perfiles > span:not(.re-flecha) { display: grid; gap: 2px; }
+.re-perfiles small { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; }
+.re-perfiles b { font-family: var(--font-title); font-weight: 900; font-stretch: 125%; font-size: 22px; line-height: 1.1; }
+.re-flecha { color: var(--sub); font-size: 22px; }
+.re-aca-fase { display: grid; gap: 3px; padding: 12px 14px; border: 1px solid var(--linea); border-radius: 10px; color: var(--tinta); text-decoration: none; }
+.re-aca-fase .mono { font-size: 12px; color: var(--c); }
+.re-aca-fase b { font-size: 18px; }
+.re-aca-fase .sub { font-size: 14px; }
+.re-avance { display: grid; gap: 6px; }
+.re-avance .mono { font-size: 12px; }
+.re-barra { height: 6px; background: var(--linea); display: block; }
+.re-barra span { display: block; height: 100%; background: var(--c); }
+.re-btn { display: grid; place-items: center; text-decoration: none; }
+.re-quedan { margin: 0; font-size: 12px; text-align: center; }
+
+/* Línea de tiempo */
+.re-tl { list-style: none; margin: 8px 0 0; padding: 0; }
+.re-tl li { position: relative; }
+.re-anio { padding: 18px 0 8px; font-size: 14px; border-bottom: 1px solid var(--tinta); margin-bottom: 4px; }
+.re-tl a {
+  display: grid; grid-template-columns: 28px minmax(0, 1fr) auto; gap: 12px; align-items: start;
+  padding: 12px 0; color: var(--tinta); text-decoration: none; position: relative;
+}
+.re-tl li::before { content: ''; position: absolute; left: 13px; top: 0; bottom: 0; width: 2px; background: var(--linea); }
+.re-tl li.cerrada::before { background: var(--c); }
+.re-tl li:first-child::before { top: 30px; }
+.re-tl li:last-child::before { bottom: calc(100% - 30px); }
+.re-tl li:has(.re-anio)::before { top: 44px; }
+.re-nodo {
+  position: relative; z-index: 1; width: 28px; height: 28px; margin-top: 2px; border-radius: 50%;
+  border: 2px solid var(--linea); background: var(--papel); display: grid; place-items: center; font-size: 14px; font-weight: 700;
+}
+.re-tl li.cerrada .re-nodo { background: var(--c); border-color: var(--c); color: var(--papel); }
+.re-tl li.actual .re-nodo { border-color: var(--c); box-shadow: 0 0 0 5px color-mix(in srgb, var(--c) var(--hl-alpha), transparent); }
+.re-tl li.actual .re-nodo::after { content: ''; width: 10px; height: 10px; border-radius: 50%; background: var(--c); }
+.re-tl-cuerpo { display: grid; gap: 3px; min-width: 0; }
+.re-tl-et { font-size: 11.5px; color: var(--sub); }
+.re-tl li.actual .re-tl-et { color: var(--c); }
+.re-tl-cuerpo b { font-size: 17px; line-height: 1.25; }
+.re-tl-perfil { font-size: 15px; justify-self: start; }
+.re-tl-libros { font-size: 13px; }
+.re-tl li.proxima .re-tl-cuerpo b { color: var(--sub); }
+.re-tl-ir { color: var(--sub); align-self: center; }
+
+/* Cómo se usa */
+.re-como { margin-top: 26px; border: 1px solid var(--linea); border-radius: 10px; padding: 0 14px 4px; }
+.re-como summary { min-height: 52px; display: flex; align-items: center; cursor: pointer; font-weight: 600; list-style: none; }
+.re-como summary::-webkit-details-marker { display: none; }
+.re-como summary::after { content: '+'; margin-left: auto; color: var(--sub); font-size: 20px; }
+.re-como[open] summary::after { content: '−'; }
+.re-como p { margin: 0 0 10px; }
+.re-protocolo, .re-roles { margin: 6px 0 16px; padding-left: 20px; display: grid; gap: 8px; color: var(--sub); }
+.re-protocolo b, .re-roles b { color: var(--tinta); }
+
+/* Semáforo */
+.re-semaforo { list-style: none; margin: 4px 0 12px; padding: 0; display: grid; gap: 8px; font-size: 15px; }
+.re-semaforo li { display: grid; grid-template-columns: 14px minmax(0, 1fr); gap: 10px; align-items: baseline; }
+.re-semaforo i { width: 12px; height: 12px; border-radius: 50%; transform: translateY(1px); }
+.re-semaforo .verde i { background: var(--salud); }
+.re-semaforo .amarillo i { background: var(--economia); }
+.re-semaforo .rojo i { background: var(--rutina); }
+
+/* Detalle de fase */
+.re-al-cerrar { margin: -10px 0 8px; font-size: 17px; }
+.re-sec { margin-top: 26px; display: grid; gap: 8px; }
+.re-mats { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.re-mat { display: grid; gap: 3px; padding: 12px 14px; border: 1px solid var(--linea); border-radius: 10px; }
+.re-mat b { font-size: 16px; }
+.re-mat small { font-size: 13px; }
+.re-cuando { color: var(--c); }
+.re-nucleo .re-mat { border-color: var(--c); border-width: 1.5px; }
+.re-rol-uso { margin: -2px 0 2px; font-size: 14px; }
+.re-bloques { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--linea); }
+.re-bloques li { border-bottom: 1px solid var(--linea); }
+.re-bloques summary { display: grid; gap: 2px; padding: 12px 28px 12px 0; cursor: pointer; list-style: none; position: relative; }
+.re-bloques summary::-webkit-details-marker { display: none; }
+.re-bloques summary::after { content: '+'; position: absolute; right: 4px; top: 12px; color: var(--sub); font-size: 20px; }
+.re-bloques details[open] summary::after { content: '−'; }
+.re-bloques summary small { font-size: 13px; }
+.re-temas { margin: 0 0 12px; padding-left: 20px; display: grid; gap: 4px; color: var(--sub); }
+.re-activar { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--linea); }
+.re-activar li { display: grid; gap: 2px; padding: 10px 0; border-bottom: 1px solid var(--linea); }
+.re-activar .sub { font-size: 14px; }
+.re-descartados { margin: 0; padding-left: 20px; color: var(--sub); display: grid; gap: 4px; }
+.re-proy { font-size: 24px; margin: 0; }
+.re-modulos { margin: 0; padding-left: 22px; display: grid; gap: 4px; }
+.re-salida-cab { display: flex; justify-content: space-between; align-items: baseline; }
+.re-salida .btn-principal, .re-salida .btn-borde { margin-top: 12px; }
+.re-nav { display: flex; justify-content: space-between; gap: 12px; margin-top: 30px; padding-top: 14px; border-top: 1px solid var(--linea); }
+.re-nav a { color: var(--tinta); text-decoration: none; font-size: 14px; min-height: 44px; display: flex; align-items: center; }
+.pantalla.re h1 { font-size: clamp(30px, 9.5vw, 44px); overflow-wrap: anywhere; hyphens: auto; }
+.re-salida > p.mono { font-size: 12px; margin: 0; }

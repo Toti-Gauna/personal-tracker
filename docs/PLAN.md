@@ -422,12 +422,16 @@ Salen de usar la app en el teléfono. Una rama y un PR por ola; se mergea a `mai
 - **Perfiles por fase** (derivados del roadmap, se cambian en el JSON): Estudiante con método (M0), Aritmético, Precalculista, Calculista, Probabilista para IA, Matemático de ingeniería, Numérico, Físico general, Mecánico, Termofluidista y Pre-aeroespacial (M10).
 - **A confirmar:** (1) este roadmap no coincide con la ruta de `roadmap.json`, donde CONAMAT cubre los 69 capítulos de B1 a B6 hasta cálculo; acá M1 es CONAMAT y Serge Lang, y M2 es Stewart Precalculus. Hoy conviven: Estudio lee este archivo y la Ruta sigue leyendo `roadmap.json`. (2) Sumando las duraciones de cada fase da 45 a 57 meses; el cronograma por años del texto habla de 33. (3) M0 no tiene duración en el texto: quedó en 1 mes.
 
-**Ola 12b · Estudio: pantallas** (Opus 5.5 · alto)
+**Ola 12b · Estudio: pantallas** (Opus 5.5 · alto) — *hecha*
 
 - **Estudio:** cards seleccionables por roadmap (Matemática primero). Lo de hoy (Repasar → Aprender → Comprobar) queda arriba, como acceso.
 - **Detalle del roadmap:** timeline de fases con "Estás acá", el perfil de cada fase (por ejemplo "Aritmético") y el resto hasta el último.
 - **Detalle de la fase:** qué libro manda, qué complementario activar y cuándo, el proyecto y qué tenés que poder hacer para pasar.
-- **Aceptación:** se entiende en qué fase estás sin leer nada más, y sin desbordes a 390 px.
+- **Aceptación:** se entiende en qué fase estás sin leer nada más, y sin desbordes a 390 px. *Hecho* (revisado a 390 px en claro y oscuro, de M0 a M10).
+- **Rutas:** `#/estudio/ruta/matematica` (el roadmap) y `#/estudio/ruta/matematica/M1` (una fase). Pantalla en `src/screens/RoadmapEstudio.tsx`.
+- **Estudio:** arriba "Tus roadmaps" (la card de matemática con la tira de fases, "Estás acá", el perfil que tenés y al que vas) y una card de Programación que lleva a Metas → Ruta, donde ya está su línea de tiempo. Abajo, "Lo de hoy", sin cambios.
+- **Roadmap:** "Estás acá" con "Hoy sos → Vas a ser", la fase actual, sus criterios y la evidencia; la escalera de fases agrupada por año (cerradas con ✓, la actual con halo); "Cómo se usa" plegado con la regla, el protocolo, los cinco tipos de material y el semáforo.
+- **Fase:** qué libro manda, bloques con sus temas, qué activar según cómo falla un test, los demás materiales por rol, lo que no entra, el proyecto y los criterios de salida. Solo la fase actual se tilda; con todos tildados se cierra y suena el sello. La última cerrada se puede reabrir.
 
 **Decisiones abiertas:** nombres de los perfiles de cada fase (se derivan de la fase si no hay otros), y de dónde salen los roadmaps que no son de matemática. Si no hay más fuentes, la 12b arranca solo con matemática y deja la estructura lista.
 
