@@ -68,6 +68,8 @@ export function valueOf(g: Goal, date: string, ctx: { study: StudyState; days: R
     }
     case 'entreno':
       return ctx.train ? ctx.train.sessions.filter((s) => inRange(s.date)).length : 0;
+    case 'correr':
+      return ctx.train ? ctx.train.runs.filter((r) => inRange(r.date)).length : 0;
     case 'peso': {
       const w = ctx.train?.weights.filter((x) => x.date <= date).sort((a, b) => a.date.localeCompare(b.date)).pop();
       return w?.kg ?? 0;

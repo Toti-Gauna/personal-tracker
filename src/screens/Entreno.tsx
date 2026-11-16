@@ -1,12 +1,15 @@
-import { useState } from 'react';
-import { addDays } from '../data/time';
+import { useEffect, useState } from 'react';
+import { addDays, fmtFecha } from '../data/time';
 import { weekday } from '../data/study';
-import { fmtH, fmtKg, monday, plannedFor, restLabel, sessionsInWeek, setsLabel, stepsMin, totalMin, volume, weightAt } from '../data/train';
+import { debePreguntarPeso, fmtH, fmtKg, fmtPace, monday, plannedFor, RUN_LABEL, runOn, runWeek, restLabel, sessionsInWeek, setsLabel, stepsMin, totalMin, volume, weightAt } from '../data/train';
 import { PLAN_NAME, REST_DAY } from '../data/train-catalog';
 import type { DayLog } from '../data/types';
 import { ir } from '../lib/routes';
 import { useStore } from '../state/store';
-import { startTraining } from '../state/train';
+import { deleteRun, startTraining } from '../state/train';
+import { abrirCorrida, abrirPeso } from '../ui/checkins';
+import { CorridasChart } from '../ui/CorridasChart';
+import '../styles/checkins.css';
 import '../styles/entreno.css';
 
 const DIAS = ['L', 'M', 'X', 'J', 'V', 'S', 'D'];
@@ -27,6 +30,15 @@ export function Entreno({ day }: { day: DayLog }) {
   const enCurso = t.active?.date === date ? t.active : null;
   const partner = settings.names.partner;
   const otras = t.routines.filter((r) => r.id !== hoy.routine?.id);
+  const corrHoy = runOn(t.runs, date);
+  const corrSem = runWeek(t.runs, date);
+
+  // Ola 13: la primera vez que entrás a Entreno en el día, pregunta el peso (una sola vez por día).
+  useEffect(() => {
+    if (debePreguntarPeso(t, date)) abrirPeso(date);
+    // Solo al entrar: guardar o saltar lo marca como preguntado.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [date]);
 
   return (
     <main className="pantalla entreno">
@@ -87,6 +99,26 @@ export function Entreno({ day }: { day: DayLog }) {
       {hoy.rest && (
         <div className="descanso-hoy"><h2 className="titulo rut-t">Descanso activo</h2><p className="sub">Caminar 45 minutos. Hoy no se levanta.</p></div>
       )}
+
+      <section className="corridas" aria-labelledby="corr-t">
+        <div className="corridas-cab">
+          <span className="etiqueta" id="corr-t" style={{ color: 'var(--salud)' }}>Correr</span>
+          <span className="mono sub">{corrSem.n ? `${corrSem.n} esta semana · ${corrSem.min} min${corrSem.km ? ` · ${String(corrSem.km).replace('.', ',')} km` : ''}` : 'ninguna esta semana'}</span>
+        </div>
+        <CorridasChart runs={t.runs} hoy={date} />
+        <button className="btn-borde" onClick={() => abrirCorrida(date)}>{corrHoy ? `Corregir la corrida de hoy · ${corrHoy.min} min` : 'Registrar corrida'}</button>
+        {t.runs.length > 0 && (
+          <ul className="corr-lista">
+            {[...t.runs].reverse().slice(0, 4).map((r) => (
+              <li key={r.date}>
+                <span className="mono sub">{fmtFecha(r.date).slice(0, 9)}</span>
+                <span>{r.min} min{r.km ? ` · ${String(r.km).replace('.', ',')} km` : ''}{fmtPace(r.min, r.km) ? ` · ${fmtPace(r.min, r.km)} /km` : ''}<span className="sub"> · {RUN_LABEL[r.kind].toLowerCase()} · {r.feel}/5</span></span>
+                <button className="borrar" aria-label={`Borrar la corrida del ${fmtFecha(r.date)}`} onClick={() => deleteRun(r.date)}>Borrar</button>
+              </li>
+            ))}
+          </ul>
+        )}
+      </section>
 
       <div className="etiqueta otras-t">Otras rutinas</div>
       <ul className="otras">

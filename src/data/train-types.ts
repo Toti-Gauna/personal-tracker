@@ -103,11 +103,38 @@ export interface Weigh {
   kg: number;
 }
 
+export type RunKind = 'suave' | 'fondo' | 'series';
+export const RUN_KINDS: RunKind[] = ['suave', 'fondo', 'series'];
+
+/** Una corrida: una por día (si cargás otra el mismo día, reemplaza). */
+export interface Run {
+  date: string;
+  min: number;
+  km?: number;
+  kind: RunKind;
+  /** Cómo te sentiste, de 1 (muy mal) a 5 (muy bien). */
+  feel: 1 | 2 | 3 | 4 | 5;
+}
+
+/** Medidas en cm, una vez por mes. Todas opcionales. */
+export interface Medida {
+  date: string;
+  cintura?: number;
+  pecho?: number;
+  brazo?: number;
+}
+
 export interface TrainState {
   routines: Routine[];
   plan: WeekPlan;
   sessions: TrainSession[];
   weights: Weigh[];
+  /** Corridas registradas (ola 13). */
+  runs: Run[];
+  /** Medidas mensuales (ola 13). */
+  medidas: Medida[];
+  /** Días en que ya se preguntó el peso al entrar a Entreno, se haya cargado o saltado. */
+  pesoPreguntado: string[];
   goalKg: number;
   active: ActiveSession | null;
   /** Ejercicios que quedaron sin hacer, por rutina. */

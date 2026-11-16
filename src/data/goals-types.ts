@@ -9,6 +9,7 @@ export type AutoSource =
   | { kind: 'horas'; front: string }
   | { kind: 'actividad'; id: string }
   | { kind: 'entreno' }
+  | { kind: 'correr' }
   | { kind: 'peso' };
 
 /** Meta de la semana (o de otro horizonte). Con `ref` y `part` queda atada a un ítem del roadmap. */

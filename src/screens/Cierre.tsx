@@ -22,6 +22,7 @@ export function Cierre({ day }: { day: DayLog }) {
   const settings = useStore((s) => s.settings)!;
   const days = useStore((s) => s.days);
   const names = useStore((s) => s.goals.bimesterNames);
+  const train = useStore((s) => s.train);
   const cerrado = !!day.closed;
   const mejora = mejoraDia(day);
   const ayer = mejoraAyer(days, day.date);
@@ -55,7 +56,7 @@ export function Cierre({ day }: { day: DayLog }) {
 
   const bim = bimester(settings.startDate, day.date, names);
   const json = useMemo(() => {
-    const j = dayJson({ ...day, closed: day.closed ?? { at: toHHMM(nowMin()), xp, score, victoria, manana } }, settings, days, names);
+    const j = dayJson({ ...day, closed: day.closed ?? { at: toHHMM(nowMin()), xp, score, victoria, manana } }, settings, days, names, train);
     return JSON.stringify(j, null, 2);
   }, [day, settings, days, names, xp, score, victoria, manana]);
 
@@ -63,7 +64,7 @@ export function Cierre({ day }: { day: DayLog }) {
     const nuevos = closeDay(day.date, { victoria, manana, carry: [...pasar], score });
     // El JSON se arma después de cerrar, con lo que pasó a mañana ya sacado del día.
     const s = getState();
-    const final = JSON.stringify(dayJson(s.days[day.date], s.settings!, s.days, s.goals.bimesterNames), null, 2);
+    const final = JSON.stringify(dayJson(s.days[day.date], s.settings!, s.days, s.goals.bimesterNames, s.train), null, 2);
     try {
       await navigator.clipboard.writeText(final + '\n');
       toast({ title: 'JSON copiado · día cerrado', sub: `Pegalo como data/days/${day.date}.json`, color: 'var(--economia)' }, false);

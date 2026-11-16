@@ -4,7 +4,7 @@ import {
   adjustDays, exercisesMin, history, isDeloadWeek, nextTarget, orderFor, rangeKey, rangeOf, recordsFor, sessionsInWeek,
 } from '../data/train';
 import { PLANS } from '../data/train-catalog';
-import type { ActiveSession, Exercise, Routine, SetLog, Template, TrainState, Who } from '../data/train-types';
+import type { ActiveSession, Exercise, Medida, Routine, Run, SetLog, Template, TrainState, Who } from '../data/train-types';
 import { getState, setState, updateDay } from './store';
 
 function update(fn: (t: TrainState) => TrainState) {
@@ -200,6 +200,37 @@ export function setRange(who: Who, exId: string, range: [number, number]) {
 export function addWeight(date: string, kg: number) {
   if (!(kg > 0)) return;
   update((t) => ({ ...t, weights: [...t.weights.filter((w) => w.date !== date), { date, kg }].sort((a, b) => a.date.localeCompare(b.date)) }));
+}
+
+/** Guarda el peso del día y deja anotado que ya se preguntó. */
+export function guardarPeso(date: string, kg: number) {
+  addWeight(date, kg);
+  marcarPesoPreguntado(date);
+}
+
+/** "Hoy no": no vuelve a preguntar el peso ese día. */
+export function marcarPesoPreguntado(date: string) {
+  update((t) => (t.pesoPreguntado.includes(date) ? t : { ...t, pesoPreguntado: [...t.pesoPreguntado.slice(-60), date] }));
+}
+
+/** Una corrida por día: si ya había una, la reemplaza. */
+export function addRun(run: Run) {
+  if (!(run.min > 0)) return;
+  update((t) => ({ ...t, runs: [...t.runs.filter((r) => r.date !== run.date), run].sort((a, b) => a.date.localeCompare(b.date)) }));
+}
+
+export function deleteRun(date: string) {
+  update((t) => ({ ...t, runs: t.runs.filter((r) => r.date !== date) }));
+}
+
+/** Medidas del día (una por fecha); sin ningún valor no guarda nada. */
+export function addMedida(m: Medida) {
+  if (m.cintura == null && m.pecho == null && m.brazo == null) return;
+  update((t) => ({ ...t, medidas: [...t.medidas.filter((x) => x.date !== m.date), m].sort((a, b) => a.date.localeCompare(b.date)) }));
+}
+
+export function deleteMedida(date: string) {
+  update((t) => ({ ...t, medidas: t.medidas.filter((m) => m.date !== date) }));
 }
 
 export function deleteWeight(date: string) {

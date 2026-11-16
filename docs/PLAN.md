@@ -445,14 +445,23 @@ Salen de usar la app en el teléfono. Una rama y un PR por ola; se mergea a `mai
 
 Mismo flujo: una rama y un PR por ola; se mergea a `main` con el CI en verde.
 
-**Ola 13 · Check-ins de salud** (Sonnet 5.5 · alto)
+**Ola 13 · Check-ins de salud** (Sonnet 5.5 · alto) — *hecha*
 
 - **Hoy:** el peso se carga a mano en Peso y nada lo pide; correr es un contador semanal `+1` sin tiempo ni distancia; el plan tiene hitos de "Control de peso y medidas", pero la app no guarda medidas.
 - **Peso al entrar a Entreno:** la primera vez de cada día se abre una hoja inferior, "¿Te pesaste hoy?", con el último peso precargado, `−`/`+` de a 0,1 kg, "Guardar" y "Hoy no". Aparece una sola vez por día, aunque la saltees. *A confirmar: todos los días (por defecto) o solo los domingos, con la opción en Ajustes.*
 - **Correr:** al tildar "Acompañar a Abi y correr" en Hoy o tocar `+1 Correr` se abre una hoja con minutos, km (opcional, con el ritmo calculado), tipo (suave, fondo o series) y cómo te sentiste (1 a 5). La meta semanal "Correr" pasa a sumarse sola con lo registrado y muestra los minutos de la semana. *A confirmar: si alcanzan esos datos.*
 - **Medidas:** cintura, pecho y brazo, opcionales en la hoja del peso, una vez por mes y alineadas con los hitos del plan.
 - **Datos:** `TrainState` suma `runs` y `medidas`; migración de lo guardado y tests. El JSON del día suma peso, corrida y medidas. Curva de corridas en Entreno y en Avance.
-- **Aceptación:** al entrar a Entreno por primera vez en el día aparece la hoja del peso y no vuelve a aparecer ese día; una corrida registrada suma a la meta semanal sin tocar `+1`.
+- **Aceptación:** al entrar a Entreno por primera vez en el día aparece la hoja del peso y no vuelve a aparecer ese día; una corrida registrada suma a la meta semanal sin tocar `+1`. *Hecho.*
+- **Lo que quedó:**
+  - **Peso:** la hoja "¿Te pesaste hoy?" se abre al entrar a Entreno, con el último peso precargado, `−`/`+` de a 0,1 kg (también se escribe), "Guardar peso" y "Hoy no". Se pregunta una sola vez por día (`pesoPreguntado`), aunque la saltees, y no durante una sesión de entreno. Sin un peso anterior, el primer `+` arranca en la meta menos 5 kg.
+  - **Medidas:** cintura, pecho y brazo en cm, opcionales, dentro de la misma hoja cuando pasaron 28 días o más desde las últimas. También se cargan y borran en la pantalla Peso.
+  - **Corrida:** la hoja "¿Cuánto corriste?" pide minutos (de a 5), km opcional con el ritmo calculado, tipo (suave, fondo o series) y sensación de 1 a 5. Se abre al tildar "Correr" en Hoy (si todavía no cargaste la de hoy), con el `+` de la meta semanal y con "Registrar corrida" en Entreno. Una corrida por día: otra el mismo día la reemplaza.
+  - **Meta "Correr":** pasa a sumarse sola (cuenta corridas de la semana) y muestra los minutos y km; las guardadas antes se migran. Ya no tiene botón `+1` rápido en Hoy.
+  - **Gráficos:** barras de minutos de las últimas 8 corridas en Entreno y en Avance, con descripción para lectores de pantalla.
+  - **JSON del día:** suma `salud: { peso, corrida, medidas }` (null lo que no se cargó).
+  - **Datos:** `TrainState` suma `runs`, `medidas` y `pesoPreguntado`; los guardados viejos arrancan vacíos. 16 tests nuevos.
+- **Pendiente a propósito:** pedir el peso solo los domingos en Ajustes (hoy es todos los días, salteable); minutos de otras actividades de cardio distintas de correr.
 
 **Ola 14 · Arreglos de Hoy** (Sonnet 5.5 · medio)
 

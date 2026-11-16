@@ -6,13 +6,17 @@ import { syncBlockRuta } from '../state/ruta';
 import { BIMS, laneById, laneOfItem } from '../data/ruta';
 import { ir } from '../lib/routes';
 import { play } from './sound';
+import { abrirCorrida } from './checkins';
 
 /** Marca una tarea y, si con eso se cumple la meta, avisa cuánto suma. */
 export function marcarTarea(date: string, key: string, id: string) {
   const before = getState().days[date]?.blocks.find((b) => b.key === key);
   const wasDone = before ? blockDone(before) : false;
   toggleTask(date, key, id);
-  const hecha = getState().days[date]?.blocks.find((x) => x.key === key)?.tasks.find((t) => t.id === id)?.done;
+  const tarea = getState().days[date]?.blocks.find((x) => x.key === key)?.tasks.find((t) => t.id === id);
+  const hecha = tarea?.done;
+  // Ola 13: al tildar "Correr" pregunta cuánto corriste (si todavía no cargaste la de hoy).
+  if (hecha && tarea && /\bcorrer\b/i.test(tarea.t) && !getState().train.runs.some((r) => r.date === date)) abrirCorrida(date);
   const day = getState().days[date];
   const b = day?.blocks.find((x) => x.key === key);
   if (day && b && !wasDone && blockDone(b)) {

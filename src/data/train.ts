@@ -1,5 +1,5 @@
 import { REST_DAY, REST_DAY_MIN, RULES } from './train-catalog';
-import type { Exercise, Routine, SetLog, TrainRecord, TrainSession, TrainState, Who } from './train-types';
+import type { Exercise, Medida, Routine, Run, RunKind, SetLog, TrainRecord, TrainSession, TrainState, Who } from './train-types';
 import { addDays, daysBetween } from './time';
 import { weekday } from './study';
 
@@ -188,3 +188,39 @@ export function pace(ws: { date: string; kg: number }[]) {
   const weeks = Math.max(1, daysBetween(s[0].date, s[s.length - 1].date) / 7);
   return { perWeek: (s[s.length - 1].kg - s[0].kg) / weeks, change: s[s.length - 1].kg - s[0].kg, weeks: Math.round(weeks) };
 }
+
+// ——— Ola 13: peso al entrar, corridas y medidas ———
+
+export const RUN_LABEL: Record<RunKind, string> = { suave: 'Suave', fondo: 'Fondo', series: 'Series' };
+export const FEEL_LABEL = ['', 'Muy mal', 'Mal', 'Normal', 'Bien', 'Muy bien'];
+
+/** Ritmo en min/km ("5:30"); sin distancia no hay ritmo. */
+export function fmtPace(min: number, km?: number) {
+  if (!km || km <= 0 || min <= 0) return null;
+  const sec = Math.round((min / km) * 60);
+  return `${Math.floor(sec / 60)}:${String(sec % 60).padStart(2, '0')}`;
+}
+
+export const runOn = (runs: Run[], date: string) => runs.find((r) => r.date === date);
+export const runsBetween = (runs: Run[], from: string, to: string) => runs.filter((r) => r.date >= from && r.date <= to).sort((a, b) => a.date.localeCompare(b.date));
+
+/** Lo corrido en la semana (lunes a domingo) de una fecha. */
+export function runWeek(runs: Run[], date: string) {
+  const l = monday(date);
+  const rs = runsBetween(runs, l, addDays(l, 6));
+  return { n: rs.length, min: rs.reduce((s, r) => s + r.min, 0), km: Math.round(rs.reduce((s, r) => s + (r.km ?? 0), 0) * 10) / 10 };
+}
+
+/** Las medidas se piden una vez por mes: a los 28 días de la última (o si nunca se cargaron). */
+export const DIAS_ENTRE_MEDIDAS = 28;
+export function medidasPendientes(medidas: Medida[], date: string) {
+  const ult = [...medidas].filter((m) => m.date <= date).sort((a, b) => a.date.localeCompare(b.date)).pop();
+  return !ult || daysBetween(ult.date, date) >= DIAS_ENTRE_MEDIDAS;
+}
+
+/**
+ * ¿Hay que preguntar el peso al entrar a Entreno? Una sola vez por día: si ya lo cargaste, si
+ * ya lo salteaste o si estás en plena sesión, no.
+ */
+export const debePreguntarPeso = (t: Pick<TrainState, 'weights' | 'pesoPreguntado' | 'active'>, date: string) =>
+  !t.pesoPreguntado.includes(date) && !t.weights.some((w) => w.date === date) && !t.active;

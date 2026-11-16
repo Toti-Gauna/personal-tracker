@@ -4,9 +4,11 @@ import type { Goal } from '../data/goals-types';
 import { useStore } from '../state/store';
 import { periodKey } from '../data/goals';
 import { addDays } from '../data/time';
+import { runWeek } from '../data/train';
 import { addProgress, deleteGoal, stepOf, toggleGoal, toggleMark, toggleSub } from '../state/goals';
 import { dateKey } from '../data/time';
 import { Casilla } from './Casilla';
+import { abrirCorrida } from './checkins';
 
 const fmt = (n: number) => String(n).replace('.', ',');
 const DIAS = ['L', 'M', 'X', 'J', 'V', 'S', 'D'];
@@ -19,6 +21,8 @@ export function GoalRow({ g, date, editar, sub }: { g: Goal; date: string; edita
   const v = valueOf(g, date, { study, days, train });
   const manual = !g.auto;
   const done = v >= g.target;
+  const corr = g.auto?.kind === 'correr' ? runWeek(train.runs, date) : null;
+  const subtexto = sub ?? (corr && corr.n ? `${corr.min} min${corr.km ? ` · ${fmt(corr.km)} km` : ''} esta semana` : undefined);
   const conSubs = !!g.subs?.length;
   const porDia = !!g.daily && manual;
   const hechas = new Set(g.subDone?.[periodKey(g.horizon, date)] ?? []);
@@ -33,7 +37,7 @@ export function GoalRow({ g, date, editar, sub }: { g: Goal; date: string; edita
             {g.type === 'tarea' ? (done ? 'hecha' : 'pendiente') : `${fmt(v)}/${g.target}${g.unit === 'h' || g.unit === 'kg' ? ` ${g.unit}` : ''}`}
           </span>
         </div>
-        {sub && <small className="mg-sub mono">{sub}</small>}
+        {subtexto && <small className="mg-sub mono">{subtexto}</small>}
         <div className="mg-barra" aria-hidden="true"><span style={{ width: `${ratio(v, g.target) * 100}%` }} /></div>
       </div>
       {editar ? (
@@ -42,6 +46,8 @@ export function GoalRow({ g, date, editar, sub }: { g: Goal; date: string; edita
         <Casilla checked={done} label={`${g.title}: marcar`} onChange={() => toggleGoal(g.id, date)} />
       ) : manual ? (
         <button className="mg-mas" aria-label={`Sumar ${stepOf(g)} a ${g.title}`} onClick={() => addProgress(g.id, date, stepOf(g))}>+</button>
+      ) : g.auto?.kind === 'correr' ? (
+        <button className="mg-mas" aria-label="Registrar una corrida" title="Registrar corrida" onClick={() => abrirCorrida(date)}>+</button>
       ) : (
         <span className="mg-auto mono" title="Se suma solo">auto</span>
       )}

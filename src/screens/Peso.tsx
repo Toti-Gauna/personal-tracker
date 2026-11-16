@@ -1,11 +1,12 @@
 import { useState } from 'react';
 import { weekday } from '../data/study';
 import { fmtFecha, parseDate } from '../data/time';
-import { fmtKg, pace, weightAt } from '../data/train';
+import { fmtKg, medidasPendientes, pace, weightAt } from '../data/train';
 import type { DayLog } from '../data/types';
 import { useStore } from '../state/store';
-import { addWeight, deleteWeight, setGoalKg } from '../state/train';
+import { addMedida, addWeight, deleteMedida, deleteWeight, setGoalKg } from '../state/train';
 import { toast } from '../ui/avisos';
+import '../styles/checkins.css';
 import '../styles/entreno.css';
 
 const MES = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'];
@@ -18,6 +19,7 @@ export function Peso({ day }: { day: DayLog }) {
   const t = useStore((s) => s.train);
   const [txt, setTxt] = useState('');
   const [meta, setMeta] = useState<string | null>(null);
+  const [med, setMed] = useState({ cintura: '', pecho: '', brazo: '' });
   const ws = [...t.weights].sort((a, b) => a.date.localeCompare(b.date));
   const hoy = day.date;
   const dom = weekday(hoy) === 6;
@@ -36,6 +38,15 @@ export function Peso({ day }: { day: DayLog }) {
   const ticks: number[] = [];
   for (let v = min; v <= max; v += 4) ticks.push(v);
 
+  const num = (v: string) => Number(v.replace(',', '.')) || undefined;
+  const guardarMedidas = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!num(med.cintura) && !num(med.pecho) && !num(med.brazo)) return;
+    addMedida({ date: day.date, cintura: num(med.cintura), pecho: num(med.pecho), brazo: num(med.brazo) });
+    setMed({ cintura: '', pecho: '', brazo: '' });
+    toast({ title: 'Medidas guardadas', sub: 'Pedimos otras en 4 semanas', color: 'var(--salud)' }, false);
+  };
+  const ms = [...t.medidas].sort((a, b) => b.date.localeCompare(a.date));
   const registrar = (e: React.FormEvent) => {
     e.preventDefault();
     const kg = Number(txt.replace(',', '.'));
@@ -91,6 +102,32 @@ export function Peso({ day }: { day: DayLog }) {
         </div>
         {!dom && <p className="sub nota-izq">Pesarse los domingos hace comparables las semanas, pero podés cargar hoy.</p>}
       </form>
+
+      <section aria-labelledby="medidas-t">
+        <div className="etiqueta rep-t" id="medidas-t">Medidas · una vez por mes</div>
+        <p className="sub nota-izq">{medidasPendientes(t.medidas, day.date) ? 'Ya toca cargarlas (pasaron 4 semanas o más).' : 'Ya cargaste las de este mes.'} En cm, todas opcionales.</p>
+        <form onSubmit={guardarMedidas}>
+          <div className="ck-3">
+            {(['cintura', 'pecho', 'brazo'] as const).map((k) => (
+              <label key={k}><span className="sub">{k[0].toUpperCase() + k.slice(1)}</span>
+                <input className="campo-texto mono" inputMode="decimal" placeholder="cm" value={med[k]} onChange={(e) => setMed({ ...med, [k]: e.target.value.replace(/[^\d.,]/g, '') })} />
+              </label>
+            ))}
+          </div>
+          <button className="btn-borde" type="submit" disabled={!num(med.cintura) && !num(med.pecho) && !num(med.brazo)}>Guardar medidas</button>
+        </form>
+        {ms.length > 0 && (
+          <ul className="medidas-lista">
+            {ms.slice(0, 4).map((m) => (
+              <li key={m.date}>
+                <span className="mono sub">{dm(m.date)}</span>
+                <span className="mono">{[m.cintura != null && `cintura ${fmtKg(m.cintura)}`, m.pecho != null && `pecho ${fmtKg(m.pecho)}`, m.brazo != null && `brazo ${fmtKg(m.brazo)}`].filter(Boolean).join(' · ')} cm</span>
+                <button className="borrar" aria-label={`Borrar las medidas del ${dm(m.date)}`} onClick={() => deleteMedida(m.date)}>Borrar</button>
+              </li>
+            ))}
+          </ul>
+        )}
+      </section>
 
       <div className="etiqueta rep-t">Meta</div>
       <div className="pesaje-fila">

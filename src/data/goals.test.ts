@@ -57,7 +57,8 @@ describe('metas', () => {
   });
 
   it('el avance semanal se reinicia cada semana', () => {
-    const g = getState().goals.goals.find((x) => x.title === 'Correr')!;
+    // "Correr" se suma solo desde la ola 13; "Comer sano" sigue siendo un contador manual.
+    const g = getState().goals.goals.find((x) => x.title === 'Comer sano')!;
     addProgress(g.id, D0, 1);
     addProgress(g.id, '2026-11-13', 1);
     const now = () => getState().goals.goals.find((x) => x.id === g.id)!;

@@ -1,10 +1,11 @@
 import { bimestreDelPlan, enPlan, etapas, semanaDelPlan } from './plan';
 import { bimester, dayNumber, mejoraAcumulada, mejoraAyer } from './derive';
 import { blockDone, mejoraDia, round } from './mejora';
+import type { TrainState } from './train-types';
 import type { DayLog, Settings } from './types';
 
 /** JSON del día: lo que se pega y se commitea en data/days/AAAA-MM-DD.json. */
-export function dayJson(day: DayLog, settings: Settings, days: Record<string, DayLog>, names: Record<number, string> = {}) {
+export function dayJson(day: DayLog, settings: Settings, days: Record<string, DayLog>, names: Record<number, string> = {}, train?: Pick<TrainState, 'weights' | 'runs' | 'medidas'>) {
   const b = bimester(settings.startDate, day.date, names);
   return {
     date: day.date,
@@ -26,11 +27,24 @@ export function dayJson(day: DayLog, settings: Settings, days: Record<string, Da
     notes: day.notes,
     ...(day.closed ? { cierre: { at: day.closed.at, score: round(day.closed.score), xp: day.closed.xp, victoria: day.closed.victoria, manana: day.closed.manana } } : {}),
     ...planDelDia(day.date, settings.startDate),
+    ...(train ? { salud: saludDelDia(day.date, train) } : {}),
     mejora: {
       hoy: round(mejoraDia(day)),
       ayer: round(mejoraAyer(days, day.date)),
       acumulado: round(mejoraAcumulada(days, day.date), 2),
     },
+  };
+}
+
+/** Peso, corrida y medidas del día (ola 13); null lo que no se cargó. */
+function saludDelDia(date: string, t: Pick<TrainState, 'weights' | 'runs' | 'medidas'>) {
+  const peso = t.weights.find((w) => w.date === date);
+  const run = t.runs.find((r) => r.date === date);
+  const m = t.medidas.find((x) => x.date === date);
+  return {
+    peso: peso ? peso.kg : null,
+    corrida: run ? { min: run.min, km: run.km ?? null, tipo: run.kind, sensacion: run.feel } : null,
+    medidas: m ? { cintura: m.cintura ?? null, pecho: m.pecho ?? null, brazo: m.brazo ?? null } : null,
   };
 }
 
