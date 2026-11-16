@@ -12,6 +12,8 @@ import { toast } from '../ui/avisos';
 import { startStudy, tramoHecho } from '../ui/estudio-acciones';
 import { useNow } from '../ui/useNow';
 import { useStudyPlan } from '../ui/useStudy';
+import { capsTexto, microFaltantes } from '../data/libros';
+import { MicroTesis } from '../ui/MicroTesis';
 import '../styles/estudio.css';
 import '../styles/foco.css';
 
@@ -98,6 +100,9 @@ export function SesionEstudio({ day, id }: { day: DayLog; id?: string }) {
 
   const t = tr[activa.i];
   const prev = activa.i > 0 ? tr[activa.i - 1] : null;
+  const ultimoLearn = tr.map((x) => x.kind).lastIndexOf('capitulo');
+  const unidadLibro = a?.libro && t.ref.startsWith('learn:') ? Number(t.ref.split(':')[2]) || null : null;
+  const faltaMicro = a && unidadLibro ? microFaltantes(study, a, unidadLibro) : [];
   const pausado = activa.pausedAt != null;
   const total = sumMin(tr);
 
@@ -108,6 +113,10 @@ export function SesionEstudio({ day, id }: { day: DayLog; id?: string }) {
     if (t.kind === 'test') {
       const [, act, n] = t.ref.split(':');
       return ir(`test/${act}/${n}`);
+    }
+    // Libro: el último tramo de leer no cierra la unidad sin la micro-tesis de cada capítulo.
+    if (faltaMicro.length && t.kind === 'capitulo' && activa.i === ultimoLearn) {
+      return toast({ title: `Falta la micro-tesis del ${capsTexto(faltaMicro)}`, sub: 'Escribila abajo: una frase por capítulo', color }, false);
     }
     tramoHecho(activa);
   };
@@ -148,6 +157,8 @@ export function SesionEstudio({ day, id }: { day: DayLog; id?: string }) {
           <button className="btn-principal" onClick={accion}>{accionLabel}</button>
         </div>
       </div>
+
+      {a && unidadLibro && t.step === 'estudiar' && <MicroTesis date={day.date} a={a} n={unidadLibro} />}
 
       <div className="fila-t">
         <span className="etiqueta">La sesión</span>

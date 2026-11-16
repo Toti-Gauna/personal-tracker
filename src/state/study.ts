@@ -6,6 +6,7 @@ import { addDays } from '../data/time';
 import { newId } from '../data/schedule';
 import { getState, setState, updateDay } from './store';
 import { logFromStudy } from './ruta';
+import { claveMicro, libroPorId, unidadesDe, type TipoArtefacto } from '../data/libros';
 
 function updateStudy(fn: (st: StudyState) => StudyState) {
   setState((s) => ({ ...s, study: fn(s.study) }));
@@ -264,4 +265,94 @@ export function savePoints(key: string, points: string[]) {
 function rutaFromStudy(date: string, activityId: string, n: number, part: 'learn' | 'test') {
   if (activityId !== 'conamat') return;
   logFromStudy(date, `b1-conamat-arit-${String(n).padStart(2, '0')}`, 0.5, `study:${part}:${activityId}:${n}`);
+}
+
+// ——— Sistema de libros (ola 20) ———
+
+/**
+ * Guarda la micro-tesis de un capítulo (una frase en tus palabras). Queda como punto clave de la unidad
+ * (contra eso se compara el cold recall) y, si se pide, como tarjeta. Editarla actualiza su tarjeta.
+ */
+export function guardarMicrotesis(date: string, actId: string, cap: number, texto: string, tarjeta = true) {
+  const st = getState().study;
+  const a = st.activities.find((x) => x.id === actId);
+  const l = a?.libro ? libroPorId(a.libro) : undefined;
+  if (!a || !l) return;
+  const t = texto.trim();
+  const clave = claveMicro(actId, cap);
+  const prev = st.microtesis?.[clave];
+  const capi = l.capitulos.find((c) => c.n === cap);
+  const unidad = unidadesDe(l).find((u) => u.caps.includes(cap));
+  const deck = st.fronts.find((f) => f.id === a.front)?.name ?? 'General';
+  let cardId = prev?.cardId;
+  let nueva: Card | null = null;
+  if (t && tarjeta && !cardId) {
+    cardId = `c${newId()}`;
+    nueva = {
+      id: cardId, front: `${l.titulo} · cap. ${cap}${capi ? ` (${capi.titulo})` : ''}: ¿cuál es la idea central?`, back: t, kind: 'explicar',
+      deck, frontId: a.front, source: `Micro-tesis · cap. ${cap}`, createdOn: date, activityId: actId, unit: unidad?.n,
+    };
+  }
+  updateStudy((s) => {
+    const microtesis = { ...(s.microtesis ?? {}) };
+    if (t) microtesis[clave] = { texto: t, fecha: prev?.fecha ?? date, ...(cardId ? { cardId } : {}) };
+    else delete microtesis[clave];
+    // Los puntos de la unidad: las micro-tesis de sus capítulos (el cold recall compara contra esto).
+    const points = { ...s.points };
+    if (unidad) {
+      const ps = unidad.caps.flatMap((c) => {
+        const m = microtesis[claveMicro(actId, c)];
+        const titulo = l.capitulos.find((x) => x.n === c)?.titulo ?? `Cap. ${c}`;
+        return m ? [`Cap. ${c} · ${titulo} :: ${m.texto}`] : [];
+      });
+      if (ps.length) points[`${actId}:${unidad.n}`] = ps;
+      else delete points[`${actId}:${unidad.n}`];
+    }
+    const cards = nueva ? [...s.cards, nueva] : s.cards.map((c) => (c.id === prev?.cardId && t ? { ...c, back: t } : c));
+    return { ...s, microtesis, points, cards };
+  });
+}
+
+/** Lectura de apoyo (Foreword, Resources): se tilda, sin test. */
+export function marcarRecurso(date: string, actId: string, recurso: string) {
+  updateStudy((s) => {
+    const r = { ...(s.recursosLeidos ?? {}) };
+    const k = `${actId}:${recurso}`;
+    if (r[k]) delete r[k];
+    else r[k] = date;
+    return { ...s, recursosLeidos: r };
+  });
+}
+
+/**
+ * Test final del libro. Con 85 % o más queda aprobado y la tesis final vence mañana (va a la sesión
+ * como cualquier tesis). Con menos, se puede repetir.
+ */
+export function guardarTestFinal(date: string, actId: string, data: { score: number; total: number; errors: Record<ErrType, number>; mode: 'app' | 'papel' }) {
+  const a = findAct(actId);
+  if (!a) return { approved: false };
+  const approved = approves(data.score, data.total);
+  updateStudy((s) => {
+    const cur = s.finales?.[actId] ?? { tests: [] };
+    const nuevo = approved && !cur.aprobadoOn;
+    const tesis: ReviewItem | null = nuevo
+      ? { id: `r${newId()}`, activityId: actId, kind: 'tesis', due: addDays(date, 1), min: 30, label: `Tesis final · ${a.title}` }
+      : null;
+    return {
+      ...s,
+      finales: { ...(s.finales ?? {}), [actId]: { ...cur, tests: [...cur.tests, { ...data, date, approved }], aprobadoOn: cur.aprobadoOn ?? (approved ? date : undefined), ...(tesis ? { tesisItem: tesis.id } : {}) } },
+      reviews: tesis ? [...s.reviews, tesis] : s.reviews,
+    };
+  });
+  markStep(date, `test:${actId}:final`);
+  return { approved };
+}
+
+/** El artefacto del libro: sin él, el libro queda "leído" y no "terminado". */
+export function guardarArtefacto(date: string, actId: string, art: { tipo: TipoArtefacto; titulo: string; link?: string } | null) {
+  updateStudy((s) => {
+    const cur = s.finales?.[actId] ?? { tests: [] };
+    const { artefacto: _, ...resto } = cur;
+    return { ...s, finales: { ...(s.finales ?? {}), [actId]: art ? { ...resto, artefacto: { ...art, fecha: date } } : resto } };
+  });
 }

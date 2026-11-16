@@ -58,7 +58,7 @@ function load(): State {
 export function migrate(parsed: any): State {
   // Migración: la ola 1 no tenía estudio y la ola 2 no tenía reglas, registro ni puntos.
   const base = emptyStudy();
-  const study = parsed.study ? { ...base, ...parsed.study, attempts: parsed.study.attempts ?? [], rules: { ...base.rules, ...parsed.study.rules, pesos: { ...base.rules.pesos, ...parsed.study.rules?.pesos } } } : base;
+  const study = parsed.study ? migrateStudy({ ...base, ...parsed.study, attempts: parsed.study.attempts ?? [], rules: { ...base.rules, ...parsed.study.rules, pesos: { ...base.rules.pesos, ...parsed.study.rules?.pesos } } }) : base;
   const goals = parsed.goals ? { ...emptyGoals(), ...parsed.goals } : null;
   const train = parsed.train ? { ...emptyTrain(), ...parsed.train } : emptyTrain();
   const ruta = { ...emptyRuta(), ...(parsed.ruta ?? {}) };
@@ -104,6 +104,17 @@ const subscribe = (f: () => void) => {
 
 export function useStore<T>(sel: (s: State) => T): T {
   return useSyncExternalStore(subscribe, () => sel(state), () => sel(state));
+}
+
+/**
+ * Ola 20: el sistema de libros suma Measure What Matters (si no estaba) y cada actividad conocida
+ * toma su área (CONAMAT, matemática). Lo estudiado no se toca.
+ */
+function migrateStudy(st: StudyState): StudyState {
+  const mwm = emptyStudy().activities.find((a) => a.libro === 'mwm')!;
+  let activities = st.activities.map((a) => (a.id === 'conamat' && !a.area ? { ...a, area: 'matematica' as const } : a));
+  if (!activities.some((a) => a.libro === 'mwm' || a.id === mwm.id)) activities = [...activities, mwm];
+  return { ...st, activities };
 }
 
 /**

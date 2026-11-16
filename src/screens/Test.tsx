@@ -10,6 +10,7 @@ import { useStore } from '../state/store';
 import { saveTest } from '../state/study';
 import { toast } from '../ui/avisos';
 import { LADDER, MAX_TRIES } from '../data/study-catalog';
+import { TestFinal } from './TestFinal';
 import '../styles/estudio.css';
 
 const ERR: Record<ErrType, [string, string]> = {
@@ -27,6 +28,11 @@ const fecha = (d: string) => fmtFecha(d).split(' ').slice(0, 2).join(' ').toLowe
 /** 2.5 y 2.6 · Test: el test completo del capítulo recién estudiado, en la app o en papel. */
 export function Test({ day, param }: { day: DayLog; param?: string }) {
   const [actId, nStr] = (param ?? '').split('/');
+  if (nStr === 'final') return <TestFinal day={day} actId={actId} />;
+  return <TestUnidad day={day} actId={actId} nStr={nStr} />;
+}
+
+function TestUnidad({ day, actId, nStr }: { day: DayLog; actId: string; nStr: string }) {
   const study = useStore((s) => s.study);
   const a = study.activities.find((x) => x.id === actId);
   const unit = a?.units?.find((u) => u.n === Number(nStr));

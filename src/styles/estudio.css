@@ -236,3 +236,40 @@ label.celda { cursor: text; align-content: start; gap: 2px; }
 .donde-flojo small { font-size: 14px; }
 .donde-flojo .deb-barra { display: block; height: 4px; background: var(--linea); margin-top: 6px; }
 .donde-flojo .deb-barra > span { display: block; height: 100%; }
+
+/* Ola 20 · sistema de libros */
+.micro { display: grid; gap: 12px; margin: 18px 0 8px; padding: 14px; border: 1px solid var(--linea); border-left: 3px solid var(--handyx); border-radius: var(--radius); }
+.micro .fila-t { margin: 0; }
+.micro-cap { display: grid; gap: 6px; }
+.micro-t { display: grid; gap: 2px; }
+.micro-t b { font-size: 15px; }
+.micro-t small { color: var(--sub); font-size: 13px; }
+.micro-cap textarea { resize: vertical; min-height: 64px; }
+.micro-tarjeta { display: flex; align-items: center; gap: 10px; font-size: 14px; color: var(--sub); }
+.micro-tarjeta input { width: 20px; height: 20px; accent-color: var(--handyx); }
+.micro .btn-borde { margin-top: 0; }
+.libro-aca { display: grid; gap: 8px; margin: 18px 0; padding: 16px; border: 1px solid var(--linea); border-radius: var(--radius); }
+.libro-aca > b { font-size: 20px; line-height: 1.25; overflow-wrap: anywhere; }
+.libro-barra { display: block; height: 6px; border-radius: 3px; background: var(--linea); overflow: hidden; }
+.libro-barra span { display: block; height: 100%; background: var(--c); }
+.libro-nums { display: flex; flex-wrap: wrap; gap: 6px 18px; font-size: 14px; color: var(--sub); }
+.libro-nums b { color: var(--tinta); }
+.libro-como { margin: 0 0 18px; border-top: 1px solid var(--linea); border-bottom: 1px solid var(--linea); padding: 12px 0; }
+.libro-como summary { cursor: pointer; font-weight: 600; min-height: 32px; }
+.libro-como ol { margin: 10px 0 0; padding-left: 20px; display: grid; gap: 6px; color: var(--sub); font-size: 15px; }
+.libro-como b { color: var(--tinta); font-weight: 600; }
+.libro-unid { list-style: none; margin: 0 0 18px; padding: 0; }
+.libro-unid > li { border-top: 1px solid var(--linea); }
+.libro-u-fila { display: grid; grid-template-columns: 28px minmax(0, 1fr) auto; gap: 10px; align-items: center; width: 100%; text-align: left; padding: 12px 0; min-height: 56px; }
+.libro-u-t { display: grid; gap: 2px; min-width: 0; }
+.libro-u-t small { color: var(--sub); font-size: 13px; overflow-wrap: anywhere; }
+.libro-u-det { padding: 0 0 14px; }
+.libro-rec { list-style: none; margin: 0 0 18px; padding: 0; }
+.libro-rec li { display: flex; align-items: center; gap: 14px; min-height: 48px; border-top: 1px solid var(--linea); }
+.libro-rec label { flex: 1; min-width: 0; cursor: pointer; }
+.libro-cierre ol { list-style: none; margin: 0 0 12px; padding: 0; display: grid; gap: 0; }
+.libro-cierre li { display: grid; gap: 2px; padding: 12px 0 12px 14px; border-left: 3px solid var(--linea); margin-bottom: 4px; }
+.libro-cierre li.hecho { border-left-color: var(--salud); }
+.libro-cierre li small { color: var(--sub); font-size: 14px; }
+.libro-cierre li .subrayado { justify-self: start; margin-top: 4px; }
+.libro-art { display: grid; gap: 10px; margin-top: 10px; }

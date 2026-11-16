@@ -1,4 +1,5 @@
 import type { Activity, Front, Rules, StudyState, Unit } from './study-types';
+import { actividadDeLibro, libroPorId } from './libros';
 
 export const FRONTS: Front[] = [
   { id: 'math', name: 'Matemática', color: 'ing' },
@@ -61,7 +62,7 @@ const TODOS = [0, 1, 2, 3, 4, 5];
 export const DEFAULT_ACTIVITIES: Activity[] = [
   {
     id: 'conamat', title: 'CONAMAT · Aritmética', front: 'math', type: 'lectura', perSession: 1, total: 11, unit: 'caps.',
-    days: TODOS, block: 'math', engine: true, progress: 0, units: CONAMAT_B1, unitLabel: 'Cap.', testMode: 'papel',
+    days: TODOS, block: 'math', engine: true, progress: 0, units: CONAMAT_B1, unitLabel: 'Cap.', testMode: 'papel', area: 'matematica',
     final: { title: 'Examen de aritmética', desc: '40 ejercicios mixtos de todas las unidades, sin apuntes. Aprobás con 85 %.' },
   },
   {
@@ -73,6 +74,8 @@ export const DEFAULT_ACTIVITIES: Activity[] = [
     id: 'make-it-stick', title: 'Make It Stick', front: 'lectura', type: 'lectura', perSession: 20, total: 313, unit: 'págs',
     days: [0, 2, 4], block: 'cierre', engine: true, progress: 0, testMode: 'app',
   },
+  // Ola 20: el primer libro del sistema de libros (año 1 de idiomas, en el bloque de inglés).
+  actividadDeLibro(libroPorId('mwm')!),
 ];
 
 export const emptyStudy = (): StudyState => ({
