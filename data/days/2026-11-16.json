@@ -1,0 +1,224 @@
+{
+  "date": "2026-11-16",
+  "day": 0,
+  "bimester": {
+    "n": 1,
+    "name": "El despegue",
+    "week": 1
+  },
+  "wake": "08:00",
+  "routine": "tarde",
+  "blocks": [
+    {
+      "n": 1,
+      "id": "rutina",
+      "area": "rutina",
+      "rama": "main",
+      "start": "08:00",
+      "min": 30,
+      "done": true,
+      "tasks": [
+        {
+          "t": "Agua y cama hecha",
+          "done": true
+        },
+        {
+          "t": "Movilidad 10 min",
+          "done": true
+        }
+      ]
+    },
+    {
+      "n": 2,
+      "id": "abi",
+      "area": "salud",
+      "rama": "salud",
+      "start": "08:30",
+      "min": 90,
+      "done": true,
+      "tasks": [
+        {
+          "t": "Correr y ducha",
+          "done": true
+        }
+      ]
+    },
+    {
+      "n": 3,
+      "id": "trabajo",
+      "area": "economia",
+      "start": "10:00",
+      "min": 120,
+      "done": true,
+      "tasks": [
+        {
+          "t": "Tarea principal del trabajo",
+          "done": true
+        }
+      ]
+    },
+    {
+      "n": 4,
+      "id": "prog",
+      "area": "ing",
+      "rama": "programacion",
+      "start": "12:00",
+      "min": 90,
+      "done": true,
+      "tasks": [
+        {
+          "t": "Tarea del portfolio (P0)",
+          "done": true
+        },
+        {
+          "t": "Commit y nota para la revisión",
+          "done": true
+        }
+      ]
+    },
+    {
+      "n": 5,
+      "id": "busqueda",
+      "area": "rutina",
+      "rama": "trabajo",
+      "start": "13:30",
+      "min": 90,
+      "done": true,
+      "tasks": [
+        {
+          "t": "CV, LinkedIn o revisión de mercado",
+          "done": true
+        }
+      ]
+    },
+    {
+      "n": 6,
+      "id": "math",
+      "area": "ing",
+      "rama": "matematica",
+      "start": "15:00",
+      "min": 90,
+      "done": false,
+      "tasks": []
+    },
+    {
+      "n": 7,
+      "id": "ingles",
+      "area": "ing",
+      "rama": "ingles",
+      "start": "16:30",
+      "min": 90,
+      "done": false,
+      "tasks": []
+    },
+    {
+      "n": 8,
+      "id": "entreno",
+      "area": "salud",
+      "rama": "salud",
+      "start": "18:00",
+      "min": 180,
+      "done": false,
+      "tasks": []
+    },
+    {
+      "n": 9,
+      "id": "cierre",
+      "area": "rutina",
+      "rama": "main",
+      "start": "21:00",
+      "min": 60,
+      "done": true,
+      "tasks": [
+        {
+          "t": "Cerrar el día en 5 min",
+          "done": true
+        },
+        {
+          "t": "Preparar mañana",
+          "done": true
+        }
+      ]
+    },
+    {
+      "n": 10,
+      "id": "sueno",
+      "area": "rutina",
+      "rama": "salud",
+      "start": "22:00",
+      "min": 600,
+      "done": true,
+      "tasks": [
+        {
+          "t": "En la cama a las 21:00",
+          "done": true
+        }
+      ]
+    }
+  ],
+  "focus": [
+    {
+      "block": "trabajo",
+      "plan": "50/10 + 20",
+      "min": 66,
+      "at": "11:56"
+    }
+  ],
+  "notes": [],
+  "cierre": {
+    "at": "20:56",
+    "score": 0.5,
+    "xp": 110,
+    "victoria": "",
+    "manana": ""
+  },
+  "plan": {
+    "semana": 1,
+    "bimestre": {
+      "n": 1,
+      "semana": 1,
+      "semanas": 9
+    },
+    "ramas": {
+      "programacion": {
+        "etapa": "P0 · Consolidación",
+        "lado": "sem 1/2"
+      },
+      "matematica": {
+        "etapa": "CONAMAT Aritmética y Álgebra",
+        "lado": "B1 · Aritmética 1–11"
+      },
+      "trabajo": {
+        "etapa": "Búsqueda intensa",
+        "lado": "sem 1/8"
+      },
+      "ingles": {
+        "etapa": "Measure What Matters",
+        "lado": "sem 1/6"
+      },
+      "handyx": {
+        "etapa": "Año de prueba · Lanzar",
+        "lado": "sem 1/13"
+      },
+      "salud": {
+        "etapa": "Rutina estable y registro",
+        "lado": "B1"
+      }
+    }
+  },
+  "salud": {
+    "peso": 109.8,
+    "corrida": {
+      "min": 30,
+      "km": 3,
+      "tipo": "suave",
+      "sensacion": 3
+    },
+    "medidas": null
+  },
+  "mejora": {
+    "hoy": 0.7,
+    "ayer": 0,
+    "acumulado": 0.7
+  }
+}
