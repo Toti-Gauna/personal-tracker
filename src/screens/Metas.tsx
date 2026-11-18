@@ -7,7 +7,7 @@ import { RAMA_COLOR, RAMA_NOMBRE, RAMAS } from '../data/ramas';
 import { addDays, parseDate } from '../data/time';
 import type { DayLog } from '../data/types';
 import { lunesDe } from '../state/plan';
-import { getState, planSettings, useStore } from '../state/store';
+import { getState, intensivaEn, planSettings, useStore } from '../state/store';
 import { usePlanVista } from '../ui/usePlan';
 import { AnioPlan, BimestrePlan, MesPlan, SemanaPlan } from './MetasPlan';
 import { PlanProyecto } from './PlanProyecto';
@@ -65,7 +65,7 @@ function MetasTabs({ day, tab }: { day: DayLog; tab?: string }) {
     const fase = faseTrabajo(date, t0);
     const l = lunesDe(date);
     const ctx = { plan, days, study: getState().study, train: getState().train, clipping: getState().clipping, t0 };
-    const metas = plan.semanas[l]?.metas ?? metasSemanaGeneradas(date, t0, { intensiva: planSettings(settings).modo === 'busqueda-intensiva', pausa: plan });
+    const metas = plan.semanas[l]?.metas ?? metasSemanaGeneradas(date, t0, { intensiva: intensivaEn(settings, date), pausa: plan });
     const porRama = RAMAS.map((r) => {
       const ms = metas.filter((m) => m.rama === r && m.meta);
       return [RAMA_NOMBRE[r], ms.length ? ms.reduce((s, m) => s + ratio(avanceMeta(m, l, addDays(l, 6), ctx).v, m.meta!), 0) / ms.length : 1] as const;

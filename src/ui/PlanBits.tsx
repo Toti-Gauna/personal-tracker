@@ -8,7 +8,7 @@ import { RAMA_COLOR } from '../data/ramas';
 import { addDays, nowMin } from '../data/time';
 import type { DayLog, RamaOMain } from '../data/types';
 import { desactivarIntensiva, lunesDe, contador, ensayarRespuesta, setPlanSettings, sumarContador, sumarHandyx } from '../state/plan';
-import { planSettings, useStore } from '../state/store';
+import { intensivaEn, planSettings, useStore } from '../state/store';
 import { toast } from './avisos';
 import { useNow } from './useNow';
 import { HojaClip } from './HojaClip';
@@ -75,7 +75,8 @@ export function SumarPlan({ date }: { date: string }) {
   const metas = Object.fromEntries(metasSemanaPlan(date, t0).map((m) => [m.id, m.meta]));
   const ensayadas = plan.respuestas.filter((r) => r.veces > 0).length;
   const ops = plan.handyx[lunesDe(date)]?.operaciones ?? 0;
-  const intensiva = useStore((s) => planSettings(s.settings).modo === 'busqueda-intensiva');
+  const intensiva = useStore((s) => intensivaEn(s.settings, date));
+  const clippingOn = useStore((s) => !!planSettings(s.settings).bloquesPendientes?.clipping);
   // Ola 23: los clips salen de la planilla del clipping; el botón abre la hoja Registrar.
   const clipping = useStore((s) => s.clipping);
   const [hojaClip, setHojaClip] = useState(false);
@@ -86,7 +87,7 @@ export function SumarPlan({ date }: { date: string }) {
     { id: 'respuestas', label: '+1 Respuesta ensayada', v: ensayadas, meta: plan.respuestas.length, rama: 'ingles', run: () => ensayarRespuesta(date) },
     // Una rama en pausa no genera contadores nuevos.
     ...(enPausa(plan, 'handyx', date) ? [] : [{ id: 'operaciones', label: '+1 Operación Handyx', v: ops, rama: 'handyx' as RamaOMain, run: () => sumarHandyx(date, { operaciones: 1 }) }]),
-    ...(intensiva ? [{ id: 'clips', label: 'Registrar clips', v: clipsSem, meta: planEntre(l, addDays(l, 6)).clips, rama: 'main' as RamaOMain, color: 'var(--eclipse)', run: () => setHojaClip(true) }] : []),
+    ...(intensiva && clippingOn ? [{ id: 'clips', label: 'Registrar clips', v: clipsSem, meta: planEntre(l, addDays(l, 6)).clips, rama: 'main' as RamaOMain, color: 'var(--eclipse)', run: () => setHojaClip(true) }] : []),
     { id: 'entrenos', label: '+1 Entrené', v: sesiones + contador(plan, date, 'entrenos'), meta: metas.entrenos, rama: 'salud', run: () => sumarContador(date, 'entrenos') },
   ];
   return (

@@ -205,6 +205,8 @@ export function startDay(routine: RoutineId, wake: string, date = dateKey()) {
       .map((b) => (refs[b.key] ? { ...b, ...refs[b.key] } : b))
       .map((b) => (b.rama === 'programacion' && delProyecto.length ? { ...b, tasks: [...delProyecto.map((t) => ({ id: newId(), t: `${proyecto} · ${t}`, done: false })), ...b.tasks] } : b))
       .map((b) => (b.key === 'cierre' && estirar ? { ...b, tasks: b.tasks.map((x) => (x.t === 'Estirar' ? { ...x, t: `Estirar: ${estirar}` } : x)) } : b))
+      // Ola 27: el domingo, el cierre suma la revisión semanal de 30 min y la mini-tesis de una página.
+      .map((b) => (b.key === 'cierre' && isoDay(date) === 7 && /^(busqueda-intensiva|con-trabajo)/.test(dayType) ? { ...b, tasks: [...b.tasks, ...['Revisión semanal (30 min)', 'Mini-tesis de una página'].map((t) => ({ id: newId(), t, done: false }))] } : b))
       // Ola 23: de lunes a viernes, el clipping trae las tareas del mes del roadmap; el finde, pipeline y prospección.
       .map((b) => (b.key === 'clipping' && isoDay(date) <= 5 && mesClipDe(date) >= 1 && mesClipDe(date) <= 12 ? { ...b, tasks: [...mesClipEn(date).tareas.map((t) => ({ id: newId(), t, done: false })), ...b.tasks.filter((x) => (carry.clipping ?? []).includes(x.t))] } : b));
     const day: DayLog = { date, wake, routine, dayType, ...(ventana ? { ventana } : {}), blocks, notes: [], focus: [] };
@@ -223,6 +225,9 @@ export function entrevistaEn48h(p: PlanState, date: string): { rol: string; empr
   const e = p.entrevistas.find((x) => x.fecha >= date && x.fecha <= addDays(date, 2));
   return e ? { rol: e.rol, ...(e.empresa ? { empresa: e.empresa } : {}) } : false;
 }
+
+/** Ola 27 · ¿rige el modo intensivo ese día? Hasta el día anterior al inicio del trabajo. */
+export const intensivaEn = (st: Settings | null, date: string): boolean => planSettings(st).modo === 'busqueda-intensiva' && date < inicioTrabajo(st);
 
 /** ¿La entrevista es en inglés? Se lee de la modalidad ("remoto · entrevista técnica en inglés"). */
 export const entrevistaEnIngles = (e: { modalidad?: string }) => /ingl[eé]s/i.test(e.modalidad ?? '');

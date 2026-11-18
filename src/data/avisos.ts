@@ -83,15 +83,7 @@ export function avisosEntreRamas(date: string, p: PlanState, cfg: PlanSettings, 
       href: '#/metas',
     });
   }
-  // T+2 marcado y todavía con la rutina de búsqueda: pide pasar a la rutina con trabajo.
-  if (cfg.t2 && cfg.rutina === 'busqueda') {
-    out.push({
-      id: 't2', de: 'trabajo', a: 'main',
-      titulo: 'T+2: trabajo nuevo',
-      texto: 'Desde ahora, la rutina con trabajo: matemática 2 h temprano, programación 1 h, inglés 45 min y Handyx 1 h 30.',
-      accion: 'con-trabajo',
-    });
-  }
+  // Ola 27: el inicio del trabajo es una fecha: la rutina con trabajo rige sola desde ese día (ya no hay aviso de T+2).
   // Ola 8b: una rama en pausa (stand-by) no genera avisos, ni de ida ni de vuelta.
   return out.filter((a) => !(a.de !== 'main' && enPausa(p, a.de, date)) && !(a.a !== 'main' && enPausa(p, a.a, date)));
 }

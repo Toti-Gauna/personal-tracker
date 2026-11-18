@@ -45,9 +45,8 @@ describe('avisos entre ramas', () => {
     expect(avisosEntreRamas('2027-02-14', emptyPlan(), cfg).some((x) => x.de === 'matematica')).toBe(false);
   });
 
-  it('T+2 marcado con la rutina de búsqueda → pide pasar a la rutina con trabajo', () => {
-    expect(avisosEntreRamas('2027-01-12', emptyPlan(), { ...cfg, t2: '2027-01-11' }).find((x) => x.id === 't2')).toMatchObject({ accion: 'con-trabajo' });
-    expect(avisosEntreRamas('2027-01-12', emptyPlan(), { ...cfg, t2: '2027-01-11', rutina: 'con-trabajo' }).some((x) => x.id === 't2')).toBe(false);
+  it('el inicio del trabajo es una fecha: ya no hay aviso de T+2 que pida cambiar de rutina', () => {
+    expect(avisosEntreRamas('2027-01-12', emptyPlan(), { ...cfg, t2: '2027-01-11' }).some((x) => x.id === 't2')).toBe(false);
   });
 });
 

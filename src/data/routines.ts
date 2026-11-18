@@ -333,11 +333,6 @@ export interface TardeConTrabajo {
 /**
  * Acomoda la tarde de la rutina con trabajo según la salida: matemática 1 h, idiomas 30 min y entreno hasta 2 h 30
  * (con las caminatas) entre la salida y el descanso final de las 20:00. Si no entra todo, primero se saca la
- * matemática de la tarde, después se acorta el entreno (mínimo 1 h). La programación de la mañana no se toca.
- */
-/**
- * Acomoda la tarde de la rutina con trabajo según la salida: matemática 1 h, idiomas 30 min y entreno hasta 2 h 30
- * (con las caminatas) entre la salida y el descanso final de las 20:00. Si no entra todo, primero se saca la
  * matemática de la tarde (queda como deuda de horas) y después se acorta el entreno (mínimo 1 h). La programación
  * de la mañana no se toca. Con la salida a las 16:00 queda la rutina de fábrica; a las 18:00, idiomas 30 min y
  * entreno 1 h 30 entre las 18:00 y las 20:00.
