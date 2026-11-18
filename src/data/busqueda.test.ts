@@ -95,14 +95,20 @@ describe('búsqueda intensiva', () => {
 describe('pausas en metas, cortes y avisos', () => {
   const pausa = { pausas: [{ id: 'p', objetivo: 'handyx', desde: '2026-11-16', motivo: 'búsqueda intensiva', guardado: {} }] };
 
-  it('la semana de la intensiva no genera metas de Handyx y suma clipping', async () => {
+  it('la semana del modo intensivo no genera metas de Handyx ni de clipping (pausado) y suma los clips al reactivarlo', async () => {
     const { metasSemanaGeneradas, metasMesGeneradas } = await import('./metas-plan');
     const s = metasSemanaGeneradas('2026-11-23', '2026-11-16', { intensiva: true, pausa });
     expect(s.some((m) => m.rama === 'handyx')).toBe(false);
-    expect(s.find((m) => m.clave === 'horas-prog')?.meta).toBe(25.5);
-    expect(s.find((m) => m.clave === 'horas-clipping')?.meta).toBe(11.5);
-    // Ola 23: los clips de la semana salen del mes 1 del roadmap (5 por día).
-    expect(s.find((m) => m.clave === 'clips')).toMatchObject({ meta: 35, nota: 'mes 1 del roadmap · 5 por día' });
+    expect(s.find((m) => m.clave === 'horas-prog')?.meta).toBe(53);
+    expect(s.find((m) => m.clave === 'postulaciones')?.meta).toBe(25);
+    expect(s.find((m) => m.clave === 'horas-clipping')).toBeUndefined();
+    expect(s.find((m) => m.clave === 'clips')).toBeUndefined();
+    // Con un bloque asignado, el clipping vuelve: los clips de la semana salen del mes 1 del roadmap (5 por día).
+    const { setClippingActivo } = await import('./clipping-activo');
+    setClippingActivo(true);
+    const con = metasSemanaGeneradas('2026-11-23', '2026-11-16', { intensiva: true, pausa });
+    expect(con.find((m) => m.clave === 'clips')).toMatchObject({ meta: 35, nota: 'mes 1 del roadmap · 5 por día' });
+    setClippingActivo(false);
     const normal = metasSemanaGeneradas('2026-11-23', '2026-11-16');
     expect(normal.some((m) => m.rama === 'handyx')).toBe(true);
     const ene = metasMesGeneradas('2027-02-01', '2026-11-16', undefined, { intensiva: true, pausa });

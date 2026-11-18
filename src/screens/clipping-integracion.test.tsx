@@ -1,5 +1,6 @@
 import { fireEvent, render, screen, within } from '@testing-library/react';
-import { beforeEach, describe, expect, it } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it } from 'vitest';
+import { setClippingActivo } from '../data/clipping-activo';
 import { avanceMeta, metasMesGeneradas, metasSemanaGeneradas } from '../data/metas-plan';
 import { alertas } from '../data/plan-vistas';
 import { emptyPlan } from '../data/plan-state';
@@ -50,6 +51,9 @@ describe('ola 23 · el clipping en Hoy', () => {
 });
 
 describe('ola 23 · metas, mapa, alertas y JSON', () => {
+  beforeEach(() => setClippingActivo(true));
+  afterEach(() => setClippingActivo(false));
+
   it('metas: los clips de la semana y del mes salen del roadmap y avanzan con la planilla', () => {
     const s = metasSemanaGeneradas('2026-12-21', '2026-11-16', { intensiva: true });
     expect(s.find((m) => m.clave === 'clips')?.meta).toBe(56); // mes 2: 8 por día

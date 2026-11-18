@@ -19,6 +19,7 @@ import { emptyTrain, migrarEntreno } from '../data/train-catalog';
 import { emptyRuta, refsForDay, type RutaState } from '../data/ruta';
 import { applySettings } from './apply';
 import { aplicarCalendario } from '../data/plan';
+import { setClippingActivo } from '../data/clipping-activo';
 import { aplicarLibrosPropios } from '../data/libros';
 import type { TrainState } from '../data/train-types';
 import type { StudyState } from '../data/study-types';
@@ -82,6 +83,7 @@ export function migrate(parsed: any): State {
 
 let state: State = load();
 applySettings(state.settings);
+setClippingActivo(!!state.settings?.plan?.bloquesPendientes?.clipping);
 aplicarCalendario(state.plan.extrasApagados ?? [], state.plan.pausaFinDeAnio !== false);
 aplicarLibrosPropios(state.study.librosPropios);
 const subs = new Set<() => void>();
@@ -95,7 +97,7 @@ export function setState(fn: (s: State) => State) {
   const prevLibros = state.study.librosPropios;
   state = fn(state);
   if (state.study.librosPropios !== prevLibros) aplicarLibrosPropios(state.study.librosPropios);
-  if (state.settings !== prev) applySettings(state.settings);
+  if (state.settings !== prev) { applySettings(state.settings); setClippingActivo(!!state.settings?.plan?.bloquesPendientes?.clipping); }
   // Ola 16b: el calendario vivo se recalcula si cambian los extras de feature apagados.
   if (state.plan.extrasApagados !== prevExtras || state.plan.pausaFinDeAnio !== prevPausa) aplicarCalendario(state.plan.extrasApagados ?? [], state.plan.pausaFinDeAnio !== false);
   try { localStorage.setItem(KEY, JSON.stringify(state)); } catch { /* sin storage */ }
@@ -106,6 +108,7 @@ export function setState(fn: (s: State) => State) {
 export function resetState(s: State = empty()) {
   state = s;
   applySettings(s.settings);
+  setClippingActivo(!!s.settings?.plan?.bloquesPendientes?.clipping);
   aplicarCalendario(s.plan.extrasApagados ?? [], s.plan.pausaFinDeAnio !== false);
   aplicarLibrosPropios(s.study.librosPropios);
   subs.forEach((f) => f());

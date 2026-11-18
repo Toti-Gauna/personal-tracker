@@ -773,31 +773,17 @@
   ],
   "conTrabajo": [
    {
-    "rama": "trabajo",
-    "id": "horas-busqueda",
-    "texto": "Horas de búsqueda",
-    "meta": 2,
-    "unidad": "h"
-   },
-   {
     "rama": "ingles",
     "id": "horas-ingles",
     "texto": "Horas de idiomas",
-    "meta": 11.5,
-    "unidad": "h"
-   },
-   {
-    "rama": "handyx",
-    "id": "horas-handyx",
-    "texto": "Horas de Handyx",
-    "meta": 7.5,
+    "meta": 6.5,
     "unidad": "h"
    },
    {
     "rama": "programacion",
     "id": "horas-prog",
     "texto": "Horas de programación",
-    "meta": 7,
+    "meta": 29,
     "unidad": "h"
    },
    {
@@ -811,7 +797,7 @@
     "rama": "salud",
     "id": "entrenos",
     "texto": "Entrenamientos",
-    "meta": 6,
+    "meta": 5,
     "unidad": ""
    }
   ]
@@ -860,7 +846,7 @@
     },
     {
      "rama": "salud",
-     "texto": "Entrenamiento 6 de 7 días, con peso, calorías y sueño registrados"
+     "texto": "Entrenamiento 5 de 7 días, con peso, calorías y sueño registrados"
     }
    ]
   },

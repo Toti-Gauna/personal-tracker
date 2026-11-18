@@ -10,6 +10,7 @@ import { T0_PLAN, TRAMOS } from './plan';
 import type { PlanState } from './plan-state';
 import { addDays, daysBetween } from './time';
 import { CLIP, hitosClip } from './clipping';
+import { clippingActivo } from './clipping-activo';
 import type { Rama } from './types';
 
 export type RamaMapa = Rama | 'clipping';
@@ -98,7 +99,7 @@ export const esDeBusqueda = (h: HitoRama) => h.rama === 'trabajo' || (h.rama ===
 
 /** Los hitos con su fecha real (desde T0, o la que moviste) y su estado a una fecha. */
 export function hitosFechados(hoy: string, estado: PlanState['hitos'] = {}, t0 = T0_PLAN): HitoFechado[] {
-  return HITOS.map((h): HitoFechado => {
+  return HITOS.filter((h) => h.rama !== 'clipping' || clippingActivo()).map((h): HitoFechado => {
     const original = addDays(t0, diaDe(h));
     const st = estado[h.id] ?? {};
     const fecha = st.fecha ?? original;

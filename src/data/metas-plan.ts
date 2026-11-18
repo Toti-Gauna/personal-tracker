@@ -4,6 +4,7 @@
  * los cambia o los borra. Nada se carga 18 meses antes: todo se calcula al abrir el período.
  */
 import { IDIOMAS, calendarioIdiomas } from './idiomas';
+import { clippingActivo } from './clipping-activo';
 import { mesClipEn, mesDe as mesClipDe, planEntre } from './clipping';
 import { clipsEntre, usdEntre } from './clipping-metricas';
 import type { ClippingState } from './clipping-state';
@@ -149,25 +150,28 @@ export interface OpcionesPlan {
 }
 
 /**
- * Los contadores semanales de la búsqueda intensiva (Ola 8b): 70 a medida y 70 mensajes en
- * las dos semanas del sprint, y las horas de la tabla (matemática 14, programación 25,5,
- * inglés 11,5, búsqueda 10,5, clipping 11,5, entrenamiento 10). Los clips de la semana salen del mes del
- * Roadmap Clipper (ola 23): clips por día del mes × 7.
+ * Los contadores semanales del modo intensivo (v3, ola 27): 25 postulaciones y 25 mensajes (5 por día de lunes a
+ * viernes, nada el finde), y las horas de las rutinas: programación 53, matemática 7, idiomas 7, búsqueda 5 y
+ * 5 entrenamientos. Los 2 posts de LinkedIn van en inglés dentro del bloque de idiomas. El clipping está pausado:
+ * sus metas (clips y horas) solo salen cuando le asignás un bloque.
  */
 export const SEMANA_INTENSIVA: (Omit<MetaGenerada, 'id' | 'origen'> & { clave: string })[] = [
-  { rama: 'trabajo', texto: 'Postulaciones a medida', meta: 35, clave: 'postulaciones', nota: '5 por día' },
-  { rama: 'trabajo', texto: 'Mensajes directos', meta: 35, clave: 'mensajes', nota: '5 por día' },
-  { rama: 'trabajo', texto: 'Horas de búsqueda', meta: 10.5, unidad: 'h', clave: 'horas-busqueda' },
-  { rama: 'programacion', texto: 'Horas de programación', meta: 25.5, unidad: 'h', clave: 'horas-prog' },
-  { rama: 'matematica', texto: 'Horas de matemática', meta: 14, unidad: 'h', clave: 'horas-mate' },
-  { rama: 'ingles', texto: 'Horas de idiomas', meta: 11.5, unidad: 'h', clave: 'horas-ingles' },
+  { rama: 'trabajo', texto: 'Postulaciones a medida', meta: 25, clave: 'postulaciones', nota: '5 por día, de lunes a viernes' },
+  { rama: 'trabajo', texto: 'Mensajes directos', meta: 25, clave: 'mensajes', nota: '5 por día, de lunes a viernes' },
+  { rama: 'trabajo', texto: 'Horas de búsqueda', meta: 5, unidad: 'h', clave: 'horas-busqueda' },
+  { rama: 'trabajo', texto: 'Posts de LinkedIn en inglés', meta: 2, clave: 'posts', nota: 'dentro del bloque de idiomas' },
+  { rama: 'programacion', texto: 'Horas de programación', meta: 53, unidad: 'h', clave: 'horas-prog' },
+  { rama: 'matematica', texto: 'Horas de matemática', meta: 7, unidad: 'h', clave: 'horas-mate' },
+  { rama: 'ingles', texto: 'Horas de idiomas', meta: 7, unidad: 'h', clave: 'horas-ingles' },
   // Ola 18/21: la entrevista se practica en el bloque de búsqueda laboral.
   { rama: 'trabajo', texto: 'Respuestas ensayadas', meta: 10, clave: 'respuestas' },
   { rama: 'trabajo', texto: 'Simulacro de entrevista', meta: 1, clave: 'simulada' },
-  // Ola 23: 1 h 30 de lunes a viernes y 2 h el sábado y el domingo; los clips salen del mes del roadmap.
-  { area: 'eclipse', texto: 'Horas de clipping', meta: 11.5, unidad: 'h', clave: 'horas-clipping' },
-  { area: 'eclipse', texto: 'Clips publicados', meta: 35, clave: 'clips' },
   { rama: 'salud', texto: 'Entrenamientos', meta: 5, clave: 'entrenos' },
+];
+
+/** Las metas de la semana del clipping (solo si tiene bloque en la rutina). */
+const CLIPPING_SEMANA: typeof SEMANA_INTENSIVA = [
+  { area: 'eclipse', texto: 'Clips publicados', meta: 35, clave: 'clips' },
 ];
 
 /** Saca las metas de ramas o áreas en pausa (Handyx; las ventas de Eclipse). */
@@ -185,7 +189,7 @@ export function metasSemanaGeneradas(fecha: string, t0 = T0_PLAN, op: OpcionesPl
   const s = semanaDelPlan(fecha, t0);
   if (s < 1 || s > SEMANAS) return [];
   const base: MetaGenerada[] = op.intensiva
-    ? SEMANA_INTENSIVA.map((x) => ({ ...x, id: `s-${x.clave}`, origen: 'plan' as const, ...(x.clave === 'clips' ? clipsDeLaSemana(fecha) : {}) }))
+    ? [...SEMANA_INTENSIVA, ...(clippingActivo() ? CLIPPING_SEMANA : [])].map((x) => ({ ...x, id: `s-${x.clave}`, origen: 'plan' as const, ...(x.clave === 'clips' ? clipsDeLaSemana(fecha) : {}) }))
     : metasSemanaPlan(fecha, t0).map((x) => ({ id: `s-${x.id}`, rama: x.rama, texto: x.texto, meta: x.meta, unidad: x.unidad || undefined, clave: x.id, origen: 'plan' }));
   const out = sinPausa(base, fecha, op.pausa);
   const t = tramoActivo(fecha, t0);
@@ -299,17 +303,16 @@ export function metasMesGeneradas(fecha: string, t0 = T0_PLAN, study?: StudyStat
       push({ id: 'm-msj', rama: 'trabajo', texto: 'Mensajes directos', meta: porDia.mensajes * diasBusqueda, clave: 'mensajes', nota: `${porDia.mensajes} por día` });
       push({ id: 'm-sim', rama: 'trabajo', texto: 'Entrevistas simuladas', meta: Math.max(1, Math.round(diasBusqueda / 7)), clave: 'simulada' });
     }
-    if (diasBusqueda < dias) push({ id: 'm-busq', rama: 'trabajo', texto: 'Horas de búsqueda', meta: Math.round(2 * ((dias - diasBusqueda) / 7)), unidad: 'h', clave: 'horas-busqueda' });
     // Idiomas (ola 21): las 11,5 h por semana del roadmap y el hito de la fase que cierra en el mes.
     push({ id: 'm-ing', rama: 'ingles', texto: 'Horas de idiomas', meta: Math.round(((IDIOMAS.horasSemana * dias) / 7) * 10) / 10, unidad: 'h', clave: 'horas-ingles', nota: `${String(IDIOMAS.horasSemana).replace('.', ',')} h por semana` });
     for (const f of calendarioIdiomas(t0)) if (f.fin >= a && f.fin <= b) push({ id: `m-idioma-${f.clave}`, rama: 'ingles', texto: `${f.nombre}: ${f.hito.charAt(0).toLowerCase()}${f.hito.slice(1)}` });
     // Handyx: el corte que cae en el mes y las horas.
     for (const c of PLAN.handyx.cortes) { const f = finSemana(c.hasta, t0); if (f >= a && f <= b) push({ id: `m-corte-${c.id}`, rama: 'handyx', texto: `Corte ${c.nombre.toLowerCase()} el ${fechaCorta(f)}: ${c.texto}` }); }
-    if (corteHandyx(a, t0)) push({ id: 'm-hx', rama: 'handyx', texto: 'Horas de Handyx', meta: Math.round(semanal('horas-handyx') * semanas), unidad: 'h', clave: 'horas-handyx' });
+    if (corteHandyx(a, t0) && semanal('horas-handyx') > 0) push({ id: 'm-hx', rama: 'handyx', texto: 'Horas de Handyx', meta: Math.round(semanal('horas-handyx') * semanas), unidad: 'h', clave: 'horas-handyx' });
     // Salud.
-    push({ id: 'm-entreno', rama: 'salud', texto: 'Entrenar 6 de 7 días', meta: Math.round((dias * 6) / 7), clave: 'entrenos' });
+    push({ id: 'm-entreno', rama: 'salud', texto: 'Entrenar 5 de 7 días', meta: Math.round((dias * 5) / 7), clave: 'entrenos' });
   }
-  if (op.intensiva) {
+  if (op.intensiva && clippingActivo()) {
     // Ola 23: clips y USD del Roadmap Clipper, día por día del mes (el mes del roadmap arranca el 16).
     const pc = planEntre(a, b);
     push({ id: 'm-clips', area: 'eclipse', texto: 'Clips publicados', meta: pc.clips, clave: 'clips', nota: 'según el mes del roadmap' });

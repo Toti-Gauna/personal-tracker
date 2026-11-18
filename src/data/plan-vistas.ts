@@ -12,6 +12,7 @@ import type { PlanState } from './plan-state';
 import { cierreProyecto, puertaAprobada } from './puertas';
 import { daysBetween } from './time';
 import { alertasClipping } from './clipping-metricas';
+import { clippingActivo } from './clipping-activo';
 import type { ClippingState } from './clipping-state';
 
 /** Regla del plan: 85 % o más aprueba y pasa a la tesis; 65 a 84 % refuerzo y retest; menos, vuelve. */
@@ -167,7 +168,7 @@ export function alertas(hoy: string, plan: PlanState, t0 = T0_PLAN, clipping?: C
   // Ola 21: exámenes de idiomas, trimestres y tesis anual.
   for (const a of alertasIdiomas(hoy, t0)) out.push({ ...a, tipo: 'idioma' });
   // Ola 23: las del clipping (lunes, viernes, fin de fase, mes 6, concentración y compuerta).
-  if (clipping) for (const a of alertasClipping(hoy, clipping)) out.push({ ...a, tipo: 'clipping' });
+  if (clipping && clippingActivo()) for (const a of alertasClipping(hoy, clipping)) out.push({ ...a, tipo: 'clipping' });
   return out.sort((a, b) => a.fecha.localeCompare(b.fecha));
 }
 

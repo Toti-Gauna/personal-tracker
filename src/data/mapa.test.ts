@@ -32,6 +32,8 @@ describe('mapa en ramas', () => {
 describe('mapa · hitos y stand-by (Ola 8b)', () => {
   it('Trimestre: los hitos iniciales, ordenados por fecha, con clipping y rombos', async () => {
     const { HITOS } = await import('./hitos');
+    const { setClippingActivo } = await import('./clipping-activo');
+    setClippingActivo(true);
     const f = filasMapa('2026-11-15', 'trimestre', emptyPlan(), emptyStudy(), '2026-11-16');
     const h = f.filter((x) => x.hitoId);
     // Ola 18 (sin pausas): Escudo cierra el 31 de enero y W1 queda lista el 21 de feb, así que entra en el
@@ -54,6 +56,11 @@ describe('mapa · hitos y stand-by (Ola 8b)', () => {
     expect(h.filter((x) => x.rama === 'clipping').map((x) => x.hitoId).reverse()).toEqual(['clip-gta6', 'clip-usd-150', 'clip-dashboard-v1', 'clip-usd-350', 'clip-retainer-1', 'clip-usd-700']);
     expect(h.filter((x) => x.hitoTipo === 'grande')).toHaveLength(9); // W1 lista (14 mar) ya no entra
     expect(f[0].hito).toBe('T+18');
+    // Pausado (sin bloque asignado) los hitos del clipping no salen del mapa.
+    setClippingActivo(false);
+    const pausado = filasMapa('2026-11-15', 'trimestre', emptyPlan(), emptyStudy(), '2026-11-16').filter((x) => x.hitoId);
+    expect(pausado.filter((x) => x.rama === 'clipping')).toHaveLength(0);
+    expect(pausado).toHaveLength(h.length - 6);
   });
 
   it('marcar un hito como hecho lo pasa a trazo lleno y HEAD sigue en hoy', () => {

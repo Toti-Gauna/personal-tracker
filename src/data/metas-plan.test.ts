@@ -15,8 +15,9 @@ describe('metas generadas desde el plan', () => {
     expect(s5.find((m) => m.clave === 'casillas:P1')?.meta).toBe(6);
     const s20 = metasSemanaGeneradas('2027-04-01', T0);
     expect(s20.find((m) => m.clave === 'postulaciones')).toBeUndefined();
-    // Ola 21: idiomas mantiene las 11,5 h por semana del roadmap.
-    expect(s20.find((m) => m.clave === 'horas-ingles')?.meta).toBe(11.5);
+    // Ola 27: con trabajo, idiomas son 6,5 h por semana y programación 29.
+    expect(s20.find((m) => m.clave === 'horas-ingles')?.meta).toBe(6.5);
+    expect(s20.find((m) => m.clave === 'horas-prog')?.meta).toBe(29);
     expect(metasSemanaGeneradas('2026-11-10', T0)).toEqual([]);
   });
 
