@@ -24,6 +24,7 @@ const RUTAS = [
   'perfil', 'ajustes', 'ajustes-rutinas', 'ajustes-datos', 'avance', 'unidades', 'como', 'repaso', 'flojo', 'tarjetas', 'motor', 'pomodoros', 'json', 'importar',
   'cierre', 'actividad', 'meta-nueva/semana',
   // Ola 23 · el apartado Clipping (con una planilla de ejemplo cargada).
+  'metas/calibracion', 'metas/proyecto/C2', 'metas/proyecto/P10',
   'metas/clipping', 'metas/clipping/plan', 'metas/clipping/registro', 'metas/clipping/metricas', 'metas/clipping/cuentas',
   'metas/clipping/campanas', 'metas/clipping/retainers', 'metas/clipping/nichos', 'metas/clipping/riesgos', 'metas/clipping/semana1',
 ];

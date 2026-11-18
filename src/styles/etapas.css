@@ -46,3 +46,26 @@
 /* Ola 20 · nivel de salida de una ventana */
 .salida { margin: 12px 0; }
 .et-alerta.clipping { --c: var(--eclipse); }
+
+/* Ola 24 · calibración y escenarios */
+.cal-factor { border: 1px solid var(--tinta); border-radius: 14px; padding: 16px; display: grid; gap: 6px; margin-bottom: 16px; }
+.cal-factor .etiqueta { color: var(--c); }
+.cal-n { font-size: 48px; font-weight: 500; line-height: 1; font-variant-numeric: tabular-nums; }
+.cal-espera { font-size: 19px; }
+.cal-sug { border: 1px solid var(--linea); border-radius: 12px; padding: 14px; margin-bottom: 16px; display: grid; gap: 8px; }
+.cal-sug.lento { border-color: var(--rutina); }
+.cal-sug.rapido { border-color: var(--salud); }
+.cal-sug p { margin: 0; }
+.cal-filas { list-style: none; margin: 8px 0 20px; padding: 0; display: grid; gap: 12px; }
+.cal-fila-t { display: flex; flex-wrap: wrap; gap: 4px 8px; align-items: baseline; font-size: 15px; }
+.cal-fila-t small { margin-left: auto; font-size: 12px; }
+.cal-barras { display: grid; gap: 3px; margin-top: 4px; }
+.cal-barras i { display: block; height: 6px; border-radius: 3px; min-width: 2px; }
+.cal-barras .est { background: var(--linea); }
+.cal-barras .real { background: var(--c); }
+.cal-esc { list-style: none; margin: 8px 0 12px; padding: 0; display: grid; gap: 8px; }
+.cal-esc li { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 2px 10px; padding: 12px 14px; border: 1px solid var(--linea); border-radius: 12px; }
+.cal-esc li small { grid-column: 1 / -1; font-size: 13px; }
+.cal-esc li .mono { font-size: 13px; white-space: nowrap; }
+.cal-esc li.actual { border-color: var(--tinta); }
+.cal-esc li.tuyo { border-color: var(--c); }

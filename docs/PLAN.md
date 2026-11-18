@@ -5,7 +5,7 @@ Tracker personal de Toti: el día en horas, el estudio con su propio motor de re
 - **Diseño:** [canvas de Trazo](https://claude.ai/artifact/6Cc2E6aW2ViU5ikovpsRTy)
 - **Roadmap de estudio:** [ruta ML + DevSecOps](https://claude.ai/artifact/9PEokku7mBLZdCFJr1zqXP)
 - **Pantallas:** presentación `Trazo-pantallas.pptx` y su ZIP de imágenes (44 pantallas, 8 flujos).
-- **Estado:** olas 0 a 12b hechas y en `main`. Olas 0 a 16c hechas (la 15 quedó absorbida por la 16c). Olas 0 a 23 hechas. Las olas 24 (plan T+18 v2) y 25 (Hoy editable) están planificadas en §6 septies. Este archivo es la fuente de verdad.
+- **Estado:** olas 0 a 12b hechas y en `main`. Olas 0 a 16c hechas (la 15 quedó absorbida por la 16c). Olas 0 a 24 hechas. La ola 25 (Hoy editable) está planificada en §6 septies. Este archivo es la fuente de verdad.
 
 ---
 
@@ -390,7 +390,7 @@ Desde el lunes 16 nov 2026 la prioridad es un trabajo remoto de USD 3.000 a 5.00
 | 21 · Idiomas y libros | *Hecha.* Roadmap maestro v3: un idioma por año durante 6 años (inglés, francés, italiano, alemán, japonés y chino), 12 libros de consolidación, la biblioteca de 42 libros y el ascenso a C1, dentro de Estudio (§6 sexies, paso 8) | Opus 5.5 · alto |
 | 22 · Orden de pantallas | *Hecha.* Pasada de UX en Metas, Estudio y Hoy: secciones plegables y escalera compacta; ninguna de las 49 pantallas pasa de 3,2 pantallas de scroll a 390 px (§6 sexies, paso 9) | Sonnet 5.5 · medio |
 | 23 · Clipping | *Hecha.* Roadmap Clipper de 12 meses (de 0 a USD 10k/mes) con su propio apartado en Metas: plan, registro, cuentas, campañas, retainers, métricas y gráficos, y una UX/UI premium; se integra con Hoy, el mapa y las alertas (§6 sexies, pasos 10 a 12) | Opus 5.5 · alto |
-| 24 · Plan T+18 v2 | Plataforma extra y arquitectura por proyecto, pausa de fin de año automática (con switch), P8 en 2 semanas, alerta de versión de examen, calibración con horas reales y escenarios (§6 septies, pasos 13 a 15) | Opus 5.5 · alto |
+| 24 · Plan T+18 v2 | *Hecha.* Plataforma extra y arquitectura por proyecto, pausa de fin de año automática (con switch), P8 en 2 semanas, alerta de versión de examen, calibración con horas reales y escenarios (§6 septies, pasos 13 a 15) | Opus 5.5 · alto |
 | 25 · Hoy editable | Borrar y editar submetas, dar un bloque por hecho aunque queden submetas, cambiar horarios del día, sumar metas nuevas y saltear bloques (§6 septies, pasos 16 y 17) | Sonnet 5.5 · medio |
 
 ## 6 bis. Olas 9 a 12: mejoras de uso
@@ -1050,7 +1050,16 @@ No dependen una de la otra: la 25 puede ir antes si Hoy molesta en el día a dí
 
 ---
 
-### Ola 24 · Plan T+18 v2 (Opus 5.5 · alto)
+### Ola 24 · Plan T+18 v2 (Opus 5.5 · alto) · *Hecha*
+
+**Lo que quedó:** 483 tests pasando (19 nuevos y 37 actualizados al calendario v2) y tres commits, uno por paso.
+- **Calendario:** las fechas del motor coinciden una por una con la tabla 3.1 de la v2 (52 bloques y 5 pausas, en base y con extras; lo prueba `src/data/plan-v2.test.ts` leyendo la tabla del prompt). Con todo prendido son 217 semanas hasta el 12 ene 2031 y **T+18 pasa al 12 nov 2028** (104 semanas, 12 bimestres; el último de 5). Con la pausa y las capas v2 apagadas vuelve el de la ola 18 (90 semanas): los tests de la v1 corren así.
+- **Pausa automática:** el motor inserta `PAUSA-AAAA` (tipo descanso) la semana cuyo lunes cae entre el 18 y el 24 de diciembre; si cae dentro de un bloque, lo parte (P1 y Q1). "Semana x de y" no cuenta la pausa, y las semanas ganadas tampoco. Switch en Ajustes (prendido por defecto).
+- **Extras:** `extrasApagados` acepta `P1` (feature, como antes), `P1:plataforma` y `P1:arquitectura`: lo guardado sigue igual. Switches en cada proyecto ("Semanas extra") y generales en Ajustes (plataformas y arquitectura).
+- **Fichas:** plataforma extra y arquitectura en cada proyecto (tabla 3.8); checklist de arquitectura (contrato, trazas, mTLS y ADR) en P1, P5, P10, S1 y Q5.
+- **Security+:** versiones con fecha de retiro; en C2 se elige la versión y, si se retira antes del examen (1 ago 2027 con extras) o falta elegirla, avisa en C2 y en Etapas (reemplaza a la alerta de la decisión).
+- **Calibración** (`#/metas/calibracion`, desde Etapas): horas estimadas (semanas × 25,5 h) contra reales (foco de programación) por proyecto; el factor se calcula al cerrar P3 (18 abr 2027) y propone qué apagar con un botón; escenarios de la v2 (203, 236 y 273 semanas) más el calendario actual y la proyección con tu factor.
+- `npm run pantallas` suma calibración, C2 y P10: 62 pantallas, todas dentro.
 
 **Paso 13 · Datos y motor**
 - `data/plan-extendido.json` pasa a la v2: cada bloque lleva `feature`, `plataforma` y `arquitectura` (semanas extra: +25, +18 y +2) y la ficha suma `plataforma` y `arquitectura` (tabla 3.8). P8 queda 2 + 1, C7 pasa a "SCS-C03" y los textos de las fichas siguen la v2.

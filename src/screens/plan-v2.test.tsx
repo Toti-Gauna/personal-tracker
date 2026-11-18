@@ -72,4 +72,12 @@ describe('ola 24 · pantallas del plan v2', () => {
     // Sin pausas ni plataformas: T+18 vuelve a acercarse (90 + 2 de arquitectura = 92 semanas).
     expect(screen.getByText(/T\+18 el 20 ago 2028/)).toBeInTheDocument();
   });
+
+  it('Calibración: antes de P3 espera, muestra las horas por proyecto y los escenarios', () => {
+    render(<Metas day={day()} tab="calibracion" />);
+    expect(screen.getByText(/Se calcula al cerrar P3, el 18 abr 2027/)).toBeInTheDocument();
+    expect(screen.getByText(/P0/)).toBeInTheDocument();
+    expect(screen.getByText('Calendario actual').parentElement!.textContent).toMatch(/217 sem · 12 ene 2031/);
+    expect(screen.getByText('Pesimista').parentElement!.textContent).toMatch(/273 sem · 5 feb 2032/);
+  });
 });
