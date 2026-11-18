@@ -31,18 +31,18 @@ describe('avisos entre ramas', () => {
   });
 
   it('proyecto que cierra en 14 días o menos con el estándar sin marcar → programacion → trabajo', () => {
-    // Con las 2 semanas de feature, Faro v1 se entrega el domingo 3 de enero.
-    const a = avisosEntreRamas('2026-12-21', emptyPlan(), cfg).find((x) => x.de === 'programacion')!;
-    expect(a).toMatchObject({ a: 'trabajo', titulo: 'Faro v1 se entrega el domingo 3', href: '#/metas/proyecto/P1' });
+    // Con la feature, la plataforma y la pausa adentro, Faro v1 se entrega el domingo 17 de enero.
+    const a = avisosEntreRamas('2027-01-04', emptyPlan(), cfg).find((x) => x.de === 'programacion')!;
+    expect(a).toMatchObject({ a: 'trabajo', titulo: 'Faro v1 se entrega el domingo 17', href: '#/metas/proyecto/P1' });
     const listo = { ...emptyPlan(), proyectos: { P1: { estandar: { ux: true, tresd: true, animacion: true, docs: true, venta: true, ingenieria: true }, tiempo: { nucleo: 0, producto: 0, lanzamiento: 0 }, revisiones: [] } } };
-    expect(avisosEntreRamas('2026-12-21', listo, cfg).some((x) => x.de === 'programacion')).toBe(false);
-    expect(avisosEntreRamas('2026-12-19', emptyPlan(), cfg).some((x) => x.de === 'programacion')).toBe(false);
+    expect(avisosEntreRamas('2027-01-04', listo, cfg).some((x) => x.de === 'programacion')).toBe(false);
+    expect(avisosEntreRamas('2027-01-02', emptyPlan(), cfg).some((x) => x.de === 'programacion')).toBe(false);
   });
 
   it('ventana W que empieza en 7 días o menos → matematica → programacion', () => {
-    // Sin pausa de fin de año, W1 empieza el lunes 1 de febrero.
-    expect(avisosEntreRamas('2027-01-25', emptyPlan(), cfg).find((x) => x.de === 'matematica')).toMatchObject({ a: 'programacion', titulo: 'La ventana W1 empieza el lunes 1' });
-    expect(avisosEntreRamas('2027-01-24', emptyPlan(), cfg).some((x) => x.de === 'matematica')).toBe(false);
+    // Con la v2, W1 empieza el lunes 22 de febrero.
+    expect(avisosEntreRamas('2027-02-15', emptyPlan(), cfg).find((x) => x.de === 'matematica')).toMatchObject({ a: 'programacion', titulo: 'La ventana W1 empieza el lunes 22' });
+    expect(avisosEntreRamas('2027-02-14', emptyPlan(), cfg).some((x) => x.de === 'matematica')).toBe(false);
   });
 
   it('T+2 marcado con la rutina de búsqueda → pide pasar a la rutina con trabajo', () => {
@@ -60,7 +60,7 @@ describe('etiqueta de rama en Hoy', () => {
     const tag = (k: string) => etiquetaDeBloque(d.blocks.find((b) => b.key === k)!, { day: d, plan: p, study: emptyStudy() });
     expect(tag('rutina')).toBe('main · rutina');
     expect(tag('math')).toBe('matematica · Aritmética cap. 1 de 11');
-    expect(tag('prog')).toBe('programacion · P1 · semana 3 de 5');
+    expect(tag('prog')).toBe('programacion · P1 · semana 3 de 6');
     expect(tag('trabajo')).toBe('fuera del plan');
     expect(tag('busqueda')).toBe('trabajo · semana 5 de 8 · 1 h 30 hoy');
     expect(tag('handyx')).toBe('handyx · Lanzar · semana 5 de 13');

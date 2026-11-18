@@ -7,7 +7,8 @@ import { DEFAULT_ALARMS } from '../data/sounds';
 import type { Area } from '../data/types';
 import { applyTheme, getThemePref, type ThemePref } from '../lib/theme';
 import { planSettings, useStore } from '../state/store';
-import { activarIntensiva, desactivarIntensiva, setExtraBloque, setInicioPlan, setPlanSettings } from '../state/plan';
+import { activarIntensiva, desactivarIntensiva, setExtraBloque, setInicioPlan, setPausaFinDeAnio, setPlanSettings, setTodosExtra } from '../state/plan';
+import { PLAN_EXT } from '../data/plan-extendido';
 import { dateKey } from '../data/time';
 import { renameBimester } from '../state/goals';
 import { setAreaName } from '../state/profile';
@@ -139,6 +140,7 @@ function PlanT18() {
           <input className="campo-texto mono" type="date" value={t0} onChange={(e) => e.target.value && setInicioPlan(e.target.value)} aria-label="Inicio del plan" />
         </li>
         <ExtrasFeature t0={t0} />
+        <CapasV2 />
         <li>
           <span><b>Rutina del día</b><small>{intensiva ? 'La de la búsqueda intensiva mientras dure; al apagarla vuelve esta' : 'Cambia al marcar T+2 (con confirmación)'}</small></span>
           <div className="segmentado" role="radiogroup" aria-label="Rutina de lunes a viernes">
@@ -175,6 +177,33 @@ function PlanT18() {
       </div>
       <p className="sub nota-izq">Cada rama tiene su color en Hoy, Metas y el mapa; main es Trazo.</p>
     </Plegable>
+  );
+}
+
+/** Ola 24 (plan v2): la pausa de fin de año y las capas de plataforma y arquitectura, con un switch cada una. */
+function CapasV2() {
+  const apagados = useStore((s) => s.plan.extrasApagados) ?? [];
+  const pausa = useStore((s) => s.plan.pausaFinDeAnio) !== false;
+  const conPlat = PLAN_EXT.bloques.filter((b) => b.extraPlataforma > 0).map((b) => b.id);
+  const conArq = PLAN_EXT.bloques.filter((b) => b.extraArquitectura > 0).map((b) => b.id);
+  const prendidas = (ids: string[], k: string) => ids.filter((id) => !apagados.includes(`${id}:${k}`)).length;
+  const plat = prendidas(conPlat, 'plataforma');
+  const arq = prendidas(conArq, 'arquitectura');
+  return (
+    <>
+      <li>
+        <span><b>Pausa de fin de año</b><small>{pausa ? 'Prendida: la semana cuyo lunes cae entre el 18 y el 24 de diciembre no se programa; si cae en un bloque, lo parte.' : 'Apagada: el calendario de la ola 18, sin pausas.'}</small></span>
+        <button role="switch" className="switch" aria-checked={pausa} aria-label="Pausa de fin de año" onClick={() => setPausaFinDeAnio(!pausa)} />
+      </li>
+      <li>
+        <span><b>Plataformas extra</b><small>{plat} de {conPlat.length} proyectos, +1 semana cada uno (mobile, escritorio, VR o AR). Se ajustan una por una en cada proyecto.</small></span>
+        <button role="switch" className="switch" aria-checked={plat > 0} aria-label="Plataformas extra" onClick={() => setTodosExtra('plataforma', plat === 0, conPlat)} />
+      </li>
+      <li>
+        <span><b>Arquitectura</b><small>{arq ? 'Prendida' : 'Apagada'}: las 2 semanas de microservicios y microfrontends de P10.</small></span>
+        <button role="switch" className="switch" aria-checked={arq > 0} aria-label="Arquitectura" onClick={() => setTodosExtra('arquitectura', arq === 0, conArq)} />
+      </li>
+    </>
   );
 }
 

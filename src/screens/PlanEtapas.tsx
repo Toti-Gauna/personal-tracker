@@ -45,6 +45,8 @@ export function PlanEtapas({ day }: { day: DayLog }) {
         </section>
       )}
 
+      <a className="fila-link" href="#/metas/calibracion">Calibración con horas reales y escenarios <span aria-hidden="true">→</span></a>
+
       {etapas.map((e) => (
         <section key={e.n} className={`et-etapa ${e.estado}`} aria-labelledby={`et-${e.n}`}>
           <div className="et-cab">
@@ -67,7 +69,7 @@ export function PlanEtapas({ day }: { day: DayLog }) {
                   <a href={`#/metas/proyecto/${b.id}`}>
                     <span className="mono">{b.id}</span>
                     <span>{b.nombre}{b.alternativa ? <small className="sub"> · o {b.alternativa}</small> : null}{b.recortable ? <small className="sub"> · recortable</small> : null}</span>
-                    <span className="mono sub">{TIPO[b.tipo]} · {f(b.inicio)} · {b.semanas} sem{b.extraAplicado ? ` (+${b.extraAplicado})` : ''}</span>
+                    <span className="mono sub">{b.pausa ? 'pausa de fin de año' : TIPO[b.tipo]} · {f(b.inicio)} · {b.semanas} sem{b.semanas > b.base && !b.pausa ? ` (+${b.semanas - b.base - b.atraso})` : ''}{b.pausasDentro?.length ? ' · partido por la pausa' : ''}</span>
                   </a>
                 </li>
               ))}

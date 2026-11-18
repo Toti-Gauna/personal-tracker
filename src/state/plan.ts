@@ -33,13 +33,56 @@ export function tildarSalida(ventana: string, i: number) {
   });
 }
 
-/** Prende o apaga las semanas extra de feature de un proyecto; el calendario se recalcula. */
-export function setExtraBloque(id: string, prendido: boolean) {
+export type TipoExtra = 'feature' | 'plataforma' | 'arquitectura';
+
+/** Prende o apaga las semanas extra (feature, plataforma o arquitectura) de un proyecto; el calendario se recalcula. */
+export function setExtraBloque(id: string, prendido: boolean, tipo: TipoExtra = 'feature') {
+  const clave = tipo === 'feature' ? id : `${id}:${tipo}`;
   update((p) => {
     const set = new Set(p.extrasApagados ?? []);
-    if (prendido) set.delete(id);
-    else set.add(id);
+    if (prendido) set.delete(clave);
+    else set.add(clave);
     return { ...p, extrasApagados: [...set].sort() };
+  });
+}
+
+/** Apaga varios extras de una vez (las sugerencias de la calibración). */
+export function apagarExtras(claves: string[]) {
+  update((p) => ({ ...p, extrasApagados: [...new Set([...(p.extrasApagados ?? []), ...claves])].sort() }));
+}
+
+/** Ola 24: prende o apaga un tipo de extra en todos los proyectos que lo tienen (plataformas o arquitectura). */
+export function setTodosExtra(tipo: Exclude<TipoExtra, 'feature'>, prendido: boolean, ids: string[]) {
+  update((p) => {
+    const set = new Set(p.extrasApagados ?? []);
+    for (const id of ids) {
+      if (prendido) set.delete(`${id}:${tipo}`);
+      else set.add(`${id}:${tipo}`);
+    }
+    return { ...p, extrasApagados: [...set].sort() };
+  });
+}
+
+/** Ola 24: prende o apaga la pausa de fin de año automática. */
+export function setPausaFinDeAnio(prendida: boolean) {
+  update((p) => ({ ...p, pausaFinDeAnio: prendida }));
+}
+
+/** Ola 24: la versión de examen elegida para una certificación ("" la borra). */
+export function setVersionCert(cert: string, version: string) {
+  update((p) => {
+    const v = { ...(p.versionCert ?? {}) };
+    if (version) v[cert] = version;
+    else delete v[cert];
+    return { ...p, versionCert: v };
+  });
+}
+
+/** Ola 24: tilda o destilda un entregable de arquitectura de un proyecto. */
+export function toggleArquitectura(proyecto: string, k: 'contrato' | 'trazas' | 'mtls' | 'adr') {
+  update((p) => {
+    const cur = p.arquitectura?.[proyecto] ?? {};
+    return { ...p, arquitectura: { ...(p.arquitectura ?? {}), [proyecto]: { ...cur, [k]: !cur[k] } } };
   });
 }
 

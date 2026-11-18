@@ -21,6 +21,10 @@ export interface BloqueExt {
   base: number;
   /** Semanas extra por la feature diferencial (solo proyectos). */
   extra: number;
+  /** v2 (ola 24): semanas extra por la plataforma extra (mobile, escritorio, VR o AR). */
+  extraPlataforma: number;
+  /** v2 (ola 24): semanas extra por la capa de arquitectura (microservicios y microfrontends). */
+  extraArquitectura: number;
   /** Bloques que tienen que ir antes (la ventana que abre el proyecto). */
   dependeDe?: string[];
   /** Propuesta de reemplazo, pendiente de confirmar ("red teaming de agentes"). */
@@ -53,6 +57,12 @@ export interface Ficha {
   /** Quién lo valida (experto del rubro, PR aceptado o certificación). */
   validador?: string;
   perfil?: string;
+  /** v2 (ola 24): la plataforma extra del proyecto (tabla 3.8). */
+  plataforma?: string;
+  /** v2 (ola 24): la capa de arquitectura del proyecto. */
+  arquitectura?: string;
+  /** Lleva el checklist de arquitectura (contrato probado, trazas, mTLS y ADR): P1, P5, P10, S1 y Q5. */
+  entregablesArquitectura?: boolean;
 }
 
 /** Rol de un libro de refuerzo: se abre según el tipo de error. */
@@ -83,7 +93,11 @@ export interface CertInfo {
   decision?: string;
   /** Certificación que exige antes (CKS exige CKA). */
   requiere?: string;
+  /** v2 (ola 24): versiones del examen, con la fecha en que se retiran o salen. */
+  versiones?: VersionExamen[];
 }
+
+export interface VersionExamen { id: string; nombre: string; retiro?: string; sale?: string }
 
 export interface EtapaExt {
   n: 1 | 2 | 3 | 4;
@@ -92,6 +106,8 @@ export interface EtapaExt {
   perfil: string;
   semanasBase: number;
   semanasExtra: number;
+  semanasPlataforma: number;
+  semanasArquitectura: number;
 }
 
 export interface PlanExtendido {
@@ -139,6 +155,12 @@ export function validar(doc: unknown): string[] {
     if (!Number.isInteger(b.base) || b.base < 1) err.push(`${en}: base tiene que ser un entero de 1 o más`);
     if (!Number.isInteger(b.extra) || b.extra < 0) err.push(`${en}: extra tiene que ser un entero de 0 o más`);
     if (b.extra > 0 && b.tipo !== 'proyecto') err.push(`${en}: solo un proyecto lleva semanas extra de feature`);
+    for (const k of ['extraPlataforma', 'extraArquitectura'] as const) {
+      if (!Number.isInteger(b[k]) || b[k] < 0) err.push(`${en}: ${k} tiene que ser un entero de 0 o más`);
+      if (b[k] > 0 && b.tipo !== 'proyecto') err.push(`${en}: solo un proyecto lleva ${k}`);
+    }
+    if (b.extraPlataforma > 0 && !b.ficha?.plataforma) err.push(`${en}: suma semanas de plataforma pero la ficha no dice cuál`);
+    if (b.extraArquitectura > 0 && !b.ficha?.arquitectura) err.push(`${en}: suma semanas de arquitectura pero la ficha no dice cuál`);
     if (b.alternativa && b.tipo !== 'proyecto') err.push(`${en}: solo un proyecto tiene alternativa`);
     if (i > 0 && bloques[i - 1].etapa > b.etapa) err.push(`${en}: las etapas van en orden (la ${b.etapa} viene después de la ${bloques[i - 1].etapa})`);
     for (const dep of b.dependeDe ?? []) {
@@ -182,8 +204,12 @@ export function validar(doc: unknown): string[] {
     if (!bs.length) err.push(`etapa ${e.n}: sin bloques`);
     const base = bs.reduce((s, b) => s + b.base, 0);
     const extra = bs.reduce((s, b) => s + b.extra, 0);
+    const plat = bs.reduce((s, b) => s + b.extraPlataforma, 0);
+    const arq = bs.reduce((s, b) => s + b.extraArquitectura, 0);
     if (base !== e.semanasBase) err.push(`etapa ${e.n}: las semanas base suman ${base} y dice ${e.semanasBase}`);
     if (extra !== e.semanasExtra) err.push(`etapa ${e.n}: las semanas extra suman ${extra} y dice ${e.semanasExtra}`);
+    if (plat !== e.semanasPlataforma) err.push(`etapa ${e.n}: las semanas de plataforma suman ${plat} y dice ${e.semanasPlataforma}`);
+    if (arq !== e.semanasArquitectura) err.push(`etapa ${e.n}: las semanas de arquitectura suman ${arq} y dice ${e.semanasArquitectura}`);
   }
   for (const n of new Set(bloques.map((b) => b.etapa))) if (![1, 2, 3, 4].includes(n) || !etapas.some((e) => e.n === n)) err.push(`etapa ${n}: no está declarada en etapas`);
   return err;
@@ -200,49 +226,80 @@ export const bloqueExtPorId = (id: string) => BLOQUES_EXT.find((b) => b.id === i
 
 // ——— calendario derivado ———
 
+/** Un switch de extras: `true` o `false` para todos, o un mapa por bloque sobre el valor por defecto. */
+export type Switch = boolean | Record<string, boolean>;
+
 export interface Opciones {
   /** Inicio del plan; por defecto el T0 del plan (si el usuario instaló otro día, el suyo). */
   t0?: string;
+  /** Semanas extra de feature (por defecto, prendidas en todos los proyectos). */
+  extras?: Switch;
+  /** v2: semanas extra de plataforma (por defecto, prendidas). */
+  plataforma?: Switch;
+  /** v2: semanas extra de arquitectura (por defecto, prendidas). */
+  arquitectura?: Switch;
   /**
-   * Semanas extra de feature: `true` (por defecto) las suma en todos los proyectos, `false` en
-   * ninguno, o un mapa por bloque ({ P1: false }) sobre el valor por defecto.
+   * v2: pausa de fin de año automática (por defecto, prendida): la semana cuyo lunes cae entre el
+   * 18 y el 24 de diciembre. Si cae dentro de un bloque, lo parte y lo corre una semana.
    */
-  extras?: boolean | Record<string, boolean>;
+  pausas?: boolean;
   /** Semanas de atraso por bloque (puerta de matemática sin aprobar, proyecto que se pasó). */
   atrasos?: Record<string, number>;
 }
 
 export interface BloqueFechado extends BloqueExt {
-  /** Semanas que dura con las opciones elegidas (base + extra + atraso, o lo que quedó del colchón). */
+  /** Semanas de trabajo con las opciones elegidas (base + extras + atraso, o lo que quedó del colchón). */
   semanas: number;
-  /** Semana del plan en que empieza y en que termina (1 es la de T0). */
+  /** Semana del plan en que empieza y en que termina (1 es la de T0); incluye las pausas que lo parten. */
   desde: number;
   hasta: number;
   /** Lunes del primer día y domingo del último. */
   inicio: string;
   fin: string;
-  /** Extra de feature que se sumó. */
+  /** Extras que se sumaron (feature, plataforma y arquitectura). */
   extraAplicado: number;
+  plataformaAplicada: number;
+  arquitecturaAplicada: number;
   /** Semanas de atraso propias. */
   atraso: number;
   /** Colchón: semanas que se comió el atraso de la etapa. */
   absorbido: number;
+  /** Semanas del plan que son pausa de fin de año dentro del bloque (lo parten). */
+  pausasDentro: number[];
+  /** Es una pausa de fin de año insertada por el motor. */
+  pausa?: true;
 }
+
+/** ¿La semana que arranca este día es la pausa de fin de año? (su primer día cae entre el 18 y el 24 de diciembre). */
+export const esSemanaDePausa = (lunes: string) => lunes.slice(5, 7) === '12' && Number(lunes.slice(8, 10)) >= 18 && Number(lunes.slice(8, 10)) <= 24;
+
+const leer = (sw: Switch | undefined, id: string) => (typeof sw === 'object' ? sw[id] ?? true : sw ?? true);
 
 /**
  * Deriva las fechas. Una ventana siempre va antes de su proyecto; si hay atraso, el colchón de la
- * etapa lo absorbe (hasta sus semanas) y solo lo que sobra corre las fechas siguientes.
+ * etapa lo absorbe (hasta sus semanas) y solo lo que sobra corre las fechas siguientes. Con
+ * `pausas`, cada diciembre se inserta una pausa: entre bloques o partiendo el bloque en el que cae.
  */
 export function calendario(plan: PlanExtendido = PLAN_EXT, o: Opciones = {}): BloqueFechado[] {
   const t0 = o.t0 ?? plan.t0;
-  const porDefecto = typeof o.extras === 'boolean' ? o.extras : true;
-  const quiere = (id: string) => (typeof o.extras === 'object' ? o.extras[id] ?? porDefecto : porDefecto);
+  const conPausas = o.pausas ?? true;
+  const lunesDe = (w: number) => addDays(t0, (w - 1) * 7);
+  const pausaEn = (w: number) => conPausas && esSemanaDePausa(lunesDe(w));
+  const out: BloqueFechado[] = [];
+  const pausa = (w: number, etapa: 1 | 2 | 3 | 4): BloqueFechado => ({
+    id: `PAUSA-${lunesDe(w).slice(0, 4)}`, etapa, tipo: 'descanso', nombre: 'Pausa de fin de año', base: 1, extra: 0, extraPlataforma: 0, extraArquitectura: 0,
+    que: 'Una semana sin programación entre Navidad y Año Nuevo; la matemática diaria y lo demás siguen.',
+    semanas: 1, desde: w, hasta: w, inicio: lunesDe(w), fin: addDays(lunesDe(w), 6), extraAplicado: 0, plataformaAplicada: 0, arquitecturaAplicada: 0, atraso: 0, absorbido: 0, pausasDentro: [], pausa: true,
+  });
   let semana = 0;
   let etapa = 0;
   let pendiente = 0;
-  return plan.bloques.map((b) => {
+  for (const b of plan.bloques) {
     if (b.etapa !== etapa) { etapa = b.etapa; pendiente = 0; }
-    const extraAplicado = b.tipo === 'proyecto' && quiere(b.id) ? b.extra : 0;
+    const proy = b.tipo === 'proyecto';
+    const extraAplicado = proy && leer(o.extras, b.id) ? b.extra : 0;
+    const plataformaAplicada = proy && leer(o.plataforma, b.id) ? b.extraPlataforma ?? 0 : 0;
+    const arquitecturaAplicada = proy && leer(o.arquitectura, b.id) ? b.extraArquitectura ?? 0 : 0;
     const atraso = Math.max(0, Math.round(o.atrasos?.[b.id] ?? 0));
     let semanas: number;
     let absorbido = 0;
@@ -251,31 +308,57 @@ export function calendario(plan: PlanExtendido = PLAN_EXT, o: Opciones = {}): Bl
       semanas = b.base - absorbido;
       pendiente = 0;
     } else {
-      semanas = b.base + extraAplicado + atraso;
+      semanas = b.base + extraAplicado + plataformaAplicada + arquitecturaAplicada + atraso;
       pendiente += atraso;
     }
-    const desde = semana + 1;
-    const hasta = semana + semanas;
-    semana = hasta;
+    const extras = { extraAplicado, plataformaAplicada, arquitecturaAplicada, atraso, absorbido };
     // Un colchón consumido del todo dura 0 semanas: no ocupa fechas.
-    const inicio = addDays(t0, (desde - 1) * 7);
-    const fin = semanas > 0 ? addDays(t0, hasta * 7 - 1) : addDays(t0, (desde - 1) * 7 - 1);
-    return { ...b, semanas, desde, hasta, inicio, fin, extraAplicado, atraso, absorbido };
-  });
+    if (semanas === 0) {
+      out.push({ ...b, ...extras, semanas, desde: semana + 1, hasta: semana, inicio: lunesDe(semana + 1), fin: addDays(lunesDe(semana + 1), -1), pausasDentro: [] });
+      continue;
+    }
+    // La pausa que cae justo antes del bloque va entre los dos.
+    while (pausaEn(semana + 1)) { semana++; out.push(pausa(semana, b.etapa)); }
+    const desde = semana + 1;
+    const pausasDentro: number[] = [];
+    let quedan = semanas;
+    while (quedan > 0) {
+      semana++;
+      if (pausaEn(semana)) pausasDentro.push(semana);
+      else quedan--;
+    }
+    out.push({ ...b, ...extras, semanas, desde, hasta: semana, inicio: lunesDe(desde), fin: addDays(t0, semana * 7 - 1), pausasDentro });
+    // La pausa que parte el bloque va después de él en la lista (sus fechas están adentro del bloque).
+    for (const w of pausasDentro) out.push(pausa(w, b.etapa));
+  }
+  return out;
 }
 
-/** Semanas totales del calendario. */
+/** Opciones del calendario a partir de lo guardado: ids con el extra apagado ("P1" es feature; "P1:plataforma" y "P1:arquitectura") y la pausa. */
+export function opcionesDe(apagados: readonly string[] = [], pausas = true, t0?: string): Opciones {
+  const de = (k: string) => Object.fromEntries(apagados.filter((x) => x.endsWith(`:${k}`)).map((x) => [x.split(':')[0], false]));
+  return {
+    ...(t0 ? { t0 } : {}),
+    extras: Object.fromEntries(apagados.filter((x) => !x.includes(':')).map((id) => [id, false])),
+    plataforma: de('plataforma'),
+    arquitectura: de('arquitectura'),
+    pausas,
+  };
+}
+
+/** Semanas totales del calendario (con las pausas). */
 export const totalSemanas = (cal: BloqueFechado[]) => cal.reduce((s, b) => s + b.semanas, 0);
 
 /** Último día de una etapa. */
 export function finEtapa(cal: BloqueFechado[], n: number) {
   const bs = cal.filter((b) => b.etapa === n && b.semanas > 0);
-  return bs.length ? bs[bs.length - 1].fin : null;
+  return bs.length ? bs.reduce((m, b) => (b.fin > m ? b.fin : m), bs[0].fin) : null;
 }
 
 /** El bloque que está en curso en una fecha (null antes de T0 o después del final). */
 export function bloqueEn(cal: BloqueFechado[], fecha: string): BloqueFechado | null {
-  return cal.find((b) => b.semanas > 0 && fecha >= b.inicio && fecha <= b.fin) ?? null;
+  // Una pausa que parte un bloque gana: esa semana no se programa.
+  return cal.find((b) => b.pausa && fecha >= b.inicio && fecha <= b.fin) ?? cal.find((b) => b.semanas > 0 && fecha >= b.inicio && fecha <= b.fin) ?? null;
 }
 
 /** Semana del plan (1 es la de T0) en la que cae una fecha; 0 o negativa si es anterior. */

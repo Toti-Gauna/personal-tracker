@@ -83,7 +83,7 @@ export function migrate(parsed: any): State {
 
 let state: State = load();
 applySettings(state.settings);
-aplicarCalendario(state.plan.extrasApagados ?? []);
+aplicarCalendario(state.plan.extrasApagados ?? [], state.plan.pausaFinDeAnio !== false);
 aplicarLibrosPropios(state.study.librosPropios);
 const subs = new Set<() => void>();
 
@@ -92,12 +92,13 @@ export const getState = () => state;
 export function setState(fn: (s: State) => State) {
   const prev = state.settings;
   const prevExtras = state.plan.extrasApagados;
+  const prevPausa = state.plan.pausaFinDeAnio;
   const prevLibros = state.study.librosPropios;
   state = fn(state);
   if (state.study.librosPropios !== prevLibros) aplicarLibrosPropios(state.study.librosPropios);
   if (state.settings !== prev) applySettings(state.settings);
   // Ola 16b: el calendario vivo se recalcula si cambian los extras de feature apagados.
-  if (state.plan.extrasApagados !== prevExtras) aplicarCalendario(state.plan.extrasApagados ?? []);
+  if (state.plan.extrasApagados !== prevExtras || state.plan.pausaFinDeAnio !== prevPausa) aplicarCalendario(state.plan.extrasApagados ?? [], state.plan.pausaFinDeAnio !== false);
   try { localStorage.setItem(KEY, JSON.stringify(state)); } catch { /* sin storage */ }
   subs.forEach((f) => f());
 }
@@ -106,7 +107,7 @@ export function setState(fn: (s: State) => State) {
 export function resetState(s: State = empty()) {
   state = s;
   applySettings(s.settings);
-  aplicarCalendario(s.plan.extrasApagados ?? []);
+  aplicarCalendario(s.plan.extrasApagados ?? [], s.plan.pausaFinDeAnio !== false);
   aplicarLibrosPropios(s.study.librosPropios);
   subs.forEach((f) => f());
 }

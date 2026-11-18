@@ -4,7 +4,7 @@
  * al cerrar. También sirve para certificaciones y ventanas, con lo que les toca.
  */
 import { useState } from 'react';
-import { PLAN, TRAMOS, diaSemanaCorto, fechaCorta, fechas, nombreTramo, proyectos, semanaDelPlan, siguienteTramo, T0_PLAN, tramoActivo, tramoPorId, type Capa } from '../data/plan';
+import { PLAN, TRAMOS, diaSemanaCorto, fechaCorta, fechas, nombreTramo, proyectos, semanaDelPlan, semanasDeTramo, siguienteTramo, T0_PLAN, tramoActivo, tramoPorId, type Capa } from '../data/plan';
 import { EVIDENCIAS, proyectoVacio, type TipoError } from '../data/plan-state';
 import { Plegable } from '../ui/Plegable';
 import { RAMA_COLOR } from '../data/ramas';
@@ -13,7 +13,8 @@ import { guardarExamen, marcarCapa, setTecnica, sumarRevision, sumarTiempo, togg
 import { atrasoPuerta, puertaAprobada } from '../data/puertas';
 import { useStore } from '../state/store';
 import { Casilla } from '../ui/Casilla';
-import { EvidenciaProyecto, FichaBloque, NivelSalida } from '../ui/FichaBloque';
+import { ArquitecturaProyecto, EvidenciaProyecto, ExtrasProyecto, FichaBloque, NivelSalida, VersionExamen, avanceArquitectura } from '../ui/FichaBloque';
+import { bloqueExtPorId } from '../data/plan-extendido';
 import { bloqueConFechas } from '../data/plan-vistas';
 import { MetasBloque } from '../ui/MetasBloque';
 import '../styles/etapas.css';
@@ -34,15 +35,20 @@ export function PlanProyecto({ day, id }: { day: DayLog; id?: string }) {
   const date = day.date;
   const t0 = useStore((s) => s.settings?.startDate) ?? T0_PLAN;
   const estado = useStore((s) => s.plan.proyectos);
+  const arqs = useStore((s) => s.plan.arquitectura);
   const activo = tramoActivo(date, t0);
   // Ola 16c: los bloques de las etapas 3 y 4 no están en el calendario vivo: tienen su ficha propia.
   if (id && !tramoPorId(id) && bloqueConFechas(id, t0)) return <FichaExtendida id={id} t0={t0} />;
   const t = (id && tramoPorId(id)) || activo;
   const p = estado[t.id] ?? proyectoVacio();
   const { inicio, fin } = fechas(t.desde, t.hasta, t0);
-  const semanas = t.hasta - t.desde + 1;
+  // Ola 24: las semanas de pausa que parten el tramo no cuentan.
+  const semanas = semanasDeTramo(t);
   const sHoy = semanaDelPlan(date, t0);
-  const semana = Math.max(0, Math.min(semanas, sHoy - t.desde + 1));
+  const enPausa = (t.pausas ?? []).includes(sHoy);
+  const semana = Math.max(0, Math.min(semanas, sHoy - t.desde + 1 - (t.pausas ?? []).filter((w) => w < sHoy).length));
+  const arq = arqs?.[t.id];
+  const conArq = !!bloqueExtPorId(t.id)?.ficha?.entregablesArquitectura;
   const sig = siguienteTramo(t.id);
   const numerados = proyectos().filter((x) => x.id !== 'P0');
   const n = numerados.findIndex((x) => x.id === t.id);
@@ -72,7 +78,7 @@ export function PlanProyecto({ day, id }: { day: DayLog; id?: string }) {
         {Array.from({ length: semanas }, (_, k) => <span key={k} className={k + 1 < semana ? 'pas' : k + 1 === semana ? 'on' : ''} />)}
       </div>
       <div className="pp-cuando mono">
-        <span><b>{semana >= 1 ? `semana ${semana} de ${semanas}` : sHoy < t.desde ? `empieza el ${fechaCorta(inicio)}` : 'cerrado'}</b> · {fechaCorta(inicio)} — {fechaCorta(fin)}</span>
+        <span><b>{enPausa ? 'pausa de fin de año' : semana >= 1 && sHoy <= t.hasta ? `semana ${semana} de ${semanas}` : sHoy < t.desde ? `empieza el ${fechaCorta(inicio)}` : 'cerrado'}</b> · {fechaCorta(inicio)} — {fechaCorta(fin)}{t.pausas?.length ? ' · con la pausa adentro' : ''}</span>
         {(t.tipo === 'proyecto' || t.tipo === 'cert') && <span className="sub">examen {diaSemanaCorto(fin)} {Number(fin.slice(8))}</span>}
       </div>
       {otro && <p className="sub pp-par">{t.version === 'v1' ? `Vuelve como ${nombreTramo(otro, false)} en ${otro.id}, desde el ${fechaCorta(fechas(otro.desde, otro.hasta, t0).inicio)}.` : `Crece desde ${nombreTramo(otro, false)} (${otro.id}).`}</p>}
@@ -88,6 +94,9 @@ export function PlanProyecto({ day, id }: { day: DayLog; id?: string }) {
       <MetasBloque bloque={t.id} date={date} titulo={`Metas de ${t.id}`} />
       <Plegable id={`proy:${t.id}:ficha`} titulo="Ficha" resumen={t.tipo === 'cert' ? 'costo y versión' : 'feature, tecnología, validador'} color={RAMA_COLOR.programacion}><FichaBloque id={t.id} /></Plegable>
       {t.tipo === 'proyecto' && <Plegable id={`proy:${t.id}:evidencia`} titulo="Puerta de evidencia" resumen={`${EVIDENCIAS.filter(([k]) => p.evidencia?.[k]).length} de 3`}><EvidenciaProyecto id={t.id} /></Plegable>}
+      {t.tipo === 'proyecto' && <Plegable id={`proy:${t.id}:extras`} titulo="Semanas extra" resumen={`${semanas} semanas`}><ExtrasProyecto id={t.id} t0={t0} /></Plegable>}
+      {conArq && <Plegable id={`proy:${t.id}:arquitectura`} titulo="Arquitectura" resumen={`${avanceArquitectura(arq)} de 4`} color={RAMA_COLOR.programacion}><ArquitecturaProyecto id={t.id} /></Plegable>}
+      {t.tipo === 'cert' && <VersionExamen id={t.id} date={date} t0={t0} />}
 
       {t.tipo === 'ventana' && (
         <>
@@ -299,10 +308,12 @@ function FichaExtendida({ id, t0 }: { id: string; t0: string }) {
       <div className="topbar"><a className="volver" href="#/metas/etapas">Las 4 etapas</a><span className="mono" style={{ color: RAMA_COLOR.programacion }}>etapa {b.etapa} · {b.id}</span></div>
       <span className="etiqueta">{[b.ficha?.rubro && !ETAPA[b.etapa].includes(b.ficha.rubro) ? b.ficha.rubro : null, `etapa ${b.etapa} · ${ETAPA[b.etapa]}`].filter(Boolean).join(' · ')}</span>
       <h1 className="titulo pp-titulo"><span className="resaltado" style={{ ['--c' as string]: RAMA_COLOR.programacion }}>{b.nombre}</span></h1>
-      <div className="pp-cuando mono"><span><b>{b.semanas} semanas{b.extraAplicado ? ` (${b.base} + ${b.extraAplicado} de feature)` : ''}</b> · {fl(b.inicio)} — {fl(b.fin)}</span></div>
+      <div className="pp-cuando mono"><span><b>{b.semanas} semanas{b.semanas > b.base ? ` (${b.base} + ${b.semanas - b.base} extra)` : ''}</b> · {fl(b.inicio)} — {fl(b.fin)}</span></div>
       {b.dependeDe?.length ? <p className="sub">Va después de la ventana {b.dependeDe.join(' y ')}: sin aprobarla con 85 %, no arranca.</p> : null}
       <FichaBloque id={b.id} />
       {b.tipo === 'proyecto' && <EvidenciaProyecto id={b.id} />}
+      {b.tipo === 'proyecto' && <Plegable id={`proy:${b.id}:extras`} titulo="Semanas extra" resumen={`${b.semanas} semanas`}><ExtrasProyecto id={b.id} t0={t0} /></Plegable>}
+      {b.ficha?.entregablesArquitectura && <Plegable id={`proy:${b.id}:arquitectura`} titulo="Arquitectura" resumen="contrato, trazas, mTLS y ADR"><ArquitecturaProyecto id={b.id} /></Plegable>}
       {b.etapa === 3 && <p className="sub">Plan de estudio e ingeniería, no asesoramiento financiero. Capital real: nada hasta cumplir la puerta escrita (12 semanas o más de paper trading, kill-switch probado y límite de pérdida fijado antes).</p>}
       {b.etapa === 4 && <p className="sub">Modelos educativos y datos públicos o sintéticos; ningún modelo controla hardware real.</p>}
     </main>

@@ -6,8 +6,8 @@
  * - La línea de tiempo por etapas, el panel "hoy sos" y las alertas.
  */
 import { alertasIdiomas } from './idiomas';
-import { EXTRAS_APAGADOS, PLAN, T0_PLAN, fechas } from './plan';
-import { PLAN_EXT, bloqueExtPorId, calendario, type BloqueExt, type BloqueFechado, type MateTramo, type RolRefuerzo } from './plan-extendido';
+import { EXTRAS_APAGADOS, PAUSAS, PLAN, T0_PLAN, fechas } from './plan';
+import { PLAN_EXT, bloqueExtPorId, calendario, opcionesDe, type BloqueExt, type BloqueFechado, type MateTramo, type RolRefuerzo } from './plan-extendido';
 import type { PlanState } from './plan-state';
 import { cierreProyecto, puertaAprobada } from './puertas';
 import { daysBetween } from './time';
@@ -31,8 +31,7 @@ export function refuerzoPara(m: Pick<MateTramo, 'refuerzo'>, motivo: string) {
 }
 
 /** El calendario completo (4 etapas) con los mismos extras apagados que el calendario vivo. */
-export const calendarioCompleto = (t0?: string) =>
-  calendario(PLAN_EXT, { t0, extras: Object.fromEntries(EXTRAS_APAGADOS.map((id) => [id, false])) });
+export const calendarioCompleto = (t0?: string) => calendario(PLAN_EXT, opcionesDe(EXTRAS_APAGADOS, PAUSAS, t0));
 
 export type EstadoItem = 'hecho' | 'actual' | 'proximo';
 
@@ -103,7 +102,8 @@ export function lineaEtapas(hoy: string, t0 = T0_PLAN): EtapaVista[] {
   return PLAN_EXT.etapas.map((e) => {
     const bs = cal.filter((b) => b.etapa === e.n && b.semanas > 0).map((b) => ({ ...b, estado: estadoEn(b, hoy) }));
     const inicio = bs[0].inicio;
-    const fin = bs[bs.length - 1].fin;
+    // Una pausa que parte el último bloque va después en la lista: el fin es el mayor.
+    const fin = bs.reduce((m, b) => (b.fin > m ? b.fin : m), bs[0].fin);
     return { n: e.n, nombre: e.nombre, perfil: e.perfil, inicio, fin, semanas: bs.reduce((s, b) => s + b.semanas, 0), bloques: bs, estado: estadoEn({ inicio, fin }, hoy) };
   });
 }
@@ -154,7 +154,14 @@ export function alertas(hoy: string, plan: PlanState, t0 = T0_PLAN, clipping?: C
       out.push({ id: `vent-${b.id}`, tipo: 'ventana', fecha: b.fin, href: `#/estudio/mate/${b.id}`, titulo: `${b.id} cierra el ${fmt(b.fin)}`, texto: `Aprobá la puerta (85 %) para que ${hab ?? 'el proyecto'} arranque; si no, la programación sigue siendo matemática y se descuenta del colchón.` });
     }
   }
+  // Ola 24: versión de examen (Security+): si la elegida se retira antes del examen, o falta elegirla.
+  for (const b of cal) {
+    const a = alertaVersion(b, plan, hoy);
+    if (a) out.push(a);
+  }
   for (const d of PLAN_EXT.decisiones) {
+    // La de Security+ ya la dice la alerta de versión (con lo que sirve para tu fecha de examen).
+    if (d.id === 'secplus' && out.some((a) => a.id === 'ver-C2')) continue;
     if (d.fecha && d.fecha >= hoy && daysBetween(hoy, d.fecha) <= 14) out.push({ id: `dec-${d.id}`, tipo: 'decision', fecha: d.fecha, titulo: `Decisión el ${fmt(d.fecha)}`, texto: d.texto });
   }
   // Ola 21: exámenes de idiomas, trimestres y tesis anual.
@@ -162,6 +169,25 @@ export function alertas(hoy: string, plan: PlanState, t0 = T0_PLAN, clipping?: C
   // Ola 23: las del clipping (lunes, viernes, fin de fase, mes 6, concentración y compuerta).
   if (clipping) for (const a of alertasClipping(hoy, clipping)) out.push({ ...a, tipo: 'clipping' });
   return out.sort((a, b) => a.fecha.localeCompare(b.fecha));
+}
+
+/**
+ * Ola 24 · la alerta de versión de un examen: si la versión elegida se retira antes del examen (fin
+ * del bloque), o si todavía no elegiste y alguna versión se retira antes. Null si no hace falta.
+ */
+export function alertaVersion(b: BloqueFechado, plan: Pick<PlanState, 'versionCert'>, hoy: string): Alerta | null {
+  const vs = b.cert?.versiones;
+  if (!vs?.length || b.fin < hoy) return null;
+  const elegida = vs.find((v) => v.id === plan.versionCert?.[b.id]);
+  const href = `#/metas/proyecto/${b.id}`;
+  if (elegida) {
+    if (elegida.retiro && elegida.retiro < b.fin) return { id: `ver-${b.id}`, tipo: 'cert', fecha: elegida.retiro, href, titulo: `${elegida.nombre} se retira el ${fmt(elegida.retiro)}, antes de tu examen (${fmt(b.fin)})`, texto: `Rendí antes del retiro o cambiá de versión. ${vs.filter((v) => v !== elegida && (!v.retiro || v.retiro >= b.fin)).map((v) => v.nombre).join(' o ') || 'Ninguna otra llega a esa fecha.'}` };
+    return null;
+  }
+  const caen = vs.filter((v) => v.retiro && v.retiro < b.fin);
+  if (!caen.length) return null;
+  const sirven = vs.filter((v) => !v.retiro || v.retiro >= b.fin);
+  return { id: `ver-${b.id}`, tipo: 'cert', fecha: b.cert?.decision ?? b.inicio, href, titulo: `${b.cert?.decision ? `Decisión el ${fmt(b.cert.decision)}: ` : ''}versión de ${b.nombre}`, texto: `Con el examen el ${fmt(b.fin)}, ${caen.map((v) => `${v.nombre} ya está retirada`).join(' y ')}. Sirven: ${sirven.map((v) => v.nombre).join(' o ')}.` };
 }
 
 const MES = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'];

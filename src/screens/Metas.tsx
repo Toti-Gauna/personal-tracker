@@ -18,6 +18,7 @@ import { RutaEvolucion } from './RutaEvolucion';
 import { RutaMapa } from './RutaMapa';
 import { PlanEtapas } from './PlanEtapas';
 import { Clipping } from './Clipping';
+import { Calibracion } from './Calibracion';
 import '../styles/metas.css';
 
 const TABS = [['ruta', 'Ruta'], ['semana', 'Semana'], ['mes', 'Mes'], ['bimestre', 'Bim.'], ['anio', 'Año']] as const;
@@ -33,6 +34,7 @@ export function Metas({ day, tab }: { day: DayLog; tab?: string }) {
   // Las pantallas del plan que se abren desde la pestaña Ruta.
   if (tab === 'mapa') return <RutaMapa day={day} />;
   if (tab === 'etapas') return <PlanEtapas day={day} />;
+  if (tab === 'calibracion') return <Calibracion day={day} />;
   if (tab === 'evolucion') return <RutaEvolucion day={day} />;
   if (tab === 'sprint') return <SprintBusqueda day={day} />;
   if (tab === 'impacto') return <RutaImpacto day={day} />;

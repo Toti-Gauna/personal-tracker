@@ -1,5 +1,7 @@
 # Prompt: cargar el Plan T+18 extendido en Trazo (programación + matemática)
 
+> **Reemplazado el 2026-11-18 por `plan-t18-extendido-v2.md`** (ola 24). Queda como historia; la tabla de abajo es el calendario de la ola 18 (sin pausas ni capas de plataforma y arquitectura), que los tests de la v1 siguen probando con esas capas apagadas.
+
 > Fuente de verdad de la ola 16 (`docs/PLAN.md` §6 quater). Texto tal como lo pasó el usuario el 2026-11-16. Las decisiones abiertas de la sección 8 son flags editables: no se resuelven en el código.
 
 > **Actualizado el 2026-11-16 (ola 18):** se sacaron las 4 pausas de fin de año (PAU1 a PAU4) por pedido de Toti: las pausas no existen. Quedan los dos "Descanso" (DES3 y DES4, tipo `descanso`). El calendario pasa a 52 bloques y a 167 semanas base (192 con los extras); T+18 cae el 6 de agosto de 2028 y el plan termina el 21 de julio de 2030. La tabla de la sección 3.1 está regenerada con esas fechas.

@@ -7,6 +7,12 @@ import { PLAN_EXT, bloqueEn, calendario, finEtapa, semanaDe, totalSemanas, valid
 
 const copia = () => structuredClone(raw) as unknown as PlanExtendido;
 
+/**
+ * Ola 24: estos tests comparan con la tabla de la v1 (calendario de la ola 18). Se corren con la pausa
+ * de fin de año y las capas de plataforma y arquitectura apagadas; la v2 se prueba en plan-v2.test.ts.
+ */
+const OLA18 = { pausas: false, plataforma: false, arquitectura: false } as const;
+
 // ——— la tabla de docs/prompts/plan-t18-extendido.md es la fuente de verdad: se lee y se compara ———
 
 const MES: Record<string, string> = { ene: '01', feb: '02', mar: '03', abr: '04', may: '05', jun: '06', jul: '07', ago: '08', sep: '09', oct: '10', nov: '11', dic: '12' };
@@ -42,9 +48,9 @@ describe('data/plan-extendido.json', () => {
   it('las semanas por etapa suman 52, 24, 37 y 54 (167) y 11, 3, 6 y 5 de extras (192), sin pausas', () => {
     expect(PLAN_EXT.etapas.map((e) => e.semanasBase)).toEqual([52, 24, 37, 54]);
     expect(PLAN_EXT.etapas.map((e) => e.semanasExtra)).toEqual([11, 3, 6, 5]);
-    const base = calendario(PLAN_EXT, { extras: false });
+    const base = calendario(PLAN_EXT, { ...OLA18, extras: false });
     expect(totalSemanas(base)).toBe(167);
-    expect(totalSemanas(calendario())).toBe(192);
+    expect(totalSemanas(calendario(PLAN_EXT, OLA18))).toBe(192);
   });
 
   it('27 proyectos, 12 ventanas y 7 certificaciones', () => {
@@ -64,10 +70,10 @@ describe('data/plan-extendido.json', () => {
   });
 });
 
-describe('calendario derivado', () => {
+describe('calendario derivado (con la pausa y las capas v2 apagadas: el de la ola 18)', () => {
   it('coincide fecha por fecha con la tabla del prompt, sin extras y con extras', () => {
-    const base = calendario(PLAN_EXT, { extras: false });
-    const ext = calendario(PLAN_EXT, { extras: true });
+    const base = calendario(PLAN_EXT, { ...OLA18, extras: false });
+    const ext = calendario(PLAN_EXT, { ...OLA18, extras: true });
     for (const f of TABLA) {
       const b = base.find((x) => x.id === f.id)!;
       const e = ext.find((x) => x.id === f.id)!;
@@ -77,17 +83,17 @@ describe('calendario derivado', () => {
   });
 
   it('los extras vienen prendidos por defecto', () => {
-    expect(calendario()).toEqual(calendario(PLAN_EXT, { extras: true }));
+    expect(calendario(PLAN_EXT, OLA18)).toEqual(calendario(PLAN_EXT, { ...OLA18, extras: true }));
   });
 
   it('el fin de cada etapa es el del prompt', () => {
-    const fin = (o: Parameters<typeof calendario>[1]) => [1, 2, 3, 4].map((n) => finEtapa(calendario(PLAN_EXT, o), n));
+    const fin = (o: Parameters<typeof calendario>[1]) => [1, 2, 3, 4].map((n) => finEtapa(calendario(PLAN_EXT, { ...OLA18, ...o }), n));
     expect(fin({ extras: false })).toEqual(['2027-11-14', '2028-04-30', '2029-01-14', '2030-01-27']);
     expect(fin({ extras: true })).toEqual(['2028-01-30', '2028-08-06', '2029-06-03', '2030-07-21']);
   });
 
   it('es continuo: cada bloque empieza el lunes siguiente al fin del anterior', () => {
-    const cal = calendario();
+    const cal = calendario(PLAN_EXT, OLA18);
     cal.forEach((b, i) => {
       expect(new Date(b.inicio + 'T12:00').getDay()).toBe(1);
       expect(new Date(b.fin + 'T12:00').getDay()).toBe(0);
@@ -96,20 +102,20 @@ describe('calendario derivado', () => {
   });
 
   it('apagar el extra de un bloque lo acorta y corre lo que sigue', () => {
-    const con = calendario();
-    const sin = calendario(PLAN_EXT, { extras: { P1: false } });
+    const con = calendario(PLAN_EXT, OLA18);
+    const sin = calendario(PLAN_EXT, { ...OLA18, extras: { P1: false } });
     expect(sin.find((b) => b.id === 'P1')!.semanas).toBe(3);
     expect(con.find((b) => b.id === 'P1')!.semanas).toBe(5);
     expect(sin.find((b) => b.id === 'P2')!.desde).toBe(con.find((b) => b.id === 'P2')!.desde - 2);
     expect(totalSemanas(sin)).toBe(190);
     // Con extras apagados en general, uno prendido suma solo el suyo.
-    expect(totalSemanas(calendario(PLAN_EXT, { extras: false }))).toBe(167);
-    expect(totalSemanas(calendario(PLAN_EXT, { extras: { P1: true }, atrasos: {} }))).toBe(192);
+    expect(totalSemanas(calendario(PLAN_EXT, { ...OLA18, extras: false }))).toBe(167);
+    expect(totalSemanas(calendario(PLAN_EXT, { ...OLA18, extras: { P1: true }, atrasos: {} }))).toBe(192);
   });
 
   it('un atraso en una ventana se descuenta del colchón y las fechas siguientes se corren solas', () => {
-    const base = calendario();
-    const a = calendario(PLAN_EXT, { atrasos: { W1: 2 } });
+    const base = calendario(PLAN_EXT, OLA18);
+    const a = calendario(PLAN_EXT, { ...OLA18, atrasos: { W1: 2 } });
     const get = (c: typeof base, id: string) => c.find((b) => b.id === id)!;
     expect(get(a, 'W1').semanas).toBe(3 + 2);
     // Lo que va hasta el colchón se corre 2 semanas…
@@ -123,8 +129,8 @@ describe('calendario derivado', () => {
   });
 
   it('con más atraso que colchón, solo lo que sobra corre la etapa 2', () => {
-    const base = calendario();
-    const a = calendario(PLAN_EXT, { atrasos: { W1: 3, W2: 2 } });
+    const base = calendario(PLAN_EXT, OLA18);
+    const a = calendario(PLAN_EXT, { ...OLA18, atrasos: { W1: 3, W2: 2 } });
     const get = (c: typeof base, id: string) => c.find((b) => b.id === id)!;
     expect(get(a, 'COL')).toMatchObject({ semanas: 0, absorbido: 2 });
     expect(get(a, 'W4').inicio).toBe(addSemanas(get(base, 'W4').inicio, 3));
@@ -132,19 +138,19 @@ describe('calendario derivado', () => {
   });
 
   it('un atraso con colchón a medias lo achica sin sacarlo', () => {
-    const a = calendario(PLAN_EXT, { atrasos: { P5: 1 } });
+    const a = calendario(PLAN_EXT, { ...OLA18, atrasos: { P5: 1 } });
     expect(a.find((b) => b.id === 'COL')).toMatchObject({ semanas: 1, absorbido: 1 });
   });
 
   it('un atraso en una etapa sin colchón corre todo lo que sigue', () => {
-    const base = calendario();
-    const a = calendario(PLAN_EXT, { atrasos: { S2: 2 } });
+    const base = calendario(PLAN_EXT, OLA18);
+    const a = calendario(PLAN_EXT, { ...OLA18, atrasos: { S2: 2 } });
     expect(a.find((b) => b.id === 'C4')!.desde).toBe(base.find((b) => b.id === 'C4')!.desde + 2);
     expect(totalSemanas(a)).toBe(totalSemanas(base) + 2);
   });
 
   it('bloqueEn y semanaDe ubican una fecha', () => {
-    const cal = calendario();
+    const cal = calendario(PLAN_EXT, OLA18);
     expect(bloqueEn(cal, '2026-11-16')!.id).toBe('P0');
     expect(bloqueEn(cal, '2026-12-30')!.id).toBe('P1'); // con extras P1 dura hasta el 3 de enero
     expect(bloqueEn(cal, '2027-01-05')!.id).toBe('P2'); // sin pausa de fin de año: Escudo arranca el 4 de enero
@@ -156,7 +162,7 @@ describe('calendario derivado', () => {
   });
 
   it('el plan puede arrancar otro lunes', () => {
-    const cal = calendario(PLAN_EXT, { t0: '2026-11-23' });
+    const cal = calendario(PLAN_EXT, { ...OLA18, t0: '2026-11-23' });
     expect(cal[0].inicio).toBe('2026-11-23');
     expect(cal[cal.length - 1].fin).toBe('2030-07-28');
   });
