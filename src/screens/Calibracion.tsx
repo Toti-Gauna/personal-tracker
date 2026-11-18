@@ -78,7 +78,7 @@ export function Calibracion({ day }: { day: DayLog }) {
 
       <span className="etiqueta">Registro diario · últimos 7 días</span>
       <ul className="cal-filas" aria-label="Horas por día">
-        {registroDiario(days, addDays(hoy, -6), hoy, { t0, inicioTrabajo: inicio }).map((r) => (
+        {registroDiario(days, addDays(hoy, -6) < t0 ? t0 : addDays(hoy, -6), hoy, { t0, inicioTrabajo: inicio }).map((r) => (
           <li key={r.fecha}>
             <span className="cal-fila-t"><b className="mono">{Number(r.fecha.slice(8))} {MES[Number(r.fecha.slice(5, 7)) - 1]}</b> {r.proyecto}<small className="mono sub">prog {n1(r.progReal)} / {n1(r.progPlan)} h · mate {n1(r.mateReal)} / {n1(r.matePlan)} h</small></span>
           </li>

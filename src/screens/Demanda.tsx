@@ -114,6 +114,14 @@ export function Demanda({ day }: { day: DayLog }) {
         </Plegable>
       )}
 
+      {(PLAN_EXT.backlog?.length ?? 0) > 0 && (
+        <Plegable id="dem:backlog" titulo="Backlog sin fecha" resumen={`${PLAN_EXT.backlog!.length}`} color={COLOR}>
+          <ul className="dem-lista">
+            {PLAN_EXT.backlog!.map((d) => <li key={d.nombre}><span><b>{d.nombre}</b><small className="sub">{d.motivo} · {fecha(d.fecha)}</small></span></li>)}
+          </ul>
+        </Plegable>
+      )}
+
       {(PLAN_EXT.descartadas?.length ?? 0) > 0 && (
         <Plegable id="dem:descartadas" titulo="Descartado por ahora" resumen={`${PLAN_EXT.descartadas!.length}`} color={COLOR}>
           <ul className="dem-lista">
