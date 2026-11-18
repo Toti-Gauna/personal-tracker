@@ -74,7 +74,7 @@ describe('ola 24 · pantallas del plan v2', () => {
   it('Calibración: antes de P2 espera, muestra las horas por proyecto y los escenarios calculados con el factor', () => {
     render(<Metas day={day()} tab="calibracion" />);
     expect(screen.getByText(/Se calcula al cerrar P2, el 29 dic 2026, y otra vez al cerrar P3/)).toBeInTheDocument();
-    expect(screen.getByText(/P0/)).toBeInTheDocument();
+    expect(screen.getAllByText(/P0/).length).toBeGreaterThan(0);
     expect(screen.getByText('Calendario actual').parentElement!.textContent).toMatch(/ h · 6 may 2030|ene 2031| 2030/);
     expect(screen.getByText(/Lento · 1,15/).parentElement!.textContent).toMatch(/ h · /);
     expect(screen.getByText(/Rápido · 0,85/)).toBeInTheDocument();

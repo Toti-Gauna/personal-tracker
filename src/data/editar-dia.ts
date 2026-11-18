@@ -77,7 +77,7 @@ export function reprogramar(blocks: Block[], key: string, start: string, min: nu
     cursor = s + durs[i];
     return s === toMin(b.start) && durs[i] === b.min ? b : { ...b, start: toHHMM(s), min: durs[i] };
   });
-  if (cursor > limite) return { ok: false, error: `Los que siguen pasan de dormir (${toHHMM(limite)}) por ${cursor - limite} min: acortalos o salteá alguno.`, exceso: cursor - limite };
+  if (cursor > limite) return { ok: false, error: `Los que siguen pasan de dormir (${toHHMM(limite)}) por ${cursor - limite} min: acortalos o salteá alguno (sin margen, lo primero que se recorta es el último bloque de programación).`, exceso: cursor - limite };
   return { ok: true, blocks: ordenar([...resto, nuevo, ...movidos]) };
 }
 

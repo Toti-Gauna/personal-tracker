@@ -5,6 +5,7 @@
  *   refuerzo por tipo de error.
  * - La línea de tiempo por etapas, el panel "hoy sos" y las alertas.
  */
+import { alertaHorasIntensivo, alertasMatematica } from './control';
 import { alertasIdiomas } from './idiomas';
 import { CFG_HORAS, PLAN, T0_PLAN, calendarioVivo, fechas } from './plan';
 import { PLAN_EXT, bloqueExtPorId, calendario, opcionesDe, type BloqueExt, type BloqueFechado, type MateTramo, type RolRefuerzo } from './plan-extendido';
@@ -14,6 +15,7 @@ import { addDays, daysBetween } from './time';
 import { alertasClipping } from './clipping-metricas';
 import { clippingActivo } from './clipping-activo';
 import type { ClippingState } from './clipping-state';
+import type { DayLog } from './types';
 
 /** Regla del plan: 85 % o más aprueba y pasa a la tesis; 65 a 84 % refuerzo y retest; menos, vuelve. */
 export const PUERTA = { verde: 0.85, amarillo: 0.65 };
@@ -133,7 +135,7 @@ export function hoySos(hoy: string, plan: PlanState, t0 = T0_PLAN) {
 
 export interface Alerta {
   id: string;
-  tipo: 'cert' | 'ventana' | 'decision' | 'idioma' | 'clipping';
+  tipo: 'cert' | 'ventana' | 'decision' | 'idioma' | 'clipping' | 'matematica' | 'control';
   titulo: string;
   texto: string;
   href?: string;
@@ -144,7 +146,10 @@ export interface Alerta {
  * Alertas: certificaciones que empiezan en 8 semanas o menos (o en curso), ventanas que cierran en
  * 7 días o menos sin la puerta aprobada y decisiones abiertas con fecha en 14 días o menos.
  */
-export function alertas(hoy: string, plan: PlanState, t0 = T0_PLAN, clipping?: ClippingState): Alerta[] {
+/** Ola 27: lo que hace falta para las alertas de control (horas reales y el inicio del trabajo). */
+export interface CtxAlertas { days: Record<string, DayLog>; inicioTrabajo: string }
+
+export function alertas(hoy: string, plan: PlanState, t0 = T0_PLAN, clipping?: ClippingState, ctx?: CtxAlertas): Alerta[] {
   const cal = calendarioCompleto(t0);
   const out: Alerta[] = [];
   for (const b of cal) {
@@ -171,6 +176,9 @@ export function alertas(hoy: string, plan: PlanState, t0 = T0_PLAN, clipping?: C
     if (d.id === 'secplus' && out.some((a) => a.id === 'ver-C2')) continue;
     if (d.fecha && d.fecha >= hoy && daysBetween(hoy, d.fecha) <= 14) out.push({ id: `dec-${d.id}`, tipo: 'decision', fecha: d.fecha, titulo: `Decisión el ${fmt(d.fecha)}`, texto: d.texto });
   }
+  // Ola 27: matemática que habilita un proyecto que ya arranca, y el control de horas del modo intensivo (días 10 y 20).
+  for (const a of alertasMatematica(hoy, t0)) out.push({ ...a, tipo: 'matematica' });
+  if (ctx) { const h = alertaHorasIntensivo(hoy, ctx.days, { t0, inicioTrabajo: ctx.inicioTrabajo }); if (h) out.push({ ...h, tipo: 'control' }); }
   // Ola 21: exámenes de idiomas, trimestres y tesis anual.
   for (const a of alertasIdiomas(hoy, t0)) out.push({ ...a, tipo: 'idioma' });
   // Ola 23: las del clipping (lunes, viernes, fin de fase, mes 6, concentración y compuerta).

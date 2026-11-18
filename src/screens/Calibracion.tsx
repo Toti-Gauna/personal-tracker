@@ -1,12 +1,14 @@
 /** Ola 24 · #/metas/calibracion: horas estimadas contra reales, el factor tras P3 y los escenarios del plan v2. */
 import { useMemo } from 'react';
 import { FACTOR_MAX, FACTOR_MIN, HORAS_PROG_SEMANA, calibrar, escenarios, proyectar, sugerencia } from '../data/calibracion';
+import { deudaMatematica, registroDiario } from '../data/control';
 import { T0_PLAN } from '../data/plan';
+import { addDays } from '../data/time';
 import { calendarioCompleto } from '../data/plan-vistas';
 import { RAMA_COLOR } from '../data/ramas';
 import type { DayLog } from '../data/types';
 import { apagarExtras } from '../state/plan';
-import { useStore } from '../state/store';
+import { inicioTrabajo, useStore } from '../state/store';
 import { toast } from '../ui/avisos';
 import '../styles/plan.css';
 import '../styles/etapas.css';
@@ -20,6 +22,7 @@ export function Calibracion({ day }: { day: DayLog }) {
   const t0 = useStore((s) => s.settings?.startDate) ?? T0_PLAN;
   const plan = useStore((s) => s.plan);
   const days = useStore((s) => s.days);
+  const inicio = useStore((s) => inicioTrabajo(s.settings));
   const d = useMemo(() => {
     const cal = calendarioCompleto(t0);
     const c = calibrar(cal, days, plan, hoy);
@@ -72,6 +75,16 @@ export function Calibracion({ day }: { day: DayLog }) {
           ))}
         </ul>
       )}
+
+      <span className="etiqueta">Registro diario · últimos 7 días</span>
+      <ul className="cal-filas" aria-label="Horas por día">
+        {registroDiario(days, addDays(hoy, -6), hoy, { t0, inicioTrabajo: inicio }).map((r) => (
+          <li key={r.fecha}>
+            <span className="cal-fila-t"><b className="mono">{Number(r.fecha.slice(8))} {MES[Number(r.fecha.slice(5, 7)) - 1]}</b> {r.proyecto}<small className="mono sub">prog {n1(r.progReal)} / {n1(r.progPlan)} h · mate {n1(r.mateReal)} / {n1(r.matePlan)} h</small></span>
+          </li>
+        ))}
+      </ul>
+      {(() => { const deuda = deudaMatematica(hoy, { t0, inicioTrabajo: inicio }); return deuda.horas > 0 ? <p className="sub">Matemática: en el modo intensivo son 7 h por semana en lugar de 14. Deuda acumulada: <b>{n1(deuda.horas)} h</b> (se recupera con trabajo, a 14 h por semana).</p> : null; })()}
 
       <span className="etiqueta">Escenarios</span>
       <ul className="cal-esc">

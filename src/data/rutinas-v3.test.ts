@@ -72,3 +72,53 @@ describe('ola 27 · rutinas v3', () => {
     expect(buildBlocks(planDay('2026-11-18', 'completo', undefined, 'busqueda-intensiva')).length).toBeGreaterThan(5);
   });
 });
+
+describe('ola 27 · control, alertas y deuda de matemática', () => {
+  it('días 10 y 20 del modo intensivo: con menos del 85 % de las horas planificadas, avisa con los recortes en orden', async () => {
+    const { alertaHorasIntensivo, controlHoras, diaIntensivo, ordenDeRecortes, deudaMatematica } = await import('./control');
+    const c = { t0: '2026-11-16', inicioTrabajo: '2027-01-11' };
+    expect(diaIntensivo('2026-11-22', c)).toBe(0);
+    expect(diaIntensivo('2026-11-23', c)).toBe(1);
+    expect(diaIntensivo('2026-12-02', c)).toBe(10);
+    expect(diaIntensivo('2026-12-12', c)).toBe(20);
+    expect(diaIntensivo('2027-01-11', c)).toBe(0);
+    // Nada registrado: 0 % de lo planificado.
+    const h = controlHoras('2026-12-02', {}, c)!;
+    expect(h).toMatchObject({ dia: 10, reales: 0, debajo: true });
+    expect(h.planificadas).toBeCloseTo(9 * 7 + 0, -1);
+    const a = alertaHorasIntensivo('2026-12-02', {}, c)!;
+    expect(a.titulo).toMatch(/Día 10 del modo intensivo: 0 %/);
+    // Orden de recortes: primero el conector de terceros (P1), después la accesibilidad (P2).
+    expect(ordenDeRecortes()).toEqual(['Conector a una API de terceros en sandbox', 'Revisión de accesibilidad']);
+    expect(a.texto.indexOf('Conector')).toBeLessThan(a.texto.indexOf('accesibilidad'));
+    expect(a.texto).toMatch(/Nunca el sueño, el entrenamiento ni los repasos/);
+    // Dos días después todavía se ve; al cuarto, no.
+    expect(alertaHorasIntensivo('2026-12-04', {}, c)).not.toBeNull();
+    expect(alertaHorasIntensivo('2026-12-06', {}, c)).toBeNull();
+    // El día 20 mide de nuevo.
+    expect(alertaHorasIntensivo('2026-12-12', {}, c)!.id).toBe('horas-dia-20');
+    // Con el 100 % de lo planificado no avisa.
+    const dias: Record<string, import('./types').DayLog> = {};
+    const { horasDelDia } = await import('./capacidad');
+    const { addDays } = await import('./time');
+    for (let d = '2026-11-23'; d < '2026-12-02'; d = addDays(d, 1)) dias[d] = { date: d, wake: '04:00', routine: 'completo', notes: [], blocks: [{ key: 'prog', n: 1, title: 'P', short: 'p', area: 'ing', kind: 'pomodoro', start: '05:30', min: 180, fixed: false, rama: 'programacion', tasks: [] }], focus: [{ key: 'prog', plan: 'p', focusMin: horasDelDia(d, { ...c, pausas: true }) * 60, at: '07:00' }] } as import('./types').DayLog;
+    expect(controlHoras('2026-12-02', dias, c)!.debajo).toBe(false);
+    expect(alertaHorasIntensivo('2026-12-02', dias, c)).toBeNull();
+    // Deuda de matemática: 1 h por día desde el inicio de P1.
+    expect(deudaMatematica('2026-12-02', c).horas).toBe(9);
+    expect(deudaMatematica('2027-03-01', c).horas).toBe(49);
+  });
+
+  it('alerta cuando un proyecto arranca antes de que termine el tramo de matemática que lo habilita (solo los nombrados)', async () => {
+    const { alertasMatematica, habilitaciones } = await import('./control');
+    expect(habilitaciones().map((h) => `${h.tramo}>${h.proyecto}`)).toEqual(['m2>P4', 'm2>P9', 'm3>P7']);
+    // P4 arranca el 15 mar 2027 y m2 termina el 22 jul 2027.
+    const a = alertasMatematica('2027-03-10', '2026-11-16');
+    expect(a.map((x) => x.id)).toEqual(['mate-m2-P4']);
+    expect(a[0].titulo).toBe('P4 arranca antes de que termine m2');
+    // P9 arranca después de que m2 termine: nunca avisa. P7 sí, con la nota de la pieza de PCA y SVD.
+    expect(alertasMatematica('2027-08-05', '2026-11-16').map((x) => x.id)).toEqual(['mate-m3-P7']);
+    expect(alertasMatematica('2027-08-05', '2026-11-16')[0].texto).toMatch(/PCA y SVD de P7 pasa después de W3 o a P9/);
+    expect(alertasMatematica('2026-12-01', '2026-11-16')).toEqual([]);
+  });
+});
