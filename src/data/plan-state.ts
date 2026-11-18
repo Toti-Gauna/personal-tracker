@@ -129,7 +129,7 @@ export interface PlanSettings {
   rutina: 'busqueda' | 'con-trabajo';
   /** Día ISO libre (2 = martes); null, ninguno. */
   diaLibre: number | null;
-  /** Fecha en que marcaste T+2 (trabajo nuevo). */
+  /** Inicio del trabajo nuevo (el antiguo T+2). Sin valor: el 11 ene 2027 (T+2). Desde esa fecha rige la rutina con trabajo. */
   t2?: string;
   /** Umbrales de la decisión de Handyx: los escribe el usuario. */
   umbralIngreso: string;
@@ -140,6 +140,10 @@ export interface PlanSettings {
    * migración lo activa, porque es la prioridad desde T0).
    */
   modo?: 'busqueda-intensiva' | null;
+  /** Ola 27: horario del trabajo nuevo (rutina con trabajo). De fábrica, 10:00 a 16:00. */
+  horarioTrabajo?: import('./routines').HorarioTrabajo;
+  /** Ola 27: bloques que asignaste a Handyx, clipping y Eclipse (hasta entonces no tienen bloque). */
+  bloquesPendientes?: import('./routines').BloquesPendientes;
   /** La rutina y el día libre de antes de activar el modo, para volver exactamente a ellos. */
   previo?: { rutina: 'busqueda' | 'con-trabajo'; diaLibre: number | null };
 }

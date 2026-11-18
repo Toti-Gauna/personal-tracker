@@ -1,4 +1,4 @@
-import { ajustarDia, dayTypeOf, isMeta, planRoutine, toTemplate, type Ajustes, type DayType } from './routines';
+import { ajustarDia, conPendientes, dayTypeOf, isMeta, planRoutine, toTemplate, type Ajustes, type DayType } from './routines';
 import type { Block, BlockTemplate, RoutineId } from './types';
 import { toMin } from './time';
 
@@ -14,7 +14,7 @@ export interface PlannedBlock {
  * (despertar, comidas, descanso y sueño) no entra.
  */
 export function planDay(date: string, routine: RoutineId, wake?: string, type: DayType = dayTypeOf(date), ajustes: Ajustes = {}): PlannedBlock[] {
-  return ajustarDia(planRoutine(type, routine, wake), ajustes)
+  return conPendientes(ajustarDia(planRoutine(type, routine, wake), ajustes), ajustes.pendientes, type)
     .filter((p) => isMeta(p.block))
     .map((p) => ({ tpl: toTemplate(p.block, p.min), start: p.start, min: p.min }));
 }

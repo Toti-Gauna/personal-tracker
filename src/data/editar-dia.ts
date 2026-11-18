@@ -32,8 +32,8 @@ function ordenar(blocks: Block[]): Block[] {
 export function reprogramar(blocks: Block[], key: string, start: string, min: number, modo: Modo): Resultado {
   const editado = blocks.find((b) => b.key === key);
   if (!editado) return { ok: false, error: 'No existe ese bloque.', exceso: 0 };
-  if (esSueno(editado)) return { ok: false, error: 'Dormir a las 22:00 no se mueve.', exceso: 0 };
   const sueno = blocks.find(esSueno);
+  if (esSueno(editado)) return { ok: false, error: `Dormir a las ${sueno?.start ?? '21:00'} no se mueve.`, exceso: 0 };
   const limite = sueno ? toMin(sueno.start) : 24 * 60;
   const nuevo = { ...editado, start, min, editado: true as const };
   const ini = toMin(start);

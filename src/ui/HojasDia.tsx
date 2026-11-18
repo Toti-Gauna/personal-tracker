@@ -63,7 +63,7 @@ function Modos({ modo, setModo }: { modo: Modo; setModo: (m: Modo) => void }) {
   );
 }
 
-const textoModo = (m: Modo) => (m === 'correr' ? 'Los que siguen empiezan más tarde si se pisan; nada pasa de dormir a las 22:00.' : 'Los que siguen se achican (mínimo 15 min) para terminar a la misma hora que antes.');
+const textoModo = (m: Modo, date: string) => (m === 'correr' ? `Los que siguen empiezan más tarde si se pisan; nada pasa de dormir a las ${getState().days[date]?.blocks.find((b) => b.key === 'sueno')?.start ?? '21:00'}.` : 'Los que siguen se achican (mínimo 15 min) para terminar a la misma hora que antes.');
 
 /** Cambiar el horario de un bloque solo por hoy. */
 export function HojaHorario({ date, block, onCerrar }: { date: string; block: Block; onCerrar: () => void }) {
@@ -89,7 +89,7 @@ export function HojaHorario({ date, block, onCerrar }: { date: string; block: Bl
         </div>
         <p className="sub mono">Termina a las {ok ? toHHMM(toMin(start) + m) : '—'}</p>
         <Modos modo={modo} setModo={(x) => { setModo(x); setError(''); }} />
-        <p className="sub">{textoModo(modo)} La rutina no cambia: solo hoy.</p>
+        <p className="sub">{textoModo(modo, date)} La rutina no cambia: solo hoy.</p>
         {error && <p className="hdia-error" role="alert">{error}</p>}
         <button className="btn-principal" type="submit" disabled={!ok}>Guardar</button>
       </form>
@@ -104,7 +104,7 @@ export function HojaMetaNueva({ date, onCerrar }: { date: string; onCerrar: () =
   const ahora = Math.ceil(nowMin() / 5) * 5;
   const [titulo, setTitulo] = useState('');
   const [rama, setRama] = useState<RamaOMain | ''>('');
-  const [start, setStart] = useState(toHHMM(Math.min(ahora, 21 * 60 + 30)));
+  const [start, setStart] = useState(toHHMM(Math.min(ahora, 20 * 60 + 30)));
   const [min, setMin] = useState('60');
   const [tareas, setTareas] = useState('');
   const [modo, setModo] = useState<Modo>('acortar');
@@ -133,7 +133,7 @@ export function HojaMetaNueva({ date, onCerrar }: { date: string; onCerrar: () =
         </div>
         <label>Submetas (una por línea, opcional)<textarea className="campo-texto" rows={2} value={tareas} onChange={(e) => setTareas(e.target.value)} /></label>
         <Modos modo={modo} setModo={(x) => { setModo(x); setError(''); }} />
-        <p className="sub">{textoModo(modo)} Si cae en medio de un bloque, ese se corta ahí.</p>
+        <p className="sub">{textoModo(modo, date)} Si cae en medio de un bloque, ese se corta ahí.</p>
         {error && <p className="hdia-error" role="alert">{error}</p>}
         <button className="btn-principal" type="submit" disabled={!ok}>Sumar a hoy</button>
       </form>

@@ -74,16 +74,16 @@ describe('ola 25 · horarios y metas del día', () => {
     const dlg = screen.getByRole('dialog');
     fireEvent.change(within(dlg).getByLabelText('Dura (min)'), { target: { value: '180' } });
     expect(within(dlg).getByText('Termina a las 13:00')).toBeInTheDocument();
-    // El día de la intensiva está lleno hasta las 22: corriendo no entra, acortando sí.
+    // El día del modo intensivo está lleno hasta las 21: corriendo no entra, acortando sí.
     fireEvent.click(within(dlg).getByRole('button', { name: 'Guardar' }));
     expect(within(dlg).getByRole('alert').textContent).toMatch(/pasan de dormir/);
     fireEvent.click(within(dlg).getByRole('radio', { name: 'Acortar los siguientes' }));
     fireEvent.click(within(dlg).getByRole('button', { name: 'Guardar' }));
     expect(bloque('trabajo')).toMatchObject({ start: '10:00', min: 180, editado: true });
-    expect(bloque('caso').start).toBe('13:00');
+    expect(bloque('prog-tarde').start).toBe('13:00');
     const cierre = bloque('cierre');
-    expect(Number(cierre.start.slice(0, 2)) * 60 + Number(cierre.start.slice(3)) + cierre.min).toBe(22 * 60);
-    expect(bloque('sueno').start).toBe('22:00');
+    expect(Number(cierre.start.slice(0, 2)) * 60 + Number(cierre.start.slice(3)) + cierre.min).toBe(21 * 60);
+    expect(bloque('sueno').start).toBe('21:00');
     // Mañana arranca con la rutina de siempre.
     startDay('completo', '04:00', '2026-11-19');
     expect(getState().days['2026-11-19'].blocks.find((b) => b.key === 'trabajo')).toMatchObject({ start: '10:00', min: 120 });
@@ -109,8 +109,8 @@ describe('ola 25 · horarios y metas del día', () => {
     fireEvent.click(within(dlg).getByRole('button', { name: 'Sumar a hoy' }));
     const nueva = day().blocks.find((b) => b.propia)!;
     expect(nueva).toMatchObject({ title: 'Reunión Tsoft', start: '12:00', min: 30 });
-    expect(bloque('caso').start).toBe('12:30');
-    expect(bloque('sueno').start).toBe('22:00');
+    expect(bloque('prog-tarde').start).toBe('12:30');
+    expect(bloque('sueno').start).toBe('21:00');
     rerender(<Hoy day={day()} />);
     fireEvent.click(within(abrir(/Reunión Tsoft/)).getByRole('button', { name: 'Quitar de hoy' }));
     expect(day().blocks.some((b) => b.propia)).toBe(false);

@@ -98,10 +98,10 @@ describe('ola 19 · la sesión: calentamiento, RIR y el día', () => {
     expect(t().active!.sets[0]).toMatchObject({ ex: 'dead-hang', kg: 0, reps: 30 });
   });
 
-  it('el cierre de las 21:00 a 22:00 estira los músculos de la rutina del día', () => {
+  it('el cierre de las 20:00 a 21:00 estira los músculos de la rutina del día', () => {
     const cierre = day(D).blocks.find((b) => b.key === 'cierre')!;
-    expect(cierre.title).toBe('Bañarse, estirar, comer y escribir');
-    expect(cierre.tasks.map((x) => x.t)).toEqual(['Bañarse', 'Estirar: cuádriceps, aductores, glúteos y gemelos', 'Comer', 'Escribir']);
+    expect(cierre.title).toBe('Descanso final · recall en frío');
+    expect(cierre.tasks.map((x) => x.t)).toEqual(['Cena y ducha', 'Estirar: cuádriceps, aductores, glúteos y gemelos', 'Recall en frío (20 min): lo construido hoy', 'Cerrar el día en 5 min']);
   });
 
   it('el jueves se estira lo de Upper y el viernes lo de Lower; el sábado no hay entreno que estirar', () => {
@@ -111,26 +111,26 @@ describe('ola 19 · la sesión: calentamiento, RIR y el día', () => {
     expect(day('2026-11-20').blocks.find((b) => b.key === 'cierre')!.tasks[1].t).toBe('Estirar: cuádriceps, isquiotibiales, glúteos, aductores y gemelos');
   });
 
-  it('el entreno de la rutina de búsqueda son 30 min de ida, 2 h y 30 de vuelta', () => {
+  it('el entreno del modo intensivo son 2 h con las caminatas: 30 min de ida, 1 h de rutina y 30 de vuelta', () => {
     const e = day(D).blocks.find((b) => b.key === 'entreno')!;
     expect(e.start).toBe('18:00');
-    expect(e.min).toBe(180);
-    expect(e.tasks.map((x) => x.t)).toEqual(['Caminar 30 min de ida', 'Entrenar: la rutina del día (2 h)', 'Caminar 30 min de vuelta']);
+    expect(e.min).toBe(120);
+    expect(e.tasks.map((x) => x.t)).toEqual(['Caminar 30 min de ida', 'Entrenar: la rutina del día (1 h)', 'Caminar 30 min de vuelta']);
   });
 });
 
 describe('ola 19 · sábado y domingo son libres, también a las 08:00', () => {
-  it('la rutina de las 08:00 de un sábado no tiene entreno y la tarde queda para descansar hasta las 22:00', () => {
+  it('la rutina de las 08:00 de un sábado no tiene entreno y la tarde queda para descansar hasta las 21:00', () => {
     for (const tipo of ['weekend', 'busqueda-intensiva-finde'] as const) {
       const p = planRoutine(tipo, 'tarde');
       expect(p.some((x) => x.block.id === 'entreno')).toBe(false);
       const c = p.find((x) => x.block.id === 'cierre')!;
-      expect([c.start, c.min]).toEqual(['18:00', 240]);
+      expect([c.start, c.min]).toEqual(['18:00', 180]);
     }
-    // En semana sigue igual: entreno de 18:00 a 21:00 y cierre de 21:00 a 22:00.
+    // En semana: entreno de 18:00 a 20:00 (con las caminatas) y cierre de 20:00 a 21:00.
     const sem = planRoutine('busqueda-intensiva', 'tarde');
-    expect(sem.find((x) => x.block.id === 'entreno')).toMatchObject({ start: '18:00', min: 180 });
-    expect(sem.find((x) => x.block.id === 'cierre')).toMatchObject({ start: '21:00', min: 60 });
+    expect(sem.find((x) => x.block.id === 'entreno')).toMatchObject({ start: '18:00', min: 120 });
+    expect(sem.find((x) => x.block.id === 'cierre')).toMatchObject({ start: '20:00', min: 60 });
   });
 });
 

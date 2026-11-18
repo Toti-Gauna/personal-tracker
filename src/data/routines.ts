@@ -4,7 +4,7 @@
  * se validan al cargar y se arma el día según la hora a la que te levantaste.
  */
 import raw from '../../data/routines.json';
-import { parseDate, toHHMM, toMin } from './time';
+import { fmtDur, parseDate, toHHMM, toMin } from './time';
 import { esRama } from './ramas';
 import type { Area, BlockKind, BlockTemplate, RamaOMain, RoutineId } from './types';
 
@@ -13,8 +13,8 @@ import type { Area, BlockKind, BlockTemplate, RamaOMain, RoutineId } from './typ
  * lunes a viernes con trabajo nuevo ("con-trabajo", reemplaza a weekday desde T+2) y el día
  * libre ("libre": solo repasos y un entrenamiento suave).
  */
-export type DayType = 'weekday' | 'weekend' | 'con-trabajo' | 'libre' | 'busqueda-intensiva' | 'busqueda-intensiva-finde';
-export const DAY_TYPES: DayType[] = ['weekday', 'weekend', 'con-trabajo', 'libre', 'busqueda-intensiva', 'busqueda-intensiva-finde'];
+export type DayType = 'weekday' | 'weekend' | 'con-trabajo' | 'con-trabajo-finde' | 'libre' | 'busqueda-intensiva' | 'busqueda-intensiva-finde';
+export const DAY_TYPES: DayType[] = ['weekday', 'weekend', 'con-trabajo', 'con-trabajo-finde', 'libre', 'busqueda-intensiva', 'busqueda-intensiva-finde'];
 /** Modos que cambian las rutinas de toda la semana (Ola 8b: búsqueda intensiva). */
 export type ModoRutina = 'busqueda-intensiva';
 /** Las que reparten los días de la semana; las otras reemplazan a una o son el día libre. */
@@ -170,6 +170,11 @@ export interface RutinaCfg {
   diaLibre?: number | null;
   /** Modo activo: con búsqueda intensiva no hay día libre y cada día usa la rutina del modo. */
   modo?: ModoRutina | null;
+  /**
+   * Ola 27: desde este día (inclusive) rige la rutina con trabajo (lunes a viernes y fin de semana),
+   * sin importar el modo: es el "inicio del trabajo". Antes de esa fecha, la rutina del modo intensivo.
+   */
+  inicioTrabajo?: string;
 }
 
 /**
@@ -178,6 +183,11 @@ export interface RutinaCfg {
  */
 export function routineFor(date: string, cfg: RutinaCfg = {}, file: RoutinesFile = ROUTINES_FILE): DayType {
   const base = dayTypeOf(date, file);
+  // Ola 27: con el trabajo nuevo empezado, rige la rutina con trabajo (L a V y finde); no hay día libre.
+  if (cfg.inicioTrabajo && date >= cfg.inicioTrabajo) {
+    const conTrabajo = DAY_TYPES.find((t) => file.dayRoutines[t]?.reemplaza === base && !file.dayRoutines[t].modo && !file.dayRoutines[t].libre);
+    if (conTrabajo) return conTrabajo;
+  }
   // El modo manda sobre todo: ni día libre ni con-trabajo mientras dure.
   if (cfg.modo) {
     const delModo = DAY_TYPES.find((t) => file.dayRoutines[t]?.modo === cfg.modo && file.dayRoutines[t].reemplaza === base);
@@ -234,7 +244,7 @@ export function planRoutine(t: DayType, mode: RoutineId, wakeHHMM?: string, file
   // Ola 17: a las 08:00 el día es otro, con los horarios del JSON tal cual (el día libre sigue igual).
   if (mode === 'tarde' && t !== 'libre') {
     // Ola 19: sábado y domingo son libres: sin entreno ni su cierre; la tarde queda para descansar hasta las 22:00.
-    const finde = t === 'weekend' || t === 'busqueda-intensiva-finde';
+    const finde = t === 'weekend' || t === 'busqueda-intensiva-finde' || t === 'con-trabajo-finde';
     return file.tarde.blocks.filter((b) => !(finde && b.id === 'entreno')).map((b) => {
       if (!(finde && b.id === 'cierre')) return { block: b, start: b.start, min: blockMin(b) };
       const libre = { ...b, label: 'Descansar · cierre de 5 min a las 21:00', short: 'el descanso', start: '18:00', tasks: ['Descansar', 'Cerrar el día en 5 min a las 20:00'] };
@@ -298,6 +308,62 @@ export interface Ajustes {
   entrevista?: { rol: string; empresa?: string; ingles?: boolean } | false;
   /** Puerta de matemática sin aprobar ("W1"): el proyecto no arranca y programación pasa a matemática pura. */
   puerta?: string;
+  /** Ola 27: hay una entrevista en las próximas 48 h: el último bloque de programación del día pasa a preparación. */
+  prepara?: { rol: string; empresa?: string } | false;
+  /** Ola 27: horario del trabajo (rutina con trabajo): lo de la tarde se acomoda después de la salida. */
+  trabajo?: HorarioTrabajo;
+  /** Ola 27: bloques que asignaste a Handyx, clipping y Eclipse (solo entran en un hueco libre). */
+  pendientes?: BloquesPendientes;
+}
+
+/** Horario del trabajo nuevo (editable en Ajustes). De fábrica, de 10:00 a 16:00. */
+export interface HorarioTrabajo { inicio: string; fin: string }
+export const HORARIO_TRABAJO: HorarioTrabajo = { inicio: '10:00', fin: '16:00' };
+
+/** Lo que se acomoda después del trabajo, en orden de prioridad al faltar tiempo: la matemática de la tarde es lo primero que se saca. */
+const DESPUES_DEL_TRABAJO = { math: 60, ingles: 30, entrenoMax: 150, entrenoMin: 60 };
+
+export interface TardeConTrabajo {
+  /** La matemática de la tarde no entra (queda como deuda de horas). */
+  sinMatematica: boolean;
+  /** El entreno se acortó. */
+  entrenoMin: number;
+}
+
+/**
+ * Acomoda la tarde de la rutina con trabajo según la salida: matemática 1 h, idiomas 30 min y entreno hasta 2 h 30
+ * (con las caminatas) entre la salida y el descanso final de las 20:00. Si no entra todo, primero se saca la
+ * matemática de la tarde, después se acorta el entreno (mínimo 1 h). La programación de la mañana no se toca.
+ */
+/**
+ * Acomoda la tarde de la rutina con trabajo según la salida: matemática 1 h, idiomas 30 min y entreno hasta 2 h 30
+ * (con las caminatas) entre la salida y el descanso final de las 20:00. Si no entra todo, primero se saca la
+ * matemática de la tarde (queda como deuda de horas) y después se acorta el entreno (mínimo 1 h). La programación
+ * de la mañana no se toca. Con la salida a las 16:00 queda la rutina de fábrica; a las 18:00, idiomas 30 min y
+ * entreno 1 h 30 entre las 18:00 y las 20:00.
+ */
+export function ajustarTrabajo(plan: PlannedRoutineBlock[], h: HorarioTrabajo): { plan: PlannedRoutineBlock[]; tarde: TardeConTrabajo } {
+  const trabajo = plan.find((p) => p.block.id === 'trabajo');
+  const entreno = plan.find((p) => p.block.id === 'entreno');
+  if (!trabajo || !entreno) return { plan, tarde: { sinMatematica: false, entrenoMin: entreno?.min ?? 0 } };
+  const ini = toMin(h.inicio);
+  const fin = toMin(h.fin);
+  const lugar = Math.max(0, toMin('20:00') - fin);
+  const sinMatematica = lugar < DESPUES_DEL_TRABAJO.math + DESPUES_DEL_TRABAJO.ingles + DESPUES_DEL_TRABAJO.entrenoMax;
+  const entrenoMin = Math.max(DESPUES_DEL_TRABAJO.entrenoMin, Math.min(DESPUES_DEL_TRABAJO.entrenoMax, lugar - DESPUES_DEL_TRABAJO.ingles - (sinMatematica ? 0 : DESPUES_DEL_TRABAJO.math)));
+  let cursor = fin;
+  const colocar = (p: PlannedRoutineBlock, min: number): PlannedRoutineBlock => { const x = { ...p, start: toHHMM(cursor), min }; cursor += min; return x; };
+  const out: PlannedRoutineBlock[] = [];
+  for (const p of plan) {
+    if (p.block.id === 'trabajo') out.push({ ...p, start: toHHMM(ini), min: Math.max(15, fin - ini) });
+    else if (p.block.id === 'math-tarde') { if (!sinMatematica) out.push(colocar(p, DESPUES_DEL_TRABAJO.math)); }
+    else if (p.block.id === 'ingles' && toMin(p.start) > toMin(trabajo.start)) out.push(colocar(p, DESPUES_DEL_TRABAJO.ingles));
+    else if (p.block.id === 'entreno') {
+      const tasks = (p.block.tasks ?? []).map((t) => (t.startsWith('Entrenar: la rutina del día') ? `Entrenar: la rutina del día (${fmtDur(entrenoMin - 60)})` : t));
+      out.push({ ...colocar(p, entrenoMin), block: { ...p.block, tasks } });
+    } else out.push(p);
+  }
+  return { plan: out, tarde: { sinMatematica, entrenoMin } };
 }
 
 /** Aplica la ventana W, la puerta y la práctica de la entrevista de mañana al día ya armado. */
@@ -312,6 +378,15 @@ export function ajustarDia(plan: PlannedRoutineBlock[], a: Ajustes): PlannedRout
       ? { ...p, block: { ...p.block, label: `Matemática · ventana ${a.ventana}`, short: 'matemática', rama: 'matematica', tasks: ['Repaso de tarjetas', `Capítulo de la ventana ${a.ventana}`, 'Ejercicios del capítulo'] } }
       : p));
   }
+  // Ola 27: el horario del trabajo acomoda la tarde de la rutina con trabajo.
+  if (a.trabajo) out = ajustarTrabajo(out, a.trabajo).plan;
+  // Ola 27: con una entrevista en las próximas 48 h, el último bloque de programación pasa a preparación.
+  if (a.prepara) {
+    const e = a.prepara;
+    const ultimo = [...out].reverse().find((p) => p.block.rama === 'programacion' && /^prog/.test(p.block.id));
+    const de = e.empresa ? ` de ${e.rol} en ${e.empresa}` : e.rol ? ` de ${e.rol}` : '';
+    if (ultimo) out = out.map((p) => (p === ultimo ? { ...p, block: { ...p.block, label: `Preparación de la entrevista${de ? ` · ${e.rol}` : ''}`, short: 'la preparación', tasks: [`Repasar el caso del proyecto en voz alta${de}`, 'Práctica técnica: algoritmos o diseño (45 min)', 'Ensayar el pitch de 60 s y las historias STAR'] } } : p));
+  }
   // Sin modo entrevista: el día anterior, la búsqueda suma practicar la entrevista con el pitch armado
   // (y en inglés si la entrevista es en inglés). Nada se reemplaza ni se parte.
   if (a.entrevista) {
@@ -325,3 +400,73 @@ export function ajustarDia(plan: PlannedRoutineBlock[], a: Ajustes): PlannedRout
 
 /** Las metas de una rutina, en orden. */
 export const metasOf = (t: DayType, file: RoutinesFile = ROUTINES_FILE) => file.dayRoutines[t].blocks.filter(isMeta);
+
+// ——— Ola 27 · bloques pendientes (Handyx, clipping y Eclipse no tienen bloque hasta que lo asignes) ———
+
+export type ObjetivoPendiente = 'handyx' | 'clipping' | 'eclipse';
+export const OBJETIVOS_PENDIENTES: ObjetivoPendiente[] = ['handyx', 'clipping', 'eclipse'];
+export interface BloquePendiente { start: string; min: number; dias: 'lv' | 'finde' | 'todos' }
+export type BloquesPendientes = Partial<Record<ObjetivoPendiente, BloquePendiente>>;
+
+const PENDIENTE: Record<ObjetivoPendiente, RoutineBlock> = {
+  handyx: { id: 'handyx', label: 'Handyx', short: 'Handyx', start: '00:00', end: '00:00', area: 'handyx', kind: 'fixed', focus: true, rama: 'handyx', tasks: ['Tarea principal de Handyx'] },
+  clipping: { id: 'clipping', label: 'Clipping', short: 'el clipping', start: '00:00', end: '00:00', area: 'eclipse', kind: 'fixed', focus: true, tasks: ['Editar clips', 'Publicar'] },
+  eclipse: { id: 'eclipse', label: 'Eclipse', short: 'Eclipse', start: '00:00', end: '00:00', area: 'eclipse', kind: 'fixed', focus: true, tasks: ['Tarea principal de Eclipse'] },
+};
+export const NOMBRE_PENDIENTE: Record<ObjetivoPendiente, string> = { handyx: 'Handyx', clipping: 'Clipping', eclipse: 'Eclipse' };
+
+const esFinde = (t: DayType) => t === 'weekend' || t === 'busqueda-intensiva-finde' || t === 'con-trabajo-finde';
+const aplica = (b: BloquePendiente, t: DayType) => t !== 'libre' && (b.dias === 'todos' || (b.dias === 'finde') === esFinde(t));
+
+/**
+ * Lo que pisa un bloque de `min` minutos desde `start`. El descanso del fin de semana (`cierre`) cede su tiempo:
+ * lo demás no se pisa nunca. Devuelve el bloque que lo impide, o null.
+ */
+function pisa(plan: PlannedRoutineBlock[], start: string, min: number, tipo: DayType): PlannedRoutineBlock | null {
+  const a = toMin(start);
+  const b = a + min;
+  const cede = (p: PlannedRoutineBlock) => p.block.id === 'cierre' && esFinde(tipo);
+  const sueno = plan.find((p) => p.block.id === 'sueno');
+  if (sueno && b > toMin(sueno.start)) return sueno;
+  return plan.find((p) => p.block.id !== 'sueno' && !cede(p) && toMin(p.start) < b && toMin(p.start) + p.min > a) ?? null;
+}
+
+/** Suma al día los bloques que asignaste. Solo entran donde no pisan otra meta (el descanso del finde cede su tiempo). */
+export function conPendientes(plan: PlannedRoutineBlock[], pend: BloquesPendientes | undefined, tipo: DayType): PlannedRoutineBlock[] {
+  let out = plan;
+  for (const o of OBJETIVOS_PENDIENTES) {
+    const b = pend?.[o];
+    if (!b || !aplica(b, tipo) || pisa(out, b.start, b.min, tipo)) continue;
+    const ini = toMin(b.start);
+    const fin = ini + b.min;
+    const tasks = o === 'clipping' && esFinde(tipo) ? ['Mejoras al pipeline (1 a 2 h)', 'Prospección de retainers'] : PENDIENTE[o].tasks;
+    const block: RoutineBlock = { ...PENDIENTE[o], start: b.start, end: toHHMM(fin), tasks };
+    // El descanso se achica: queda lo que no ocupa el bloque nuevo (antes si empieza antes, después si no).
+    out = out.flatMap((p) => {
+      if (p.block.id !== 'cierre' || !esFinde(tipo)) return [p];
+      const pi = toMin(p.start), pf = pi + p.min;
+      if (fin <= pi || ini >= pf) return [p];
+      const [ni, nf] = ini <= pi ? [fin, pf] : [pi, ini];
+      return nf - ni >= 15 ? [{ ...p, start: toHHMM(ni), min: nf - ni }] : [];
+    });
+    out = [...out, { block, start: b.start, min: b.min }].sort((x, y) => (x.block.id === 'sueno' ? 1 : y.block.id === 'sueno' ? -1 : toMin(x.start) - toMin(y.start)));
+  }
+  return out;
+}
+
+/**
+ * Valida un bloque pendiente contra las rutinas que alcanza (con el horario de trabajo de fábrica).
+ * Devuelve el texto del problema o null si entra en todas.
+ */
+export function pendienteEncaja(b: BloquePendiente, file: RoutinesFile = ROUTINES_FILE): string | null {
+  if (!HHMM.test(b.start)) return 'La hora tiene que ser HH:MM.';
+  if (!(b.min >= 15)) return 'Tiene que durar 15 minutos o más.';
+  const tipos: DayType[] = ['busqueda-intensiva', 'busqueda-intensiva-finde', 'con-trabajo', 'con-trabajo-finde'];
+  for (const t of tipos) {
+    if (!aplica(b, t)) continue;
+    const plan = planRoutine(t, 'completo', undefined, file);
+    const otro = pisa(plan, b.start, b.min, t);
+    if (otro) return `Pisa a ${otro.block.label} (${otro.start} a ${toHHMM(toMin(otro.start) + otro.min)}) en «${file.dayRoutines[t].label}». Elegí un hueco libre.`;
+  }
+  return null;
+}

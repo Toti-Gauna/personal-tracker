@@ -53,8 +53,9 @@ describe('puertas de matemática', () => {
     // Con las extras y la pausa, W1 va del 22 de febrero al 14 de marzo y P3 arranca el 15 de marzo.
     expect(puertaBloqueando('2027-03-16', getState().plan, T0)).toBe('W1');
     startDay('completo', '04:30', '2027-03-16');
-    const prog = getState().days['2027-03-16'].blocks.filter((b) => b.key === 'prog' || b.key === 'caso');
-    expect(prog).toHaveLength(2);
+    const prog = getState().days['2027-03-16'].blocks.filter((b) => /^prog/.test(b.key));
+    // Con trabajo (desde el 11 ene 2027) el martes tiene un solo bloque de programación, el de las 05:30.
+    expect(prog).toHaveLength(1);
     for (const b of prog) expect(b).toMatchObject({ rama: 'matematica', title: 'Matemática pura · puerta W1' });
   });
 

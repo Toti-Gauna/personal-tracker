@@ -4,11 +4,10 @@ import { aplicarIntensiva } from '../data/busqueda';
 import { useSyncExternalStore } from 'react';
 import { DEFAULT_BLOCK_PRESETS, DEFAULT_PRESETS } from '../data/defaults';
 import { buildBlocks, newId, planDay } from '../data/schedule';
-import { routineFor } from '../data/routines';
+import { isoDay, routineFor } from '../data/routines';
 import { emptyPlan, DEFAULT_PLAN_SETTINGS, type PlanSettings, type PlanState } from '../data/plan-state';
 import { semanaDelPlan, tramoActivo, ventanaW } from '../data/plan';
 import { tareasDeBloque } from '../data/metas-bloque';
-import { faseIdiomaEn } from '../data/idiomas';
 import { mesClipEn, mesDe as mesClipDe } from '../data/clipping';
 import { plannedFor } from '../data/train';
 import { addDays, dateKey } from '../data/time';
@@ -188,24 +187,23 @@ export function startDay(routine: RoutineId, wake: string, date = dateKey()) {
     // Las metas que empujan la ruta llevan su etiqueta (ref y part) desde que empieza el día.
     const refs = refsForDay(s.ruta, date);
     const cfg = planSettings(s.settings);
-    const dayType = routineFor(date, cfg);
+    const dayType = routineFor(date, { ...cfg, inicioTrabajo: inicioTrabajo(s.settings) });
     const t0 = s.settings?.startDate;
     const puerta = puertaBloqueando(date, s.plan, t0) ?? undefined;
     const ventana = ventanaW(date, t0).ahora?.id ?? puerta;
     const entrevista = entrevistaCerca(s.plan, date);
+    const prepara = entrevistaEn48h(s.plan, date);
     // Ola 20: la meta de programación sale de las metas del proyecto en curso (si las hay).
     const proyecto = tramoActivo(date, t0).id;
     const delProyecto = tareasDeBloque(s.plan.metasBloque?.[proyecto]);
     // Ola 19: el estiramiento de las 21:00 a 22:00 lleva los músculos de la rutina del día.
     const estirar = plannedFor(s.train, date, t0 ?? T0_PLAN).routine?.estiramiento?.musculos;
-    const blocks = buildBlocks(planDay(date, routine, wake, dayType, { ventana, entrevista, puerta }), carry)
+    const blocks = buildBlocks(planDay(date, routine, wake, dayType, { ventana, entrevista, puerta, prepara, ...(cfg.horarioTrabajo ? { trabajo: cfg.horarioTrabajo } : {}), ...(cfg.bloquesPendientes ? { pendientes: cfg.bloquesPendientes } : {}) }), carry)
       .map((b) => (refs[b.key] ? { ...b, ...refs[b.key] } : b))
       .map((b) => (b.rama === 'programacion' && delProyecto.length ? { ...b, tasks: [...delProyecto.map((t) => ({ id: newId(), t: `${proyecto} · ${t}`, done: false })), ...b.tasks] } : b))
       .map((b) => (b.key === 'cierre' && estirar ? { ...b, tasks: b.tasks.map((x) => (x.t === 'Estirar' ? { ...x, t: `Estirar: ${estirar}` } : x)) } : b))
-      // Ola 21: el bloque de idiomas trae las tareas de la fase de esta semana (salvo lo que pasó de ayer).
-      .map((b) => (b.key === 'ingles' ? { ...b, tasks: [...faseIdiomaEn(date, t0 ?? T0_PLAN).tareas.map((t) => ({ id: newId(), t, done: false })), ...b.tasks.filter((x) => (carry.ingles ?? []).includes(x.t))] } : b))
       // Ola 23: de lunes a viernes, el clipping trae las tareas del mes del roadmap; el finde, pipeline y prospección.
-      .map((b) => (b.key === 'clipping' && b.min <= 90 && mesClipDe(date) >= 1 && mesClipDe(date) <= 12 ? { ...b, tasks: [...mesClipEn(date).tareas.map((t) => ({ id: newId(), t, done: false })), ...b.tasks.filter((x) => (carry.clipping ?? []).includes(x.t))] } : b));
+      .map((b) => (b.key === 'clipping' && isoDay(date) <= 5 && mesClipDe(date) >= 1 && mesClipDe(date) <= 12 ? { ...b, tasks: [...mesClipEn(date).tareas.map((t) => ({ id: newId(), t, done: false })), ...b.tasks.filter((x) => (carry.clipping ?? []).includes(x.t))] } : b));
     const day: DayLog = { date, wake, routine, dayType, ...(ventana ? { ventana } : {}), blocks, notes: [], focus: [] };
     return { ...s, days: { ...s.days, [date]: day }, carry: restCarry };
   });
@@ -213,6 +211,15 @@ export function startDay(routine: RoutineId, wake: string, date = dateKey()) {
 
 /** Ajustes del plan con los valores de fábrica. */
 export const planSettings = (st: Settings | null): PlanSettings => ({ ...DEFAULT_PLAN_SETTINGS, ...(st?.plan ?? {}) });
+
+/** Ola 27 · el inicio del trabajo (un único campo): lo que cargaste o, si no, el T+2 (11 ene 2027 con el plan de fábrica). */
+export const inicioTrabajo = (st: Settings | null): string => planSettings(st).t2 ?? addDays(st?.startDate ?? T0_PLAN, 56);
+
+/** Ola 27 · ¿hay una entrevista en las próximas 48 h (hoy, mañana o pasado)? El último bloque de programación pasa a preparación. */
+export function entrevistaEn48h(p: PlanState, date: string): { rol: string; empresa?: string } | false {
+  const e = p.entrevistas.find((x) => x.fecha >= date && x.fecha <= addDays(date, 2));
+  return e ? { rol: e.rol, ...(e.empresa ? { empresa: e.empresa } : {}) } : false;
+}
 
 /** ¿La entrevista es en inglés? Se lee de la modalidad ("remoto · entrevista técnica en inglés"). */
 export const entrevistaEnIngles = (e: { modalidad?: string }) => /ingl[eé]s/i.test(e.modalidad ?? '');

@@ -19,25 +19,24 @@ describe('búsqueda intensiva', () => {
     expect(enPausa(getState().plan, 'ventas', '2026-11-20')).toBe(true);
   });
 
-  it('las dos rutinas: 10 metas de lunes a viernes y 8 el finde, con las horas de la tabla', () => {
-    // Las 10 de la tabla, más la rutina de la mañana (04:00) y dormir a las 22:00 (ola 17: entreno de 3 h).
-    expect(metasOf('busqueda-intensiva').map((b) => b.start)).toEqual(['04:00', '04:30', '06:30', '08:30', '10:00', '12:00', '13:30', '15:00', '16:30', '18:00', '21:00', '22:00']);
-    expect(metasOf('busqueda-intensiva-finde')).toHaveLength(10);
+  it('las dos rutinas del modo intensivo (v3): lunes a viernes y finde, con las horas de la tabla', () => {
+    expect(metasOf('busqueda-intensiva').map((b) => b.start)).toEqual(['04:00', '04:30', '05:30', '08:30', '10:00', '12:00', '16:00', '17:00', '18:00', '20:00', '21:00']);
+    expect(metasOf('busqueda-intensiva-finde').map((b) => b.start)).toEqual(['04:00', '04:30', '05:30', '08:30', '10:00', '16:00', '17:00', '21:00']);
     const horas = (rama: string) => {
       const m = (t: 'busqueda-intensiva' | 'busqueda-intensiva-finde') => planRoutine(t, 'completo').filter((p) => p.block.rama === rama || (rama === 'clipping' && p.block.id === 'clipping')).reduce((s, p) => s + p.min, 0);
       return (m('busqueda-intensiva') * 5 + m('busqueda-intensiva-finde') * 2) / 60;
     };
-    expect(horas('matematica')).toBe(14);
-    expect(horas('programacion')).toBe(25.5);
-    expect(horas('ingles')).toBe(11.5);
-    expect(horas('trabajo')).toBe(10.5);
-    // Ola 23: 1 h 30 de lunes a viernes y 2 h el sábado y el domingo.
-    expect(horas('clipping')).toBe(11.5);
+    expect(horas('matematica')).toBe(7);
+    expect(horas('programacion')).toBe(53);
+    expect(horas('ingles')).toBe(7);
+    expect(horas('trabajo')).toBe(5);
+    // Clipping en pausa: la rutina del modo intensivo no tiene su bloque.
+    expect(horas('clipping')).toBe(0);
   });
 
   it('el día corto y "Otra hora" recorren solo la mañana (rutina, matemática y programación)', () => {
     const p = planRoutine('busqueda-intensiva', 'corto');
-    expect(p.slice(0, 4).map((x) => [x.start, x.min])).toEqual([['05:00', 20], ['05:20', 100], ['07:00', 90], ['08:30', 90]]);
+    expect(p.slice(0, 4).map((x) => [x.start, x.min])).toEqual([['05:00', 20], ['05:20', 45], ['06:05', 145], ['08:30', 90]]);
     expect(p[4].start).toBe('10:00');
   });
 
@@ -45,7 +44,7 @@ describe('búsqueda intensiva', () => {
     startDay('completo', '04:30', '2026-11-21');
     const d = getState().days['2026-11-21'];
     expect(d.dayType).toBe('busqueda-intensiva-finde');
-    expect(d.blocks.map((b) => b.key)).toEqual(['rutina', 'math', 'prog', 'abi', 'caso', 'ingles', 'busqueda', 'clipping', 'cierre', 'sueno']);
+    expect(d.blocks.map((b) => b.key)).toEqual(['rutina', 'math', 'prog', 'abi', 'prog-2', 'ingles', 'cierre', 'sueno']);
   });
 
   it('el día anterior a una entrevista, la búsqueda suma practicarla (y en inglés); sin modo propio', () => {
@@ -55,8 +54,11 @@ describe('búsqueda intensiva', () => {
     expect(b.find((x) => x.key === 'ingles')!.title).not.toMatch(/simulacro/);
     expect(b.some((x) => x.key === 'ingles-entrevista')).toBe(false);
     const busq = b.find((x) => x.key === 'busqueda')!;
-    expect(busq.min).toBe(90);
+    expect(busq.min).toBe(60);
     expect(busq.tasks.map((t) => t.t).slice(0, 2)).toEqual(['Practicar la entrevista de mañana de AI Engineer en Acme con el pitch armado', 'Practicarla en inglés']);
+    // Con la entrevista en 48 h, el último bloque de programación pasa a preparación.
+    expect(b.find((x) => x.key === 'prog-tarde')!.title).toMatch(/Preparación de la entrevista/);
+    expect(b.find((x) => x.key === 'prog')!.title).not.toMatch(/Preparación/);
     // Con 3 días de anticipación todavía no se practica: es solo el aviso.
     startDay('completo', '04:30', '2026-11-17');
     expect(getState().days['2026-11-17'].blocks.find((x) => x.key === 'busqueda')!.tasks.some((t) => /Practicar la entrevista/.test(t.t))).toBe(false);
@@ -138,7 +140,8 @@ describe('sprint e impacto', () => {
 
   it('horas por semana de la intensiva y el lanzamiento de Handyx según cuándo entre el trabajo', async () => {
     const { horasSemana, escenariosHandyx } = await import('./sprint');
-    expect(horasSemana('busqueda-intensiva', 'busqueda-intensiva-finde')).toMatchObject({ Programación: 25.5, Matemática: 14, Inglés: 11.5, Búsqueda: 10.5, Clipping: 11.5, Entrenamiento: 15, Handyx: 0 });
+    expect(horasSemana('con-trabajo', 'con-trabajo-finde')).toMatchObject({ Programación: 29, Matemática: 14, Inglés: 6.5 });
+    expect(horasSemana('busqueda-intensiva', 'busqueda-intensiva-finde')).toMatchObject({ Programación: 53, Matemática: 7, Inglés: 7, Búsqueda: 5, Clipping: 0, Entrenamiento: 10, Handyx: 0 });
     expect(escenariosHandyx('2026-11-16', '2026-11-16').map((e) => e.lanza)).toEqual(['2027-03-14', '2027-04-11', '2027-05-09']);
   });
 });

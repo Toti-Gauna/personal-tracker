@@ -11,6 +11,7 @@ import { hitosFechados } from '../data/hitos';
 import { etiquetaDeBloque, tituloDeBloque } from '../data/etiquetas';
 import { getState, register, resetState, startDay } from '../state/store';
 import { registrarClips } from '../state/clipping';
+import { setPlanSettings } from '../state/plan';
 import { Hoy } from './Hoy';
 
 beforeEach(() => {
@@ -20,23 +21,27 @@ beforeEach(() => {
 });
 
 describe('ola 23 · el clipping en Hoy', () => {
-  it('de lunes a viernes: "Clipping · Mes 1", la etiqueta del mes y las tareas del roadmap; el finde son 2 h', () => {
+  it('sin bloque asignado el clipping no está en Hoy; con uno, trae el mes del roadmap (lunes a viernes) o el pipeline (finde)', () => {
     startDay('completo', '04:00', '2026-11-18');
-    const d = getState().days['2026-11-18'];
-    const b = d.blocks.find((x) => x.key === 'clipping')!;
-    expect(tituloDeBloque(b, d.date)).toBe('Clipping · Mes 1');
-    expect(etiquetaDeBloque(b, { day: d, plan: getState().plan, study: getState().study })).toBe('clipping · mes 1 · 5 clips/día · 3 cuentas');
-    expect(b.tasks.map((t) => t.t)).toEqual(['5 clips a mano en 3 cuentas', 'Anotar views, aprobaciones y pago real por campaña']);
+    expect(getState().days['2026-11-18'].blocks.some((x) => x.key === 'clipping')).toBe(false);
+    // El día entre semana está lleno: no entra en ningún hueco, así que no se suma.
+    setPlanSettings({ bloquesPendientes: { clipping: { start: '17:00', min: 90, dias: 'todos' } } });
+    startDay('completo', '04:00', '2026-11-18');
+    expect(getState().days['2026-11-18'].blocks.some((x) => x.key === 'clipping')).toBe(false);
     startDay('completo', '04:00', '2026-11-21');
     const f = getState().days['2026-11-21'].blocks.find((x) => x.key === 'clipping')!;
-    expect([f.start, f.min]).toEqual(['15:30', 120]);
+    expect([f.start, f.min]).toEqual(['17:00', 90]);
+    const d = getState().days['2026-11-21'];
+    expect(tituloDeBloque(f, d.date)).toBe('Clipping · Mes 1');
+    expect(etiquetaDeBloque(f, { day: d, plan: getState().plan, study: getState().study })).toMatch(/^clipping · mes 1/);
     expect(f.tasks.map((t) => t.t)).toEqual(['Mejoras al pipeline (1 a 2 h)', 'Prospección de retainers']);
   });
 
   it('el bloque abierto tiene "Registrar clips y views" y "Sumar a la semana" cuenta los clips de la planilla', () => {
-    startDay('completo', '04:00', '2026-11-18');
+    setPlanSettings({ bloquesPendientes: { clipping: { start: '17:00', min: 120, dias: 'finde' } } });
+    startDay('completo', '04:00', '2026-11-21');
     registrarClips({ fecha: '2026-11-17', clips: 4, views: 9000 });
-    render(<Hoy day={getState().days['2026-11-18']} />);
+    render(<Hoy day={getState().days['2026-11-21']} />);
     const sumar = screen.getByRole('button', { name: /Registrar clips: van 4 de 35/ });
     fireEvent.click(sumar);
     const dlg = screen.getByRole('dialog');

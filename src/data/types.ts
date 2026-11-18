@@ -97,7 +97,7 @@ export interface DayLog {
   /** Modo del modal "Buen día": 04:00 completo, 05:00 corto u otra hora. */
   routine: RoutineId;
   /** Rutina del día: lunes a viernes, fin de semana, con trabajo o día libre. */
-  dayType?: 'weekday' | 'weekend' | 'con-trabajo' | 'libre' | 'busqueda-intensiva' | 'busqueda-intensiva-finde';
+  dayType?: 'weekday' | 'weekend' | 'con-trabajo' | 'con-trabajo-finde' | 'libre' | 'busqueda-intensiva' | 'busqueda-intensiva-finde';
   /** Ventana de matemática del plan si cayó ese día ("W1"). */
   ventana?: string;
   blocks: Block[];

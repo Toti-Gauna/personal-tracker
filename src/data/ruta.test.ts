@@ -133,9 +133,9 @@ describe('de la ruta a tu día', () => {
     expect(bl.math).toMatchObject({ ref: 'b1-conamat-arit-01', part: 'learn' });
     expect(bl.prog).toMatchObject({ ref: 'b1-prog-python', part: 'learn' });
     expect(bl.abi.ref).toBeUndefined();
-    // Ola 8b: con la búsqueda intensiva no hay bloque de Handyx (en pausa); clipping va sin ruta.
+    // Con el modo intensivo no hay bloque de Handyx ni de clipping (sin bloque asignado).
     expect(bl.handyx).toBeUndefined();
-    expect(bl.clipping.ref).toBeUndefined();
+    expect(bl.clipping).toBeUndefined();
   });
 
   it('marcar la meta suma a la mejora, avanza la meta semanal, mueve el carril y recalcula el ritmo', () => {
@@ -145,7 +145,7 @@ describe('de la ruta a tu día', () => {
     for (const t of math.tasks) marcarTarea(D, 'math', t.id);
     const s = getState();
     const p = progressMap(s.ruta.log);
-    expect(mejoraDia(s.days[D])).toBeCloseTo(1 / 12);
+    expect(mejoraDia(s.days[D])).toBeCloseTo(1 / 11);
     expect(p['b1-conamat-arit-01']).toBe(0.5);
     expect(laneStatus(B1, 'math', D, p).done).toBe(antes.done + 0.5);
     const semana = weekPlan(D).plan.goals.find((g) => g.lane === 'math')!;

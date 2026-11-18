@@ -344,7 +344,7 @@
    "blocks": [
     {
      "id": "rutina",
-     "label": "Rutina de la mañana",
+     "label": "Despertar, cambiarse y necesidades",
      "short": "la rutina",
      "start": "04:00",
      "end": "04:30",
@@ -362,7 +362,7 @@
      "label": "Matemática · CONAMAT",
      "short": "matemática",
      "start": "04:30",
-     "end": "06:30",
+     "end": "05:30",
      "area": "ing",
      "kind": "flex",
      "focus": true,
@@ -375,32 +375,18 @@
     },
     {
      "id": "prog",
-     "label": "Programación",
+     "label": "Programación · CV y portfolio (P0)",
      "short": "programación",
-     "start": "06:30",
-     "end": "07:30",
+     "start": "05:30",
+     "end": "08:30",
      "area": "ing",
      "kind": "flex",
      "focus": true,
      "rama": "programacion",
      "tasks": [
-      "Repaso de tarjetas",
-      "Tarea del proyecto",
+      "Estudio de lo del día (20 a 30 min)",
+      "Construir con tests primero",
       "Commit y nota para la revisión"
-     ]
-    },
-    {
-     "id": "ingles",
-     "label": "Inglés · bloque diario",
-     "short": "inglés",
-     "start": "07:30",
-     "end": "08:15",
-     "area": "ing",
-     "kind": "flex",
-     "focus": true,
-     "rama": "ingles",
-     "tasks": [
-      "45 min hacia el C1"
      ]
     },
     {
@@ -414,96 +400,100 @@
      "focus": false,
      "rama": "salud",
      "tasks": [
-      "Correr y ducha"
+      "Correr y ducha",
+      "Audio de recall pasivo"
      ]
     },
     {
      "id": "trabajo",
-     "label": "Trabajo",
+     "label": "Trabajo actual",
      "short": "el trabajo",
      "start": "10:00",
-     "end": "17:00",
-     "area": "rutina",
+     "end": "16:00",
+     "area": "economia",
      "kind": "fixed",
      "focus": true,
-     "rama": "trabajo",
      "tasks": [
       "Tarea principal del trabajo"
      ]
     },
     {
-     "id": "handyx",
-     "label": "Handyx",
-     "short": "Handyx",
-     "start": "17:00",
-     "end": "18:30",
-     "area": "handyx",
+     "id": "math-tarde",
+     "label": "Matemática · ejercicios",
+     "short": "matemática",
+     "start": "16:00",
+     "end": "17:00",
+     "area": "ing",
      "kind": "fixed",
      "focus": true,
-     "rama": "handyx",
+     "rama": "matematica",
      "tasks": [
-      "Tarea principal cerrada"
+      "Ejercicios del capítulo en papel",
+      "Repaso de tarjetas"
      ]
     },
     {
-     "id": "comida",
-     "label": "Comida y descanso",
-     "start": "18:30",
-     "end": "19:00",
-     "area": "rutina",
+     "id": "ingles",
+     "label": "Inglés técnico y de entrevista",
+     "short": "inglés",
+     "start": "17:00",
+     "end": "17:30",
+     "area": "ing",
      "kind": "fixed",
-     "focus": false,
-     "meta": false
+     "focus": true,
+     "rama": "ingles",
+     "tasks": [
+      "Explicar un proyecto en voz alta (inglés técnico)",
+      "Práctica de código en vivo en inglés",
+      "Preguntas de entrevista en inglés"
+     ]
     },
     {
      "id": "entreno",
      "label": "Entrenamiento",
      "short": "el entreno",
-     "start": "19:00",
+     "start": "17:30",
      "end": "20:00",
      "area": "salud",
      "kind": "fixed",
      "focus": true,
      "rama": "salud",
      "tasks": [
-      "Caminata y movilidad",
-      "Rutina del día"
+      "Caminar 30 min de ida",
+      "Entrenar: la rutina del día (1 h 30)",
+      "Caminar 30 min de vuelta"
      ]
     },
     {
-     "id": "desconexion",
-     "label": "Desconexión",
+     "id": "cierre",
+     "label": "Descanso final · recall en frío",
+     "short": "el descanso",
      "start": "20:00",
      "end": "21:00",
      "area": "rutina",
      "kind": "fixed",
      "focus": false,
-     "meta": false
-    },
-    {
-     "id": "cierre",
-     "label": "Cerrar y preparar mañana",
-     "short": "el cierre",
-     "start": "21:00",
-     "end": "22:00",
-     "area": "rutina",
-     "kind": "fixed",
-     "focus": false,
      "rama": "main",
      "tasks": [
-      "Cerrar el día y copiar el JSON",
-      "Preparar mañana"
+      "Cena y ducha",
+      "Estirar",
+      "Recall en frío (20 min): lo construido hoy",
+      "Cerrar el día en 5 min"
      ]
     },
     {
      "id": "sueno",
-     "label": "Sueño",
-     "start": "22:00",
+     "label": "Dormir a las 21:00",
+     "short": "dormir",
+     "start": "21:00",
      "end": "04:00",
      "area": "rutina",
      "kind": "fixed",
      "focus": false,
-     "meta": false
+     "rama": "salud",
+     "tasks": [
+      "En la cama a las 21:00"
+     ]
     }
    ]
   },
@@ -562,7 +552,7 @@
    ]
   },
   "busqueda-intensiva": {
-   "label": "Lunes a viernes · búsqueda intensiva",
+   "label": "Lunes a viernes · modo intensivo",
    "reemplaza": "weekday",
    "modo": "busqueda-intensiva",
    "wake": {
@@ -572,7 +562,7 @@
    "blocks": [
     {
      "id": "rutina",
-     "label": "Rutina de la mañana",
+     "label": "Despertar, cambiarse y necesidades",
      "short": "la rutina",
      "start": "04:00",
      "end": "04:30",
@@ -590,7 +580,7 @@
      "label": "Matemática · CONAMAT",
      "short": "matemática",
      "start": "04:30",
-     "end": "06:30",
+     "end": "05:30",
      "area": "ing",
      "kind": "flex",
      "focus": true,
@@ -605,14 +595,15 @@
      "id": "prog",
      "label": "Programación · CV y portfolio (P0)",
      "short": "programación",
-     "start": "06:30",
+     "start": "05:30",
      "end": "08:30",
      "area": "ing",
      "kind": "flex",
      "focus": true,
      "rama": "programacion",
      "tasks": [
-      "Tarea del portfolio (P0)",
+      "Estudio de lo del día (20 a 30 min)",
+      "Construir con tests primero",
       "Commit y nota para la revisión"
      ]
     },
@@ -627,7 +618,8 @@
      "focus": false,
      "rama": "salud",
      "tasks": [
-      "Correr y ducha"
+      "Correr y ducha",
+      "Audio de recall pasivo"
      ]
     },
     {
@@ -644,64 +636,50 @@
      ]
     },
     {
-     "id": "caso",
-     "label": "Programación · caso para entrevistas",
-     "short": "el caso",
+     "id": "prog-tarde",
+     "label": "Programación",
+     "short": "programación",
      "start": "12:00",
-     "end": "13:30",
+     "end": "16:00",
      "area": "ing",
      "kind": "fixed",
      "focus": true,
      "rama": "programacion",
      "tasks": [
-      "Contar el caso en 3 minutos",
-      "Sesión técnica: algoritmos o diseño"
+      "Construir con tests primero",
+      "Pausa de 5 a 10 min por hora",
+      "Commit y nota para la revisión"
      ]
     },
     {
      "id": "ingles",
-     "label": "Inglés · modo entrevista",
+     "label": "Inglés técnico y de entrevista",
      "short": "inglés",
-     "start": "13:30",
-     "end": "15:00",
+     "start": "16:00",
+     "end": "17:00",
      "area": "ing",
      "kind": "fixed",
      "focus": true,
      "rama": "ingles",
      "tasks": [
-      "Respuestas ensayadas en voz alta",
-      "Pitch de 60 s",
-      "Una historia STAR"
+      "Explicar un proyecto en voz alta (inglés técnico)",
+      "Práctica de código en vivo en inglés",
+      "Preguntas de entrevista en inglés"
      ]
     },
     {
      "id": "busqueda",
      "label": "Búsqueda laboral",
      "short": "la búsqueda",
-     "start": "15:00",
-     "end": "16:30",
+     "start": "17:00",
+     "end": "18:00",
      "area": "rutina",
      "kind": "fixed",
      "focus": true,
      "rama": "trabajo",
      "tasks": [
       "5 postulaciones a medida",
-      "5 mensajes directos",
-      "CV, LinkedIn o revisión de mercado"
-     ]
-    },
-    {
-     "id": "clipping",
-     "label": "Clipping",
-     "short": "el clipping",
-     "start": "16:30",
-     "end": "18:00",
-     "area": "eclipse",
-     "kind": "fixed",
-     "focus": true,
-     "tasks": [
-      "Editar clips",
-      "Publicar"
+      "5 mensajes directos"
      ]
     },
     {
@@ -709,52 +687,52 @@
      "label": "Entrenamiento",
      "short": "el entreno",
      "start": "18:00",
-     "end": "21:00",
+     "end": "20:00",
      "area": "salud",
      "kind": "fixed",
      "focus": true,
      "rama": "salud",
      "tasks": [
       "Caminar 30 min de ida",
-      "Entrenar: la rutina del día (2 h)",
+      "Entrenar: la rutina del día (1 h)",
       "Caminar 30 min de vuelta"
      ]
     },
     {
      "id": "cierre",
-     "label": "Bañarse, estirar, comer y escribir",
-     "short": "el cierre",
-     "start": "21:00",
-     "end": "22:00",
+     "label": "Descanso final · recall en frío",
+     "short": "el descanso",
+     "start": "20:00",
+     "end": "21:00",
      "area": "rutina",
      "kind": "fixed",
      "focus": false,
      "rama": "main",
      "tasks": [
-      "Bañarse",
+      "Cena y ducha",
       "Estirar",
-      "Comer",
-      "Escribir"
+      "Recall en frío (20 min): lo construido hoy",
+      "Cerrar el día en 5 min"
      ]
     },
     {
      "id": "sueno",
-     "label": "Dormir a las 22:00",
+     "label": "Dormir a las 21:00",
      "short": "dormir",
-     "start": "22:00",
+     "start": "21:00",
      "end": "04:00",
      "area": "rutina",
      "kind": "fixed",
      "focus": false,
      "rama": "salud",
      "tasks": [
-      "En la cama a las 22:00"
+      "En la cama a las 21:00"
      ]
     }
    ]
   },
   "busqueda-intensiva-finde": {
-   "label": "Fin de semana · búsqueda intensiva",
+   "label": "Fin de semana · modo intensivo",
    "reemplaza": "weekend",
    "modo": "busqueda-intensiva",
    "wake": {
@@ -764,7 +742,137 @@
    "blocks": [
     {
      "id": "rutina",
-     "label": "Rutina de la mañana",
+     "label": "Despertar, cambiarse y necesidades",
+     "short": "la rutina",
+     "start": "04:00",
+     "end": "04:30",
+     "area": "rutina",
+     "kind": "flex",
+     "focus": false,
+     "rama": "main",
+     "tasks": [
+      "Agua y cama hecha",
+      "Movilidad 10 min"
+     ]
+    },
+    {
+     "id": "math",
+     "label": "Matemática · CONAMAT",
+     "short": "matemática",
+     "start": "04:30",
+     "end": "05:30",
+     "area": "ing",
+     "kind": "flex",
+     "focus": true,
+     "rama": "matematica",
+     "tasks": [
+      "Repaso de tarjetas",
+      "Capítulo del día",
+      "Test del capítulo"
+     ]
+    },
+    {
+     "id": "prog",
+     "label": "Programación · CV y portfolio (P0)",
+     "short": "programación",
+     "start": "05:30",
+     "end": "08:30",
+     "area": "ing",
+     "kind": "flex",
+     "focus": true,
+     "rama": "programacion",
+     "tasks": [
+      "Estudio de lo del día (20 a 30 min)",
+      "Construir con tests primero",
+      "Commit y nota para la revisión"
+     ]
+    },
+    {
+     "id": "abi",
+     "label": "Acompañar a Abi y correr",
+     "short": "Abi",
+     "start": "08:30",
+     "end": "10:00",
+     "area": "salud",
+     "kind": "fixed",
+     "focus": false,
+     "rama": "salud",
+     "tasks": [
+      "Correr y ducha",
+      "Audio de recall pasivo"
+     ]
+    },
+    {
+     "id": "prog-2",
+     "label": "Programación",
+     "short": "programación",
+     "start": "10:00",
+     "end": "16:00",
+     "area": "ing",
+     "kind": "fixed",
+     "focus": true,
+     "rama": "programacion",
+     "tasks": [
+      "Construir con tests primero",
+      "Pausa de 5 a 10 min por hora",
+      "Commit y nota para la revisión"
+     ]
+    },
+    {
+     "id": "ingles",
+     "label": "Inglés técnico y de entrevista",
+     "short": "inglés",
+     "start": "16:00",
+     "end": "17:00",
+     "area": "ing",
+     "kind": "fixed",
+     "focus": true,
+     "rama": "ingles",
+     "tasks": [
+      "Explicar un proyecto en voz alta (inglés técnico)",
+      "Práctica de código en vivo en inglés",
+      "Preguntas de entrevista en inglés"
+     ]
+    },
+    {
+     "id": "cierre",
+     "label": "Descanso y visitas · recall en frío",
+     "short": "el descanso",
+     "start": "17:00",
+     "end": "21:00",
+     "area": "rutina",
+     "kind": "fixed",
+     "focus": false,
+     "rama": "main",
+     "tasks": [
+      "Familia o amigos (sin entrenamiento)",
+      "Recall en frío (20 min): lo construido hoy",
+      "Cerrar el día en 5 min"
+     ]
+    },
+    {
+     "id": "sueno",
+     "label": "Dormir a las 21:00",
+     "short": "dormir",
+     "start": "21:00",
+     "end": "04:00",
+     "area": "rutina",
+     "kind": "fixed",
+     "focus": false,
+     "rama": "salud",
+     "tasks": [
+      "En la cama a las 21:00"
+     ]
+    }
+   ]
+  },
+  "con-trabajo-finde": {
+   "label": "Fin de semana · con trabajo",
+   "reemplaza": "weekend",
+   "blocks": [
+    {
+     "id": "rutina",
+     "label": "Despertar, cambiarse y necesidades",
      "short": "la rutina",
      "start": "04:00",
      "end": "04:30",
@@ -804,7 +912,8 @@
      "focus": true,
      "rama": "programacion",
      "tasks": [
-      "Tarea del portfolio (P0)",
+      "Estudio de lo del día (20 a 30 min)",
+      "Construir con tests primero",
       "Commit y nota para la revisión"
      ]
     },
@@ -819,97 +928,70 @@
      "focus": false,
      "rama": "salud",
      "tasks": [
-      "Correr y ducha"
+      "Correr y ducha",
+      "Audio de recall pasivo"
      ]
     },
     {
-     "id": "caso",
-     "label": "Programación · caso para entrevistas",
-     "short": "el caso",
+     "id": "prog-2",
+     "label": "Programación",
+     "short": "programación",
      "start": "10:00",
-     "end": "12:00",
+     "end": "15:00",
      "area": "ing",
      "kind": "fixed",
      "focus": true,
      "rama": "programacion",
      "tasks": [
-      "Contar el caso en 3 minutos",
-      "Sesión técnica: algoritmos o diseño"
+      "Construir con tests primero",
+      "Pausa de 5 a 10 min por hora",
+      "Commit y nota para la revisión"
      ]
     },
     {
      "id": "ingles",
-     "label": "Inglés · modo entrevista",
+     "label": "Inglés técnico y de entrevista",
      "short": "inglés",
-     "start": "12:00",
-     "end": "14:00",
+     "start": "15:00",
+     "end": "17:00",
      "area": "ing",
      "kind": "fixed",
      "focus": true,
      "rama": "ingles",
      "tasks": [
-      "Respuestas ensayadas en voz alta",
-      "Pitch de 60 s",
-      "Una historia STAR"
-     ]
-    },
-    {
-     "id": "busqueda",
-     "label": "Búsqueda laboral",
-     "short": "la búsqueda",
-     "start": "14:00",
-     "end": "15:30",
-     "area": "rutina",
-     "kind": "fixed",
-     "focus": true,
-     "rama": "trabajo",
-     "tasks": [
-      "5 postulaciones a medida",
-      "5 mensajes directos",
-      "CV, LinkedIn o revisión de mercado"
-     ]
-    },
-    {
-     "id": "clipping",
-     "label": "Clipping",
-     "short": "el clipping",
-     "start": "15:30",
-     "end": "17:30",
-     "area": "eclipse",
-     "kind": "fixed",
-     "focus": true,
-     "tasks": [
-      "Mejoras al pipeline (1 a 2 h)",
-      "Prospección de retainers"
+      "Explicar un proyecto en voz alta (inglés técnico)",
+      "Práctica de código en vivo en inglés",
+      "Preguntas de entrevista en inglés"
      ]
     },
     {
      "id": "cierre",
-     "label": "Descansar · cierre de 5 min a las 21:00",
+     "label": "Descanso y visitas · recall en frío",
      "short": "el descanso",
-     "start": "17:30",
-     "end": "22:00",
+     "start": "17:00",
+     "end": "21:00",
      "area": "rutina",
      "kind": "fixed",
      "focus": false,
      "rama": "main",
      "tasks": [
-      "Descansar",
-      "Cerrar el día en 5 min a las 20:00"
+      "Familia o amigos (sin entrenamiento)",
+      "Recall en frío (20 min): lo construido hoy",
+      "Cerrar el día en 5 min"
      ]
     },
     {
      "id": "sueno",
-     "label": "Dormir a las 22:00",
+     "label": "Dormir a las 21:00",
      "short": "dormir",
-     "start": "22:00",
+     "start": "21:00",
      "end": "04:00",
      "area": "rutina",
      "kind": "fixed",
      "focus": false,
      "rama": "salud",
      "tasks": [
-      "En la cama a las 22:00"
+      "En la cama a las 21:00"
      ]
     }
    ]
@@ -1029,46 +1111,46 @@
     "label": "Entrenamiento",
     "short": "el entreno",
     "start": "18:00",
-    "end": "21:00",
+    "end": "20:00",
     "area": "salud",
     "kind": "fixed",
     "focus": true,
     "rama": "salud",
     "tasks": [
      "Caminar 30 min de ida",
-     "Entrenar: la rutina del día (2 h)",
+     "Entrenar: la rutina del día (1 h)",
      "Caminar 30 min de vuelta"
     ]
    },
    {
     "id": "cierre",
-    "label": "Bañarse, estirar, comer y escribir",
-    "short": "el cierre",
-    "start": "21:00",
-    "end": "22:00",
+    "label": "Descanso final · recall en frío",
+    "short": "el descanso",
+    "start": "20:00",
+    "end": "21:00",
     "area": "rutina",
     "kind": "fixed",
     "focus": false,
     "rama": "main",
     "tasks": [
-     "Bañarse",
+     "Cena y ducha",
      "Estirar",
-     "Comer",
-     "Escribir"
+     "Recall en frío (20 min): lo construido hoy",
+     "Cerrar el día en 5 min"
     ]
    },
    {
     "id": "sueno",
-    "label": "Dormir a las 22:00",
+    "label": "Dormir a las 21:00",
     "short": "dormir",
-    "start": "22:00",
+    "start": "21:00",
     "end": "08:00",
     "area": "rutina",
     "kind": "fixed",
     "focus": false,
     "rama": "salud",
     "tasks": [
-     "En la cama a las 22:00"
+     "En la cama a las 21:00"
     ]
    }
   ]
