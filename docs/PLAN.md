@@ -5,7 +5,7 @@ Tracker personal de Toti: el día en horas, el estudio con su propio motor de re
 - **Diseño:** [canvas de Trazo](https://claude.ai/artifact/6Cc2E6aW2ViU5ikovpsRTy)
 - **Roadmap de estudio:** [ruta ML + DevSecOps](https://claude.ai/artifact/9PEokku7mBLZdCFJr1zqXP)
 - **Pantallas:** presentación `Trazo-pantallas.pptx` y su ZIP de imágenes (44 pantallas, 8 flujos).
-- **Estado:** olas 0 a 12b hechas y en `main`. Olas 0 a 16c hechas (la 15 quedó absorbida por la 16c). Olas 0 a 23 hechas: el plan de olas de §6 sexies quedó completo. Este archivo es la fuente de verdad.
+- **Estado:** olas 0 a 12b hechas y en `main`. Olas 0 a 16c hechas (la 15 quedó absorbida por la 16c). Olas 0 a 23 hechas. Las olas 24 (plan T+18 v2) y 25 (Hoy editable) están planificadas en §6 septies. Este archivo es la fuente de verdad.
 
 ---
 
@@ -390,6 +390,8 @@ Desde el lunes 16 nov 2026 la prioridad es un trabajo remoto de USD 3.000 a 5.00
 | 21 · Idiomas y libros | *Hecha.* Roadmap maestro v3: un idioma por año durante 6 años (inglés, francés, italiano, alemán, japonés y chino), 12 libros de consolidación, la biblioteca de 42 libros y el ascenso a C1, dentro de Estudio (§6 sexies, paso 8) | Opus 5.5 · alto |
 | 22 · Orden de pantallas | *Hecha.* Pasada de UX en Metas, Estudio y Hoy: secciones plegables y escalera compacta; ninguna de las 49 pantallas pasa de 3,2 pantallas de scroll a 390 px (§6 sexies, paso 9) | Sonnet 5.5 · medio |
 | 23 · Clipping | *Hecha.* Roadmap Clipper de 12 meses (de 0 a USD 10k/mes) con su propio apartado en Metas: plan, registro, cuentas, campañas, retainers, métricas y gráficos, y una UX/UI premium; se integra con Hoy, el mapa y las alertas (§6 sexies, pasos 10 a 12) | Opus 5.5 · alto |
+| 24 · Plan T+18 v2 | Plataforma extra y arquitectura por proyecto, pausa de fin de año automática (con switch), P8 en 2 semanas, alerta de versión de examen, calibración con horas reales y escenarios (§6 septies, pasos 13 a 15) | Opus 5.5 · alto |
+| 25 · Hoy editable | Borrar y editar submetas, dar un bloque por hecho aunque queden submetas, cambiar horarios del día, sumar metas nuevas y saltear bloques (§6 septies, pasos 16 y 17) | Sonnet 5.5 · medio |
 
 ## 6 bis. Olas 9 a 12: mejoras de uso
 
@@ -1029,6 +1031,63 @@ En el día a día alcanza con **Haiku 5.5 · bajo**: pegás el JSON del cierre y
 - Tipografías self-hosted con `@fontsource`; GSAP con Flip.
 - PWA con `vite-plugin-pwa` (service worker generado, manifest, íconos).
 - CI: `typecheck`, `test` y `build` en cada push. Deploy: al mergear a `main` o a mano con "Run workflow".
+
+## 6 septies. Olas 24 y 25: el plan T+18 v2 y Hoy editable
+
+Pedido del 2026-11-18. Dos olas, **un PR por ola** y **un commit por paso**. La 24 sigue el **prompt v2** del plan (`docs/prompts/plan-t18-extendido-v2.md`, que reemplaza a `plan-t18-extendido.md`); la 25 sale de lo que pediste usando Hoy.
+
+| Ola | Pasos | Modelo · esfuerzo |
+|---|---|---|
+| 24 · Plan T+18 v2 | 13, 14 y 15 | Opus 5.5 · alto |
+| 25 · Hoy editable | 16 y 17 | Sonnet 5.5 · medio |
+
+No dependen una de la otra: la 25 puede ir antes si Hoy molesta en el día a día.
+
+**Decidido (2026-11-18)**
+1. **Pausa de fin de año:** se hace como dice la v2 (la semana cuyo lunes cae entre el 18 y el 24 de diciembre se inserta sola y parte el bloque), con un **switch en Ajustes, prendido por defecto**. Apagado vuelve al calendario sin pausas de la ola 18.
+2. **Repasos:** los "días 2, 3, 8, 22 y 61" de la v2 son el motor actual (estudio, test al día 2, tesis al día 3 y repasos a +8, +22 y +61). No cambia nada.
+3. Lo "sin verificar" de la v2 (precios, versiones, demanda de mercado, reemplazos de P8, P9, Q2, Q6 y A6) se queda así, como flags editables en Decisiones.
+
+---
+
+### Ola 24 · Plan T+18 v2 (Opus 5.5 · alto)
+
+**Paso 13 · Datos y motor**
+- `data/plan-extendido.json` pasa a la v2: cada bloque lleva `feature`, `plataforma` y `arquitectura` (semanas extra: +25, +18 y +2) y la ficha suma `plataforma` y `arquitectura` (tabla 3.8). P8 queda 2 + 1, C7 pasa a "SCS-C03" y los textos de las fichas siguen la v2.
+- **Tres switches por bloque** (feature, plataforma y arquitectura), independientes. Lo que apagaste en la ola 16b (`extrasApagados`, solo feature) se migra sin perderse.
+- **Pausa automática** en el calendario derivado (con el switch del punto 1). Si cae dentro de un bloque, lo parte: el bloque sigue la semana siguiente.
+- **Versiones de examen:** cada certificación guarda sus versiones con fecha de retiro (Security+: SY0-701 se retira el 11 jun 2027 en inglés y el 13 ago 2027 en español; SY0-801 sale cerca del 17 nov 2026). Si la fecha del examen cae después del retiro de la versión elegida, alerta.
+- *Tests:* sumas por etapa en base (53, 25, 38 y 55 con pausas), fin de etapas en base (21 nov 2027, 14 may 2028, 4 feb 2029 y 24 feb 2030) y con extras (23 abr 2028, 12 nov 2028, 7 oct 2029 y 12 ene 2031), 217 semanas con extras y 5 pausas, la pausa que parte P1 y Q1, con el switch apagado el calendario de la ola 18, migración de `extrasApagados` y la alerta de Security+.
+
+**Paso 14 · Pantallas**
+- Ficha del proyecto con **plataforma extra** y **arquitectura**; los tres switches con las semanas que suma cada uno y la fecha de cierre que resulta.
+- **Checklist de arquitectura** en P1, P5, P10, S1 y Q5 (contrato probado, trazas distribuidas, mTLS y ADR), dentro del estándar de entrega del proyecto.
+- Línea de tiempo y escalera con las pausas; switch de la pausa en Ajustes; alerta de versión en Etapas y en C2; Decisiones con los flags nuevos (plataformas, microservicios y microfrontends, dispositivo de VR y AR, demanda de mercado).
+- Todo dentro del presupuesto de la ola 22 (`npm run pantallas`).
+
+**Paso 15 · Calibración y escenarios**
+- **Horas estimadas** por bloque (semanas × horas de programación de la semana) y **reales** (foco de los bloques de programación entre sus fechas).
+- Al cerrar P3, **factor real/estimado**; se revisa al cerrar cada etapa. Con menos de 0,85 propone comprimir las extras de los proyectos que reusan (P5, P7, P9, P10, S2, S3, Q3 a Q6, A5 y A7); con más de 1,15, recortar primero A3, A6, Q2, Q6 y las plataformas opcionales. **Propone, no aplica solo:** un botón apaga los switches que sugiere.
+- **Escenarios** (supuestos de la v2): optimista 203 semanas (8 oct 2030), intermedio 236 (25 may 2031) y pesimista 273 (5 feb 2032). Ventanas, certificaciones y pausas no se comprimen.
+- *Tests:* horas estimadas y reales, factor, las dos reglas y las tres fechas de escenario.
+
+---
+
+### Ola 25 · Hoy editable (Sonnet 5.5 · medio)
+
+**Paso 16 · Submetas y bloque hecho**
+- Cada submeta se puede **editar y borrar** (las que agregaste y las de fábrica), con "Deshacer" en el aviso.
+- **Dar el bloque por hecho** aunque queden submetas sin tildar, con una línea opcional "¿En qué lo usaste?" (por ejemplo: la reunión no se dio y estuviste en otra cosa de Tsoft). Cuenta en la mejora del día; las submetas pendientes de un bloque hecho no pasan a mañana. Se puede deshacer.
+- El JSON del día lo dice (`"hecho": "a mano"` y la nota).
+
+**Paso 17 · Horarios y metas nuevas del día**
+- **Cambiar el horario** de un bloque solo para hoy (la rutina no se toca). Si pisa al siguiente, elegís **correr los siguientes** o **acortar los siguientes** (como mínimo 15 min cada uno). Dormir a las 22:00 no se mueve: si no entra, avisa y propone qué acortar o saltear.
+- **+ Meta para hoy:** título, rama o "fuera del plan", hora, duración y submetas; entra en su lugar con las mismas dos opciones.
+- **Saltear hoy** un bloque: no cuenta en la mejora y queda marcado como salteado.
+- "Ahora toca", el foco, los avisos y el JSON del día siguen los horarios nuevos.
+- *Tests:* borrar y editar submetas, bloque hecho a mano y mejora, correr y acortar con el tope de las 22:00, meta nueva, salteado y el JSON del día.
+
+---
 
 ## 7. Registro de cambios
 
