@@ -23,7 +23,7 @@
 
 | B | Fechas | Producto (industria) | Matemática | Programación | Certificación (horas) |
 |---|---|---|---|---|---|
-| 1 | 16 nov 2026 – 15 ene 2027 | Complia Pro (compliance · normas nuevas → cambios por empresa) | CONAMAT Aritmética 1–11 | Python, FastAPI, RAG evaluado, OWASP LLM | — |
+| 1 | 16 nov 2026 – 15 ene 2027 | Portfolio hub (portfolio y servicios · mapa de proyectos en 3D, Trazo como caso y RAG para negocios) | CONAMAT Aritmética 1–11 | Python, FastAPI, RAG evaluado, OWASP LLM | — |
 | 2 | 16 ene 2027 – 15 mar 2027 | Faro (pesca · flota oscura, evidencia firmada) | CONAMAT Álgebra 1–12 | ML clásico, SQL, geodatos | — |
 | 3 | 16 mar 2027 – 15 may 2027 | Lupa (salud · Papanicolaou con celular) | Álgebra 13–17, Geometría y trig. 1–10 | Autograd, CNN, visión médica | — |
 | 4 | 16 may 2027 – 15 jul 2027 | Talud (minería · InSAR y alerta de diques) | Geom. y trig. 11–17, Analítica 1–7 | Docker, redes, OWASP, AWS, InSAR | AWS SAA (~40 h) |
@@ -55,16 +55,16 @@
 
 ## Detalle por bimestre
 
-### B1 · Complia Pro
+### B1 · Portfolio hub
 
-16 nov 2026 – 15 ene 2027 · año 1 (AI Engineer con seguridad) · compliance: normas nuevas → cambios por empresa
+16 nov 2026 – 15 ene 2027 · año 1 (AI Engineer con seguridad) · portfolio y servicios: mapa de proyectos en 3D, Trazo como caso y RAG para negocios
 
 | Semanas | Carril | Ítem | Partes | Horas |
 |---|---|---|---|---|
 | S1 | math | CONAMAT · Aritmética cap. 1 · Números reales | aprender, test |  |
 | S1 | math | CONAMAT · Aritmética cap. 2 · Números enteros | aprender, test |  |
 | S1 | prog | Python | aprender, construir |  |
-| S1–4 | product | Complia Pro · pieza desde cero | construir |  |
+| S1–4 | product | Portfolio hub · pieza desde cero | construir |  |
 | S2 | math | CONAMAT · Aritmética cap. 3 · Teoría de números | aprender, test |  |
 | S2 | prog | FastAPI | aprender, construir |  |
 | S3 | math | CONAMAT · Aritmética cap. 4 · Números racionales | aprender, test |  |
@@ -73,12 +73,12 @@
 | S4 | math | CONAMAT · Aritmética cap. 6 · Potenciación y radicación | aprender, test |  |
 | S4 | prog | OWASP LLM | aprender, construir |  |
 | S5 | math | CONAMAT · Aritmética cap. 7 · Notación científica y logaritmos | aprender, test |  |
-| S5–8 | product | Complia Pro · producto | construir |  |
+| S5–8 | product | Portfolio hub · producto | construir |  |
 | S6 | math | CONAMAT · Aritmética cap. 8 · Razones y proporciones | aprender, test |  |
 | S6 | math | CONAMAT · Aritmética cap. 9 · Sistemas de numeración | aprender, test |  |
 | S7 | math | CONAMAT · Aritmética cap. 10 · Sistema métrico decimal | aprender, test |  |
 | S8 | math | CONAMAT · Aritmética cap. 11 · Razonamiento aritmético | aprender, test |  |
-| S9 | product | Complia Pro · cierre | cerrar |  |
+| S9 | product | Portfolio hub · cierre | cerrar |  |
 
 **Compuertas**
 

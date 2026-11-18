@@ -1,0 +1,133 @@
+import { describe, expect, it } from 'vitest';
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
+import raw from '../../data/plan-extendido.json';
+import { PLAN_EXT, calendario, totalSemanas, validar, type PlanExtendido } from './plan-extendido';
+import { TRAMOS } from './plan';
+
+const copia = () => structuredClone(raw) as unknown as PlanExtendido;
+const bloque = (id: string, d: PlanExtendido = PLAN_EXT) => d.bloques.find((b) => b.id === id)!;
+const nombres = (id: string) => bloque(id).tecnologias!.map((t) => t.nombre);
+const marca = (id: string, n: string) => bloque(id).tecnologias!.find((t) => t.nombre === n);
+
+describe('ola 26 · tecnologías de los proyectos (v2.1)', () => {
+  it('el JSON valida, no cambió ninguna duración y el calendario sigue en 217 semanas', () => {
+    expect(validar(raw)).toEqual([]);
+    expect(totalSemanas(calendario())).toBe(217);
+    expect(PLAN_EXT.bloques.filter((b) => b.tipo === 'proyecto').every((b) => Array.isArray(b.tecnologias))).toBe(true);
+    // El stack ya no vive en data/plan.json: sale de las tecnologías.
+    // (se lee del archivo: el módulo `plan` muta su copia al armar el calendario vivo).
+    const enDisco = JSON.parse(readFileSync(join(__dirname, '../../data/plan.json'), 'utf8')) as { programacion: { tramos: { stack?: string[] }[] } };
+    expect(enDisco.programacion.tramos.some((t) => t.stack)).toBe(false);
+    expect(TRAMOS.find((t) => t.id === 'P1')!.stack).toEqual(nombres('P1'));
+  });
+
+  it('P0: suma la auditoría y refactor de una app generada con IA y el RAG usa un dominio de muestra', () => {
+    expect(nombres('P0').some((n) => /Auditoría y refactor de una app generada con IA/.test(n))).toBe(true);
+    expect(nombres('P0').some((n) => /dominio de muestra/.test(n))).toBe(true);
+    expect(JSON.stringify(raw)).not.toMatch(/\bCompli?A\b|Complia Pro/i);
+    expect(marca('P0', 'portfolio-mcp v0')?.marca).toBe('nueva');
+    expect(bloque('P0').historial).toHaveLength(2);
+  });
+
+  it('P1: LangGraph es la única nueva; evals, cola, conector y SQLite son parte del trabajo; DuckDB y Parquet ya no está', () => {
+    const t = bloque('P1').tecnologias!;
+    expect(t.filter((x) => x.marca === 'nueva').map((x) => x.nombre)).toEqual(['LangGraph (agente analista con herramientas)']);
+    for (const parte of [/^Evals/, /^Cola asíncrona.*RabbitMQ o SQS/, /^Conector a una API de terceros en sandbox/, /^SQLite local/]) expect(t.find((x) => parte.test(x.nombre))?.marca).toBeUndefined();
+    expect(nombres('P1').some((n) => /DuckDB|Parquet/.test(n))).toBe(false);
+    expect(bloque('P1').ficha!.plataforma).toBe('Escritorio (Electron con SQLite local)');
+    expect(bloque('P1').ficha!.tecnologiaNueva).toBe('LangGraph (agente analista con herramientas)');
+    expect(bloque('P1').recortarPrimero).toEqual(['Conector a una API de terceros en sandbox']);
+  });
+
+  it('P2: .NET con FHIR es la nueva, suma Azure, la app de prueba y accesibilidad; vLLM y LoRA ya no está; el gateway en Go sigue', () => {
+    expect(bloque('P2').ficha!.tecnologiaNueva).toBe('.NET con FHIR (C# y ASP.NET Core)');
+    expect(nombres('P2')).toEqual(expect.arrayContaining(['Go', 'Despliegue en Azure con Azure OpenAI', 'App mobile en versión de prueba (TestFlight o Play interno)', 'Revisión de accesibilidad']));
+    expect(nombres('P2').some((n) => /vLLM|LoRA/.test(n))).toBe(false);
+    expect(bloque('P2').recortarPrimero).toEqual(['Revisión de accesibilidad']);
+  });
+
+  it('P3: GraphQL opcional; Rails es la nueva y el resto queda igual', () => {
+    expect(marca('P3', 'GraphQL en el backoffice de Rails')).toMatchObject({ opcional: true });
+    expect(marca('P3', 'GraphQL en el backoffice de Rails')?.marca).toBeUndefined();
+    expect(bloque('P3').ficha!.tecnologiaNueva).toBe('Ruby on Rails');
+    expect(nombres('P3')).toEqual(expect.arrayContaining(['pandas', 'scikit-learn', 'MLflow', 'Gradient boosting y predicción conforme']));
+  });
+
+  it('las movidas aparecen solo en su destino: DuckDB y Parquet en P5 (de P1) y vLLM y LoRA en P8 (de P2)', () => {
+    expect(marca('P5', 'DuckDB y Parquet')).toMatchObject({ marca: 'movida', desde: 'P1' });
+    expect(marca('P8', 'vLLM y LoRA')).toMatchObject({ marca: 'movida', desde: 'P2' });
+    const donde = (n: string) => PLAN_EXT.bloques.filter((b) => b.tecnologias?.some((t) => t.nombre === n)).map((b) => b.id);
+    expect(donde('DuckDB y Parquet')).toEqual(['P5']);
+    expect(donde('vLLM y LoRA')).toEqual(['P8']);
+    // P5 y P8 conservan su tecnología nueva.
+    expect(bloque('P5').ficha!.tecnologiaNueva).toBe('eBPF con Falco');
+    expect(bloque('P8').ficha!.tecnologiaNueva).toBe('garak y PyRIT (si se confirma el reemplazo)');
+  });
+
+  it('los proyectos sin cambios (P4, P6, P7, P9, P10) y las etapas 2, 3 y 4 no tienen historial ni marcas movidas', () => {
+    for (const id of ['P4', 'P6', 'P7', 'P9', 'P10']) expect(bloque(id).historial).toBeUndefined();
+    for (const b of PLAN_EXT.bloques.filter((x) => x.etapa > 1 && x.tipo === 'proyecto')) {
+      expect(b.historial).toBeUndefined();
+      expect(b.tecnologias!.some((t) => t.marca === 'movida')).toBe(false);
+    }
+    expect(PLAN_EXT.bloques.filter((b) => b.historial).map((b) => b.id)).toEqual(['P0', 'P1', 'P2', 'P3', 'P5', 'P8']);
+    for (const b of PLAN_EXT.bloques.filter((x) => x.historial)) for (const h of b.historial!) expect(h).toMatchObject({ fecha: '2026-11-18' });
+  });
+
+  it('descartado por ahora: Django, Supabase, CRM/ERP y APIs de bolsa, con motivo, y no entran a ningún proyecto', () => {
+    expect(PLAN_EXT.descartadas!.map((d) => d.nombre)).toEqual(['Django', 'Supabase', 'CRM/ERP', 'APIs de bolsa']);
+    expect(PLAN_EXT.descartadas!.every((d) => d.motivo.length > 10)).toBe(true);
+    const d = copia();
+    bloque('P1', d).tecnologias!.push({ nombre: 'Supabase para el login' });
+    expect(validar(d).join(' ')).toMatch(/P1: Supabase para el login está descartada por ahora \(Supabase\)/);
+  });
+});
+
+describe('ola 26 · el validador de tecnologías', () => {
+  it('rechaza una tecnología repetida dentro de un proyecto (sin importar mayúsculas ni tildes)', () => {
+    const d = copia();
+    bloque('P3', d).tecnologias!.push({ nombre: 'PANDAS' }, { nombre: 'Incertidumbre' });
+    const e = validar(d);
+    expect(e).toContain('P3: tecnología repetida (PANDAS)');
+    expect(e).toContain('P3: tecnología repetida (Incertidumbre)');
+  });
+
+  it('rechaza más de una tecnología nueva por proyecto', () => {
+    const d = copia();
+    bloque('P1', d).tecnologias!.push({ nombre: 'DuckDB', marca: 'nueva' });
+    expect(validar(d)).toContain('P1: hay 2 tecnologías nuevas y el máximo es una');
+  });
+
+  it('una movida tiene que aparecer solo en su destino: no sigue en el origen ni se repite', () => {
+    const d = copia();
+    bloque('P1', d).tecnologias!.push({ nombre: 'DuckDB y Parquet' });
+    expect(validar(d).join('\n')).toMatch(/P5 · DuckDB y Parquet: es movida y sigue en P1/);
+    const e = copia();
+    bloque('P9', e).tecnologias!.push({ nombre: 'vLLM y LoRA', marca: 'movida', desde: 'P2' });
+    expect(validar(e).join('\n')).toMatch(/vLLM y LoRA: movida en P8 y en P9/);
+    const f = copia();
+    bloque('P5', f).tecnologias!.find((t) => t.marca === 'movida')!.desde = 'P8';
+    expect(validar(f).join('\n')).toMatch(/"desde" \(P8\) tiene que ir antes/);
+    const g = copia();
+    delete bloque('P5', g).tecnologias!.find((t) => t.marca === 'movida')!.desde;
+    expect(validar(g).join('\n')).toMatch(/necesita "desde" con un proyecto que exista/);
+  });
+
+  it('una reusada tiene que venir de un proyecto anterior que la tiene', () => {
+    const d = copia();
+    bloque('P10', d).tecnologias!.push({ nombre: 'Go', marca: 'reusada', desde: 'P2' });
+    expect(validar(d)).toEqual([]);
+    bloque('P10', d).tecnologias!.push({ nombre: 'Rust', marca: 'reusada', desde: 'P2' });
+    expect(validar(d).join('\n')).toMatch(/P10 · Rust: es reusada pero P2 no la tiene/);
+  });
+
+  it('recortarPrimero e historial se validan', () => {
+    const d = copia();
+    bloque('P2', d).recortarPrimero = ['Algo que no está'];
+    bloque('P0', d).historial!.push({ fecha: 'ayer', cambio: '', motivo: 'x' });
+    const e = validar(d).join('\n');
+    expect(e).toMatch(/P2: recortarPrimero menciona Algo que no está/);
+    expect(e).toMatch(/P0: el historial pide fecha AAAA-MM-DD, cambio y motivo/);
+  });
+});

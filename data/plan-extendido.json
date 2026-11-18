@@ -51,7 +51,6 @@
    "extraArquitectura": 0,
    "ficha": {
     "rubro": "portfolio",
-    "tecnologiaNueva": "portfolio-mcp v0",
     "feature": "Portfolio hub con mapa 3D de proyectos y validador de proyectos.json (ids repetidos, referencias rotas y ciclos)",
     "visual": "Mapa 3D de proyectos",
     "pieza": "Ninguna: solo diagnóstico",
@@ -59,7 +58,62 @@
     "perfil": "Sr Full-stack con IA aplicada",
     "plataforma": "PWA instalable y base del monorepo",
     "arquitectura": "Shell de microfrontends (Module Federation)"
-   }
+   },
+   "tecnologias": [
+    {
+     "nombre": "Next.js",
+     "alias": [
+      "nextjs",
+      "next js"
+     ]
+    },
+    {
+     "nombre": "Three.js",
+     "alias": [
+      "threejs",
+      "three js"
+     ]
+    },
+    {
+     "nombre": "RAG para negocios (dominio de muestra con datos sintéticos)",
+     "alias": [
+      "RAG"
+     ]
+    },
+    {
+     "nombre": "MCP"
+    },
+    {
+     "nombre": "ElevenLabs"
+    },
+    {
+     "nombre": "Higgsfield"
+    },
+    {
+     "nombre": "Auditoría y refactor de una app generada con IA (informe de hallazgos y arreglos)",
+     "alias": [
+      "auditoría de código",
+      "code review",
+      "refactor"
+     ]
+    },
+    {
+     "nombre": "portfolio-mcp v0",
+     "marca": "nueva"
+    }
+   ],
+   "historial": [
+    {
+     "fecha": "2026-11-18",
+     "cambio": "Suma el caso de auditoría y refactor de una app generada con IA (informe de hallazgos y arreglos)",
+     "motivo": "Pedido v2.1"
+    },
+    {
+     "fecha": "2026-11-18",
+     "cambio": "El RAG para negocios pasa a otro dominio con datos de muestra",
+     "motivo": "Deja de usar el dominio anterior; pedido v2.1"
+    }
+   ]
   },
   {
    "id": "P1",
@@ -72,17 +126,107 @@
    "extraArquitectura": 0,
    "ficha": {
     "rubro": "petróleo",
-    "tecnologiaNueva": "DuckDB y Parquet",
     "feature": "\"Faro Vaca Muerta\": preguntas en lenguaje natural sobre pozos reales con cita al dato, pozo tipo P10/P50/P90, verificador de cumplimiento y calendario de reportes",
     "visual": "Yacimiento 3D con pozos reales, rama horizontal, etapas de fractura y producción acumulada",
     "pieza": "Percentiles y similitud coseno",
     "referencia": "Respuestas validadas contra el dato oficial de la Secretaría de Energía",
     "validador": "Ingeniero de reservorios o de cumplimiento",
     "perfil": "Full-stack AI Engineer",
-    "plataforma": "Escritorio (Electron)",
+    "plataforma": "Escritorio (Electron con SQLite local)",
     "arquitectura": "2 servicios con contrato OpenAPI, gateway y pruebas de contrato",
     "entregablesArquitectura": true
-   }
+   },
+   "tecnologias": [
+    {
+     "nombre": "Java"
+    },
+    {
+     "nombre": "Spring Boot",
+     "alias": [
+      "spring"
+     ]
+    },
+    {
+     "nombre": "Python"
+    },
+    {
+     "nombre": "RAG"
+    },
+    {
+     "nombre": "Evals (set de preguntas de referencia y métrica de aciertos)",
+     "alias": [
+      "Evals",
+      "evaluaciones de LLM",
+      "LLM evals"
+     ]
+    },
+    {
+     "nombre": "MCP"
+    },
+    {
+     "nombre": "Docker"
+    },
+    {
+     "nombre": "Three.js",
+     "alias": [
+      "threejs",
+      "three js"
+     ]
+    },
+    {
+     "nombre": "LangGraph (agente analista con herramientas)",
+     "marca": "nueva",
+     "alias": [
+      "LangGraph",
+      "LangChain",
+      "agentes"
+     ]
+    },
+    {
+     "nombre": "Cola asíncrona para la ingesta (RabbitMQ o SQS)",
+     "alias": [
+      "RabbitMQ",
+      "SQS",
+      "colas de mensajes",
+      "message queue"
+     ]
+    },
+    {
+     "nombre": "Conector a una API de terceros en sandbox",
+     "alias": [
+      "API de terceros",
+      "integración con APIs",
+      "integraciones con APIs",
+      "REST API"
+     ]
+    },
+    {
+     "nombre": "SQLite local (consola Electron)",
+     "alias": [
+      "SQLite"
+     ]
+    }
+   ],
+   "recortarPrimero": [
+    "Conector a una API de terceros en sandbox"
+   ],
+   "historial": [
+    {
+     "fecha": "2026-11-18",
+     "cambio": "Suma LangGraph (agente analista), evals, cola asíncrona para la ingesta y un conector a una API de terceros en sandbox",
+     "motivo": "Pedido v2.1"
+    },
+    {
+     "fecha": "2026-11-18",
+     "cambio": "LangGraph pasa a ser la tecnología nueva; las demás son parte del trabajo",
+     "motivo": "Una sola tecnología nueva por proyecto"
+    },
+    {
+     "fecha": "2026-11-18",
+     "cambio": "DuckDB y Parquet pasan a P5; la consola Electron usa SQLite local",
+     "motivo": "Pedido v2.1"
+    }
+   ]
   },
   {
    "id": "P2",
@@ -95,16 +239,76 @@
    "extraArquitectura": 0,
    "ficha": {
     "rubro": "medicina",
-    "tecnologiaNueva": ".NET con FHIR; vLLM y LoRA",
     "feature": "Desidentificación de datos clínicos con enmascarado por rol y reporte \"quién accedió a este paciente\"",
     "visual": "Recorrido del dato clínico y qué se enmascara",
     "pieza": "Conteo y k-anonimato",
     "referencia": "Precisión y recall de la detección de datos sensibles en un set sintético; banco de ataques contra herramientas existentes",
     "validador": "Persona de salud digital",
     "perfil": "AI Engineer con seguridad",
-    "plataforma": "Mobile (Expo y React Native)",
+    "plataforma": "Mobile (Expo y React Native), con versión de prueba en TestFlight o Play interno",
     "arquitectura": "Gateway en el borde"
-   }
+   },
+   "tecnologias": [
+    {
+     "nombre": "Go"
+    },
+    {
+     "nombre": "MCP"
+    },
+    {
+     "nombre": "OAuth"
+    },
+    {
+     "nombre": "OWASP LLM Top 10"
+    },
+    {
+     "nombre": "rate limiting"
+    },
+    {
+     "nombre": ".NET con FHIR (C# y ASP.NET Core)",
+     "marca": "nueva",
+     "alias": [
+      ".NET",
+      "dotnet",
+      "C#",
+      "ASP.NET Core",
+      "FHIR"
+     ]
+    },
+    {
+     "nombre": "Despliegue en Azure con Azure OpenAI",
+     "alias": [
+      "Azure",
+      "Azure OpenAI"
+     ]
+    },
+    {
+     "nombre": "App mobile en versión de prueba (TestFlight o Play interno)"
+    },
+    {
+     "nombre": "Revisión de accesibilidad",
+     "alias": [
+      "accesibilidad",
+      "a11y",
+      "WCAG"
+     ]
+    }
+   ],
+   "recortarPrimero": [
+    "Revisión de accesibilidad"
+   ],
+   "historial": [
+    {
+     "fecha": "2026-11-18",
+     "cambio": "Suma despliegue en Azure con Azure OpenAI, la app mobile en versión de prueba (TestFlight o Play interno) y la revisión de accesibilidad",
+     "motivo": "Pedido v2.1"
+    },
+    {
+     "fecha": "2026-11-18",
+     "cambio": "Queda .NET con FHIR (C# y ASP.NET Core) como tecnología nueva; el gateway en Go se mantiene. vLLM y LoRA pasan a P8",
+     "motivo": "Pedido v2.1"
+    }
+   ]
   },
   {
    "id": "W1",
@@ -160,7 +364,6 @@
    ],
    "ficha": {
     "rubro": "agro",
-    "tecnologiaNueva": "Ruby on Rails; gradient boosting y predicción conforme",
     "feature": "Simulador de escenarios por fecha de siembra",
     "visual": "Terreno 3D con mapa de vegetación y zonas",
     "pieza": "Cuantiles y predicción conforme",
@@ -169,7 +372,57 @@
     "perfil": "Applied ML Engineer",
     "plataforma": "Mobile (Expo)",
     "arquitectura": "Monolito modular en Rails, a propósito"
-   }
+   },
+   "tecnologias": [
+    {
+     "nombre": "pandas"
+    },
+    {
+     "nombre": "scikit-learn"
+    },
+    {
+     "nombre": "incertidumbre"
+    },
+    {
+     "nombre": "MLflow"
+    },
+    {
+     "nombre": "Three.js",
+     "alias": [
+      "threejs",
+      "three js"
+     ]
+    },
+    {
+     "nombre": "Ruby on Rails",
+     "marca": "nueva",
+     "alias": [
+      "Rails",
+      "Ruby"
+     ]
+    },
+    {
+     "nombre": "Gradient boosting y predicción conforme",
+     "alias": [
+      "gradient boosting",
+      "XGBoost"
+     ]
+    },
+    {
+     "nombre": "GraphQL en el backoffice de Rails",
+     "opcional": true,
+     "alias": [
+      "GraphQL"
+     ]
+    }
+   ],
+   "historial": [
+    {
+     "fecha": "2026-11-18",
+     "cambio": "Suma GraphQL en el backoffice de Rails (opcional)",
+     "motivo": "Pedido v2.1"
+    }
+   ]
   },
   {
    "id": "C1",
@@ -196,7 +449,6 @@
    "extraArquitectura": 0,
    "ficha": {
     "rubro": "espacio",
-    "tecnologiaNueva": "WebAssembly y estándares CCSDS",
     "feature": "Planificador de pasadas con estimación de calidad de enlace",
     "visual": "Pasadas y visibilidad en 3D",
     "pieza": "Propagación SGP4 de una pasada comparada con la librería",
@@ -204,7 +456,29 @@
     "validador": "Operador de estación terrena o radioaficionado",
     "perfil": "Systems / Ground Software Engineer",
     "plataforma": "AR del cielo con sensores del dispositivo"
-   }
+   },
+   "tecnologias": [
+    {
+     "nombre": "Rust"
+    },
+    {
+     "nombre": "Three.js",
+     "alias": [
+      "threejs",
+      "three js"
+     ]
+    },
+    {
+     "nombre": "telemetría"
+    },
+    {
+     "nombre": "órbitas (SGP4)"
+    },
+    {
+     "nombre": "WebAssembly y estándares CCSDS",
+     "marca": "nueva"
+    }
+   ]
   },
   {
    "id": "P5",
@@ -217,7 +491,6 @@
    "extraArquitectura": 0,
    "ficha": {
     "rubro": "petróleo",
-    "tecnologiaNueva": "eBPF con Falco",
     "feature": "Detección sobre tráfico industrial simulado (Modbus, OPC UA) mapeada a MITRE ATT&CK for ICS, con cada regla y su ataque simulado",
     "visual": "Interior de planta con el equipo afectado y el recorrido del ataque",
     "pieza": "Ajuste de curvas de declinación con intervalos y tasa de falsos positivos",
@@ -227,7 +500,49 @@
     "plataforma": "VR (WebXR)",
     "arquitectura": "Malla de servicios con mTLS (Linkerd o Istio)",
     "entregablesArquitectura": true
-   }
+   },
+   "tecnologias": [
+    {
+     "nombre": "Terraform"
+    },
+    {
+     "nombre": "Kubernetes",
+     "alias": [
+      "k8s"
+     ]
+    },
+    {
+     "nombre": "GitOps"
+    },
+    {
+     "nombre": "SBOM y firmas"
+    },
+    {
+     "nombre": "políticas como código"
+    },
+    {
+     "nombre": "IAM y OIDC"
+    },
+    {
+     "nombre": "detection engineering"
+    },
+    {
+     "nombre": "eBPF con Falco",
+     "marca": "nueva"
+    },
+    {
+     "nombre": "DuckDB y Parquet",
+     "marca": "movida",
+     "desde": "P1"
+    }
+   ],
+   "historial": [
+    {
+     "fecha": "2026-11-18",
+     "cambio": "Suma DuckDB y Parquet, que vienen de P1",
+     "motivo": "Pedido v2.1"
+    }
+   ]
   },
   {
    "id": "C2",
@@ -325,7 +640,6 @@
    ],
    "ficha": {
     "rubro": "aeroespacial",
-    "tecnologiaNueva": "Blender con Python para datos sintéticos",
     "feature": "Informe de inspección automático con el defecto ubicado en el modelo 3D, severidad y cola de revisión humana",
     "visual": "Defectos sobre la aeronave",
     "pieza": "Autograd y backpropagation (regla de la cadena)",
@@ -333,7 +647,32 @@
     "validador": "Ingeniero del rubro",
     "perfil": "ML Engineer (deep learning)",
     "plataforma": "Escritorio (Tauri)"
-   }
+   },
+   "tecnologias": [
+    {
+     "nombre": "PyTorch"
+    },
+    {
+     "nombre": "CNN"
+    },
+    {
+     "nombre": "GPU"
+    },
+    {
+     "nombre": "datos sintéticos"
+    },
+    {
+     "nombre": "Three.js",
+     "alias": [
+      "threejs",
+      "three js"
+     ]
+    },
+    {
+     "nombre": "Blender con Python para datos sintéticos",
+     "marca": "nueva"
+    }
+   ]
   },
   {
    "id": "P7",
@@ -346,7 +685,6 @@
    "extraArquitectura": 0,
    "ficha": {
     "rubro": "agro",
-    "tecnologiaNueva": "PostGIS y STAC",
     "feature": "Zonas de manejo por lote y alerta temprana de estrés de cultivo",
     "visual": "Mapa de estrés por lote",
     "pieza": "PCA y SVD",
@@ -355,7 +693,25 @@
     "perfil": "ML / MLOps Engineer",
     "plataforma": "AR (zonas de manejo sobre el lote)",
     "arquitectura": "Pipeline de reentrenamiento orquestado"
-   }
+   },
+   "tecnologias": [
+    {
+     "nombre": "pipelines"
+    },
+    {
+     "nombre": "registro de modelos"
+    },
+    {
+     "nombre": "serving en K8s"
+    },
+    {
+     "nombre": "drift"
+    },
+    {
+     "nombre": "PostGIS y STAC",
+     "marca": "nueva"
+    }
+   ]
   },
   {
    "id": "C3",
@@ -436,13 +792,51 @@
    "alternativa": "red teaming de agentes",
    "ficha": {
     "rubro": "nuclear",
-    "tecnologiaNueva": "garak y PyRIT (si se confirma el reemplazo)",
     "feature": "Gemelo digital de un reactor simplificado con red team de sensores (modelo educativo); propuesta: laboratorio de red teaming de agentes mapeado a OWASP LLM Top 10",
     "pieza": "Bayes y tasa base",
     "referencia": "Tasa de éxito de ataques por herramienta",
     "validador": "Pentester o analista SOC",
     "perfil": "AI Security Engineer"
-   }
+   },
+   "tecnologias": [
+    {
+     "nombre": "simulación numérica"
+    },
+    {
+     "nombre": "ML adversarial"
+    },
+    {
+     "nombre": "robustez"
+    },
+    {
+     "nombre": "red teaming"
+    },
+    {
+     "nombre": "Three.js",
+     "alias": [
+      "threejs",
+      "three js"
+     ]
+    },
+    {
+     "nombre": "garak y PyRIT",
+     "marca": "nueva",
+     "nota": "si se confirma el reemplazo"
+    },
+    {
+     "nombre": "vLLM y LoRA",
+     "marca": "movida",
+     "desde": "P2",
+     "nota": "atacar un modelo propio y medir evals y guardrails"
+    }
+   ],
+   "historial": [
+    {
+     "fecha": "2026-11-18",
+     "cambio": "Suma vLLM y LoRA, que vienen de P2: atacar un modelo propio y medir evals y guardrails",
+     "motivo": "Pedido v2.1"
+    }
+   ]
   },
   {
    "id": "P9",
@@ -455,7 +849,6 @@
    "extraArquitectura": 0,
    "ficha": {
     "rubro": "aeroespacial",
-    "tecnologiaNueva": "ONNX Runtime y cuantización (si se confirma el reemplazo)",
     "feature": "Modo sin conexión con cola de sincronización y presupuesto de latencia medido",
     "visual": "Latencia y energía en vivo",
     "pieza": "Error de cuantización y su cota",
@@ -463,7 +856,33 @@
     "validador": "Ingeniero del rubro",
     "perfil": "Edge AI Engineer",
     "plataforma": "Mobile (ONNX Runtime Mobile) y AR"
-   }
+   },
+   "tecnologias": [
+    {
+     "nombre": "C++"
+    },
+    {
+     "nombre": "Jetson"
+    },
+    {
+     "nombre": "modelos optimizados"
+    },
+    {
+     "nombre": "simulación"
+    },
+    {
+     "nombre": "Three.js",
+     "alias": [
+      "threejs",
+      "three js"
+     ]
+    },
+    {
+     "nombre": "ONNX Runtime y cuantización",
+     "marca": "nueva",
+     "nota": "si se confirma el reemplazo"
+    }
+   ]
   },
   {
    "id": "P10",
@@ -476,7 +895,6 @@
    "extraArquitectura": 2,
    "ficha": {
     "rubro": "espacio",
-    "tecnologiaNueva": "Kafka y autoencoders",
     "feature": "Triage de anomalías con explicación y priorización para reducir falsas alarmas",
     "visual": "Línea de tiempo de alertas",
     "pieza": "Distribución de errores y probabilidad aplicada a SLO",
@@ -485,7 +903,25 @@
     "perfil": "Senior ML + DevSecOps + Cloud con arquitectura de sistemas distribuidos",
     "arquitectura": "Microservicios completos (Kafka, saga y outbox, mTLS, OpenTelemetry, Pact, ADRs) y microfrontends sobre el shell de P0",
     "entregablesArquitectura": true
-   }
+   },
+   "tecnologias": [
+    {
+     "nombre": "detección de anomalías"
+    },
+    {
+     "nombre": "arquitectura"
+    },
+    {
+     "nombre": "SLO y costos"
+    },
+    {
+     "nombre": "multiempresa"
+    },
+    {
+     "nombre": "Kafka y autoencoders",
+     "marca": "nueva"
+    }
+   ]
   },
   {
    "id": "COL",
@@ -553,7 +989,6 @@
    "perfil": "Security Engineer (cripto y secretos)",
    "ficha": {
     "rubro": "seguridad",
-    "tecnologiaNueva": "Vault y SPIFFE",
     "feature": "Inventario de secretos y escáner de secretos expuestos en repos",
     "pieza": "RSA y curvas elípticas",
     "referencia": "Primitivas de laboratorio comparadas con una biblioteca auditada",
@@ -562,7 +997,13 @@
     "plataforma": "Escritorio (Tauri)",
     "arquitectura": "Identidad de servicios con SPIFFE",
     "entregablesArquitectura": true
-   }
+   },
+   "tecnologias": [
+    {
+     "nombre": "Vault y SPIFFE",
+     "marca": "nueva"
+    }
+   ]
   },
   {
    "id": "S2",
@@ -577,13 +1018,18 @@
    "perfil": "Application Security Engineer",
    "ficha": {
     "rubro": "seguridad",
-    "tecnologiaNueva": "Burp Suite y fuzzing guiado por cobertura",
     "feature": "Cada hallazgo se reprueba solo en CI",
     "pieza": "Lógica y análisis de programas",
     "referencia": "Informe con CVSS de Faro, Escudo y Estación",
     "validador": "Pentester o analista SOC",
     "perfil": "Application Security Engineer"
-   }
+   },
+   "tecnologias": [
+    {
+     "nombre": "Burp Suite y fuzzing guiado por cobertura",
+     "marca": "nueva"
+    }
+   ]
   },
   {
    "id": "C4",
@@ -649,14 +1095,19 @@
    "perfil": "Detection & Response / Cloud Security Engineer",
    "ficha": {
     "rubro": "seguridad",
-    "tecnologiaNueva": "OpenSearch como SIEM y osquery",
     "feature": "Playbooks ejecutables con aprobación humana y medición de tiempo de detección y de respuesta",
     "pieza": "Precisión, recall y costo de falsos positivos",
     "referencia": "Detección como código (Sigma y MITRE ATT&CK) contra un laboratorio propio",
     "validador": "Pentester o analista SOC",
     "perfil": "Detection & Response / Cloud Security Engineer",
     "plataforma": "Mobile (alertas y aprobación de playbooks)"
-   }
+   },
+   "tecnologias": [
+    {
+     "nombre": "OpenSearch como SIEM y osquery",
+     "marca": "nueva"
+    }
+   ]
   },
   {
    "id": "C7",
@@ -739,7 +1190,6 @@
    ],
    "ficha": {
     "rubro": "quant",
-    "tecnologiaNueva": "Polars y Arrow, enlaces PyO3",
     "feature": "Registro de experimentos reproducibles (hash de datos, código y parámetros)",
     "visual": "Superficie parámetros × desempeño",
     "pieza": "Sharpe deflactado y validación purgada",
@@ -747,7 +1197,13 @@
     "validador": "Trader o quant",
     "perfil": "Quant Developer (infraestructura de investigación)",
     "plataforma": "Escritorio (Tauri)"
-   }
+   },
+   "tecnologias": [
+    {
+     "nombre": "Polars y Arrow, enlaces PyO3",
+     "marca": "nueva"
+    }
+   ]
   },
   {
    "id": "Q2",
@@ -764,13 +1220,18 @@
    "alternativa": "réplica de papers",
    "ficha": {
     "rubro": "quant",
-    "tecnologiaNueva": "Quarto",
     "feature": "Propuesta: réplica de 3 papers académicos con el backtester y un informe con las diferencias",
     "pieza": "Inferencia y corrección por comparaciones múltiples",
     "referencia": "Los resultados de los papers originales",
     "validador": "Trader o quant",
     "perfil": "Junior Quant Researcher"
-   }
+   },
+   "tecnologias": [
+    {
+     "nombre": "Quarto",
+     "marca": "nueva"
+    }
+   ]
   },
   {
    "id": "DES3",
@@ -848,7 +1309,8 @@
     "validador": "Trader o quant",
     "perfil": "Quant Developer (valuación y riesgo)",
     "plataforma": "VR (superficie de volatilidad)"
-   }
+   },
+   "tecnologias": []
   },
   {
    "id": "Q4",
@@ -864,14 +1326,19 @@
    ],
    "ficha": {
     "rubro": "quant",
-    "tecnologiaNueva": "Protocolo FIX",
     "feature": "Análisis de costos de transacción (slippage contra VWAP y precio de llegada)",
     "visual": "Libro de órdenes animado",
     "pieza": "Avellaneda–Stoikov y Almgren–Chriss",
     "referencia": "Latencia p99 medida",
     "validador": "Trader o quant",
     "perfil": "Trading Systems Engineer"
-   }
+   },
+   "tecnologias": [
+    {
+     "nombre": "Protocolo FIX",
+     "marca": "nueva"
+    }
+   ]
   },
   {
    "id": "WQ3",
@@ -923,7 +1390,6 @@
    ],
    "ficha": {
     "rubro": "quant",
-    "tecnologiaNueva": ".NET para el gestor de órdenes y riesgo",
     "feature": "Conciliación de posiciones y límites previos a cada orden; solo paper trading, con kill-switch",
     "pieza": "Optimización convexa de portafolio",
     "referencia": "12 semanas o más de paper trading con resultados netos de costos",
@@ -932,7 +1398,13 @@
     "plataforma": "Mobile (aprobación de órdenes y kill-switch con doble factor)",
     "arquitectura": "Componentes en servicios separados: datos, señales, órdenes y riesgo",
     "entregablesArquitectura": true
-   }
+   },
+   "tecnologias": [
+    {
+     "nombre": ".NET para el gestor de órdenes y riesgo",
+     "marca": "nueva"
+    }
+   ]
   },
   {
    "id": "Q6",
@@ -949,13 +1421,18 @@
    "alternativa": "pipeline de datos de mercado",
    "ficha": {
     "rubro": "quant",
-    "tecnologiaNueva": "ClickHouse",
     "feature": "Calidad de datos de mercado: huecos, outliers, ajustes corporativos y linaje",
     "pieza": "Series de tiempo y controles de calidad",
     "referencia": "Replay de datos de mercado contra la fuente",
     "validador": "Trader o quant",
     "perfil": "ML Quant / AI Quant Researcher"
-   }
+   },
+   "tecnologias": [
+    {
+     "nombre": "ClickHouse",
+     "marca": "nueva"
+    }
+   ]
   },
   {
    "id": "CIE3",
@@ -1025,14 +1502,19 @@
    ],
    "ficha": {
     "rubro": "aeroespacial",
-    "tecnologiaNueva": "Julia para contrastar",
     "feature": "Dispersión Monte Carlo con cono de incertidumbre",
     "pieza": "EDOs, RK4 y cuaterniones",
     "referencia": "Validado contra soluciones analíticas",
     "validador": "Ingeniero del rubro",
     "perfil": "Simulation / Flight Dynamics Software Engineer",
     "plataforma": "VR (trayectoria en 3D)"
-   }
+   },
+   "tecnologias": [
+    {
+     "nombre": "Julia para contrastar",
+     "marca": "nueva"
+    }
+   ]
   },
   {
    "id": "WA2",
@@ -1092,14 +1574,19 @@
    ],
    "ficha": {
     "rubro": "aeroespacial",
-    "tecnologiaNueva": "Gmsh y CalculiX para validar",
     "feature": "Verificación de convergencia de malla y reporte de margen",
     "pieza": "Matriz de rigidez de una viga",
     "referencia": "Ejemplos de Beer y Johnston",
     "validador": "Ingeniero del rubro",
     "perfil": "Computational Mechanics / CAE Software Engineer",
     "plataforma": "Escritorio (Tauri)"
-   }
+   },
+   "tecnologias": [
+    {
+     "nombre": "Gmsh y CalculiX para validar",
+     "marca": "nueva"
+    }
+   ]
   },
   {
    "id": "DES4",
@@ -1173,7 +1660,8 @@
     "referencia": "Comparado con OpenFOAM o SU2",
     "validador": "Ingeniero del rubro",
     "perfil": "Aerodynamics / CFD Software Engineer"
-   }
+   },
+   "tecnologias": []
   },
   {
    "id": "WA4",
@@ -1229,14 +1717,19 @@
    ],
    "ficha": {
     "rubro": "aeroespacial",
-    "tecnologiaNueva": "ROS 2 y aprendizaje por refuerzo (solo en simulación)",
     "feature": "Banco de fallas de sensor y GPS con evaluación de modos seguros",
     "pieza": "LQR y Kalman",
     "referencia": "Controlador de dron en PX4 o ArduPilot en simulación",
     "validador": "Ingeniero del rubro",
     "perfil": "GNC Software Engineer",
     "plataforma": "Mobile (estación de control en simulación)"
-   }
+   },
+   "tecnologias": [
+    {
+     "nombre": "ROS 2 y aprendizaje por refuerzo (solo en simulación)",
+     "marca": "nueva"
+    }
+   ]
   },
   {
    "id": "WA5",
@@ -1293,14 +1786,19 @@
    ],
    "ficha": {
     "rubro": "aeroespacial",
-    "tecnologiaNueva": "Orekit (Java)",
     "feature": "Ventanas de comunicación y screening de conjunciones con TLE públicos",
     "pieza": "Kepler, Lambert y Hohmann",
     "referencia": "Comparado con GMAT u Orekit",
     "validador": "Ingeniero del rubro",
     "perfil": "Mission Analysis / Astrodynamics Software Engineer",
     "plataforma": "AR de órbitas"
-   }
+   },
+   "tecnologias": [
+    {
+     "nombre": "Orekit (Java)",
+     "marca": "nueva"
+    }
+   ]
   },
   {
    "id": "A6",
@@ -1322,7 +1820,8 @@
     "referencia": "PR aceptado en un proyecto open source",
     "validador": "Ingeniero del rubro",
     "perfil": "Systems / MDO Engineer"
-   }
+   },
+   "tecnologias": []
   },
   {
    "id": "A7",
@@ -1335,13 +1834,18 @@
    "extraArquitectura": 0,
    "ficha": {
     "rubro": "aeroespacial",
-    "tecnologiaNueva": "RTOS con Rust embebido o Ada/SPARK",
     "feature": "Operador asistido: el agente propone el runbook y el operador aprueba",
     "referencia": "Gemelo digital de misión sobre F Prime o cFS",
     "validador": "Ingeniero del rubro",
     "perfil": "Aerospace Software Engineer",
     "plataforma": "VR (sala de control del operador)"
-   }
+   },
+   "tecnologias": [
+    {
+     "nombre": "RTOS con Rust embebido o Ada/SPARK",
+     "marca": "nueva"
+    }
+   ]
   },
   {
    "id": "CIE4",
@@ -1558,6 +2062,28 @@
   {
    "id": "demanda",
    "texto": "Verificar la demanda de mercado de las tecnologías nuevas (y de microservicios, microfrontends, mobile, VR y AR) contra ofertas reales"
+  }
+ ],
+ "descartadas": [
+  {
+   "nombre": "Django",
+   "motivo": "El backend Python ya lo cubre FastAPI.",
+   "fecha": "2026-11-18"
+  },
+  {
+   "nombre": "Supabase",
+   "motivo": "Postgres, auth y vectores ya están con Spring Security y pgvector.",
+   "fecha": "2026-11-18"
+  },
+  {
+   "nombre": "CRM/ERP",
+   "motivo": "Fuera de los rubros del plan.",
+   "fecha": "2026-11-18"
+  },
+  {
+   "nombre": "APIs de bolsa",
+   "motivo": "La etapa 3 usa paper trading y datos de mercado propios (Q6); el capital real queda detrás de su puerta escrita.",
+   "fecha": "2026-11-18"
   }
  ]
 }

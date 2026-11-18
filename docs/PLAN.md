@@ -5,7 +5,7 @@ Tracker personal de Toti: el día en horas, el estudio con su propio motor de re
 - **Diseño:** [canvas de Trazo](https://claude.ai/artifact/6Cc2E6aW2ViU5ikovpsRTy)
 - **Roadmap de estudio:** [ruta ML + DevSecOps](https://claude.ai/artifact/9PEokku7mBLZdCFJr1zqXP)
 - **Pantallas:** presentación `Trazo-pantallas.pptx` y su ZIP de imágenes (44 pantallas, 8 flujos).
-- **Estado:** olas 0 a 12b hechas y en `main`. Olas 0 a 16c hechas (la 15 quedó absorbida por la 16c). Olas 0 a 25 hechas: el plan de olas de §6 septies quedó completo. Este archivo es la fuente de verdad.
+- **Estado:** olas 0 a 12b hechas y en `main`. Olas 0 a 16c hechas (la 15 quedó absorbida por la 16c). Olas 0 a 26 hechas: el plan de olas de §6 septies y §6 octies quedó completo. Este archivo es la fuente de verdad.
 
 ---
 
@@ -392,6 +392,7 @@ Desde el lunes 16 nov 2026 la prioridad es un trabajo remoto de USD 3.000 a 5.00
 | 23 · Clipping | *Hecha.* Roadmap Clipper de 12 meses (de 0 a USD 10k/mes) con su propio apartado en Metas: plan, registro, cuentas, campañas, retainers, métricas y gráficos, y una UX/UI premium; se integra con Hoy, el mapa y las alertas (§6 sexies, pasos 10 a 12) | Opus 5.5 · alto |
 | 24 · Plan T+18 v2 | *Hecha.* Plataforma extra y arquitectura por proyecto, pausa de fin de año automática (con switch), P8 en 2 semanas, alerta de versión de examen, calibración con horas reales y escenarios (§6 septies, pasos 13 a 15) | Opus 5.5 · alto |
 | 25 · Hoy editable | *Hecha.* Borrar y editar submetas, dar un bloque por hecho aunque queden submetas, cambiar horarios del día, sumar metas nuevas y saltear bloques (§6 septies, pasos 16 y 17) | Sonnet 5.5 · medio |
+| 26 · Tecnologías v2.1 | *Hecha.* Cada proyecto lleva sus tecnologías con marca (nueva, reusada o movida), historial y lo que se recorta primero; cambios de P0, P1, P2, P3, P5 y P8; Complia Pro fuera del roadmap viejo y tabla de demanda con vacantes cargadas (§6 octies, pasos 18 y 19) | Sonnet 5.5 · medio |
 
 ## 6 bis. Olas 9 a 12: mejoras de uso
 
@@ -1103,6 +1104,33 @@ No dependen una de la otra: la 25 puede ir antes si Hoy molesta en el día a dí
 - **Saltear hoy** un bloque: no cuenta en la mejora y queda marcado como salteado.
 - "Ahora toca", el foco, los avisos y el JSON del día siguen los horarios nuevos.
 - *Tests:* borrar y editar submetas, bloque hecho a mano y mejora, correr y acortar con el tope de las 22:00, meta nueva, salteado y el JSON del día.
+
+---
+
+## 6 octies. Ola 26: tecnologías de los proyectos (v2.1)
+
+Pedido del 2026-11-18, sobre el prompt v2 ya aplicado. El texto está en `docs/prompts/plan-t18-extendido-v2.1.md`. **No cambia fechas ni duraciones: solo el contenido de los proyectos** (un test confirma que el calendario sigue en 217 semanas). Un PR, dos pasos.
+
+**Paso 18 · Modelo de datos y cambios**
+- **Una sola fuente:** cada proyecto de `data/plan-extendido.json` tiene `tecnologias` (nombre, marca `nueva` / `reusada` / `movida`, `desde`, `alias`, `opcional`, `nota`), `historial` (fecha, cambio y motivo) y `recortarPrimero`. La ficha (`tecnologiaNueva`) y el stack de `plan.json` se derivan de ahí; el `stack` salió de `plan.json`. Lo que no lleva marca es "parte del trabajo del proyecto"; los pares de la v2 ("PostGIS y STAC") quedan como un solo ítem.
+- **Validador** (`validarTecnologias`): sin tecnologías repetidas dentro de un proyecto (sin importar mayúsculas ni tildes), una sola nueva por proyecto, las movidas solo en su destino (no siguen en el origen ni aparecen dos veces, y `desde` es un proyecto anterior), las reusadas vienen de un proyecto anterior que las tiene, `recortarPrimero` apunta a tecnologías del proyecto, historial con fecha y motivo, y nada de lo descartado se cuela.
+- **P0** suma la auditoría y refactor de una app generada con IA; el RAG para negocios pasa a un dominio de muestra con datos sintéticos. **P1:** LangGraph es la nueva; suma evals, cola asíncrona (RabbitMQ o SQS), conector a una API de terceros en sandbox y SQLite local en Electron; DuckDB y Parquet salen. **P2:** .NET con FHIR (C# y ASP.NET Core) es la nueva; suma Azure con Azure OpenAI, la app mobile en versión de prueba y la revisión de accesibilidad; vLLM y LoRA salen. **P3:** GraphQL opcional. **P5:** recibe DuckDB y Parquet (movida de P1). **P8:** recibe vLLM y LoRA (movida de P2). P4, P6, P7, P9, P10 y las etapas 2 a 4 no cambian.
+- **Recortes** si P1 o P2 se pasan de horas: primero la revisión de accesibilidad (P2) y el conector de terceros (P1).
+- **Descartado por ahora** (`descartadas`): Django, Supabase, CRM/ERP y APIs de bolsa, cada uno con su motivo.
+- **Complia Pro** sale también del `roadmap.json` viejo, de `bimesters.json` y de `bimesters.ts`: el producto del bimestre 1 pasa a ser el Portfolio hub (docs/ROADMAP.md regenerado).
+- Pantallas: Estudio → Programación → proyecto → *Stack y tecnología nueva* muestra la nueva, las movidas (con su origen), lo opcional, lo que se recorta primero y el historial.
+
+**Paso 19 · Tabla de demanda** (`#/estudio/prog/demanda`, desde Estudio → Programación)
+- Columnas: tecnología, vacantes que la piden, proyecto que la cubre y fecha estimada (el cierre de ese proyecto con tus extras). Una tecnología la cubre el primer proyecto que la tiene; una movida, su destino.
+- **Cargar vacantes** pegando **texto** (una por bloque separado por `---`; la primera línea es el rol; una línea `Stack: a, b` suma lo que diga; el resto se busca entre las tecnologías del plan) o **JSON** (`{"tipo":"vacantes","lista":[{"rol","empresa","stack":[…],"texto"}]}`, una lista o una sola). Se validan con el mensaje de qué vacante y qué campo falla, y no se carga nada si algo falla. "Deshacer" en el aviso y borrado por vacante.
+- **No hay datos de mercado:** arranca vacía y solo cuenta lo que cargues. Lo que una vacante pide y el plan no cubre queda "sin proyecto". Las tecnologías del plan que nadie pidió van en una sección aparte. Una vacante cuenta una vez por tecnología; un alias ambiguo no cuenta para dos tecnologías, y los nombres cortos ("Go", "C#", "SQS") distinguen mayúsculas.
+- Estado: `plan.vacantes` (aditivo: lo guardado sigue igual).
+
+**Lo que quedó pendiente (a tu decisión)**
+- El dominio del RAG de P0: dice "dominio de muestra con datos sintéticos"; falta elegir cuál.
+- La decisión "reemplazos" sigue abierta: P8 como "red teaming de agentes" (con garak y PyRIT) está propuesto, no confirmado. vLLM y LoRA en P8 supone esa versión.
+- El texto de P2 dice "modelo local opcional" (venía con vLLM y LoRA): queda como estaba hasta que lo definas.
+- `reusada` está implementada y validada pero no se usó: ningún proyecto la lleva todavía.
 
 ---
 

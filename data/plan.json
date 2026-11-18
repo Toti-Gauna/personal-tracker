@@ -75,15 +75,7 @@
     "hasta": 2,
     "tipo": "proyecto",
     "nombre": "Consolidación",
-    "que": "Portfolio hub, mapa de proyectos en 3D, Trazo como caso, RAG para negocios, 3 automatizaciones, portfolio-mcp v0 y tráiler",
-    "stack": [
-     "Next.js",
-     "Three.js",
-     "RAG",
-     "MCP",
-     "ElevenLabs",
-     "Higgsfield"
-    ],
+    "que": "Portfolio hub, mapa de proyectos en 3D, Trazo como caso, RAG para negocios con un dominio de muestra, auditoría y refactor de una app generada con IA, 3 automatizaciones, portfolio-mcp v0 y tráiler",
     "perfil": "Sr Full-stack con IA aplicada",
     "meta": 2,
     "tope": 3
@@ -97,16 +89,7 @@
     "version": "v1",
     "industria": "petróleo",
     "producto": "faro",
-    "que": "API en Spring Boot y servicio RAG en Python sobre normativa de operadoras, con cita exacta, tasa de error medida, MCP y visor 3D de la instalación",
-    "stack": [
-     "Java",
-     "Spring Boot",
-     "Python",
-     "RAG y evals",
-     "MCP",
-     "Docker",
-     "Three.js"
-    ],
+    "que": "API en Spring Boot y servicio RAG en Python sobre normativa de operadoras, con cita exacta, tasa de error medida, agente analista con LangGraph, evals, cola asíncrona para la ingesta, MCP y visor 3D de la instalación",
     "perfil": "Full-stack AI Engineer",
     "meta": 3,
     "tope": 4
@@ -119,13 +102,6 @@
     "nombre": "Escudo",
     "industria": "medicina",
     "que": "Gateway en Go que protege datos de pacientes, con acceso por rol, auditoría, modelo local opcional y banco de ataques",
-    "stack": [
-     "Go",
-     "MCP",
-     "OAuth",
-     "OWASP LLM Top 10",
-     "rate limiting"
-    ],
     "perfil": "AI Engineer con seguridad",
     "meta": 3,
     "tope": 4
@@ -149,13 +125,6 @@
     "industria": "agro",
     "producto": "surco",
     "que": "Predicción de rinde por lote con rango de confianza y visor 3D del terreno",
-    "stack": [
-     "pandas",
-     "scikit-learn",
-     "incertidumbre",
-     "MLflow",
-     "Three.js"
-    ],
     "perfil": "Applied ML Engineer",
     "meta": 3,
     "tope": 4
@@ -181,12 +150,6 @@
     "industria": "espacio",
     "producto": "estacion",
     "que": "Ingesta y decodificación de telemetría satelital en Rust, visor 3D de pasadas",
-    "stack": [
-     "Rust",
-     "Three.js",
-     "telemetría",
-     "órbitas (SGP4)"
-    ],
     "perfil": "Systems / Ground Software Engineer",
     "meta": 4,
     "tope": 5
@@ -201,15 +164,6 @@
     "industria": "petróleo",
     "producto": "faro",
     "que": "Plataforma endurecida: Kubernetes, GitOps, firmas y SBOM, IAM con mínimo privilegio (OIDC), detección de intrusos sobre logs mapeada a MITRE ATT&CK",
-    "stack": [
-     "Terraform",
-     "Kubernetes",
-     "GitOps",
-     "SBOM y firmas",
-     "políticas como código",
-     "IAM y OIDC",
-     "detection engineering"
-    ],
     "perfil": "DevSecOps / Cloud Security Engineer",
     "meta": 2,
     "tope": 3
@@ -244,13 +198,6 @@
     "industria": "aeroespacial",
     "producto": "lupa",
     "que": "Inspección de superficies de aeronaves con imágenes sintéticas 3D; autograd desde cero",
-    "stack": [
-     "PyTorch",
-     "CNN",
-     "GPU",
-     "datos sintéticos",
-     "Three.js"
-    ],
     "perfil": "ML Engineer (deep learning)",
     "meta": 4,
     "tope": 5
@@ -265,12 +212,6 @@
     "industria": "agro",
     "producto": "surco",
     "que": "MLOps: Sentinel-2, reentrenamiento por campaña, drift y mapa 3D",
-    "stack": [
-     "pipelines",
-     "registro de modelos",
-     "serving en K8s",
-     "drift"
-    ],
     "perfil": "ML / MLOps Engineer",
     "meta": 2,
     "tope": 3
@@ -303,13 +244,6 @@
     "nombre": "Núcleo",
     "industria": "nuclear",
     "que": "Gemelo digital educativo de un reactor (cinética puntual), anomalías en sensores y red team",
-    "stack": [
-     "simulación numérica",
-     "ML adversarial",
-     "robustez",
-     "red teaming",
-     "Three.js"
-    ],
     "perfil": "AI Security Engineer",
     "meta": 2,
     "tope": 3
@@ -324,13 +258,6 @@
     "industria": "aeroespacial",
     "producto": "lupa",
     "que": "El mismo modelo en el borde (C++ y Jetson), en un dron dentro de un simulador 3D",
-    "stack": [
-     "C++",
-     "Jetson",
-     "modelos optimizados",
-     "simulación",
-     "Three.js"
-    ],
     "perfil": "Edge AI Engineer",
     "meta": 3,
     "tope": 4
@@ -345,12 +272,6 @@
     "industria": "espacio",
     "producto": "estacion",
     "que": "Anomalías en telemetría con datos de NASA (SMAP y MSL) y plataforma multiempresa con SLO",
-    "stack": [
-     "detección de anomalías",
-     "arquitectura",
-     "SLO y costos",
-     "multiempresa"
-    ],
     "perfil": "Senior ML + DevSecOps + Cloud",
     "meta": 4,
     "tope": 5

@@ -70,7 +70,7 @@ export const DEFAULT_ACTIVITIES: Activity[] = [
     // no entra en el día, pero lo que ya estudiaste y sus repasos siguen.
     id: 'prog-b1', title: 'Python y FastAPI', front: 'prog', type: 'curso', perSession: 1, total: 7, unit: 'unidades',
     days: TODOS, block: 'prog', engine: true, progress: 0, units: PROG_B1, unitLabel: 'Unidad', testMode: 'app', area: 'programacion', archivada: true,
-    final: { title: 'Complia Pro', desc: 'El producto del bimestre publicado, con README en inglés y demo de 2 minutos.' },
+    final: { title: 'Portfolio hub', desc: 'El producto del bimestre publicado, con README en inglés y demo de 2 minutos.' },
   },
   {
     id: 'make-it-stick', title: 'Make It Stick', front: 'lectura', type: 'lectura', perSession: 20, total: 313, unit: 'págs',

@@ -8,7 +8,7 @@ const items = bims.flatMap((b) => b.items);
 
 /** La tabla del plan: producto (industria) | matemática | programación | certificación (horas). */
 const TABLA: [number, string, string, string, string, [string, number, boolean] | null][] = [
-  [1, 'Complia Pro', 'compliance', 'CONAMAT Aritmética 1–11', 'Python, FastAPI, RAG evaluado, OWASP LLM', null],
+  [1, 'Portfolio hub', 'portfolio y servicios', 'CONAMAT Aritmética 1–11', 'Python, FastAPI, RAG evaluado, OWASP LLM', null],
   [2, 'Faro', 'pesca', 'CONAMAT Álgebra 1–12', 'ML clásico, SQL, geodatos', null],
   [3, 'Lupa', 'salud', 'Álgebra 13–17, Geometría y trig. 1–10', 'Autograd, CNN, visión médica', null],
   [4, 'Talud', 'minería', 'Geom. y trig. 11–17, Analítica 1–7', 'Docker, redes, OWASP, AWS, InSAR', ['AWS SAA', 40, false]],

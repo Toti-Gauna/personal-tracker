@@ -40,6 +40,11 @@ export interface BloqueExt {
   habilita?: string;
   /** Ola 16c: ficha de un proyecto, matemática de una ventana y datos de una certificación. */
   ficha?: Ficha;
+  /** Ola 26 (v2.1): las tecnologías del proyecto, cada una con su marca, y su historial de cambios. */
+  tecnologias?: Tecnologia[];
+  historial?: CambioProyecto[];
+  /** Si el proyecto se pasa de horas: lo que se recorta primero, en este orden (nombres de `tecnologias`). */
+  recortarPrimero?: string[];
   mate?: MateTramo;
   cert?: CertInfo;
 }
@@ -64,6 +69,26 @@ export interface Ficha {
   /** Lleva el checklist de arquitectura (contrato probado, trazas, mTLS y ADR): P1, P5, P10, S1 y Q5. */
   entregablesArquitectura?: boolean;
 }
+
+/**
+ * Ola 26 · una tecnología de un proyecto. Sin marca: parte del trabajo del proyecto. `nueva`: la que
+ * se aprende ahí (una por proyecto como máximo). `reusada`: viene de un proyecto anterior (`desde`).
+ * `movida`: cambió de proyecto y aparece solo en su destino (`desde` es de dónde salió).
+ */
+export type MarcaTecnologia = 'nueva' | 'reusada' | 'movida';
+export const MARCAS: MarcaTecnologia[] = ['nueva', 'reusada', 'movida'];
+export interface Tecnologia {
+  nombre: string;
+  marca?: MarcaTecnologia;
+  /** reusada o movida: el proyecto de origen. */
+  desde?: string;
+  /** Otros nombres con los que aparece en una vacante ("k8s" para Kubernetes). */
+  alias?: string[];
+  opcional?: boolean;
+  nota?: string;
+}
+export interface CambioProyecto { fecha: string; cambio: string; motivo: string }
+export interface Descartada { nombre: string; motivo: string; fecha: string }
 
 /** Rol de un libro de refuerzo: se abre según el tipo de error. */
 export type RolRefuerzo = 'intuicion' | 'banco' | 'duro' | 'curso';
@@ -126,6 +151,8 @@ export interface PlanExtendido {
   perfilesHito: { despues: string; perfil: string; nota: string }[];
   /** Decisiones abiertas: flags editables, no se resuelven en el código. */
   decisiones: { id: string; texto: string; fecha?: string }[];
+  /** Ola 26: tecnologías que se pidieron y se dejaron afuera "por ahora", con el motivo. */
+  descartadas?: Descartada[];
 }
 
 // ——— validación ———
@@ -196,6 +223,7 @@ export function validar(doc: unknown): string[] {
     if (b.tipo === 'cert' && !b.cert) err.push(`${b.id}: certificación sin datos (costo y verificación)`);
     if (b.cert?.requiere && !pos.has(b.cert.requiere)) err.push(`${b.id}: requiere una certificación que no existe (${b.cert.requiere})`);
   }
+  validarTecnologias(bloques, pos, d?.descartadas ?? [], err);
   for (const p of d?.perfilesHito ?? []) if (!pos.has(p.despues)) err.push(`perfil "${p.perfil}": el bloque ${p.despues} no existe`);
 
   // Sumas por etapa.
@@ -215,9 +243,62 @@ export function validar(doc: unknown): string[] {
   return err;
 }
 
+const norm = (x: string) => x.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().trim();
+const FECHA = /^\d{4}-\d{2}-\d{2}$/;
+
+/**
+ * Ola 26 · valida las tecnologías de los proyectos: sin repetidas dentro de un proyecto, una sola
+ * "nueva", las "movidas" solo en su destino (no siguen en el proyecto de origen ni aparecen dos
+ * veces), las "reusadas" vienen de un proyecto anterior que la tiene, y lo descartado no se cuela.
+ */
+export function validarTecnologias(bloques: BloqueExt[], pos: Map<string, number>, descartadas: Descartada[], err: string[]) {
+  const movidas = new Map<string, string>();
+  for (const b of bloques) {
+    if (b.tipo !== 'proyecto') { if (b.tecnologias?.length) err.push(`${b.id}: solo un proyecto lleva tecnologías`); continue; }
+    if (!Array.isArray(b.tecnologias)) { err.push(`${b.id}: falta la lista de tecnologías`); continue; }
+    const vistas = new Set<string>();
+    let nuevas = 0;
+    for (const t of b.tecnologias) {
+      const k = norm(t.nombre ?? '');
+      if (!k) { err.push(`${b.id}: tecnología sin nombre`); continue; }
+      if (vistas.has(k)) err.push(`${b.id}: tecnología repetida (${t.nombre})`);
+      vistas.add(k);
+      if (t.marca && !MARCAS.includes(t.marca)) err.push(`${b.id} · ${t.nombre}: marca desconocida (${t.marca})`);
+      if (t.marca === 'nueva') nuevas++;
+      if (t.marca === 'nueva' && t.desde) err.push(`${b.id} · ${t.nombre}: una nueva no tiene "desde"`);
+      if (t.marca === 'movida' || t.marca === 'reusada') {
+        const j = t.desde ? pos.get(t.desde) : undefined;
+        const origen = j == null ? undefined : bloques[j];
+        if (!t.desde || !origen || origen.tipo !== 'proyecto') err.push(`${b.id} · ${t.nombre}: "${t.marca}" necesita "desde" con un proyecto que exista`);
+        else if (j! >= pos.get(b.id)!) err.push(`${b.id} · ${t.nombre}: "desde" (${t.desde}) tiene que ir antes`);
+        else {
+          const enOrigen = origen.tecnologias?.some((o) => norm(o.nombre) === k);
+          if (t.marca === 'movida' && enOrigen) err.push(`${b.id} · ${t.nombre}: es movida y sigue en ${t.desde} (tiene que aparecer solo en su destino)`);
+          if (t.marca === 'reusada' && !enOrigen) err.push(`${b.id} · ${t.nombre}: es reusada pero ${t.desde} no la tiene`);
+        }
+      }
+      if (t.marca === 'movida') {
+        if (movidas.has(k)) err.push(`${t.nombre}: movida en ${movidas.get(k)} y en ${b.id} (solo en su destino)`);
+        movidas.set(k, b.id);
+      }
+      for (const d of descartadas) if (norm(d.nombre) && k.includes(norm(d.nombre))) err.push(`${b.id}: ${t.nombre} está descartada por ahora (${d.nombre})`);
+    }
+    if (nuevas > 1) err.push(`${b.id}: hay ${nuevas} tecnologías nuevas y el máximo es una`);
+    for (const r of b.recortarPrimero ?? []) if (!vistas.has(norm(r))) err.push(`${b.id}: recortarPrimero menciona ${r}, que no está en sus tecnologías`);
+    for (const h of b.historial ?? []) if (!FECHA.test(h.fecha) || !h.cambio || !h.motivo) err.push(`${b.id}: el historial pide fecha AAAA-MM-DD, cambio y motivo`);
+  }
+  for (const d of descartadas) if (!d.nombre || !d.motivo || !FECHA.test(d.fecha)) err.push(`descartada ${d.nombre || '(sin nombre)'}: pide nombre, motivo y fecha`);
+}
+
 const doc = raw as unknown as PlanExtendido;
 const problemas = validar(doc);
 if (problemas.length) console.error('data/plan-extendido.json tiene problemas:\n' + problemas.join('\n'));
+
+// La tecnología nueva de la ficha sale de la lista (una sola fuente): "garak y PyRIT (si se confirma el reemplazo)".
+for (const b of doc.bloques) {
+  const n = b.tecnologias?.find((t) => t.marca === 'nueva');
+  if (b.ficha && n) b.ficha.tecnologiaNueva = `${n.nombre}${n.nota ? ` (${n.nota})` : ''}`;
+}
 
 export const PLAN_EXT: PlanExtendido = doc;
 export const T0_EXT = doc.t0;

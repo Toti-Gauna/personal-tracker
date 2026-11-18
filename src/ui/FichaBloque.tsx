@@ -5,6 +5,7 @@ import { setExtraBloque, setVersionCert, tildarSalida, toggleArquitectura, toggl
 import { alertaVersion, avanceSalida, calendarioCompleto, salidaDe } from '../data/plan-vistas';
 import { useStore } from '../state/store';
 import { Casilla } from './Casilla';
+import { Plegable } from './Plegable';
 
 /** Ficha del plan extendido (ola 16c): lo que hace distinto a un proyecto, una certificación o una ventana. */
 export function FichaBloque({ id }: { id: string }) {
@@ -13,7 +14,7 @@ export function FichaBloque({ id }: { id: string }) {
   const f = b.ficha;
   const filas: [string, string | undefined][] = f ? [
     ['Rubro', f.rubro], ['Feature diferencial', f.feature], ['Tecnología nueva', f.tecnologiaNueva], ['Visual', f.visual],
-    ['Pieza matemática hecha a mano', f.pieza], ['Plataforma extra', f.plataforma], ['Arquitectura', f.arquitectura], ['Referencia externa', f.referencia], ['Quién lo valida', f.validador], ['Perfil al cerrar', f.perfil],
+    ['Pieza matemática hecha a mano', f.pieza], ['Plataforma extra', f.plataforma], ['Arquitectura', f.arquitectura], ['Referencia externa', f.referencia], ['Quién lo valida', f.validador], ['Se recorta primero si te pasás de horas', b.recortarPrimero?.join(' y ')], ['Perfil al cerrar', f.perfil],
   ] : [];
   return (
     <>
@@ -189,5 +190,45 @@ export function VersionExamen({ id, date, t0 }: { id: string; date: string; t0: 
       </label>
       {alerta ? <p className="pp-alerta-version" role="status"><b>{alerta.titulo}</b> {alerta.texto}</p> : elegida ? <p className="sub">La {vs.find((v) => v.id === elegida)?.nombre} llega a tu examen ({fm(b.fin)}).</p> : null}
     </section>
+  );
+}
+
+// ——— Ola 26 · tecnologías de un proyecto (v2.1) ———
+
+const MARCA_TXT = { nueva: 'nueva', reusada: 'reusada', movida: 'movida' } as const;
+const fh = (d: string) => `${Number(d.slice(8))}/${d.slice(5, 7)}/${d.slice(0, 4)}`;
+
+/** Las tecnologías de un proyecto con su marca (nueva, reusada o movida), lo que se recorta primero y su historial. */
+export function TecnologiasProyecto({ id }: { id: string }) {
+  const b = bloqueExtPorId(id);
+  const tec = b?.tecnologias ?? [];
+  if (!b || !tec.length) return <p className="sub">Este bloque no suma tecnología nueva.</p>;
+  const marcadas = tec.filter((t) => t.marca);
+  const trabajo = tec.filter((t) => !t.marca);
+  return (
+    <>
+      {marcadas.length > 0 && (
+        <ul className="tec-lista">
+          {marcadas.map((t) => (
+            <li key={t.nombre} className={`tec-${t.marca}`}>
+              <span className="etiqueta tec-marca">{MARCA_TXT[t.marca!]}{t.desde ? ` · de ${t.desde}` : ''}</span>
+              <b>{t.nombre}</b>
+              {t.nota && <small className="sub">{t.nota}</small>}
+            </li>
+          ))}
+        </ul>
+      )}
+      {marcadas.length > 0 && <p className="sub">Una tecnología nueva por proyecto como máximo, y ninguna en bloques con certificación.</p>}
+      <section className="re-sec">
+        <span className="etiqueta">Parte del trabajo</span>
+        <div className="pp-chips">{trabajo.map((t) => <span key={t.nombre} className={`mono${t.opcional ? ' opcional' : ''}`}>{t.nombre}{t.opcional ? ' · opcional' : ''}</span>)}</div>
+      </section>
+      {b.recortarPrimero?.length ? <p className="sub">Si {id} se pasa de horas, se recorta primero: <b>{b.recortarPrimero.join(' y ')}</b>.</p> : null}
+      {b.historial?.length ? (
+        <Plegable id={`tec:${id}:historial`} titulo="Historial de cambios" resumen={`${b.historial.length} ${b.historial.length === 1 ? 'cambio' : 'cambios'}`}>
+          <ol className="tec-hist">{b.historial.map((h, i) => <li key={i}><span className="mono sub">{fh(h.fecha)}</span><span>{h.cambio}<small className="sub"> · {h.motivo}</small></span></li>)}</ol>
+        </Plegable>
+      ) : null}
+    </>
   );
 }

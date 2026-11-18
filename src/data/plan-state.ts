@@ -99,6 +99,8 @@ export interface PlanState {
   pausaFinDeAnio?: boolean;
   /** Ola 24: versión de examen elegida por certificación (C2 → "SY0-801"). */
   versionCert?: Record<string, string>;
+  /** Ola 26: las vacantes que cargaste (tabla de demanda). Solo cuenta lo que cargues: no hay datos de mercado. */
+  vacantes?: import('./demanda').Vacante[];
   /** Ola 24: checklist de arquitectura por proyecto (contrato, trazas, mtls, adr). */
   arquitectura?: Record<string, Partial<Record<'contrato' | 'trazas' | 'mtls' | 'adr', boolean>>>;
   /** Meta "Mapa de proyectos del portfolio": 4 pasos (Trazo guarda la meta; el diseño es tuyo). */

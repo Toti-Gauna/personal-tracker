@@ -114,9 +114,9 @@
    "start": "2026-11-16",
    "end": "2027-01-15",
    "product": {
-    "name": "Complia Pro",
-    "industry": "compliance",
-    "pitch": "normas nuevas → cambios por empresa"
+    "name": "Portfolio hub",
+    "industry": "portfolio y servicios",
+    "pitch": "mapa de proyectos en 3D, Trazo como caso y RAG para negocios"
    },
    "summary": {
     "math": "CONAMAT Aritmética 1–11",
@@ -332,7 +332,7 @@
     {
      "id": "b1-pieza",
      "lane": "product",
-     "title": "Complia Pro · pieza desde cero",
+     "title": "Portfolio hub · pieza desde cero",
      "weeks": [
       1,
       4
@@ -344,7 +344,7 @@
     {
      "id": "b1-producto",
      "lane": "product",
-     "title": "Complia Pro · producto",
+     "title": "Portfolio hub · producto",
      "weeks": [
       5,
       8
@@ -356,7 +356,7 @@
     {
      "id": "b1-cierre",
      "lane": "product",
-     "title": "Complia Pro · cierre",
+     "title": "Portfolio hub · cierre",
      "weeks": [
       9,
       9
