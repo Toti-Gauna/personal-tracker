@@ -102,7 +102,8 @@ export function lineaEtapas(hoy: string, t0 = T0_PLAN): EtapaVista[] {
   return PLAN_EXT.etapas.map((e) => {
     const bs = cal.filter((b) => b.etapa === e.n && b.semanas > 0).map((b) => ({ ...b, estado: estadoEn(b, hoy) }));
     const inicio = bs[0].inicio;
-    const fin = bs[bs.length - 1].fin;
+    // Una pausa que parte el último bloque va después en la lista: el fin es el mayor.
+    const fin = bs.reduce((m, b) => (b.fin > m ? b.fin : m), bs[0].fin);
     return { n: e.n, nombre: e.nombre, perfil: e.perfil, inicio, fin, semanas: bs.reduce((s, b) => s + b.semanas, 0), bloques: bs, estado: estadoEn({ inicio, fin }, hoy) };
   });
 }
@@ -159,6 +160,8 @@ export function alertas(hoy: string, plan: PlanState, t0 = T0_PLAN, clipping?: C
     if (a) out.push(a);
   }
   for (const d of PLAN_EXT.decisiones) {
+    // La de Security+ ya la dice la alerta de versión (con lo que sirve para tu fecha de examen).
+    if (d.id === 'secplus' && out.some((a) => a.id === 'ver-C2')) continue;
     if (d.fecha && d.fecha >= hoy && daysBetween(hoy, d.fecha) <= 14) out.push({ id: `dec-${d.id}`, tipo: 'decision', fecha: d.fecha, titulo: `Decisión el ${fmt(d.fecha)}`, texto: d.texto });
   }
   // Ola 21: exámenes de idiomas, trimestres y tesis anual.

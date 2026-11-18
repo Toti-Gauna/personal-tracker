@@ -112,7 +112,10 @@ describe('etapas, hoy sos y alertas', () => {
 
   it('alertas: la decisión de Security+, una certificación que se acerca y una ventana que cierra', () => {
     const a = alertas('2026-11-16', emptyPlan(), T0);
-    expect(a.find((x) => x.tipo === 'decision')).toMatchObject({ titulo: 'Decisión el 22 nov 2026' });
+    // Ola 24: la decisión de Security+ la dice la alerta de versión; con la versión elegida, vuelve la de la decisión.
+    expect(a.find((x) => x.id === 'ver-C2')).toMatchObject({ titulo: 'Decisión el 22 nov 2026: versión de CompTIA Security+' });
+    expect(a.some((x) => x.id === 'dec-secplus')).toBe(false);
+    expect(alertas('2026-11-16', { ...emptyPlan(), versionCert: { C2: 'SY0-801' } }, T0).find((x) => x.tipo === 'decision')).toMatchObject({ titulo: 'Decisión el 22 nov 2026' });
     const c1 = alertas('2027-03-08', emptyPlan(), T0).find((x) => x.id === 'cert-C1')!;
     expect(c1.texto).toMatch(/Costo sin verificar/);
     expect(alertas('2027-03-08', emptyPlan(), T0).find((x) => x.id === 'vent-W1')).toMatchObject({ titulo: 'W1 cierra el 14 mar 2027' });

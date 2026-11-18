@@ -51,6 +51,18 @@ export function apagarExtras(claves: string[]) {
   update((p) => ({ ...p, extrasApagados: [...new Set([...(p.extrasApagados ?? []), ...claves])].sort() }));
 }
 
+/** Ola 24: prende o apaga un tipo de extra en todos los proyectos que lo tienen (plataformas o arquitectura). */
+export function setTodosExtra(tipo: Exclude<TipoExtra, 'feature'>, prendido: boolean, ids: string[]) {
+  update((p) => {
+    const set = new Set(p.extrasApagados ?? []);
+    for (const id of ids) {
+      if (prendido) set.delete(`${id}:${tipo}`);
+      else set.add(`${id}:${tipo}`);
+    }
+    return { ...p, extrasApagados: [...set].sort() };
+  });
+}
+
 /** Ola 24: prende o apaga la pausa de fin de año automática. */
 export function setPausaFinDeAnio(prendida: boolean) {
   update((p) => ({ ...p, pausaFinDeAnio: prendida }));

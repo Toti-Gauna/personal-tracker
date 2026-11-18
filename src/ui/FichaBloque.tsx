@@ -1,8 +1,8 @@
 import { EVIDENCIAS, evidenciaCompleta } from '../data/plan-state';
 import { bloqueExtPorId } from '../data/plan-extendido';
 import { RAMA_COLOR } from '../data/ramas';
-import { tildarSalida, toggleEvidencia } from '../state/plan';
-import { avanceSalida, salidaDe } from '../data/plan-vistas';
+import { setExtraBloque, setVersionCert, tildarSalida, toggleArquitectura, toggleEvidencia, type TipoExtra } from '../state/plan';
+import { alertaVersion, avanceSalida, calendarioCompleto, salidaDe } from '../data/plan-vistas';
 import { useStore } from '../state/store';
 import { Casilla } from './Casilla';
 
@@ -13,7 +13,7 @@ export function FichaBloque({ id }: { id: string }) {
   const f = b.ficha;
   const filas: [string, string | undefined][] = f ? [
     ['Rubro', f.rubro], ['Feature diferencial', f.feature], ['Tecnología nueva', f.tecnologiaNueva], ['Visual', f.visual],
-    ['Pieza matemática hecha a mano', f.pieza], ['Referencia externa', f.referencia], ['Quién lo valida', f.validador], ['Perfil al cerrar', f.perfil],
+    ['Pieza matemática hecha a mano', f.pieza], ['Plataforma extra', f.plataforma], ['Arquitectura', f.arquitectura], ['Referencia externa', f.referencia], ['Quién lo valida', f.validador], ['Perfil al cerrar', f.perfil],
   ] : [];
   return (
     <>
@@ -101,6 +101,93 @@ export function NivelSalida({ id }: { id: string }) {
           : examen && examen.puntaje >= 85 ? `Puerta aprobada por el test (${examen.puntaje} %), pero te ${av.total - av.hechos === 1 ? 'falta 1 criterio' : `faltan ${av.total - av.hechos} criterios`} de salida: repasalos antes del proyecto.`
           : 'Tildá cada criterio cuando lo puedas hacer sin ayuda; con todos, hacé el test de la puerta (85 %).'}
       </p>
+    </section>
+  );
+}
+
+// ——— Ola 24 · plan T+18 v2 ———
+
+const ARQ: [('contrato' | 'trazas' | 'mtls' | 'adr'), string, string][] = [
+  ['contrato', 'Contrato probado', 'OpenAPI o eventos con pruebas de contrato (Pact) en CI.'],
+  ['trazas', 'Trazas distribuidas', 'OpenTelemetry de punta a punta entre servicios.'],
+  ['mtls', 'mTLS entre servicios', 'Identidad de cada servicio y tráfico cifrado adentro.'],
+  ['adr', 'ADR de la división', 'Por qué se divide (escala, equipos o aislamiento) y por qué no un monolito modular.'],
+];
+
+/** Checklist de arquitectura (P1, P5, P10, S1 y Q5): contrato probado, trazas, mTLS y ADR. */
+export function ArquitecturaProyecto({ id }: { id: string }) {
+  const hechos = useStore((s) => s.plan.arquitectura?.[id]) ?? {};
+  const b = bloqueExtPorId(id);
+  return (
+    <section>
+      <p className="sub">{b?.ficha?.arquitectura}. Microservicios con criterio: se divide cuando hay una razón; todo servicio lleva contrato probado, trazas y mTLS.</p>
+      <ul className="pp-capas">
+        {ARQ.map(([k, nombre, texto]) => (
+          <li key={k}>
+            <Casilla checked={!!hechos[k]} label={`${nombre}: marcar`} onChange={() => toggleArquitectura(id, k)} />
+            <div><b className={hechos[k] ? 'resaltado' : ''} style={{ ['--c' as string]: RAMA_COLOR.programacion }}>{nombre}</b><p className="sub">{texto}</p></div>
+          </li>
+        ))}
+      </ul>
+    </section>
+  );
+}
+
+export const avanceArquitectura = (h: Partial<Record<string, boolean>> | undefined) => ARQ.filter(([k]) => h?.[k]).length;
+
+const MES = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'];
+const fm = (d: string) => `${Number(d.slice(8))} ${MES[Number(d.slice(5, 7)) - 1]} ${d.slice(0, 4)}`;
+
+/** Las tres semanas extra de un proyecto (feature, plataforma y arquitectura), cada una con su switch. */
+export function ExtrasProyecto({ id, t0 }: { id: string; t0: string }) {
+  useStore((s) => s.plan.extrasApagados);
+  useStore((s) => s.plan.pausaFinDeAnio);
+  const b = calendarioCompleto(t0).find((x) => x.id === id);
+  if (!b || b.tipo !== 'proyecto') return null;
+  const filas: [TipoExtra, string, number, number, string | undefined][] = [
+    ['feature', 'Feature diferencial', b.extra, b.extraAplicado, b.ficha?.feature],
+    ['plataforma', 'Plataforma extra', b.extraPlataforma, b.plataformaAplicada, b.ficha?.plataforma],
+    ['arquitectura', 'Arquitectura', b.extraArquitectura, b.arquitecturaAplicada, b.ficha?.arquitectura],
+  ];
+  const posibles = filas.filter(([, , p]) => p > 0);
+  if (!posibles.length) return <p className="sub">Sin semanas extra: {b.base} semanas{b.pausasDentro.length ? ' más la pausa de fin de año' : ''}.</p>;
+  return (
+    <section>
+      <ul className="aj-extras pp-extras">
+        {posibles.map(([tipo, nombre, posible, aplicada, que]) => (
+          <li key={tipo}>
+            <span><b>{nombre}</b><small className="sub"> · +{posible} sem{que ? ` · ${que}` : ''}</small></span>
+            <button role="switch" className="switch" aria-checked={aplicada > 0} aria-label={`${nombre} de ${id}`} onClick={() => setExtraBloque(id, !(aplicada > 0), tipo)} />
+          </li>
+        ))}
+      </ul>
+      <p className="sub mono">{b.base} base{b.extraAplicado ? ` + ${b.extraAplicado} feature` : ''}{b.plataformaAplicada ? ` + ${b.plataformaAplicada} plataforma` : ''}{b.arquitecturaAplicada ? ` + ${b.arquitecturaAplicada} arquitectura` : ''} = {b.semanas} semanas{b.pausasDentro.length ? ' (más la pausa de fin de año, que lo parte)' : ''} · cierra el {fm(b.fin)}</p>
+      <p className="sub">Si falta tiempo se recorta alcance y la feature primero; nunca tests, seguridad, revisiones, repasos, sueño ni entrenamiento.</p>
+    </section>
+  );
+}
+
+/** Versión del examen de una certificación (Security+): elegirla y ver si se retira antes del examen. */
+export function VersionExamen({ id, date, t0 }: { id: string; date: string; t0: string }) {
+  const plan = useStore((s) => s.plan);
+  const b = calendarioCompleto(t0).find((x) => x.id === id);
+  const vs = b?.cert?.versiones;
+  if (!b || !vs?.length) return null;
+  const alerta = alertaVersion(b, plan, date);
+  const elegida = plan.versionCert?.[id] ?? '';
+  return (
+    <section className="pp-ficha">
+      <div className="etiqueta pp-sec">Versión del examen</div>
+      <ul className="pp-versiones">
+        {vs.map((v) => <li key={v.id} className={v.retiro && v.retiro < b.fin ? 'retirada' : ''}><b>{v.nombre}</b><span className="mono sub">{v.retiro ? `se retira el ${fm(v.retiro)}` : v.sale ? `sale cerca del ${fm(v.sale)}` : ''}</span></li>)}
+      </ul>
+      <label className="pp-version">Elegida
+        <select className="campo-texto" value={elegida} onChange={(e) => setVersionCert(id, e.target.value)}>
+          <option value="">Sin elegir</option>
+          {vs.map((v) => <option key={v.id} value={v.id}>{v.nombre}</option>)}
+        </select>
+      </label>
+      {alerta ? <p className="pp-alerta-version" role="status"><b>{alerta.titulo}</b> {alerta.texto}</p> : elegida ? <p className="sub">La {vs.find((v) => v.id === elegida)?.nombre} llega a tu examen ({fm(b.fin)}).</p> : null}
     </section>
   );
 }

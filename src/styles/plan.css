@@ -372,3 +372,16 @@
 @media (min-width: 720px) {
   .mapa-detalle, .app.con-mini .mapa-detalle { bottom: 16px; }
 }
+
+/* Ola 24 · plan v2: semanas extra, versión de examen y pausa. */
+.pp-extras { margin: 4px 0 10px; }
+.pp-versiones { list-style: none; margin: 0 0 10px; padding: 0; display: grid; gap: 6px; }
+.pp-versiones li { display: grid; gap: 1px; }
+.pp-versiones li .mono { font-size: 12.5px; }
+.pp-versiones li.retirada b { text-decoration: line-through; color: var(--sub); }
+.pp-version { display: grid; gap: 4px; font-size: 13px; color: var(--sub); max-width: 320px; }
+.pp-alerta-version { margin: 10px 0 0; padding: 10px 12px; border: 1px solid var(--rutina); border-radius: 10px; font-size: 14.5px; }
+.pp-alerta-version b { display: block; margin-bottom: 2px; }
+.pp-extras { list-style: none; padding: 0; }
+.pp-extras li { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 8px 0; border-top: 1px solid var(--linea); }
+.pp-extras li span { min-width: 0; }
