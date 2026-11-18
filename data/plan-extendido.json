@@ -61,13 +61,24 @@
    },
    "tecnologias": [
     {
-     "nombre": "Next.js"
+     "nombre": "Next.js",
+     "alias": [
+      "nextjs",
+      "next js"
+     ]
     },
     {
-     "nombre": "Three.js"
+     "nombre": "Three.js",
+     "alias": [
+      "threejs",
+      "three js"
+     ]
     },
     {
-     "nombre": "RAG para negocios (dominio de muestra con datos sintéticos)"
+     "nombre": "RAG para negocios (dominio de muestra con datos sintéticos)",
+     "alias": [
+      "RAG"
+     ]
     },
     {
      "nombre": "MCP"
@@ -79,7 +90,12 @@
      "nombre": "Higgsfield"
     },
     {
-     "nombre": "Auditoría y refactor de una app generada con IA (informe de hallazgos y arreglos)"
+     "nombre": "Auditoría y refactor de una app generada con IA (informe de hallazgos y arreglos)",
+     "alias": [
+      "auditoría de código",
+      "code review",
+      "refactor"
+     ]
     },
     {
      "nombre": "portfolio-mcp v0",
@@ -125,7 +141,10 @@
      "nombre": "Java"
     },
     {
-     "nombre": "Spring Boot"
+     "nombre": "Spring Boot",
+     "alias": [
+      "spring"
+     ]
     },
     {
      "nombre": "Python"
@@ -134,7 +153,12 @@
      "nombre": "RAG"
     },
     {
-     "nombre": "Evals (set de preguntas de referencia y métrica de aciertos)"
+     "nombre": "Evals (set de preguntas de referencia y métrica de aciertos)",
+     "alias": [
+      "Evals",
+      "evaluaciones de LLM",
+      "LLM evals"
+     ]
     },
     {
      "nombre": "MCP"
@@ -143,20 +167,44 @@
      "nombre": "Docker"
     },
     {
-     "nombre": "Three.js"
+     "nombre": "Three.js",
+     "alias": [
+      "threejs",
+      "three js"
+     ]
     },
     {
      "nombre": "LangGraph (agente analista con herramientas)",
-     "marca": "nueva"
+     "marca": "nueva",
+     "alias": [
+      "LangGraph",
+      "LangChain",
+      "agentes"
+     ]
     },
     {
-     "nombre": "Cola asíncrona para la ingesta (RabbitMQ o SQS)"
+     "nombre": "Cola asíncrona para la ingesta (RabbitMQ o SQS)",
+     "alias": [
+      "RabbitMQ",
+      "SQS",
+      "colas de mensajes",
+      "message queue"
+     ]
     },
     {
-     "nombre": "Conector a una API de terceros en sandbox"
+     "nombre": "Conector a una API de terceros en sandbox",
+     "alias": [
+      "API de terceros",
+      "integración con APIs",
+      "integraciones con APIs",
+      "REST API"
+     ]
     },
     {
-     "nombre": "SQLite local (consola Electron)"
+     "nombre": "SQLite local (consola Electron)",
+     "alias": [
+      "SQLite"
+     ]
     }
    ],
    "recortarPrimero": [
@@ -218,16 +266,32 @@
     },
     {
      "nombre": ".NET con FHIR (C# y ASP.NET Core)",
-     "marca": "nueva"
+     "marca": "nueva",
+     "alias": [
+      ".NET",
+      "dotnet",
+      "C#",
+      "ASP.NET Core",
+      "FHIR"
+     ]
     },
     {
-     "nombre": "Despliegue en Azure con Azure OpenAI"
+     "nombre": "Despliegue en Azure con Azure OpenAI",
+     "alias": [
+      "Azure",
+      "Azure OpenAI"
+     ]
     },
     {
      "nombre": "App mobile en versión de prueba (TestFlight o Play interno)"
     },
     {
-     "nombre": "Revisión de accesibilidad"
+     "nombre": "Revisión de accesibilidad",
+     "alias": [
+      "accesibilidad",
+      "a11y",
+      "WCAG"
+     ]
     }
    ],
    "recortarPrimero": [
@@ -323,18 +387,33 @@
      "nombre": "MLflow"
     },
     {
-     "nombre": "Three.js"
+     "nombre": "Three.js",
+     "alias": [
+      "threejs",
+      "three js"
+     ]
     },
     {
      "nombre": "Ruby on Rails",
-     "marca": "nueva"
+     "marca": "nueva",
+     "alias": [
+      "Rails",
+      "Ruby"
+     ]
     },
     {
-     "nombre": "Gradient boosting y predicción conforme"
+     "nombre": "Gradient boosting y predicción conforme",
+     "alias": [
+      "gradient boosting",
+      "XGBoost"
+     ]
     },
     {
      "nombre": "GraphQL en el backoffice de Rails",
-     "opcional": true
+     "opcional": true,
+     "alias": [
+      "GraphQL"
+     ]
     }
    ],
    "historial": [
@@ -383,7 +462,11 @@
      "nombre": "Rust"
     },
     {
-     "nombre": "Three.js"
+     "nombre": "Three.js",
+     "alias": [
+      "threejs",
+      "three js"
+     ]
     },
     {
      "nombre": "telemetría"
@@ -423,7 +506,10 @@
      "nombre": "Terraform"
     },
     {
-     "nombre": "Kubernetes"
+     "nombre": "Kubernetes",
+     "alias": [
+      "k8s"
+     ]
     },
     {
      "nombre": "GitOps"
@@ -576,7 +662,11 @@
      "nombre": "datos sintéticos"
     },
     {
-     "nombre": "Three.js"
+     "nombre": "Three.js",
+     "alias": [
+      "threejs",
+      "three js"
+     ]
     },
     {
      "nombre": "Blender con Python para datos sintéticos",
@@ -722,7 +812,11 @@
      "nombre": "red teaming"
     },
     {
-     "nombre": "Three.js"
+     "nombre": "Three.js",
+     "alias": [
+      "threejs",
+      "three js"
+     ]
     },
     {
      "nombre": "garak y PyRIT",
@@ -777,7 +871,11 @@
      "nombre": "simulación"
     },
     {
-     "nombre": "Three.js"
+     "nombre": "Three.js",
+     "alias": [
+      "threejs",
+      "three js"
+     ]
     },
     {
      "nombre": "ONNX Runtime y cuantización",

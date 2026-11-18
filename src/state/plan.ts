@@ -2,6 +2,7 @@
 import { PLAN, semanaDelPlan, type Capa, type Entrevista, type EventoRama, type MetaGenerada, type Postulacion } from '../data/plan';
 import { proyectoVacio, type Evidencia, type HandyxSemana, type Importacion, type PlanSettings, type PlanState, type TipoError } from '../data/plan-state';
 import { newId } from '../data/schedule';
+import type { Vacante } from '../data/demanda';
 import { addDays, parseDate } from '../data/time';
 import type { Rama } from '../data/types';
 import { getState, setState } from './store';
@@ -76,6 +77,22 @@ export function setVersionCert(cert: string, version: string) {
     else delete v[cert];
     return { ...p, versionCert: v };
   });
+}
+
+/** Ola 26: suma vacantes a la tabla de demanda. Devuelve los ids (para deshacer). */
+export function cargarVacantes(nuevas: Omit<Vacante, 'id'>[]): string[] {
+  const ids = nuevas.map(() => `v${newId()}`);
+  update((p) => ({ ...p, vacantes: [...(p.vacantes ?? []), ...nuevas.map((v, i) => ({ ...v, id: ids[i] }))] }));
+  return ids;
+}
+
+export function borrarVacantes(ids: string[]) {
+  update((p) => ({ ...p, vacantes: (p.vacantes ?? []).filter((v) => !ids.includes(v.id)) }));
+}
+
+/** Vuelve a poner vacantes borradas (el "Deshacer" del aviso). */
+export function restaurarVacantes(v: Vacante[]) {
+  update((p) => ({ ...p, vacantes: [...(p.vacantes ?? []).filter((x) => !v.some((y) => y.id === x.id)), ...v] }));
 }
 
 /** Ola 24: tilda o destilda un entregable de arquitectura de un proyecto. */

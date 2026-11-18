@@ -81,3 +81,23 @@
 .pp-chips .opcional { border-style: dashed; color: var(--sub); }
 .tec-hist { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; font-size: 14.5px; }
 .tec-hist li { display: grid; grid-template-columns: 82px minmax(0, 1fr); gap: 8px; }
+
+/* Ola 26 · demanda */
+.demanda .re-sec { margin-bottom: 18px; }
+.dem-texto { min-height: 120px; font-family: var(--font-mono); font-size: 16px; }
+.dem-json { margin: 6px 0 0; padding: 10px 12px; border: 1px solid var(--linea); border-radius: 10px; font: 12.5px var(--font-mono); overflow-x: auto; white-space: pre; }
+.dem-errores { color: var(--rutina); font-size: 14px; padding-left: 18px; margin: 4px 0; }
+.dem-avisos { font-size: 13.5px; padding-left: 18px; margin: 4px 0; }
+.dem-vacio { padding: 14px; border: 1px dashed var(--linea); border-radius: 12px; }
+.dem-tabla { overflow-x: auto; margin: 8px 0; }
+.dem-tabla table { width: 100%; border-collapse: collapse; font-size: 14.5px; }
+.dem-tabla th[scope='col'] { text-align: left; font: 11px var(--font-mono); letter-spacing: 0.06em; text-transform: uppercase; color: var(--sub); padding: 6px 8px 6px 0; border-bottom: 1px solid var(--tinta); white-space: nowrap; }
+.dem-tabla th[scope='row'] { text-align: left; font-weight: 500; padding: 10px 8px 10px 0; overflow-wrap: anywhere; }
+.dem-tabla td { padding: 10px 8px 10px 0; vertical-align: top; }
+.dem-tabla tr { border-bottom: 1px solid var(--linea); }
+.dem-tabla tr.sin-proyecto th { color: var(--rutina); }
+.dem-lista { list-style: none; margin: 0; padding: 0; display: grid; }
+.dem-lista li { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--linea); }
+.dem-lista li > span { display: grid; gap: 2px; min-width: 0; }
+.dem-lista small { font-size: 12.5px; overflow-wrap: anywhere; }
+.dem-lista button { min-height: 44px; flex: none; }
