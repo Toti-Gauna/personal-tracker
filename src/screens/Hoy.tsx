@@ -15,6 +15,8 @@ import { colorDeBloque, etiquetaDeBloque, tituloDeBloque } from '../data/etiquet
 import { AvisosRamas, SumarPlan } from '../ui/PlanBits';
 import { HojaSubmeta } from '../ui/HojaSubmeta';
 import { HojaClip } from '../ui/HojaClip';
+import { HojaHecho, HojaHorario, HojaMetaNueva } from '../ui/HojasDia';
+import { deshacerHecho, quitarMetaPropia, saltear } from '../state/dia';
 import { Tareas } from '../ui/Tareas';
 import { useNow } from '../ui/useNow';
 import '../styles/hoy.css';
@@ -51,8 +53,10 @@ export function Hoy({ day }: { day: DayLog }) {
   const train = useStore((s) => s.train);
   const plan = useStore((s) => s.plan);
   const now = nowMin(new Date(useNow(30000)));
-  const cur = currentBlock(day.blocks, now);
-  const upcoming = day.blocks.find((b) => toMin(b.start) > now);
+  // Ola 25: los salteados no cuentan para "Ahora toca".
+  const activos = day.blocks.filter((b) => !b.salteado);
+  const cur = currentBlock(activos, now);
+  const upcoming = activos.find((b) => toMin(b.start) > now);
   const lista = useRef<HTMLOListElement>(null);
   // Entrada: las filas aparecen escalonadas y la regla de horas baja hasta su lugar.
   useLayoutEffect(() => {
@@ -72,6 +76,9 @@ export function Hoy({ day }: { day: DayLog }) {
   // La meta numerada a la que se le agregan submetas (sus tareas).
   const [subDe, setSubDe] = useState<string | null>(null);
   const [hojaClip, setHojaClip] = useState(false);
+  // Ola 25: hojas para editar el día (dar por hecho, horario, meta nueva).
+  const [hojaDia, setHojaDia] = useState<{ tipo: 'hecho' | 'horario'; key: string } | 'nueva' | null>(null);
+  const bloqueHoja = hojaDia && hojaDia !== 'nueva' ? day.blocks.find((x) => x.key === hojaDia.key) : undefined;
   const bloqueSub = subDe ? day.blocks.find((x) => x.key === subDe) : undefined;
 
   const tareas = day.blocks.flatMap((b) => b.tasks);
@@ -89,7 +96,7 @@ export function Hoy({ day }: { day: DayLog }) {
       <Marca date={day.date} plan />
       <header>
         <h1 className="titulo">Hoy</h1>
-        <p>{fmtFecha(day.date)}, día {String(n).padStart(2, '0')} de {bim.name}. {frase(day.blocks, now)}</p>
+        <p>{fmtFecha(day.date)}, día {String(n).padStart(2, '0')} de {bim.name}. {frase(activos, now)}</p>
       </header>
 
       <div className="dia-avance" aria-label={`${hechas} de ${tareas.length} tareas`}>
@@ -137,7 +144,7 @@ export function Hoy({ day }: { day: DayLog }) {
           return (
             <li
               key={b.key}
-              className={`meta${abiertaEsta ? ' abierta' : ''}${blockDone(b) ? ' hecha' : ''}${activa ? ' activa' : ''}${tag ? ' con-rama' : ''}`}
+              className={`meta${abiertaEsta ? ' abierta' : ''}${blockDone(b) ? ' hecha' : ''}${activa ? ' activa' : ''}${tag ? ' con-rama' : ''}${b.salteado ? ' salteada' : ''}`}
               style={{ ['--c' as string]: color }}
             >
               <button className="meta-fila" aria-expanded={abiertaEsta} onClick={() => setAbierta(abiertaEsta ? null : b.key)}>
@@ -149,12 +156,20 @@ export function Hoy({ day }: { day: DayLog }) {
                 </span>
                 <span className="meta-cont mono" aria-label={`${done} de ${b.tasks.length} tareas`}>{done}/{b.tasks.length}</span>
               </button>
-              {tag && <span className={`meta-rama mono${b.rama ? '' : ' sin'}`}>↳ {tag}</span>}
+              {tag && <span className={`meta-rama mono${b.rama ? '' : ' sin'}`}>↳ {b.salteado ? 'salteado hoy · ' : b.hecho ? 'hecho a mano · ' : ''}{tag}</span>}
               {abiertaEsta && (
                 <div className="meta-det">
                   <div className="kicker">{estado(b, now)}</div>
                   <Tareas date={day.date} block={b} />
                   <button type="button" className="sub-add" aria-label={`Agregar submeta a ${tituloDeBloque(b, day.date, settings.startDate)}`} onClick={() => setSubDe(b.key)}>+ Agregar submeta</button>
+                  {b.hecho && <p className="meta-hecho sub">Hecho a mano a las {b.hecho.at}{b.hecho.nota ? `: ${b.hecho.nota}` : ''} · <button type="button" className="subrayado" onClick={() => deshacerHecho(day.date, b.key)}>Deshacer</button></p>}
+                  <div className="meta-acciones">
+                    {!b.hecho && !b.salteado && !blockDone(b) && <button type="button" onClick={() => setHojaDia({ tipo: 'hecho', key: b.key })}>Dar por hecho</button>}
+                    {b.key !== 'sueno' && <button type="button" onClick={() => setHojaDia({ tipo: 'horario', key: b.key })}>Cambiar horario</button>}
+                    {b.propia
+                      ? <button type="button" onClick={() => quitarMetaPropia(day.date, b.key)}>Quitar de hoy</button>
+                      : <button type="button" onClick={() => saltear(day.date, b.key, !b.salteado)}>{b.salteado ? 'Volver a hoy' : 'Saltear hoy'}</button>}
+                  </div>
                   {b.key === 'clipping' && <button className="btn-borde btn-registrar" onClick={() => setHojaClip(true)}>Registrar clips y views</button>}
                   {b.focus !== false && <button className="btn-foco" onClick={() => ir(destino)}>
                     {b.kind === 'entreno' ? (entrenando ? 'Volver al entreno' : entrenado ? 'Ver el entreno de hoy' : hoyRut ? `Entrar en foco · ${hoyRut.name}` : 'Entrar en foco · entreno') : enFoco ? 'Volver al foco' : act ? 'Entrar en foco · sesión de estudio' : 'Entrar en foco'}
@@ -165,6 +180,11 @@ export function Hoy({ day }: { day: DayLog }) {
           );
         })}
       </ol>
+
+      <button type="button" className="meta-nueva-hoy" onClick={() => setHojaDia('nueva')}>+ Meta para hoy</button>
+      {hojaDia === 'nueva' && <HojaMetaNueva date={day.date} onCerrar={() => setHojaDia(null)} />}
+      {bloqueHoja && hojaDia !== 'nueva' && hojaDia?.tipo === 'hecho' && <HojaHecho date={day.date} block={bloqueHoja} onCerrar={() => setHojaDia(null)} />}
+      {bloqueHoja && hojaDia !== 'nueva' && hojaDia?.tipo === 'horario' && <HojaHorario date={day.date} block={bloqueHoja} onCerrar={() => setHojaDia(null)} />}
 
       <SumarPlan date={day.date} />
       {hojaClip && <HojaClip date={day.date} onCerrar={() => setHojaClip(false)} />}

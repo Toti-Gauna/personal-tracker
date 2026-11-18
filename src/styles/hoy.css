@@ -158,3 +158,11 @@
 .rutina-hora { font-size: 26px; }
 .rutina-op .sub { font-size: 13px; }
 .meta-det .btn-registrar { border-color: var(--c); color: var(--tinta); }
+
+/* Ola 25 · Hoy editable */
+.meta-acciones { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0 2px; }
+.meta-acciones button { min-height: 40px; padding: 0 14px; border: 1px solid var(--linea); border-radius: 999px; font-size: 14px; color: var(--tinta); }
+.meta-hecho { margin: 10px 0 0; font-size: 14px; }
+.meta.salteada .meta-nombre { text-decoration: line-through; color: var(--sub); }
+.meta.salteada .meta-check { opacity: 0.4; }
+.meta-nueva-hoy { display: block; width: 100%; min-height: 52px; margin: 14px 0 6px; border: 1px dashed var(--linea); border-radius: 10px; color: var(--sub); font-size: 15px; }

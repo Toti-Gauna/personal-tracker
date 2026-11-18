@@ -39,7 +39,8 @@ export function Cierre({ day }: { day: DayLog }) {
   const acum = mejoraAcumulada(days, day.date);
   const ultimos = [-2, -1, 0].map((i) => addDays(day.date, i)).filter((d) => days[d]).map((d) => ({ d, m: mejoraDia(days[d]) }));
   const max = Math.max(1, ...ultimos.map((x) => x.m));
-  const pendientes = day.blocks.flatMap((b) => b.tasks.filter((t) => !t.done).map((t) => ({ ...t, block: b.title })));
+  // Ola 25: lo de un bloque dado por hecho, salteado o sumado hoy no pasa a mañana.
+  const pendientes = day.blocks.filter((b) => !b.hecho && !b.salteado && !b.propia).flatMap((b) => b.tasks.filter((t) => !t.done).map((t) => ({ ...t, block: b.title })));
   const [pasar, setPasar] = useState<Set<string>>(() => new Set(pendientes.map((t) => t.id)));
   // Del estudio salen la victoria (un test aprobado hoy) y lo primero de mañana (lo que vence).
   const [sug] = useState(() => cierreSugerido(getState().study, day.date));
