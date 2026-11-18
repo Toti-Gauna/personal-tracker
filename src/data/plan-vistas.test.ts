@@ -45,7 +45,7 @@ describe('matemática: un solo roadmap (absorbe la ola 15)', () => {
     expect(r.map((x) => x.id)).toEqual(['m1', 'W1', 'm2', 'W2', 'm3', 'W3', 'm4', 'W4', 'm5', 'WQ1', 'WQ2', 'WQ3', 'WA1', 'WA2', 'WA3', 'WA4', 'WA5']);
     for (let i = 1; i < r.length; i++) expect(r[i].inicio > r[i - 1].fin).toBe(true);
     expect(r[0]).toMatchObject({ tipo: 'diario', inicio: '2026-11-16', perfil: 'Aritmético', principal: ['CONAMAT Aritmética y Álgebra'] });
-    expect(r.find((x) => x.id === 'W1')).toMatchObject({ inicio: '2027-02-01', fin: '2027-02-21', habilita: ['P3'], perfil: 'Algebraico' });
+    expect(r.find((x) => x.id === 'W1')).toMatchObject({ inicio: '2027-02-22', fin: '2027-03-14', habilita: ['P3'], perfil: 'Algebraico' });
     expect(r.find((x) => x.id === 'WA5')).toMatchObject({ etapa: 4, habilita: ['A5', 'A6'] });
   });
 
@@ -73,19 +73,34 @@ describe('matemática: un solo roadmap (absorbe la ola 15)', () => {
   it('hoy sos / vas a ser en matemática; una ventana sin la puerta aprobada no cuenta', () => {
     const r = rutaMate(T0);
     expect(perfilMate(r, '2026-11-20', emptyPlan())).toMatchObject({ sos: null, vasASer: 'Aritmético' });
-    expect(perfilMate(r, '2027-03-02', emptyPlan())).toMatchObject({ sos: 'Aritmético', vasASer: 'Precalculista' });
-    const p = { ...emptyPlan(), proyectos: { W1: { ...proyectoVacio(), examen: { fecha: '2027-02-27', puntaje: 88 } } } };
-    expect(perfilMate(r, '2027-03-02', p).sos).toBe('Algebraico');
+    expect(perfilMate(r, '2027-03-16', emptyPlan())).toMatchObject({ sos: 'Aritmético', vasASer: 'Precalculista' });
+    const p = { ...emptyPlan(), proyectos: { W1: { ...proyectoVacio(), examen: { fecha: '2027-03-13', puntaje: 88 } } } };
+    expect(perfilMate(r, '2027-03-16', p).sos).toBe('Algebraico');
     expect(estadoEn(r[0], '2026-11-16')).toBe('actual');
   });
 });
 
+describe('ola 24 · alerta de versión de examen (Security+)', () => {
+  it('sin elegir, avisa que la SY0-701 en inglés ya está retirada para el examen de jul 2027; con la 801 no avisa', () => {
+    const a = alertas('2026-11-18', emptyPlan(), T0).find((x) => x.id === 'ver-C2')!;
+    expect(a).toMatchObject({ tipo: 'cert', titulo: 'Decisión el 22 nov 2026: versión de CompTIA Security+' });
+    expect(a.texto).toMatch(/SY0-701 en inglés ya está retirada/);
+    expect(a.texto).toMatch(/Sirven: SY0-701 en español o SY0-801/);
+    const con801 = { ...emptyPlan(), versionCert: { C2: 'SY0-801' } };
+    expect(alertas('2026-11-18', con801, T0).some((x) => x.id === 'ver-C2')).toBe(false);
+    const con701en = { ...emptyPlan(), versionCert: { C2: 'SY0-701-en' } };
+    expect(alertas('2026-11-18', con701en, T0).find((x) => x.id === 'ver-C2')!.titulo).toBe('SY0-701 en inglés se retira el 11 jun 2027, antes de tu examen (1 ago 2027)');
+    // Después del examen no avisa más.
+    expect(alertas('2027-08-02', con701en, T0).some((x) => x.id === 'ver-C2')).toBe(false);
+  });
+});
+
 describe('etapas, hoy sos y alertas', () => {
-  it('cuatro etapas con sus semanas (63, 27, 43 y 59 con extras, sin pausas) y la actual marcada', () => {
+  it('cuatro etapas con sus semanas (75, 29, 47 y 66 con las extras y las pausas de la v2) y la actual marcada', () => {
     const e = lineaEtapas('2027-03-01', T0);
-    expect(e.map((x) => x.semanas)).toEqual([63, 27, 43, 59]);
+    expect(e.map((x) => x.semanas)).toEqual([75, 29, 47, 66]);
     expect(e.map((x) => x.estado)).toEqual(['actual', 'proximo', 'proximo', 'proximo']);
-    expect(e[3]).toMatchObject({ fin: '2030-07-21', perfil: 'Aerospace Software Engineer' });
+    expect(e[3]).toMatchObject({ fin: '2031-01-12', perfil: 'Aerospace Software Engineer' });
   });
 
   it('hoy sos: el último proyecto cerrado; vas a ser: el que sigue', () => {
@@ -97,18 +112,19 @@ describe('etapas, hoy sos y alertas', () => {
 
   it('alertas: la decisión de Security+, una certificación que se acerca y una ventana que cierra', () => {
     const a = alertas('2026-11-16', emptyPlan(), T0);
-    expect(a[0]).toMatchObject({ tipo: 'decision', titulo: 'Decisión el 22 nov 2026' });
-    const c1 = alertas('2027-02-15', emptyPlan(), T0).find((x) => x.id === 'cert-C1')!;
+    expect(a.find((x) => x.tipo === 'decision')).toMatchObject({ titulo: 'Decisión el 22 nov 2026' });
+    const c1 = alertas('2027-03-08', emptyPlan(), T0).find((x) => x.id === 'cert-C1')!;
     expect(c1.texto).toMatch(/Costo sin verificar/);
-    expect(alertas('2027-02-15', emptyPlan(), T0).find((x) => x.id === 'vent-W1')).toMatchObject({ titulo: 'W1 cierra el 21 feb 2027' });
-    const aprobada = { ...emptyPlan(), proyectos: { W1: { ...proyectoVacio(), examen: { fecha: '2027-02-12', puntaje: 90 } } } };
-    expect(alertas('2027-02-15', aprobada, T0).some((x) => x.id === 'vent-W1')).toBe(false);
+    expect(alertas('2027-03-08', emptyPlan(), T0).find((x) => x.id === 'vent-W1')).toMatchObject({ titulo: 'W1 cierra el 14 mar 2027' });
+    const aprobada = { ...emptyPlan(), proyectos: { W1: { ...proyectoVacio(), examen: { fecha: '2027-03-05', puntaje: 90 } } } };
+    expect(alertas('2027-03-08', aprobada, T0).some((x) => x.id === 'vent-W1')).toBe(false);
   });
 
   it('apagar extras se refleja también en las etapas 3 y 4', () => {
     try {
       aplicarCalendario(['P1']);
-      expect(lineaEtapas('2027-03-01', T0)[3].fin).toBe('2030-07-07');
+      // Dos semanas menos: el plan termina antes de diciembre de 2030 y esa pausa ya no cae.
+      expect(lineaEtapas('2027-03-01', T0)[3].fin).toBe('2030-12-22');
     } finally {
       aplicarCalendario([]);
     }

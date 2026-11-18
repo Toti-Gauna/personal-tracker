@@ -95,6 +95,12 @@ export interface PlanState {
   hitos: Record<string, { hecho?: string; fecha?: string }>;
   /** Ola 16b: proyectos con las semanas extra de feature apagadas (por defecto van prendidas). */
   extrasApagados?: string[];
+  /** Ola 24: pausa de fin de año automática (sin valor, prendida). */
+  pausaFinDeAnio?: boolean;
+  /** Ola 24: versión de examen elegida por certificación (C2 → "SY0-801"). */
+  versionCert?: Record<string, string>;
+  /** Ola 24: checklist de arquitectura por proyecto (contrato, trazas, mtls, adr). */
+  arquitectura?: Record<string, Partial<Record<'contrato' | 'trazas' | 'mtls' | 'adr', boolean>>>;
   /** Meta "Mapa de proyectos del portfolio": 4 pasos (Trazo guarda la meta; el diseño es tuyo). */
   mapaPortfolio?: Record<string, boolean>;
   /** Revisión de mercado: ofertas cargadas y % de ofertas que piden cada proyecto movible. */

@@ -342,7 +342,7 @@ export function letraTramo(t: Tramo) {
   // P1 a P10 van con la inicial del producto (F, E, S…); P0 y los de la etapa 2 (S1 a S3), con su id.
   return t.id === 'P0' || !t.id.startsWith('P') ? t.id : t.nombre[0];
 }
-const nombreLeyenda = (t: Tramo) => (t.tipo === 'descanso' ? 'descanso' : t.id === 'P0' ? 'consolidación' : t.tipo === 'cert' ? t.corto ?? t.nombre : t.tipo === 'ventana' ? t.id : t.tipo === 'colchon' ? 'colchón' : t.tipo === 'cierre' ? 'cierre de T+18' : nombreTramo(t, false));
+const nombreLeyenda = (t: Tramo) => (t.pausa ? 'pausa de fin de año' : t.tipo === 'descanso' ? 'descanso' : t.id === 'P0' ? 'consolidación' : t.tipo === 'cert' ? t.corto ?? t.nombre : t.tipo === 'ventana' ? t.id : t.tipo === 'colchon' ? 'colchón' : t.tipo === 'cierre' ? 'cierre de T+18' : nombreTramo(t, false));
 
 export function semanasDelBimestre(n: number, t0 = T0_PLAN) {
   const desde = (n - 1) * SEMANAS_BIM + 1;

@@ -5,30 +5,38 @@
   {
    "n": 1,
    "nombre": "Núcleo",
-   "perfil": "Senior ML + DevSecOps + Cloud",
+   "perfil": "Senior ML + DevSecOps + Cloud con arquitectura de sistemas distribuidos",
    "semanasBase": 52,
-   "semanasExtra": 11
+   "semanasExtra": 11,
+   "semanasPlataforma": 8,
+   "semanasArquitectura": 2
   },
   {
    "n": 2,
    "nombre": "Ciberseguridad",
    "perfil": "Senior con foco en seguridad",
    "semanasBase": 24,
-   "semanasExtra": 3
+   "semanasExtra": 3,
+   "semanasPlataforma": 2,
+   "semanasArquitectura": 0
   },
   {
    "n": 3,
    "nombre": "Quant trading",
    "perfil": "Quant Trading Engineer / ML Quant",
    "semanasBase": 37,
-   "semanasExtra": 6
+   "semanasExtra": 6,
+   "semanasPlataforma": 3,
+   "semanasArquitectura": 0
   },
   {
    "n": 4,
    "nombre": "Ingeniería aeroespacial",
    "perfil": "Aerospace Software Engineer",
    "semanasBase": 54,
-   "semanasExtra": 5
+   "semanasExtra": 5,
+   "semanasPlataforma": 5,
+   "semanasArquitectura": 0
   }
  ],
  "bloques": [
@@ -39,6 +47,8 @@
    "nombre": "Consolidación",
    "base": 2,
    "extra": 0,
+   "extraPlataforma": 0,
+   "extraArquitectura": 0,
    "ficha": {
     "rubro": "portfolio",
     "tecnologiaNueva": "portfolio-mcp v0",
@@ -46,7 +56,9 @@
     "visual": "Mapa 3D de proyectos",
     "pieza": "Ninguna: solo diagnóstico",
     "referencia": "RAG evaluado con 20 preguntas de respuesta conocida y tasa de abstención correcta",
-    "perfil": "Sr Full-stack con IA aplicada"
+    "perfil": "Sr Full-stack con IA aplicada",
+    "plataforma": "PWA instalable y base del monorepo",
+    "arquitectura": "Shell de microfrontends (Module Federation)"
    }
   },
   {
@@ -56,6 +68,8 @@
    "nombre": "Faro v1 · petróleo",
    "base": 3,
    "extra": 2,
+   "extraPlataforma": 1,
+   "extraArquitectura": 0,
    "ficha": {
     "rubro": "petróleo",
     "tecnologiaNueva": "DuckDB y Parquet",
@@ -64,7 +78,10 @@
     "pieza": "Percentiles y similitud coseno",
     "referencia": "Respuestas validadas contra el dato oficial de la Secretaría de Energía",
     "validador": "Ingeniero de reservorios o de cumplimiento",
-    "perfil": "Full-stack AI Engineer"
+    "perfil": "Full-stack AI Engineer",
+    "plataforma": "Escritorio (Electron)",
+    "arquitectura": "2 servicios con contrato OpenAPI, gateway y pruebas de contrato",
+    "entregablesArquitectura": true
    }
   },
   {
@@ -74,6 +91,8 @@
    "nombre": "Escudo · medicina",
    "base": 3,
    "extra": 1,
+   "extraPlataforma": 1,
+   "extraArquitectura": 0,
    "ficha": {
     "rubro": "medicina",
     "tecnologiaNueva": ".NET con FHIR; vLLM y LoRA",
@@ -82,7 +101,9 @@
     "pieza": "Conteo y k-anonimato",
     "referencia": "Precisión y recall de la detección de datos sensibles en un set sintético; banco de ataques contra herramientas existentes",
     "validador": "Persona de salud digital",
-    "perfil": "AI Engineer con seguridad"
+    "perfil": "AI Engineer con seguridad",
+    "plataforma": "Mobile (Expo y React Native)",
+    "arquitectura": "Gateway en el borde"
    }
   },
   {
@@ -92,6 +113,8 @@
    "nombre": "Ventana W1 · matemática",
    "base": 3,
    "extra": 0,
+   "extraPlataforma": 0,
+   "extraArquitectura": 0,
    "mate": {
     "principal": [
      "CONAMAT Álgebra (funciones, desigualdades)",
@@ -130,6 +153,8 @@
    "nombre": "Surco v1 · agro",
    "base": 3,
    "extra": 1,
+   "extraPlataforma": 1,
+   "extraArquitectura": 0,
    "dependeDe": [
     "W1"
    ],
@@ -141,7 +166,9 @@
     "pieza": "Cuantiles y predicción conforme",
     "referencia": "Error contra una línea base simple y cobertura de los intervalos cercana a la nominal",
     "validador": "Agrónomo",
-    "perfil": "Applied ML Engineer"
+    "perfil": "Applied ML Engineer",
+    "plataforma": "Mobile (Expo)",
+    "arquitectura": "Monolito modular en Rails, a propósito"
    }
   },
   {
@@ -151,6 +178,8 @@
    "nombre": "AWS Solutions Architect Associate",
    "base": 2,
    "extra": 0,
+   "extraPlataforma": 0,
+   "extraArquitectura": 0,
    "cert": {
     "verificado": false,
     "notas": "Confirmar precio y versión"
@@ -163,6 +192,8 @@
    "nombre": "Estación v1 · espacio",
    "base": 4,
    "extra": 1,
+   "extraPlataforma": 1,
+   "extraArquitectura": 0,
    "ficha": {
     "rubro": "espacio",
     "tecnologiaNueva": "WebAssembly y estándares CCSDS",
@@ -171,7 +202,8 @@
     "pieza": "Propagación SGP4 de una pasada comparada con la librería",
     "referencia": "Error de posición en km contra la librería",
     "validador": "Operador de estación terrena o radioaficionado",
-    "perfil": "Systems / Ground Software Engineer"
+    "perfil": "Systems / Ground Software Engineer",
+    "plataforma": "AR del cielo con sensores del dispositivo"
    }
   },
   {
@@ -181,6 +213,8 @@
    "nombre": "Faro v2 · petróleo",
    "base": 2,
    "extra": 1,
+   "extraPlataforma": 1,
+   "extraArquitectura": 0,
    "ficha": {
     "rubro": "petróleo",
     "tecnologiaNueva": "eBPF con Falco",
@@ -189,7 +223,10 @@
     "pieza": "Ajuste de curvas de declinación con intervalos y tasa de falsos positivos",
     "referencia": "Cobertura medida y CIS Kubernetes Benchmark",
     "validador": "Ingeniero de reservorios o de cumplimiento",
-    "perfil": "DevSecOps / Cloud Security Engineer"
+    "perfil": "DevSecOps / Cloud Security Engineer",
+    "plataforma": "VR (WebXR)",
+    "arquitectura": "Malla de servicios con mTLS (Linkerd o Istio)",
+    "entregablesArquitectura": true
    }
   },
   {
@@ -199,11 +236,30 @@
    "nombre": "CompTIA Security+",
    "base": 3,
    "extra": 0,
+   "extraPlataforma": 0,
+   "extraArquitectura": 0,
    "cert": {
     "costo": "US$ 439 (579 con reintento)",
     "verificado": true,
     "notas": "SY0-801 sale cerca del 17 nov 2026; SY0-701 se retira el 11 jun 2027 (inglés) y el 13 ago 2027 (español). Decisión el domingo 22 nov 2026.",
-    "decision": "2026-11-22"
+    "decision": "2026-11-22",
+    "versiones": [
+     {
+      "id": "SY0-701-en",
+      "nombre": "SY0-701 en inglés",
+      "retiro": "2027-06-11"
+     },
+     {
+      "id": "SY0-701-es",
+      "nombre": "SY0-701 en español",
+      "retiro": "2027-08-13"
+     },
+     {
+      "id": "SY0-801",
+      "nombre": "SY0-801",
+      "sale": "2026-11-17"
+     }
+    ]
    }
   },
   {
@@ -213,6 +269,8 @@
    "nombre": "Ventana W2 · matemática",
    "base": 4,
    "extra": 0,
+   "extraPlataforma": 0,
+   "extraArquitectura": 0,
    "mate": {
     "principal": [
      "CONAMAT Cálculo diferencial",
@@ -260,6 +318,8 @@
    "nombre": "Lupa v1 · aeroespacial",
    "base": 4,
    "extra": 1,
+   "extraPlataforma": 1,
+   "extraArquitectura": 0,
    "dependeDe": [
     "W2"
    ],
@@ -271,7 +331,8 @@
     "pieza": "Autograd y backpropagation (regla de la cadena)",
     "referencia": "Gradient check contra PyTorch y caída sintético → real medida",
     "validador": "Ingeniero del rubro",
-    "perfil": "ML Engineer (deep learning)"
+    "perfil": "ML Engineer (deep learning)",
+    "plataforma": "Escritorio (Tauri)"
    }
   },
   {
@@ -281,6 +342,8 @@
    "nombre": "Surco v2 · agro",
    "base": 2,
    "extra": 1,
+   "extraPlataforma": 1,
+   "extraArquitectura": 0,
    "ficha": {
     "rubro": "agro",
     "tecnologiaNueva": "PostGIS y STAC",
@@ -289,7 +352,9 @@
     "pieza": "PCA y SVD",
     "referencia": "Drift detectado contra drift inyectado",
     "validador": "Agrónomo",
-    "perfil": "ML / MLOps Engineer"
+    "perfil": "ML / MLOps Engineer",
+    "plataforma": "AR (zonas de manejo sobre el lote)",
+    "arquitectura": "Pipeline de reentrenamiento orquestado"
    }
   },
   {
@@ -299,6 +364,8 @@
    "nombre": "AWS Machine Learning Engineer Associate",
    "base": 2,
    "extra": 0,
+   "extraPlataforma": 0,
+   "extraArquitectura": 0,
    "cert": {
     "costo": "US$ 150 según la mayoría de las fuentes; una dice 300",
     "verificado": false,
@@ -312,6 +379,8 @@
    "nombre": "Ventana W3 · matemática",
    "base": 4,
    "extra": 0,
+   "extraPlataforma": 0,
+   "extraArquitectura": 0,
    "mate": {
     "principal": [
      "Blitzstein y Hwang · Introduction to Probability",
@@ -359,6 +428,8 @@
    "nombre": "Núcleo · nuclear",
    "base": 2,
    "extra": 1,
+   "extraPlataforma": 0,
+   "extraArquitectura": 0,
    "dependeDe": [
     "W3"
    ],
@@ -380,6 +451,8 @@
    "nombre": "Lupa v2 · aeroespacial",
    "base": 3,
    "extra": 1,
+   "extraPlataforma": 1,
+   "extraArquitectura": 0,
    "ficha": {
     "rubro": "aeroespacial",
     "tecnologiaNueva": "ONNX Runtime y cuantización (si se confirma el reemplazo)",
@@ -388,7 +461,8 @@
     "pieza": "Error de cuantización y su cota",
     "referencia": "Latencia y pérdida de exactitud contra el modelo original",
     "validador": "Ingeniero del rubro",
-    "perfil": "Edge AI Engineer"
+    "perfil": "Edge AI Engineer",
+    "plataforma": "Mobile (ONNX Runtime Mobile) y AR"
    }
   },
   {
@@ -398,6 +472,8 @@
    "nombre": "Estación v2 · espacio",
    "base": 4,
    "extra": 1,
+   "extraPlataforma": 0,
+   "extraArquitectura": 2,
    "ficha": {
     "rubro": "espacio",
     "tecnologiaNueva": "Kafka y autoencoders",
@@ -406,7 +482,9 @@
     "pieza": "Distribución de errores y probabilidad aplicada a SLO",
     "referencia": "Métricas sobre SMAP y MSL de la NASA contra una línea base publicada",
     "validador": "Operador de estación terrena o radioaficionado",
-    "perfil": "Senior ML + DevSecOps + Cloud"
+    "perfil": "Senior ML + DevSecOps + Cloud con arquitectura de sistemas distribuidos",
+    "arquitectura": "Microservicios completos (Kafka, saga y outbox, mTLS, OpenTelemetry, Pact, ADRs) y microfrontends sobre el shell de P0",
+    "entregablesArquitectura": true
    }
   },
   {
@@ -415,7 +493,9 @@
    "tipo": "colchon",
    "nombre": "Colchón y salto senior",
    "base": 2,
-   "extra": 0
+   "extra": 0,
+   "extraPlataforma": 0,
+   "extraArquitectura": 0
   },
   {
    "id": "W4",
@@ -424,6 +504,8 @@
    "nombre": "Ventana W4 · matemática discreta y cripto",
    "base": 2,
    "extra": 0,
+   "extraPlataforma": 0,
+   "extraArquitectura": 0,
    "que": "Matemática discreta y criptografía",
    "libros": [
     "Lehman, Leighton y Meyer · Mathematics for Computer Science"
@@ -462,6 +544,8 @@
    "nombre": "Cripta",
    "base": 2,
    "extra": 1,
+   "extraPlataforma": 1,
+   "extraArquitectura": 0,
    "dependeDe": [
     "W4"
    ],
@@ -474,7 +558,10 @@
     "pieza": "RSA y curvas elípticas",
     "referencia": "Primitivas de laboratorio comparadas con una biblioteca auditada",
     "validador": "Pentester o analista SOC",
-    "perfil": "Security Engineer (cripto y secretos)"
+    "perfil": "Security Engineer (cripto y secretos)",
+    "plataforma": "Escritorio (Tauri)",
+    "arquitectura": "Identidad de servicios con SPIFFE",
+    "entregablesArquitectura": true
    }
   },
   {
@@ -484,6 +571,8 @@
    "nombre": "Bastión",
    "base": 4,
    "extra": 1,
+   "extraPlataforma": 0,
+   "extraArquitectura": 0,
    "que": "Modelo de amenazas (STRIDE) y pentest de Faro, Escudo y Estación, con SAST, DAST y SCA en el pipeline",
    "perfil": "Application Security Engineer",
    "ficha": {
@@ -503,6 +592,8 @@
    "nombre": "PNPT",
    "base": 3,
    "extra": 0,
+   "extraPlataforma": 0,
+   "extraArquitectura": 0,
    "corto": "PNPT",
    "que": "Practical Network Penetration Tester (TCM Security)",
    "cert": {
@@ -518,6 +609,8 @@
    "nombre": "CKA",
    "base": 2,
    "extra": 0,
+   "extraPlataforma": 0,
+   "extraArquitectura": 0,
    "corto": "CKA",
    "que": "Certified Kubernetes Administrator, requisito de CKS",
    "cert": {
@@ -532,6 +625,8 @@
    "nombre": "CKS",
    "base": 3,
    "extra": 0,
+   "extraPlataforma": 0,
+   "extraArquitectura": 0,
    "corto": "CKS",
    "que": "Certified Kubernetes Security Specialist",
    "cert": {
@@ -548,6 +643,8 @@
    "nombre": "Centinela",
    "base": 4,
    "extra": 1,
+   "extraPlataforma": 1,
+   "extraArquitectura": 0,
    "que": "Detección como código (Sigma y MITRE ATT&CK) sobre el colector de Faro v2, purple team y runbooks",
    "perfil": "Detection & Response / Cloud Security Engineer",
    "ficha": {
@@ -557,16 +654,19 @@
     "pieza": "Precisión, recall y costo de falsos positivos",
     "referencia": "Detección como código (Sigma y MITRE ATT&CK) contra un laboratorio propio",
     "validador": "Pentester o analista SOC",
-    "perfil": "Detection & Response / Cloud Security Engineer"
+    "perfil": "Detection & Response / Cloud Security Engineer",
+    "plataforma": "Mobile (alertas y aprobación de playbooks)"
    }
   },
   {
    "id": "C7",
    "etapa": 2,
    "tipo": "cert",
-   "nombre": "AWS Security Specialty",
+   "nombre": "AWS Security Specialty (SCS-C03)",
    "base": 3,
    "extra": 0,
+   "extraPlataforma": 0,
+   "extraArquitectura": 0,
    "corto": "AWS SCS",
    "que": "AWS Security Specialty (SCS-C03)",
    "cert": {
@@ -582,6 +682,8 @@
    "nombre": "Cierre de T+18",
    "base": 1,
    "extra": 0,
+   "extraPlataforma": 0,
+   "extraArquitectura": 0,
    "que": "Cierre de T+18: perfil senior con foco en seguridad"
   },
   {
@@ -591,6 +693,8 @@
    "nombre": "Ventana WQ1 · estadística, series de tiempo, portafolios",
    "base": 3,
    "extra": 0,
+   "extraPlataforma": 0,
+   "extraArquitectura": 0,
    "mate": {
     "principal": [
      "Wasserman · All of Statistics",
@@ -628,6 +732,8 @@
    "nombre": "Ábaco",
    "base": 4,
    "extra": 1,
+   "extraPlataforma": 1,
+   "extraArquitectura": 0,
    "dependeDe": [
     "WQ1"
    ],
@@ -639,7 +745,8 @@
     "pieza": "Sharpe deflactado y validación purgada",
     "referencia": "Validación walk-forward y purgada",
     "validador": "Trader o quant",
-    "perfil": "Quant Developer (infraestructura de investigación)"
+    "perfil": "Quant Developer (infraestructura de investigación)",
+    "plataforma": "Escritorio (Tauri)"
    }
   },
   {
@@ -649,6 +756,8 @@
    "nombre": "Brújula",
    "base": 4,
    "extra": 1,
+   "extraPlataforma": 0,
+   "extraArquitectura": 0,
    "dependeDe": [
     "WQ1"
    ],
@@ -669,7 +778,9 @@
    "tipo": "descanso",
    "nombre": "Descanso",
    "base": 1,
-   "extra": 0
+   "extra": 0,
+   "extraPlataforma": 0,
+   "extraArquitectura": 0
   },
   {
    "id": "WQ2",
@@ -678,6 +789,8 @@
    "nombre": "Ventana WQ2 · cálculo estocástico y derivados",
    "base": 4,
    "extra": 0,
+   "extraPlataforma": 0,
+   "extraArquitectura": 0,
    "mate": {
     "principal": [
      "Shreve · Stochastic Calculus for Finance I y II",
@@ -721,6 +834,8 @@
    "nombre": "Prisma",
    "base": 4,
    "extra": 1,
+   "extraPlataforma": 1,
+   "extraArquitectura": 0,
    "dependeDe": [
     "WQ2"
    ],
@@ -731,7 +846,8 @@
     "pieza": "Black–Scholes derivado y Monte Carlo",
     "referencia": "Validación contra QuantLib",
     "validador": "Trader o quant",
-    "perfil": "Quant Developer (valuación y riesgo)"
+    "perfil": "Quant Developer (valuación y riesgo)",
+    "plataforma": "VR (superficie de volatilidad)"
    }
   },
   {
@@ -741,6 +857,8 @@
    "nombre": "Libro",
    "base": 4,
    "extra": 1,
+   "extraPlataforma": 0,
+   "extraArquitectura": 0,
    "dependeDe": [
     "WQ2"
    ],
@@ -762,6 +880,8 @@
    "nombre": "Ventana WQ3 · optimización convexa y ML financiero",
    "base": 2,
    "extra": 0,
+   "extraPlataforma": 0,
+   "extraArquitectura": 0,
    "mate": {
     "principal": [
      "Boyd y Vandenberghe cap. 5 a 8"
@@ -796,6 +916,8 @@
    "nombre": "Tablero",
    "base": 5,
    "extra": 1,
+   "extraPlataforma": 1,
+   "extraArquitectura": 0,
    "dependeDe": [
     "WQ3"
    ],
@@ -806,7 +928,10 @@
     "pieza": "Optimización convexa de portafolio",
     "referencia": "12 semanas o más de paper trading con resultados netos de costos",
     "validador": "Trader o quant",
-    "perfil": "Quant Trading Engineer"
+    "perfil": "Quant Trading Engineer",
+    "plataforma": "Mobile (aprobación de órdenes y kill-switch con doble factor)",
+    "arquitectura": "Componentes en servicios separados: datos, señales, órdenes y riesgo",
+    "entregablesArquitectura": true
    }
   },
   {
@@ -816,6 +941,8 @@
    "nombre": "Nexo",
    "base": 4,
    "extra": 1,
+   "extraPlataforma": 0,
+   "extraArquitectura": 0,
    "dependeDe": [
     "WQ3"
    ],
@@ -836,7 +963,9 @@
    "tipo": "cierre",
    "nombre": "Cierre y puerta de capital real",
    "base": 2,
-   "extra": 0
+   "extra": 0,
+   "extraPlataforma": 0,
+   "extraArquitectura": 0
   },
   {
    "id": "WA1",
@@ -845,6 +974,8 @@
    "nombre": "Ventana WA1 · física y EDOs",
    "base": 4,
    "extra": 0,
+   "extraPlataforma": 0,
+   "extraArquitectura": 0,
    "mate": {
     "principal": [
      "Young y Freedman · University Physics (mecánica)",
@@ -887,6 +1018,8 @@
    "nombre": "Trayectoria",
    "base": 5,
    "extra": 1,
+   "extraPlataforma": 1,
+   "extraArquitectura": 0,
    "dependeDe": [
     "WA1"
    ],
@@ -897,7 +1030,8 @@
     "pieza": "EDOs, RK4 y cuaterniones",
     "referencia": "Validado contra soluciones analíticas",
     "validador": "Ingeniero del rubro",
-    "perfil": "Simulation / Flight Dynamics Software Engineer"
+    "perfil": "Simulation / Flight Dynamics Software Engineer",
+    "plataforma": "VR (trayectoria en 3D)"
    }
   },
   {
@@ -907,6 +1041,8 @@
    "nombre": "Ventana WA2 · estática, materiales, álgebra lineal numérica",
    "base": 3,
    "extra": 0,
+   "extraPlataforma": 0,
+   "extraArquitectura": 0,
    "mate": {
     "principal": [
      "Hibbeler · Statics y Dynamics",
@@ -949,6 +1085,8 @@
    "nombre": "Cuerda",
    "base": 5,
    "extra": 1,
+   "extraPlataforma": 1,
+   "extraArquitectura": 0,
    "dependeDe": [
     "WA2"
    ],
@@ -959,7 +1097,8 @@
     "pieza": "Matriz de rigidez de una viga",
     "referencia": "Ejemplos de Beer y Johnston",
     "validador": "Ingeniero del rubro",
-    "perfil": "Computational Mechanics / CAE Software Engineer"
+    "perfil": "Computational Mechanics / CAE Software Engineer",
+    "plataforma": "Escritorio (Tauri)"
    }
   },
   {
@@ -968,7 +1107,9 @@
    "tipo": "descanso",
    "nombre": "Descanso",
    "base": 1,
-   "extra": 0
+   "extra": 0,
+   "extraPlataforma": 0,
+   "extraArquitectura": 0
   },
   {
    "id": "WA3",
@@ -977,6 +1118,8 @@
    "nombre": "Ventana WA3 · termodinámica, fluidos, PDEs",
    "base": 4,
    "extra": 0,
+   "extraPlataforma": 0,
+   "extraArquitectura": 0,
    "mate": {
     "principal": [
      "Çengel y Boles · Thermodynamics",
@@ -1017,6 +1160,8 @@
    "nombre": "Túnel",
    "base": 6,
    "extra": 0,
+   "extraPlataforma": 0,
+   "extraArquitectura": 0,
    "dependeDe": [
     "WA3"
    ],
@@ -1037,6 +1182,8 @@
    "nombre": "Ventana WA4 · control y estimación",
    "base": 3,
    "extra": 0,
+   "extraPlataforma": 0,
+   "extraArquitectura": 0,
    "mate": {
     "principal": [
      "Nise · Control Systems Engineering",
@@ -1075,6 +1222,8 @@
    "nombre": "Rumbo",
    "base": 5,
    "extra": 1,
+   "extraPlataforma": 1,
+   "extraArquitectura": 0,
    "dependeDe": [
     "WA4"
    ],
@@ -1085,7 +1234,8 @@
     "pieza": "LQR y Kalman",
     "referencia": "Controlador de dron en PX4 o ArduPilot en simulación",
     "validador": "Ingeniero del rubro",
-    "perfil": "GNC Software Engineer"
+    "perfil": "GNC Software Engineer",
+    "plataforma": "Mobile (estación de control en simulación)"
    }
   },
   {
@@ -1095,6 +1245,8 @@
    "nombre": "Ventana WA5 · mecánica orbital y propulsión",
    "base": 2,
    "extra": 0,
+   "extraPlataforma": 0,
+   "extraArquitectura": 0,
    "mate": {
     "principal": [
      "Curtis · Orbital Mechanics for Engineering Students",
@@ -1134,6 +1286,8 @@
    "nombre": "Órbita",
    "base": 4,
    "extra": 1,
+   "extraPlataforma": 1,
+   "extraArquitectura": 0,
    "dependeDe": [
     "WA5"
    ],
@@ -1144,7 +1298,8 @@
     "pieza": "Kepler, Lambert y Hohmann",
     "referencia": "Comparado con GMAT u Orekit",
     "validador": "Ingeniero del rubro",
-    "perfil": "Mission Analysis / Astrodynamics Software Engineer"
+    "perfil": "Mission Analysis / Astrodynamics Software Engineer",
+    "plataforma": "AR de órbitas"
    }
   },
   {
@@ -1154,6 +1309,8 @@
    "nombre": "Cohete",
    "base": 4,
    "extra": 0,
+   "extraPlataforma": 0,
+   "extraArquitectura": 0,
    "dependeDe": [
     "WA5"
    ],
@@ -1174,13 +1331,16 @@
    "nombre": "Horizonte",
    "base": 6,
    "extra": 1,
+   "extraPlataforma": 1,
+   "extraArquitectura": 0,
    "ficha": {
     "rubro": "aeroespacial",
     "tecnologiaNueva": "RTOS con Rust embebido o Ada/SPARK",
     "feature": "Operador asistido: el agente propone el runbook y el operador aprueba",
     "referencia": "Gemelo digital de misión sobre F Prime o cFS",
     "validador": "Ingeniero del rubro",
-    "perfil": "Aerospace Software Engineer"
+    "perfil": "Aerospace Software Engineer",
+    "plataforma": "VR (sala de control del operador)"
    }
   },
   {
@@ -1189,7 +1349,9 @@
    "tipo": "cierre",
    "nombre": "Cierre y decisión sobre el título",
    "base": 2,
-   "extra": 0
+   "extra": 0,
+   "extraPlataforma": 0,
+   "extraArquitectura": 0
   }
  ],
  "matematica": {
@@ -1380,6 +1542,22 @@
   {
    "id": "titulo",
    "texto": "Si una carrera universitaria entra o no al plan: hoy no, camino autodidacta"
+  },
+  {
+   "id": "plataformas",
+   "texto": "Confirmar la capa de plataformas (mobile, escritorio, VR y AR) y si se aligera la etapa 1"
+  },
+  {
+   "id": "arquitectura",
+   "texto": "Confirmar microservicios y microfrontends como entregables de P1, P5, P10, S1 y Q5"
+  },
+  {
+   "id": "dispositivo",
+   "texto": "Qué dispositivo de VR y AR vas a usar para probar"
+  },
+  {
+   "id": "demanda",
+   "texto": "Verificar la demanda de mercado de las tecnologías nuevas (y de microservicios, microfrontends, mobile, VR y AR) contra ofertas reales"
   }
  ]
 }

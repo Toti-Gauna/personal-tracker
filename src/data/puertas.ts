@@ -84,7 +84,8 @@ export function semanasDeProyecto(plan: PlanState, id: string, hoy: string, t0 =
   if (!t || t.tipo !== 'proyecto') return 0;
   const fin = finSemana(t.hasta, t0);
   const c = cierreProyecto(plan, id);
-  if (c) return c < fin ? Math.floor(dias(c, fin) / 7) : c > fin ? -1 : 0;
+  // Ola 24: las semanas de pausa que caen entre el cierre y la meta no son semanas ganadas.
+  if (c) return c < fin ? Math.max(0, Math.floor(dias(c, fin) / 7) - (t.pausas ?? []).filter((w) => inicioSemana(w, t0) > c).length) : c > fin ? -1 : 0;
   // Sin cerrar y pasada la meta: usa la semana de tope (y si pasa el tope, se recorta alcance).
   return hoy > fin ? -1 : 0;
 }

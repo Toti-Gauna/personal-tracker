@@ -6,15 +6,15 @@ import { emptyStudy } from './study-catalog';
 describe('mapa en ramas', () => {
   it('arriba T+18, abajo T+0 y HEAD en hoy; lo que viene después de HEAD es futuro', () => {
     const f = filasMapa('2026-12-14', 'mes', emptyPlan(), emptyStudy());
-    expect(f[0]).toMatchObject({ hito: 'T+18', fecha: '2028-08-06' });
+    expect(f[0]).toMatchObject({ hito: 'T+18', fecha: '2028-11-12' });
     expect(f[f.length - 1]).toMatchObject({ hito: 'T+0', fecha: '2026-11-16' });
     const head = f.findIndex((x) => x.tipo === 'head');
-    expect(f[head].texto).toBe('Faro v1 · semana 3 de 5');
+    expect(f[head].texto).toBe('Faro v1 · semana 3 de 6');
     expect(f.slice(1, head).every((x) => x.futuro || x.tipo === 'gap')).toBe(true);
     expect(f.slice(head + 1).every((x) => !x.futuro)).toBe(true);
-    // Este mes incluye T+2 (11 ene) y la entrega de Faro v1 (3 ene, con las semanas de feature).
+    // Este mes incluye T+2 (11 ene); la entrega de Faro v1 (17 ene, con la pausa adentro) queda en el mapa completo.
     expect(f.some((x) => x.hito === 'T+2')).toBe(true);
-    expect(f.some((x) => x.a === 'trabajo' && x.fecha === '2027-01-03')).toBe(true);
+    expect(filasMapa('2026-12-14', 'todo', emptyPlan(), emptyStudy()).find((x) => x.id === 'fin-P1')?.fecha).toBe('2027-01-17');
     // Ordenadas de la más nueva a la más vieja.
     const fechas = f.filter((x) => x.tipo !== 'gap').map((x) => x.fecha);
     expect([...fechas].sort().reverse()).toEqual(fechas);
@@ -38,19 +38,21 @@ describe('mapa · hitos y stand-by (Ola 8b)', () => {
     // primer trimestre; Surco v1 arranca (22 feb) y cierra (21 mar) y pasan al segundo. Quedan 28 de los 30.
     // Ola 21: entran los hitos de idiomas del 27 dic (Measure What Matters) y el 7 feb (pronunciación); sale el viejo "B2 sólido".
     // Ola 23: los 3 hitos viejos de clipping dejan lugar a los 15 del Roadmap Clipper (6 caen en el trimestre).
-    expect(h).toHaveLength(32);
+    // Ola 24 (v2): con la plataforma y la pausa, W1 queda lista el 14 de marzo y sale del primer trimestre.
+    expect(h).toHaveLength(31);
     expect(HITOS).toHaveLength(45);
     expect(h.filter((x) => x.rama === 'ingles').map((x) => x.hitoId)).toEqual(['ingles-83', 'ingles-41']);
     const fechas = h.map((x) => x.fecha);
     expect([...fechas].sort().reverse()).toEqual(fechas);
     expect(h[h.length - 1]).toMatchObject({ fecha: '2026-11-16', rama: 'main', hito: 'T+0' });
-    expect(h.find((x) => x.hitoId === 'programacion-62')).toMatchObject({ fecha: '2027-01-31', rama: 'programacion', hitoTipo: 'grande' });
+    expect(h.find((x) => x.hitoId === 'programacion-62')).toMatchObject({ fecha: '2027-02-21', rama: 'programacion', hitoTipo: 'grande' });
+    expect(h.find((x) => x.hitoId === 'programacion-34')).toMatchObject({ fecha: '2027-01-17' }); // Faro v1, con la pausa adentro
     const t2 = filasMapa('2027-03-01', 'trimestre', emptyPlan(), emptyStudy(), '2026-11-16').filter((x) => x.hitoId);
-    expect(t2.find((x) => x.hitoId === 'programacion-77')).toMatchObject({ fecha: '2027-02-22', rama: 'programacion', desde: 'matematica' });
-    expect(t2.find((x) => x.hitoId === 'programacion-97')).toMatchObject({ fecha: '2027-03-21', hitoTipo: 'grande' });
-    expect(h.find((x) => x.hitoId === 'matematica-76')).toMatchObject({ fecha: '2027-02-21' });
+    expect(t2.find((x) => x.hitoId === 'programacion-77')).toMatchObject({ fecha: '2027-03-15', rama: 'programacion', desde: 'matematica' });
+    expect(t2.find((x) => x.hitoId === 'programacion-97')).toMatchObject({ fecha: '2027-04-18', hitoTipo: 'grande' });
+    expect(t2.find((x) => x.hitoId === 'matematica-76')).toMatchObject({ fecha: '2027-03-14' });
     expect(h.filter((x) => x.rama === 'clipping').map((x) => x.hitoId).reverse()).toEqual(['clip-gta6', 'clip-usd-150', 'clip-dashboard-v1', 'clip-usd-350', 'clip-retainer-1', 'clip-usd-700']);
-    expect(h.filter((x) => x.hitoTipo === 'grande')).toHaveLength(10); // con W1 lista (21 feb)
+    expect(h.filter((x) => x.hitoTipo === 'grande')).toHaveLength(9); // W1 lista (14 mar) ya no entra
     expect(f[0].hito).toBe('T+18');
   });
 
