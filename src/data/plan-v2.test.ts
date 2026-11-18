@@ -1,7 +1,11 @@
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
-import { PLAN_EXT, calendario, esSemanaDePausa, finEtapa, opcionesDe, totalSemanas, validar } from './plan-extendido';
+import { calendario, esSemanaDePausa, finEtapa, opcionesDe, totalSemanas, validar } from './plan-extendido';
+
+/** Ola 27: estos tests comparan con las tablas de la v1 y la v2: usan el JSON de la v2.1 congelado (los datos vivos son los de la v3). */
+import raw from './fixtures/plan-extendido-v2.1.json';
+const PLAN_EXT = raw as unknown as import('./plan-extendido').PlanExtendido;
 
 const MES: Record<string, string> = { ene: '01', feb: '02', mar: '03', abr: '04', may: '05', jun: '06', jul: '07', ago: '08', sep: '09', oct: '10', nov: '11', dic: '12' };
 const iso = (t: string) => { const [d, m, y] = t.trim().split(' '); return `${y}-${MES[m]}-${d.padStart(2, '0')}`; };
@@ -89,18 +93,18 @@ describe('ola 24 · migración y calendario vivo', () => {
     expect(s.plan.pausaFinDeAnio).toBeUndefined();
     resetState(s);
     const plan = await import('./plan');
-    expect(plan.TRAMOS.find((t) => t.id === 'P1')).toMatchObject({ extra: 0, plataforma: 1, meta: 4 });
-    expect(plan.SEMANAS).toBe(102);
-    // Apagar la pausa vuelve a contar sin ella; apagar la plataforma de P1 la saca solo de P1.
-    setPausaFinDeAnio(false);
-    expect(plan.SEMANAS).toBe(100);
-    expect(plan.TRAMOS.some((t) => t.pausa)).toBe(false);
-    setExtraBloque('P1', false, 'plataforma');
-    expect(getState().plan.extrasApagados).toEqual(['P1', 'P1:plataforma']);
     expect(plan.TRAMOS.find((t) => t.id === 'P1')).toMatchObject({ extra: 0, plataforma: 0, meta: 3 });
+    const conPausa = plan.SEMANAS;
+    // Apagar la pausa vuelve a contar sin ella; apagar la plataforma de P3 la saca solo de P3.
+    setPausaFinDeAnio(false);
+    expect(plan.SEMANAS).toBeLessThan(conPausa);
+    expect(plan.TRAMOS.some((t) => t.pausa)).toBe(false);
+    setExtraBloque('P3', false, 'plataforma');
+    expect(getState().plan.extrasApagados).toEqual(['P1', 'P3:plataforma']);
+    expect(plan.TRAMOS.find((t) => t.id === 'P3')).toMatchObject({ extra: 1, plataforma: 0, meta: 4 });
     setState((x) => x);
     resetState();
     expect([SEMANAS, TRAMOS.length]).toBeTruthy();
-    expect(plan.SEMANAS).toBe(104);
+    expect(plan.SEMANAS).toBe(89);
   });
 });

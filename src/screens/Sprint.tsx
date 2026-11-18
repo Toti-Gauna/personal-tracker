@@ -4,7 +4,7 @@
  */
 import { useState } from 'react';
 import { MOTIVO_INTENSIVA } from '../data/busqueda';
-import { PLAN, T0_PLAN, TRAMOS, fechaCorta, finSemana, inicioSemana, nombreTramo, semanaDelPlan } from '../data/plan';
+import { PLAN, T0_PLAN, TRAMOS, fechaCorta, finDe, finSemana, inicioDe, inicioSemana, nombreTramo, semanaDelPlan } from '../data/plan';
 import { RAMA_COLOR } from '../data/ramas';
 import { DIAS_SPRINT, EMBUDO_DEFAULT, acompanaSprint, embudoSprint, escenariosHandyx, horasSemana, sprintActual, type FilaHoras } from '../data/sprint';
 import { addDays } from '../data/time';
@@ -170,8 +170,9 @@ export function RutaImpacto({ day }: { day: DayLog }) {
         <span className="etiqueta">Matemática a demanda · cada tramo abre un proyecto</span>
         <ul className="ri-mate">
           {PLAN.matematica.tramos.slice(0, 4).map((m) => {
-            const desde = inicioSemana(m.desde, t0);
-            const cuando = semanaDelPlan(date, t0) >= m.desde && semanaDelPlan(date, t0) <= m.hasta ? 'ahora' : m.desdeT && m.desdeT !== 'T+0' ? m.desdeT : dm(desde);
+            const desde = m.inicio ?? inicioSemana(m.desde, t0);
+            const enCurso = m.inicio && m.fin ? date >= m.inicio && date <= m.fin : semanaDelPlan(date, t0) >= m.desde && semanaDelPlan(date, t0) <= m.hasta;
+            const cuando = enCurso ? 'ahora' : m.desdeT && m.desdeT !== 'T+0' ? m.desdeT : dm(desde);
             const p = TRAMOS.find((t) => t.id === m.habilita);
             return (
               <li key={m.id}>
@@ -210,11 +211,11 @@ function Linea({ t0 }: { t0: string }) {
   const xd = (d: string) => X0 + Math.max(0, Math.min(91, (new Date(d + 'T12:00').getTime() - new Date(t0 + 'T12:00').getTime()) / 864e5)) * dx;
   const t2 = inicioSemana(PLAN.hitos.find((h) => h.id === 'T+2')!.semana, t0);
   const fin = addDays(t0, 91);
-  const prog = TRAMOS.filter((t) => inicioSemana(t.desde, t0) < fin && t.tipo !== 'descanso');
+  const prog = TRAMOS.filter((t) => inicioDe(t, t0) < fin && t.tipo !== 'descanso');
   const filas: { n: string; c: string; segs: { a: string; b: string; t?: string; sb?: boolean; ancho?: number }[] }[] = [
     { n: 'trabajo', c: RAMA_COLOR.trabajo, segs: [{ a: t0, b: addDays(t0, 13), t: 'sprint', ancho: 5 }, { a: addDays(t0, 14), b: fin, t: 'sigue hasta la oferta' }] },
     { n: 'inglés', c: RAMA_COLOR.ingles, segs: [{ a: t0, b: fin, t: 'ahora: 1 h 30 por día', ancho: 3 }] },
-    { n: 'programación', c: RAMA_COLOR.programacion, segs: prog.map((t) => ({ a: inicioSemana(t.desde, t0), b: finSemana(t.hasta, t0) < fin ? finSemana(t.hasta, t0) : fin, t: t.tipo === 'ventana' ? t.id : t.id === 'P0' ? 'P0' : nombreTramo(t, false) })) },
+    { n: 'programación', c: RAMA_COLOR.programacion, segs: prog.map((t) => ({ a: inicioDe(t, t0), b: finDe(t, t0) < fin ? finDe(t, t0) : fin, t: t.tipo === 'ventana' ? t.id : t.id === 'P0' ? 'P0' : nombreTramo(t, false) })) },
     { n: 'matemática', c: RAMA_COLOR.matematica, segs: [{ a: t0, b: fin, t: 'Aritmética → Álgebra · 2 h por día' }] },
     { n: 'handyx', c: RAMA_COLOR.handyx, segs: [{ a: t0, b: t2, t: 'stand-by hasta el trabajo', sb: true }, { a: t2, b: fin, sb: true }] },
     { n: 'eclipse', c: 'var(--eclipse)', segs: [{ a: t0, b: fin, t: 'clipping 1 h 30 por día y 2 h el finde' }] },

@@ -14,6 +14,7 @@ import { renameBimester } from '../state/goals';
 import { setAreaName } from '../state/profile';
 import { toast } from '../ui/avisos';
 import { Plegable } from '../ui/Plegable';
+import { BloquesPendientes, FilasTrabajo } from './AjustesTrabajo';
 import '../styles/perfil.css';
 
 const TEMAS: [ThemePref, string][] = [['dark', 'Oscuro'], ['light', 'Claro'], ['system', 'Sistema']];
@@ -120,16 +121,15 @@ function PlanT18() {
   const settings = useStore((s) => s.settings)!;
   const cfg = planSettings(settings);
   const t0 = settings.startDate || T0_PLAN;
-  const [marcar, setMarcar] = useState(false);
-  const intensiva = cfg.modo === 'busqueda-intensiva';
+    const intensiva = cfg.modo === 'busqueda-intensiva';
   const decision = PLAN.hitos.find((h) => h.id === 'T+12')!;
   const fechaDecision = (() => { const d = new Date(t0 + 'T12:00'); d.setDate(d.getDate() + (decision.semana - 1) * 7); return dateKey(d); })();
   return (
-    <Plegable id="aj:plan" titulo="Plan T+18" resumen={intensiva ? 'búsqueda intensiva' : 'rutina con trabajo'}>
+    <Plegable id="aj:plan" titulo="Plan T+18" resumen={intensiva ? 'modo intensivo' : 'rutina con trabajo'}>
       <ul className="aj-plan">
         <li>
-          <span><b>Búsqueda intensiva</b><small>{intensiva ? `Activa · Handyx y ventas en stand-by. Al apagarla vuelve la rutina ${cfg.previo?.rutina === 'con-trabajo' ? 'con trabajo' : 'buscando trabajo'} y el día libre.` : 'Rutinas de búsqueda todos los días, sin día libre; Handyx y ventas en pausa sin borrar nada.'}</small></span>
-          <button role="switch" className="switch" aria-checked={intensiva} aria-label="Búsqueda intensiva" onClick={() => {
+          <span><b>Modo intensivo</b><small>{intensiva ? `Activa · Handyx y ventas en stand-by. Al apagarla vuelve la rutina ${cfg.previo?.rutina === 'con-trabajo' ? 'con trabajo' : 'buscando trabajo'} y el día libre.` : 'Rutinas de búsqueda todos los días, sin día libre; Handyx y ventas en pausa sin borrar nada.'}</small></span>
+          <button role="switch" className="switch" aria-checked={intensiva} aria-label="Modo intensivo" onClick={() => {
             if (intensiva) {
               if (window.confirm('¿Apagás la búsqueda intensiva? Vuelve la rutina anterior, el día libre y Handyx y ventas salen de la pausa.')) desactivarIntensiva(dateKey());
             } else if (window.confirm('¿Activás la búsqueda intensiva desde hoy? Handyx y ventas quedan en pausa (no se borra nada).')) activarIntensiva(dateKey());
@@ -141,29 +141,14 @@ function PlanT18() {
         </li>
         <ExtrasFeature t0={t0} />
         <CapasV2 />
-        <li>
-          <span><b>Rutina del día</b><small>{intensiva ? 'La de la búsqueda intensiva mientras dure; al apagarla vuelve esta' : 'Cambia al marcar T+2 (con confirmación)'}</small></span>
-          <div className="segmentado" role="radiogroup" aria-label="Rutina de lunes a viernes">
-            <button role="radio" disabled={intensiva} aria-checked={(intensiva ? cfg.previo?.rutina : cfg.rutina) === 'busqueda'} onClick={() => setPlanSettings({ rutina: 'busqueda' })}>Búsqueda</button>
-            <button role="radio" disabled={intensiva} aria-checked={(intensiva ? cfg.previo?.rutina : cfg.rutina) === 'con-trabajo'} onClick={() => setPlanSettings({ rutina: 'con-trabajo' })}>Con trabajo</button>
-          </div>
-        </li>
-        <li>
-          <span><b>T+2 · trabajo nuevo</b><small>{cfg.t2 ? `Marcado el ${fechaCorta(cfg.t2)}` : 'Cuando firmes, marcalo: Hoy te ofrece pasar a la rutina con trabajo'}</small></span>
-          {cfg.t2 ? (
-            <button className="subrayado" onClick={() => setPlanSettings({ t2: undefined })}>Desmarcar</button>
-          ) : marcar ? (
-            <span className="aj-dos"><button className="subrayado" onClick={() => setMarcar(false)}>No</button><button className="btn-borde" onClick={() => { setPlanSettings({ t2: dateKey() }); setMarcar(false); }}>Sí, hoy</button></span>
-          ) : (
-            <button className="btn-borde" onClick={() => setMarcar(true)}>Marcar T+2</button>
-          )}
-        </li>
+        <FilasTrabajo />
         <li>
           <span><b>Día libre</b><small>{intensiva ? `Ninguno mientras dure la búsqueda intensiva; ${DIAS_LIBRE.find(([v]) => v === (cfg.previo?.diaLibre ?? null))?.[1].toLowerCase()} queda guardado` : 'Solo repasos de 20 min y entreno suave'}</small></span>
           <select className="campo-texto" disabled={intensiva} value={cfg.diaLibre ?? ''} onChange={(e) => setPlanSettings({ diaLibre: e.target.value ? Number(e.target.value) : null })} aria-label="Día libre">
             {DIAS_LIBRE.map(([v, n]) => <option key={n} value={v ?? ''}>{n}</option>)}
           </select>
         </li>
+        <BloquesPendientes />
         <li className="aj-columna">
           <span><b>Umbrales de Handyx</b><small>Para decidir el {fechaCorta(fechaDecision)} {fechaDecision.slice(0, 4)}. Los escribís vos: Trazo no inventa números.</small></span>
           <div className="dos-campos">

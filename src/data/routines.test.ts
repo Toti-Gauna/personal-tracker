@@ -57,7 +57,7 @@ describe('qué rutina toca', () => {
     expect(routineFor(MARTES, { diaLibre: null })).toBe('weekday');
     expect(routineFor(VIERNES, { diaLibre: 5 })).toBe('libre');
     expect(routineFor(VIERNES, { rutina: 'con-trabajo' })).toBe('con-trabajo');
-    expect(routineFor(SABADO, { rutina: 'con-trabajo' })).toBe('weekend');
+    expect(routineFor(SABADO, { rutina: 'con-trabajo' })).toBe('con-trabajo-finde');
   });
 
   it('con la fecha inyectada, el día se cuenta en la hora de Buenos Aires', () => {
@@ -159,7 +159,7 @@ describe('ola 17: rutina de las 08:00 y dormir a las 22:00', () => {
     const d = buildBlocks(planDay(VIERNES, 'tarde', undefined, 'busqueda-intensiva'));
     expect(d.map((b) => [b.start, b.min, b.key])).toEqual([
       ['08:00', 30, 'rutina'], ['08:30', 90, 'abi'], ['10:00', 120, 'trabajo'], ['12:00', 90, 'prog'], ['13:30', 90, 'busqueda'],
-      ['15:00', 90, 'math'], ['16:30', 90, 'ingles'], ['18:00', 180, 'entreno'], ['21:00', 60, 'cierre'], ['22:00', 600, 'sueno'],
+      ['15:00', 90, 'math'], ['16:30', 90, 'ingles'], ['18:00', 120, 'entreno'], ['20:00', 60, 'cierre'], ['21:00', 660, 'sueno'],
     ]);
     // Los ids son los de siempre: la sesión de estudio, el entreno y las puertas funcionan igual.
     expect(d.find((b) => b.key === 'math')!.rama).toBe('matematica');
@@ -171,16 +171,17 @@ describe('ola 17: rutina de las 08:00 y dormir a las 22:00', () => {
     expect(buildBlocks(planDay(MARTES, 'tarde', undefined, 'libre')).map((b) => b.title)).toEqual(['Repasos · 20 min', 'Entrenamiento suave']);
   });
 
-  it('a las 04:00 la rutina queda igual, con el entreno de 3 h y dormir a las 22:00', () => {
+  it('a las 04:00 el entreno es de 2 h (con las caminatas), el cierre de 20:00 a 21:00 y se duerme a las 21:00', () => {
     const p = planRoutine('busqueda-intensiva', 'completo');
     const b = (id: string) => p.find((x) => x.block.id === id)!;
-    expect([b('entreno').start, b('entreno').min, b('cierre').start, b('cierre').min, b('sueno').start]).toEqual(['18:00', 180, '21:00', 60, '22:00']);
+    expect([b('entreno').start, b('entreno').min, b('cierre').start, b('cierre').min, b('sueno').start]).toEqual(['18:00', 120, '20:00', 60, '21:00']);
     expect(p[0].start).toBe('04:00');
   });
 
-  it('todas las rutinas duermen a las 22:00', () => {
-    for (const t of DAY_TYPES) expect([t, ROUTINES_FILE.dayRoutines[t].blocks.find((x) => x.id === 'sueno')?.start]).toEqual([t, '22:00']);
-    expect(ROUTINES_FILE.tarde.blocks.find((x) => x.id === 'sueno')!.start).toBe('22:00');
+  it('las rutinas v3 duermen a las 21:00 y las de siempre, a las 22:00', () => {
+    const V3 = ['busqueda-intensiva', 'busqueda-intensiva-finde', 'con-trabajo', 'con-trabajo-finde'];
+    for (const t of DAY_TYPES) expect([t, ROUTINES_FILE.dayRoutines[t].blocks.find((x) => x.id === 'sueno')?.start]).toEqual([t, V3.includes(t) ? '21:00' : '22:00']);
+    expect(ROUTINES_FILE.tarde.blocks.find((x) => x.id === 'sueno')!.start).toBe('21:00');
   });
 
   it('la validación revisa la rutina de las 08:00', () => {

@@ -75,8 +75,8 @@ describe('data/idiomas.json · el roadmap maestro v3', () => {
     expect(nivelesIdiomas('2028-01-10', T0)).toMatchObject({ sos: ['Inglés C1'], vasASer: 'Francés B1' });
   });
 
-  it('la rutina de búsqueda intensiva le da al bloque de idiomas las 11,5 h que pide el roadmap', () => {
-    expect(horasDeLaRutina()).toBe(11.5);
+  it('el modo intensivo le da al bloque de idiomas 7 h por semana (el roadmap pide 11,5)', () => {
+    expect(horasDeLaRutina()).toBe(7);
   });
 });
 
@@ -89,19 +89,17 @@ describe('integración con el plan T+18', () => {
     expect(PLAN.hitos.find((h) => h.id === 'T+18')!.titulo).not.toMatch(/examen C1/);
   });
 
-  it('el bloque de idiomas de Hoy dice lo que toca esa semana y trae sus tareas', () => {
+  it('el bloque de idiomas de Hoy es inglés técnico y de entrevista, con las tareas de la rutina', () => {
     vi.useFakeTimers({ toFake: ['Date'] });
     vi.setSystemTime(new Date(2026, 10, 17, 7, 0));
     resetState();
     register('Toti', 'Abi', T0);
     startDay('completo', '04:00', '2026-11-17');
     const b = getState().days['2026-11-17'].blocks.find((x) => x.key === 'ingles')!;
-    expect(tituloDeBloque(b, '2026-11-17')).toBe('Inglés · Measure What Matters');
-    expect(b.tasks.map((t) => t.t)).toEqual(faseIdiomaEn('2026-11-17').tareas);
-    startDay('completo', '04:00', '2027-01-04');
-    const p = getState().days['2027-01-04'].blocks.find((x) => x.key === 'ingles')!;
-    expect(tituloDeBloque(p, '2027-01-04')).toBe('Inglés · Pronunciación');
-    expect(p.tasks[0].t).toBe('Curso de Udemy: una lección');
+    expect(tituloDeBloque(b, '2026-11-17')).toBe('Inglés técnico y de entrevista');
+    expect(b.tasks.map((t) => t.t)).toEqual(['Explicar un proyecto en voz alta (inglés técnico)', 'Práctica de código en vivo en inglés', 'Preguntas de entrevista en inglés']);
+    // La fase del roadmap sigue disponible en Estudio · Idiomas.
+    expect(faseIdiomaEn('2026-11-17').tareas.length).toBeGreaterThan(0);
     vi.useRealTimers();
   });
 });
@@ -130,7 +128,7 @@ describe('pantallas de Idiomas', () => {
     expect(screen.getByText('Inglés · Measure What Matters')).toBeInTheDocument();
     expect(screen.getByText('Inglés B1–B2')).toBeInTheDocument();
     expect(screen.getByText('Inglés C1')).toBeInTheDocument();
-    expect(screen.getByText(/pide 11,5 h por semana · la búsqueda intensiva le da 11,5 h/)).toBeInTheDocument();
+    expect(screen.getByText(/pide 11,5 h por semana · la búsqueda intensiva le da 7 h/)).toBeInTheDocument();
     const tl = document.querySelector('.re-tl') as HTMLElement;
     expect(within(tl).getAllByRole('link').map((a) => a.querySelector('b')!.textContent)).toEqual(['Inglés', 'Francés', 'Italiano', 'Alemán', 'Japonés', 'Chino']);
   });

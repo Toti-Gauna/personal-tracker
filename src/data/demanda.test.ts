@@ -87,10 +87,10 @@ describe('ola 26 · la tabla de demanda', () => {
       v('C', ['DuckDB', 'Rust']),
     ], cal, HOY);
     const fila = (n: string) => t.filas.find((f) => f.tecnologia === n)!;
-    expect(fila('LangGraph (agente analista con herramientas)')).toMatchObject({ vacantes: 2, proyecto: 'P1', fecha: '2027-01-17', cubierta: false });
+    expect(fila('LangGraph (agente analista con herramientas)')).toMatchObject({ vacantes: 2, proyecto: 'P1', fecha: '2026-12-09', cubierta: false });
     expect(fila('Python').vacantes).toBe(1);
     expect(fila('Kubernetes')).toMatchObject({ vacantes: 1, proyecto: 'P5' });
-    expect(fila('DuckDB y Parquet')).toMatchObject({ proyecto: 'P5', fecha: '2027-07-11' });
+    expect(fila('DuckDB y Parquet')).toMatchObject({ proyecto: 'P5', fecha: '2027-05-14' });
     expect(t.filas[0].vacantes).toBe(2);
     expect(t.vacantes).toBe(3);
   });
@@ -104,6 +104,6 @@ describe('ola 26 · la tabla de demanda', () => {
 
   it('una fecha pasada marca la tecnología como cubierta', () => {
     const t = tablaDemanda([v('A', ['Next.js'])], cal, '2027-02-01');
-    expect(t.filas[0]).toMatchObject({ proyecto: 'P0', fecha: '2026-11-29', cubierta: true });
+    expect(t.filas[0]).toMatchObject({ proyecto: 'P0', fecha: '2026-11-22', cubierta: true });
   });
 });

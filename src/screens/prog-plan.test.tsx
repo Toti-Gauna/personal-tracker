@@ -32,11 +32,12 @@ describe('nivel de salida de las 12 ventanas', () => {
   it('los criterios se tildan y se destildan', () => {
     tildarSalida('W1', 0);
     tildarSalida('W1', 2);
-    expect(avanceSalida(getState().plan, 'W1')).toEqual({ hechos: 2, total: 3, completo: false });
+    expect(avanceSalida(getState().plan, 'W1')).toEqual({ hechos: 2, total: 4, completo: false });
     tildarSalida('W1', 1);
+    tildarSalida('W1', 3);
     expect(avanceSalida(getState().plan, 'W1').completo).toBe(true);
     tildarSalida('W1', 1);
-    expect(avanceSalida(getState().plan, 'W1').hechos).toBe(2);
+    expect(avanceSalida(getState().plan, 'W1').hechos).toBe(3);
   });
 });
 

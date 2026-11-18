@@ -5,7 +5,7 @@
 import { useState } from 'react';
 import { horasDeRama } from '../data/metas-plan';
 import {
-  PLAN, corteHandyx, diaSemanaCorto, faseIngles, faseTrabajo, fechaCorta, fechaHito, finSemana, hitoSemana, inicioSemana, nombreTramo, semanaDelPlan,
+  PLAN, corteHandyx, diaSemanaCorto, faseIngles, faseTrabajo, fechaCorta, fechaHito, finSemana, hitoSemana, inicioDe, inicioSemana, nombreTramo, semanaDelPlan,
   T0_PLAN, tramoActivo, type EstadoPostulacion,
 } from '../data/plan';
 import { planSettings, useStore } from '../state/store';
@@ -273,7 +273,7 @@ export function PlanIngles({ day }: { day: DayLog }) {
       <div className="pi-fases">
         {fases.map((x) => (
           <div key={x.id} className={x.id === f.id ? 'on' : ''}>
-            <span className="mono sub">{x.id === f.id ? 'ahora' : `desde ${fechaCorta(inicioSemana(x.desde, t0))}`}</span>
+            <span className="mono sub">{x.id === f.id ? 'ahora' : `desde ${fechaCorta(inicioDe(x, t0))}`}</span>
             <b>{x.nombre}</b>
           </div>
         ))}

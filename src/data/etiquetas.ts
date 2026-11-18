@@ -3,7 +3,7 @@
  * título del bloque de programación con el proyecto activo.
  */
 import { AREAS } from './defaults';
-import { faseIdiomaEn, tituloIdiomaDelDia } from './idiomas';
+import { faseIdiomaEn } from './idiomas';
 import { mesClipEn, mesDe as mesClipDe } from './clipping';
 import { PLAN, bimestreDelPlan, enPlan, corteHandyx, faseTrabajo, nombreTramo, tramoActivo, ventanaW } from './plan';
 import type { PlanState } from './plan-state';
@@ -22,11 +22,10 @@ export function colorDeBloque(b: Pick<Block, 'rama' | 'area'>, delPlan: boolean)
 
 /** Título que se muestra: el bloque de programación lleva el proyecto activo ("Programación · Faro v1"). */
 export function tituloDeBloque(b: Pick<Block, 'rama' | 'key' | 'title'>, date: string, t0?: string) {
-  // Ola 21: el bloque de idiomas dice lo que toca esa semana ("Inglés · Measure What Matters").
-  if (b.key === 'ingles') return tituloIdiomaDelDia(date, t0);
+  // Ola 27: el bloque de idiomas es inglés técnico y de entrevista (el año del roadmap se ve en Estudio · Idiomas).
   // Ola 23: el clipping dice el mes del Roadmap Clipper ("Clipping · Mes 1").
   if (b.key === 'clipping' && mesClipDe(date) >= 1 && mesClipDe(date) <= 12) return `Clipping · Mes ${mesClipDe(date)}`;
-  if (b.rama !== 'programacion' || b.key !== 'prog') return b.title;
+  if (b.rama !== 'programacion' || !/^prog/.test(b.key) || /^Preparación/.test(b.title) || /^Matemática/.test(b.title)) return b.title;
   return programacionDelPlan(date, t0) ?? b.title;
 }
 

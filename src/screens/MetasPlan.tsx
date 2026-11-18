@@ -20,7 +20,7 @@ import { addDays, parseDate } from '../data/time';
 import type { DayLog, Rama } from '../data/types';
 import { addProgress, deleteGoal, renameBimester, stepOf } from '../state/goals';
 import { togglePasoMapa, marcarHito, moverHito, confirmarMetas, editarMeta, editarMetaFija, ensayarRespuesta, lunesDe, sumarContador, sumarHandyx, sumarHechoMeta } from '../state/plan';
-import { planSettings, useStore } from '../state/store';
+import { inicioTrabajo, planSettings, useStore } from '../state/store';
 import { Calendario } from '../ui/Calendario';
 import { Plegable } from '../ui/Plegable';
 import { Casilla } from '../ui/Casilla';
@@ -102,7 +102,7 @@ function MapaPortfolio() {
   );
 }
 
-function useCtx(): CtxPlan & { goals: Goal[]; intensiva: boolean } {
+function useCtx(): CtxPlan & { goals: Goal[]; intensiva: boolean; inicioTrabajo: string } {
   const plan = useStore((s) => s.plan);
   const days = useStore((s) => s.days);
   const study = useStore((s) => s.study);
@@ -110,7 +110,7 @@ function useCtx(): CtxPlan & { goals: Goal[]; intensiva: boolean } {
   const settings = useStore((s) => s.settings);
   const goals = useStore((s) => s.goals.goals);
   const clipping = useStore((s) => s.clipping);
-  return { plan, days, study, train, goals, clipping, t0: settings?.startDate ?? T0_PLAN, t2: planSettings(settings).t2, intensiva: planSettings(settings).modo === 'busqueda-intensiva' };
+  return { plan, days, study, train, goals, clipping, t0: settings?.startDate ?? T0_PLAN, t2: planSettings(settings).t2, intensiva: planSettings(settings).modo === 'busqueda-intensiva', inicioTrabajo: inicioTrabajo(settings) };
 }
 
 const colorDe = (m: { rama?: Rama; area?: keyof typeof AREAS }) => (m.rama ? RAMA_COLOR[m.rama] : m.area ? AREAS[m.area].css : 'var(--sub)');
@@ -196,7 +196,7 @@ export function SemanaPlan({ day, editar }: { day: DayLog; editar: boolean }) {
   const d7 = addDays(l, 6);
   const s = semanaDelPlan(date, t0);
   const guardadas = ctx.plan.semanas[l];
-  const generadas = useMemo(() => metasSemanaGeneradas(date, t0, { intensiva: ctx.intensiva, pausa: ctx.plan }), [date, t0, ctx.intensiva, ctx.plan]);
+  const generadas = useMemo(() => metasSemanaGeneradas(date, t0, { intensiva: ctx.intensiva && date < ctx.inicioTrabajo, pausa: ctx.plan }), [date, t0, ctx.intensiva, ctx.inicioTrabajo, ctx.plan]);
   const metas = guardadas?.metas ?? generadas;
   const personales = visibles(ctx.goals.filter((g) => appliesTo(g, 'semana', date)), ctx.plan, date);
   const vctx = { study: ctx.study, days: ctx.days, train: ctx.train };
@@ -298,7 +298,7 @@ export function MesPlan({ day, editar }: { day: DayLog; editar: boolean }) {
   const [a, b] = rangoMes(date);
   const key = claveMes(date);
   const guardado = ctx.plan.meses[key];
-  const generadas = useMemo(() => metasMesGeneradas(date, t0, ctx.study, { intensiva: ctx.intensiva, pausa: ctx.plan }), [date, t0, ctx.study, ctx.intensiva, ctx.plan]);
+  const generadas = useMemo(() => metasMesGeneradas(date, t0, ctx.study, { intensiva: ctx.intensiva && date < ctx.inicioTrabajo, pausa: ctx.plan }), [date, t0, ctx.study, ctx.intensiva, ctx.inicioTrabajo, ctx.plan]);
   const metas = guardado?.metas ?? generadas;
   const confirmado = guardado?.confirmado ?? (t0 >= a && t0 <= b ? t0 : undefined);
   const cierra = cierraEnMes(date, ctx.plan.entrevistas, t0);

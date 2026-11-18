@@ -32,8 +32,8 @@ function ordenar(blocks: Block[]): Block[] {
 export function reprogramar(blocks: Block[], key: string, start: string, min: number, modo: Modo): Resultado {
   const editado = blocks.find((b) => b.key === key);
   if (!editado) return { ok: false, error: 'No existe ese bloque.', exceso: 0 };
-  if (esSueno(editado)) return { ok: false, error: 'Dormir a las 22:00 no se mueve.', exceso: 0 };
   const sueno = blocks.find(esSueno);
+  if (esSueno(editado)) return { ok: false, error: `Dormir a las ${sueno?.start ?? '21:00'} no se mueve.`, exceso: 0 };
   const limite = sueno ? toMin(sueno.start) : 24 * 60;
   const nuevo = { ...editado, start, min, editado: true as const };
   const ini = toMin(start);
@@ -77,7 +77,7 @@ export function reprogramar(blocks: Block[], key: string, start: string, min: nu
     cursor = s + durs[i];
     return s === toMin(b.start) && durs[i] === b.min ? b : { ...b, start: toHHMM(s), min: durs[i] };
   });
-  if (cursor > limite) return { ok: false, error: `Los que siguen pasan de dormir (${toHHMM(limite)}) por ${cursor - limite} min: acortalos o salteá alguno.`, exceso: cursor - limite };
+  if (cursor > limite) return { ok: false, error: `Los que siguen pasan de dormir (${toHHMM(limite)}) por ${cursor - limite} min: acortalos o salteá alguno (sin margen, lo primero que se recorta es el último bloque de programación).`, exceso: cursor - limite };
   return { ok: true, blocks: ordenar([...resto, nuevo, ...movidos]) };
 }
 

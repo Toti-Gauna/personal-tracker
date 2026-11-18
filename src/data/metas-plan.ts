@@ -4,11 +4,12 @@
  * los cambia o los borra. Nada se carga 18 meses antes: todo se calcula al abrir el período.
  */
 import { IDIOMAS, calendarioIdiomas } from './idiomas';
+import { clippingActivo } from './clipping-activo';
 import { mesClipEn, mesDe as mesClipDe, planEntre } from './clipping';
 import { clipsEntre, usdEntre } from './clipping-metricas';
 import type { ClippingState } from './clipping-state';
 import {
-  PLAN, SEMANAS, SEMANAS_BIM, TRAMOS, bimestreDelPlan, corteHandyx, faseIngles, faseTrabajo, fechaCorta, fechaHito, finSemana, hitoSemana,
+  PLAN, SEMANAS, SEMANAS_BIM, TRAMOS, bimestreDelPlan, corteHandyx, faseIngles, faseTrabajo, fechaCorta, fechaHito, finDe, finSemana, hitoSemana, inicioDe,
   inicioSemana, metasSemanaPlan, tramoEnSemana, nombreTramo, semanaDelPlan, T0_PLAN, tramoActivo, type MetaGenerada, type Tramo,
 } from './plan';
 import { enPausa, type PlanState } from './plan-state';
@@ -149,25 +150,28 @@ export interface OpcionesPlan {
 }
 
 /**
- * Los contadores semanales de la búsqueda intensiva (Ola 8b): 70 a medida y 70 mensajes en
- * las dos semanas del sprint, y las horas de la tabla (matemática 14, programación 25,5,
- * inglés 11,5, búsqueda 10,5, clipping 11,5, entrenamiento 10). Los clips de la semana salen del mes del
- * Roadmap Clipper (ola 23): clips por día del mes × 7.
+ * Los contadores semanales del modo intensivo (v3, ola 27): 25 postulaciones y 25 mensajes (5 por día de lunes a
+ * viernes, nada el finde), y las horas de las rutinas: programación 53, matemática 7, idiomas 7, búsqueda 5 y
+ * 5 entrenamientos. Los 2 posts de LinkedIn van en inglés dentro del bloque de idiomas. El clipping está pausado:
+ * sus metas (clips y horas) solo salen cuando le asignás un bloque.
  */
 export const SEMANA_INTENSIVA: (Omit<MetaGenerada, 'id' | 'origen'> & { clave: string })[] = [
-  { rama: 'trabajo', texto: 'Postulaciones a medida', meta: 35, clave: 'postulaciones', nota: '5 por día' },
-  { rama: 'trabajo', texto: 'Mensajes directos', meta: 35, clave: 'mensajes', nota: '5 por día' },
-  { rama: 'trabajo', texto: 'Horas de búsqueda', meta: 10.5, unidad: 'h', clave: 'horas-busqueda' },
-  { rama: 'programacion', texto: 'Horas de programación', meta: 25.5, unidad: 'h', clave: 'horas-prog' },
-  { rama: 'matematica', texto: 'Horas de matemática', meta: 14, unidad: 'h', clave: 'horas-mate' },
-  { rama: 'ingles', texto: 'Horas de idiomas', meta: 11.5, unidad: 'h', clave: 'horas-ingles' },
+  { rama: 'trabajo', texto: 'Postulaciones a medida', meta: 25, clave: 'postulaciones', nota: '5 por día, de lunes a viernes' },
+  { rama: 'trabajo', texto: 'Mensajes directos', meta: 25, clave: 'mensajes', nota: '5 por día, de lunes a viernes' },
+  { rama: 'trabajo', texto: 'Horas de búsqueda', meta: 5, unidad: 'h', clave: 'horas-busqueda' },
+  { rama: 'trabajo', texto: 'Posts de LinkedIn en inglés', meta: 2, clave: 'posts', nota: 'dentro del bloque de idiomas' },
+  { rama: 'programacion', texto: 'Horas de programación', meta: 53, unidad: 'h', clave: 'horas-prog' },
+  { rama: 'matematica', texto: 'Horas de matemática', meta: 7, unidad: 'h', clave: 'horas-mate' },
+  { rama: 'ingles', texto: 'Horas de idiomas', meta: 7, unidad: 'h', clave: 'horas-ingles' },
   // Ola 18/21: la entrevista se practica en el bloque de búsqueda laboral.
   { rama: 'trabajo', texto: 'Respuestas ensayadas', meta: 10, clave: 'respuestas' },
   { rama: 'trabajo', texto: 'Simulacro de entrevista', meta: 1, clave: 'simulada' },
-  // Ola 23: 1 h 30 de lunes a viernes y 2 h el sábado y el domingo; los clips salen del mes del roadmap.
-  { area: 'eclipse', texto: 'Horas de clipping', meta: 11.5, unidad: 'h', clave: 'horas-clipping' },
-  { area: 'eclipse', texto: 'Clips publicados', meta: 35, clave: 'clips' },
   { rama: 'salud', texto: 'Entrenamientos', meta: 5, clave: 'entrenos' },
+];
+
+/** Las metas de la semana del clipping (solo si tiene bloque en la rutina). */
+const CLIPPING_SEMANA: typeof SEMANA_INTENSIVA = [
+  { area: 'eclipse', texto: 'Clips publicados', meta: 35, clave: 'clips' },
 ];
 
 /** Saca las metas de ramas o áreas en pausa (Handyx; las ventas de Eclipse). */
@@ -185,7 +189,7 @@ export function metasSemanaGeneradas(fecha: string, t0 = T0_PLAN, op: OpcionesPl
   const s = semanaDelPlan(fecha, t0);
   if (s < 1 || s > SEMANAS) return [];
   const base: MetaGenerada[] = op.intensiva
-    ? SEMANA_INTENSIVA.map((x) => ({ ...x, id: `s-${x.clave}`, origen: 'plan' as const, ...(x.clave === 'clips' ? clipsDeLaSemana(fecha) : {}) }))
+    ? [...SEMANA_INTENSIVA, ...(clippingActivo() ? CLIPPING_SEMANA : [])].map((x) => ({ ...x, id: `s-${x.clave}`, origen: 'plan' as const, ...(x.clave === 'clips' ? clipsDeLaSemana(fecha) : {}) }))
     : metasSemanaPlan(fecha, t0).map((x) => ({ id: `s-${x.id}`, rama: x.rama, texto: x.texto, meta: x.meta, unidad: x.unidad || undefined, clave: x.id, origen: 'plan' }));
   const out = sinPausa(base, fecha, op.pausa);
   const t = tramoActivo(fecha, t0);
@@ -233,8 +237,8 @@ export function cierraEnMes(fecha: string, entrevistas: { fecha: string; rol: st
   const out: Cierre[] = [];
   const en = (d: string) => d >= a && d <= b;
   for (const t of TRAMOS) {
-    const ini = inicioSemana(t.desde, t0);
-    const fin = finSemana(t.hasta, t0);
+    const ini = inicioDe(t, t0);
+    const fin = finDe(t, t0);
     if (t.tipo === 'proyecto' && en(fin)) out.push({ fecha: fin, rama: 'programacion', texto: t.id === 'P0' ? 'P0 · consolidación cerrada' : `${nombreTramo(t, false)} entregado y examen de programación` });
     if (t.tipo === 'cert' && en(fin)) out.push({ fecha: fin, rama: 'programacion', texto: `Examen de ${t.corto ?? t.nombre}` });
     if (t.tipo === 'ventana' && en(ini)) out.push({ fecha: ini, rama: 'matematica', texto: `Empieza la ventana ${t.id} · ${t.hasta - t.desde + 1} semanas` });
@@ -265,7 +269,7 @@ export function metasMesGeneradas(fecha: string, t0 = T0_PLAN, study?: StudyStat
     PLAN.etapaActual.mes.metas.forEach((m, i) => push({ id: `m-e${i}`, rama: m.rama, texto: m.texto }));
   } else {
     // Programación: lo que se entrega este mes; si no se entrega nada, las horas del tramo.
-    const cierran = TRAMOS.filter((t) => { const f = finSemana(t.hasta, t0); return f >= a && f <= b && (t.tipo === 'proyecto' || t.tipo === 'cert') && t.id !== 'P0'; });
+    const cierran = TRAMOS.filter((t) => { const f = finDe(t, t0); return f >= a && f <= b && (t.tipo === 'proyecto' || t.tipo === 'cert') && t.id !== 'P0'; });
     for (const t of cierran) {
       if (t.tipo === 'proyecto') {
         push({ id: `m-cas-${t.id}`, rama: 'programacion', texto: `${nombreTramo(t, false)} con tráiler, docs y landing`, meta: 6, clave: `casillas:${t.id}` });
@@ -280,7 +284,7 @@ export function metasMesGeneradas(fecha: string, t0 = T0_PLAN, study?: StudyStat
       if (t.tipo !== 'descanso') push({ id: 'm-horas-prog', rama: 'programacion', texto: `Horas de programación · ${t.tipo === 'cert' ? t.corto ?? t.nombre : t.tipo === 'proyecto' ? nombreTramo(t, false) : t.nombre}`, meta: Math.round(semanal('horas-prog') * semanas), unidad: 'h', clave: 'horas-prog' });
     }
     // Matemática: la ventana W o los capítulos del mes (uno cada 5 días).
-    const w = TRAMOS.find((t) => t.tipo === 'ventana' && inicioSemana(t.desde, t0) <= b && finSemana(t.hasta, t0) >= a);
+    const w = TRAMOS.find((t) => t.tipo === 'ventana' && inicioDe(t, t0) <= b && finDe(t, t0) >= a);
     if (w) push({ id: `m-${w.id}`, rama: 'matematica', texto: `Ventana ${w.id}: ${w.que}` });
     const caps = Math.max(1, Math.round((w ? dias - 7 * (w.hasta - w.desde + 1) : dias) / 5));
     if (!w || caps > 1) {
@@ -299,17 +303,16 @@ export function metasMesGeneradas(fecha: string, t0 = T0_PLAN, study?: StudyStat
       push({ id: 'm-msj', rama: 'trabajo', texto: 'Mensajes directos', meta: porDia.mensajes * diasBusqueda, clave: 'mensajes', nota: `${porDia.mensajes} por día` });
       push({ id: 'm-sim', rama: 'trabajo', texto: 'Entrevistas simuladas', meta: Math.max(1, Math.round(diasBusqueda / 7)), clave: 'simulada' });
     }
-    if (diasBusqueda < dias) push({ id: 'm-busq', rama: 'trabajo', texto: 'Horas de búsqueda', meta: Math.round(2 * ((dias - diasBusqueda) / 7)), unidad: 'h', clave: 'horas-busqueda' });
     // Idiomas (ola 21): las 11,5 h por semana del roadmap y el hito de la fase que cierra en el mes.
     push({ id: 'm-ing', rama: 'ingles', texto: 'Horas de idiomas', meta: Math.round(((IDIOMAS.horasSemana * dias) / 7) * 10) / 10, unidad: 'h', clave: 'horas-ingles', nota: `${String(IDIOMAS.horasSemana).replace('.', ',')} h por semana` });
     for (const f of calendarioIdiomas(t0)) if (f.fin >= a && f.fin <= b) push({ id: `m-idioma-${f.clave}`, rama: 'ingles', texto: `${f.nombre}: ${f.hito.charAt(0).toLowerCase()}${f.hito.slice(1)}` });
     // Handyx: el corte que cae en el mes y las horas.
     for (const c of PLAN.handyx.cortes) { const f = finSemana(c.hasta, t0); if (f >= a && f <= b) push({ id: `m-corte-${c.id}`, rama: 'handyx', texto: `Corte ${c.nombre.toLowerCase()} el ${fechaCorta(f)}: ${c.texto}` }); }
-    if (corteHandyx(a, t0)) push({ id: 'm-hx', rama: 'handyx', texto: 'Horas de Handyx', meta: Math.round(semanal('horas-handyx') * semanas), unidad: 'h', clave: 'horas-handyx' });
+    if (corteHandyx(a, t0) && semanal('horas-handyx') > 0) push({ id: 'm-hx', rama: 'handyx', texto: 'Horas de Handyx', meta: Math.round(semanal('horas-handyx') * semanas), unidad: 'h', clave: 'horas-handyx' });
     // Salud.
-    push({ id: 'm-entreno', rama: 'salud', texto: 'Entrenar 6 de 7 días', meta: Math.round((dias * 6) / 7), clave: 'entrenos' });
+    push({ id: 'm-entreno', rama: 'salud', texto: 'Entrenar 5 de 7 días', meta: Math.round((dias * 5) / 7), clave: 'entrenos' });
   }
-  if (op.intensiva) {
+  if (op.intensiva && clippingActivo()) {
     // Ola 23: clips y USD del Roadmap Clipper, día por día del mes (el mes del roadmap arranca el 16).
     const pc = planEntre(a, b);
     push({ id: 'm-clips', area: 'eclipse', texto: 'Clips publicados', meta: pc.clips, clave: 'clips', nota: 'según el mes del roadmap' });
@@ -336,6 +339,7 @@ export function resumenMes(fecha: string, t0 = T0_PLAN, study?: StudyState) {
 export function letraTramo(t: Tramo) {
   if (t.tipo === 'descanso') return '—';
   if (t.tipo === 'ventana') return 'W';
+  if (t.tipo === 'sumas') return '+';
   if (t.tipo === 'cert') return 'C';
   if (t.tipo === 'colchon') return '·';
   if (t.tipo === 'cierre') return 'T';
@@ -389,8 +393,8 @@ export function filasBimestre(n: number, fecha: string, c: CtxPlan, editadas: Re
     let avance = transcurrido;
     if (rama === 'programacion') {
       const ts = TRAMOS.filter((t) => t.tipo !== 'descanso' && t.desde <= b.hasta && t.hasta >= b.desde);
-      const cerrados = ts.filter((t) => finSemana(t.hasta, t0) < fecha).length;
-      const partes = ts.slice(0, 3).map((t) => (t.hasta <= b.hasta ? `${nombreLeyenda(t)} ${t.tipo === 'proyecto' ? 'se entrega' : 'termina'} el ${fechaCorta(finSemana(t.hasta, t0))}` : `${nombreLeyenda(t)} empieza el ${fechaCorta(inicioSemana(t.desde, t0))}`));
+      const cerrados = ts.filter((t) => finDe(t, t0) < fecha).length;
+      const partes = ts.slice(0, 3).map((t) => (t.hasta <= b.hasta ? `${nombreLeyenda(t)} ${t.tipo === 'proyecto' ? 'se entrega' : 'termina'} el ${fechaCorta(finDe(t, t0))}` : `${nombreLeyenda(t)} empieza el ${fechaCorta(inicioDe(t, t0))}`));
       sub = partes.slice(-2).join('; ');
       lado = `${cerrados}/${ts.length}`;
       avance = ts.length ? cerrados / ts.length : 0;
@@ -398,7 +402,7 @@ export function filasBimestre(n: number, fecha: string, c: CtxPlan, editadas: Re
       const plan = capitulosPlaneados(PLAN.metasBimestre.matematica[n - 1] ?? '');
       const hechos = capsAprobados(c.study, b.inicio, hasta);
       const w = TRAMOS.find((t) => t.tipo === 'ventana' && t.desde <= b.hasta && t.hasta >= b.desde);
-      sub = w ? `Ventana ${w.id} del ${fechaCorta(inicioSemana(w.desde, t0))}: ${w.que.toLowerCase()}` : 'Un capítulo con test aprobado cada 5 días';
+      sub = w ? `Ventana ${w.id} del ${fechaCorta(inicioDe(w, t0))}: ${w.que.toLowerCase()}` : 'Un capítulo con test aprobado cada 5 días';
       if (plan) { lado = `${hechos}/${plan}`; avance = Math.min(1, hechos / plan); }
     } else if (rama === 'trabajo') {
       const f = faseTrabajo(b.inicio, t0);
@@ -460,7 +464,7 @@ export function cerradosAnio1(c: CtxPlan, fecha: string) {
   const t0 = c.t0 ?? T0_PLAN;
   const ts = TRAMOS.filter((t) => (t.tipo === 'proyecto' || t.tipo === 'cert') && t.hasta <= hitoSemana('T+12') - 3);
   const cerrado = (t: Tramo) => {
-    if (t.tipo === 'proyecto') return !!cierreProyecto(c.plan, t.id) || (t.id === 'P0' && finSemana(t.hasta, t0) < fecha);
+    if (t.tipo === 'proyecto') return !!cierreProyecto(c.plan, t.id) || (t.id === 'P0' && finDe(t, t0) < fecha);
     const p = c.plan.proyectos[t.id];
     return !!(p?.examen && p.examen.puntaje >= 85);
   };

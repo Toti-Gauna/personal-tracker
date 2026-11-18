@@ -1,14 +1,16 @@
 import { useState } from 'react';
 /** Piezas del plan T+18 que se repiten: avisos entre ramas, contadores, etiqueta de rama. */
-import { avisoPasado, avisosEntreRamas } from '../data/avisos';
+import { avisoPasado, avisosEntreRamas, type Aviso } from '../data/avisos';
+import { esDiaDePausa } from '../data/capacidad';
+import { alertaHorasIntensivo, alertasMatematica } from '../data/control';
 import { focusStartedAt } from '../data/focus';
 import { enPausa } from '../data/plan-state';
-import { metasSemanaPlan } from '../data/plan';
+import { T0_PLAN, metasSemanaPlan } from '../data/plan';
 import { RAMA_COLOR } from '../data/ramas';
 import { addDays, nowMin } from '../data/time';
 import type { DayLog, RamaOMain } from '../data/types';
 import { desactivarIntensiva, lunesDe, contador, ensayarRespuesta, setPlanSettings, sumarContador, sumarHandyx } from '../state/plan';
-import { planSettings, useStore } from '../state/store';
+import { inicioTrabajo, intensivaEn, planSettings, useStore } from '../state/store';
 import { toast } from './avisos';
 import { useNow } from './useNow';
 import { HojaClip } from './HojaClip';
@@ -35,7 +37,17 @@ export function AvisosRamas({ date, day }: { date: string; day?: DayLog }) {
   useNow(30000);
   const cfg = planSettings(settings);
   const pasado = day ? avisoPasado(day, focoKey, nowMin(), focoInicio != null ? nowMin(new Date(focoInicio)) : undefined) : null;
-  const avisos = [...(pasado ? [pasado] : []), ...avisosEntreRamas(date, plan, cfg, settings?.startDate)];
+  const days = useStore((s) => s.days);
+  const t0 = settings?.startDate ?? T0_PLAN;
+  const inicio = inicioTrabajo(settings);
+  // Ola 27: el control de horas del modo intensivo (días 10 y 20), la matemática que habilita un proyecto que ya arranca y la pausa de Navidad.
+  const horas = alertaHorasIntensivo(date, days, { t0, inicioTrabajo: inicio });
+  const control: Aviso[] = [
+    ...(horas ? [{ id: horas.id, de: 'programacion' as const, a: 'main' as const, titulo: horas.titulo, texto: horas.texto, href: horas.href }] : []),
+    ...alertasMatematica(date, t0).map((a) => ({ id: a.id, de: 'matematica' as const, a: 'programacion' as const, titulo: a.titulo, texto: a.texto, href: a.href })),
+    ...(intensivaEn(settings, date) && esDiaDePausa(date) ? [{ id: 'pausa-fin-de-anio', de: 'main' as const, a: 'salud' as const, titulo: 'Pausa de fin de año', texto: 'Es el único descanso del modo intensivo: esta semana no se programa; la matemática, los idiomas y el entreno siguen.' }] : []),
+  ];
+  const avisos = [...(pasado ? [pasado] : []), ...control, ...avisosEntreRamas(date, plan, cfg, settings?.startDate)];
   if (!avisos.length) return null;
   const pasar = () => {
     if (!window.confirm('¿Pasás a la rutina con trabajo de lunes a viernes? Se aplica desde el próximo día que empieces.')) return;
@@ -75,7 +87,8 @@ export function SumarPlan({ date }: { date: string }) {
   const metas = Object.fromEntries(metasSemanaPlan(date, t0).map((m) => [m.id, m.meta]));
   const ensayadas = plan.respuestas.filter((r) => r.veces > 0).length;
   const ops = plan.handyx[lunesDe(date)]?.operaciones ?? 0;
-  const intensiva = useStore((s) => planSettings(s.settings).modo === 'busqueda-intensiva');
+  const intensiva = useStore((s) => intensivaEn(s.settings, date));
+  const clippingOn = useStore((s) => !!planSettings(s.settings).bloquesPendientes?.clipping);
   // Ola 23: los clips salen de la planilla del clipping; el botón abre la hoja Registrar.
   const clipping = useStore((s) => s.clipping);
   const [hojaClip, setHojaClip] = useState(false);
@@ -86,7 +99,7 @@ export function SumarPlan({ date }: { date: string }) {
     { id: 'respuestas', label: '+1 Respuesta ensayada', v: ensayadas, meta: plan.respuestas.length, rama: 'ingles', run: () => ensayarRespuesta(date) },
     // Una rama en pausa no genera contadores nuevos.
     ...(enPausa(plan, 'handyx', date) ? [] : [{ id: 'operaciones', label: '+1 Operación Handyx', v: ops, rama: 'handyx' as RamaOMain, run: () => sumarHandyx(date, { operaciones: 1 }) }]),
-    ...(intensiva ? [{ id: 'clips', label: 'Registrar clips', v: clipsSem, meta: planEntre(l, addDays(l, 6)).clips, rama: 'main' as RamaOMain, color: 'var(--eclipse)', run: () => setHojaClip(true) }] : []),
+    ...(intensiva && clippingOn ? [{ id: 'clips', label: 'Registrar clips', v: clipsSem, meta: planEntre(l, addDays(l, 6)).clips, rama: 'main' as RamaOMain, color: 'var(--eclipse)', run: () => setHojaClip(true) }] : []),
     { id: 'entrenos', label: '+1 Entrené', v: sesiones + contador(plan, date, 'entrenos'), meta: metas.entrenos, rama: 'salud', run: () => sumarContador(date, 'entrenos') },
   ];
   return (

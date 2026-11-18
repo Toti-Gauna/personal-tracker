@@ -5,7 +5,7 @@ Tracker personal de Toti: el día en horas, el estudio con su propio motor de re
 - **Diseño:** [canvas de Trazo](https://claude.ai/artifact/6Cc2E6aW2ViU5ikovpsRTy)
 - **Roadmap de estudio:** [ruta ML + DevSecOps](https://claude.ai/artifact/9PEokku7mBLZdCFJr1zqXP)
 - **Pantallas:** presentación `Trazo-pantallas.pptx` y su ZIP de imágenes (44 pantallas, 8 flujos).
-- **Estado:** olas 0 a 12b hechas y en `main`. Olas 0 a 16c hechas (la 15 quedó absorbida por la 16c). Olas 0 a 26 hechas: el plan de olas de §6 septies y §6 octies quedó completo. Este archivo es la fuente de verdad.
+- **Estado:** olas 0 a 12b hechas y en `main`. Olas 0 a 16c hechas (la 15 quedó absorbida por la 16c). Olas 0 a 27 hechas: el plan de olas de §6 septies, §6 octies y §6 nonies quedó completo. Este archivo es la fuente de verdad.
 
 ---
 
@@ -1131,6 +1131,33 @@ Pedido del 2026-11-18, sobre el prompt v2 ya aplicado. El texto está en `docs/p
 - La decisión "reemplazos" sigue abierta: P8 como "red teaming de agentes" (con garak y PyRIT) está propuesto, no confirmado. vLLM y LoRA en P8 supone esa versión.
 - El texto de P2 dice "modelo local opcional" (venía con vLLM y LoRA): queda como estaba hasta que lo definas.
 - `reusada` está implementada y validada pero no se usó: ningún proyecto la lleva todavía.
+
+---
+
+## 6 nonies. Ola 27: rutinas, calendario por horas y matemática (v3)
+
+Pedido del 2026-11-18. El texto y las decisiones están en `docs/prompts/plan-t18-extendido-v3.md`. **Reemplaza al calendario de 217 semanas.** Un PR, tres partes.
+
+**Parte A · Rutinas, metas y ajustes**
+- `data/routines.json`: las rutinas `busqueda-intensiva` (y `-finde`), `con-trabajo` y la nueva `con-trabajo-finde` de la v3, todas con dormir a las 21:00; las de siempre (`weekday`, `weekend`, `libre`) no se tocaron. La rutina de las 08:00 (`tarde`) termina a las 21:00.
+- **Inicio del trabajo:** un único campo (`plan.t2`, por defecto T0 + 56 días, el 11 ene 2027). Desde esa fecha `routineFor` devuelve la rutina con trabajo (de lunes a viernes y el fin de semana); no hay aviso de T+2. Ajustes → Plan T+18: *Inicio del trabajo*, *Horario del trabajo* (la tarde se acomoda; si no entra, la matemática de la tarde queda como deuda) y *Bloques pendientes* (Handyx, clipping y Eclipse: hora, duración y días; solo entran en un hueco libre, el descanso del fin de semana cede su tiempo).
+- Metas del modo intensivo (53 h de programación, 7 de matemática, 7 de idiomas, 25 + 25 de búsqueda, 2 posts, 5 entrenos) solo hasta el día anterior al inicio del trabajo; con trabajo, 29, 14 y 6,5. "Entrenar 5 de 7 días".
+- El bloque de idiomas es inglés técnico y de entrevista. El domingo, el cierre suma la revisión semanal y la mini-tesis. Con una entrevista en 48 h, el último bloque de programación pasa a "Preparación de la entrevista".
+- **Clipping pausado** (`src/data/clipping-activo.ts`): sin bloque asignado no hay alertas, hitos, metas ni botón de registro; nada se borra.
+
+**Parte B · Calendario por horas**
+- `src/data/capacidad.ts`: horas de programación por día (3,5 h la semana de arranque, 7 y 9 en el modo intensivo, 3 y 7 con trabajo, cero en la pausa de diciembre; los días ya pasados usan las horas reales del foco). `calendarioHoras()` (en `plan-extendido.ts`) reparte las horas de cada bloque (semanas × 24,5) día por día: un bloque ocupa días enteros. El calendario por semanas anterior sigue como `calendario()` sin `horas` (los tests de la v1 y la v2 usan un fixture congelado).
+- `data/plan-extendido.json`: P0 de 1 semana; P1 y P2 sin plataforma extra; nuevo bloque **Semana de sumas** (`SUM`, 2 semanas) con la consola Electron y la app de Expo (más la auditoría si sobra tiempo); W1, W2 y W3 de 5, 6 y 5 semanas; `backlog` sin fecha (portfolio-mcp, auditoría, RAG para negocios, 3 automatizaciones); `matematica.diarios[*].horas`.
+- Los tramos (`TRAMOS`) llevan `inicio`, `fin`, `horas`; `tramoActivo` y `ventanaW` van por fecha; "semana n de N" es un tramo de 24,5 h. `inicioDe`/`finDe` reemplazan a `inicioSemana(t.desde)`/`finSemana(t.hasta)`. El calendario se recalcula al cambiar T0, el inicio del trabajo, los extras, la pausa, las horas reales o el factor.
+- Resultado con el trabajo el 11 ene 2027: P1 23 nov–9 dic, P2 10–29 dic, Sumas 30 dic–5 ene, W1 6–31 ene, P3 1 feb–2 mar… T+18 el 25 jul 2028; etapa 1 el 31 ene 2028, etapa 3 el 6 may 2029 y etapa 4 el 2 jun 2030. Con el trabajo el 4 ene la tabla del prompt se reproduce con 1 a 3 días de diferencia (un test lo cubre).
+
+**Parte C · Matemática, control y calibración**
+- `src/data/mate-horas.ts`: los tramos diarios se miden en horas de matemática (1 h por día en el modo intensivo, 2 h con trabajo) y se pausan durante cada ventana. T+0 a T+2 termina el 10 mar 2027 y T+3 a T+6 el 22 jul.
+- `src/data/control.ts`: registro diario (horas reales y planificadas de programación y matemática por proyecto), alerta de los días 10 y 20 del modo intensivo con menos del 85 % (recortes: conector de terceros de P1, después accesibilidad de P2), alerta de proyecto que arranca antes del tramo de matemática que lo habilita (P4 y P7; P9 no) y deuda de matemática en horas. Aparecen en Hoy (avisos), en Las 4 etapas y en Calibración. Hoy muestra la pausa de Navidad como único descanso del modo intensivo.
+- `src/data/calibracion.ts`: estimadas = horas del calendario; el factor real/estimado se calcula al cerrar P2 y otra vez al cerrar P3 y se aplica al resto (`calendarioVivo` con `factor`); los escenarios (0,85, 1,00 y 1,15) se calculan, ya no están escritos a mano.
+- *Tests:* horas por rutina, capacidad con la pausa, reproducción de la tabla v3, cambio de rutina en la fecha de inicio del trabajo, horario del trabajo, bloques pendientes, alerta del 85 %, tramo de matemática sin terminar, factor y escenarios.
+
+**Pendiente (a tu decisión):** ver el final de `docs/prompts/plan-t18-extendido-v3.md` (T+7 a T+8, RAG y automatizaciones de P0, horario real del trabajo, Handyx/clipping/Eclipse después del modo intensivo, piezas de P4 y P7). El recall en frío todavía no genera las tarjetas solo: es una tarea del cierre.
 
 ---
 

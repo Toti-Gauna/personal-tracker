@@ -4,7 +4,7 @@ import { tituloDeBloque } from '../data/etiquetas';
 import { DAY_ROUTINES, TARDE, isMeta, wakeDe, planRoutine, routineFor, wakeRange, type DayType } from '../data/routines';
 import { fmtDur, fmtFecha, nowMin, toHHMM, toMin } from '../data/time';
 import type { RoutineId } from '../data/types';
-import { planSettings, startDay, useStore } from '../state/store';
+import { inicioTrabajo, planSettings, startDay, useStore } from '../state/store';
 import { Marca } from '../ui/Marca';
 import '../styles/hoy.css';
 
@@ -31,7 +31,7 @@ function defaultChoice(now: number, t: DayType): { r: RoutineId; otra: number } 
 export function Despertar({ date }: { date: string }) {
   const settings = useStore((s) => s.settings)!;
   const now = nowMin();
-  const tipo = routineFor(date, planSettings(settings));
+  const tipo = routineFor(date, { ...planSettings(settings), inicioTrabajo: inicioTrabajo(settings) });
   const rutina = DAY_ROUTINES[tipo];
   const init = useMemo(() => defaultChoice(now, tipo), []); // eslint-disable-line react-hooks/exhaustive-deps
   const [choice, setChoice] = useState<RoutineId>(init.r);

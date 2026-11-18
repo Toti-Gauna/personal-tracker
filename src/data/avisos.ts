@@ -2,7 +2,7 @@
  * Avisos entre ramas: lo que pasa en una rama y cambia lo que toca en otra. Puro: recibe la
  * fecha, el plan registrado y los ajustes, y devuelve los avisos en el orden en que importan.
  */
-import { PLAN, finSemana, inicioSemana, nombreTramo, tramoActivo, ventanaW, type Capa } from './plan';
+import { PLAN, finDe, finSemana, inicioDe, inicioSemana, nombreTramo, tramoActivo, ventanaW, type Capa } from './plan';
 import { enPausa, type PlanSettings, type PlanState } from './plan-state';
 import { RAMA_NOMBRE } from './ramas';
 import { puertaBloqueando } from './puertas';
@@ -78,20 +78,12 @@ export function avisosEntreRamas(date: string, p: PlanState, cfg: PlanSettings, 
     const sem = w.prox.hasta - w.prox.desde + 1;
     out.push({
       id: `w-${w.prox.id}`, de: 'matematica', a: 'programacion',
-      titulo: `La ventana ${w.prox.id} empieza ${elDia(inicioSemana(w.prox.desde, t0))}`,
-      texto: `${sem === 2 ? 'Dos' : sem === 3 ? 'Tres' : sem} semanas de ${w.prox.que.toLowerCase()}: los bloques de programación pasan a matemática hasta ${elDia(finSemana(w.prox.hasta, t0))}.`,
+      titulo: `La ventana ${w.prox.id} empieza ${elDia(inicioDe(w.prox, t0))}`,
+      texto: `${sem === 2 ? 'Dos' : sem === 3 ? 'Tres' : sem} semanas de ${w.prox.que.toLowerCase()}: los bloques de programación pasan a matemática hasta ${elDia(finDe(w.prox, t0))}.`,
       href: '#/metas',
     });
   }
-  // T+2 marcado y todavía con la rutina de búsqueda: pide pasar a la rutina con trabajo.
-  if (cfg.t2 && cfg.rutina === 'busqueda') {
-    out.push({
-      id: 't2', de: 'trabajo', a: 'main',
-      titulo: 'T+2: trabajo nuevo',
-      texto: 'Desde ahora, la rutina con trabajo: matemática 2 h temprano, programación 1 h, inglés 45 min y Handyx 1 h 30.',
-      accion: 'con-trabajo',
-    });
-  }
+  // Ola 27: el inicio del trabajo es una fecha: la rutina con trabajo rige sola desde ese día (ya no hay aviso de T+2).
   // Ola 8b: una rama en pausa (stand-by) no genera avisos, ni de ida ni de vuelta.
   return out.filter((a) => !(a.de !== 'main' && enPausa(p, a.de, date)) && !(a.a !== 'main' && enPausa(p, a.a, date)));
 }

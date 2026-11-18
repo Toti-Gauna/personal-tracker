@@ -4,11 +4,10 @@ import { aplicarIntensiva } from '../data/busqueda';
 import { useSyncExternalStore } from 'react';
 import { DEFAULT_BLOCK_PRESETS, DEFAULT_PRESETS } from '../data/defaults';
 import { buildBlocks, newId, planDay } from '../data/schedule';
-import { routineFor } from '../data/routines';
+import { isoDay, routineFor } from '../data/routines';
 import { emptyPlan, DEFAULT_PLAN_SETTINGS, type PlanSettings, type PlanState } from '../data/plan-state';
 import { semanaDelPlan, tramoActivo, ventanaW } from '../data/plan';
 import { tareasDeBloque } from '../data/metas-bloque';
-import { faseIdiomaEn } from '../data/idiomas';
 import { mesClipEn, mesDe as mesClipDe } from '../data/clipping';
 import { plannedFor } from '../data/train';
 import { addDays, dateKey } from '../data/time';
@@ -19,7 +18,9 @@ import { periodKey } from '../data/goals';
 import { emptyTrain, migrarEntreno } from '../data/train-catalog';
 import { emptyRuta, refsForDay, type RutaState } from '../data/ruta';
 import { applySettings } from './apply';
-import { aplicarCalendario } from '../data/plan';
+import { calibrar } from '../data/calibracion';
+import { aplicarCalendario, calendarioVivo } from '../data/plan';
+import { setClippingActivo } from '../data/clipping-activo';
 import { aplicarLibrosPropios } from '../data/libros';
 import type { TrainState } from '../data/train-types';
 import type { StudyState } from '../data/study-types';
@@ -82,8 +83,50 @@ export function migrate(parsed: any): State {
 }
 
 let state: State = load();
+
+/** Ola 27 · horas de programación reales por día (foco en bloques de la rama programación), solo de los días que ya pasaron. */
+function realesProg(days: Record<string, DayLog>, hoy: string): Record<string, number> {
+  const out: Record<string, number> = {};
+  for (const [d, day] of Object.entries(days)) {
+    if (d >= hoy) continue;
+    const ramaDe = new Map(day.blocks.map((b) => [b.key, b.rama]));
+    const min = day.focus.filter((f) => ramaDe.get(f.key) === 'programacion').reduce((x, f) => x + f.focusMin, 0);
+    if (min > 0) out[d] = Math.round((min / 60) * 100) / 100;
+  }
+  return out;
+}
+
+/** Ola 27 · el factor real/estimado (al cerrar P2 y P3) y los bloques cerrados con los que se calculó. Cuando todavía no cierra P2, nada. */
+function factorCalendario(s: State, t0: string, hoy: string): { factor?: number; cerrados?: string[] } {
+  if (!s.plan.proyectos.P2?.examen && hoy < addDays(t0, 40)) return {};
+  const c = calibrar(calendarioVivo(t0, { factor: null, cerrados: [] }), s.days, s.plan, hoy);
+  if (c.factor == null || !c.hito) return {};
+  return { factor: c.factor, cerrados: c.hito === 'P3' ? ['P0', 'P1', 'P2', 'P3'] : ['P0', 'P1', 'P2'] };
+}
+
+/** Ola 27 · lo que hace falta para fechar el calendario por horas: T0, inicio del trabajo, extras, pausa, horas reales y factor. */
+function ajustesCalendario(s: State) {
+  const t0 = s.settings?.startDate ?? T0_PLAN;
+  const hoy = dateKey();
+  const reales = realesProg(s.days, hoy);
+  return { t0, hoy, reales, inicioTrabajo: s.settings?.plan?.t2 ?? addDays(t0, 56) };
+}
+const claveCalendario = (s: State) => {
+  const a = ajustesCalendario(s);
+  return `${a.t0}|${s.settings?.plan?.t2 ?? ''}|${(s.plan.extrasApagados ?? []).join(',')}|${s.plan.pausaFinDeAnio !== false}|${a.hoy}|${Object.entries(a.reales).map(([d, h]) => `${d}:${h}`).join(',')}|${Object.entries(s.plan.proyectos).filter(([, p]) => p.examen).map(([id]) => id).join(',')}`;
+};
+let claveAplicada = '';
+function recalcularCalendario() {
+  claveAplicada = claveCalendario(state);
+  const a = ajustesCalendario(state);
+  // Primero sin factor (para medir contra el calendario estimado); con las horas reales ya cargadas.
+  aplicarCalendario(state.plan.extrasApagados ?? [], state.plan.pausaFinDeAnio !== false, { t0: a.t0, inicioTrabajo: a.inicioTrabajo, reales: a.reales, hoy: a.hoy });
+  const f = factorCalendario(state, a.t0, a.hoy);
+  if (f.factor) aplicarCalendario(state.plan.extrasApagados ?? [], state.plan.pausaFinDeAnio !== false, { t0: a.t0, inicioTrabajo: a.inicioTrabajo, reales: a.reales, hoy: a.hoy, ...f });
+}
 applySettings(state.settings);
-aplicarCalendario(state.plan.extrasApagados ?? [], state.plan.pausaFinDeAnio !== false);
+setClippingActivo(!!state.settings?.plan?.bloquesPendientes?.clipping);
+recalcularCalendario();
 aplicarLibrosPropios(state.study.librosPropios);
 const subs = new Set<() => void>();
 
@@ -96,9 +139,9 @@ export function setState(fn: (s: State) => State) {
   const prevLibros = state.study.librosPropios;
   state = fn(state);
   if (state.study.librosPropios !== prevLibros) aplicarLibrosPropios(state.study.librosPropios);
-  if (state.settings !== prev) applySettings(state.settings);
+  if (state.settings !== prev) { applySettings(state.settings); setClippingActivo(!!state.settings?.plan?.bloquesPendientes?.clipping); }
   // Ola 16b: el calendario vivo se recalcula si cambian los extras de feature apagados.
-  if (state.plan.extrasApagados !== prevExtras || state.plan.pausaFinDeAnio !== prevPausa) aplicarCalendario(state.plan.extrasApagados ?? [], state.plan.pausaFinDeAnio !== false);
+  if (state.plan.extrasApagados !== prevExtras || state.plan.pausaFinDeAnio !== prevPausa || claveCalendario(state) !== claveAplicada) recalcularCalendario();
   try { localStorage.setItem(KEY, JSON.stringify(state)); } catch { /* sin storage */ }
   subs.forEach((f) => f());
 }
@@ -107,7 +150,8 @@ export function setState(fn: (s: State) => State) {
 export function resetState(s: State = empty()) {
   state = s;
   applySettings(s.settings);
-  aplicarCalendario(s.plan.extrasApagados ?? [], s.plan.pausaFinDeAnio !== false);
+  setClippingActivo(!!s.settings?.plan?.bloquesPendientes?.clipping);
+  recalcularCalendario();
   aplicarLibrosPropios(s.study.librosPropios);
   subs.forEach((f) => f());
 }
@@ -188,24 +232,25 @@ export function startDay(routine: RoutineId, wake: string, date = dateKey()) {
     // Las metas que empujan la ruta llevan su etiqueta (ref y part) desde que empieza el día.
     const refs = refsForDay(s.ruta, date);
     const cfg = planSettings(s.settings);
-    const dayType = routineFor(date, cfg);
+    const dayType = routineFor(date, { ...cfg, inicioTrabajo: inicioTrabajo(s.settings) });
     const t0 = s.settings?.startDate;
     const puerta = puertaBloqueando(date, s.plan, t0) ?? undefined;
     const ventana = ventanaW(date, t0).ahora?.id ?? puerta;
     const entrevista = entrevistaCerca(s.plan, date);
+    const prepara = entrevistaEn48h(s.plan, date);
     // Ola 20: la meta de programación sale de las metas del proyecto en curso (si las hay).
     const proyecto = tramoActivo(date, t0).id;
     const delProyecto = tareasDeBloque(s.plan.metasBloque?.[proyecto]);
     // Ola 19: el estiramiento de las 21:00 a 22:00 lleva los músculos de la rutina del día.
     const estirar = plannedFor(s.train, date, t0 ?? T0_PLAN).routine?.estiramiento?.musculos;
-    const blocks = buildBlocks(planDay(date, routine, wake, dayType, { ventana, entrevista, puerta }), carry)
+    const blocks = buildBlocks(planDay(date, routine, wake, dayType, { ventana, entrevista, puerta, prepara, ...(cfg.horarioTrabajo ? { trabajo: cfg.horarioTrabajo } : {}), ...(cfg.bloquesPendientes ? { pendientes: cfg.bloquesPendientes } : {}) }), carry)
       .map((b) => (refs[b.key] ? { ...b, ...refs[b.key] } : b))
       .map((b) => (b.rama === 'programacion' && delProyecto.length ? { ...b, tasks: [...delProyecto.map((t) => ({ id: newId(), t: `${proyecto} · ${t}`, done: false })), ...b.tasks] } : b))
       .map((b) => (b.key === 'cierre' && estirar ? { ...b, tasks: b.tasks.map((x) => (x.t === 'Estirar' ? { ...x, t: `Estirar: ${estirar}` } : x)) } : b))
-      // Ola 21: el bloque de idiomas trae las tareas de la fase de esta semana (salvo lo que pasó de ayer).
-      .map((b) => (b.key === 'ingles' ? { ...b, tasks: [...faseIdiomaEn(date, t0 ?? T0_PLAN).tareas.map((t) => ({ id: newId(), t, done: false })), ...b.tasks.filter((x) => (carry.ingles ?? []).includes(x.t))] } : b))
+      // Ola 27: el domingo, el cierre suma la revisión semanal de 30 min y la mini-tesis de una página.
+      .map((b) => (b.key === 'cierre' && isoDay(date) === 7 && /^(busqueda-intensiva|con-trabajo)/.test(dayType) ? { ...b, tasks: [...b.tasks, ...['Revisión semanal (30 min)', 'Mini-tesis de una página'].map((t) => ({ id: newId(), t, done: false }))] } : b))
       // Ola 23: de lunes a viernes, el clipping trae las tareas del mes del roadmap; el finde, pipeline y prospección.
-      .map((b) => (b.key === 'clipping' && b.min <= 90 && mesClipDe(date) >= 1 && mesClipDe(date) <= 12 ? { ...b, tasks: [...mesClipEn(date).tareas.map((t) => ({ id: newId(), t, done: false })), ...b.tasks.filter((x) => (carry.clipping ?? []).includes(x.t))] } : b));
+      .map((b) => (b.key === 'clipping' && isoDay(date) <= 5 && mesClipDe(date) >= 1 && mesClipDe(date) <= 12 ? { ...b, tasks: [...mesClipEn(date).tareas.map((t) => ({ id: newId(), t, done: false })), ...b.tasks.filter((x) => (carry.clipping ?? []).includes(x.t))] } : b));
     const day: DayLog = { date, wake, routine, dayType, ...(ventana ? { ventana } : {}), blocks, notes: [], focus: [] };
     return { ...s, days: { ...s.days, [date]: day }, carry: restCarry };
   });
@@ -213,6 +258,18 @@ export function startDay(routine: RoutineId, wake: string, date = dateKey()) {
 
 /** Ajustes del plan con los valores de fábrica. */
 export const planSettings = (st: Settings | null): PlanSettings => ({ ...DEFAULT_PLAN_SETTINGS, ...(st?.plan ?? {}) });
+
+/** Ola 27 · el inicio del trabajo (un único campo): lo que cargaste o, si no, el T+2 (11 ene 2027 con el plan de fábrica). */
+export const inicioTrabajo = (st: Settings | null): string => planSettings(st).t2 ?? addDays(st?.startDate ?? T0_PLAN, 56);
+
+/** Ola 27 · ¿hay una entrevista en las próximas 48 h (hoy, mañana o pasado)? El último bloque de programación pasa a preparación. */
+export function entrevistaEn48h(p: PlanState, date: string): { rol: string; empresa?: string } | false {
+  const e = p.entrevistas.find((x) => x.fecha >= date && x.fecha <= addDays(date, 2));
+  return e ? { rol: e.rol, ...(e.empresa ? { empresa: e.empresa } : {}) } : false;
+}
+
+/** Ola 27 · ¿rige el modo intensivo ese día? Hasta el día anterior al inicio del trabajo. */
+export const intensivaEn = (st: Settings | null, date: string): boolean => planSettings(st).modo === 'busqueda-intensiva' && date < inicioTrabajo(st);
 
 /** ¿La entrevista es en inglés? Se lee de la modalidad ("remoto · entrevista técnica en inglés"). */
 export const entrevistaEnIngles = (e: { modalidad?: string }) => /ingl[eé]s/i.test(e.modalidad ?? '');

@@ -10,6 +10,7 @@ import { T0_PLAN, TRAMOS } from './plan';
 import type { PlanState } from './plan-state';
 import { addDays, daysBetween } from './time';
 import { CLIP, hitosClip } from './clipping';
+import { clippingActivo } from './clipping-activo';
 import type { Rama } from './types';
 
 export type RamaMapa = Rama | 'clipping';
@@ -36,6 +37,8 @@ export function diaDe(h: HitoRama) {
   if (!h.ancla) return h.dia;
   const t = TRAMOS.find((x) => x.id === h.ancla!.tramo);
   if (!t) return h.dia;
+  // Ola 27: el calendario va por días (horas de programación): el hito cae el día exacto en que empieza o termina el tramo.
+  if (t.diaIni != null && t.diaFin != null) return h.ancla.borde === 'inicio' ? t.diaIni : t.diaFin;
   return h.ancla.borde === 'inicio' ? (t.desde - 1) * 7 : t.hasta * 7 - 1;
 }
 
@@ -98,7 +101,7 @@ export const esDeBusqueda = (h: HitoRama) => h.rama === 'trabajo' || (h.rama ===
 
 /** Los hitos con su fecha real (desde T0, o la que moviste) y su estado a una fecha. */
 export function hitosFechados(hoy: string, estado: PlanState['hitos'] = {}, t0 = T0_PLAN): HitoFechado[] {
-  return HITOS.map((h): HitoFechado => {
+  return HITOS.filter((h) => h.rama !== 'clipping' || clippingActivo()).map((h): HitoFechado => {
     const original = addDays(t0, diaDe(h));
     const st = estado[h.id] ?? {};
     const fecha = st.fecha ?? original;
