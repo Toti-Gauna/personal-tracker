@@ -24,7 +24,7 @@ describe('ola 24 · pantallas del plan v2', () => {
     render(<Metas day={day()} tab="proyecto/P1" />);
     expect(screen.getByText(/con la pausa adentro/)).toBeInTheDocument();
     const ficha = abrir('Ficha');
-    expect(within(ficha).getByText('Escritorio (Electron)')).toBeInTheDocument();
+    expect(within(ficha).getByText('Escritorio (Electron con SQLite local)')).toBeInTheDocument();
     expect(within(ficha).getByText(/2 servicios con contrato OpenAPI/)).toBeInTheDocument();
     const ext = abrir('Semanas extra');
     expect(within(ext).getByText(/3 base \+ 2 feature \+ 1 plataforma = 6 semanas/)).toBeInTheDocument();

@@ -308,6 +308,8 @@ export function aplicarCalendario(apagados: readonly string[] = [], pausas = tru
     if (!b.pausa) delete t.pausa;
     if (base?.tope != null || tipo === 'proyecto') t.tope = b.semanas + 1;
     else delete t.tope;
+    // Ola 26: el stack sale de las tecnologías del proyecto (una sola fuente, con marca).
+    if (b.tecnologias?.length) t.stack = b.tecnologias.map((x) => x.nombre);
     if (!base?.corto && b.corto) t.corto = b.corto;
     if (!base?.perfil && b.perfil) t.perfil = b.perfil;
     return t;

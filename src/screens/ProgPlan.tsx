@@ -13,7 +13,7 @@ import type { DayLog } from '../data/types';
 import { marcarCapa } from '../state/plan';
 import { useStore } from '../state/store';
 import { Casilla } from '../ui/Casilla';
-import { EvidenciaProyecto, FichaBloque, NivelSalida } from '../ui/FichaBloque';
+import { EvidenciaProyecto, FichaBloque, NivelSalida, TecnologiasProyecto } from '../ui/FichaBloque';
 import { MetasBloque } from '../ui/MetasBloque';
 import { EscaleraCompacta } from '../ui/EscaleraCompacta';
 import '../styles/estudio.css';
@@ -148,13 +148,7 @@ function ProyectoProg({ day, id, sub }: { day: DayLog; id: string; sub: Sub }) {
         </>
       )}
 
-      {sub === 'stack' && (
-        <>
-          {b.ficha?.tecnologiaNueva && <section className="re-sec"><span className="etiqueta">Tecnología nueva</span><p><b>{b.ficha.tecnologiaNueva}</b></p><p className="sub">Una tecnología nueva por proyecto como máximo, y ninguna en bloques con certificación.</p></section>}
-          {t?.stack?.length ? <section className="re-sec"><span className="etiqueta">Stack</span><div className="pp-chips">{t.stack.map((x) => <span key={x} className="mono">{x}</span>)}</div></section> : null}
-          {!b.ficha?.tecnologiaNueva && !t?.stack?.length && <p className="sub">Este bloque no suma tecnología nueva.</p>}
-        </>
-      )}
+      {sub === 'stack' && <TecnologiasProyecto id={id} />}
 
       {sub === 'metas' && <MetasBloque bloque={id} date={day.date} titulo={`Metas de ${id}`} vacio={id === 'P0' ? 'En P0 se arman las metas: cargalas a mano o pegá el JSON que te pase Claude.' : undefined} />}
 

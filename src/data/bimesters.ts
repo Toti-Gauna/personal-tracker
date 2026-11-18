@@ -10,7 +10,7 @@ export interface BimesterInfo {
 
 /** Los 9 bimestres de la ruta (16 de un mes al 15 de dos meses después). */
 export const BIMESTERS: BimesterInfo[] = [
-  { n: 1, start: '2026-11-16', end: '2027-01-15', name: 'El despegue', industry: 'compliance y servicios', product: 'Complia Pro' },
+  { n: 1, start: '2026-11-16', end: '2027-01-15', name: 'El despegue', industry: 'portfolio y servicios', product: 'Portfolio hub' },
   { n: 2, start: '2027-01-16', end: '2027-03-15', name: 'Agro y pesca', industry: 'agro y pesca marítima', product: 'MarAgro Ops' },
   { n: 3, start: '2027-03-16', end: '2027-05-15', name: 'Petróleo y gas', industry: 'petróleo y gas', product: 'WellSense' },
   { n: 4, start: '2027-05-16', end: '2027-07-15', name: 'Energía', industry: 'energía y utilities', product: 'GridCast' },

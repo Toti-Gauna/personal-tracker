@@ -69,3 +69,15 @@
 .cal-esc li .mono { font-size: 13px; white-space: nowrap; }
 .cal-esc li.actual { border-color: var(--tinta); }
 .cal-esc li.tuyo { border-color: var(--c); }
+
+/* Ola 26 · tecnologías de un proyecto */
+.tec-lista { list-style: none; margin: 4px 0 8px; padding: 0; display: grid; gap: 8px; }
+.tec-lista li { display: grid; gap: 2px; padding: 12px 14px; border: 1px solid var(--linea); border-radius: 12px; }
+.tec-lista li.tec-nueva { border-color: var(--c, var(--tinta)); }
+.tec-lista li b { font-size: 16px; }
+.tec-marca { font-size: 11px; }
+.tec-lista li.tec-nueva .tec-marca { color: var(--c); }
+.tec-lista li.tec-movida { border-style: dashed; }
+.pp-chips .opcional { border-style: dashed; color: var(--sub); }
+.tec-hist { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; font-size: 14.5px; }
+.tec-hist li { display: grid; grid-template-columns: 82px minmax(0, 1fr); gap: 8px; }
