@@ -1,9 +1,12 @@
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { describe, expect, it } from 'vitest';
-import raw from '../../data/plan-extendido.json';
+import raw from './fixtures/plan-extendido-v2.1.json';
 import plan from '../../data/plan.json';
-import { PLAN_EXT, bloqueEn, calendario, finEtapa, semanaDe, totalSemanas, validar, type PlanExtendido } from './plan-extendido';
+import { bloqueEn, calendario, finEtapa, semanaDe, totalSemanas, validar, type PlanExtendido } from './plan-extendido';
+
+/** Ola 27: estos tests comparan con las tablas de la v1 y la v2: usan el JSON de la v2.1 congelado (los datos vivos son los de la v3). */
+const PLAN_EXT = raw as unknown as PlanExtendido;
 
 const copia = () => structuredClone(raw) as unknown as PlanExtendido;
 

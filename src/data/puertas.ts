@@ -10,10 +10,12 @@
  * la etapa 1), más las que cada proyecto cierra antes de su meta, menos las de atraso (proyecto
  * que pasa la meta; puerta sin aprobar: cada semana se descuenta del colchón).
  */
-import { FIN_PROGRAMACION, PLAN, T0_PLAN, TRAMOS, finSemana, inicioSemana, semanaDelPlan, tramoActivo } from './plan';
+import { HORAS_SEMANA_PLAN } from './capacidad';
+import { FIN_PROGRAMACION, PLAN, T0_PLAN, TRAMOS, finDe, horasEntre, inicioSemana, semanaDelPlan, tramoActivo } from './plan';
 import { evidenciaCompleta, type PlanState } from './plan-state';
 
 export const APROBAR = 85;
+const addDias = (f: string, n: number, _t0?: string) => new Date(new Date(f + 'T12:00').getTime() + n * 864e5).toISOString().slice(0, 10);
 const dias = (a: string, b: string) => Math.round((new Date(b + 'T12:00').getTime() - new Date(a + 'T12:00').getTime()) / 864e5);
 
 /** ¿La puerta (W1, W2, W3) está aprobada? Con el examen de la ventana a 85 % o más. */
@@ -40,7 +42,7 @@ export function puertaBloqueando(date: string, plan: Pick<PlanState, 'proyectos'
 export function atrasoPuerta(plan: Pick<PlanState, 'proyectos'>, w: string, hoy: string, t0 = T0_PLAN) {
   const v = TRAMOS.find((t) => t.id === w);
   if (!v) return 0;
-  const fin = finSemana(v.hasta, t0);
+  const fin = finDe(v, t0);
   const hasta = puertaAprobada(plan, w) ?? hoy;
   return hasta > fin ? Math.ceil(dias(fin, hasta) / 7) : 0;
 }
@@ -82,16 +84,16 @@ export function contadoresAgenticos(plan: Pick<PlanState, 'proyectos'>) {
 export function semanasDeProyecto(plan: PlanState, id: string, hoy: string, t0 = T0_PLAN) {
   const t = TRAMOS.find((x) => x.id === id);
   if (!t || t.tipo !== 'proyecto') return 0;
-  const fin = finSemana(t.hasta, t0);
+  const fin = finDe(t, t0);
   const c = cierreProyecto(plan, id);
-  // Ola 24: las semanas de pausa que caen entre el cierre y la meta no son semanas ganadas.
-  if (c) return c < fin ? Math.max(0, Math.floor(dias(c, fin) / 7) - (t.pausas ?? []).filter((w) => inicioSemana(w, t0) > c).length) : c > fin ? -1 : 0;
+  // Ola 27: lo ganado se mide en horas de programación (la pausa de fin de año vale cero): cada 24,5 h son una semana del plan.
+  if (c) return c < fin ? Math.max(0, Math.floor(horasEntre(addDias(c, 1, t0), fin) / HORAS_SEMANA_PLAN + 1e-9)) : c > fin ? -1 : 0;
   // Sin cerrar y pasada la meta: usa la semana de tope (y si pasa el tope, se recorta alcance).
   return hoy > fin ? -1 : 0;
 }
 
 /** Semanas del colchón de la etapa 1 con el calendario actual. */
-export const semanasColchon = () => TRAMOS.filter((t) => t.tipo === 'colchon').reduce((s, t) => s + t.hasta - t.desde + 1, 0);
+export const semanasColchon = () => TRAMOS.filter((t) => t.tipo === 'colchon').reduce((s, t) => s + (t.meta ?? t.hasta - t.desde + 1), 0);
 
 export function semanasGanadas(plan: PlanState, hoy: string, t0 = T0_PLAN) {
   const base = semanasColchon();

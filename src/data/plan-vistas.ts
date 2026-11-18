@@ -6,11 +6,11 @@
  * - La línea de tiempo por etapas, el panel "hoy sos" y las alertas.
  */
 import { alertasIdiomas } from './idiomas';
-import { EXTRAS_APAGADOS, PAUSAS, PLAN, T0_PLAN, fechas } from './plan';
+import { CFG_HORAS, PLAN, T0_PLAN, calendarioVivo, fechas } from './plan';
 import { PLAN_EXT, bloqueExtPorId, calendario, opcionesDe, type BloqueExt, type BloqueFechado, type MateTramo, type RolRefuerzo } from './plan-extendido';
 import type { PlanState } from './plan-state';
 import { cierreProyecto, puertaAprobada } from './puertas';
-import { daysBetween } from './time';
+import { addDays, daysBetween } from './time';
 import { alertasClipping } from './clipping-metricas';
 import { clippingActivo } from './clipping-activo';
 import type { ClippingState } from './clipping-state';
@@ -32,7 +32,7 @@ export function refuerzoPara(m: Pick<MateTramo, 'refuerzo'>, motivo: string) {
 }
 
 /** El calendario completo (4 etapas) con los mismos extras apagados que el calendario vivo. */
-export const calendarioCompleto = (t0?: string) => calendario(PLAN_EXT, opcionesDe(EXTRAS_APAGADOS, PAUSAS, t0));
+export const calendarioCompleto = (t0?: string) => calendarioVivo(t0);
 
 export type EstadoItem = 'hecho' | 'actual' | 'proximo';
 
@@ -44,6 +44,8 @@ export interface ItemMate extends MateTramo {
   inicio: string;
   fin: string;
   semanas: number;
+  /** Horas del tramo (los diarios se miden en horas de matemática). */
+  horas?: number;
 }
 
 /**
@@ -52,19 +54,22 @@ export interface ItemMate extends MateTramo {
  */
 export function rutaMate(t0 = T0_PLAN): ItemMate[] {
   const cal = calendarioCompleto(t0);
-  const fin1 = cal.filter((b) => b.etapa === 1).pop()!.hasta;
+  const finEtapa1 = cal.filter((b) => b.etapa === 1).reduce((m, b) => (b.fin > m ? b.fin : m), '');
   const vivos: ItemMate[] = PLAN.matematica.tramos.map((m) => {
     const b = cal.find((x) => x.id === m.id);
     const diario = !b;
     const datos: MateTramo & { nombre?: string } = b?.mate ?? PLAN_EXT.matematica.diarios[m.id] ?? PLAN_EXT.matematica.diarios.m4;
-    const { inicio, fin } = fechas(m.desde, m.hasta, t0);
+    const corrida = dias(CFG_HORAS.t0, t0);
+    const inicio = m.inicio ? addDays(m.inicio, corrida) : fechas(m.desde, m.hasta, t0).inicio;
+    const fin = m.fin ? addDays(m.fin, corrida) : fechas(m.desde, m.hasta, t0).fin;
     return {
       ...datos,
       id: m.id,
       tipo: diario ? 'diario' : 'ventana',
       nombre: diario ? datos.nombre ?? m.id : b!.nombre,
-      etapa: b?.etapa ?? (m.desde <= fin1 ? 1 : 2),
-      inicio, fin, semanas: m.hasta - m.desde + 1,
+      etapa: b?.etapa ?? (inicio <= finEtapa1 ? 1 : 2),
+      inicio, fin, semanas: diario ? Math.ceil((m.horas ?? 0) / 14) : b!.semanas,
+      ...(m.horas ? { horas: m.horas } : {}),
     };
   });
   const despues: ItemMate[] = cal.filter((b) => b.etapa > 2 && b.tipo === 'ventana' && b.mate).map((b) => ({
@@ -73,6 +78,7 @@ export function rutaMate(t0 = T0_PLAN): ItemMate[] {
   return [...vivos, ...despues];
 }
 
+const dias = daysBetween;
 export const estadoEn = (x: { inicio: string; fin: string }, hoy: string): EstadoItem => (x.fin < hoy ? 'hecho' : x.inicio <= hoy ? 'actual' : 'proximo');
 
 /**

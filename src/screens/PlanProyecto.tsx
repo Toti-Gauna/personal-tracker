@@ -4,7 +4,8 @@
  * al cerrar. También sirve para certificaciones y ventanas, con lo que les toca.
  */
 import { useState } from 'react';
-import { PLAN, TRAMOS, diaSemanaCorto, fechaCorta, fechas, nombreTramo, proyectos, semanaDelPlan, semanasDeTramo, siguienteTramo, T0_PLAN, tramoActivo, tramoPorId, type Capa } from '../data/plan';
+import { addDays } from '../data/time';
+import { PLAN, TRAMOS, diaSemanaCorto, fechaCorta, fechas, finDe, inicioDe, inicioSemana, nombreTramo, proyectos, semanaDelPlan, semanasDeTramo, siguienteTramo, T0_PLAN, tramoActivo, tramoPorId, type Capa } from '../data/plan';
 import { EVIDENCIAS, proyectoVacio, type TipoError } from '../data/plan-state';
 import { Plegable } from '../ui/Plegable';
 import { RAMA_COLOR } from '../data/ramas';
@@ -41,12 +42,13 @@ export function PlanProyecto({ day, id }: { day: DayLog; id?: string }) {
   if (id && !tramoPorId(id) && bloqueConFechas(id, t0)) return <FichaExtendida id={id} t0={t0} />;
   const t = (id && tramoPorId(id)) || activo;
   const p = estado[t.id] ?? proyectoVacio();
-  const { inicio, fin } = fechas(t.desde, t.hasta, t0);
-  // Ola 24: las semanas de pausa que parten el tramo no cuentan.
-  const semanas = semanasDeTramo(t);
-  const sHoy = semanaDelPlan(date, t0);
-  const enPausa = (t.pausas ?? []).includes(sHoy);
-  const semana = Math.max(0, Math.min(semanas, sHoy - t.desde + 1 - (t.pausas ?? []).filter((w) => w < sHoy).length));
+  const inicio = inicioDe(t, t0);
+  const fin = finDe(t, t0);
+  // Ola 27: cada "semana" del proyecto son 24,5 h de programación del plan (no 7 días); la pausa de fin de año vale cero horas.
+  const semanas = Math.max(1, Math.ceil(t.meta ?? semanasDeTramo(t)));
+  const pausaHoy = (t.pausas ?? []).some((w) => { const l = inicioSemana(w, t0); return date >= l && date <= addDays(l, 6); });
+  const semana = date < inicio ? 0 : date > fin ? semanas : activo.id === t.id ? activo.semana : Math.max(1, semanas);
+  const antes = date < inicio;
   const arq = arqs?.[t.id];
   const conArq = !!bloqueExtPorId(t.id)?.ficha?.entregablesArquitectura;
   const sig = siguienteTramo(t.id);
@@ -78,10 +80,10 @@ export function PlanProyecto({ day, id }: { day: DayLog; id?: string }) {
         {Array.from({ length: semanas }, (_, k) => <span key={k} className={k + 1 < semana ? 'pas' : k + 1 === semana ? 'on' : ''} />)}
       </div>
       <div className="pp-cuando mono">
-        <span><b>{enPausa ? 'pausa de fin de año' : semana >= 1 && sHoy <= t.hasta ? `semana ${semana} de ${semanas}` : sHoy < t.desde ? `empieza el ${fechaCorta(inicio)}` : 'cerrado'}</b> · {fechaCorta(inicio)} — {fechaCorta(fin)}{t.pausas?.length ? ' · con la pausa adentro' : ''}</span>
+        <span><b>{pausaHoy ? 'pausa de fin de año' : date > fin ? 'cerrado' : antes ? `empieza el ${fechaCorta(inicio)}` : `semana ${semana} de ${semanas}`}</b> · {fechaCorta(inicio)} — {fechaCorta(fin)}{t.pausas?.length ? ' · con la pausa adentro' : ''}{t.horas ? ` · ${t.horas} h` : ''}</span>
         {(t.tipo === 'proyecto' || t.tipo === 'cert') && <span className="sub">examen {diaSemanaCorto(fin)} {Number(fin.slice(8))}</span>}
       </div>
-      {otro && <p className="sub pp-par">{t.version === 'v1' ? `Vuelve como ${nombreTramo(otro, false)} en ${otro.id}, desde el ${fechaCorta(fechas(otro.desde, otro.hasta, t0).inicio)}.` : `Crece desde ${nombreTramo(otro, false)} (${otro.id}).`}</p>}
+      {otro && <p className="sub pp-par">{t.version === 'v1' ? `Vuelve como ${nombreTramo(otro, false)} en ${otro.id}, desde el ${fechaCorta(inicioDe(otro, t0))}.` : `Crece desde ${nombreTramo(otro, false)} (${otro.id}).`}</p>}
 
       {t.stack && t.stack.length > 0 && (
         <>

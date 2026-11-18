@@ -9,7 +9,7 @@ import { mesClipEn, mesDe as mesClipDe, planEntre } from './clipping';
 import { clipsEntre, usdEntre } from './clipping-metricas';
 import type { ClippingState } from './clipping-state';
 import {
-  PLAN, SEMANAS, SEMANAS_BIM, TRAMOS, bimestreDelPlan, corteHandyx, faseIngles, faseTrabajo, fechaCorta, fechaHito, finSemana, hitoSemana,
+  PLAN, SEMANAS, SEMANAS_BIM, TRAMOS, bimestreDelPlan, corteHandyx, faseIngles, faseTrabajo, fechaCorta, fechaHito, finDe, finSemana, hitoSemana, inicioDe,
   inicioSemana, metasSemanaPlan, tramoEnSemana, nombreTramo, semanaDelPlan, T0_PLAN, tramoActivo, type MetaGenerada, type Tramo,
 } from './plan';
 import { enPausa, type PlanState } from './plan-state';
@@ -237,8 +237,8 @@ export function cierraEnMes(fecha: string, entrevistas: { fecha: string; rol: st
   const out: Cierre[] = [];
   const en = (d: string) => d >= a && d <= b;
   for (const t of TRAMOS) {
-    const ini = inicioSemana(t.desde, t0);
-    const fin = finSemana(t.hasta, t0);
+    const ini = inicioDe(t, t0);
+    const fin = finDe(t, t0);
     if (t.tipo === 'proyecto' && en(fin)) out.push({ fecha: fin, rama: 'programacion', texto: t.id === 'P0' ? 'P0 · consolidación cerrada' : `${nombreTramo(t, false)} entregado y examen de programación` });
     if (t.tipo === 'cert' && en(fin)) out.push({ fecha: fin, rama: 'programacion', texto: `Examen de ${t.corto ?? t.nombre}` });
     if (t.tipo === 'ventana' && en(ini)) out.push({ fecha: ini, rama: 'matematica', texto: `Empieza la ventana ${t.id} · ${t.hasta - t.desde + 1} semanas` });
@@ -269,7 +269,7 @@ export function metasMesGeneradas(fecha: string, t0 = T0_PLAN, study?: StudyStat
     PLAN.etapaActual.mes.metas.forEach((m, i) => push({ id: `m-e${i}`, rama: m.rama, texto: m.texto }));
   } else {
     // Programación: lo que se entrega este mes; si no se entrega nada, las horas del tramo.
-    const cierran = TRAMOS.filter((t) => { const f = finSemana(t.hasta, t0); return f >= a && f <= b && (t.tipo === 'proyecto' || t.tipo === 'cert') && t.id !== 'P0'; });
+    const cierran = TRAMOS.filter((t) => { const f = finDe(t, t0); return f >= a && f <= b && (t.tipo === 'proyecto' || t.tipo === 'cert') && t.id !== 'P0'; });
     for (const t of cierran) {
       if (t.tipo === 'proyecto') {
         push({ id: `m-cas-${t.id}`, rama: 'programacion', texto: `${nombreTramo(t, false)} con tráiler, docs y landing`, meta: 6, clave: `casillas:${t.id}` });
@@ -284,7 +284,7 @@ export function metasMesGeneradas(fecha: string, t0 = T0_PLAN, study?: StudyStat
       if (t.tipo !== 'descanso') push({ id: 'm-horas-prog', rama: 'programacion', texto: `Horas de programación · ${t.tipo === 'cert' ? t.corto ?? t.nombre : t.tipo === 'proyecto' ? nombreTramo(t, false) : t.nombre}`, meta: Math.round(semanal('horas-prog') * semanas), unidad: 'h', clave: 'horas-prog' });
     }
     // Matemática: la ventana W o los capítulos del mes (uno cada 5 días).
-    const w = TRAMOS.find((t) => t.tipo === 'ventana' && inicioSemana(t.desde, t0) <= b && finSemana(t.hasta, t0) >= a);
+    const w = TRAMOS.find((t) => t.tipo === 'ventana' && inicioDe(t, t0) <= b && finDe(t, t0) >= a);
     if (w) push({ id: `m-${w.id}`, rama: 'matematica', texto: `Ventana ${w.id}: ${w.que}` });
     const caps = Math.max(1, Math.round((w ? dias - 7 * (w.hasta - w.desde + 1) : dias) / 5));
     if (!w || caps > 1) {
@@ -339,6 +339,7 @@ export function resumenMes(fecha: string, t0 = T0_PLAN, study?: StudyState) {
 export function letraTramo(t: Tramo) {
   if (t.tipo === 'descanso') return '—';
   if (t.tipo === 'ventana') return 'W';
+  if (t.tipo === 'sumas') return '+';
   if (t.tipo === 'cert') return 'C';
   if (t.tipo === 'colchon') return '·';
   if (t.tipo === 'cierre') return 'T';
@@ -392,8 +393,8 @@ export function filasBimestre(n: number, fecha: string, c: CtxPlan, editadas: Re
     let avance = transcurrido;
     if (rama === 'programacion') {
       const ts = TRAMOS.filter((t) => t.tipo !== 'descanso' && t.desde <= b.hasta && t.hasta >= b.desde);
-      const cerrados = ts.filter((t) => finSemana(t.hasta, t0) < fecha).length;
-      const partes = ts.slice(0, 3).map((t) => (t.hasta <= b.hasta ? `${nombreLeyenda(t)} ${t.tipo === 'proyecto' ? 'se entrega' : 'termina'} el ${fechaCorta(finSemana(t.hasta, t0))}` : `${nombreLeyenda(t)} empieza el ${fechaCorta(inicioSemana(t.desde, t0))}`));
+      const cerrados = ts.filter((t) => finDe(t, t0) < fecha).length;
+      const partes = ts.slice(0, 3).map((t) => (t.hasta <= b.hasta ? `${nombreLeyenda(t)} ${t.tipo === 'proyecto' ? 'se entrega' : 'termina'} el ${fechaCorta(finDe(t, t0))}` : `${nombreLeyenda(t)} empieza el ${fechaCorta(inicioDe(t, t0))}`));
       sub = partes.slice(-2).join('; ');
       lado = `${cerrados}/${ts.length}`;
       avance = ts.length ? cerrados / ts.length : 0;
@@ -401,7 +402,7 @@ export function filasBimestre(n: number, fecha: string, c: CtxPlan, editadas: Re
       const plan = capitulosPlaneados(PLAN.metasBimestre.matematica[n - 1] ?? '');
       const hechos = capsAprobados(c.study, b.inicio, hasta);
       const w = TRAMOS.find((t) => t.tipo === 'ventana' && t.desde <= b.hasta && t.hasta >= b.desde);
-      sub = w ? `Ventana ${w.id} del ${fechaCorta(inicioSemana(w.desde, t0))}: ${w.que.toLowerCase()}` : 'Un capítulo con test aprobado cada 5 días';
+      sub = w ? `Ventana ${w.id} del ${fechaCorta(inicioDe(w, t0))}: ${w.que.toLowerCase()}` : 'Un capítulo con test aprobado cada 5 días';
       if (plan) { lado = `${hechos}/${plan}`; avance = Math.min(1, hechos / plan); }
     } else if (rama === 'trabajo') {
       const f = faseTrabajo(b.inicio, t0);
@@ -463,7 +464,7 @@ export function cerradosAnio1(c: CtxPlan, fecha: string) {
   const t0 = c.t0 ?? T0_PLAN;
   const ts = TRAMOS.filter((t) => (t.tipo === 'proyecto' || t.tipo === 'cert') && t.hasta <= hitoSemana('T+12') - 3);
   const cerrado = (t: Tramo) => {
-    if (t.tipo === 'proyecto') return !!cierreProyecto(c.plan, t.id) || (t.id === 'P0' && finSemana(t.hasta, t0) < fecha);
+    if (t.tipo === 'proyecto') return !!cierreProyecto(c.plan, t.id) || (t.id === 'P0' && finDe(t, t0) < fecha);
     const p = c.plan.proyectos[t.id];
     return !!(p?.examen && p.examen.puntaje >= 85);
   };

@@ -14,15 +14,15 @@ describe('colchón (ola 16b: reemplaza a las semanas ganadas del calendario comp
   it('suma lo que un proyecto cierra antes de su meta y resta la semana de tope si se pasa', () => {
     const p = emptyPlan();
     const evidencia = { medido: true, validador: true, informe: true };
-    p.proyectos.P0 = { ...proyectoVacio(), examen: { fecha: '2026-11-29', puntaje: 90 }, evidencia };
-    p.proyectos.P1 = { ...proyectoVacio(), examen: { fecha: '2026-12-10', puntaje: 90 }, tecnica: { diseno: true, ejercicios: 6, defensa: '2026-12-11' }, evidencia };
-    expect(cierreProyecto(p, 'P1')).toBe('2026-12-11');
-    // P1 cerró 37 días antes de su meta (17 ene, con feature, plataforma y la pausa adentro): 5 semanas menos la pausa, 4 ganadas.
-    expect(semanasGanadas(p, '2026-12-14', T0).total).toBe(6);
+    p.proyectos.P0 = { ...proyectoVacio(), examen: { fecha: '2026-11-20', puntaje: 90 }, evidencia };
+    p.proyectos.P1 = { ...proyectoVacio(), examen: { fecha: '2026-12-02', puntaje: 90 }, tecnica: { diseno: true, ejercicios: 6, defensa: '2026-12-03' }, evidencia };
+    expect(cierreProyecto(p, 'P1')).toBe('2026-12-03');
+    // P1 cerró 6 días antes de su meta (9 dic): 46 h de programación libres, una semana del plan (24,5 h) ganada.
+    expect(semanasGanadas(p, '2026-12-04', T0).total).toBe(3);
     // P1 sin cerrar después de su meta: usa la semana de tope.
     const q = emptyPlan();
     q.proyectos.P0 = p.proyectos.P0;
-    expect(semanasGanadas(q, '2027-01-19', T0).total).toBe(1);
+    expect(semanasGanadas(q, '2026-12-20', T0).total).toBe(1);
   });
 
   it('sin las tres pruebas de evidencia el proyecto no cierra (ola 16c)', () => {
@@ -50,30 +50,30 @@ describe('puertas de matemática', () => {
   });
 
   it('P3 no arranca sin aprobar W1: la programación del día pasa a matemática pura', () => {
-    // Con las extras y la pausa, W1 va del 22 de febrero al 14 de marzo y P3 arranca el 15 de marzo.
-    expect(puertaBloqueando('2027-03-16', getState().plan, T0)).toBe('W1');
-    startDay('completo', '04:30', '2027-03-16');
-    const prog = getState().days['2027-03-16'].blocks.filter((b) => /^prog/.test(b.key));
+    // Con el calendario por horas, W1 va del 6 al 31 de enero y P3 arranca el 1 de febrero.
+    expect(puertaBloqueando('2027-02-10', getState().plan, T0)).toBe('W1');
+    startDay('completo', '04:30', '2027-02-10');
+    const prog = getState().days['2027-02-10'].blocks.filter((b) => /^prog/.test(b.key));
     // Con trabajo (desde el 11 ene 2027) el martes tiene un solo bloque de programación, el de las 05:30.
     expect(prog).toHaveLength(1);
     for (const b of prog) expect(b).toMatchObject({ rama: 'matematica', title: 'Matemática pura · puerta W1' });
   });
 
   it('con W1 aprobada (85 % o más) P3 arranca normal, y la atrasada se descuenta del colchón', () => {
-    guardarExamen('W1', '2027-03-29', 88);
-    expect(puertaBloqueando('2027-03-30', getState().plan, T0)).toBeNull();
-    startDay('completo', '04:30', '2027-03-30');
-    expect(getState().days['2027-03-30'].blocks.find((b) => b.key === 'prog')!.rama).toBe('programacion');
-    // W1 cerró el 14 mar y se aprobó el 29 mar: 3 semanas que se descuentan del colchón.
-    expect(semanasGanadas(getState().plan, '2027-03-30', T0).puertas).toBe(3);
+    guardarExamen('W1', '2027-02-20', 88);
+    expect(puertaBloqueando('2027-02-21', getState().plan, T0)).toBeNull();
+    startDay('completo', '04:30', '2027-02-21');
+    expect(getState().days['2027-02-21'].blocks.find((b) => b.key === 'prog')!.rama).toBe('programacion');
+    // W1 cerró el 31 ene y se aprobó el 20 feb: 3 semanas que se descuentan del colchón.
+    expect(semanasGanadas(getState().plan, '2027-02-21', T0).puertas).toBe(3);
   });
 
   it('P6 y P8 también tienen puerta (W2 y W3)', () => {
-    // P6 arranca el 30 ago 2027 y P8 el 27 dic 2027 (después de la pausa).
-    expect(puertaBloqueando('2027-08-31', emptyPlan(), T0)).toBe('W2');
-    expect(puertaBloqueando('2027-12-28', emptyPlan(), T0)).toBe('W3');
-    expect(puertaBloqueando('2027-12-22', emptyPlan(), T0)).toBeNull();
-    expect(puertaBloqueando('2027-05-11', emptyPlan(), T0)).toBeNull(); // P4 no tiene puerta
+    // P6 arranca el 7 jul 2027 y P8 el 17 oct 2027.
+    expect(puertaBloqueando('2027-07-20', emptyPlan(), T0)).toBe('W2');
+    expect(puertaBloqueando('2027-10-20', emptyPlan(), T0)).toBe('W3');
+    expect(puertaBloqueando('2027-10-10', emptyPlan(), T0)).toBeNull();
+    expect(puertaBloqueando('2027-04-01', emptyPlan(), T0)).toBeNull(); // P4 no tiene puerta
   });
 });
 

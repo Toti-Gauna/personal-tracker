@@ -6,9 +6,9 @@
    "n": 1,
    "nombre": "Núcleo",
    "perfil": "Senior ML + DevSecOps + Cloud con arquitectura de sistemas distribuidos",
-   "semanasBase": 52,
+   "semanasBase": 58,
    "semanasExtra": 11,
-   "semanasPlataforma": 8,
+   "semanasPlataforma": 6,
    "semanasArquitectura": 2
   },
   {
@@ -45,16 +45,16 @@
    "etapa": 1,
    "tipo": "proyecto",
    "nombre": "Consolidación",
-   "base": 2,
+   "base": 1,
    "extra": 0,
    "extraPlataforma": 0,
    "extraArquitectura": 0,
    "ficha": {
     "rubro": "portfolio",
-    "feature": "Portfolio hub con mapa 3D de proyectos y validador de proyectos.json (ids repetidos, referencias rotas y ciclos)",
+    "feature": "Portfolio hub con Trazo como caso de estudio, CV, LinkedIn y pitch de 60 s con 6 historias STAR",
     "visual": "Mapa 3D de proyectos",
     "pieza": "Ninguna: solo diagnóstico",
-    "referencia": "RAG evaluado con 20 preguntas de respuesta conocida y tasa de abstención correcta",
+    "referencia": "El hub validado: ids repetidos, referencias rotas y ciclos de proyectos.json",
     "perfil": "Sr Full-stack con IA aplicada",
     "plataforma": "PWA instalable y base del monorepo",
     "arquitectura": "Shell de microfrontends (Module Federation)"
@@ -75,31 +75,10 @@
      ]
     },
     {
-     "nombre": "RAG para negocios (dominio de muestra con datos sintéticos)",
-     "alias": [
-      "RAG"
-     ]
-    },
-    {
-     "nombre": "MCP"
-    },
-    {
      "nombre": "ElevenLabs"
     },
     {
      "nombre": "Higgsfield"
-    },
-    {
-     "nombre": "Auditoría y refactor de una app generada con IA (informe de hallazgos y arreglos)",
-     "alias": [
-      "auditoría de código",
-      "code review",
-      "refactor"
-     ]
-    },
-    {
-     "nombre": "portfolio-mcp v0",
-     "marca": "nueva"
     }
    ],
    "historial": [
@@ -112,6 +91,11 @@
      "fecha": "2026-11-18",
      "cambio": "El RAG para negocios pasa a otro dominio con datos de muestra",
      "motivo": "Deja de usar el dominio anterior; pedido v2.1"
+    },
+    {
+     "fecha": "2026-11-18",
+     "cambio": "P0 queda en una semana: hub, Trazo como caso, CV, LinkedIn y pitch de 60 s con 6 historias STAR. Portfolio-mcp, la auditoría de una app generada con IA y el RAG para negocios pasan al backlog sin fecha",
+     "motivo": "Prompt v3 (una tecnología nueva por proyecto)"
     }
    ]
   },
@@ -122,7 +106,7 @@
    "nombre": "Faro v1 · petróleo",
    "base": 3,
    "extra": 2,
-   "extraPlataforma": 1,
+   "extraPlataforma": 0,
    "extraArquitectura": 0,
    "ficha": {
     "rubro": "petróleo",
@@ -132,7 +116,7 @@
     "referencia": "Respuestas validadas contra el dato oficial de la Secretaría de Energía",
     "validador": "Ingeniero de reservorios o de cumplimiento",
     "perfil": "Full-stack AI Engineer",
-    "plataforma": "Escritorio (Electron con SQLite local)",
+    "plataforma": "Escritorio (consola Electron): pasa a la Semana de sumas, después de P2",
     "arquitectura": "2 servicios con contrato OpenAPI, gateway y pruebas de contrato",
     "entregablesArquitectura": true
    },
@@ -199,12 +183,6 @@
       "integraciones con APIs",
       "REST API"
      ]
-    },
-    {
-     "nombre": "SQLite local (consola Electron)",
-     "alias": [
-      "SQLite"
-     ]
     }
    ],
    "recortarPrimero": [
@@ -225,6 +203,11 @@
      "fecha": "2026-11-18",
      "cambio": "DuckDB y Parquet pasan a P5; la consola Electron usa SQLite local",
      "motivo": "Pedido v2.1"
+    },
+    {
+     "fecha": "2026-11-18",
+     "cambio": "La consola Electron sale de P1 y va a la Semana de sumas; P1 queda en 5 semanas (122 h)",
+     "motivo": "Prompt v3"
     }
    ]
   },
@@ -235,7 +218,7 @@
    "nombre": "Escudo · medicina",
    "base": 3,
    "extra": 1,
-   "extraPlataforma": 1,
+   "extraPlataforma": 0,
    "extraArquitectura": 0,
    "ficha": {
     "rubro": "medicina",
@@ -245,7 +228,7 @@
     "referencia": "Precisión y recall de la detección de datos sensibles en un set sintético; banco de ataques contra herramientas existentes",
     "validador": "Persona de salud digital",
     "perfil": "AI Engineer con seguridad",
-    "plataforma": "Mobile (Expo y React Native), con versión de prueba en TestFlight o Play interno",
+    "plataforma": "Mobile (Expo y React Native): la app de prueba pasa a la Semana de sumas",
     "arquitectura": "Gateway en el borde"
    },
    "tecnologias": [
@@ -283,9 +266,6 @@
      ]
     },
     {
-     "nombre": "App mobile en versión de prueba (TestFlight o Play interno)"
-    },
-    {
      "nombre": "Revisión de accesibilidad",
      "alias": [
       "accesibilidad",
@@ -307,6 +287,36 @@
      "fecha": "2026-11-18",
      "cambio": "Queda .NET con FHIR (C# y ASP.NET Core) como tecnología nueva; el gateway en Go se mantiene. vLLM y LoRA pasan a P8",
      "motivo": "Pedido v2.1"
+    },
+    {
+     "fecha": "2026-11-18",
+     "cambio": "La app de prueba de Expo sale de P2 y va a la Semana de sumas; P2 queda en 4 semanas (98 h)",
+     "motivo": "Prompt v3"
+    }
+   ]
+  },
+  {
+   "id": "SUM",
+   "etapa": 1,
+   "tipo": "sumas",
+   "nombre": "Semana de sumas",
+   "base": 2,
+   "extra": 0,
+   "extraPlataforma": 0,
+   "extraArquitectura": 0,
+   "que": "Lo que se sacó de P1 y P2 para no cargar dos tecnologías nuevas en un proyecto: la consola Electron (de P1) y la app de prueba de Expo (de P2), una semana cada una. La auditoría de una app generada con IA entra solo si sobra tiempo.",
+   "items": [
+    {
+     "nombre": "Consola Electron de Faro v1 (viene de P1)",
+     "desde": "P1"
+    },
+    {
+     "nombre": "App de prueba de Expo para Escudo (viene de P2)",
+     "desde": "P2"
+    },
+    {
+     "nombre": "Auditoría y refactor de una app generada con IA (solo si sobra tiempo)",
+     "opcional": true
     }
    ]
   },
@@ -315,7 +325,7 @@
    "etapa": 1,
    "tipo": "ventana",
    "nombre": "Ventana W1 · matemática",
-   "base": 3,
+   "base": 5,
    "extra": 0,
    "extraPlataforma": 0,
    "extraArquitectura": 0,
@@ -346,7 +356,8 @@
     "salida": [
      "Resolver ecuaciones y desigualdades (lineales, cuadráticas y con valor absoluto) sin ayuda",
      "Graficar funciones lineales, cuadráticas, exponenciales y logarítmicas a mano",
-     "Calcular media, varianza, desvío, percentiles y cuantiles de un conjunto de datos"
+     "Calcular media, varianza, desvío, percentiles y cuantiles de un conjunto de datos",
+     "Resolver triángulos y usar funciones trigonométricas básicas"
     ]
    }
   },
@@ -582,7 +593,7 @@
    "etapa": 1,
    "tipo": "ventana",
    "nombre": "Ventana W2 · matemática",
-   "base": 4,
+   "base": 6,
    "extra": 0,
    "extraPlataforma": 0,
    "extraArquitectura": 0,
@@ -733,7 +744,7 @@
    "etapa": 1,
    "tipo": "ventana",
    "nombre": "Ventana W3 · matemática",
-   "base": 4,
+   "base": 5,
    "extra": 0,
    "extraPlataforma": 0,
    "extraArquitectura": 0,
@@ -1900,7 +1911,8 @@
      "todo lo demás"
     ],
     "perfil": "Aritmético",
-    "fase": "M1"
+    "fase": "M1",
+    "horas": 126
    },
    "m2": {
     "nombre": "T+3 a T+6 · diario",
@@ -1927,7 +1939,8 @@
      "P9"
     ],
     "perfil": "Precalculista",
-    "fase": "M2"
+    "fase": "M2",
+    "horas": 196
    },
    "m3": {
     "nombre": "T+7 a T+8 · diario",
@@ -1949,7 +1962,8 @@
      "P7"
     ],
     "perfil": "Calculista y lineal",
-    "fase": "M3"
+    "fase": "M3",
+    "horas": 112
    },
    "m4": {
     "nombre": "T+9 a T+18 · diario",
@@ -1980,7 +1994,8 @@
      "base de la etapa 3"
     ],
     "perfil": "Matemático para ML",
-    "fase": "M4"
+    "fase": "M4",
+    "horas": 560
    }
   }
  },
@@ -2083,6 +2098,29 @@
   {
    "nombre": "APIs de bolsa",
    "motivo": "La etapa 3 usa paper trading y datos de mercado propios (Q6); el capital real queda detrás de su puerta escrita.",
+   "fecha": "2026-11-18"
+  }
+ ],
+ "horasPorSemana": 24.5,
+ "backlog": [
+  {
+   "nombre": "portfolio-mcp",
+   "motivo": "Una tecnología nueva por proyecto: P0 queda solo con hub, caso, CV, LinkedIn y pitch. Puede hacerse en el colchón de enero de 2028",
+   "fecha": "2026-11-18"
+  },
+  {
+   "nombre": "Auditoría y refactor de una app generada con IA",
+   "motivo": "Entra en la Semana de sumas solo si sobra tiempo",
+   "fecha": "2026-11-18"
+  },
+  {
+   "nombre": "RAG para negocios (dominio de muestra)",
+   "motivo": "Sale de P0 con la v3; sin fecha hasta que haya lugar",
+   "fecha": "2026-11-18"
+  },
+  {
+   "nombre": "3 automatizaciones de P0",
+   "motivo": "Salen de P0 con la v3; sin fecha hasta que haya lugar",
    "fecha": "2026-11-18"
   }
  ]

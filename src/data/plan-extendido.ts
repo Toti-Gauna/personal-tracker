@@ -9,8 +9,8 @@
 import raw from '../../data/plan-extendido.json';
 import { addDays, parseDate } from './time';
 
-export type TipoBloque = 'proyecto' | 'ventana' | 'cert' | 'descanso' | 'colchon' | 'cierre';
-export const TIPOS_BLOQUE: TipoBloque[] = ['proyecto', 'ventana', 'cert', 'descanso', 'colchon', 'cierre'];
+export type TipoBloque = 'proyecto' | 'ventana' | 'cert' | 'descanso' | 'colchon' | 'cierre' | 'sumas';
+export const TIPOS_BLOQUE: TipoBloque[] = ['proyecto', 'ventana', 'cert', 'descanso', 'colchon', 'cierre', 'sumas'];
 
 export interface BloqueExt {
   id: string;
@@ -47,6 +47,8 @@ export interface BloqueExt {
   recortarPrimero?: string[];
   mate?: MateTramo;
   cert?: CertInfo;
+  /** v3: lo que lleva un bloque de sumas (la consola Electron de P1, la app de Expo de P2…). */
+  items?: { nombre: string; desde?: string; opcional?: boolean }[];
 }
 
 /** Ficha de un proyecto: lo que lo hace distinto y cómo se prueba. */
@@ -145,7 +147,7 @@ export interface PlanExtendido {
     principio: string;
     /** Tipo de error → roles de refuerzo que se abren (concepto → intuición, técnica → banco…). */
     reglaRefuerzo: Record<string, RolRefuerzo[]>;
-    diarios: Record<string, MateTramo & { nombre: string }>;
+    diarios: Record<string, MateTramo & { nombre: string; horas?: number }>;
   };
   /** Perfiles vendibles por hito: el que tenés al cerrar ese bloque. */
   perfilesHito: { despues: string; perfil: string; nota: string }[];
@@ -153,6 +155,10 @@ export interface PlanExtendido {
   decisiones: { id: string; texto: string; fecha?: string }[];
   /** Ola 26: tecnologías que se pidieron y se dejaron afuera "por ahora", con el motivo. */
   descartadas?: Descartada[];
+  /** v3: horas que vale una semana del plan (24,5). Con este campo el calendario se mide en horas. */
+  horasPorSemana?: number;
+  /** v3: lo que salió de los proyectos y queda sin fecha. */
+  backlog?: { nombre: string; motivo: string; fecha: string }[];
 }
 
 // ——— validación ———
@@ -310,7 +316,20 @@ export const bloqueExtPorId = (id: string) => BLOQUES_EXT.find((b) => b.id === i
 /** Un switch de extras: `true` o `false` para todos, o un mapa por bloque sobre el valor por defecto. */
 export type Switch = boolean | Record<string, boolean>;
 
+export interface OpcionesHoras {
+  /** Horas de programación del día (ver capacidad.ts). */
+  capacidad: (fecha: string) => number;
+  /** Horas por semana del plan; por defecto las del JSON (24,5). */
+  horasSemana?: number;
+  /** Factor real/estimado que escala las horas de los bloques que todavía no cerraron (calibración en P2 y P3). */
+  factor?: number;
+  /** Bloques cerrados (con horas reales): después de ellos rige el factor. */
+  cerrados?: string[];
+}
+
 export interface Opciones {
+  /** v3: el calendario se mide en horas y se reparte día por día sobre la capacidad de la rutina. */
+  horas?: OpcionesHoras;
   /** Inicio del plan; por defecto el T0 del plan (si el usuario instaló otro día, el suyo). */
   t0?: string;
   /** Semanas extra de feature (por defecto, prendidas en todos los proyectos). */
@@ -349,6 +368,10 @@ export interface BloqueFechado extends BloqueExt {
   pausasDentro: number[];
   /** Es una pausa de fin de año insertada por el motor. */
   pausa?: true;
+  /** v3: horas del bloque y días desde T0 en que empieza y termina (con el calendario por horas). */
+  horas?: number;
+  diaIni?: number;
+  diaFin?: number;
 }
 
 /** ¿La semana que arranca este día es la pausa de fin de año? (su primer día cae entre el 18 y el 24 de diciembre). */
@@ -362,6 +385,7 @@ const leer = (sw: Switch | undefined, id: string) => (typeof sw === 'object' ? s
  * `pausas`, cada diciembre se inserta una pausa: entre bloques o partiendo el bloque en el que cae.
  */
 export function calendario(plan: PlanExtendido = PLAN_EXT, o: Opciones = {}): BloqueFechado[] {
+  if (o.horas) return calendarioHoras(plan, o);
   const t0 = o.t0 ?? plan.t0;
   const conPausas = o.pausas ?? true;
   const lunesDe = (w: number) => addDays(t0, (w - 1) * 7);
@@ -412,6 +436,87 @@ export function calendario(plan: PlanExtendido = PLAN_EXT, o: Opciones = {}): Bl
     // La pausa que parte el bloque va después de él en la lista (sus fechas están adentro del bloque).
     for (const w of pausasDentro) out.push(pausa(w, b.etapa));
   }
+  return out;
+}
+
+/**
+ * Ola 27 (v3) · el calendario medido en horas. Cada bloque vale (semanas del plan × 24,5) horas; se reparte día por día sobre la
+ * capacidad de programación de la rutina que rige ese día (53 h por semana en el modo intensivo, 29 con trabajo, cero en la pausa de
+ * fin de año). Un bloque ocupa días enteros: el siguiente arranca al día siguiente de que se junten sus horas. Los descansos son
+ * calendario (7 días por semana, sin horas). Las pausas de fin de año parten el bloque o van entre dos, como en el motor por semanas.
+ */
+export function calendarioHoras(plan: PlanExtendido = PLAN_EXT, o: Opciones = {}): BloqueFechado[] {
+  const h = o.horas!;
+  const t0 = o.t0 ?? plan.t0;
+  const unidad = h.horasSemana ?? plan.horasPorSemana ?? 24.5;
+  const conPausas = o.pausas ?? true;
+  const dia = (n: number) => addDays(t0, n);
+  const semanaDe = (n: number) => Math.floor(n / 7) + 1;
+  const enPausa = (n: number) => conPausas && esSemanaDePausa(addDays(dia(n), -((parseDate(dia(n)).getDay() + 6) % 7)));
+  const ultimoCerrado = Math.max(-1, ...(h.cerrados ?? []).map((id) => plan.bloques.findIndex((b) => b.id === id)));
+  const out: BloqueFechado[] = [];
+  const pausa = (nIni: number, etapa: 1 | 2 | 3 | 4): BloqueFechado => {
+    const lunes = nIni - (((parseDate(dia(nIni)).getDay() + 6) % 7));
+    return {
+      id: `PAUSA-${dia(lunes).slice(0, 4)}`, etapa, tipo: 'descanso', nombre: 'Pausa de fin de año', base: 1, extra: 0, extraPlataforma: 0, extraArquitectura: 0,
+      que: 'Una semana sin programación entre Navidad y Año Nuevo; la matemática diaria y lo demás siguen.',
+      semanas: 1, desde: semanaDe(lunes), hasta: semanaDe(lunes), inicio: dia(lunes), fin: dia(lunes + 6), extraAplicado: 0, plataformaAplicada: 0, arquitecturaAplicada: 0, atraso: 0, absorbido: 0, pausasDentro: [], pausa: true,
+      horas: 0, diaIni: lunes, diaFin: lunes + 6,
+    };
+  };
+  let cursor = 0;
+  let etapa = 0;
+  let pendiente = 0;
+  plan.bloques.forEach((b, idx) => {
+    if (b.etapa !== etapa) { etapa = b.etapa; pendiente = 0; }
+    const proy = b.tipo === 'proyecto';
+    const extraAplicado = proy && leer(o.extras, b.id) ? b.extra : 0;
+    const plataformaAplicada = proy && leer(o.plataforma, b.id) ? b.extraPlataforma ?? 0 : 0;
+    const arquitecturaAplicada = proy && leer(o.arquitectura, b.id) ? b.extraArquitectura ?? 0 : 0;
+    const atraso = Math.max(0, Math.round(o.atrasos?.[b.id] ?? 0));
+    let semanas: number;
+    let absorbido = 0;
+    if (b.tipo === 'colchon') {
+      absorbido = Math.min(b.base, pendiente);
+      semanas = b.base - absorbido;
+      pendiente = 0;
+    } else {
+      semanas = b.base + extraAplicado + plataformaAplicada + arquitecturaAplicada + atraso;
+      pendiente += atraso;
+    }
+    const extras = { extraAplicado, plataformaAplicada, arquitecturaAplicada, atraso, absorbido };
+    if (semanas === 0) {
+      out.push({ ...b, ...extras, semanas, desde: semanaDe(cursor), hasta: semanaDe(cursor) - 1, inicio: dia(cursor), fin: dia(cursor - 1), pausasDentro: [], horas: 0, diaIni: cursor, diaFin: cursor - 1 });
+      return;
+    }
+    // Un descanso es calendario: 7 días por semana, sin horas.
+    if (b.tipo === 'descanso') {
+      const ini = cursor;
+      cursor += semanas * 7;
+      out.push({ ...b, ...extras, semanas, desde: semanaDe(ini), hasta: semanaDe(cursor - 1), inicio: dia(ini), fin: dia(cursor - 1), pausasDentro: [], horas: 0, diaIni: ini, diaFin: cursor - 1 });
+      return;
+    }
+    // La pausa que cae justo antes del bloque va entre los dos.
+    while (enPausa(cursor)) {
+      const p = pausa(cursor, b.etapa);
+      out.push(p);
+      cursor = p.diaFin! + 1;
+    }
+    const horas = Math.floor(semanas * unidad * (idx > ultimoCerrado ? h.factor ?? 1 : 1) + 1e-9);
+    const ini = cursor;
+    let acc = 0;
+    let d = ini;
+    const pausasDentro: number[] = [];
+    for (let guarda = 0; guarda < 4000; guarda++, d++) {
+      if (enPausa(d)) { const w = semanaDe(d - (((parseDate(dia(d)).getDay() + 6) % 7))); if (!pausasDentro.includes(w)) pausasDentro.push(w); continue; }
+      acc += h.capacidad(dia(d));
+      if (acc >= horas - 1e-9) break;
+    }
+    const fin = d;
+    cursor = fin + 1;
+    out.push({ ...b, ...extras, semanas, desde: semanaDe(ini), hasta: semanaDe(fin), inicio: dia(ini), fin: dia(fin), pausasDentro, horas, diaIni: ini, diaFin: fin });
+    for (const w of pausasDentro) out.push(pausa((w - 1) * 7, b.etapa));
+  });
   return out;
 }
 

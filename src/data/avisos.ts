@@ -2,7 +2,7 @@
  * Avisos entre ramas: lo que pasa en una rama y cambia lo que toca en otra. Puro: recibe la
  * fecha, el plan registrado y los ajustes, y devuelve los avisos en el orden en que importan.
  */
-import { PLAN, finSemana, inicioSemana, nombreTramo, tramoActivo, ventanaW, type Capa } from './plan';
+import { PLAN, finDe, finSemana, inicioDe, inicioSemana, nombreTramo, tramoActivo, ventanaW, type Capa } from './plan';
 import { enPausa, type PlanSettings, type PlanState } from './plan-state';
 import { RAMA_NOMBRE } from './ramas';
 import { puertaBloqueando } from './puertas';
@@ -78,8 +78,8 @@ export function avisosEntreRamas(date: string, p: PlanState, cfg: PlanSettings, 
     const sem = w.prox.hasta - w.prox.desde + 1;
     out.push({
       id: `w-${w.prox.id}`, de: 'matematica', a: 'programacion',
-      titulo: `La ventana ${w.prox.id} empieza ${elDia(inicioSemana(w.prox.desde, t0))}`,
-      texto: `${sem === 2 ? 'Dos' : sem === 3 ? 'Tres' : sem} semanas de ${w.prox.que.toLowerCase()}: los bloques de programación pasan a matemática hasta ${elDia(finSemana(w.prox.hasta, t0))}.`,
+      titulo: `La ventana ${w.prox.id} empieza ${elDia(inicioDe(w.prox, t0))}`,
+      texto: `${sem === 2 ? 'Dos' : sem === 3 ? 'Tres' : sem} semanas de ${w.prox.que.toLowerCase()}: los bloques de programación pasan a matemática hasta ${elDia(finDe(w.prox, t0))}.`,
       href: '#/metas',
     });
   }

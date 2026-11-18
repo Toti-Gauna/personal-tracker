@@ -18,7 +18,8 @@ import { periodKey } from '../data/goals';
 import { emptyTrain, migrarEntreno } from '../data/train-catalog';
 import { emptyRuta, refsForDay, type RutaState } from '../data/ruta';
 import { applySettings } from './apply';
-import { aplicarCalendario } from '../data/plan';
+import { calibrar } from '../data/calibracion';
+import { aplicarCalendario, calendarioVivo } from '../data/plan';
 import { setClippingActivo } from '../data/clipping-activo';
 import { aplicarLibrosPropios } from '../data/libros';
 import type { TrainState } from '../data/train-types';
@@ -82,9 +83,50 @@ export function migrate(parsed: any): State {
 }
 
 let state: State = load();
+
+/** Ola 27 · horas de programación reales por día (foco en bloques de la rama programación), solo de los días que ya pasaron. */
+function realesProg(days: Record<string, DayLog>, hoy: string): Record<string, number> {
+  const out: Record<string, number> = {};
+  for (const [d, day] of Object.entries(days)) {
+    if (d >= hoy) continue;
+    const ramaDe = new Map(day.blocks.map((b) => [b.key, b.rama]));
+    const min = day.focus.filter((f) => ramaDe.get(f.key) === 'programacion').reduce((x, f) => x + f.focusMin, 0);
+    if (min > 0) out[d] = Math.round((min / 60) * 100) / 100;
+  }
+  return out;
+}
+
+/** Ola 27 · el factor real/estimado (al cerrar P2 y P3) y los bloques cerrados con los que se calculó. Cuando todavía no cierra P2, nada. */
+function factorCalendario(s: State, t0: string, hoy: string): { factor?: number; cerrados?: string[] } {
+  if (!s.plan.proyectos.P2?.examen && hoy < addDays(t0, 40)) return {};
+  const c = calibrar(calendarioVivo(t0, { factor: null, cerrados: [] }), s.days, s.plan, hoy);
+  if (c.factor == null || !c.hito) return {};
+  return { factor: c.factor, cerrados: c.hito === 'P3' ? ['P0', 'P1', 'P2', 'P3'] : ['P0', 'P1', 'P2'] };
+}
+
+/** Ola 27 · lo que hace falta para fechar el calendario por horas: T0, inicio del trabajo, extras, pausa, horas reales y factor. */
+function ajustesCalendario(s: State) {
+  const t0 = s.settings?.startDate ?? T0_PLAN;
+  const hoy = dateKey();
+  const reales = realesProg(s.days, hoy);
+  return { t0, hoy, reales, inicioTrabajo: s.settings?.plan?.t2 ?? addDays(t0, 56) };
+}
+const claveCalendario = (s: State) => {
+  const a = ajustesCalendario(s);
+  return `${a.t0}|${s.settings?.plan?.t2 ?? ''}|${(s.plan.extrasApagados ?? []).join(',')}|${s.plan.pausaFinDeAnio !== false}|${a.hoy}|${Object.entries(a.reales).map(([d, h]) => `${d}:${h}`).join(',')}|${Object.entries(s.plan.proyectos).filter(([, p]) => p.examen).map(([id]) => id).join(',')}`;
+};
+let claveAplicada = '';
+function recalcularCalendario() {
+  claveAplicada = claveCalendario(state);
+  const a = ajustesCalendario(state);
+  // Primero sin factor (para medir contra el calendario estimado); con las horas reales ya cargadas.
+  aplicarCalendario(state.plan.extrasApagados ?? [], state.plan.pausaFinDeAnio !== false, { t0: a.t0, inicioTrabajo: a.inicioTrabajo, reales: a.reales, hoy: a.hoy });
+  const f = factorCalendario(state, a.t0, a.hoy);
+  if (f.factor) aplicarCalendario(state.plan.extrasApagados ?? [], state.plan.pausaFinDeAnio !== false, { t0: a.t0, inicioTrabajo: a.inicioTrabajo, reales: a.reales, hoy: a.hoy, ...f });
+}
 applySettings(state.settings);
 setClippingActivo(!!state.settings?.plan?.bloquesPendientes?.clipping);
-aplicarCalendario(state.plan.extrasApagados ?? [], state.plan.pausaFinDeAnio !== false);
+recalcularCalendario();
 aplicarLibrosPropios(state.study.librosPropios);
 const subs = new Set<() => void>();
 
@@ -99,7 +141,7 @@ export function setState(fn: (s: State) => State) {
   if (state.study.librosPropios !== prevLibros) aplicarLibrosPropios(state.study.librosPropios);
   if (state.settings !== prev) { applySettings(state.settings); setClippingActivo(!!state.settings?.plan?.bloquesPendientes?.clipping); }
   // Ola 16b: el calendario vivo se recalcula si cambian los extras de feature apagados.
-  if (state.plan.extrasApagados !== prevExtras || state.plan.pausaFinDeAnio !== prevPausa) aplicarCalendario(state.plan.extrasApagados ?? [], state.plan.pausaFinDeAnio !== false);
+  if (state.plan.extrasApagados !== prevExtras || state.plan.pausaFinDeAnio !== prevPausa || claveCalendario(state) !== claveAplicada) recalcularCalendario();
   try { localStorage.setItem(KEY, JSON.stringify(state)); } catch { /* sin storage */ }
   subs.forEach((f) => f());
 }
@@ -109,7 +151,7 @@ export function resetState(s: State = empty()) {
   state = s;
   applySettings(s.settings);
   setClippingActivo(!!s.settings?.plan?.bloquesPendientes?.clipping);
-  aplicarCalendario(s.plan.extrasApagados ?? [], s.plan.pausaFinDeAnio !== false);
+  recalcularCalendario();
   aplicarLibrosPropios(s.study.librosPropios);
   subs.forEach((f) => f());
 }

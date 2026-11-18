@@ -162,7 +162,7 @@ export function ExtrasProyecto({ id, t0 }: { id: string; t0: string }) {
           </li>
         ))}
       </ul>
-      <p className="sub mono">{b.base} base{b.extraAplicado ? ` + ${b.extraAplicado} feature` : ''}{b.plataformaAplicada ? ` + ${b.plataformaAplicada} plataforma` : ''}{b.arquitecturaAplicada ? ` + ${b.arquitecturaAplicada} arquitectura` : ''} = {b.semanas} semanas{b.pausasDentro.length ? ' (más la pausa de fin de año, que lo parte)' : ''} · cierra el {fm(b.fin)}</p>
+      <p className="sub mono">{b.base} base{b.extraAplicado ? ` + ${b.extraAplicado} feature` : ''}{b.plataformaAplicada ? ` + ${b.plataformaAplicada} plataforma` : ''}{b.arquitecturaAplicada ? ` + ${b.arquitecturaAplicada} arquitectura` : ''} = {b.semanas} semanas del plan{b.horas ? ` (${b.horas} h)` : ''}{b.pausasDentro.length ? ' (más la pausa de fin de año, que lo parte)' : ''} · cierra el {fm(b.fin)}</p>
       <p className="sub">Si falta tiempo se recorta alcance y la feature primero; nunca tests, seguridad, revisiones, repasos, sueño ni entrenamiento.</p>
     </section>
   );

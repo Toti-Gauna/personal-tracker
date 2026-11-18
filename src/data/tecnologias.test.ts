@@ -10,10 +10,10 @@ const bloque = (id: string, d: PlanExtendido = PLAN_EXT) => d.bloques.find((b) =
 const nombres = (id: string) => bloque(id).tecnologias!.map((t) => t.nombre);
 const marca = (id: string, n: string) => bloque(id).tecnologias!.find((t) => t.nombre === n);
 
-describe('ola 26 · tecnologías de los proyectos (v2.1)', () => {
-  it('el JSON valida, no cambió ninguna duración y el calendario sigue en 217 semanas', () => {
+describe('ola 26 · tecnologías de los proyectos (v2.1, con los cambios de la v3)', () => {
+  it('el JSON valida y cada proyecto lleva sus tecnologías; el calendario por semanas sigue en 221 (v3: P0 de 1 semana, sumas y ventanas más largas)', () => {
     expect(validar(raw)).toEqual([]);
-    expect(totalSemanas(calendario())).toBe(217);
+    expect(totalSemanas(calendario())).toBe(221);
     expect(PLAN_EXT.bloques.filter((b) => b.tipo === 'proyecto').every((b) => Array.isArray(b.tecnologias))).toBe(true);
     // El stack ya no vive en data/plan.json: sale de las tecnologías.
     // (se lee del archivo: el módulo `plan` muta su copia al armar el calendario vivo).
@@ -22,27 +22,32 @@ describe('ola 26 · tecnologías de los proyectos (v2.1)', () => {
     expect(TRAMOS.find((t) => t.id === 'P1')!.stack).toEqual(nombres('P1'));
   });
 
-  it('P0: suma la auditoría y refactor de una app generada con IA y el RAG usa un dominio de muestra', () => {
-    expect(nombres('P0').some((n) => /Auditoría y refactor de una app generada con IA/.test(n))).toBe(true);
-    expect(nombres('P0').some((n) => /dominio de muestra/.test(n))).toBe(true);
+  it('P0 (v3): solo hub, Trazo como caso, CV, LinkedIn y pitch; la auditoría, el RAG y portfolio-mcp van al backlog sin fecha', () => {
+    expect(nombres('P0')).toEqual(['Next.js', 'Three.js', 'ElevenLabs', 'Higgsfield']);
+    expect(bloque('P0').base).toBe(1);
     expect(JSON.stringify(raw)).not.toMatch(/\bCompli?A\b|Complia Pro/i);
-    expect(marca('P0', 'portfolio-mcp v0')?.marca).toBe('nueva');
-    expect(bloque('P0').historial).toHaveLength(2);
+    expect(bloque('P0').tecnologias!.some((t) => t.marca === 'nueva')).toBe(false);
+    expect(bloque('P0').historial).toHaveLength(3);
+    expect(PLAN_EXT.backlog!.map((b) => b.nombre)).toEqual(expect.arrayContaining(['portfolio-mcp', 'Auditoría y refactor de una app generada con IA', 'RAG para negocios (dominio de muestra)']));
   });
 
-  it('P1: LangGraph es la única nueva; evals, cola, conector y SQLite son parte del trabajo; DuckDB y Parquet ya no está', () => {
+  it('P1: LangGraph es la única nueva; evals, cola y conector son parte del trabajo; DuckDB y Parquet ya no está y Electron va a la Semana de sumas', () => {
     const t = bloque('P1').tecnologias!;
     expect(t.filter((x) => x.marca === 'nueva').map((x) => x.nombre)).toEqual(['LangGraph (agente analista con herramientas)']);
-    for (const parte of [/^Evals/, /^Cola asíncrona.*RabbitMQ o SQS/, /^Conector a una API de terceros en sandbox/, /^SQLite local/]) expect(t.find((x) => parte.test(x.nombre))?.marca).toBeUndefined();
+    for (const parte of [/^Evals/, /^Cola asíncrona.*RabbitMQ o SQS/, /^Conector a una API de terceros en sandbox/]) expect(t.find((x) => parte.test(x.nombre))?.marca).toBeUndefined();
     expect(nombres('P1').some((n) => /DuckDB|Parquet/.test(n))).toBe(false);
-    expect(bloque('P1').ficha!.plataforma).toBe('Escritorio (Electron con SQLite local)');
+    expect(nombres('P1').some((n) => /SQLite/.test(n))).toBe(false);
+    expect(bloque('P1').extraPlataforma).toBe(0);
+    expect(bloque('P1').ficha!.plataforma).toMatch(/Semana de sumas/);
     expect(bloque('P1').ficha!.tecnologiaNueva).toBe('LangGraph (agente analista con herramientas)');
     expect(bloque('P1').recortarPrimero).toEqual(['Conector a una API de terceros en sandbox']);
   });
 
-  it('P2: .NET con FHIR es la nueva, suma Azure, la app de prueba y accesibilidad; vLLM y LoRA ya no está; el gateway en Go sigue', () => {
+  it('P2: .NET con FHIR es la nueva, suma Azure y accesibilidad; la app de prueba va a la Semana de sumas; vLLM y LoRA ya no está; el gateway en Go sigue', () => {
     expect(bloque('P2').ficha!.tecnologiaNueva).toBe('.NET con FHIR (C# y ASP.NET Core)');
-    expect(nombres('P2')).toEqual(expect.arrayContaining(['Go', 'Despliegue en Azure con Azure OpenAI', 'App mobile en versión de prueba (TestFlight o Play interno)', 'Revisión de accesibilidad']));
+    expect(nombres('P2')).toEqual(expect.arrayContaining(['Go', 'Despliegue en Azure con Azure OpenAI', 'Revisión de accesibilidad']));
+    expect(nombres('P2').some((n) => /TestFlight/.test(n))).toBe(false);
+    expect(bloque('P2').extraPlataforma).toBe(0);
     expect(nombres('P2').some((n) => /vLLM|LoRA/.test(n))).toBe(false);
     expect(bloque('P2').recortarPrimero).toEqual(['Revisión de accesibilidad']);
   });

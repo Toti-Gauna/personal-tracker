@@ -12,7 +12,7 @@ describe('metas generadas desde el plan', () => {
   it('la semana sigue la fase: búsqueda hasta T+2 y con trabajo después', () => {
     const s5 = metasSemanaGeneradas('2026-12-14', T0);
     expect(s5.find((m) => m.clave === 'postulaciones')?.meta).toBe(35);
-    expect(s5.find((m) => m.clave === 'casillas:P1')?.meta).toBe(6);
+    expect(s5.find((m) => m.clave === 'casillas:P2')?.meta).toBe(6);
     const s20 = metasSemanaGeneradas('2027-04-01', T0);
     expect(s20.find((m) => m.clave === 'postulaciones')).toBeUndefined();
     // Ola 27: con trabajo, idiomas son 6,5 h por semana y programación 29.
@@ -30,13 +30,14 @@ describe('metas generadas desde el plan', () => {
     const nov = metasMesGeneradas('2026-11-20', T0);
     expect(nov.filter((m) => m.origen === 'plan').map((m) => m.texto)).toEqual(PLAN.etapaActual.mes.metas.map((m) => m.texto));
     const dic = metasMesGeneradas('2026-12-14', T0);
-    // Faro v1 se entrega el 17 de enero (con la feature, la plataforma y la pausa adentro): entra en las metas de enero.
-    expect(dic.find((m) => m.clave === 'casillas:P1')).toBeUndefined();
-    expect(metasMesGeneradas('2027-01-10', T0).find((m) => m.clave === 'casillas:P1')?.texto).toBe('Faro v1 con tráiler, docs y landing');
+    // Con el calendario por horas, Faro v1 se entrega el 9 de diciembre y Escudo el 29: las dos entran en las metas de diciembre.
+    expect(dic.find((m) => m.clave === 'casillas:P1')?.texto).toBe('Faro v1 con tráiler, docs y landing');
+    expect(dic.find((m) => m.clave === 'casillas:P2')?.texto).toBe('Escudo con tráiler, docs y landing');
+    expect(metasMesGeneradas('2027-01-10', T0).find((m) => /^casillas/.test(m.clave ?? ''))).toBeUndefined();
     expect(dic.find((m) => m.clave === 'postulaciones')?.meta).toBe(155);
     expect(dic.filter((m) => m.origen === 'chequeo').map((m) => m.texto)).toEqual(['Registro de laboratorios de seguridad', 'Medidas del mes']);
-    // El plan termina en T+18 (12 nov 2028): después no hay metas generadas.
-    expect(metasMesGeneradas('2028-10-01', T0).length).toBeGreaterThan(0);
+    // El plan termina en T+18 (25 jul 2028): después no hay metas generadas.
+    expect(metasMesGeneradas('2028-07-10', T0).length).toBeGreaterThan(0);
     expect(metasMesGeneradas('2028-12-01', T0)).toEqual([]);
   });
 
@@ -56,11 +57,11 @@ describe('metas generadas desde el plan', () => {
     expect(oct.some((m) => m.id === 'm-idioma-a1-examen')).toBe(true);
   });
 
-  it('lo que cierra en diciembre y enero: la entrevista y la entrega de Faro v1 (Escudo se entrega en febrero)', () => {
+  it('lo que cierra en diciembre y enero: las entregas de Faro v1 y Escudo, la entrevista, la pausa y la ventana W1', () => {
     const c = cierraEnMes('2026-12-01', [{ fecha: '2026-12-17', rol: 'AI Engineer' }], T0);
-    expect(c.map((x) => [x.fecha, x.rama, x.texto])).toEqual([['2026-12-17', 'trabajo', 'Entrevista · AI Engineer'], ['2026-12-21', null, 'Pausa de fin de año · semana 6']]);
+    expect(c.map((x) => [x.fecha, x.rama, x.texto])).toEqual([['2026-12-09', 'programacion', 'Faro v1 entregado y examen de programación'], ['2026-12-17', 'trabajo', 'Entrevista · AI Engineer'], ['2026-12-21', null, 'Pausa de fin de año · semana 6'], ['2026-12-29', 'programacion', 'Escudo entregado y examen de programación']]);
     const e = cierraEnMes('2027-01-01', [], T0);
-    expect(e.map((x) => [x.fecha, x.rama])).toEqual([['2027-01-11', 'main'], ['2027-01-17', 'programacion']]);
+    expect(e.map((x) => [x.fecha, x.rama])).toEqual([['2027-01-06', 'matematica'], ['2027-01-11', 'main']]);
     expect(e.some((x) => x.rama === null)).toBe(false);
   });
 
@@ -86,12 +87,12 @@ describe('proyecto', () => {
 const LETRA_PAUSA = '—';
 
 describe('bimestre y año', () => {
-  it('B1 tiene 9 semanas con P0 y Faro (6 con feature y plataforma, partido por la pausa); hay 12 bimestres, el último de 5', () => {
+  it('B1 tiene 9 semanas de calendario con P0, Faro, Escudo, la pausa, la Semana de sumas y W1; hay 10 bimestres, el último de 8', () => {
     const b1 = semanasDelBimestre(1, T0);
-    expect(b1.semanas.map((s) => s.letra)).toEqual(['P0', 'P0', 'F', 'F', 'F', LETRA_PAUSA, 'F', 'F', 'F']);
+    expect(b1.semanas.map((s) => s.letra)).toEqual(['P0', 'F', 'F', 'E', 'E', LETRA_PAUSA, '+', 'W', 'W']);
     expect(b1.fin).toBe('2027-01-17');
-    expect(semanasDelBimestre(11, T0).semanas).toHaveLength(9);
-    expect(semanasDelBimestre(12, T0).semanas).toHaveLength(5);
+    expect(semanasDelBimestre(9, T0).semanas).toHaveLength(9);
+    expect(semanasDelBimestre(10, T0).semanas).toHaveLength(8);
   });
 
   it('los capítulos del bimestre salen del texto del plan', () => {

@@ -37,6 +37,8 @@ export function diaDe(h: HitoRama) {
   if (!h.ancla) return h.dia;
   const t = TRAMOS.find((x) => x.id === h.ancla!.tramo);
   if (!t) return h.dia;
+  // Ola 27: el calendario va por días (horas de programación): el hito cae el día exacto en que empieza o termina el tramo.
+  if (t.diaIni != null && t.diaFin != null) return h.ancla.borde === 'inicio' ? t.diaIni : t.diaFin;
   return h.ancla.borde === 'inicio' ? (t.desde - 1) * 7 : t.hasta * 7 - 1;
 }
 

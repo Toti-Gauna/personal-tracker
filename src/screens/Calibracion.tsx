@@ -1,6 +1,6 @@
 /** Ola 24 · #/metas/calibracion: horas estimadas contra reales, el factor tras P3 y los escenarios del plan v2. */
 import { useMemo } from 'react';
-import { ESCENARIOS_V2, FACTOR_MAX, FACTOR_MIN, calibrar, proyectar, sugerencia } from '../data/calibracion';
+import { FACTOR_MAX, FACTOR_MIN, HORAS_PROG_SEMANA, calibrar, escenarios, proyectar, sugerencia } from '../data/calibracion';
 import { T0_PLAN } from '../data/plan';
 import { calendarioCompleto } from '../data/plan-vistas';
 import { RAMA_COLOR } from '../data/ramas';
@@ -23,28 +23,29 @@ export function Calibracion({ day }: { day: DayLog }) {
   const d = useMemo(() => {
     const cal = calendarioCompleto(t0);
     const c = calibrar(cal, days, plan, hoy);
-    const total = cal.reduce((s, b) => s + b.semanas, 0);
+    const horas = cal.reduce((s, b) => s + (b.horas ?? 0), 0);
     const fin = cal.reduce((m, b) => (b.fin > m ? b.fin : m), cal[0].fin);
-    return { cal, c, total, fin, sug: sugerencia(c, cal, hoy), proy: c.factor != null ? proyectar(cal, c.factor, hoy) : null };
+    const cerrados = c.hito === 'P3' ? ['P0', 'P1', 'P2', 'P3'] : c.hito === 'P2' ? ['P0', 'P1', 'P2'] : [];
+    return { cal, c, horas, fin, sug: sugerencia(c, cal, hoy), proy: c.factor != null ? proyectar(c.factor, t0, cerrados) : null, esc: escenarios(t0, cerrados) };
   }, [t0, plan, days, hoy]);
   const { c } = d;
   const max = Math.max(1, ...c.filas.map((x) => Math.max(x.estimadas, x.reales)));
   return (
     <main className="pantalla plan-proy cal-pag" style={{ ['--c' as string]: RAMA_COLOR.programacion }}>
-      <div className="topbar"><a className="volver" href="#/metas/etapas">Las 4 etapas</a><span className="mono sub">{d.total} semanas · hasta el {f(d.fin)}</span></div>
-      <header><h1 className="titulo">Calibración</h1><p>Horas estimadas contra horas reales de programación. Al cerrar P3 se calcula el factor y se revisa al cerrar cada etapa: Trazo propone, vos decidís.</p></header>
+      <div className="topbar"><a className="volver" href="#/metas/etapas">Las 4 etapas</a><span className="mono sub">{n1(d.horas)} h · hasta el {f(d.fin)}</span></div>
+      <header><h1 className="titulo">Calibración</h1><p>Horas estimadas contra horas reales de programación. El factor se calcula al cerrar P2 y otra vez al cerrar P3, y se aplica a lo que falta: Trazo propone, vos decidís.</p></header>
 
       <section className="cal-factor" aria-labelledby="cal-f">
         <span className="etiqueta" id="cal-f">Factor real / estimado</span>
         {c.factor != null ? (
           <>
             <b className="mono cal-n">{n1(c.factor)}</b>
-            <span className="sub">{n1(c.reales)} h reales de {n1(c.estimadas)} h estimadas en los proyectos cerrados · en plan entre {n1(FACTOR_MIN)} y {n1(FACTOR_MAX)}</span>
+            <span className="sub">{n1(c.reales)} h reales de {n1(c.estimadas)} h estimadas en los proyectos cerrados (hasta {c.hito}) · en plan entre {n1(FACTOR_MIN)} y {n1(FACTOR_MAX)}</span>
           </>
         ) : (
           <>
-            <b className="cal-espera">Se calcula al cerrar P3{c.cuando ? `, el ${f(c.cuando)}` : ''}</b>
-            <span className="sub">Las horas reales salen del foco de los bloques de programación. Estimadas: semanas de trabajo × 25,5 h.</span>
+            <b className="cal-espera">Se calcula al cerrar P2{c.cuando ? `, el ${f(c.cuando)}` : ''}, y otra vez al cerrar P3</b>
+            <span className="sub">Las horas reales salen del foco de los bloques de programación. Estimadas: semanas del plan × {n1(HORAS_PROG_SEMANA)} h.</span>
           </>
         )}
       </section>
@@ -74,11 +75,11 @@ export function Calibracion({ day }: { day: DayLog }) {
 
       <span className="etiqueta">Escenarios</span>
       <ul className="cal-esc">
-        <li className="actual"><b>Calendario actual</b><span className="mono">{d.total} sem · {f(d.fin)}</span><small className="sub">Con las extras y la pausa como las tenés ahora.</small></li>
-        {d.proy && <li className="tuyo"><b>Con tu factor</b><span className="mono">{d.proy.semanas} sem · {f(d.proy.fin)}</span><small className="sub">Las semanas de proyecto que faltan × {n1(c.factor!)}; ventanas, certificaciones y pausas no cambian.</small></li>}
-        {ESCENARIOS_V2.map((e) => <li key={e.id}><b>{e.nombre}</b><span className="mono">{e.semanas} sem · {f(e.fin)}</span><small className="sub">{e.supuesto}</small></li>)}
+        <li className="actual"><b>Calendario actual</b><span className="mono">{n1(d.horas)} h · {f(d.fin)}</span><small className="sub">Con las extras y la pausa como las tenés ahora.</small></li>
+        {d.proy && <li className="tuyo"><b>Con tu factor</b><span className="mono">{n1(d.proy.horas)} h · {f(d.proy.fin)}</span><small className="sub">Las horas de lo que falta × {n1(c.factor!)}; los descansos y la pausa de fin de año no cambian.</small></li>}
+        {d.esc.map((e) => <li key={e.id}><b>{e.nombre} · {n1(e.factor)}</b><span className="mono">{n1(e.horas)} h · {f(e.fin)}</span><small className="sub">{e.supuesto}</small></li>)}
       </ul>
-      <p className="sub">Los tres escenarios son supuestos de la v2, sin verificar: se recalibran con tus horas reales. Ventanas, certificaciones y pausas no se comprimen.</p>
+      <p className="sub">Los tres escenarios salen del calendario por horas con un factor de 0,85, 1,00 y 1,15 sobre lo que falta; no son supuestos escritos a mano.</p>
     </main>
   );
 }
