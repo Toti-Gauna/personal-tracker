@@ -68,6 +68,14 @@ export interface Block extends RoadmapLink {
   /** Rama del plan T+18 ("main" = Trazo); sin valor, fuera del plan. */
   rama?: RamaOMain;
   tasks: Task[];
+  /** Ola 25: dado por hecho a mano (aunque queden submetas), con lo que hiciste en ese tiempo. */
+  hecho?: { at: string; nota?: string };
+  /** Ola 25: salteado hoy (no cuenta en la mejora). */
+  salteado?: boolean;
+  /** Ola 25: meta sumada hoy desde Hoy (no viene de la rutina). */
+  propia?: boolean;
+  /** Ola 25: horario cambiado hoy. */
+  editado?: boolean;
 }
 
 export interface FocusEntry {

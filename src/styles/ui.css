@@ -149,3 +149,14 @@
   .trazo { transition-duration: 0.15s; }
   .toast, .modal, .modal-fondo { animation: none; }
 }
+
+/* Ola 25 · Hoy editable */
+.tarea-mas { flex: none; width: 44px; height: 44px; margin-right: -10px; display: grid; place-items: center; color: var(--sub); font-size: 20px; border-radius: 8px; }
+.tarea-mas:active { background: var(--campo); }
+.hdia { display: grid; gap: 10px; }
+.hdia label { display: grid; gap: 4px; font-size: 13px; color: var(--sub); }
+.hdia-dos { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.hdia-modo { margin: 4px 0 0; }
+.hdia-modo button { font-size: 14px; padding: 0 6px; }
+.hdia .hdia-error { margin: 0; color: var(--rutina); font-size: 14.5px; padding: 10px 12px; border: 1px solid var(--rutina); border-radius: 10px; }
+.hdia .btn-principal { margin-top: 4px; }

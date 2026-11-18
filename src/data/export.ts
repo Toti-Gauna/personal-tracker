@@ -24,6 +24,11 @@ export function dayJson(day: DayLog, settings: Settings, days: Record<string, Da
       start: x.start,
       min: x.min,
       done: blockDone(x),
+      // Ola 25: dado por hecho a mano (con su nota), salteado, sumado hoy o con el horario cambiado.
+      ...(x.hecho ? { hecho: 'a mano', ...(x.hecho.nota ? { nota: x.hecho.nota } : {}) } : {}),
+      ...(x.salteado ? { salteado: true } : {}),
+      ...(x.propia ? { propia: true } : {}),
+      ...(x.editado ? { editado: true } : {}),
       tasks: x.tasks.map((t) => ({ t: t.t, done: t.done })),
     })),
     focus: day.focus.map((f) => ({ block: f.key, plan: f.plan, min: f.focusMin, at: f.at })),

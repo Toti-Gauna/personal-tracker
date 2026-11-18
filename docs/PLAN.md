@@ -5,7 +5,7 @@ Tracker personal de Toti: el día en horas, el estudio con su propio motor de re
 - **Diseño:** [canvas de Trazo](https://claude.ai/artifact/6Cc2E6aW2ViU5ikovpsRTy)
 - **Roadmap de estudio:** [ruta ML + DevSecOps](https://claude.ai/artifact/9PEokku7mBLZdCFJr1zqXP)
 - **Pantallas:** presentación `Trazo-pantallas.pptx` y su ZIP de imágenes (44 pantallas, 8 flujos).
-- **Estado:** olas 0 a 12b hechas y en `main`. Olas 0 a 16c hechas (la 15 quedó absorbida por la 16c). Olas 0 a 24 hechas. La ola 25 (Hoy editable) está planificada en §6 septies. Este archivo es la fuente de verdad.
+- **Estado:** olas 0 a 12b hechas y en `main`. Olas 0 a 16c hechas (la 15 quedó absorbida por la 16c). Olas 0 a 25 hechas: el plan de olas de §6 septies quedó completo. Este archivo es la fuente de verdad.
 
 ---
 
@@ -391,7 +391,7 @@ Desde el lunes 16 nov 2026 la prioridad es un trabajo remoto de USD 3.000 a 5.00
 | 22 · Orden de pantallas | *Hecha.* Pasada de UX en Metas, Estudio y Hoy: secciones plegables y escalera compacta; ninguna de las 49 pantallas pasa de 3,2 pantallas de scroll a 390 px (§6 sexies, paso 9) | Sonnet 5.5 · medio |
 | 23 · Clipping | *Hecha.* Roadmap Clipper de 12 meses (de 0 a USD 10k/mes) con su propio apartado en Metas: plan, registro, cuentas, campañas, retainers, métricas y gráficos, y una UX/UI premium; se integra con Hoy, el mapa y las alertas (§6 sexies, pasos 10 a 12) | Opus 5.5 · alto |
 | 24 · Plan T+18 v2 | *Hecha.* Plataforma extra y arquitectura por proyecto, pausa de fin de año automática (con switch), P8 en 2 semanas, alerta de versión de examen, calibración con horas reales y escenarios (§6 septies, pasos 13 a 15) | Opus 5.5 · alto |
-| 25 · Hoy editable | Borrar y editar submetas, dar un bloque por hecho aunque queden submetas, cambiar horarios del día, sumar metas nuevas y saltear bloques (§6 septies, pasos 16 y 17) | Sonnet 5.5 · medio |
+| 25 · Hoy editable | *Hecha.* Borrar y editar submetas, dar un bloque por hecho aunque queden submetas, cambiar horarios del día, sumar metas nuevas y saltear bloques (§6 septies, pasos 16 y 17) | Sonnet 5.5 · medio |
 
 ## 6 bis. Olas 9 a 12: mejoras de uso
 
@@ -1082,7 +1082,15 @@ No dependen una de la otra: la 25 puede ir antes si Hoy molesta en el día a dí
 
 ---
 
-### Ola 25 · Hoy editable (Sonnet 5.5 · medio)
+### Ola 25 · Hoy editable (Sonnet 5.5 · medio) · *Hecha*
+
+**Lo que quedó:** 496 tests pasando (13 nuevos). Los dos pasos quedaron en un solo commit porque comparten las hojas y las acciones del día.
+- **Submetas:** cada una tiene su botón ⋯ (en Hoy y en Foco) para editarla o borrarla, las de fábrica también; el aviso trae "Deshacer" y vuelve a su lugar.
+- **Dar por hecho:** el bloque cuenta como cumplido aunque queden submetas, con una nota opcional ("¿En qué lo usaste?"). Suma a la mejora, sus pendientes no aparecen en el cierre para pasar a mañana y el JSON del día lo dice (`"hecho": "a mano"` y `nota`). Se deshace desde el bloque.
+- **Horarios solo de hoy** (`src/data/editar-dia.ts`, puro): *correr* empuja a los que siguen si se pisan; *acortar* los achica parejo (de a 5 min, mínimo 15) para terminar a la hora en que terminaban. Dormir no se mueve: si algo no entra, avisa cuánto sobra y no cambia nada. En el día de la intensiva, que va lleno hasta las 22:00, alargar un bloque solo entra acortando.
+- **+ Meta para hoy:** título, rama (o fuera del plan), hora, duración y submetas; si cae en medio de un bloque, ese se corta ahí. Se quita con "Quitar de hoy"; sus pendientes no pasan a mañana.
+- **Saltear hoy:** el bloque queda tachado, no cuenta en la mejora (ni en el total) y "Ahora toca" lo saltea. Se vuelve con "Volver a hoy".
+- La rutina no se toca: mañana arranca como siempre.
 
 **Paso 16 · Submetas y bloque hecho**
 - Cada submeta se puede **editar y borrar** (las que agregaste y las de fábrica), con "Deshacer" en el aviso.
