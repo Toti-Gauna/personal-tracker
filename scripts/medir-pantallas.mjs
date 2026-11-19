@@ -17,7 +17,7 @@ const { chromium } = createRequire(import.meta.url)('playwright');
 const BASE = process.env.BASE ?? 'http://127.0.0.1:4173/personal-tracker/';
 const PRESUPUESTO = Number(process.env.PRESUPUESTO ?? 3.2);
 const RUTAS = [
-  'hoy', 'estudio', 'estudio/mate', 'estudio/mate/W1', 'estudio/prog', 'estudio/prog/P3', 'estudio/prog/P3/metas', 'estudio/idiomas', 'estudio/idiomas/ingles',
+  'hoy', 'estudio', 'estudio/mate', 'estudio/mate/W1', 'estudio/mate/m1', 'estudio/mate/libro/conamat', 'estudio/mate/libro/conamat/1', 'estudio/prog', 'estudio/prog/P3', 'estudio/prog/P3/metas', 'estudio/idiomas', 'estudio/idiomas/ingles',
   'estudio/idiomas/frances', 'estudio/idiomas/biblioteca', 'estudio/idiomas/ascenso', 'estudio/libro/mwm', 'estudio/ruta/matematica',
   'metas/ruta', 'metas/semana', 'metas/mes', 'metas/bimestre', 'metas/anio', 'metas/etapas', 'metas/mapa', 'metas/evolucion', 'metas/sprint', 'metas/impacto',
   'metas/trabajo', 'metas/ingles', 'metas/handyx', 'metas/proyecto/P1', 'entreno', 'entreno-semana', 'entreno-motor', 'entreno-peso',

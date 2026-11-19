@@ -7,6 +7,13 @@ import { BIMS, laneById, laneOfItem } from '../data/ruta';
 import { ir } from '../lib/routes';
 import { play } from './sound';
 import { abrirCorrida } from './checkins';
+import { abrirEstadoEstudio, hayQuePreguntar } from './EstadoEstudio';
+import type { Block } from '../data/types';
+
+/** Ola 28: al cerrar la meta de matemática, en qué estado quedó el capítulo (no avanza solo). */
+export function preguntarSiEsMate(date: string, b: Pick<Block, 'rama'>) {
+  if (b.rama === 'matematica' && hayQuePreguntar(date)) abrirEstadoEstudio(date);
+}
 
 /** Marca una tarea y, si con eso se cumple la meta, avisa cuánto suma. */
 export function marcarTarea(date: string, key: string, id: string) {
@@ -26,6 +33,7 @@ export function marcarTarea(date: string, key: string, id: string) {
       color: AREAS[b.area].css,
       evento: 'tarea',
     });
+    preguntarSiEsMate(date, b);
   } else if (hecha) play('tarea');
   // La meta con ruta mueve su carril.
   const r = syncBlockRuta(date, key);

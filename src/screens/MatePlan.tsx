@@ -11,6 +11,10 @@ import { EscaleraCompacta } from '../ui/EscaleraCompacta';
 import type { DayLog } from '../data/types';
 import { useStore } from '../state/store';
 import { NivelSalida } from '../ui/FichaBloque';
+import { Plegable } from '../ui/Plegable';
+import { actShort, librosMate } from '../data/study';
+import type { Activity } from '../data/study-types';
+import { FilaLibro, MateLibro } from './MateLibro';
 import '../styles/estudio.css';
 import '../styles/roadmap-estudio.css';
 
@@ -49,6 +53,8 @@ export function CardMate({ day }: { day: DayLog }) {
 
 /** #/estudio/mate y #/estudio/mate/:id */
 export function MatePlan({ day, param }: { day: DayLog; param: string }) {
+  // Ola 28: el libro y sus capítulos (#/estudio/mate/libro/:id[/:n]).
+  if (param.split('/')[1] === 'libro') return <MateLibro day={day} param={param} />;
   const id = param.split('/')[1];
   const { items, plan, perfil } = useMate(day);
   const it = id ? items.find((x) => x.id === id) : undefined;
@@ -76,6 +82,8 @@ export function MatePlan({ day, param }: { day: DayLog; param: string }) {
         <p className="mono sub re-quedan">Regla: {pct(PUERTA.verde)} o más aprueba · {pct(PUERTA.amarillo)} a 84 % refuerzo y retest · menos vuelve al tema</p>
       </section>
 
+      <TusLibros hoy={day.date} />
+
       <span className="etiqueta">La escalera · las ventanas van siempre antes del proyecto que las pide</span>
       <EscaleraCompacta etiqueta="Escalera de matemática por etapa" color="var(--economia)" grupos={porEtapa.map((xs) => ({
         id: `mate:etapa:${xs[0].etapa}`,
@@ -93,9 +101,28 @@ export function MatePlan({ day, param }: { day: DayLog; param: string }) {
           };
         }),
       }))} />
-
-      <a className="fila-link" href="#/estudio/ruta/matematica">Material de refuerzo: M0 a M10 por fases <span aria-hidden="true">→</span></a>
     </main>
+  );
+}
+
+/** Ola 28 · los libros de la app que nombra un tramo ("CONAMAT Aritmética" → conamat). */
+export function librosDelTramo(it: Pick<ItemMate, 'principal'>, activities: Activity[]) {
+  const norm = (x: string) => x.toLowerCase().replace(/·/g, ' ').replace(/\s+/g, ' ').trim();
+  return it.principal.map((p) => activities.find((a) => !!a.units?.length && norm(a.title) === norm(p))).filter((a): a is Activity => !!a);
+}
+
+/** Ola 28 · acceso directo a los libros en curso desde Matemática. */
+function TusLibros({ hoy }: { hoy: string }) {
+  const study = useStore((s) => s.study);
+  const ls = study.activities.filter((a) => a.front === 'math' && !!a.units?.length && !a.archivada);
+  if (!ls.length) return null;
+  const enCurso = librosMate(study).map((a) => a.id);
+  return (
+    <section className="re-sec">
+      <span className="etiqueta">Tus libros · capítulos, tarjetas, tests e historial</span>
+      {ls.map((a) => <FilaLibro key={a.id} a={a} hoy={hoy} />)}
+      {enCurso.length === 0 && <p className="sub">Ningún libro en curso.</p>}
+    </section>
   );
 }
 
@@ -107,16 +134,18 @@ function TramoMate({ it, items, day }: { it: ItemMate; items: ItemMate[]; day: D
   const est = estadoEn(it, day.date);
   const gate = PLAN.programacion.puertas[it.id];
   const examen = plan.proyectos[it.id]?.examen;
+  const study = useStore((s) => s.study);
+  const libros = librosDelTramo(it, study.activities);
   return (
     <main className="pantalla re re-fase" style={{ ['--c' as string]: 'var(--economia)' }}>
       <div className="topbar"><a className="volver" href="#/estudio/mate">Matemática</a><span className="mono sub">{it.id} · {it.semanas} sem</span></div>
       <div className="kicker">{est === 'actual' ? 'Estás acá' : est === 'hecho' ? 'Pasó' : 'Todavía no'} · {f(it.inicio)} a {f(it.fin)}</div>
-      <header><h1 className="titulo">{it.tipo === 'ventana' ? it.nombre : it.principal.join(' y ')}</h1><p>{it.tipo === 'ventana' ? 'Semanas de matemática intensiva: los bloques de programación pasan a matemática.' : 'Matemática diaria, 2 h a las 04:30, en libro y papel.'}</p></header>
+      <header><h1 className="titulo">{it.tipo === 'ventana' ? it.nombre : libros.length ? `${libros.map(actShort).join(' y ')}` : it.principal.join(' y ')}</h1><p>{it.tipo === 'ventana' ? 'Semanas de matemática intensiva: los bloques de programación pasan a matemática.' : `Matemática diaria en libro y papel${it.horas ? `: ${it.horas} h en total` : ''}.`}</p></header>
       <p className="re-al-cerrar">Al terminarlo sos <b className="resaltado">{it.perfil}</b></p>
 
       <section className="re-sec">
-        <span className="etiqueta">Qué libro manda</span>
-        <ul className="re-mats re-nucleo">{it.principal.map((t) => <li key={t} className="re-mat"><b>{t}</b></li>)}</ul>
+        <span className="etiqueta">{libros.length ? 'Los libros · tocá uno para ver capítulos, tarjetas y tests' : 'Qué libro manda'}</span>
+        {libros.length ? libros.map((l) => <FilaLibro key={l.id} a={l} hoy={day.date} />) : <ul className="re-mats re-nucleo">{it.principal.map((t) => <li key={t} className="re-mat"><b>{t}</b></li>)}</ul>}
         <p className="sub">Habilita: {it.habilita.join(', ')}</p>
       </section>
 
@@ -130,6 +159,7 @@ function TramoMate({ it, items, day }: { it: ItemMate; items: ItemMate[]; day: D
         </section>
       )}
 
+      <Plegable id={`mate:reglas:${it.id}`} titulo="Reglas y refuerzo" resumen="si un test sale mal">
       <section className="re-sec">
         <span className="etiqueta">Si un test sale mal</span>
         <ul className="re-semaforo">
@@ -148,8 +178,8 @@ function TramoMate({ it, items, day }: { it: ItemMate; items: ItemMate[]; day: D
       <section className="re-sec">
         <span className="etiqueta">Refuerzo · se abre por tema y tipo de error, nunca en lugar del libro</span>
         <ul className="re-mats">{it.refuerzo.map((r) => <li key={r.titulo} className="re-mat"><b>{r.titulo}</b><small className="re-cuando">{ROL_REFUERZO[r.rol]}</small></li>)}</ul>
-        {it.fase && <a className="fila-link" href={`#/estudio/ruta/matematica/${it.fase}`}>Más material en {it.fase} (M0 a M10) <span aria-hidden="true">→</span></a>}
       </section>
+      </Plegable>
 
       <nav className="re-nav" aria-label="Otros tramos">
         {items[i - 1] ? <a href={`#/estudio/mate/${items[i - 1].id}`}>← {items[i - 1].id}</a> : <span />}

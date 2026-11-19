@@ -178,6 +178,12 @@ function migrateStudy(st: StudyState): StudyState {
     return a;
   });
   if (!activities.some((a) => a.libro === 'mwm' || a.id === mwm.id)) activities = [...activities, mwm];
+  // Ola 28: Álgebra es un libro aparte (va justo después de Aritmética).
+  if (!activities.some((a) => a.id === 'conamat-algebra')) {
+    const alg = emptyStudy().activities.find((a) => a.id === 'conamat-algebra')!;
+    const i = activities.findIndex((a) => a.id === 'conamat');
+    activities = i < 0 ? [...activities, alg] : [...activities.slice(0, i + 1), alg, ...activities.slice(i + 1)];
+  }
   return { ...st, activities };
 }
 

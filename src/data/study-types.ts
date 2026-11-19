@@ -51,6 +51,8 @@ export interface Activity {
   libro?: string;
   /** Ola 20: ya no entra en el día, pero sus repasos y su historial siguen (por ejemplo, prog-b1). */
   archivada?: boolean;
+  /** Ola 28: arranca cuando termina este otro libro (Álgebra después de Aritmética). */
+  despuesDe?: string;
 }
 
 export type ErrType = 'concepto' | 'tecnica' | 'descuido' | 'enunciado';

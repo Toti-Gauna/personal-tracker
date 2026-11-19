@@ -139,7 +139,7 @@ export const SEALS: SealDef[] = [
   { id: 'aritmetica', group: 'estudio', mark: 'AR', name: 'Aritmética', how: 'Aprobar los 11 capítulos de Aritmética de CONAMAT.', line: 'Aritmética completa.', color: 'var(--ing)',
     test: ({ s }) => approvedUnits(s, 'conamat').length >= 11, progress: ({ s }) => prog(approvedUnits(s, 'conamat').length, 11, 'CONAMAT, 11 capítulos') },
   { id: 'conamat', group: 'estudio', mark: '69', name: 'CONAMAT completo', how: 'Aprobar los 69 capítulos de CONAMAT, del B1 al B6.', line: 'CONAMAT, completo.', color: 'var(--ing)',
-    test: ({ s }) => approvedUnits(s, 'conamat').length >= 69, progress: ({ s }) => prog(approvedUnits(s, 'conamat').length, 69, 'Llegan los capítulos de los bimestres 2 al 6') },
+    test: ({ s }) => approvedUnits(s, 'conamat').length + approvedUnits(s, 'conamat-algebra').length >= 69, progress: ({ s }) => prog(approvedUnits(s, 'conamat').length + approvedUnits(s, 'conamat-algebra').length, 69, 'Llegan los capítulos de los bimestres 2 al 6') },
   { id: 'libro', group: 'estudio', mark: 'L1', name: 'Libro terminado', how: 'Terminar un libro o curso cargado como actividad.', line: 'Un libro terminado.', color: 'var(--handyx)',
     test: ({ s }) => s.study.activities.some((a) => !a.units && a.total > 0 && a.progress >= a.total) },
   // Trabajo

@@ -2,11 +2,13 @@ import { approves, scheduleApproved, scheduleFailed, scheduleLearned, unitName, 
 import { newSrs, review as fsrsReview, type Grade } from '../data/fsrs';
 import { MAX_TRIES, RELEER_MIN } from '../data/study-catalog';
 import type { Activity, Attempt, Card, CardDraft, ErrType, ReviewItem, Rules, StudyState, Tesis, Tramo } from '../data/study-types';
+import type { DayLog } from '../data/types';
 import { addDays } from '../data/time';
 import { newId } from '../data/schedule';
 import { getState, setState, updateDay } from './store';
-import { logFromStudy } from './ruta';
-import { claveMicro, libroPorId, unidadesDe, type TipoArtefacto } from '../data/libros';
+import { logFromStudy, unlogFromStudy } from './ruta';
+import { BIMS } from '../data/ruta';
+import { capsTexto, claveMicro, libroPorId, microFaltantes, unidadesDe, type TipoArtefacto } from '../data/libros';
 
 function updateStudy(fn: (st: StudyState) => StudyState) {
   setState((s) => ({ ...s, study: fn(s.study) }));
@@ -46,8 +48,9 @@ export function completeLearn(date: string, activityId: string, n?: number) {
   const a = findAct(activityId);
   if (!a) return;
   const ref = `learn:${a.id}:${n ?? ''}`;
-  if ((getState().days[date]?.studyDone ?? []).includes(ref)) return;
   const unit = n != null ? a.units?.find((u) => u.n === n) : undefined;
+  // Ola 28: con unidades manda el estado del capítulo (un "sigo estudiando" de hoy no lo bloquea); sin unidades, el paso del día.
+  if (unit ? !!unitState(getState().study, a.id, unit.n).learnedOn : (getState().days[date]?.studyDone ?? []).includes(ref)) return;
   const first = unit ? !unitState(getState().study, a.id, unit.n).learnedOn : true;
   updateStudy((st) => {
     const units = { ...st.units };
@@ -136,10 +139,57 @@ export function addFront(name: string, color: StudyState['fronts'][number]['colo
 export function tramoDone(date: string, t: Tramo, isLastLearn: boolean) {
   // El cold recall y la tesis se cierran en su pantalla; las tarjetas, al calificarlas.
   if (t.ref.startsWith('rev:') && t.kind !== 'tesis' && t.kind !== 'cold') completeReview(date, t.ref.slice(4));
+  // Ola 28: terminar el tiempo de estudiar NO da el capítulo por estudiado. Al cerrar la sesión (o la meta)
+  // se pregunta en qué estado quedó; sin unidades (páginas, minutos) sí avanza solo, como siempre.
   if (t.kind === 'capitulo' && isLastLearn) {
     const [, act, n] = t.ref.split(':');
-    completeLearn(date, act, n ? Number(n) : undefined);
+    if (!n) completeLearn(date, act);
   }
+}
+
+/**
+ * Ola 28 · "Sigo estudiando el capítulo": cuenta como estudio de hoy (el paso del día queda hecho) pero el
+ * capítulo no avanza: mañana sigue el mismo y no hay cold recall ni test todavía.
+ */
+export function seguirEstudiando(date: string, activityId: string, n: number) {
+  markStep(date, `learn:${activityId}:${n}`);
+}
+
+/**
+ * Ola 28 · Terminé de estudiar el capítulo: queda estudiado hoy y el motor agenda solo el cold recall y el test
+ * (día 2). Un libro del sistema de libros pide antes la micro-tesis de cada capítulo: si falta, devuelve el aviso.
+ */
+export function terminarEstudio(date: string, activityId: string, n: number): string | null {
+  const a = findAct(activityId);
+  if (!a) return 'No encontré el libro.';
+  if (a.libro) {
+    const falta = microFaltantes(getState().study, a, n);
+    if (falta.length) return `Falta la micro-tesis del ${capsTexto(falta)}`;
+  }
+  completeLearn(date, activityId, n);
+  return null;
+}
+
+/**
+ * Ola 28 · "Todavía no lo terminé": deshace "estudiado" si no hay ningún test cargado. Se borran el cold recall
+ * y el test que el motor había agendado, el paso del día en que se marcó y su avance en la ruta. Devuelve si pudo.
+ */
+export function volverAEstudiar(activityId: string, n: number): boolean {
+  const st = getState().study;
+  const cur = unitState(st, activityId, n);
+  if (!cur.learnedOn || cur.tests.length || cur.approvedOn || cur.flojo) return false;
+  const dia = cur.learnedOn;
+  updateStudy((s) => {
+    const { learnedOn: _l, ...resto } = s.units[activityId]?.[n] ?? { tests: [] };
+    return {
+      ...s,
+      units: { ...s.units, [activityId]: { ...s.units[activityId], [n]: { ...resto, tests: resto.tests ?? [] } } },
+      reviews: s.reviews.filter((r) => !(r.activityId === activityId && r.unit === n && !r.doneOn && (r.kind === 'cold' || r.kind === 'retest' || r.kind === 'releer'))),
+    };
+  });
+  unmarkStep(dia, `learn:${activityId}:${n}`);
+  unlogFromStudy(`study:learn:${activityId}:${n}`);
+  return true;
 }
 
 // ——— Motor de repaso (ola 3) ———
@@ -243,7 +293,7 @@ export function completeExercises(date: string, itemId: string, perfect: boolean
   markStep(date, `rev:${itemId}`);
 }
 
-export function addCards(date: string, drafts: (CardDraft & { deck: string; frontId?: string; source: string })[]) {
+export function addCards(date: string, drafts: (CardDraft & { deck: string; frontId?: string; source: string; activityId?: string; unit?: number })[]) {
   const cards: Card[] = drafts.map((d) => ({ ...d, id: `c${newId()}`, createdOn: date }));
   updateStudy((s) => ({ ...s, cards: [...s.cards, ...cards] }));
   return cards.length;
@@ -261,10 +311,11 @@ export function savePoints(key: string, points: string[]) {
   updateStudy((s) => ({ ...s, points: { ...s.points, [key]: points } }));
 }
 
-/** CONAMAT · Aritmética (unidades 1 a 11) es el B1 de la ruta: aprender y aprobar cada capítulo empuja su ítem. */
+/** CONAMAT (Aritmética en el B1, Álgebra en el B2 y B3) empuja la ruta: aprender y aprobar cada capítulo suma a su ítem. */
 function rutaFromStudy(date: string, activityId: string, n: number, part: 'learn' | 'test') {
-  if (activityId !== 'conamat') return;
-  logFromStudy(date, `b1-conamat-arit-${String(n).padStart(2, '0')}`, 0.5, `study:${part}:${activityId}:${n}`);
+  const nn = String(n).padStart(2, '0');
+  const id = activityId === 'conamat' ? `b1-conamat-arit-${nn}` : activityId === 'conamat-algebra' ? BIMS.flatMap((b) => b.items).find((i) => i.id.endsWith(`-conamat-alg-${nn}`))?.id : undefined;
+  if (id) logFromStudy(date, id, 0.5, `study:${part}:${activityId}:${n}`);
 }
 
 // ——— Sistema de libros (ola 20) ———
@@ -354,5 +405,97 @@ export function guardarArtefacto(date: string, actId: string, art: { tipo: TipoA
     const cur = s.finales?.[actId] ?? { tests: [] };
     const { artefacto: _, ...resto } = cur;
     return { ...s, finales: { ...(s.finales ?? {}), [actId]: art ? { ...resto, artefacto: { ...art, fecha: date } } : resto } };
+  });
+}
+
+// ——— Ola 28 · reiniciar un libro desde cero ———
+
+/** Lo que se lleva un reinicio, para poder deshacerlo. */
+export interface FotoLibro {
+  actId: string;
+  units: StudyState['units'][string] | undefined;
+  reviews: ReviewItem[];
+  tesis: Tesis[];
+  final: NonNullable<StudyState['finales']>[string] | undefined;
+  attempts: Attempt[];
+  cards: Card[];
+  log: StudyState['log'];
+  /** Por día: los pasos marcados y los minutos de estudio de este libro. */
+  dias: Record<string, { studyDone: string[]; study: NonNullable<DayLog['study']> }>;
+  ruta: ReturnType<typeof getState>['ruta']['log'];
+}
+
+/**
+ * Reinicia un libro con capítulos (CONAMAT Aritmética, Álgebra…): borra sus capítulos estudiados, tests, tesis,
+ * repasos agendados, el examen final, lo que había sumado en "dónde estás flojo", los minutos y pasos de cada día
+ * y su avance en la ruta. Las tarjetas se conservan salvo que pidas borrarlas. Cierra la sesión si estaba abierta.
+ * Devuelve la foto para deshacerlo.
+ */
+export function reiniciarLibro(actId: string, opciones: { borrarTarjetas?: boolean } = {}): FotoLibro | null {
+  const s = getState();
+  const a = s.study.activities.find((x) => x.id === actId);
+  if (!a?.units?.length) return null;
+  const reviews = s.study.reviews.filter((r) => r.activityId === actId);
+  const ids = new Set(reviews.map((r) => `rev:${r.id}`));
+  const propio = (ref: string) => ref.startsWith(`learn:${actId}:`) || ref.startsWith(`test:${actId}:`) || ids.has(ref);
+  const cards = opciones.borrarTarjetas ? s.study.cards.filter((c) => c.activityId === actId) : [];
+  const cardIds = new Set(cards.map((c) => c.id));
+  const dias: FotoLibro['dias'] = {};
+  for (const [f, d] of Object.entries(s.days)) {
+    const studyDone = (d.studyDone ?? []).filter(propio);
+    const study = (d.study ?? []).filter((x) => x.activityId === actId);
+    if (studyDone.length || study.length) dias[f] = { studyDone, study };
+  }
+  const foto: FotoLibro = {
+    actId, units: s.study.units[actId], reviews, tesis: s.study.tesis.filter((t) => t.activityId === actId), final: s.study.finales?.[actId],
+    attempts: s.study.attempts.filter((x) => x.tema.startsWith(`${actId}:`)), cards, log: s.study.log.filter((l) => cardIds.has(l.cardId)),
+    dias, ruta: s.ruta.log.filter((l) => l.src?.includes(`:${actId}:`)),
+  };
+  setState((st) => {
+    const { [actId]: _u, ...units } = st.study.units;
+    const { [actId]: _f, ...finales } = st.study.finales ?? {};
+    const days = { ...st.days };
+    for (const f of Object.keys(dias)) days[f] = { ...days[f], studyDone: (days[f].studyDone ?? []).filter((r) => !propio(r)), study: (days[f].study ?? []).filter((x) => x.activityId !== actId) };
+    return {
+      ...st,
+      days,
+      focus: st.focus?.activityId === actId ? null : st.focus,
+      ruta: { ...st.ruta, log: st.ruta.log.filter((l) => !l.src?.includes(`:${actId}:`)) },
+      study: {
+        ...st.study, units, finales,
+        reviews: st.study.reviews.filter((r) => r.activityId !== actId),
+        tesis: st.study.tesis.filter((t) => t.activityId !== actId),
+        attempts: st.study.attempts.filter((x) => !x.tema.startsWith(`${actId}:`)),
+        cards: st.study.cards.filter((c) => !cardIds.has(c.id)),
+        log: st.study.log.filter((l) => !cardIds.has(l.cardId)),
+      },
+    };
+  });
+  return foto;
+}
+
+/** Deshace un reinicio: vuelve todo a como estaba. */
+export function restaurarLibro(f: FotoLibro) {
+  setState((st) => {
+    const days = { ...st.days };
+    for (const [fecha, d] of Object.entries(f.dias)) {
+      if (!days[fecha]) continue;
+      days[fecha] = { ...days[fecha], studyDone: [...new Set([...(days[fecha].studyDone ?? []), ...d.studyDone])], study: [...(days[fecha].study ?? []), ...d.study] };
+    }
+    return {
+      ...st,
+      days,
+      ruta: { ...st.ruta, log: [...st.ruta.log, ...f.ruta] },
+      study: {
+        ...st.study,
+        units: f.units ? { ...st.study.units, [f.actId]: f.units } : st.study.units,
+        finales: f.final ? { ...(st.study.finales ?? {}), [f.actId]: f.final } : st.study.finales,
+        reviews: [...st.study.reviews, ...f.reviews],
+        tesis: [...st.study.tesis, ...f.tesis],
+        attempts: [...st.study.attempts, ...f.attempts],
+        cards: [...st.study.cards, ...f.cards],
+        log: [...st.study.log, ...f.log],
+      },
+    };
   });
 }

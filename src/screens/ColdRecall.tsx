@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { compareAnswer } from '../data/compare';
 import { dailyReview } from '../data/study';
-import { CONAMAT_PUNTOS } from '../data/study-catalog';
+import { PUNTOS_CAP } from '../data/study-catalog';
 import type { StudyState } from '../data/study-types';
 import type { DayLog } from '../data/types';
 import { useStore } from '../state/store';
@@ -18,7 +18,7 @@ import '../styles/repaso.css';
  */
 function puntosDe(study: StudyState, actId: string, unit?: number) {
   const key = `${actId}:${unit}`;
-  const capitulo = study.points[key]?.length ? study.points[key] : actId === 'conamat' && unit != null ? CONAMAT_PUNTOS[unit] ?? [] : [];
+  const capitulo = study.points[key]?.length ? study.points[key] : unit != null ? PUNTOS_CAP[actId]?.[unit] ?? [] : [];
   if (capitulo.length) return { puntos: capitulo, fuente: 'el capítulo' };
   const cards = study.cards.filter((c) => c.activityId === actId && c.unit === unit);
   if (cards.length) return { puntos: cards.map((c) => `${c.front} :: ${c.back}`), fuente: 'tus tarjetas' };

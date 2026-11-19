@@ -10,6 +10,7 @@ import { agregarMetaHoy, borrarTarea, cambiarHorario, darPorHecho, editarTarea, 
 import { getState } from '../state/store';
 import { toast } from './avisos';
 import { Hoja } from './Hoja';
+import { preguntarSiEsMate } from './acciones';
 
 const color = (b: Pick<Block, 'area'>) => AREAS[b.area].css;
 
@@ -39,6 +40,7 @@ export function HojaHecho({ date, block, onCerrar }: { date: string; block: Bloc
     const antes = blockDone(block);
     darPorHecho(date, block.key, nota);
     onCerrar();
+    preguntarSiEsMate(date, block);
     const day = getState().days[date];
     if (day && !antes) toast({ title: `Meta ${block.n} cumplida · +${fmtPct(valorMeta(day), 3)} %`, sub: `Hoy llevás +${fmtPct(mejoraDia(day))} % de mejora`, color: color(block), evento: 'tarea' });
   };

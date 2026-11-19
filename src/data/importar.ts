@@ -3,9 +3,10 @@
  * Validación a mano, sin dependencias: cada error dice la línea del texto pegado donde falla.
  * Campos comunes: "tipo", "rama", "fecha".
  */
+import { libroTerminado } from './estado-capitulo';
 import { TRAMOS, fechaCorta, type EstadoPostulacion } from './plan';
 import { RAMAS } from './ramas';
-import { approves, scheduleApproved, scheduleFailed, unitState } from './study';
+import { approves, librosMate, scheduleApproved, scheduleFailed, unitState } from './study';
 import type { ErrType, StudyState } from './study-types';
 import { addDays } from './time';
 import type { Rama } from './types';
@@ -237,7 +238,8 @@ export function actividadDe(d: Importable, study: StudyState) {
   const libro = d.libro?.toLowerCase().trim();
   const porNombre = libro ? study.activities.find((a) => a.title.toLowerCase() === libro || a.title.toLowerCase().includes(libro) || libro.includes(a.title.toLowerCase())) : undefined;
   if (porNombre) return porNombre;
-  if (d.rama === 'matematica') return study.activities.find((a) => a.id === 'conamat');
+  // Ola 28: matemática va al libro de CONAMAT en curso (Aritmética y, al terminarla, Álgebra).
+  if (d.rama === 'matematica') return librosMate(study).filter((a) => !a.libro).find((a) => !libroTerminado(study, a)) ?? study.activities.find((a) => a.id === 'conamat');
   return undefined;
 }
 
