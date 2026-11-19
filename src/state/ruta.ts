@@ -55,6 +55,12 @@ export function logFromStudy(date: string, item: string, delta: number, src: str
   update((r) => ({ ...r, log: [...r.log, { date, item, delta, src }] }));
 }
 
+/** Ola 28: saca del carril lo que había sumado un paso de estudio que se deshizo. */
+export function unlogFromStudy(src: string) {
+  if (!getState().ruta.log.some((l) => l.src === src)) return;
+  update((r) => ({ ...r, log: r.log.filter((l) => l.src !== src) }));
+}
+
 /** Marca o desmarca a mano un paso de un ítem (por ejemplo, en el detalle del bimestre). */
 export function toggleItemManual(date: string, id: string) {
   const item = findItem(id);

@@ -160,3 +160,12 @@
 .hdia-modo button { font-size: 14px; padding: 0 6px; }
 .hdia .hdia-error { margin: 0; color: var(--rutina); font-size: 14.5px; padding: 10px 12px; border: 1px solid var(--rutina); border-radius: 10px; }
 .hdia .btn-principal { margin-top: 4px; }
+
+/* Ola 28 · ¿En qué estado estás? */
+.ee { display: grid; gap: 14px; }
+.ee-libro { display: grid; gap: 10px; }
+.ee-cap { display: grid; gap: 8px; padding: 12px 0; border-top: 1px solid var(--linea); }
+.ee-cap-t { display: flex; justify-content: space-between; gap: 10px; align-items: baseline; flex-wrap: wrap; }
+.ee-botones { display: grid; gap: 8px; }
+.ee-botones .btn-borde { margin: 0; }
+.ee-botones .btn-borde[aria-pressed='true'] { border-color: var(--c); }

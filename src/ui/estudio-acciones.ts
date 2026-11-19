@@ -8,6 +8,7 @@ import { ir } from '../lib/routes';
 import { getState, setFocus } from '../state/store';
 import { logStudy, tramoDone } from '../state/study';
 import { showModal, toast } from './avisos';
+import { abrirEstadoEstudio, hayQuePreguntar } from './EstadoEstudio';
 
 const colorOf = (activityId?: string) => {
   const st = getState().study;
@@ -48,9 +49,14 @@ export function avisoTramo(f: FocusState, next: number) {
   });
 }
 
-/** Cerrar: el último paso de la sesión. */
+/** Cerrar: el último paso de la sesión. Con capítulos (CONAMAT, libros), pregunta en qué estado quedaste. */
 export function finSesion(f: FocusState) {
   const tr = f.tramos ?? [];
+  const act = getState().study.activities.find((a) => a.id === f.activityId);
+  if (act?.units?.length && hayQuePreguntar(f.date, [act.id])) {
+    abrirEstadoEstudio(f.date, { actividades: [act.id] });
+    return;
+  }
   const rep = sumMin(tr.filter((t) => t.step === 'repetir'));
   const learn = tr.find((t) => t.kind === 'capitulo');
   const test = tr.find((t) => t.step === 'test');
@@ -65,6 +71,16 @@ export function finSesion(f: FocusState) {
       ? { label: 'Registrar el test', run: () => ir(`test/${test.ref.split(':')[1]}/${test.ref.split(':')[2]}`) }
       : { label: 'Ver Estudio', run: () => ir('estudio') },
   });
+}
+
+/**
+ * Ola 28 · la sesión quedó abierta y el reloj siguió sin vos (más de 10 min pasado su fin): se cierra sin dar
+ * nada por hecho y se pregunta en qué estado quedaste.
+ */
+export function sesionVencida(f: FocusState) {
+  const act = getState().study.activities.find((a) => a.id === f.activityId);
+  if (act?.units?.length) abrirEstadoEstudio(f.date, { actividades: [act.id], nota: 'La sesión quedó abierta y terminó sola: no di nada por hecho. Contame dónde quedaste.' });
+  else toast({ title: 'La sesión quedó abierta y terminó sola', sub: 'No di nada por hecho: marcá lo que hiciste en Estudio', color: colorOf(f.activityId) }, false);
 }
 
 /** "Hecho" en la sesión: termina el tramo actual ya. */

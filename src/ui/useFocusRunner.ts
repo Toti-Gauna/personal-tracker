@@ -7,7 +7,11 @@ import { fmtDur, nowMin, toHHMM } from '../data/time';
 import { ir } from '../lib/routes';
 import { carryPending, getState, logFocus, setFocus } from '../state/store';
 import { showModal, toast } from './avisos';
-import { avisoTramo, finSesion, onTramosEnded } from './estudio-acciones';
+import { avisoTramo, finSesion, onTramosEnded, sesionVencida } from './estudio-acciones';
+import { abrirEstadoEstudio, hayQuePreguntar } from './EstadoEstudio';
+
+/** Ola 28: más de esto pasado el fin de un tramo, la sesión se considera abandonada (no se cobra sola). */
+export const VENCIDA_MS = 10 * 60000;
 
 /** Corre el foco en segundo plano: avanza tramos, avisa y frena al terminar el bloque. */
 export function useFocusRunner() {
@@ -19,6 +23,13 @@ export function useFocusRunner() {
       const r = tick(f, Date.now());
       if (!r.ended.length) return;
       if (f.tramos) {
+        // Ola 28: si el reloj siguió sin vos (más de 10 min pasado el fin de un tramo), no se da nada por hecho.
+        const fin = r.finished ? r.state.segStart + r.state.segs[r.state.i].min * 60000 : r.state.segStart;
+        if (Date.now() - fin > VENCIDA_MS) {
+          setFocus(null);
+          sesionVencida(f);
+          return;
+        }
         const idx = Array.from({ length: (r.finished ? f.segs.length : r.state.i) - f.i }, (_, k) => f.i + k);
         onTramosEnded(f, idx);
         if (r.finished) {
@@ -51,6 +62,11 @@ export function useFocusRunner() {
       setFocus(null);
       logFocus(f.date, { key: f.key, plan: f.plan, focusMin: focusMinutes(f.segs), at: toHHMM(nowMin()) });
       if (!block || !day) return;
+      // Ola 28: al cerrar el bloque de matemática, en qué estado quedó el capítulo (no avanza solo).
+      if (block.rama === 'matematica' && hayQuePreguntar(f.date)) {
+        abrirEstadoEstudio(f.date);
+        return;
+      }
       const pending = block.tasks.filter((t) => !t.done);
       const nombre = block.title.split(' · ')[0];
       if (pending.length) {

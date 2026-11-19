@@ -54,6 +54,7 @@ import { PantallaPendiente } from './screens/Seccion';
 import { useStore } from './state/store';
 import { Avisos } from './ui/avisos';
 import { Checkins } from './ui/checkins';
+import { EstadoEstudio } from './ui/EstadoEstudio';
 import { useFocusRunner } from './ui/useFocusRunner';
 import { useSealSync } from './ui/useSealSync';
 import { ensureDayRefs, ensureWeek } from './state/ruta';
@@ -143,6 +144,7 @@ export function App() {
       {conBarra && !presentacion && <BottomBar activa={activaBarra} pendientes={pendientes} />}
       <Avisos />
       {settings && <Checkins />}
+      {settings && <EstadoEstudio />}
       {cargando && <Splash onFin={fin} />}
     </div>
   );

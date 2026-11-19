@@ -5,8 +5,8 @@ import type { Activity, Attempt, Card, CardDraft, ErrType, ReviewItem, Rules, St
 import { addDays } from '../data/time';
 import { newId } from '../data/schedule';
 import { getState, setState, updateDay } from './store';
-import { logFromStudy } from './ruta';
-import { claveMicro, libroPorId, unidadesDe, type TipoArtefacto } from '../data/libros';
+import { logFromStudy, unlogFromStudy } from './ruta';
+import { capsTexto, claveMicro, libroPorId, microFaltantes, unidadesDe, type TipoArtefacto } from '../data/libros';
 
 function updateStudy(fn: (st: StudyState) => StudyState) {
   setState((s) => ({ ...s, study: fn(s.study) }));
@@ -46,8 +46,9 @@ export function completeLearn(date: string, activityId: string, n?: number) {
   const a = findAct(activityId);
   if (!a) return;
   const ref = `learn:${a.id}:${n ?? ''}`;
-  if ((getState().days[date]?.studyDone ?? []).includes(ref)) return;
   const unit = n != null ? a.units?.find((u) => u.n === n) : undefined;
+  // Ola 28: con unidades manda el estado del capítulo (un "sigo estudiando" de hoy no lo bloquea); sin unidades, el paso del día.
+  if (unit ? !!unitState(getState().study, a.id, unit.n).learnedOn : (getState().days[date]?.studyDone ?? []).includes(ref)) return;
   const first = unit ? !unitState(getState().study, a.id, unit.n).learnedOn : true;
   updateStudy((st) => {
     const units = { ...st.units };
@@ -136,10 +137,57 @@ export function addFront(name: string, color: StudyState['fronts'][number]['colo
 export function tramoDone(date: string, t: Tramo, isLastLearn: boolean) {
   // El cold recall y la tesis se cierran en su pantalla; las tarjetas, al calificarlas.
   if (t.ref.startsWith('rev:') && t.kind !== 'tesis' && t.kind !== 'cold') completeReview(date, t.ref.slice(4));
+  // Ola 28: terminar el tiempo de estudiar NO da el capítulo por estudiado. Al cerrar la sesión (o la meta)
+  // se pregunta en qué estado quedó; sin unidades (páginas, minutos) sí avanza solo, como siempre.
   if (t.kind === 'capitulo' && isLastLearn) {
     const [, act, n] = t.ref.split(':');
-    completeLearn(date, act, n ? Number(n) : undefined);
+    if (!n) completeLearn(date, act);
   }
+}
+
+/**
+ * Ola 28 · "Sigo estudiando el capítulo": cuenta como estudio de hoy (el paso del día queda hecho) pero el
+ * capítulo no avanza: mañana sigue el mismo y no hay cold recall ni test todavía.
+ */
+export function seguirEstudiando(date: string, activityId: string, n: number) {
+  markStep(date, `learn:${activityId}:${n}`);
+}
+
+/**
+ * Ola 28 · Terminé de estudiar el capítulo: queda estudiado hoy y el motor agenda solo el cold recall y el test
+ * (día 2). Un libro del sistema de libros pide antes la micro-tesis de cada capítulo: si falta, devuelve el aviso.
+ */
+export function terminarEstudio(date: string, activityId: string, n: number): string | null {
+  const a = findAct(activityId);
+  if (!a) return 'No encontré el libro.';
+  if (a.libro) {
+    const falta = microFaltantes(getState().study, a, n);
+    if (falta.length) return `Falta la micro-tesis del ${capsTexto(falta)}`;
+  }
+  completeLearn(date, activityId, n);
+  return null;
+}
+
+/**
+ * Ola 28 · "Todavía no lo terminé": deshace "estudiado" si no hay ningún test cargado. Se borran el cold recall
+ * y el test que el motor había agendado, el paso del día en que se marcó y su avance en la ruta. Devuelve si pudo.
+ */
+export function volverAEstudiar(activityId: string, n: number): boolean {
+  const st = getState().study;
+  const cur = unitState(st, activityId, n);
+  if (!cur.learnedOn || cur.tests.length || cur.approvedOn || cur.flojo) return false;
+  const dia = cur.learnedOn;
+  updateStudy((s) => {
+    const { learnedOn: _l, ...resto } = s.units[activityId]?.[n] ?? { tests: [] };
+    return {
+      ...s,
+      units: { ...s.units, [activityId]: { ...s.units[activityId], [n]: { ...resto, tests: resto.tests ?? [] } } },
+      reviews: s.reviews.filter((r) => !(r.activityId === activityId && r.unit === n && !r.doneOn && (r.kind === 'cold' || r.kind === 'retest' || r.kind === 'releer'))),
+    };
+  });
+  unmarkStep(dia, `learn:${activityId}:${n}`);
+  unlogFromStudy(`study:learn:${activityId}:${n}`);
+  return true;
 }
 
 // ——— Motor de repaso (ola 3) ———

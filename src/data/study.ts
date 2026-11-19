@@ -17,9 +17,19 @@ export const actShort = (a: Activity) => a.title.split(' · ').pop()!.trim();
 export const unitState = (st: StudyState, actId: string, n: number): UnitState =>
   st.units[actId]?.[n] ?? { tests: [] };
 
-/** Actividades que tocan hoy (sin las archivadas ni los libros ya cerrados). */
+/** Ola 28: ¿ya arrancó? Un libro con `despuesDe` espera a que el anterior tenga todos sus capítulos aprobados (o flojos). */
+export function arranco(st: StudyState, a: Activity) {
+  if (!a.despuesDe) return true;
+  const prev = st.activities.find((x) => x.id === a.despuesDe);
+  return !prev?.units?.length || prev.units.every((u) => !!unitState(st, prev.id, u.n).approvedOn || !!unitState(st, prev.id, u.n).flojo);
+}
+
+/** Actividades que tocan hoy (sin las archivadas, los libros ya cerrados ni los que todavía no arrancan). */
 export const activitiesFor = (st: StudyState, date: string) =>
-  st.activities.filter((a) => !a.archivada && a.days.includes(weekday(date)) && !libroCerrado(st, a));
+  st.activities.filter((a) => !a.archivada && a.days.includes(weekday(date)) && !libroCerrado(st, a) && arranco(st, a));
+
+/** Ola 28 · los libros de matemática con capítulos que están en curso (para preguntar en qué estado quedó cada uno). */
+export const librosMate = (st: StudyState) => st.activities.filter((a) => a.front === 'math' && !!a.units?.length && !a.archivada && arranco(st, a));
 
 /**
  * La unidad que se estudia hoy: la que estudiaste hoy (para que el plan no cambie al
