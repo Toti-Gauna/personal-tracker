@@ -5,7 +5,7 @@
  * Un capítulo pasa por: pendiente → estudiando → test (día 2) → [re-test] → tesis → repasos (8, 22, 61) → cerrado.
  * Nada avanza solo: estudiando → test lo marcás vos ("Terminé de estudiarlo"); lo demás sale del test y la tesis.
  */
-import { focusUnit, unitState } from './study';
+import { unitState } from './study';
 import type { Activity, Card, ReviewItem, StudyState, TestResult, Unit } from './study-types';
 import { addDays, daysBetween } from './time';
 import type { DayLog } from './types';
@@ -74,7 +74,8 @@ export function estadoCapitulo(st: StudyState, a: Activity, n: number, hoy: stri
     const fecha = addDays(s.learnedOn, 1);
     return { ...base, estado: 'test', etiqueta: `test ${cuando(fecha < hoy ? hoy : fecha, hoy)}`, proximo: { que: 'Cold recall y test completo del capítulo', fecha: fecha < hoy ? hoy : fecha } };
   }
-  if (focusUnit(a, st, hoy)?.n === n) return { ...base, estado: 'estudiando', etiqueta: 'estudiando', proximo: { que: 'Terminar de estudiarlo: después va el test', fecha: hoy } };
+  // El que se estudia es el primero que todavía no terminaste (aunque hoy hayas terminado otro).
+  if (a.units!.find((u) => !unitState(st, a.id, u.n).learnedOn)?.n === n) return { ...base, estado: 'estudiando', etiqueta: 'estudiando', proximo: { que: 'Terminar de estudiarlo: después va el test', fecha: hoy } };
   return { ...base, estado: 'pendiente', etiqueta: 'por empezar' };
 }
 

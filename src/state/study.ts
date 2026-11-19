@@ -292,7 +292,7 @@ export function completeExercises(date: string, itemId: string, perfect: boolean
   markStep(date, `rev:${itemId}`);
 }
 
-export function addCards(date: string, drafts: (CardDraft & { deck: string; frontId?: string; source: string })[]) {
+export function addCards(date: string, drafts: (CardDraft & { deck: string; frontId?: string; source: string; activityId?: string; unit?: number })[]) {
   const cards: Card[] = drafts.map((d) => ({ ...d, id: `c${newId()}`, createdOn: date }));
   updateStudy((s) => ({ ...s, cards: [...s.cards, ...cards] }));
   return cards.length;

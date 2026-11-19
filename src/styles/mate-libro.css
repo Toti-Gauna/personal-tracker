@@ -1,0 +1,32 @@
+/* Ola 28 · el libro de matemática y sus capítulos */
+.ml .numeros span { overflow-wrap: anywhere; }
+.ml-ahora { display: grid; gap: 10px; margin: 0 0 18px; }
+.ml-ahora > a { display: flex; justify-content: space-between; gap: 10px; align-items: baseline; flex-wrap: wrap; padding: 12px 14px; border: 1px solid var(--c); border-radius: 10px; color: inherit; text-decoration: none; }
+.ml-ahora .btn-principal, .ml-ahora .btn-borde { margin: 0; }
+.ml-ahora .btn-borde[aria-pressed='true'] { border-color: var(--c); }
+.ml .dos-botones { margin-bottom: 18px; }
+.ml .dos-botones a[aria-disabled='true'] { opacity: .5; pointer-events: none; }
+.ml-caps { list-style: none; margin: 0; padding: 0; display: grid; }
+.ml-cap a { display: grid; grid-template-columns: 28px 1fr auto; gap: 10px; align-items: center; padding: 11px 0; border-bottom: 1px solid var(--linea); color: inherit; text-decoration: none; min-height: 44px; }
+.ml-cap-n { color: var(--sub); }
+.ml-cap-t { display: grid; gap: 2px; min-width: 0; }
+.ml-cap-t b { font-weight: 500; }
+.ml-chip { font-size: 12px; color: var(--sub); text-align: right; max-width: 42vw; }
+.ml-e-estudiando .ml-chip, .ml-e-test .ml-chip, .ml-e-retest .ml-chip, .ml-e-tesis .ml-chip { color: var(--c); }
+.ml-e-repasos .ml-chip, .ml-e-cerrado .ml-chip { color: var(--salud); }
+.ml-e-flojo .ml-chip { color: var(--rutina); }
+.ml-e-pendiente b { color: var(--sub); }
+.ml-tests { list-style: none; margin: 0; padding: 0; display: grid; }
+.ml-tests li { display: grid; grid-template-columns: 64px 1fr auto; gap: 10px; padding: 9px 0; border-bottom: 1px solid var(--linea); align-items: baseline; }
+.ml-tarjetas { list-style: none; margin: 0; padding: 0; display: grid; }
+.ml-tarjetas li { display: grid; gap: 2px; padding: 9px 0; border-bottom: 1px solid var(--linea); overflow-wrap: anywhere; }
+.ml-tarjetas b { font-weight: 500; }
+.ml-imp { display: grid; gap: 10px; }
+.ml-imp .dos-botones { margin: 0; }
+.ml-hist { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+.ml-hist > li { display: grid; gap: 4px; }
+.ml-hist ul { margin: 0; padding-left: 18px; color: var(--sub); font-size: 14px; }
+.ml-fila-libro { display: grid; gap: 4px; padding: 12px 0; border-bottom: 1px solid var(--linea); color: inherit; text-decoration: none; }
+.ml-fl-t { display: flex; justify-content: space-between; gap: 10px; align-items: baseline; flex-wrap: wrap; }
+.ml-barra { height: 3px; background: var(--linea); display: block; }
+.ml-barra span { display: block; height: 100%; background: var(--c, var(--economia)); }

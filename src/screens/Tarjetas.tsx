@@ -23,14 +23,34 @@ const leerModo = (): Modo => {
   return 'escribir';
 };
 
+/** Ola 28: "libro:act" o "cap:act:n". */
+export function parseFiltro(p?: string): { act: string; n?: number } | null {
+  if (!p) return null;
+  const [k, act, n] = p.split(':');
+  if (k === 'libro' && act) return { act };
+  if (k === 'cap' && act && n && Number.isFinite(Number(n))) return { act, n: Number(n) };
+  return null;
+}
+
 /** 3.3 Tarjetas con active recall: respondés antes de dar vuelta; Trazo marca lo que faltó y sugiere. */
 export function Tarjetas({ day, frontId }: { day: DayLog; frontId?: string }) {
   const study = useStore((s) => s.study);
   // La cola se arma al entrar; lo que sale "Otra vez" vuelve al final.
+  // Ola 28: "libro:conamat" o "cap:conamat:1" repasa las tarjetas de ese libro o capítulo, venzan o no
+  // (primero las que vencen y las nuevas). Sin filtro, la cola del día por frente.
+  const filtro = parseFiltro(frontId);
   const [cola, setCola] = useState<string[]>(() => {
-    const d = dailyReview(getState().study, day.date);
+    const st = getState().study;
+    if (filtro) {
+      const ahora = Date.now();
+      const cs = st.cards.filter((c) => c.activityId === filtro.act && (filtro.n == null || c.unit === filtro.n));
+      const vence = (c: typeof cs[number]) => !c.srs || c.srs.state === 'new' || c.srs.due <= ahora;
+      return [...cs].sort((x, y) => Number(vence(y)) - Number(vence(x)) || (x.srs?.due ?? 0) - (y.srs?.due ?? 0)).map((c) => c.id);
+    }
+    const d = dailyReview(st, day.date);
     return d.groups.filter((g) => !frontId || g.frontId === frontId).flatMap((g) => g.pending.map((c) => c.id));
   });
+  const volver = filtro ? `#/estudio/mate/libro/${filtro.act}${filtro.n != null ? `/${filtro.n}` : ''}` : '#/repaso';
   const [total] = useState(cola.length);
   const [hechas, setHechas] = useState(0);
   const [modo, setModo] = useState<Modo>(leerModo);
@@ -74,7 +94,7 @@ export function Tarjetas({ day, frontId }: { day: DayLog; frontId?: string }) {
 
   const top = (
     <div className="tarj-top">
-      <a className="btn-x" href="#/repaso" aria-label="Cerrar">×</a>
+      <a className="btn-x" href={volver} aria-label="Cerrar">×</a>
       <span className="tarj-segs" aria-hidden="true">
         {Array.from({ length: total }, (_, i) => <span key={i} className={i < hechas ? 'on' : ''} />)}
       </span>
@@ -86,9 +106,9 @@ export function Tarjetas({ day, frontId }: { day: DayLog; frontId?: string }) {
     return (
       <main className="pantalla tarjetas">
         {top}
-        <h1 className="titulo">{total ? 'Tarjetas de hoy, listas.' : 'No hay tarjetas para hoy.'}</h1>
-        <p className="sub">{total ? `Repasaste ${total} ${total === 1 ? 'tarjeta' : 'tarjetas'}. El motor ya las reprogramó.` : 'Las que vencen aparecen acá. Podés crear tarjetas nuevas o importarlas.'}</p>
-        <a className="btn-principal enlace" href="#/repaso">Volver al repaso</a>
+        <h1 className="titulo">{total ? (filtro ? 'Listo, las repasaste todas.' : 'Tarjetas de hoy, listas.') : filtro ? 'No hay tarjetas acá.' : 'No hay tarjetas para hoy.'}</h1>
+        <p className="sub">{total ? `Repasaste ${total} ${total === 1 ? 'tarjeta' : 'tarjetas'}. El motor ya las reprogramó.` : filtro ? 'Importalas en el capítulo o se crean solas con el cold recall, la tesis y los errores del test.' : 'Las que vencen aparecen acá. Podés crear tarjetas nuevas o importarlas.'}</p>
+        <a className="btn-principal enlace" href={volver}>{filtro ? 'Volver' : 'Volver al repaso'}</a>
         <a className="btn-borde enlace" href="#/tarjeta-nueva">Nueva tarjeta</a>
       </main>
     );
