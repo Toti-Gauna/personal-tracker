@@ -1891,7 +1891,8 @@
    "m1": {
     "nombre": "T+0 a T+2 · diario",
     "principal": [
-     "CONAMAT Aritmética y Álgebra"
+     "CONAMAT Aritmética",
+     "CONAMAT Álgebra"
     ],
     "refuerzo": [
      {

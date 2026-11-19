@@ -48,7 +48,7 @@ describe('matemática: un solo roadmap (absorbe la ola 15)', () => {
     for (let i = 1; i < diarios.length; i++) expect(diarios[i].inicio > diarios[i - 1].fin).toBe(true);
     const ventanas = r.filter((x) => x.tipo === 'ventana');
     for (let i = 1; i < ventanas.length; i++) expect(ventanas[i].inicio > ventanas[i - 1].fin).toBe(true);
-    expect(r[0]).toMatchObject({ tipo: 'diario', inicio: '2026-11-16', horas: 126, perfil: 'Aritmético', principal: ['CONAMAT Aritmética y Álgebra'] });
+    expect(r[0]).toMatchObject({ tipo: 'diario', inicio: '2026-11-16', horas: 126, perfil: 'Aritmético', principal: ['CONAMAT Aritmética', 'CONAMAT Álgebra'] });
     // T+0 a T+2 (126 h) termina en marzo de 2027; T+3 a T+6 (196 h), en julio.
     expect(r.find((x) => x.id === 'm1')!.fin).toBe('2027-03-10');
     expect(r.find((x) => x.id === 'm2')).toMatchObject({ inicio: '2027-03-11', fin: '2027-07-22', horas: 196 });
@@ -57,7 +57,7 @@ describe('matemática: un solo roadmap (absorbe la ola 15)', () => {
   });
 
   it('los libros del calendario vivo son los del prompt', () => {
-    expect(PLAN.matematica.tramos.find((m) => m.id === 'm1')!.libros).toEqual(['CONAMAT Aritmética y Álgebra']);
+    expect(PLAN.matematica.tramos.find((m) => m.id === 'm1')!.libros).toEqual(['CONAMAT Aritmética', 'CONAMAT Álgebra']);
     expect(PLAN.matematica.tramos.find((m) => m.id === 'W4')!.libros).toEqual(['Lehman, Leighton y Meyer · Mathematics for Computer Science']);
   });
 

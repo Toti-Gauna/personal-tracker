@@ -127,3 +127,35 @@ describe('ola 28 · ¿en qué estado estás?', () => {
     expect(screen.getByRole('dialog')).toBeInTheDocument();
   });
 });
+
+describe('ola 28 · Aritmética y Álgebra son dos libros', () => {
+  it('Álgebra tiene sus 17 capítulos y no entra en el día hasta terminar Aritmética', async () => {
+    const { activitiesFor, librosMate } = await import('./study');
+    const st = () => getState().study;
+    const alg = st().activities.find((a) => a.id === 'conamat-algebra')!;
+    expect(alg).toMatchObject({ title: 'CONAMAT · Álgebra', despuesDe: 'conamat', front: 'math' });
+    expect(alg.units!.map((u) => u.title).slice(0, 4)).toEqual(['Conjuntos y lógica', 'Conceptos básicos de álgebra', 'Productos notables', 'Factorización']);
+    expect(alg.units).toHaveLength(17);
+    expect(activitiesFor(st(), D).map((a) => a.id)).not.toContain('conamat-algebra');
+    expect(librosMate(st()).map((a) => a.id)).toEqual(['conamat']);
+    // Con los 11 de Aritmética aprobados, arranca Álgebra.
+    startDay('completo', '04:00', D);
+    for (let n = 1; n <= 11; n++) {
+      terminarEstudio(D, 'conamat', n);
+      saveTest('2026-11-19', 'conamat', n, { score: 14, total: 15, errors: sinErrores, mode: 'papel' });
+    }
+    expect(activitiesFor(st(), '2026-11-20').map((a) => a.id)).toContain('conamat-algebra');
+    expect(librosMate(st()).map((a) => a.id)).toEqual(['conamat', 'conamat-algebra']);
+    expect(estadoCapitulo(st(), alg, 1, '2026-11-20').estado).toBe('estudiando');
+  });
+
+  it('un estado viejo suma Álgebra justo después de Aritmética, sin tocar lo estudiado', async () => {
+    const { migrate } = await import('../state/store');
+    const viejo = structuredClone(getState());
+    viejo.study.activities = viejo.study.activities.filter((a) => a.id !== 'conamat-algebra');
+    viejo.study.units = { conamat: { 1: { learnedOn: '2026-11-17', tests: [] } } };
+    const m = migrate(viejo);
+    expect(m.study.activities.map((a) => a.id).slice(0, 2)).toEqual(['conamat', 'conamat-algebra']);
+    expect(m.study.units.conamat[1].learnedOn).toBe('2026-11-17');
+  });
+});

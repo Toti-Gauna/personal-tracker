@@ -28,6 +28,30 @@ export const CONAMAT_B1: Unit[] = [
   { n: 11, title: 'Razonamiento aritmético', corto: 'Razonamiento', test: t(10, '10 problemas de enunciado mezclando todo lo anterior.') },
 ];
 
+/**
+ * Ola 28 · CONAMAT · Álgebra, caps. 1 a 17: un libro aparte (antes iba junto con Aritmética como uno solo).
+ * Arranca cuando Aritmética tiene todos sus capítulos aprobados (o flojos).
+ */
+export const CONAMAT_ALG: Unit[] = [
+  { n: 1, title: 'Conjuntos y lógica', corto: 'Conjuntos', test: t(15, 'Operaciones con conjuntos, diagramas de Venn y tablas de verdad.') },
+  { n: 2, title: 'Conceptos básicos de álgebra', corto: 'Conceptos básicos', test: t(15, 'Lenguaje algebraico, términos semejantes, signos de agrupación y valor numérico.') },
+  { n: 3, title: 'Productos notables', corto: 'Productos notables', test: t(15, 'Binomio al cuadrado y al cubo, conjugados y binomios con término común.') },
+  { n: 4, title: 'Factorización', corto: 'Factorización', test: t(15, 'Factor común, diferencia de cuadrados, trinomios y suma y diferencia de cubos.') },
+  { n: 5, title: 'Fracciones algebraicas', corto: 'Fracciones alg.', test: t(15, 'Simplificar, operar y fracciones complejas.') },
+  { n: 6, title: 'Ecuaciones de primer grado', corto: 'Ecuaciones 1.er grado', test: t(15, 'Ecuaciones con fracciones y problemas de enunciado.') },
+  { n: 7, title: 'Función lineal', corto: 'Función lineal', test: t(15, 'Pendiente, ordenada, gráfica y ecuación de la recta.') },
+  { n: 8, title: 'Sistemas de ecuaciones', corto: 'Sistemas', test: t(15, 'Sistemas de 2 y 3 incógnitas por varios métodos y problemas.') },
+  { n: 9, title: 'Potenciación', corto: 'Potenciación', test: t(15, 'Leyes de exponentes con expresiones algebraicas y binomio de Newton.') },
+  { n: 10, title: 'Radicación', corto: 'Radicación', test: t(15, 'Simplificar, operar y racionalizar radicales algebraicos.') },
+  { n: 11, title: 'Números complejos', corto: 'Complejos', test: t(15, 'Operaciones en forma binómica, conjugado y módulo.') },
+  { n: 12, title: 'Ecuaciones de segundo grado', corto: 'Ecuaciones 2.º grado', test: t(15, 'Fórmula general, discriminante y problemas.') },
+  { n: 13, title: 'Desigualdades', corto: 'Desigualdades', test: t(15, 'Lineales, cuadráticas, racionales y con valor absoluto.') },
+  { n: 14, title: 'Logaritmos', corto: 'Logaritmos', test: t(15, 'Propiedades y ecuaciones exponenciales y logarítmicas.') },
+  { n: 15, title: 'Progresiones', corto: 'Progresiones', test: t(15, 'Aritméticas y geométricas: término n, suma y medios.') },
+  { n: 16, title: 'Matrices', corto: 'Matrices', test: t(15, 'Operaciones, determinantes e inversa; sistemas con matrices.') },
+  { n: 17, title: 'Raíces de un polinomio', corto: 'Raíces', test: t(15, 'Teorema del residuo, división sintética y raíces racionales.') },
+];
+
 /** Puntos clave de cada capítulo («tema :: detalle»): contra esto se compara el cold recall. */
 export const CONAMAT_PUNTOS: Record<number, string[]> = {
   1: ['Naturales, enteros, racionales e irracionales :: cada conjunto contiene al anterior; los reales son racionales e irracionales juntos', 'Número racional :: se puede escribir como fracción de enteros', 'Número irracional :: su decimal no es finito ni periódico (√2, π)', 'Valor absoluto :: distancia al cero, nunca negativo', 'Orden en la recta :: a la izquierda, menor', 'Opuesto :: mismo valor absoluto, signo contrario'],
@@ -42,6 +66,9 @@ export const CONAMAT_PUNTOS: Record<number, string[]> = {
   10: ['Unidad de longitud :: el metro; cada escalón multiplica por 10', 'Superficie :: cada escalón multiplica por 100', 'Volumen :: cada escalón multiplica por 1000', '1 dm³ :: es 1 litro', 'Masa :: el gramo; 1 kg = 1000 g', 'Convertir :: hacia unidades más chicas se multiplica'],
   11: ['Leer el enunciado :: qué dan y qué piden', 'Plantear :: pasar el texto a una operación', 'Repartos proporcionales :: dividir el total por la suma de las partes', 'Problemas de edades :: plantear la diferencia, que no cambia', 'Velocidad :: distancia sobre tiempo', 'Verificar :: reemplazar el resultado en el enunciado'],
 };
+
+/** Ola 28 · los puntos clave por libro (el cold recall compara contra esto). Álgebra todavía no tiene: se escriben en el cold recall. */
+export const PUNTOS_CAP: Record<string, Record<number, string[]>> = { conamat: CONAMAT_PUNTOS };
 
 const build = 'Construir un ejercicio chico desde cero, sin mirar el curso.';
 const book = 'Preguntas de concepto y aplicar una idea del libro en código.';
@@ -64,6 +91,12 @@ export const DEFAULT_ACTIVITIES: Activity[] = [
     id: 'conamat', title: 'CONAMAT · Aritmética', front: 'math', type: 'lectura', perSession: 1, total: 11, unit: 'caps.',
     days: TODOS, block: 'math', engine: true, progress: 0, units: CONAMAT_B1, unitLabel: 'Cap.', testMode: 'papel', area: 'matematica',
     final: { title: 'Examen de aritmética', desc: '40 ejercicios mixtos de todas las unidades, sin apuntes. Aprobás con 85 %.' },
+  },
+  {
+    // Ola 28: Álgebra es otro libro, con sus 17 capítulos; arranca al terminar Aritmética.
+    id: 'conamat-algebra', title: 'CONAMAT · Álgebra', front: 'math', type: 'lectura', perSession: 1, total: 17, unit: 'caps.',
+    days: TODOS, block: 'math', engine: true, progress: 0, units: CONAMAT_ALG, unitLabel: 'Cap.', testMode: 'papel', area: 'matematica', despuesDe: 'conamat',
+    final: { title: 'Examen de álgebra', desc: '40 ejercicios mixtos de los 17 capítulos, sin apuntes. Aprobás con 85 %.' },
   },
   {
     // Ola 20: la programación se aprende por proyectos (Estudio → Programación). Queda archivada:

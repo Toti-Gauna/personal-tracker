@@ -6,6 +6,7 @@ import { addDays } from '../data/time';
 import { newId } from '../data/schedule';
 import { getState, setState, updateDay } from './store';
 import { logFromStudy, unlogFromStudy } from './ruta';
+import { BIMS } from '../data/ruta';
 import { capsTexto, claveMicro, libroPorId, microFaltantes, unidadesDe, type TipoArtefacto } from '../data/libros';
 
 function updateStudy(fn: (st: StudyState) => StudyState) {
@@ -309,10 +310,11 @@ export function savePoints(key: string, points: string[]) {
   updateStudy((s) => ({ ...s, points: { ...s.points, [key]: points } }));
 }
 
-/** CONAMAT · Aritmética (unidades 1 a 11) es el B1 de la ruta: aprender y aprobar cada capítulo empuja su ítem. */
+/** CONAMAT (Aritmética en el B1, Álgebra en el B2 y B3) empuja la ruta: aprender y aprobar cada capítulo suma a su ítem. */
 function rutaFromStudy(date: string, activityId: string, n: number, part: 'learn' | 'test') {
-  if (activityId !== 'conamat') return;
-  logFromStudy(date, `b1-conamat-arit-${String(n).padStart(2, '0')}`, 0.5, `study:${part}:${activityId}:${n}`);
+  const nn = String(n).padStart(2, '0');
+  const id = activityId === 'conamat' ? `b1-conamat-arit-${nn}` : activityId === 'conamat-algebra' ? BIMS.flatMap((b) => b.items).find((i) => i.id.endsWith(`-conamat-alg-${nn}`))?.id : undefined;
+  if (id) logFromStudy(date, id, 0.5, `study:${part}:${activityId}:${n}`);
 }
 
 // ——— Sistema de libros (ola 20) ———
