@@ -89,3 +89,41 @@ describe('ola 28 · Matemática: libros, capítulos, tarjetas y tests', () => {
     expect(screen.getByRole('link', { name: 'Cerrar' })).toHaveAttribute('href', '#/estudio/mate/libro/conamat/1');
   });
 });
+
+describe('ola 28 · reiniciar un libro desde cero', () => {
+  it('borra lo avanzado (también lo que avanzó solo), vuelve al cap. 1 y se puede deshacer', async () => {
+    const { reiniciarLibro, restaurarLibro, addCards } = await import('../state/study');
+    const { estadoCapitulo } = await import('../data/estado-capitulo');
+    const a = () => getState().study.activities.find((x) => x.id === 'conamat')!;
+    terminarEstudio(D, 'conamat', 1);
+    saveTest('2026-11-19', 'conamat', 1, { score: 14, total: 15, errors: sinErrores, mode: 'papel' });
+    terminarEstudio(D, 'conamat', 2);
+    addCards(D, [{ front: 'q', back: 'r', kind: 'pregunta', deck: 'Matemática', frontId: 'math', source: 'x', activityId: 'conamat', unit: 1 }]);
+    const antes = structuredClone(getState().study);
+    const foto = reiniciarLibro('conamat')!;
+    expect(getState().study.units.conamat).toBeUndefined();
+    expect(getState().study.reviews.filter((r) => r.activityId === 'conamat')).toEqual([]);
+    expect(getState().days[D].studyDone ?? []).toEqual([]);
+    expect(estadoCapitulo(getState().study, a(), 1, D).estado).toBe('estudiando');
+    expect(estadoCapitulo(getState().study, a(), 2, D).estado).toBe('pendiente');
+    // Las tarjetas quedan salvo que se pida borrarlas.
+    expect(getState().study.cards).toHaveLength(antes.cards.length);
+    restaurarLibro(foto);
+    expect(getState().study.units.conamat).toEqual(antes.units.conamat);
+    expect(getState().study.reviews).toHaveLength(antes.reviews.length);
+    expect(estadoCapitulo(getState().study, a(), 1, D).estado).toBe('tesis');
+    // Con tarjetas: se borran y vuelven con Deshacer.
+    const f2 = reiniciarLibro('conamat', { borrarTarjetas: true })!;
+    expect(getState().study.cards.filter((c) => c.activityId === 'conamat')).toEqual([]);
+    restaurarLibro(f2);
+    expect(getState().study.cards.filter((c) => c.activityId === 'conamat')).toHaveLength(1);
+  });
+
+  it('desde la pantalla del libro, con confirmación', () => {
+    terminarEstudio(D, 'conamat', 1);
+    window.confirm = () => true;
+    render(<MatePlan day={day()} param="mate/libro/conamat" />);
+    fireEvent.click(screen.getByRole('button', { name: 'Reiniciar Aritmética' }));
+    expect(getState().study.units.conamat).toBeUndefined();
+  });
+});

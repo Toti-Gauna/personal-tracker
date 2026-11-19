@@ -12,7 +12,7 @@ import type { Activity, ReviewItem } from '../data/study-types';
 import type { DayLog } from '../data/types';
 import { ir } from '../lib/routes';
 import { getState, useStore } from '../state/store';
-import { addCards, seguirEstudiando, terminarEstudio, volverAEstudiar } from '../state/study';
+import { addCards, reiniciarLibro, restaurarLibro, seguirEstudiando, terminarEstudio, volverAEstudiar } from '../state/study';
 import { toast } from '../ui/avisos';
 import { abrirEstadoEstudio } from '../ui/EstadoEstudio';
 import { Plegable } from '../ui/Plegable';
@@ -118,7 +118,32 @@ function Libro({ day, a }: { day: DayLog; a: Activity }) {
       <Plegable id={`ml:hist:${a.id}`} titulo="Historial de días" resumen={h.length ? `${h.length} ${h.length === 1 ? 'día' : 'días'}` : 'vacío'}>
         <Historial h={h} />
       </Plegable>
+
+      <Reiniciar a={a} tarjetas={r.tarjetas} color={color} />
     </main>
+  );
+}
+
+/** Reiniciar el libro desde cero: vuelve al cap. 1 sin nada estudiado. Con "Deshacer". */
+function Reiniciar({ a, tarjetas, color }: { a: Activity; tarjetas: number; color: string }) {
+  const [borrarTarjetas, setBorrar] = useState(false);
+  const nombre = actShort(a);
+  const reiniciar = () => {
+    if (!window.confirm(`¿Reiniciás ${nombre} desde cero? Se borran los capítulos estudiados, los tests, las tesis, los repasos agendados y los minutos de este libro${borrarTarjetas ? `, y las ${tarjetas} tarjetas` : ''}. Después podés deshacerlo.`)) return;
+    const foto = reiniciarLibro(a.id, { borrarTarjetas });
+    if (!foto) return;
+    toast({ title: `${nombre}, desde cero`, sub: `Volvés al ${a.unitLabel?.toLowerCase() ?? 'cap.'} 1${borrarTarjetas ? '' : '; las tarjetas quedaron'}`, color, action: { label: 'Deshacer', run: () => restaurarLibro(foto) } }, false);
+  };
+  return (
+    <Plegable id={`ml:reiniciar:${a.id}`} titulo="Reiniciar desde cero" resumen={nombre}>
+      <div className="ml-imp">
+        <p className="sub">Vuelve al {a.unitLabel?.toLowerCase() ?? 'cap.'} 1 sin nada estudiado: se borran los capítulos marcados, los tests, las tesis, los repasos agendados, el examen del libro, los minutos de cada día y su avance en la ruta. Sirve si algo avanzó sin que lo marcaras.</p>
+        {tarjetas > 0 && (
+          <label className="ml-check"><input type="checkbox" checked={borrarTarjetas} onChange={(e) => setBorrar(e.target.checked)} /> Borrar también las {tarjetas} tarjetas</label>
+        )}
+        <button className="btn-borde ml-peligro" onClick={reiniciar}>Reiniciar {nombre}</button>
+      </div>
+    </Plegable>
   );
 }
 

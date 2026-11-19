@@ -2,6 +2,7 @@ import { approves, scheduleApproved, scheduleFailed, scheduleLearned, unitName, 
 import { newSrs, review as fsrsReview, type Grade } from '../data/fsrs';
 import { MAX_TRIES, RELEER_MIN } from '../data/study-catalog';
 import type { Activity, Attempt, Card, CardDraft, ErrType, ReviewItem, Rules, StudyState, Tesis, Tramo } from '../data/study-types';
+import type { DayLog } from '../data/types';
 import { addDays } from '../data/time';
 import { newId } from '../data/schedule';
 import { getState, setState, updateDay } from './store';
@@ -404,5 +405,97 @@ export function guardarArtefacto(date: string, actId: string, art: { tipo: TipoA
     const cur = s.finales?.[actId] ?? { tests: [] };
     const { artefacto: _, ...resto } = cur;
     return { ...s, finales: { ...(s.finales ?? {}), [actId]: art ? { ...resto, artefacto: { ...art, fecha: date } } : resto } };
+  });
+}
+
+// ——— Ola 28 · reiniciar un libro desde cero ———
+
+/** Lo que se lleva un reinicio, para poder deshacerlo. */
+export interface FotoLibro {
+  actId: string;
+  units: StudyState['units'][string] | undefined;
+  reviews: ReviewItem[];
+  tesis: Tesis[];
+  final: NonNullable<StudyState['finales']>[string] | undefined;
+  attempts: Attempt[];
+  cards: Card[];
+  log: StudyState['log'];
+  /** Por día: los pasos marcados y los minutos de estudio de este libro. */
+  dias: Record<string, { studyDone: string[]; study: NonNullable<DayLog['study']> }>;
+  ruta: ReturnType<typeof getState>['ruta']['log'];
+}
+
+/**
+ * Reinicia un libro con capítulos (CONAMAT Aritmética, Álgebra…): borra sus capítulos estudiados, tests, tesis,
+ * repasos agendados, el examen final, lo que había sumado en "dónde estás flojo", los minutos y pasos de cada día
+ * y su avance en la ruta. Las tarjetas se conservan salvo que pidas borrarlas. Cierra la sesión si estaba abierta.
+ * Devuelve la foto para deshacerlo.
+ */
+export function reiniciarLibro(actId: string, opciones: { borrarTarjetas?: boolean } = {}): FotoLibro | null {
+  const s = getState();
+  const a = s.study.activities.find((x) => x.id === actId);
+  if (!a?.units?.length) return null;
+  const reviews = s.study.reviews.filter((r) => r.activityId === actId);
+  const ids = new Set(reviews.map((r) => `rev:${r.id}`));
+  const propio = (ref: string) => ref.startsWith(`learn:${actId}:`) || ref.startsWith(`test:${actId}:`) || ids.has(ref);
+  const cards = opciones.borrarTarjetas ? s.study.cards.filter((c) => c.activityId === actId) : [];
+  const cardIds = new Set(cards.map((c) => c.id));
+  const dias: FotoLibro['dias'] = {};
+  for (const [f, d] of Object.entries(s.days)) {
+    const studyDone = (d.studyDone ?? []).filter(propio);
+    const study = (d.study ?? []).filter((x) => x.activityId === actId);
+    if (studyDone.length || study.length) dias[f] = { studyDone, study };
+  }
+  const foto: FotoLibro = {
+    actId, units: s.study.units[actId], reviews, tesis: s.study.tesis.filter((t) => t.activityId === actId), final: s.study.finales?.[actId],
+    attempts: s.study.attempts.filter((x) => x.tema.startsWith(`${actId}:`)), cards, log: s.study.log.filter((l) => cardIds.has(l.cardId)),
+    dias, ruta: s.ruta.log.filter((l) => l.src?.includes(`:${actId}:`)),
+  };
+  setState((st) => {
+    const { [actId]: _u, ...units } = st.study.units;
+    const { [actId]: _f, ...finales } = st.study.finales ?? {};
+    const days = { ...st.days };
+    for (const f of Object.keys(dias)) days[f] = { ...days[f], studyDone: (days[f].studyDone ?? []).filter((r) => !propio(r)), study: (days[f].study ?? []).filter((x) => x.activityId !== actId) };
+    return {
+      ...st,
+      days,
+      focus: st.focus?.activityId === actId ? null : st.focus,
+      ruta: { ...st.ruta, log: st.ruta.log.filter((l) => !l.src?.includes(`:${actId}:`)) },
+      study: {
+        ...st.study, units, finales,
+        reviews: st.study.reviews.filter((r) => r.activityId !== actId),
+        tesis: st.study.tesis.filter((t) => t.activityId !== actId),
+        attempts: st.study.attempts.filter((x) => !x.tema.startsWith(`${actId}:`)),
+        cards: st.study.cards.filter((c) => !cardIds.has(c.id)),
+        log: st.study.log.filter((l) => !cardIds.has(l.cardId)),
+      },
+    };
+  });
+  return foto;
+}
+
+/** Deshace un reinicio: vuelve todo a como estaba. */
+export function restaurarLibro(f: FotoLibro) {
+  setState((st) => {
+    const days = { ...st.days };
+    for (const [fecha, d] of Object.entries(f.dias)) {
+      if (!days[fecha]) continue;
+      days[fecha] = { ...days[fecha], studyDone: [...new Set([...(days[fecha].studyDone ?? []), ...d.studyDone])], study: [...(days[fecha].study ?? []), ...d.study] };
+    }
+    return {
+      ...st,
+      days,
+      ruta: { ...st.ruta, log: [...st.ruta.log, ...f.ruta] },
+      study: {
+        ...st.study,
+        units: f.units ? { ...st.study.units, [f.actId]: f.units } : st.study.units,
+        finales: f.final ? { ...(st.study.finales ?? {}), [f.actId]: f.final } : st.study.finales,
+        reviews: [...st.study.reviews, ...f.reviews],
+        tesis: [...st.study.tesis, ...f.tesis],
+        attempts: [...st.study.attempts, ...f.attempts],
+        cards: [...st.study.cards, ...f.cards],
+        log: [...st.study.log, ...f.log],
+      },
+    };
   });
 }
