@@ -5,7 +5,7 @@ Tracker personal de Toti: el día en horas, el estudio con su propio motor de re
 - **Diseño:** [canvas de Trazo](https://claude.ai/artifact/6Cc2E6aW2ViU5ikovpsRTy)
 - **Roadmap de estudio:** [ruta ML + DevSecOps](https://claude.ai/artifact/9PEokku7mBLZdCFJr1zqXP)
 - **Pantallas:** presentación `Trazo-pantallas.pptx` y su ZIP de imágenes (44 pantallas, 8 flujos).
-- **Estado:** olas 0 a 12b hechas y en `main`. Olas 0 a 16c hechas (la 15 quedó absorbida por la 16c). Olas 0 a 27 hechas: el plan de olas de §6 septies, §6 octies y §6 nonies quedó completo. Este archivo es la fuente de verdad.
+- **Estado:** olas 0 a 12b hechas y en `main`. Olas 0 a 16c hechas (la 15 quedó absorbida por la 16c). Olas 0 a 28 hechas: el plan de olas de §6 septies a §6 decies quedó completo. Este archivo es la fuente de verdad.
 
 ---
 
@@ -1158,6 +1158,31 @@ Pedido del 2026-11-18. El texto y las decisiones están en `docs/prompts/plan-t1
 - *Tests:* horas por rutina, capacidad con la pausa, reproducción de la tabla v3, cambio de rutina en la fecha de inicio del trabajo, horario del trabajo, bloques pendientes, alerta del 85 %, tramo de matemática sin terminar, factor y escenarios.
 
 **Pendiente (a tu decisión):** ver el final de `docs/prompts/plan-t18-extendido-v3.md` (T+7 a T+8, RAG y automatizaciones de P0, horario real del trabajo, Handyx/clipping/Eclipse después del modo intensivo, piezas de P4 y P7). El recall en frío todavía no genera las tarjetas solo: es una tarea del cierre.
+
+---
+
+## 6 decies. Ola 28: estudiar matemática sin que el capítulo avance solo
+
+Pedido del 2026-11-19, después de estudiar el cap. 1 de Aritmética. Tres problemas: (1) el estudio avanzaba solo (no estudió matemática y al otro día el plan lo daba en el cap. 2); (2) Aritmética y Álgebra eran un solo "libro" cuando son dos, cada uno con sus capítulos; (3) Estudio → Matemática no tenía dónde ver las tarjetas, los tests con su %, el examen del libro ni el historial, y "Más material" llevaba a M0-M10 con un proyecto que no tiene nada que ver.
+
+**Paso 1 · El capítulo no avanza solo**
+- Por qué pasaba: el último tramo de "estudiar" de la sesión, al terminar por tiempo, daba el capítulo por estudiado; y si la sesión quedaba abierta, al volver el reloj "cobraba" todos los tramos vencidos.
+- Ahora el tiempo no da nada por hecho. Al cerrar la meta de matemática en Hoy (tildando todo, "Dar por hecho" o al terminar el foco del bloque) y al terminar una sesión de CONAMAT aparece la hoja **¿En qué estado estás?** con los capítulos en juego: *Sigo estudiándolo* (cuenta como estudio de hoy, mañana sigue el mismo), *Lo terminé · test mañana* (el motor agenda el cold recall y el test), *Hice el test · cargar el resultado*, *Escribir la tesis* y *Todavía no lo terminé* (deshace "estudiado" si no hay test: saca el cold recall, el test y el avance en la ruta).
+- Una sesión que quedó abierta y terminó sola (más de 10 min pasado su fin) se cierra sin efectos y pregunta.
+- Después, todo lo demás es automático: test aprobado → tesis al día siguiente → repasos 8, 22 y 61; reprobado → releer y re-test.
+- `src/data/estado-capitulo.ts`: estado de cada capítulo (pendiente, estudiando, test, re-test, tesis, repasos, cerrado, flojo), resumen del libro con su % y el historial de días.
+
+**Paso 2 · Aritmética y Álgebra, dos libros**
+- `conamat-algebra` (CONAMAT · Álgebra, 17 capítulos, los mismos de `roadmap.json`) con `despuesDe: 'conamat'`: no entra en el día hasta que Aritmética tenga sus 11 capítulos aprobados (o flojos). Un estado viejo lo suma justo después de Aritmética sin tocar lo estudiado.
+- El tramo m1 nombra los dos libros; el cold recall toma los puntos por libro (Álgebra todavía no tiene puntos cargados); Álgebra empuja sus ítems de la ruta del B2 y B3; "CONAMAT completo" cuenta los dos.
+
+**Paso 3 · El libro y el capítulo por dentro**
+- `#/estudio/mate/libro/:id`: capítulos aprobados, promedio de los tests, tarjetas, "Estás acá" con *Marcar dónde quedé*, *Repasar tarjetas*, la lista de capítulos con su estado y % y el examen del libro (bloqueado hasta aprobar todos). Historial de días plegado.
+- `#/estudio/mate/libro/:id/:n`: los botones del estado, las tarjetas del capítulo (verlas, repasarlas e **importar** un .txt de Anki o líneas con `::` y `[[ ]]` directo a ese capítulo), los tests con su %, los repasos agendados, los puntos clave y el historial.
+- `#/tarjetas/cap:act:n` y `#/tarjetas/libro:act`: active recall de las tarjetas de ese capítulo o libro, venzan o no.
+- Matemática muestra *Tus libros* arriba; el tramo m1 muestra los dos libros y pliega "Reglas y refuerzo". Se sacaron los enlaces a M0-M10 ("Material de refuerzo" y "Más material en M1").
+
+**Pendiente:** los puntos clave de Álgebra para el cold recall (se escriben al hacerlo); los tramos m2 a m4 todavía no son libros en la app.
 
 ---
 
