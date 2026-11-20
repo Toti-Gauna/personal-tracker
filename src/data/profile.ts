@@ -95,7 +95,29 @@ export function earlyStreak(days: Record<string, DayLog>) {
 
 const maxKg = (s: State, ex: string, who: 'me' | 'partner' = 'me') =>
   Math.max(0, ...s.train.sessions.filter((x) => !x.deload).flatMap((x) => x.sets).filter((x) => x.who === who && x.ex.includes(ex)).map((x) => x.kg));
-const lastWeight = (s: State) => [...s.train.weights].sort((a, b) => a.date.localeCompare(b.date)).pop()?.kg ?? 0;
+/**
+ * Ola 29 · el camino del peso: del primer pesaje a la meta, sea bajando o subiendo. `avance` es 0 en el primer pesaje, 1 al llegar
+ * a la meta (o pasarla) y 0 si todavía no pesaste o si te alejás. Sin camino (primer pesaje en la meta) cuenta como recorrido si ya estás ahí.
+ */
+export function caminoPeso(s: State) {
+  const ws = [...s.train.weights].sort((a, b) => a.date.localeCompare(b.date));
+  const meta = s.train.goalKg;
+  if (!ws.length) return { inicio: null as number | null, actual: null as number | null, meta, avance: 0 };
+  const inicio = ws[0].kg;
+  const actual = ws[ws.length - 1].kg;
+  const largo = inicio - meta;
+  const avance = Math.abs(largo) < 0.05 ? (Math.abs(actual - meta) <= 0.5 ? 1 : 0) : Math.max(0, (inicio - actual) / largo);
+  return { inicio, actual, meta, avance };
+}
+const progPeso = (s: State, tramo: number): Progress => {
+  const c = caminoPeso(s);
+  const fmtKg = (n: number) => String(Math.round(n * 10) / 10).replace('.', ',');
+  if (c.actual == null || c.inicio == null) return prog(0, 100, 'Cargá tu primer pesaje en Entreno → Peso');
+  const objetivo = c.inicio + (c.meta - c.inicio) * tramo;
+  const falta = Math.abs(objetivo - c.actual);
+  const llegaste = c.avance >= tramo;
+  return prog(Math.min(1, c.avance / tramo) * 100, 100, llegaste ? `Llegaste: ${fmtKg(c.actual)} kg` : `Hoy ${fmtKg(c.actual)} kg · objetivo ${fmtKg(objetivo)} kg · faltan ${fmtKg(falta)}`);
+};
 const approvedUnits = (s: State, act: string) => s.study.activities.find((a) => a.id === act)?.units?.filter((u) => s.study.units[act]?.[u.n]?.approvedOn) ?? [];
 const matureCards = (s: State) => s.study.cards.filter((c) => c.srs?.state === 'review' && c.srs.s >= 21).length;
 const mejoraAcum = (s: State, upTo: string) => {
@@ -120,10 +142,11 @@ export const SEALS: SealDef[] = [
     test: ({ s }) => Object.values(s.days).some((d) => d.blocks.length > 0 && d.blocks.every(blockDone)) },
   // Cuerpo
   { id: 'primer-entreno', group: 'cuerpo', mark: '1', name: 'Primer entreno', how: 'Terminar tu primer entrenamiento.', line: 'Primer entreno en el cuaderno.', color: 'var(--salud)', test: ({ s }) => s.train.sessions.length >= 1 },
-  { id: 'pesar-90', group: 'cuerpo', mark: '90', name: 'Pesar 90', how: 'Llegar a 90 kg.', line: 'Llegaste a los 90 kg.', color: 'var(--salud)',
-    test: ({ s }) => lastWeight(s) >= 90, progress: ({ s }) => prog(lastWeight(s), 90, `Hoy ${fmt(lastWeight(s))} kg · faltan ${fmt(Math.max(0, 90 - lastWeight(s)))}`) },
-  { id: 'pesar-95', group: 'cuerpo', mark: '95', name: 'Pesar 95', how: 'Llegar a 95 kg.', line: 'La meta del año: 95 kg.', color: 'var(--salud)',
-    test: ({ s }) => lastWeight(s) >= 95, progress: ({ s }) => prog(lastWeight(s), 95, `Hoy ${fmt(lastWeight(s))} kg · faltan ${fmt(Math.max(0, 95 - lastWeight(s)))}`) },
+  // Ola 29: los sellos de peso siguen tu meta (bajar o subir): el camino va del primer pesaje a la meta.
+  { id: 'peso-mitad', group: 'cuerpo', mark: '½', name: 'Mitad del camino', how: 'Recorrer la mitad del camino entre tu primer pesaje y la meta de peso.', line: 'Mitad del camino hacia la meta de peso.', color: 'var(--salud)',
+    test: ({ s }) => caminoPeso(s).avance >= 0.5, progress: ({ s }) => progPeso(s, 0.5) },
+  { id: 'peso-meta', group: 'cuerpo', mark: '▲', name: 'Meta de peso', how: 'Llegar a la meta de peso (se cambia en Entreno → Peso).', line: 'La meta de peso, cumplida.', color: 'var(--salud)',
+    test: ({ s }) => caminoPeso(s).avance >= 1, progress: ({ s }) => progPeso(s, 1) },
   { id: 'sentadilla-120', group: 'cuerpo', mark: '120', name: 'Sentadilla 120', how: 'Hacer una serie de sentadilla con 120 kg o más.', line: 'Sentadilla con 120 kg.', color: 'var(--salud)',
     test: ({ s }) => maxKg(s, 'sentadilla') >= 120, progress: ({ s }) => prog(maxKg(s, 'sentadilla'), 120, `Tu mejor: ${fmt(maxKg(s, 'sentadilla'))} kg`) },
   { id: 'record-reps', group: 'cuerpo', mark: '+1', name: 'Récord de reps', how: 'Batir un récord en un entreno.', line: 'Primer récord batido.', color: 'var(--salud)', test: ({ s }) => s.train.sessions.some((x) => x.records.length > 0) },

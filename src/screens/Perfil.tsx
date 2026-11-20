@@ -67,7 +67,7 @@ export function Perfil({ day }: { day: DayLog }) {
         <ul className="hitos">
           {hs.map(({ def, p }) => (
             <li key={def.id}>
-              <div className="hito-cab"><b>{def.name === 'Pesar 90' ? 'Pesar 90 kg' : def.name}</b><span className="mono">{String(Math.round(p.value * 10) / 10).replace('.', ',')}{def.id.startsWith('pesar') ? '' : `/${p.target}`}</span></div>
+              <div className="hito-cab"><b>{def.name}</b><span className="mono">{def.id.startsWith('peso-') ? `${Math.round(p.value)} %` : `${String(Math.round(p.value * 10) / 10).replace('.', ',')}/${p.target}`}</span></div>
               <div className="hito-barra"><i style={{ width: `${(p.value / p.target) * 100}%`, background: def.color }} /></div>
               <small className="sub">{p.hint}</small>
             </li>
