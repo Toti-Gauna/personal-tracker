@@ -79,7 +79,7 @@ export function migrate(parsed: any): State {
   // (con Handyx y ventas en pausa desde T0); si ya se decidió, se respeta.
   let settings = parsed.settings ?? null;
   if (settings && settings.plan?.modo === undefined) ({ settings, plan } = aplicarIntensiva(settings, plan, settings.startDate || T0_PLAN));
-  return { ...empty(), ...parsed, settings, study, train, ruta, plan, estudioRuta: { ...emptyEstudioRuta(), ...(parsed.estudioRuta ?? {}) }, idiomas: { enlaces: {}, ...(parsed.idiomas ?? {}) }, clipping: migrarClipping(parsed.clipping), profile: { seals: {}, seen: Object.keys(parsed.profile?.seals ?? {}), ...(parsed.profile ?? {}) }, goals: migrateGoals(goals ?? seedGoals(parsed.settings?.startDate ?? dateKey())) };
+  return { ...empty(), ...parsed, settings, study, train, ruta, plan, estudioRuta: { ...emptyEstudioRuta(), ...(parsed.estudioRuta ?? {}) }, idiomas: { enlaces: {}, ...(parsed.idiomas ?? {}) }, clipping: migrarClipping(parsed.clipping), profile: migrarPerfil({ seals: {}, seen: Object.keys(parsed.profile?.seals ?? {}), ...(parsed.profile ?? {}) }), goals: migrateGoals(goals ?? seedGoals(parsed.settings?.startDate ?? dateKey())) };
 }
 
 let state: State = load();
@@ -163,6 +163,13 @@ const subscribe = (f: () => void) => {
 
 export function useStore<T>(sel: (s: State) => T): T {
   return useSyncExternalStore(subscribe, () => sel(state), () => sel(state));
+}
+
+/** Ola 29: los sellos "Pesar 90" y "Pesar 95" se ganaban al pasar esos kilos hacia arriba (con 110 kg ya los tenías): se sacan; los de peso nuevos siguen tu meta. */
+function migrarPerfil(p: State['profile']): State['profile'] {
+  const viejo = (id: string) => id === 'pesar-90' || id === 'pesar-95';
+  if (!Object.keys(p.seals).some(viejo) && !p.seen.some(viejo)) return p;
+  return { ...p, seals: Object.fromEntries(Object.entries(p.seals).filter(([id]) => !viejo(id))), seen: p.seen.filter((id) => !viejo(id)) };
 }
 
 /**
