@@ -9,6 +9,7 @@ import { addDays } from '../data/time';
 import { setPlanSettings } from '../state/plan';
 import { inicioTrabajo, planSettings, useStore } from '../state/store';
 import { T0_PLAN } from '../data/plan';
+import { INICIO_TRABAJO_DIAS } from '../data/capacidad';
 
 const DIAS: [BloquePendiente['dias'], string][] = [['lv', 'Lunes a viernes'], ['finde', 'Fin de semana'], ['todos', 'Todos los días']];
 
@@ -17,14 +18,14 @@ export function FilasTrabajo() {
   const settings = useStore((s) => s.settings)!;
   const cfg = planSettings(settings);
   const inicio = inicioTrabajo(settings);
-  const porDefecto = addDays(settings.startDate || T0_PLAN, 56);
+  const porDefecto = addDays(settings.startDate || T0_PLAN, INICIO_TRABAJO_DIAS);
   const h = cfg.horarioTrabajo ?? HORARIO_TRABAJO;
   const { tarde } = ajustarTrabajo(planRoutine('con-trabajo', 'completo'), h);
   const guardar = (x: Partial<typeof h>) => setPlanSettings({ horarioTrabajo: { ...h, ...x } });
   return (
     <>
       <li>
-        <span><b>Inicio del trabajo</b><small>Desde esa fecha rige la rutina con trabajo (el modo intensivo termina el día anterior) y el calendario del plan se recalcula con las horas de esa rutina. {cfg.t2 ? `Cargado: ${fechaCorta(cfg.t2)}.` : `Por defecto, T+2 (${fechaCorta(porDefecto)}).`}</small></span>
+        <span><b>Inicio del trabajo</b><small>Desde esa fecha rige la rutina con trabajo (el modo intensivo termina el día anterior) y el calendario del plan se recalcula con las horas de esa rutina. {cfg.t2 ? `Cargado: ${fechaCorta(cfg.t2)}.` : `Por defecto, el supuesto del roadmap (${fechaCorta(porDefecto)}).`}</small></span>
         <span className="aj-dos">
           <input className="campo-texto mono" type="date" value={inicio} onChange={(e) => e.target.value && setPlanSettings({ t2: e.target.value })} aria-label="Inicio del trabajo" />
           {cfg.t2 && <button className="subrayado" onClick={() => setPlanSettings({ t2: undefined })}>Restaurar</button>}

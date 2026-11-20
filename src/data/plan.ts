@@ -7,7 +7,7 @@
  */
 import { fasesParaElPlan } from './idiomas';
 import raw from '../../data/plan.json';
-import { HORAS_SEMANA_PLAN, horasDelDia, type CfgCapacidad } from './capacidad';
+import { HORAS_SEMANA_PLAN, INICIO_TRABAJO_DIAS, horasDelDia, type CfgCapacidad } from './capacidad';
 import { fecharDiarios } from './mate-horas';
 import { PLAN_EXT, calendario, opcionesDe, type BloqueFechado } from './plan-extendido';
 import { RAMAS } from './ramas';
@@ -267,7 +267,7 @@ export interface CfgHoras extends CfgCapacidad {
   factor?: number;
   cerrados?: string[];
 }
-export let CFG_HORAS: CfgHoras = { t0: PLAN.t0, inicioTrabajo: addDays(PLAN.t0, 56) };
+export let CFG_HORAS: CfgHoras = { t0: PLAN.t0, inicioTrabajo: addDays(PLAN.t0, INICIO_TRABAJO_DIAS) };
 /** Horas de programación del día con la rutina y los registros con que se armó el calendario. */
 export const capacidadDelDia = (fecha: string) => horasDelDia(fecha, { ...CFG_HORAS, pausas: PAUSAS });
 
@@ -337,7 +337,7 @@ function progAuto(desde: number, hasta: number) {
  */
 export function aplicarCalendario(apagados: readonly string[] = [], pausas = true, horas: Partial<CfgHoras> = {}) {
   const t0 = horas.t0 ?? PLAN.t0;
-  CFG_HORAS = { t0, inicioTrabajo: horas.inicioTrabajo ?? addDays(t0, 56), ...(horas.reales ? { reales: horas.reales } : {}), ...(horas.hoy ? { hoy: horas.hoy } : {}), ...(horas.factor ? { factor: horas.factor } : {}), ...(horas.cerrados ? { cerrados: horas.cerrados } : {}) };
+  CFG_HORAS = { t0, inicioTrabajo: horas.inicioTrabajo ?? addDays(t0, INICIO_TRABAJO_DIAS), ...(horas.reales ? { reales: horas.reales } : {}), ...(horas.hoy ? { hoy: horas.hoy } : {}), ...(horas.factor ? { factor: horas.factor } : {}), ...(horas.cerrados ? { cerrados: horas.cerrados } : {}) };
   PAUSAS = pausas;
   const cal = calendario(PLAN_EXT, { ...opcionesDe(apagados, pausas, t0), horas: { capacidad: capacidadDelDia, horasSemana: HORAS_SEMANA_PLAN, ...(CFG_HORAS.factor ? { factor: CFG_HORAS.factor } : {}), ...(CFG_HORAS.cerrados ? { cerrados: CFG_HORAS.cerrados } : {}) } }).filter((b) => b.etapa <= 2);
   TRAMOS = cal.map((b) => {

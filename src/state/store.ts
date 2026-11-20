@@ -1,5 +1,6 @@
 import { puertaBloqueando } from '../data/puertas';
 import { T0_PLAN } from '../data/plan';
+import { INICIO_TRABAJO_DIAS } from '../data/capacidad';
 import { aplicarIntensiva } from '../data/busqueda';
 import { useSyncExternalStore } from 'react';
 import { DEFAULT_BLOCK_PRESETS, DEFAULT_PRESETS } from '../data/defaults';
@@ -109,7 +110,7 @@ function ajustesCalendario(s: State) {
   const t0 = s.settings?.startDate ?? T0_PLAN;
   const hoy = dateKey();
   const reales = realesProg(s.days, hoy);
-  return { t0, hoy, reales, inicioTrabajo: s.settings?.plan?.t2 ?? addDays(t0, 56) };
+  return { t0, hoy, reales, inicioTrabajo: s.settings?.plan?.t2 ?? addDays(t0, INICIO_TRABAJO_DIAS) };
 }
 const claveCalendario = (s: State) => {
   const a = ajustesCalendario(s);
@@ -272,8 +273,8 @@ export function startDay(routine: RoutineId, wake: string, date = dateKey()) {
 /** Ajustes del plan con los valores de fábrica. */
 export const planSettings = (st: Settings | null): PlanSettings => ({ ...DEFAULT_PLAN_SETTINGS, ...(st?.plan ?? {}) });
 
-/** Ola 27 · el inicio del trabajo (un único campo): lo que cargaste o, si no, el T+2 (11 ene 2027 con el plan de fábrica). */
-export const inicioTrabajo = (st: Settings | null): string => planSettings(st).t2 ?? addDays(st?.startDate ?? T0_PLAN, 56);
+/** Ola 27 · el inicio del trabajo (un único campo): lo que cargaste o, si no, el supuesto del roadmap v7 (4 ene 2027 con el plan de fábrica). */
+export const inicioTrabajo = (st: Settings | null): string => planSettings(st).t2 ?? addDays(st?.startDate ?? T0_PLAN, INICIO_TRABAJO_DIAS);
 
 /** Ola 27 · ¿hay una entrevista en las próximas 48 h (hoy, mañana o pasado)? El último bloque de programación pasa a preparación. */
 export function entrevistaEn48h(p: PlanState, date: string): { rol: string; empresa?: string } | false {
