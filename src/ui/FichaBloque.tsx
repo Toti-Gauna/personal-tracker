@@ -1,5 +1,7 @@
 import { EVIDENCIAS, evidenciaCompleta } from '../data/plan-state';
-import { bloqueExtPorId } from '../data/plan-extendido';
+import { bloqueExtPorId, type BloqueFechado } from '../data/plan-extendido';
+import { textoDelta } from '../data/diferencia';
+import { daysBetween } from '../data/time';
 import { RAMA_COLOR } from '../data/ramas';
 import { setExtraBloque, setVersionCert, tildarSalida, toggleArquitectura, toggleEvidencia, type TipoExtra } from '../state/plan';
 import { alertaVersion, avanceSalida, calendarioCompleto, salidaDe } from '../data/plan-vistas';
@@ -139,19 +141,20 @@ export const avanceArquitectura = (h: Partial<Record<string, boolean>> | undefin
 const MES = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'];
 const fm = (d: string) => `${Number(d.slice(8))} ${MES[Number(d.slice(5, 7)) - 1]} ${d.slice(0, 4)}`;
 
-/** Las tres semanas extra de un proyecto (feature, plataforma y arquitectura), cada una con su switch. */
+/** Las tres semanas extra de un proyecto (feature, plataforma y arquitectura), cada una con su switch. Sin extras (v7), sus horas y la diferencia contra el roadmap. */
 export function ExtrasProyecto({ id, t0 }: { id: string; t0: string }) {
   useStore((s) => s.plan.extrasApagados);
   useStore((s) => s.plan.pausaFinDeAnio);
   const b = calendarioCompleto(t0).find((x) => x.id === id);
-  if (!b || b.tipo !== 'proyecto') return null;
+  if (!b) return null;
+  if (b.tipo !== 'proyecto') return <HorasYRoadmap b={b} />;
   const filas: [TipoExtra, string, number, number, string | undefined][] = [
     ['feature', 'Feature diferencial', b.extra, b.extraAplicado, b.ficha?.feature],
     ['plataforma', 'Plataforma extra', b.extraPlataforma, b.plataformaAplicada, b.ficha?.plataforma],
     ['arquitectura', 'Arquitectura', b.extraArquitectura, b.arquitecturaAplicada, b.ficha?.arquitectura],
   ];
   const posibles = filas.filter(([, , p]) => p > 0);
-  if (!posibles.length) return <p className="sub">Sin semanas extra: {b.base} semanas{b.pausasDentro.length ? ' más la pausa de fin de año' : ''}.</p>;
+  if (!posibles.length) return <HorasYRoadmap b={b} />;
   return (
     <section>
       <ul className="aj-extras pp-extras">
@@ -164,6 +167,24 @@ export function ExtrasProyecto({ id, t0 }: { id: string; t0: string }) {
       </ul>
       <p className="sub mono">{b.base} base{b.extraAplicado ? ` + ${b.extraAplicado} feature` : ''}{b.plataformaAplicada ? ` + ${b.plataformaAplicada} plataforma` : ''}{b.arquitecturaAplicada ? ` + ${b.arquitecturaAplicada} arquitectura` : ''} = {b.semanas} semanas del plan{b.horas ? ` (${b.horas} h)` : ''}{b.pausasDentro.length ? ' (más la pausa de fin de año, que lo parte)' : ''} · cierra el {fm(b.fin)}</p>
       <p className="sub">Si falta tiempo se recorta alcance y la feature primero; nunca tests, seguridad, revisiones, repasos, sueño ni entrenamiento.</p>
+    </section>
+  );
+}
+
+/**
+ * Ola 29 (v7) · horas del bloque (las de ahora y las de antes), sus fechas con el motor de Trazo y la diferencia contra las que
+ * estima el roadmap. Si una versión se atrasa, se mueven fechas: no se recorta profundidad.
+ */
+export function HorasYRoadmap({ b }: { b: BloqueFechado }) {
+  const largo = daysBetween(b.inicio, b.fin) + 1;
+  return (
+    <section className="pp-horas">
+      <p className="sub mono">
+        {b.horas ? `${b.horas} h` : `${b.dias ?? largo} días fijos`}{b.horasAntes ? ` (antes ${b.horasAntes} h)` : ''} · {fm(b.inicio)} — {fm(b.fin)}{b.pausasDentro.length ? ' · con la pausa de fin de año adentro' : ''}
+      </p>
+      {b.roadmap && <p className="sub">El roadmap estima {fm(b.roadmap.inicio)} — {fm(b.roadmap.fin)}: Trazo lo termina {textoDelta(daysBetween(b.roadmap.fin, b.fin))}.</p>}
+      {b.nota && <p className="sub">{b.nota}.</p>}
+      {b.tipo === 'proyecto' && <p className="sub">Si una versión se atrasa, se mueven fechas: no se recorta profundidad.</p>}
     </section>
   );
 }

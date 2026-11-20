@@ -71,7 +71,7 @@ export function PlanEtapas({ day }: { day: DayLog }) {
                   <a href={`#/metas/proyecto/${b.id}`}>
                     <span className="mono">{b.id}</span>
                     <span>{b.nombre}{b.alternativa ? <small className="sub"> · o {b.alternativa}</small> : null}{b.recortable ? <small className="sub"> · recortable</small> : null}</span>
-                    <span className="mono sub">{b.pausa ? 'pausa de fin de año' : TIPO[b.tipo]} · {f(b.inicio)} · {b.semanas} sem{b.semanas > b.base && !b.pausa ? ` (+${b.semanas - b.base - b.atraso})` : ''}{b.pausasDentro?.length ? ' · partido por la pausa' : ''}</span>
+                    <span className="mono sub">{b.pausa ? 'pausa de fin de año' : TIPO[b.tipo]} · {f(b.inicio)} · {b.horas ? `${b.horas} h` : `${b.semanas} sem`}{b.semanas > b.base && !b.pausa && b.horas == null && b.dias == null ? ` (+${b.semanas - b.base - b.atraso})` : ''}{b.pausasDentro?.length ? ' · partido por la pausa' : ''}</span>
                   </a>
                 </li>
               ))}

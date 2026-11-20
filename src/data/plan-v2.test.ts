@@ -93,7 +93,8 @@ describe('ola 24 · migración y calendario vivo', () => {
     expect(s.plan.pausaFinDeAnio).toBeUndefined();
     resetState(s);
     const plan = await import('./plan');
-    expect(plan.TRAMOS.find((t) => t.id === 'P1')).toMatchObject({ extra: 0, plataforma: 0, meta: 3 });
+    // La v7 no tiene semanas extra: lo apagado no cambia nada, pero se conserva.
+    expect(plan.TRAMOS.find((t) => t.id === 'P1')).toMatchObject({ extra: 0, plataforma: 0, meta: 5, horas: 304 });
     const conPausa = plan.SEMANAS;
     // Apagar la pausa vuelve a contar sin ella; apagar la plataforma de P3 la saca solo de P3.
     setPausaFinDeAnio(false);
@@ -101,10 +102,10 @@ describe('ola 24 · migración y calendario vivo', () => {
     expect(plan.TRAMOS.some((t) => t.pausa)).toBe(false);
     setExtraBloque('P3', false, 'plataforma');
     expect(getState().plan.extrasApagados).toEqual(['P1', 'P3:plataforma']);
-    expect(plan.TRAMOS.find((t) => t.id === 'P3')).toMatchObject({ extra: 1, plataforma: 0, meta: 4 });
+    expect(plan.TRAMOS.find((t) => t.id === 'P3')).toMatchObject({ extra: 0, plataforma: 0, horas: 180 });
     setState((x) => x);
     resetState();
     expect([SEMANAS, TRAMOS.length]).toBeTruthy();
-    expect(plan.SEMANAS).toBe(89);
+    expect(plan.SEMANAS).toBe(111);
   });
 });

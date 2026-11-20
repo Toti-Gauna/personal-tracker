@@ -69,7 +69,7 @@ describe('programación por proyectos', () => {
     render(<Estudio day={getState().days[D]} />);
     const card = screen.getByRole('link', { name: /Programación/ });
     expect(card).toHaveAttribute('href', '#/estudio/prog');
-    expect(card).toHaveTextContent('P0 · Consolidación');
+    expect(card).toHaveTextContent('P0 · Constelación');
   });
 
   it('el roadmap: estás acá, hoy sos → vas a ser y la escalera de P0 a A7 por etapas', () => {

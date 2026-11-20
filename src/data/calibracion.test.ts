@@ -17,38 +17,38 @@ function dias(desde: string, hasta: string, h: number) {
   return out;
 }
 
-describe('ola 27 · calibración (v3: factor al cerrar P2 y P3, con la unidad de 24,5 h)', () => {
-  it('antes de cerrar P2 no hay factor; dice cuándo se calcula (29 dic 2026)', () => {
+describe('ola 27 · calibración (factor al cerrar P2 y P3, sobre las horas del roadmap v7)', () => {
+  it('antes de cerrar P2 no hay factor; dice cuándo se calcula (8 feb 2027 con el roadmap v7)', () => {
     const c = calibrar(cal, {}, emptyPlan(), '2026-12-05');
-    expect(c).toMatchObject({ listo: false, hito: null, factor: null, cuando: '2026-12-29', regla: null });
-    // P1 cerrado por fechas (122 h) y P2 en curso con las horas de programación de los días que pasaron.
+    expect(c).toMatchObject({ listo: false, hito: null, factor: null, cuando: '2027-02-08', regla: null });
+    // P0 (días fijos, sin horas) cerrado por fechas y P1 en curso con las horas de los días que pasaron (8 por día).
     const h = horasPorBloque(cal, {}, emptyPlan(), '2026-12-12');
-    expect(h.map((x) => [x.id, x.cerrado])).toEqual([['P0', true], ['P1', true], ['P2', false]]);
-    expect(h.find((x) => x.id === 'P1')!.estimadas).toBe(122);
-    expect(h.find((x) => x.id === 'P2')!.estimadas).toBeCloseTo(23, 0);
+    expect(h.map((x) => [x.id, x.cerrado])).toEqual([['P0', true], ['P1', false]]);
+    expect(h.find((x) => x.id === 'P0')!.estimadas).toBe(0);
+    expect(h.find((x) => x.id === 'P1')!.estimadas).toBe(24 * 8);
+    // Cerrado, P1 vale sus 304 h.
+    expect(horasPorBloque(cal, {}, emptyPlan(), '2027-01-02').find((x) => x.id === 'P1')).toMatchObject({ estimadas: 304, cerrado: true });
   });
 
   it('con P2 cerrado el factor sale de los cerrados; al cerrar P3 se recalcula', () => {
-    const lento = calibrar(cal, dias('2026-11-16', '2026-12-29', 80), emptyPlan(), '2026-12-30');
-    expect(lento).toMatchObject({ listo: true, hito: 'P2', cuando: '2027-03-02' });
+    const lento = calibrar(cal, dias('2026-11-16', '2027-02-08', 80), emptyPlan(), '2027-02-09');
+    expect(lento).toMatchObject({ listo: true, hito: 'P2', cuando: '2027-04-24' });
     expect(lento.factor).toBeGreaterThan(FACTOR_MAX);
     expect(lento.regla).toBe('lento');
-    const s = sugerencia(lento, cal, '2026-12-30')!;
+    const s = sugerencia(lento, cal, '2027-02-09')!;
     expect(s.recortar).toEqual(['A3', 'A6', 'Q2', 'Q6']);
-    expect(s.claves).toContain('P4:plataforma');
-    expect(s.claves.every((k) => k.endsWith(':plataforma'))).toBe(true);
-    const rapido = calibrar(cal, dias('2026-11-16', '2026-12-29', 30), emptyPlan(), '2026-12-30');
+    // La v7 no tiene semanas extra de plataforma: no hay nada que apagar, solo alcance.
+    expect(s.claves).toEqual([]);
+    const rapido = calibrar(cal, dias('2026-11-16', '2027-02-08', 30), emptyPlan(), '2027-02-09');
     expect(rapido.regla).toBe('rapido');
     expect(rapido.factor!).toBeLessThan(FACTOR_MIN);
-    const r = sugerencia(rapido, cal, '2026-12-30')!;
-    expect(r.claves).toEqual(expect.arrayContaining(['P5', 'P5:plataforma', 'P10:arquitectura', 'A7']));
-    expect(r.claves.some((k) => k.startsWith('P4'))).toBe(false);
-    // En plan: tantas horas como las estimadas (los días de pausa no suman).
-    const enPlan = calibrar(cal, dias('2026-11-16', '2026-12-29', 39), emptyPlan(), '2026-12-30');
+    expect(sugerencia(rapido, cal, '2027-02-09')!.claves).toEqual([]);
+    // En plan: tantas horas como las estimadas (459 h en los 78 días de P0, P1 y P2).
+    const enPlan = calibrar(cal, dias('2026-11-16', '2027-02-08', 41), emptyPlan(), '2027-02-09');
     expect(enPlan.regla).toBe('en-plan');
-    expect(sugerencia(enPlan, cal, '2026-12-30')).toBeNull();
-    // Al cerrar P3 se recalcula con P1, P2 y P3.
-    const p3 = calibrar(cal, dias('2026-11-16', '2027-03-02', 53), emptyPlan(), '2027-03-03');
+    expect(sugerencia(enPlan, cal, '2027-02-09')).toBeNull();
+    // Al cerrar P3 se recalcula con P0 a P3.
+    const p3 = calibrar(cal, dias('2026-11-16', '2027-04-24', 40), emptyPlan(), '2027-04-25');
     expect(p3.hito).toBe('P3');
     expect(p3.filas.filter((f) => f.cerrado).map((f) => f.id)).toEqual(['P0', 'P1', 'P2', 'P3']);
   });

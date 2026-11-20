@@ -9,6 +9,7 @@ import { applyTheme, getThemePref, type ThemePref } from '../lib/theme';
 import { planSettings, useStore } from '../state/store';
 import { activarIntensiva, desactivarIntensiva, setExtraBloque, setInicioPlan, setPausaFinDeAnio, setPlanSettings, setTodosExtra } from '../state/plan';
 import { PLAN_EXT } from '../data/plan-extendido';
+import { ANIOS_PAUSA } from '../data/capacidad';
 import { dateKey } from '../data/time';
 import { renameBimester } from '../state/goals';
 import { setAreaName } from '../state/profile';
@@ -177,17 +178,17 @@ function CapasV2() {
   return (
     <>
       <li>
-        <span><b>Pausa de fin de año</b><small>{pausa ? 'Prendida: la semana cuyo lunes cae entre el 18 y el 24 de diciembre no se programa; si cae en un bloque, lo parte.' : 'Apagada: el calendario de la ola 18, sin pausas.'}</small></span>
+        <span><b>Pausa de fin de año</b><small>{pausa ? `Prendida: la semana cuyo lunes cae entre el 18 y el 24 de diciembre no se programa; si cae en un bloque, lo parte.${ANIOS_PAUSA ? ` Con el roadmap v7, solo en ${ANIOS_PAUSA.join(', ').replace(/, (\d+)$/, ' y $1')}.` : ''}` : 'Apagada: el calendario sin pausas.'}</small></span>
         <button role="switch" className="switch" aria-checked={pausa} aria-label="Pausa de fin de año" onClick={() => setPausaFinDeAnio(!pausa)} />
       </li>
-      <li>
+      {conPlat.length > 0 && <li>
         <span><b>Plataformas extra</b><small>{plat} de {conPlat.length} proyectos, +1 semana cada uno (mobile, escritorio, VR o AR). Se ajustan una por una en cada proyecto.</small></span>
         <button role="switch" className="switch" aria-checked={plat > 0} aria-label="Plataformas extra" onClick={() => setTodosExtra('plataforma', plat === 0, conPlat)} />
-      </li>
-      <li>
+      </li>}
+      {conArq.length > 0 && <li>
         <span><b>Arquitectura</b><small>{arq ? 'Prendida' : 'Apagada'}: las 2 semanas de microservicios y microfrontends de P10.</small></span>
         <button role="switch" className="switch" aria-checked={arq > 0} aria-label="Arquitectura" onClick={() => setTodosExtra('arquitectura', arq === 0, conArq)} />
-      </li>
+      </li>}
     </>
   );
 }
@@ -195,9 +196,12 @@ function CapasV2() {
 /** Ola 16b: las semanas extra por feature diferencial, prendidas por defecto y por proyecto. */
 function ExtrasFeature({ t0 }: { t0: string }) {
   useStore((s) => s.plan.extrasApagados);
+  useStore((s) => s.plan.pausaFinDeAnio);
   const ps = TRAMOS.filter((t) => t.tipo === 'proyecto' && (t.extraPosible ?? 0) > 0);
   const t18 = fechaHito(PLAN.hitos.find((h) => h.id === 'T+18')!, t0);
   const sumadas = ps.reduce((s, t) => s + (t.extra ?? 0), 0);
+  // v7: cada bloque trae sus horas y no hay semanas extra que prender o apagar.
+  if (!ps.length) return <li><span><b>Horas del plan</b><small>Con el roadmap v7 cada bloque trae sus horas (o sus días fijos): no hay semanas extra que apagar. T+18 el {fechaCorta(t18)} {t18.slice(0, 4)}.</small></span></li>;
   return (
     <li className="aj-columna">
       <span><b>Semanas extra por feature</b><small>{sumadas} de {ps.reduce((s, t) => s + (t.extraPosible ?? 0), 0)} sumadas · T+18 el {fechaCorta(t18)} {t18.slice(0, 4)}. Apagar una acorta el proyecto y corre todo lo que sigue.</small></span>

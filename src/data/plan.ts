@@ -324,7 +324,7 @@ function nombreAuto(desde: number, hasta: number) {
   return u.length ? u.join(' y ') : 'Colchón';
 }
 
-/** Lo de programación de un bimestre: "P2 Escudo, W1 y P3 Surco v1". */
+/** Lo de programación de un bimestre: "P2 VitalIA, W1 y P3 AgrIA". */
 function progAuto(desde: number, hasta: number) {
   const ts = TRAMOS.filter((t) => !t.pausa && t.hasta >= desde && t.desde <= hasta);
   const ns = ts.map((t) => (t.tipo === 'sumas' ? 'sumas' : t.tipo === 'proyecto' ? `${t.id} ${t.nombre}${t.version ? ` ${t.version}` : ''}` : t.tipo === 'cert' ? t.corto ?? t.nombre : t.tipo === 'colchon' ? 'colchón' : t.tipo === 'cierre' ? 'cierre de T+18' : t.id));
@@ -391,7 +391,7 @@ export function aplicarCalendario(apagados: readonly string[] = [], pausas = tru
   const semanaDeFecha = (f: string) => Math.floor(dias(t0, f) / 7) + 1;
   const diariosCfg = Object.entries(PLAN_EXT.matematica?.diarios ?? {}).sort(([a], [z]) => a.localeCompare(z, undefined, { numeric: true })).map(([id, x]) => ({ id, horas: x.horas ?? 0, x })).filter((d) => d.horas > 0);
   const ventFechas = vents.map((v) => ({ inicio: v.inicio!, fin: v.fin! }));
-  const finPlan = TRAMOS[TRAMOS.length - 1].fin!;
+  const finPlan = TRAMOS.reduce((m, t) => (t.fin! > m ? t.fin! : m), TRAMOS[0].fin!);
   const dfechados = fecharDiarios(diariosCfg, t0, finPlan, { inicioTrabajo: CFG_HORAS.inicioTrabajo, ventanas: ventFechas });
   const mate: TramoMate[] = [];
   for (const df of dfechados) {
@@ -476,17 +476,22 @@ export const tramoDelAnio = (bimestre: number) => (bimestre <= 6 ? 'anio1' : 'fi
 
 // ——— Programación ———
 
+/** El tramo que termina último (una pausa que parte el cierre queda antes en la lista). */
+const ultimoTramo = () => TRAMOS.filter((t) => !t.pausa).reduce((m, t) => ((t.fin ?? '') > (m.fin ?? '') ? t : m), TRAMOS[TRAMOS.length - 1]);
+
 /** El tramo de programación activo (proyecto, certificación, ventana, descanso o colchón). */
 export function tramoActivo(fecha: string, t0 = T0_PLAN) {
   // Ola 27: por fecha exacta (el calendario se mide en horas). Antes de T0, el primero; después del final, el último.
   const f = addDays(fecha, -dias(CFG_HORAS.t0, t0));
-  const t = tramoEnFecha(f) ?? (f < (TRAMOS[0].inicio ?? '') ? TRAMOS[0] : TRAMOS[TRAMOS.length - 1]);
+  const t = tramoEnFecha(f) ?? (f < (TRAMOS[0].inicio ?? '') ? TRAMOS[0] : ultimoTramo());
   const ini = t.inicio ?? inicioSemana(t.desde, CFG_HORAS.t0);
   const fin = t.fin ?? finSemana(t.hasta, CFG_HORAS.t0);
-  // "Semana n de N": cada semana es un tramo de 24,5 h del plan (no una semana de calendario). Sin horas, semanas de calendario.
+  // "Semana n de N": las horas del tramo repartidas en sus N semanas (con el calendario viejo, tramos de 24,5 h; con la v7, las
+  // horas del bloque / sus semanas de calendario). Sin horas (días fijos), semanas de calendario.
   const N = Math.max(1, Math.ceil(t.meta ?? semanasDeTramo(t)));
-  const hechas = t.horas ? Array.from({ length: Math.max(0, Math.min(dias(ini, f), dias(ini, fin) + 1)) }, (_, i) => capacidadDelDia(addDays(ini, i))).reduce((x, y) => x + y, 0) : (Math.floor(dias(ini, f) / 7)) * HORAS_SEMANA_PLAN;
-  const semana = Math.max(1, Math.min(N, Math.floor(hechas / HORAS_SEMANA_PLAN + 1e-9) + 1));
+  const hechas = t.horas ? Array.from({ length: Math.max(0, Math.min(dias(ini, f), dias(ini, fin) + 1)) }, (_, i) => capacidadDelDia(addDays(ini, i))).reduce((x, y) => x + y, 0) : Math.floor(dias(ini, f) / 7);
+  const unidad = t.horas ? t.horas / N : 1;
+  const semana = Math.max(1, Math.min(N, Math.floor(hechas / unidad + 1e-9) + 1));
   return { ...t, semana, semanas: N, inicio: addDays(ini, dias(CFG_HORAS.t0, t0)), fin: addDays(fin, dias(CFG_HORAS.t0, t0)) };
 }
 
@@ -495,7 +500,7 @@ export const certificaciones = () => TRAMOS.filter((t) => t.tipo === 'cert');
 export const ventanas = () => TRAMOS.filter((t) => t.tipo === 'ventana');
 export const tramoPorId = (id: string) => TRAMOS.find((t) => t.id === id);
 
-/** "Faro v1 · petróleo", "Escudo · medicina", "AWS SAA". */
+/** "PetrIA · petróleo", "VitalIA · medicina", "AWS SAA". */
 export const nombreTramo = (t: Tramo, conIndustria = true) =>
   t.tipo === 'cert' ? t.corto ?? t.nombre : `${t.nombre}${t.version ? ` ${t.version}` : ''}${conIndustria && t.industria ? ` · ${t.industria}` : ''}`;
 
@@ -556,8 +561,11 @@ export function entregasDelPlan(t0 = T0_PLAN): Entrega[] {
   for (const t of TRAMOS) {
     if (t.tipo === 'proyecto' && t.id !== 'P0') out.push({ de: 'programacion', a: 'trabajo', fecha: finDe(t, t0), texto: `${nombreTramo(t, false)} entra al portfolio con tráiler y landing` });
     if (t.tipo === 'ventana') {
-      const sig = TRAMOS.find((x) => x.tipo === 'proyecto' && x.desde > t.hasta);
-      out.push({ de: 'matematica', a: 'programacion', fecha: inicioDe(t, t0), texto: `Ventana ${t.id} de ${t.hasta - t.desde + 1} semanas: la base de ${sig ? nombreTramo(sig, false) : 'lo que sigue'}` });
+      // El proyecto que la ventana habilita (el que depende de ella); si no lo dice, el próximo proyecto.
+      const hab = PLAN_EXT.bloques.find((b) => b.dependeDe?.includes(t.id))?.id;
+      const sig = TRAMOS.find((x) => x.id === hab) ?? TRAMOS.find((x) => x.tipo === 'proyecto' && (x.inicio && t.fin ? x.inicio > t.fin : x.desde > t.hasta));
+      const sem = t.meta ?? t.hasta - t.desde + 1;
+      out.push({ de: 'matematica', a: 'programacion', fecha: inicioDe(t, t0), texto: `Ventana ${t.id} de ${sem} ${sem === 1 ? 'semana' : 'semanas'}: la base de ${sig ? nombreTramo(sig, false) : 'lo que sigue'}` });
     }
   }
   // Ola 21: el examen de Cambridge C1 (fin de su fase) entra al CV.
@@ -586,7 +594,7 @@ export function eventosDelPlan(t0 = T0_PLAN): EventoRama[] {
 
 export interface Etapa {
   rama: Rama;
-  /** "P1 · Faro v1 · petróleo". */
+  /** "P1 · PetrIA · petróleo". */
   titulo: string;
   /** Lo que sigue o lo que entrega. */
   sub: string;

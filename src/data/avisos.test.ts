@@ -31,19 +31,18 @@ describe('avisos entre ramas', () => {
   });
 
   it('proyecto que cierra en 14 días o menos con el estándar sin marcar → programacion → trabajo', () => {
-    // Con el calendario por horas, Escudo (P2) se entrega el martes 29 de diciembre.
+    // Con el roadmap v7, PetrIA (P1) se entrega el sábado 26 de diciembre.
     const a = avisosEntreRamas('2026-12-20', emptyPlan(), cfg).find((x) => x.de === 'programacion')!;
-    expect(a).toMatchObject({ a: 'trabajo', titulo: 'Escudo se entrega el martes 29', href: '#/metas/proyecto/P2' });
+    expect(a).toMatchObject({ a: 'trabajo', titulo: 'PetrIA se entrega el sábado 26', href: '#/metas/proyecto/P1' });
     const listo = { ...emptyPlan(), proyectos: { P1: { estandar: { ux: true, tresd: true, animacion: true, docs: true, venta: true, ingenieria: true }, tiempo: { nucleo: 0, producto: 0, lanzamiento: 0 }, revisiones: [] } } };
-    const listo2 = { ...emptyPlan(), proyectos: { P2: listo.proyectos.P1 } };
-    expect(avisosEntreRamas('2026-12-20', listo2, cfg).some((x) => x.de === 'programacion')).toBe(false);
-    expect(avisosEntreRamas('2026-12-14', emptyPlan(), cfg).some((x) => x.de === 'programacion')).toBe(false);
+    expect(avisosEntreRamas('2026-12-20', listo, cfg).some((x) => x.de === 'programacion')).toBe(false);
+    expect(avisosEntreRamas('2026-12-10', emptyPlan(), cfg).some((x) => x.de === 'programacion')).toBe(false);
   });
 
   it('ventana W que empieza en 7 días o menos → matematica → programacion', () => {
-    // Con el calendario por horas, W1 empieza el miércoles 6 de enero.
-    expect(avisosEntreRamas('2027-01-02', emptyPlan(), cfg).find((x) => x.de === 'matematica' && x.id.startsWith('w-'))).toMatchObject({ a: 'programacion', titulo: 'La ventana W1 empieza el miércoles 6' });
-    expect(avisosEntreRamas('2026-12-29', emptyPlan(), cfg).some((x) => x.de === 'matematica' && x.id.startsWith('w-'))).toBe(false);
+    // Con el roadmap v7, W1 empieza el sábado 20 de febrero.
+    expect(avisosEntreRamas('2027-02-15', emptyPlan(), cfg).find((x) => x.de === 'matematica' && x.id.startsWith('w-'))).toMatchObject({ a: 'programacion', titulo: 'La ventana W1 empieza el sábado 20' });
+    expect(avisosEntreRamas('2027-02-11', emptyPlan(), cfg).some((x) => x.de === 'matematica' && x.id.startsWith('w-'))).toBe(false);
   });
 
   it('el inicio del trabajo es una fecha: ya no hay aviso de T+2 que pida cambiar de rutina', () => {
@@ -60,14 +59,14 @@ describe('etiqueta de rama en Hoy', () => {
     const tag = (k: string) => etiquetaDeBloque(d.blocks.find((b) => b.key === k)!, { day: d, plan: p, study: emptyStudy() });
     expect(tag('rutina')).toBe('main · rutina');
     expect(tag('math')).toBe('matematica · Aritmética cap. 1 de 11');
-    expect(tag('prog')).toBe('programacion · P2 · semana 2 de 4');
+    expect(tag('prog')).toBe('programacion · P1 · semana 4 de 5');
     expect(tag('trabajo')).toBe('fuera del plan');
     expect(tag('busqueda')).toBe('trabajo · semana 5 de 8 · 1 h 30 hoy');
     expect(tag('handyx')).toBe('handyx · Lanzar · semana 5 de 13');
-    expect(tag('prog-tarde')).toBe('programacion · Escudo');
+    expect(tag('prog-tarde')).toBe('programacion · PetrIA');
     expect(tag('entreno')).toBe('salud · fuerza');
     expect(tag('cierre')).toBe('main · JSON del día');
-    expect(tituloDeBloque(d.blocks.find((b) => b.key === 'prog')!, d.date)).toBe('Programación · Escudo');
+    expect(tituloDeBloque(d.blocks.find((b) => b.key === 'prog')!, d.date)).toBe('Programación · PetrIA');
   });
 
   it('el color sale de la rama; main, del área; fuera del plan, gris', () => {

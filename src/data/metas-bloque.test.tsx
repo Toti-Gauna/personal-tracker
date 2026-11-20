@@ -28,7 +28,7 @@ describe('metas por bloque · JSON', () => {
     const d = ok(EJEMPLO_BLOQUE) as ImportMetas;
     expect(d.bloque).toBe('P0');
     expect(d.metas.map((m) => [m.id, m.subs.length])).toEqual([['p0-hub', 2], ['trazo-publicado-con-readme-en-ingles', 0]]);
-    expect(nombreBloque('P0')).toBe('P0 · Consolidación');
+    expect(nombreBloque('P0')).toBe('P0 · Constelación');
     expect(nombreBloque('libro:mwm:3')).toBe('Measure What Matters · unidad 3');
     expect(nombreBloque('Z9')).toBeNull();
   });
@@ -126,7 +126,7 @@ describe('metas por bloque · pantallas', () => {
     const day = { date: D, wake: '04:00', routine: 'completo' as const, blocks: [], notes: [], focus: [] };
     render(<PlanImportar day={day} />);
     fireEvent.change(screen.getByLabelText('JSON pegado'), { target: { value: EJEMPLO_BLOQUE } });
-    expect(screen.getByRole('status')).toHaveTextContent('✓ formato válido · P0 · Consolidación');
+    expect(screen.getByRole('status')).toHaveTextContent('✓ formato válido · P0 · Constelación');
     expect(screen.getByText('Agrega 2')).toBeInTheDocument();
     fireEvent.click(screen.getByRole('button', { name: 'Importar las metas' }));
     expect(metas('P0')).toHaveLength(2);

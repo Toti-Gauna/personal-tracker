@@ -159,7 +159,8 @@ export interface PlanExtendido {
     principio: string;
     /** Tipo de error → roles de refuerzo que se abren (concepto → intuición, técnica → banco…). */
     reglaRefuerzo: Record<string, RolRefuerzo[]>;
-    diarios: Record<string, MateTramo & { nombre: string; horas?: number }>;
+    /** v7 (ola 29): `finRoadmap`, el fin que estima el roadmap (Trazo recalcula y muestra la diferencia). */
+    diarios: Record<string, MateTramo & { nombre: string; horas?: number; finRoadmap?: string }>;
   };
   /** Perfiles vendibles por hito: el que tenés al cerrar ese bloque. */
   perfilesHito: { despues: string; perfil: string; nota: string }[];
