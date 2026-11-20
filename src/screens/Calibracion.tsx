@@ -48,7 +48,7 @@ export function Calibracion({ day }: { day: DayLog }) {
         ) : (
           <>
             <b className="cal-espera">Se calcula al cerrar P2{c.cuando ? `, el ${f(c.cuando)}` : ''}, y otra vez al cerrar P3</b>
-            <span className="sub">Las horas reales salen del foco de los bloques de programación. Estimadas: semanas del plan × {n1(HORAS_PROG_SEMANA)} h.</span>
+            <span className="sub">Las horas reales salen del foco de los bloques de programación. Estimadas: las horas de cada bloque del roadmap v7 (sin ellas, semanas del plan × {n1(HORAS_PROG_SEMANA)} h).</span>
           </>
         )}
       </section>

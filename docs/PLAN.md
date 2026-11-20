@@ -1184,6 +1184,34 @@ Pedido del 2026-11-19, después de estudiar el cap. 1 de Aritmética. Tres probl
 
 **Pendiente:** los puntos clave de Álgebra para el cold recall (se escriben al hacerlo); los tramos m2 a m4 todavía no son libros en la app.
 
+## 6 undecies. Ola 29: el calendario sigue el roadmap v7
+
+Fuente: `docs/prompts/roadmap-completo-v7.md` (2026-11-20). Reglas: no se borra historial de horas ni datos cargados; lo que no cierra se avisa con el cálculo, sin corregirlo en silencio; las fechas del roadmap son estimaciones: Trazo recalcula y muestra la diferencia.
+
+**Paso 1 · Motor**
+- Un bloque trae sus **horas** (las "ahora" del roadmap) o sus **días fijos** (certificaciones, descansos, cierres y consolidación; una pausa de diciembre adentro los alarga). Sin ninguno de los dos, sigue valiendo semanas × 24,5 h (calendario viejo y fixtures).
+- Capacidad en `data/plan-extendido.json` → `capacidad`: 8 h por día antes del trabajo nuevo (PetrIA), 29 h por semana con trabajo (la rutina), 43 h por semana en las ventanas, pausas de diciembre solo en 2027 a 2030, y el trabajo nuevo por defecto a T0 + 49 días (4 ene 2027).
+- La semana "n de N" de un tramo reparte sus horas en sus semanas de calendario.
+
+**Paso 2 · Datos**
+- Los 60 bloques del roadmap con sus fechas (`roadmap`), horas de ahora y de antes. Ids conservados (P1 = PetrIA, P2 = VitalIA, … A7 = Horizonte; SUM = Semana multiplataforma; COL = Consolidación); nuevos: P0B (Constelación 2.0 y 2.1) y C8 a C13. Las certificaciones llevan el número del roadmap aparte del id (C8 es la 1, C1 la 2… C7 la 10). CKA, CKS y AWS Security Specialty pasan a la etapa 3. "Cierre y renovaciones" es CIE4 (certificación 14).
+- Cada proyecto suma al historial su nombre nuevo y sus horas. Ya no hay listas de recortes: si una versión se atrasa, se mueven fechas (la alerta de los días 10 y 20 lo dice). m4 = 504 h.
+- Fichas y tecnologías siguen las de la v2.1 hasta la ola 30.
+
+**Paso 3 · Diferencia contra el roadmap** (`#/metas/diferencia`, enlazada desde Las 4 etapas)
+- Cuándo termina el plan contra el roadmap, el bloque que más se adelanta y el que más se atrasa, cada etapa con sus bloques (fechas de Trazo, del roadmap, horas y días de diferencia) y la matemática diaria.
+- **Lo que no cierra en el roadmap**, con la cuenta: huecos o solapes entre bloques y bloques cuyas horas no entran en sus fechas (±10 %) con la capacidad del plan.
+- La ficha de cada proyecto y certificación muestra sus horas y la diferencia ("Horas y fechas").
+
+**Lo que da el cálculo (con el trabajo el 4 ene 2027 y sin horas reales todavía):**
+- PetrIA a 8 h por día termina el **26 dic 2026**, 10 días antes del 5 ene: las fechas del roadmap implican 304 h / 48 días = 6,3 h por día (en esas fechas entran 374 h).
+- Semana multiplataforma: en sus 10 días entran 46 h y pide 40.
+- El adelanto se achica bloque a bloque y el plan termina el **4 jun 2031**, 8 días después del 27 may: las fechas de la etapa 4 suponen algo más de 29 h por semana (ninguna pasa del ±10 % por sí sola).
+- Matemática diaria: m1 (11 feb), m2 (9 jun) y m3 (4 ago 2027) caen en la fecha del roadmap; m4 termina el 26 may 2028, una semana antes del ≈ 2 jun.
+- T+18 (cierre de la etapa 2) pasa a ser el 27 dic 2028; la pausa de 2028 cae adentro del cierre.
+
+**Pendiente (olas 30 a 33):** fichas, versiones y checklist de 12 puntos (30); rutina con trabajo, de dónde salen las 3 h que faltan para las 8 h por día y los 16 o 20 temas de algoritmos (31); revisión semanal, hardware, contadores y la alerta de Security+ (32); calibración con las horas reales de PetrIA 1.0 y 1.1 (33). `data/roadmap.json` y `data/bimesters.json` (la Ruta vieja) todavía nombran los proyectos de antes.
+
 ---
 
 ## 7. Registro de cambios

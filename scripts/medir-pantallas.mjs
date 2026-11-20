@@ -25,7 +25,7 @@ const RUTAS = [
   'cierre', 'actividad', 'meta-nueva/semana',
   // Ola 23 · el apartado Clipping (con una planilla de ejemplo cargada).
   'estudio/prog/demanda', 'estudio/prog/P1/stack', 'estudio/prog/P5/stack',
-  'metas/calibracion', 'metas/proyecto/C2', 'metas/proyecto/P10',
+  'metas/calibracion', 'metas/diferencia', 'metas/proyecto/C8', 'metas/proyecto/C2', 'metas/proyecto/P10',
   'metas/clipping', 'metas/clipping/plan', 'metas/clipping/registro', 'metas/clipping/metricas', 'metas/clipping/cuentas',
   'metas/clipping/campanas', 'metas/clipping/retainers', 'metas/clipping/nichos', 'metas/clipping/riesgos', 'metas/clipping/semana1',
 ];
