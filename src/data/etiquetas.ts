@@ -20,7 +20,7 @@ export function colorDeBloque(b: Pick<Block, 'rama' | 'area'>, delPlan: boolean)
   return b.rama === 'main' ? AREAS[b.area].css : RAMA_COLOR[b.rama];
 }
 
-/** Título que se muestra: el bloque de programación lleva el proyecto activo ("Programación · Faro v1"). */
+/** Título que se muestra: el bloque de programación lleva el proyecto activo ("Programación · PetrIA"). */
 export function tituloDeBloque(b: Pick<Block, 'rama' | 'key' | 'title'>, date: string, t0?: string) {
   // Ola 27: el bloque de idiomas es inglés técnico y de entrevista (el año del roadmap se ve en Estudio · Idiomas).
   // Ola 23: el clipping dice el mes del Roadmap Clipper ("Clipping · Mes 1").
@@ -29,7 +29,7 @@ export function tituloDeBloque(b: Pick<Block, 'rama' | 'key' | 'title'>, date: s
   return programacionDelPlan(date, t0) ?? b.title;
 }
 
-/** "Programación · Faro v1" (o la certificación) en vez de "Python": lo que se programa hoy según el plan. */
+/** "Programación · PetrIA" (o la certificación) en vez de "Python": lo que se programa hoy según el plan. */
 export function programacionDelPlan(date: string, t0?: string) {
   if (!enPlan(date, t0)) return null;
   const t = tramoActivo(date, t0);

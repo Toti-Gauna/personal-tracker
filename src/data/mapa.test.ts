@@ -6,15 +6,15 @@ import { emptyStudy } from './study-catalog';
 describe('mapa en ramas', () => {
   it('arriba T+18, abajo T+0 y HEAD en hoy; lo que viene después de HEAD es futuro', () => {
     const f = filasMapa('2026-12-14', 'mes', emptyPlan(), emptyStudy());
-    expect(f[0]).toMatchObject({ hito: 'T+18', fecha: '2028-07-30' });
+    expect(f[0]).toMatchObject({ hito: 'T+18', fecha: '2028-12-31' });
     expect(f[f.length - 1]).toMatchObject({ hito: 'T+0', fecha: '2026-11-16' });
     const head = f.findIndex((x) => x.tipo === 'head');
-    expect(f[head].texto).toBe('Escudo · semana 2 de 4');
+    expect(f[head].texto).toBe('PetrIA · semana 4 de 5');
     expect(f.slice(1, head).every((x) => x.futuro || x.tipo === 'gap')).toBe(true);
     expect(f.slice(head + 1).every((x) => !x.futuro)).toBe(true);
-    // Este mes incluye T+2 (11 ene); la entrega de Faro v1 (9 dic, con el calendario por horas) queda en el mapa completo.
+    // Este mes incluye T+2 (11 ene) y la entrega de PetrIA (26 dic, a 8 h por día).
     expect(f.some((x) => x.hito === 'T+2')).toBe(true);
-    expect(filasMapa('2026-12-14', 'todo', emptyPlan(), emptyStudy()).find((x) => x.id === 'fin-P1')?.fecha).toBe('2026-12-09');
+    expect(filasMapa('2026-12-14', 'todo', emptyPlan(), emptyStudy()).find((x) => x.id === 'fin-P1')?.fecha).toBe('2026-12-26');
     // Ordenadas de la más nueva a la más vieja.
     const fechas = f.filter((x) => x.tipo !== 'gap').map((x) => x.fecha);
     expect([...fechas].sort().reverse()).toEqual(fechas);
@@ -24,7 +24,8 @@ describe('mapa en ramas', () => {
     const f = filasMapa('2026-12-14', 'todo', emptyPlan(), emptyStudy());
     const ids = f.map((x) => x.id);
     for (const id of ['fin-P1', 'fin-P10', 'fin-C1', 'fin-C2', 'fin-C3', 'fin-W1', 'fin-W2', 'fin-W3']) expect(ids).toContain(id);
-    expect(ids.filter((x) => x.startsWith('fin-P'))).toHaveLength(11);
+    // P0 a P10 y la 2.0/2.1 de Constelación (P0B).
+    expect(ids.filter((x) => x.startsWith('fin-P'))).toHaveLength(12);
     expect(f.some((x) => x.tipo === 'gap')).toBe(false);
   });
 });
@@ -41,20 +42,22 @@ describe('mapa · hitos y stand-by (Ola 8b)', () => {
     // Ola 21: entran los hitos de idiomas del 27 dic (Measure What Matters) y el 7 feb (pronunciación); sale el viejo "B2 sólido".
     // Ola 23: los 3 hitos viejos de clipping dejan lugar a los 15 del Roadmap Clipper (6 caen en el trimestre).
     // Ola 24 (v2): con la plataforma y la pausa, W1 queda lista el 14 de marzo y sale del primer trimestre.
-    expect(h).toHaveLength(33);
+    // Ola 29 (v7): PetrIA cierra el 26 dic, VitalIA el 8 feb y W1 recién el 11 mar: AgrIA (12 mar a 24 abr) queda en el segundo trimestre.
+    expect(h).toHaveLength(31);
     expect(HITOS).toHaveLength(45);
     expect(h.filter((x) => x.rama === 'ingles').map((x) => x.hitoId)).toEqual(['ingles-83', 'ingles-41']);
     const fechas = h.map((x) => x.fecha);
     expect([...fechas].sort().reverse()).toEqual(fechas);
     expect(h[h.length - 1]).toMatchObject({ fecha: '2026-11-16', rama: 'main', hito: 'T+0' });
-    expect(h.find((x) => x.hitoId === 'programacion-62')).toMatchObject({ fecha: '2026-12-29', rama: 'programacion', hitoTipo: 'grande' });
-    expect(h.find((x) => x.hitoId === 'programacion-34')).toMatchObject({ fecha: '2026-12-09' }); // Faro v1
+    expect(h.find((x) => x.hitoId === 'programacion-62')).toMatchObject({ fecha: '2027-02-08', rama: 'programacion', hitoTipo: 'grande' }); // VitalIA
+    expect(h.find((x) => x.hitoId === 'programacion-34')).toMatchObject({ fecha: '2026-12-26' }); // PetrIA
+    expect(h.find((x) => x.hitoId === 'programacion-13')).toMatchObject({ fecha: '2026-11-18' }); // P0 v1
     const t2 = filasMapa('2027-03-01', 'trimestre', emptyPlan(), emptyStudy(), '2026-11-16').filter((x) => x.hitoId);
-    expect(h.find((x) => x.hitoId === 'programacion-77')).toMatchObject({ fecha: '2027-02-01', rama: 'programacion', desde: 'matematica' });
-    expect(t2.find((x) => x.hitoId === 'programacion-97')).toMatchObject({ fecha: '2027-03-02', hitoTipo: 'grande' });
-    expect(h.find((x) => x.hitoId === 'matematica-76')).toMatchObject({ fecha: '2027-01-31' });
+    expect(t2.find((x) => x.hitoId === 'programacion-77')).toMatchObject({ fecha: '2027-03-12', rama: 'programacion', desde: 'matematica' });
+    expect(t2.find((x) => x.hitoId === 'programacion-97')).toMatchObject({ fecha: '2027-04-24', hitoTipo: 'grande' });
+    expect(t2.find((x) => x.hitoId === 'matematica-76')).toMatchObject({ fecha: '2027-03-11' });
     expect(h.filter((x) => x.rama === 'clipping').map((x) => x.hitoId).reverse()).toEqual(['clip-gta6', 'clip-usd-150', 'clip-dashboard-v1', 'clip-usd-350', 'clip-retainer-1', 'clip-usd-700']);
-    expect(h.filter((x) => x.hitoTipo === 'grande')).toHaveLength(10); // W1 lista (31 ene) entra al primer trimestre
+    expect(h.filter((x) => x.hitoTipo === 'grande')).toHaveLength(9);
     expect(f[0].hito).toBe('T+18');
     // Pausado (sin bloque asignado) los hitos del clipping no salen del mapa.
     setClippingActivo(false);

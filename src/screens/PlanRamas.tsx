@@ -116,7 +116,7 @@ export function PlanBusqueda({ day }: { day: DayLog }) {
  * que piden el 40 % o más de las ofertas sube; menos del 10 %, baja. Las ventanas de matemática
  * y la cadena donde un proyecto reusa al anterior no se mueven.
  */
-const MOVIBLES: [string, string][] = [['P2', 'Escudo (Go)'], ['P4', 'Estación v1 (Rust)'], ['P5', 'Faro v2'], ['C1', 'AWS SAA'], ['C2', 'Security+'], ['C3', 'AWS ML Engineer']];
+const MOVIBLES: [string, string][] = [['P2', 'VitalIA'], ['P4', 'Antena'], ['P5', 'PetrIA Guard'], ['C1', 'AWS SAA'], ['C2', 'Security+'], ['C3', 'AWS ML Engineer']];
 const veredicto = (pct?: number) => (pct == null ? '—' : pct >= 40 ? 'sube' : pct < 10 ? 'baja' : 'queda');
 
 function RevisionMercado({ date }: { date: string }) {

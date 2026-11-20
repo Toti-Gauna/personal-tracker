@@ -20,19 +20,22 @@ beforeEach(() => {
 });
 
 describe('ola 24 · pantallas del plan v2', () => {
-  it('P1 (v3): la ficha manda la consola Electron a la Semana de sumas; los switches de feature y plataforma de P3 recalculan el cierre', () => {
+  it('P1 (v7): la ficha sigue con su detalle; "Horas y fechas" muestra las horas de ahora y de antes y la diferencia contra el roadmap', () => {
     const { unmount } = render(<Metas day={day()} tab="proyecto/P1" />);
     const ficha = abrir('Ficha');
-    expect(within(ficha).getByText(/Escritorio \(consola Electron\): pasa a la Semana de sumas/)).toBeInTheDocument();
     expect(within(ficha).getByText(/2 servicios con contrato OpenAPI/)).toBeInTheDocument();
-    expect(within(abrir('Semanas extra')).getByText(/3 base \+ 2 feature = 5 semanas del plan \(122 h\)/)).toBeInTheDocument();
+    const h = abrir('Horas y fechas');
+    expect(within(h).getByText(/304 h \(antes 122 h\) · 19 nov 2026 — 26 dic 2026/)).toBeInTheDocument();
+    expect(within(h).getByText(/El roadmap estima 19 nov 2026 — 5 ene 2027: Trazo lo termina 10 días antes/)).toBeInTheDocument();
+    expect(within(h).getByText(/no se recorta profundidad/)).toBeInTheDocument();
+    // Sin semanas extra no hay switches.
+    expect(within(h).queryByRole('switch')).toBeNull();
     unmount();
-    render(<Metas day={day()} tab="proyecto/P3" />);
-    const ext = abrir('Semanas extra');
-    expect(within(ext).getByText(/3 base \+ 1 feature \+ 1 plataforma = 5 semanas del plan \(122 h\).*cierra el 2 mar 2027/)).toBeInTheDocument();
-    fireEvent.click(within(ext).getByRole('switch', { name: 'Plataforma extra de P3' }));
-    expect(getState().plan.extrasApagados).toEqual(['P3:plataforma']);
-    expect(within(ext).getByText(/3 base \+ 1 feature = 4 semanas del plan \(98 h\).*cierra el/)).toBeInTheDocument();
+    // Una certificación de días fijos, con su nota.
+    render(<Metas day={day()} tab="proyecto/C8" />);
+    const c = abrir('Horas y fechas');
+    expect(within(c).getByText(/7 días fijos · 27 dic 2026 — 2 ene 2027/)).toBeInTheDocument();
+    expect(within(c).getByText(/Claude Partner Network/)).toBeInTheDocument();
   });
 
   it('P1 lleva el checklist de arquitectura (contrato, trazas, mTLS y ADR); P2 no', () => {
@@ -46,36 +49,41 @@ describe('ola 24 · pantallas del plan v2', () => {
     expect([...document.querySelectorAll('details.plegable summary b')].map((b) => b.textContent)).not.toContain('Arquitectura');
   });
 
-  it('C2 (Security+): con el examen el 31 may 2027 (antes del retiro de la 701 en inglés) no avisa; se puede elegir la SY0-801', () => {
+  it('C2 (Security+): con el examen en septiembre de 2027 (después del retiro de la 701) avisa; elegida la SY0-801, deja de avisar', () => {
     render(<Metas day={day()} tab="proyecto/C2" />);
-    expect(screen.queryByRole('status')).toBeNull();
+    expect(screen.getByRole('status')).toHaveTextContent(/Sirven: SY0-801/);
     fireEvent.change(screen.getByLabelText('Elegida'), { target: { value: 'SY0-801' } });
     expect(getState().plan.versionCert).toEqual({ C2: 'SY0-801' });
-    expect(screen.getByText(/La SY0-801 llega a tu examen \(31 may 2027\)/)).toBeInTheDocument();
+    expect(screen.getByText(/La SY0-801 llega a tu examen \(15 sep 2027\)/)).toBeInTheDocument();
   });
 
   it('Etapas: la pausa aparece en la lista', () => {
     render(<Metas day={day()} tab="etapas" />);
-    expect(screen.getAllByText(/pausa de fin de año · 21 dic 2026 · 1 sem/).length).toBeGreaterThan(0);
+    // 2026 no tiene pausa; la de 2027 parte AgrIA Sat.
+    expect(screen.getAllByText(/pausa de fin de año · 20 dic 2027 · 1 sem/).length).toBeGreaterThan(0);
+    expect(screen.queryByText(/pausa de fin de año · 21 dic 2026/)).toBeNull();
+    expect(screen.getAllByText(/proyecto · 19 nov 2026 · 304 h/).length).toBeGreaterThan(0);
   });
 
-  it('Ajustes: la pausa y las plataformas se prenden y apagan; T+18 se corre', () => {
+  it('Ajustes: la pausa se prende y apaga y T+18 se corre; sin semanas extra en la v7, no hay switches de plataforma ni arquitectura', () => {
     render(<Ajustes />);
     abrir('Plan T+18');
+    expect(screen.getByText(/Con el roadmap v7, solo en 2027, 2028, 2029 y 2030/)).toBeInTheDocument();
+    expect(screen.getByText(/T\+18 el 31 dic 2028/)).toBeInTheDocument();
     fireEvent.click(screen.getByRole('switch', { name: 'Pausa de fin de año' }));
     expect(getState().plan.pausaFinDeAnio).toBe(false);
-    fireEvent.click(screen.getByRole('switch', { name: 'Plataformas extra' }));
-    expect(getState().plan.extrasApagados).toHaveLength(16);
-    expect(screen.getByRole('switch', { name: 'Plataformas extra' })).toHaveAttribute('aria-checked', 'false');
-    // Sin pausas ni plataformas: T+18 vuelve a acercarse.
+    expect(screen.queryByRole('switch', { name: 'Plataformas extra' })).toBeNull();
+    expect(screen.queryByRole('switch', { name: 'Arquitectura' })).toBeNull();
+    // Sin la pausa de 2028, T+18 vuelve a acercarse.
     expect(screen.getByText(/T\+18 el \d+ \w+ 2028/)).toBeInTheDocument();
+    expect(screen.queryByText(/T\+18 el 31 dic 2028/)).toBeNull();
   });
 
   it('Calibración: antes de P2 espera, muestra las horas por proyecto y los escenarios calculados con el factor', () => {
     render(<Metas day={day()} tab="calibracion" />);
-    expect(screen.getByText(/Se calcula al cerrar P2, el 29 dic 2026, y otra vez al cerrar P3/)).toBeInTheDocument();
+    expect(screen.getByText(/Se calcula al cerrar P2, el 8 feb 2027, y otra vez al cerrar P3/)).toBeInTheDocument();
     expect(screen.getAllByText(/P0/).length).toBeGreaterThan(0);
-    expect(screen.getByText('Calendario actual').parentElement!.textContent).toMatch(/ h · 6 may 2030|ene 2031| 2030/);
+    expect(screen.getByText('Calendario actual').parentElement!.textContent).toMatch(/ h · 4 jun 2031/);
     expect(screen.getByText(/Lento · 1,15/).parentElement!.textContent).toMatch(/ h · /);
     expect(screen.getByText(/Rápido · 0,85/)).toBeInTheDocument();
   });

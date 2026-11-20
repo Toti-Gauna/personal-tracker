@@ -129,7 +129,7 @@ export interface PlanSettings {
   rutina: 'busqueda' | 'con-trabajo';
   /** Día ISO libre (2 = martes); null, ninguno. */
   diaLibre: number | null;
-  /** Inicio del trabajo nuevo (el antiguo T+2). Sin valor: el 11 ene 2027 (T+2). Desde esa fecha rige la rutina con trabajo. */
+  /** Inicio del trabajo nuevo (el antiguo T+2). Sin valor: el 4 ene 2027 (supuesto del roadmap v7). Desde esa fecha rige la rutina con trabajo. */
   t2?: string;
   /** Umbrales de la decisión de Handyx: los escribe el usuario. */
   umbralIngreso: string;

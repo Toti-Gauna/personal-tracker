@@ -23,7 +23,7 @@ describe('ola 26 · pantallas de tecnologías y demanda', () => {
     expect(getState().plan.vacantes).toHaveLength(2);
     const tabla = screen.getAllByRole('table')[0];
     const filas = within(tabla).getAllByRole('row').slice(1);
-    expect(filas[0].textContent).toMatch(/LangGraph.*2.*P1.*9 dic 2026/);
+    expect(filas[0].textContent).toMatch(/LangGraph.*2.*P1.*26 dic 2026/);
     expect(within(tabla).getByText('Elixir').closest('tr')!.textContent).toMatch(/sin proyecto/);
   });
 
@@ -47,10 +47,10 @@ describe('ola 26 · pantallas de tecnologías y demanda', () => {
     expect(within(desc).getByText(/El backend Python ya lo cubre FastAPI/)).toBeInTheDocument();
   });
 
-  it('el stack de un proyecto muestra la nueva, las movidas (de dónde vienen), lo opcional, lo que se recorta primero y el historial', () => {
+  it('el stack de un proyecto muestra la nueva, las movidas (de dónde vienen), lo opcional y el historial (la v7 ya no recorta)', () => {
     const { unmount } = render(<ProgPlan day={day()} param="prog/P1/stack" />);
     expect(screen.getByText('nueva').parentElement!.textContent).toMatch(/LangGraph \(agente analista con herramientas\)/);
-    expect(screen.getByText(/se recorta primero:/).textContent).toMatch(/Conector a una API de terceros en sandbox/);
+    expect(screen.queryByText(/se recorta primero:/)).toBeNull();
     expect(screen.getByText('Historial de cambios')).toBeInTheDocument();
     unmount();
     const p5 = render(<ProgPlan day={day()} param="prog/P5/stack" />);

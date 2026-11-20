@@ -96,7 +96,7 @@ export function PlanProyecto({ day, id }: { day: DayLog; id?: string }) {
       <MetasBloque bloque={t.id} date={date} titulo={`Metas de ${t.id}`} />
       <Plegable id={`proy:${t.id}:ficha`} titulo="Ficha" resumen={t.tipo === 'cert' ? 'costo y versión' : 'feature, tecnología, validador'} color={RAMA_COLOR.programacion}><FichaBloque id={t.id} /></Plegable>
       {t.tipo === 'proyecto' && <Plegable id={`proy:${t.id}:evidencia`} titulo="Puerta de evidencia" resumen={`${EVIDENCIAS.filter(([k]) => p.evidencia?.[k]).length} de 3`}><EvidenciaProyecto id={t.id} /></Plegable>}
-      {t.tipo === 'proyecto' && <Plegable id={`proy:${t.id}:extras`} titulo="Semanas extra" resumen={`${semanas} semanas`}><ExtrasProyecto id={t.id} t0={t0} /></Plegable>}
+      {(t.tipo === 'proyecto' || t.tipo === 'cert') && <Plegable id={`proy:${t.id}:extras`} titulo="Horas y fechas" resumen={t.horas ? `${t.horas} h` : `${semanas} ${semanas === 1 ? 'semana' : 'semanas'}`}><ExtrasProyecto id={t.id} t0={t0} /></Plegable>}
       {conArq && <Plegable id={`proy:${t.id}:arquitectura`} titulo="Arquitectura" resumen={`${avanceArquitectura(arq)} de 4`} color={RAMA_COLOR.programacion}><ArquitecturaProyecto id={t.id} /></Plegable>}
       {t.tipo === 'cert' && <VersionExamen id={t.id} date={date} t0={t0} />}
 
@@ -310,11 +310,11 @@ function FichaExtendida({ id, t0 }: { id: string; t0: string }) {
       <div className="topbar"><a className="volver" href="#/metas/etapas">Las 4 etapas</a><span className="mono" style={{ color: RAMA_COLOR.programacion }}>etapa {b.etapa} · {b.id}</span></div>
       <span className="etiqueta">{[b.ficha?.rubro && !ETAPA[b.etapa].includes(b.ficha.rubro) ? b.ficha.rubro : null, `etapa ${b.etapa} · ${ETAPA[b.etapa]}`].filter(Boolean).join(' · ')}</span>
       <h1 className="titulo pp-titulo"><span className="resaltado" style={{ ['--c' as string]: RAMA_COLOR.programacion }}>{b.nombre}</span></h1>
-      <div className="pp-cuando mono"><span><b>{b.semanas} semanas{b.semanas > b.base ? ` (${b.base} + ${b.semanas - b.base} extra)` : ''}</b> · {fl(b.inicio)} — {fl(b.fin)}</span></div>
+      <div className="pp-cuando mono"><span><b>{b.horas ? `${b.horas} h · ` : ''}{b.semanas} {b.semanas === 1 ? 'semana' : 'semanas'}{b.semanas > b.base && !b.horas && !b.dias ? ` (${b.base} + ${b.semanas - b.base} extra)` : ''}</b> · {fl(b.inicio)} — {fl(b.fin)}</span></div>
       {b.dependeDe?.length ? <p className="sub">Va después de la ventana {b.dependeDe.join(' y ')}: sin aprobarla con 85 %, no arranca.</p> : null}
       <FichaBloque id={b.id} />
       {b.tipo === 'proyecto' && <EvidenciaProyecto id={b.id} />}
-      {b.tipo === 'proyecto' && <Plegable id={`proy:${b.id}:extras`} titulo="Semanas extra" resumen={`${b.semanas} semanas`}><ExtrasProyecto id={b.id} t0={t0} /></Plegable>}
+      {(b.tipo === 'proyecto' || b.tipo === 'cert') && <Plegable id={`proy:${b.id}:extras`} titulo="Horas y fechas" resumen={b.horas ? `${b.horas} h` : `${b.semanas} ${b.semanas === 1 ? 'semana' : 'semanas'}`}><ExtrasProyecto id={b.id} t0={t0} /></Plegable>}
       {b.ficha?.entregablesArquitectura && <Plegable id={`proy:${b.id}:arquitectura`} titulo="Arquitectura" resumen="contrato, trazas, mTLS y ADR"><ArquitecturaProyecto id={b.id} /></Plegable>}
       {b.etapa === 3 && <p className="sub">Plan de estudio e ingeniería, no asesoramiento financiero. Capital real: nada hasta cumplir la puerta escrita (12 semanas o más de paper trading, kill-switch probado y límite de pérdida fijado antes).</p>}
       {b.etapa === 4 && <p className="sub">Modelos educativos y datos públicos o sintéticos; ningún modelo controla hardware real.</p>}

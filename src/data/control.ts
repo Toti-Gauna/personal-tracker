@@ -40,9 +40,15 @@ export function registroDiario(days: Record<string, DayLog>, desde: string, hast
   return out;
 }
 
-/** Día del modo intensivo (el 1 es el primero de P1, una semana después de T0). 0 antes y después del modo. */
+/** Primer día del modo intensivo: el inicio de P1 en el calendario (v7: jueves 19 nov 2026); sin calendario, una semana después de T0. */
+export function inicioIntensivo(c: Pick<CfgControl, 't0'>): string {
+  const p1 = TRAMOS.find((t) => t.id === 'P1');
+  return p1?.inicio ? inicioDe(p1, c.t0) : addDays(c.t0, 7);
+}
+
+/** Día del modo intensivo (el 1 es el primero de P1). 0 antes y después del modo. */
 export function diaIntensivo(fecha: string, c: Pick<CfgControl, 't0' | 'inicioTrabajo'>): number {
-  const ini = addDays(c.t0, 7);
+  const ini = inicioIntensivo(c);
   if (fecha < ini || fecha >= c.inicioTrabajo) return 0;
   return daysBetween(ini, fecha) + 1;
 }
@@ -53,7 +59,7 @@ export interface ControlHoras { dia: number; planificadas: number; reales: numbe
 export function controlHoras(fecha: string, days: Record<string, DayLog>, c: Pick<CfgControl, 't0' | 'inicioTrabajo'>): ControlHoras | null {
   const dia = diaIntensivo(fecha, c);
   if (!dia) return null;
-  const ini = addDays(c.t0, 7);
+  const ini = inicioIntensivo(c);
   let plan = 0;
   let real = 0;
   for (let d = ini; d < fecha; d = addDays(d, 1)) { plan += horasDelDia(d, { t0: c.t0, inicioTrabajo: c.inicioTrabajo, pausas: true }); real += realesDelDia(days[d], 'programacion'); }
@@ -61,7 +67,10 @@ export function controlHoras(fecha: string, days: Record<string, DayLog>, c: Pic
   return { dia, planificadas: redondeo(plan), reales: redondeo(real), porcentaje, debajo: plan > 0 && porcentaje < UMBRAL_HORAS };
 }
 
-/** Lo que se recorta si se pasan de horas, en el orden del plan: el conector de terceros de P1 y después la revisión de accesibilidad de P2. Nunca sueño, entrenamiento ni repasos. */
+/**
+ * Lo que se recorta si P1 o P2 se pasan de horas (`recortarPrimero`). Con la v7 queda vacío: si una versión se atrasa, se mueven
+ * fechas, no se recorta profundidad.
+ */
 export function ordenDeRecortes(): string[] {
   return ['P1', 'P2'].flatMap((id) => PLAN_EXT.bloques.find((b) => b.id === id)?.recortarPrimero ?? []).map((n) => n.replace(/ \(.*\)$/, ''));
 }
@@ -77,7 +86,7 @@ const n1 = (x: number) => String(x).replace('.', ',');
  */
 export function alertaHorasIntensivo(fecha: string, days: Record<string, DayLog>, c: Pick<CfgControl, 't0' | 'inicioTrabajo'>): AvisoControl | null {
   for (const n of [...DIAS_CONTROL].reverse()) {
-    const controlEl = addDays(addDays(c.t0, 7), n - 1);
+    const controlEl = addDays(inicioIntensivo(c), n - 1);
     if (fecha < controlEl || fecha > addDays(controlEl, 2)) continue;
     const h = controlHoras(controlEl, days, c);
     if (!h?.debajo) return null;
@@ -85,7 +94,7 @@ export function alertaHorasIntensivo(fecha: string, days: Record<string, DayLog>
     return {
       id: `horas-dia-${n}`, fecha: controlEl, href: '#/metas/calibracion',
       titulo: `Día ${n} del modo intensivo: ${pct(h.porcentaje)} de las horas planificadas`,
-      texto: `${n1(h.reales)} h de programación contra ${n1(h.planificadas)} h planificadas (menos del ${pct(UMBRAL_HORAS)}). Recortá en este orden: ${recortes.join(', ')}. Nunca el sueño, el entrenamiento ni los repasos.`,
+      texto: `${n1(h.reales)} h de programación contra ${n1(h.planificadas)} h planificadas (menos del ${pct(UMBRAL_HORAS)}). ${recortes.length ? `Recortá en este orden: ${recortes.join(', ')}.` : 'No se recorta profundidad: el calendario se recalcula con tus horas reales y se corren las fechas (mirá la diferencia contra el roadmap).'} Nunca el sueño, el entrenamiento ni los repasos.`,
     };
   }
   return null;
@@ -122,7 +131,7 @@ export function alertasMatematica(fecha: string, t0: string = T0_PLAN): AvisoCon
 
 /** Deuda de matemática del modo intensivo: 1 h por día respecto de las 2 h de antes, desde el inicio de P1 hasta ayer (o hasta el inicio del trabajo). */
 export function deudaMatematica(fecha: string, c: Pick<CfgControl, 't0' | 'inicioTrabajo'>): { horas: number; dias: number } {
-  const ini = addDays(c.t0, 7);
+  const ini = inicioIntensivo(c);
   const hasta = fecha < c.inicioTrabajo ? fecha : c.inicioTrabajo;
   const dias = Math.max(0, daysBetween(ini, hasta));
   return { horas: dias, dias };

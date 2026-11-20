@@ -1,5 +1,5 @@
 /**
- * Plan T+18 extendido (ola 16a): 4 etapas, 56 bloques (proyectos, ventanas de matemática,
+ * Plan T+18 extendido (ola 16a; roadmap v7 desde la ola 29): 4 etapas (proyectos, ventanas de matemática,
  * certificaciones, pausas, colchón y cierres). Fuente: data/plan-extendido.json, que sale de la
  * tabla de docs/prompts/plan-t18-extendido.md.
  *
@@ -49,6 +49,18 @@ export interface BloqueExt {
   cert?: CertInfo;
   /** v3: lo que lleva un bloque de sumas (la consola Electron de P1, la app de Expo de P2…). */
   items?: { nombre: string; desde?: string; opcional?: boolean }[];
+  /** v7 (ola 29): horas del plan ("ahora", con el factor provisional de 1,5 salvo PetrIA, que está medida). Mandan sobre `base`. */
+  horas?: number;
+  /** v7: horas que tenía el bloque antes de la v7 ("antes"), para mostrar la diferencia. */
+  horasAntes?: number;
+  /** v7: días fijos de calendario (certificaciones, descansos, cierres, consolidación). Una pausa adentro lo alarga. */
+  dias?: number;
+  /** v7: fechas que estima el roadmap (inicio y fin). Trazo recalcula y muestra la diferencia; no las usa para fechar. */
+  roadmap?: { inicio: string; fin: string };
+  /** v7: número de la certificación en el roadmap ("Certificación 3"), aparte del id. */
+  numero?: number;
+  /** v7: nota visible del bloque ("a confirmar acceso", "la arman los agentes"). */
+  nota?: string;
 }
 
 /** Ficha de un proyecto: lo que lo hace distinto y cómo se prueba. */
@@ -147,7 +159,8 @@ export interface PlanExtendido {
     principio: string;
     /** Tipo de error → roles de refuerzo que se abren (concepto → intuición, técnica → banco…). */
     reglaRefuerzo: Record<string, RolRefuerzo[]>;
-    diarios: Record<string, MateTramo & { nombre: string; horas?: number }>;
+    /** v7 (ola 29): `finRoadmap`, el fin que estima el roadmap (Trazo recalcula y muestra la diferencia). */
+    diarios: Record<string, MateTramo & { nombre: string; horas?: number; finRoadmap?: string }>;
   };
   /** Perfiles vendibles por hito: el que tenés al cerrar ese bloque. */
   perfilesHito: { despues: string; perfil: string; nota: string }[];
@@ -159,6 +172,20 @@ export interface PlanExtendido {
   horasPorSemana?: number;
   /** v3: lo que salió de los proyectos y queda sin fecha. */
   backlog?: { nombre: string; motivo: string; fecha: string }[];
+  /** v7 (ola 29): la capacidad del plan. */
+  capacidad?: CapacidadPlan;
+}
+
+/** v7 · capacidad de programación que no sale de la rutina. */
+export interface CapacidadPlan {
+  /** Horas por día de proyecto antes del trabajo nuevo (PetrIA a ~8 h por día). Sin esto rige la rutina intensiva. */
+  antesTrabajo?: number;
+  /** Horas por semana en las ventanas de matemática (43). */
+  ventanaSemana?: number;
+  /** Años con pausa de diciembre (la semana cuyo lunes cae del 18 al 24). Sin lista, todos los años. */
+  pausasDiciembre?: number[];
+  /** Días desde T0 hasta el trabajo nuevo, si no lo cargaste (49: lunes 4 ene 2027). */
+  inicioTrabajoDias?: number;
 }
 
 // ——— validación ———
@@ -186,6 +213,9 @@ export function validar(doc: unknown): string[] {
     if (!TIPOS_BLOQUE.includes(b.tipo)) err.push(`${en}: tipo desconocido (${b.tipo})`);
     if (![1, 2, 3, 4].includes(b.etapa)) err.push(`${en}: etapa inválida (${b.etapa})`);
     if (!Number.isInteger(b.base) || b.base < 1) err.push(`${en}: base tiene que ser un entero de 1 o más`);
+    if (b.horas != null && (!(b.horas >= 0) || b.dias != null)) err.push(`${en}: horas tiene que ser un número de 0 o más (y sin días fijos)`);
+    if (b.dias != null && (!Number.isInteger(b.dias) || b.dias < 1)) err.push(`${en}: dias tiene que ser un entero de 1 o más`);
+    if (b.roadmap && (!FECHA.test(b.roadmap.inicio) || !FECHA.test(b.roadmap.fin) || b.roadmap.fin < b.roadmap.inicio)) err.push(`${en}: las fechas del roadmap van AAAA-MM-DD y el fin no va antes del inicio`);
     if (!Number.isInteger(b.extra) || b.extra < 0) err.push(`${en}: extra tiene que ser un entero de 0 o más`);
     if (b.extra > 0 && b.tipo !== 'proyecto') err.push(`${en}: solo un proyecto lleva semanas extra de feature`);
     for (const k of ['extraPlataforma', 'extraArquitectura'] as const) {
@@ -374,8 +404,12 @@ export interface BloqueFechado extends BloqueExt {
   diaFin?: number;
 }
 
-/** ¿La semana que arranca este día es la pausa de fin de año? (su primer día cae entre el 18 y el 24 de diciembre). */
-export const esSemanaDePausa = (lunes: string) => lunes.slice(5, 7) === '12' && Number(lunes.slice(8, 10)) >= 18 && Number(lunes.slice(8, 10)) <= 24;
+/**
+ * ¿La semana que arranca este día es la pausa de fin de año? (su primer día cae entre el 18 y el 24 de diciembre). Con `anios`
+ * (v7: 2027 a 2030), solo esos años tienen pausa.
+ */
+export const esSemanaDePausa = (lunes: string, anios?: readonly number[]) =>
+  lunes.slice(5, 7) === '12' && Number(lunes.slice(8, 10)) >= 18 && Number(lunes.slice(8, 10)) <= 24 && (!anios || anios.includes(Number(lunes.slice(0, 4))));
 
 const leer = (sw: Switch | undefined, id: string) => (typeof sw === 'object' ? sw[id] ?? true : sw ?? true);
 
@@ -389,7 +423,7 @@ export function calendario(plan: PlanExtendido = PLAN_EXT, o: Opciones = {}): Bl
   const t0 = o.t0 ?? plan.t0;
   const conPausas = o.pausas ?? true;
   const lunesDe = (w: number) => addDays(t0, (w - 1) * 7);
-  const pausaEn = (w: number) => conPausas && esSemanaDePausa(lunesDe(w));
+  const pausaEn = (w: number) => conPausas && esSemanaDePausa(lunesDe(w), plan.capacidad?.pausasDiciembre);
   const out: BloqueFechado[] = [];
   const pausa = (w: number, etapa: 1 | 2 | 3 | 4): BloqueFechado => ({
     id: `PAUSA-${lunesDe(w).slice(0, 4)}`, etapa, tipo: 'descanso', nombre: 'Pausa de fin de año', base: 1, extra: 0, extraPlataforma: 0, extraArquitectura: 0,
@@ -440,23 +474,27 @@ export function calendario(plan: PlanExtendido = PLAN_EXT, o: Opciones = {}): Bl
 }
 
 /**
- * Ola 27 (v3) · el calendario medido en horas. Cada bloque vale (semanas del plan × 24,5) horas; se reparte día por día sobre la
- * capacidad de programación de la rutina que rige ese día (53 h por semana en el modo intensivo, 29 con trabajo, cero en la pausa de
- * fin de año). Un bloque ocupa días enteros: el siguiente arranca al día siguiente de que se junten sus horas. Los descansos son
- * calendario (7 días por semana, sin horas). Las pausas de fin de año parten el bloque o van entre dos, como en el motor por semanas.
+ * Ola 27 (v3) · el calendario medido en horas. Cada bloque vale sus `horas` (v7) o (semanas del plan × 24,5) horas; se reparte día
+ * por día sobre la capacidad de programación que rige ese día (v7: ~8 h por día antes del trabajo, 29 por semana con trabajo, 43
+ * por semana en las ventanas de matemática, cero en la pausa de fin de año). Un bloque ocupa días enteros: el siguiente arranca al
+ * día siguiente de que se junten sus horas. Los bloques de días fijos (certificaciones, descansos, cierres, consolidación) son
+ * calendario: ocupan sus días sin horas y una pausa adentro los alarga. Las pausas de fin de año parten el bloque o van entre dos.
  */
 export function calendarioHoras(plan: PlanExtendido = PLAN_EXT, o: Opciones = {}): BloqueFechado[] {
   const h = o.horas!;
   const t0 = o.t0 ?? plan.t0;
   const unidad = h.horasSemana ?? plan.horasPorSemana ?? 24.5;
   const conPausas = o.pausas ?? true;
+  const anios = plan.capacidad?.pausasDiciembre;
+  const ventanaDia = plan.capacidad?.ventanaSemana != null ? plan.capacidad.ventanaSemana / 7 : null;
   const dia = (n: number) => addDays(t0, n);
   const semanaDe = (n: number) => Math.floor(n / 7) + 1;
-  const enPausa = (n: number) => conPausas && esSemanaDePausa(addDays(dia(n), -((parseDate(dia(n)).getDay() + 6) % 7)));
+  const lunesN = (n: number) => n - ((parseDate(dia(n)).getDay() + 6) % 7);
+  const enPausa = (n: number) => conPausas && esSemanaDePausa(dia(lunesN(n)), anios);
   const ultimoCerrado = Math.max(-1, ...(h.cerrados ?? []).map((id) => plan.bloques.findIndex((b) => b.id === id)));
   const out: BloqueFechado[] = [];
   const pausa = (nIni: number, etapa: 1 | 2 | 3 | 4): BloqueFechado => {
-    const lunes = nIni - (((parseDate(dia(nIni)).getDay() + 6) % 7));
+    const lunes = lunesN(nIni);
     return {
       id: `PAUSA-${dia(lunes).slice(0, 4)}`, etapa, tipo: 'descanso', nombre: 'Pausa de fin de año', base: 1, extra: 0, extraPlataforma: 0, extraArquitectura: 0,
       que: 'Una semana sin programación entre Navidad y Año Nuevo; la matemática diaria y lo demás siguen.',
@@ -464,6 +502,8 @@ export function calendarioHoras(plan: PlanExtendido = PLAN_EXT, o: Opciones = {}
       horas: 0, diaIni: lunes, diaFin: lunes + 6,
     };
   };
+  /** Semanas de calendario de un tramo de días (sin las pausas que lo parten), al menos 1. */
+  const semanasDeDias = (ini: number, fin: number, pausas: number) => Math.max(1, Math.round((fin - ini + 1 - pausas * 7) / 7));
   let cursor = 0;
   let etapa = 0;
   let pendiente = 0;
@@ -476,24 +516,20 @@ export function calendarioHoras(plan: PlanExtendido = PLAN_EXT, o: Opciones = {}
     const atraso = Math.max(0, Math.round(o.atrasos?.[b.id] ?? 0));
     let semanas: number;
     let absorbido = 0;
+    let diasFijos = b.dias ?? (b.tipo === 'descanso' ? b.base * 7 : null);
     if (b.tipo === 'colchon') {
-      absorbido = Math.min(b.base, pendiente);
+      absorbido = Math.min(b.dias != null ? Math.floor(b.dias / 7) : b.base, pendiente);
       semanas = b.base - absorbido;
+      if (b.dias != null) { diasFijos = b.dias - absorbido * 7; semanas = diasFijos > 0 ? Math.max(1, Math.round(diasFijos / 7)) : 0; }
       pendiente = 0;
     } else {
       semanas = b.base + extraAplicado + plataformaAplicada + arquitecturaAplicada + atraso;
+      if (diasFijos != null) diasFijos += atraso * 7;
       pendiente += atraso;
     }
     const extras = { extraAplicado, plataformaAplicada, arquitecturaAplicada, atraso, absorbido };
-    if (semanas === 0) {
-      out.push({ ...b, ...extras, semanas, desde: semanaDe(cursor), hasta: semanaDe(cursor) - 1, inicio: dia(cursor), fin: dia(cursor - 1), pausasDentro: [], horas: 0, diaIni: cursor, diaFin: cursor - 1 });
-      return;
-    }
-    // Un descanso es calendario: 7 días por semana, sin horas.
-    if (b.tipo === 'descanso') {
-      const ini = cursor;
-      cursor += semanas * 7;
-      out.push({ ...b, ...extras, semanas, desde: semanaDe(ini), hasta: semanaDe(cursor - 1), inicio: dia(ini), fin: dia(cursor - 1), pausasDentro: [], horas: 0, diaIni: ini, diaFin: cursor - 1 });
+    if (semanas === 0 || diasFijos === 0) {
+      out.push({ ...b, ...extras, semanas: 0, desde: semanaDe(cursor), hasta: semanaDe(cursor) - 1, inicio: dia(cursor), fin: dia(cursor - 1), pausasDentro: [], horas: 0, diaIni: cursor, diaFin: cursor - 1 });
       return;
     }
     // La pausa que cae justo antes del bloque va entre los dos.
@@ -502,18 +538,33 @@ export function calendarioHoras(plan: PlanExtendido = PLAN_EXT, o: Opciones = {}
       out.push(p);
       cursor = p.diaFin! + 1;
     }
-    const horas = Math.floor(semanas * unidad * (idx > ultimoCerrado ? h.factor ?? 1 : 1) + 1e-9);
     const ini = cursor;
-    let acc = 0;
-    let d = ini;
     const pausasDentro: number[] = [];
-    for (let guarda = 0; guarda < 4000; guarda++, d++) {
-      if (enPausa(d)) { const w = semanaDe(d - (((parseDate(dia(d)).getDay() + 6) % 7))); if (!pausasDentro.includes(w)) pausasDentro.push(w); continue; }
-      acc += h.capacidad(dia(d));
-      if (acc >= horas - 1e-9) break;
+    const marcarPausa = (d: number) => { const w = semanaDe(lunesN(d)); if (!pausasDentro.includes(w)) pausasDentro.push(w); };
+    let d = ini;
+    let horas: number;
+    if (diasFijos != null) {
+      // Días fijos: calendario, sin horas de proyecto. La pausa no cuenta como día del bloque.
+      let quedan = diasFijos;
+      for (let guarda = 0; guarda < 4000; guarda++, d++) {
+        if (enPausa(d)) { marcarPausa(d); continue; }
+        if (--quedan <= 0) break;
+      }
+      horas = 0;
+    } else {
+      const base = b.horas != null ? b.horas * (1 + atraso / Math.max(1, b.base)) : semanas * unidad;
+      horas = Math.floor(base * (idx > ultimoCerrado ? h.factor ?? 1 : 1) + 1e-9);
+      const cap = b.tipo === 'ventana' && ventanaDia != null ? () => ventanaDia : (n: number) => h.capacidad(dia(n));
+      let acc = 0;
+      for (let guarda = 0; guarda < 4000; guarda++, d++) {
+        if (enPausa(d)) { marcarPausa(d); continue; }
+        acc += cap(d);
+        if (acc >= horas - 1e-9) break;
+      }
     }
     const fin = d;
     cursor = fin + 1;
+    if (b.horas != null || b.dias != null) semanas = semanasDeDias(ini, fin, pausasDentro.length);
     out.push({ ...b, ...extras, semanas, desde: semanaDe(ini), hasta: semanaDe(fin), inicio: dia(ini), fin: dia(fin), pausasDentro, horas, diaIni: ini, diaFin: fin });
     for (const w of pausasDentro) out.push(pausa((w - 1) * 7, b.etapa));
   });

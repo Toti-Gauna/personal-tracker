@@ -11,9 +11,9 @@ const nombres = (id: string) => bloque(id).tecnologias!.map((t) => t.nombre);
 const marca = (id: string, n: string) => bloque(id).tecnologias!.find((t) => t.nombre === n);
 
 describe('ola 26 · tecnologías de los proyectos (v2.1, con los cambios de la v3)', () => {
-  it('el JSON valida y cada proyecto lleva sus tecnologías; el calendario por semanas sigue en 221 (v3: P0 de 1 semana, sumas y ventanas más largas)', () => {
+  it('el JSON valida y cada proyecto lleva sus tecnologías; el calendario por semanas (sin horas) suma 243 con los bloques de la v7', () => {
     expect(validar(raw)).toEqual([]);
-    expect(totalSemanas(calendario())).toBe(221);
+    expect(totalSemanas(calendario())).toBe(243);
     expect(PLAN_EXT.bloques.filter((b) => b.tipo === 'proyecto').every((b) => Array.isArray(b.tecnologias))).toBe(true);
     // El stack ya no vive en data/plan.json: sale de las tecnologías.
     // (se lee del archivo: el módulo `plan` muta su copia al armar el calendario vivo).
@@ -27,7 +27,8 @@ describe('ola 26 · tecnologías de los proyectos (v2.1, con los cambios de la v
     expect(bloque('P0').base).toBe(1);
     expect(JSON.stringify(raw)).not.toMatch(/\bCompli?A\b|Complia Pro/i);
     expect(bloque('P0').tecnologias!.some((t) => t.marca === 'nueva')).toBe(false);
-    expect(bloque('P0').historial).toHaveLength(3);
+    expect(bloque('P0').historial).toHaveLength(4);
+    expect(bloque('P0').historial![3]).toMatchObject({ fecha: '2026-11-20', motivo: 'Roadmap v7' });
     expect(PLAN_EXT.backlog!.map((b) => b.nombre)).toEqual(expect.arrayContaining(['portfolio-mcp', 'Auditoría y refactor de una app generada con IA', 'RAG para negocios (dominio de muestra)']));
   });
 
@@ -40,7 +41,8 @@ describe('ola 26 · tecnologías de los proyectos (v2.1, con los cambios de la v
     expect(bloque('P1').extraPlataforma).toBe(0);
     expect(bloque('P1').ficha!.plataforma).toMatch(/Semana de sumas/);
     expect(bloque('P1').ficha!.tecnologiaNueva).toBe('LangGraph (agente analista con herramientas)');
-    expect(bloque('P1').recortarPrimero).toEqual(['Conector a una API de terceros en sandbox']);
+    // v7: ya no hay lista de recortes (se mueven fechas, no se recorta profundidad).
+    expect(bloque('P1').recortarPrimero).toBeUndefined();
   });
 
   it('P2: .NET con FHIR es la nueva, suma Azure y accesibilidad; la app de prueba va a la Semana de sumas; vLLM y LoRA ya no está; el gateway en Go sigue', () => {
@@ -49,7 +51,8 @@ describe('ola 26 · tecnologías de los proyectos (v2.1, con los cambios de la v
     expect(nombres('P2').some((n) => /TestFlight/.test(n))).toBe(false);
     expect(bloque('P2').extraPlataforma).toBe(0);
     expect(nombres('P2').some((n) => /vLLM|LoRA/.test(n))).toBe(false);
-    expect(bloque('P2').recortarPrimero).toEqual(['Revisión de accesibilidad']);
+    expect(bloque('P2').recortarPrimero).toBeUndefined();
+    expect(bloque('P2').historial!.at(-1)).toMatchObject({ cambio: 'Ya no tiene lista de recortes: si una versión se atrasa, se mueven fechas' });
   });
 
   it('P3: GraphQL opcional; Rails es la nueva y el resto queda igual', () => {
@@ -70,14 +73,14 @@ describe('ola 26 · tecnologías de los proyectos (v2.1, con los cambios de la v
     expect(bloque('P8').ficha!.tecnologiaNueva).toBe('garak y PyRIT (si se confirma el reemplazo)');
   });
 
-  it('los proyectos sin cambios (P4, P6, P7, P9, P10) y las etapas 2, 3 y 4 no tienen historial ni marcas movidas', () => {
-    for (const id of ['P4', 'P6', 'P7', 'P9', 'P10']) expect(bloque(id).historial).toBeUndefined();
-    for (const b of PLAN_EXT.bloques.filter((x) => x.etapa > 1 && x.tipo === 'proyecto')) {
-      expect(b.historial).toBeUndefined();
-      expect(b.tecnologias!.some((t) => t.marca === 'movida')).toBe(false);
-    }
-    expect(PLAN_EXT.bloques.filter((b) => b.historial).map((b) => b.id)).toEqual(['P0', 'P1', 'P2', 'P3', 'P5', 'P8']);
-    for (const b of PLAN_EXT.bloques.filter((x) => x.historial)) for (const h of b.historial!) expect(h).toMatchObject({ fecha: '2026-11-18' });
+  it('los cambios de la v2.1 siguen en P0, P1, P2, P3, P5 y P8; la v7 suma a cada proyecto su nombre y sus horas; las etapas 2 a 4 no tienen movidas', () => {
+    const v21 = (id: string) => (bloque(id).historial ?? []).filter((h) => h.fecha === '2026-11-18');
+    expect(PLAN_EXT.bloques.filter((b) => v21(b.id).length).map((b) => b.id)).toEqual(['P0', 'P1', 'P2', 'P3', 'P5', 'P8']);
+    for (const b of PLAN_EXT.bloques.filter((x) => x.etapa > 1 && x.tipo === 'proyecto')) expect(b.tecnologias!.some((t) => t.marca === 'movida')).toBe(false);
+    // Lo que no es de la v2.1 es de la v7 (20 nov 2026).
+    for (const b of PLAN_EXT.bloques.filter((x) => x.historial)) for (const h of b.historial!) expect(['2026-11-18', '2026-11-20']).toContain(h.fecha);
+    expect(bloque('P1').historial!.find((h) => h.motivo === 'Roadmap v7')!.cambio).toBe('Pasa a llamarse PetrIA (antes Faro v1 · petróleo); horas: antes 122 h, ahora ≈ 304 h');
+    expect(bloque('A7').historial).toEqual([{ fecha: '2026-11-20', cambio: 'horas: antes 196 h, ahora ≈ 265 h', motivo: 'Roadmap v7' }]);
   });
 
   it('descartado por ahora: Django, Supabase, CRM/ERP y APIs de bolsa, con motivo, y no entran a ningún proyecto', () => {

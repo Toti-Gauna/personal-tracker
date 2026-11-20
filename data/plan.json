@@ -7,7 +7,7 @@
    "id": "programacion",
    "nombre": "Programación",
    "color": "ing",
-   "contiene": "10 proyectos + 3 certificaciones (ML, DevSecOps, cloud)"
+   "contiene": "Proyectos del roadmap v7 y 13 certificaciones (IA, cloud, seguridad, Kubernetes y GitHub)"
   },
   {
    "id": "matematica",
@@ -74,9 +74,9 @@
     "desde": 1,
     "hasta": 2,
     "tipo": "proyecto",
-    "nombre": "Consolidación",
-    "que": "Portfolio hub, mapa de proyectos en 3D, Trazo como caso, RAG para negocios con un dominio de muestra, auditoría y refactor de una app generada con IA, 3 automatizaciones, portfolio-mcp v0 y tráiler",
-    "perfil": "Sr Full-stack con IA aplicada",
+    "nombre": "Constelación",
+    "que": "Portfolio como mapa 3D de proyectos; la v1 (mapa 3D, Trazo como caso, validador, shell con Module Federation) la arman los agentes",
+    "perfil": "Sr Full-stack → AI Engineer (RAG multifuente y agentes)",
     "meta": 2,
     "tope": 3
    },
@@ -85,12 +85,11 @@
     "desde": 3,
     "hasta": 5,
     "tipo": "proyecto",
-    "nombre": "Faro",
-    "version": "v1",
+    "nombre": "PetrIA",
     "industria": "petróleo",
-    "producto": "faro",
-    "que": "API en Spring Boot y servicio RAG en Python sobre normativa de operadoras, con cita exacta, tasa de error medida, agente analista con LangGraph, evals, cola asíncrona para la ingesta, MCP y visor 3D de la instalación",
-    "perfil": "Full-stack AI Engineer",
+    "producto": "petria",
+    "que": "Mapa mundial real con los pozos de Vaca Muerta y las zonas de mayor productividad esperada. Valor y declinación de cada pozo, y lector de partes viejos. Asistente por texto, voz, WhatsApp y teléfono que cita el dato oficial. Uso y costo medidos por empresa",
+    "perfil": "Full-stack AI Engineer (energía)",
     "meta": 3,
     "tope": 4
    },
@@ -99,10 +98,10 @@
     "desde": 6,
     "hasta": 8,
     "tipo": "proyecto",
-    "nombre": "Escudo",
+    "nombre": "VitalIA",
     "industria": "medicina",
-    "que": "Gateway en Go que protege datos de pacientes, con acceso por rol, auditoría, modelo local opcional y banco de ataques",
-    "perfil": "AI Engineer con seguridad",
+    "que": "brechas de cuidado y problemas de medicación con evidencia; traductor de sistemas viejos a FHIR; monitoreo remoto; dictado a nota",
+    "perfil": "AI Engineer en salud (.NET, Azure, seguridad)",
     "meta": 3,
     "tope": 4
    },
@@ -120,12 +119,11 @@
     "desde": 11,
     "hasta": 13,
     "tipo": "proyecto",
-    "nombre": "Surco",
-    "version": "v1",
+    "nombre": "AgrIA",
     "industria": "agro",
-    "producto": "surco",
-    "que": "Predicción de rinde por lote con rango de confianza y visor 3D del terreno",
-    "perfil": "Applied ML Engineer",
+    "producto": "agria",
+    "que": "rinde por departamento con rango de confianza, margen bruto con incertidumbre, atención por WhatsApp con audio",
+    "perfil": "Applied ML Engineer (agro)",
     "meta": 3,
     "tope": 4
    },
@@ -145,11 +143,10 @@
     "desde": 16,
     "hasta": 19,
     "tipo": "proyecto",
-    "nombre": "Estación",
-    "version": "v1",
+    "nombre": "Antena",
     "industria": "espacio",
-    "producto": "estacion",
-    "que": "Ingesta y decodificación de telemetría satelital en Rust, visor 3D de pasadas",
+    "producto": "antena",
+    "que": "sigue satélites reales (incluidos los argentinos), decodifica telemetría, planifica pasadas, calcula enlaces",
     "perfil": "Systems / Ground Software Engineer",
     "meta": 4,
     "tope": 5
@@ -159,12 +156,11 @@
     "desde": 20,
     "hasta": 21,
     "tipo": "proyecto",
-    "nombre": "Faro",
-    "version": "v2",
+    "nombre": "PetrIA Guard",
     "industria": "petróleo",
-    "producto": "faro",
-    "que": "Plataforma endurecida: Kubernetes, GitOps, firmas y SBOM, IAM con mínimo privilegio (OIDC), detección de intrusos sobre logs mapeada a MITRE ATT&CK",
-    "perfil": "DevSecOps / Cloud Security Engineer",
+    "producto": "petria",
+    "que": "gemelo digital de una batería de tanques en tiempo real; detecta ataques al SCADA por física y pérdidas en ductos; escala alarmas por todos los canales",
+    "perfil": "DevSecOps / OT Security Engineer",
     "meta": 2,
     "tope": 3
    },
@@ -193,12 +189,11 @@
     "desde": 28,
     "hasta": 31,
     "tipo": "proyecto",
-    "nombre": "Lupa",
-    "version": "v1",
+    "nombre": "AeroScan",
     "industria": "aeroespacial",
-    "producto": "lupa",
-    "que": "Inspección de superficies de aeronaves con imágenes sintéticas 3D; autograd desde cero",
-    "perfil": "ML Engineer (deep learning)",
+    "producto": "aeroscan",
+    "que": "inspecciona superficies de aviones, genera la orden de trabajo, consulta manuales, registra daños en 3D por matrícula",
+    "perfil": "ML Engineer (computer vision)",
     "meta": 4,
     "tope": 5
    },
@@ -207,11 +202,10 @@
     "desde": 32,
     "hasta": 33,
     "tipo": "proyecto",
-    "nombre": "Surco",
-    "version": "v2",
+    "nombre": "AgrIA Sat",
     "industria": "agro",
-    "producto": "surco",
-    "que": "MLOps: Sentinel-2, reentrenamiento por campaña, drift y mapa 3D",
+    "producto": "agria",
+    "que": "monitorea lotes con Sentinel-2, alerta estrés, genera dosis variable, estima pérdidas en USD",
     "perfil": "ML / MLOps Engineer",
     "meta": 2,
     "tope": 3
@@ -241,9 +235,9 @@
     "desde": 38,
     "hasta": 39,
     "tipo": "proyecto",
-    "nombre": "Núcleo",
+    "nombre": "AdversarIA",
     "industria": "nuclear",
-    "que": "Gemelo digital educativo de un reactor (cinética puntual), anomalías en sensores y red team",
+    "que": "escanea agentes de chat y voz propios o autorizados, los ataca y compara defensas",
     "perfil": "AI Security Engineer",
     "meta": 2,
     "tope": 3
@@ -253,11 +247,10 @@
     "desde": 40,
     "hasta": 42,
     "tipo": "proyecto",
-    "nombre": "Lupa",
-    "version": "v2",
+    "nombre": "AeroScan Edge",
     "industria": "aeroespacial",
-    "producto": "lupa",
-    "que": "El mismo modelo en el borde (C++ y Jetson), en un dron dentro de un simulador 3D",
+    "producto": "aeroscan",
+    "que": "inspección offline en el hangar, walkaround guiado por voz, sincronización",
     "perfil": "Edge AI Engineer",
     "meta": 3,
     "tope": 4
@@ -267,11 +260,10 @@
     "desde": 43,
     "hasta": 46,
     "tipo": "proyecto",
-    "nombre": "Estación",
-    "version": "v2",
+    "nombre": "Antena Ops",
     "industria": "espacio",
-    "producto": "estacion",
-    "que": "Anomalías en telemetría con datos de NASA (SMAP y MSL) y plataforma multiempresa con SLO",
+    "producto": "antena",
+    "que": "centro de control de todos tus productos: anomalías en telemetría de la NASA, agente SRE, status page, costos en vivo, Jarvis central",
     "perfil": "Senior ML + DevSecOps + Cloud",
     "meta": 4,
     "tope": 5
@@ -281,8 +273,8 @@
     "desde": 47,
     "hasta": 52,
     "tipo": "colchon",
-    "nombre": "Colchón",
-    "que": "Atrasos de las puertas de matemática y entrevistas senior",
+    "nombre": "Consolidación",
+    "que": "Cierre de la etapa 1: absorbe los atrasos de las puertas de matemática y prepara las entrevistas senior",
     "meta": 6
    }
   ],
@@ -660,7 +652,7 @@
    },
    {
     "rama": "programacion",
-    "texto": "11 proyectos (P0–P10), AWS SAA, Security+ y AWS ML"
+    "texto": "PetrIA, VitalIA, AgrIA, Antena, PetrIA Guard y AeroScan; certificaciones 1 a 3 (Claude + GitHub Foundations, AWS SAA y Security+)"
    },
    {
     "rama": "matematica",
@@ -826,7 +818,7 @@
    "metas": [
     {
      "rama": "programacion",
-     "texto": "P0 cerrado y Faro v1 con backend, RAG y despliegue en staging"
+     "texto": "P0 v1 con los agentes y PetrIA 1.0 y 1.1 desplegadas (MVP y producto)"
     },
     {
      "rama": "matematica",
@@ -888,7 +880,7 @@
       6,
       7
      ],
-     "texto": "Portfolio con 3 casos"
+     "texto": "PetrIA 1.0 desde el jueves 19: ingesta y detector P10/P50/P90"
     },
     {
      "rama": "matematica",

@@ -3,6 +3,7 @@
  * editar); mes y semana se generan desde el plan para cualquier fecha y el usuario los confirma,
  * los cambia o los borra. Nada se carga 18 meses antes: todo se calcula al abrir el período.
  */
+import { HORAS_ANTES_TRABAJO, horasPorSemana } from './capacidad';
 import { IDIOMAS, calendarioIdiomas } from './idiomas';
 import { clippingActivo } from './clipping-activo';
 import { mesClipEn, mesDe as mesClipDe, planEntre } from './clipping';
@@ -151,7 +152,7 @@ export interface OpcionesPlan {
 
 /**
  * Los contadores semanales del modo intensivo (v3, ola 27): 25 postulaciones y 25 mensajes (5 por día de lunes a
- * viernes, nada el finde), y las horas de las rutinas: programación 53, matemática 7, idiomas 7, búsqueda 5 y
+ * viernes, nada el finde), y las horas de las rutinas: programación 56 con la v7 (53 sin ella), matemática 7, idiomas 7, búsqueda 5 y
  * 5 entrenamientos. Los 2 posts de LinkedIn van en inglés dentro del bloque de idiomas. El clipping está pausado:
  * sus metas (clips y horas) solo salen cuando le asignás un bloque.
  */
@@ -160,7 +161,10 @@ export const SEMANA_INTENSIVA: (Omit<MetaGenerada, 'id' | 'origen'> & { clave: s
   { rama: 'trabajo', texto: 'Mensajes directos', meta: 25, clave: 'mensajes', nota: '5 por día, de lunes a viernes' },
   { rama: 'trabajo', texto: 'Horas de búsqueda', meta: 5, unidad: 'h', clave: 'horas-busqueda' },
   { rama: 'trabajo', texto: 'Posts de LinkedIn en inglés', meta: 2, clave: 'posts', nota: 'dentro del bloque de idiomas' },
-  { rama: 'programacion', texto: 'Horas de programación', meta: 53, unidad: 'h', clave: 'horas-prog' },
+  // v7: PetrIA a ~8 h por día (56 por semana); la rutina intensiva da 53 y las 3 que faltan salen de un bloque a definir (ola 31).
+  HORAS_ANTES_TRABAJO != null
+    ? { rama: 'programacion', texto: 'Horas de programación', meta: Math.round(HORAS_ANTES_TRABAJO * 7), unidad: 'h', clave: 'horas-prog', nota: `${String(HORAS_ANTES_TRABAJO).replace('.', ',')} h por día (roadmap v7); la rutina da ${horasPorSemana('busqueda-intensiva')}, el resto sale de un bloque a definir` }
+    : { rama: 'programacion', texto: 'Horas de programación', meta: 53, unidad: 'h', clave: 'horas-prog' },
   { rama: 'matematica', texto: 'Horas de matemática', meta: 7, unidad: 'h', clave: 'horas-mate' },
   { rama: 'ingles', texto: 'Horas de idiomas', meta: 7, unidad: 'h', clave: 'horas-ingles' },
   // Ola 18/21: la entrevista se practica en el bloque de búsqueda laboral.
@@ -325,7 +329,7 @@ export function metasMesGeneradas(fecha: string, t0 = T0_PLAN, study?: StudyStat
   return sinPausa(out, a, op.pausa);
 }
 
-/** Resumen de lo que el plan propone para el mes siguiente ("Escudo, T+2, Aritmética 7 a 9"). */
+/** Resumen de lo que el plan propone para el mes siguiente ("VitalIA, T+2, Aritmética 7 a 9"). */
 export function resumenMes(fecha: string, t0 = T0_PLAN, study?: StudyState) {
   const ms = metasMesGeneradas(fecha, t0, study).filter((m) => m.origen === 'plan');
   const corto = (m: MetaGenerada) => m.texto.replace(/^.* · /, '').replace(/ con (tráiler|test).*$/, '').replace(/^Examen de .*$/, '').replace(/ cap\. /, ' ');
@@ -335,7 +339,7 @@ export function resumenMes(fecha: string, t0 = T0_PLAN, study?: StudyState) {
 
 // ——— Bimestre ———
 
-/** Letra de cada semana del bimestre en la rama programación ("P0", "F", "—", "W"). */
+/** Letra de cada semana del bimestre en la rama programación ("P0", "P1", "—", "W"). */
 export function letraTramo(t: Tramo) {
   if (t.tipo === 'descanso') return '—';
   if (t.tipo === 'ventana') return 'W';
@@ -343,10 +347,10 @@ export function letraTramo(t: Tramo) {
   if (t.tipo === 'cert') return 'C';
   if (t.tipo === 'colchon') return '·';
   if (t.tipo === 'cierre') return 'T';
-  // P1 a P10 van con la inicial del producto (F, E, S…); P0 y los de la etapa 2 (S1 a S3), con su id.
-  return t.id === 'P0' || !t.id.startsWith('P') ? t.id : t.nombre[0];
+  // Los proyectos van con su id (P1, P2…): con los nombres de la v7 las iniciales se repiten (PetrIA y PetrIA Guard, AgrIA y Antena).
+  return t.id;
 }
-const nombreLeyenda = (t: Tramo) => (t.pausa ? 'pausa de fin de año' : t.tipo === 'descanso' ? 'descanso' : t.id === 'P0' ? 'consolidación' : t.tipo === 'cert' ? t.corto ?? t.nombre : t.tipo === 'ventana' ? t.id : t.tipo === 'colchon' ? 'colchón' : t.tipo === 'cierre' ? 'cierre de T+18' : nombreTramo(t, false));
+const nombreLeyenda = (t: Tramo) => (t.pausa ? 'pausa de fin de año' : t.tipo === 'descanso' ? 'descanso' : t.tipo === 'cert' ? t.corto ?? t.nombre : t.tipo === 'ventana' ? t.id : t.tipo === 'colchon' ? t.nombre.toLowerCase() : t.tipo === 'cierre' ? 'cierre de T+18' : nombreTramo(t, false));
 
 export function semanasDelBimestre(n: number, t0 = T0_PLAN) {
   const desde = (n - 1) * SEMANAS_BIM + 1;

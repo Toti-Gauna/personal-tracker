@@ -99,7 +99,8 @@ describe('pausas en metas, cortes y avisos', () => {
     const { metasSemanaGeneradas, metasMesGeneradas } = await import('./metas-plan');
     const s = metasSemanaGeneradas('2026-11-23', '2026-11-16', { intensiva: true, pausa });
     expect(s.some((m) => m.rama === 'handyx')).toBe(false);
-    expect(s.find((m) => m.clave === 'horas-prog')?.meta).toBe(53);
+    // v7: 8 h por día de PetrIA (56); la rutina da 53 y la nota lo dice.
+    expect(s.find((m) => m.clave === 'horas-prog')).toMatchObject({ meta: 56, nota: '8 h por día (roadmap v7); la rutina da 53, el resto sale de un bloque a definir' });
     expect(s.find((m) => m.clave === 'postulaciones')?.meta).toBe(25);
     expect(s.find((m) => m.clave === 'horas-clipping')).toBeUndefined();
     expect(s.find((m) => m.clave === 'clips')).toBeUndefined();
