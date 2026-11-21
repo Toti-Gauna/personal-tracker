@@ -89,14 +89,16 @@ describe('integración con el plan T+18', () => {
     expect(PLAN.hitos.find((h) => h.id === 'T+18')!.titulo).not.toMatch(/examen C1/);
   });
 
-  it('el bloque de idiomas de Hoy es inglés técnico y de entrevista, con las tareas de la rutina', () => {
+  it('el bloque de idiomas de Hoy es inglés (y aparte, el inglés hablado), con las tareas de la rutina', () => {
     vi.useFakeTimers({ toFake: ['Date'] });
     vi.setSystemTime(new Date(2026, 10, 17, 7, 0));
     resetState();
     register('Toti', 'Abi', T0);
     startDay('completo', '04:00', '2026-11-17');
     const b = getState().days['2026-11-17'].blocks.find((x) => x.key === 'ingles')!;
-    expect(tituloDeBloque(b, '2026-11-17')).toBe('Inglés técnico y de entrevista');
+    // v7: "Inglés" (16:00 a 16:30); el inglés hablado va aparte, de 16:30 a 17:00.
+    expect(tituloDeBloque(b, '2026-11-17')).toBe('Inglés');
+    expect(getState().days['2026-11-17'].blocks.find((x) => x.key === 'ingles-hablado')).toMatchObject({ start: '16:30', min: 30 });
     expect(b.tasks.map((t) => t.t)).toEqual(['Explicar un proyecto en voz alta (inglés técnico)', 'Práctica de código en vivo en inglés', 'Preguntas de entrevista en inglés']);
     // La fase del roadmap sigue disponible en Estudio · Idiomas.
     expect(faseIdiomaEn('2026-11-17').tareas.length).toBeGreaterThan(0);

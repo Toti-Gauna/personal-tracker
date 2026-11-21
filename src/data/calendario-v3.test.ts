@@ -11,8 +11,8 @@ const cal = (inicioTrabajo: string, o: Parameters<typeof calendario>[1] = {}) =>
 const fechas = (c: ReturnType<typeof cal>) => Object.fromEntries(c.map((b) => [b.id, [b.inicio, b.fin]]));
 
 describe('ola 27 y 29 · calendario por horas (roadmap v7)', () => {
-  it('horas por semana de cada rutina: 53 en el modo intensivo y 29 con trabajo', () => {
-    expect(horasPorSemana('busqueda-intensiva')).toBe(53);
+  it('horas por semana de cada rutina: 50 en el modo intensivo (v7) y 29 con trabajo', () => {
+    expect(horasPorSemana('busqueda-intensiva')).toBe(50);
     expect(horasPorSemana('con-trabajo')).toBe(29);
   });
 
@@ -27,11 +27,12 @@ describe('ola 27 y 29 · calendario por horas (roadmap v7)', () => {
     expect(horasDelDia('2027-12-21', cfg)).toBe(0);
     expect(horasDelDia('2027-12-21', { ...cfg, pausas: false })).toBe(3);
     expect(horasDelDia('2031-12-23', cfg)).toBe(3); // 2031 tampoco
-    // Sin horas por día (calendario viejo): la semana de arranque a 3,5 h y el modo intensivo a 7 y 9.
+    // Sin horas por día (calendario viejo): la semana de arranque a 3,5 h y la rutina intensiva (7 h de lunes a viernes, 7 el sábado y 8 el domingo).
     const viejo = { ...cfg, antesTrabajo: null, aniosPausa: undefined };
     expect(horasDelDia('2026-11-18', viejo)).toBe(3.5);
     expect(horasDelDia('2026-11-25', viejo)).toBe(7);
-    expect(horasDelDia('2026-11-28', viejo)).toBe(9);
+    expect(horasDelDia('2026-11-28', viejo)).toBe(7);
+    expect(horasDelDia('2026-11-29', viejo)).toBe(8);
   });
 
   it('roadmap v7: PetrIA (304 h) a 8 h por día termina el 26 dic, 10 días antes del 5 ene que estima el roadmap', () => {

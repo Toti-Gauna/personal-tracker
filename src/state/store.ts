@@ -1,6 +1,8 @@
 import { puertaBloqueando } from '../data/puertas';
 import { T0_PLAN } from '../data/plan';
 import { INICIO_TRABAJO_DIAS } from '../data/capacidad';
+import { sprintActivo } from '../data/algoritmos';
+import { ACADEMY_HASTA } from '../data/routines';
 import { aplicarIntensiva } from '../data/busqueda';
 import { useSyncExternalStore } from 'react';
 import { DEFAULT_BLOCK_PRESETS, DEFAULT_PRESETS } from '../data/defaults';
@@ -257,12 +259,21 @@ export function startDay(routine: RoutineId, wake: string, date = dateKey()) {
     const delProyecto = tareasDeBloque(s.plan.metasBloque?.[proyecto]);
     // Ola 19: el estiramiento de las 21:00 a 22:00 lleva los músculos de la rutina del día.
     const estirar = plannedFor(s.train, date, t0 ?? T0_PLAN).routine?.estiramiento?.musculos;
-    const blocks = buildBlocks(planDay(date, routine, wake, dayType, { ventana, entrevista, puerta, prepara, ...(cfg.horarioTrabajo ? { trabajo: cfg.horarioTrabajo } : {}), ...(cfg.bloquesPendientes ? { pendientes: cfg.bloquesPendientes } : {}) }), carry)
+    // Ola 31 (v7): Academy hasta el 22 dic, el sprint sin IA y las horas extra de PetrIA (solo antes del trabajo nuevo).
+    const antesDelTrabajo = date < inicioTrabajo(s.settings);
+    const sprint = sprintActivo(s.plan, date);
+    const v7 = {
+      ...(antesDelTrabajo && date <= ACADEMY_HASTA ? { academy: true } : {}),
+      ...(sprint ? { sprintSinIA: { dia: sprint.dia } } : {}),
+      ...(antesDelTrabajo && cfg.extraProyecto?.length ? { extraProyecto: cfg.extraProyecto } : {}),
+    };
+    const blocks = buildBlocks(planDay(date, routine, wake, dayType, { ventana, entrevista, puerta, prepara, ...(cfg.horarioTrabajo ? { trabajo: cfg.horarioTrabajo } : {}), ...(cfg.bloquesPendientes ? { pendientes: cfg.bloquesPendientes } : {}), ...v7 }), carry)
       .map((b) => (refs[b.key] ? { ...b, ...refs[b.key] } : b))
       .map((b) => (b.rama === 'programacion' && delProyecto.length ? { ...b, tasks: [...delProyecto.map((t) => ({ id: newId(), t: `${proyecto} · ${t}`, done: false })), ...b.tasks] } : b))
       .map((b) => (b.key === 'cierre' && estirar ? { ...b, tasks: b.tasks.map((x) => (x.t === 'Estirar' ? { ...x, t: `Estirar: ${estirar}` } : x)) } : b))
       // Ola 27: el domingo, el cierre suma la revisión semanal de 30 min y la mini-tesis de una página.
-      .map((b) => (b.key === 'cierre' && isoDay(date) === 7 && /^(busqueda-intensiva|con-trabajo)/.test(dayType) ? { ...b, tasks: [...b.tasks, ...['Revisión semanal (30 min)', 'Mini-tesis de una página'].map((t) => ({ id: newId(), t, done: false }))] } : b))
+      // (el domingo del modo intensivo v7 ya tiene su bloque de revisión semanal).
+      .map((b) => (b.key === 'cierre' && isoDay(date) === 7 && /^(busqueda-intensiva|con-trabajo)/.test(dayType) && dayType !== 'busqueda-intensiva-domingo' ? { ...b, tasks: [...b.tasks, ...['Revisión semanal (30 min)', 'Mini-tesis de una página'].map((t) => ({ id: newId(), t, done: false }))] } : b))
       // Ola 23: de lunes a viernes, el clipping trae las tareas del mes del roadmap; el finde, pipeline y prospección.
       .map((b) => (b.key === 'clipping' && isoDay(date) <= 5 && mesClipDe(date) >= 1 && mesClipDe(date) <= 12 ? { ...b, tasks: [...mesClipEn(date).tareas.map((t) => ({ id: newId(), t, done: false })), ...b.tasks.filter((x) => (carry.clipping ?? []).includes(x.t))] } : b));
     const day: DayLog = { date, wake, routine, dayType, ...(ventana ? { ventana } : {}), blocks, notes: [], focus: [] };

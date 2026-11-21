@@ -15,7 +15,7 @@ import { renameBimester } from '../state/goals';
 import { setAreaName } from '../state/profile';
 import { toast } from '../ui/avisos';
 import { Plegable } from '../ui/Plegable';
-import { BloquesPendientes, FilasTrabajo } from './AjustesTrabajo';
+import { BloquesPendientes, FilaExtraPetria, FilasTrabajo } from './AjustesTrabajo';
 import '../styles/perfil.css';
 
 const TEMAS: [ThemePref, string][] = [['dark', 'Oscuro'], ['light', 'Claro'], ['system', 'Sistema']];
@@ -143,6 +143,7 @@ function PlanT18() {
         <ExtrasFeature t0={t0} />
         <CapasV2 />
         <FilasTrabajo />
+        <FilaExtraPetria />
         <li>
           <span><b>Día libre</b><small>{intensiva ? `Ninguno mientras dure la búsqueda intensiva; ${DIAS_LIBRE.find(([v]) => v === (cfg.previo?.diaLibre ?? null))?.[1].toLowerCase()} queda guardado` : 'Solo repasos de 20 min y entreno suave'}</small></span>
           <select className="campo-texto" disabled={intensiva} value={cfg.diaLibre ?? ''} onChange={(e) => setPlanSettings({ diaLibre: e.target.value ? Number(e.target.value) : null })} aria-label="Día libre">

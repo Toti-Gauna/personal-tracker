@@ -145,7 +145,8 @@ describe('de la ruta a tu día', () => {
     for (const t of math.tasks) marcarTarea(D, 'math', t.id);
     const s = getState();
     const p = progressMap(s.ruta.log);
-    expect(mejoraDia(s.days[D])).toBeCloseTo(1 / 11);
+    // v7: 14 metas en el día de lunes a viernes del modo intensivo.
+    expect(mejoraDia(s.days[D])).toBeCloseTo(1 / 14);
     expect(p['b1-conamat-arit-01']).toBe(0.5);
     expect(laneStatus(B1, 'math', D, p).done).toBe(antes.done + 0.5);
     const semana = weekPlan(D).plan.goals.find((g) => g.lane === 'math')!;

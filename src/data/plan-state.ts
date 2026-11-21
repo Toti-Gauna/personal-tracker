@@ -116,6 +116,22 @@ export interface PlanState {
   salida?: Record<string, number[]>;
   /** Ola 30 (v7): estado de cada versión de un proyecto (P1 → "1.0" → publicada y lo que sale con ella). */
   versiones?: Record<string, Record<string, EstadoVersion>>;
+  /** Ola 31 (v7): algorithm spots registrados (tema → cuándo, en qué proyecto y la pregunta de entrevista que responde). */
+  algoritmos?: Record<string, RegistroSpot>;
+  /** Ola 31: temas que sumaste (el roadmap dice 20 y la tabla trae 16). */
+  temasPropios?: { id: string; tema: string; proyectos: string[]; modo: 'con-ia' | 'sin-ia' }[];
+  /** Ola 31: sprints sin IA (14 días, 30 min por día) y los problemas resueltos por día. */
+  sprintsSinIA?: { inicio: string; cortado?: string }[];
+  problemasSinIA?: Record<string, number>;
+}
+
+/** Ola 31 · un algorithm spot plantado: cuándo, en qué proyecto, la pregunta de entrevista y si se validó. */
+export interface RegistroSpot {
+  fecha: string;
+  proyecto?: string;
+  pregunta?: string;
+  /** Con IA: validaste en voz alta complejidad, bordes y cambios. Sin IA: lo escribiste vos y pasan los tests. */
+  validado?: boolean;
 }
 
 /** Ola 30 · cada versión sale con notas de versión, un video demo de 30 s y el README actualizado. */
@@ -159,6 +175,11 @@ export interface PlanSettings {
   bloquesPendientes?: import('./routines').BloquesPendientes;
   /** La rutina y el día libre de antes de activar el modo, para volver exactamente a ellos. */
   previo?: { rutina: 'busqueda' | 'con-trabajo'; diaLibre: number | null };
+  /**
+   * Ola 31 (v7): bloques de la rutina intensiva que pasan a ser horas extra de proyecto hasta el trabajo nuevo (PetrIA a ~8 h por
+   * día: "+1,5–2 h en un bloque a definir"). Ids de la rutina ("ingles", "publicaciones", "cierre"…). Sin elegir: Trazo avisa lo que falta.
+   */
+  extraProyecto?: string[];
 }
 
 /** Pausas que abre la búsqueda intensiva. */

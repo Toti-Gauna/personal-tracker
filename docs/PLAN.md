@@ -1239,6 +1239,54 @@ Fuente: `docs/prompts/roadmap-completo-v7.md` (2026-11-20). Reglas: no se borra 
 
 **Pendiente:** los algorithm spots como tracker con el sprint sin IA y la rutina (ola 31); el hardware por fase y los contadores (ola 32).
 
+
+## 6 terdecies. Ola 31: la rutina del roadmap v7 y los algoritmos
+
+**Rutina intensiva v7** (`data/routines.json`)
+- **Lunes a viernes:**
+  - 4:00 despertar
+  - 4:30 matemática
+  - 5:30–8:00 proyecto
+  - 8:00 correr, ducha y Abi
+  - 9:30–11:30 trabajo
+  - 11:30–15:30 proyecto
+  - 15:30 Anthropic Academy (hasta el 22 dic; desde el 23 es proyecto)
+  - 16:00 inglés
+  - 16:30 inglés hablado
+  - 17:00 postulaciones
+  - 17:40 publicaciones
+  - 18:00 entreno
+  - 20:00 descanso
+  - 21:00 dormir
+- **Sábado:**
+  - Proyecto 5:30–9:00 y 9:30–13:00
+  - 13:00 demo
+  - 14:00 entrevista simulada
+  - 15:00 inglés
+  - 16:00 libre
+- **Domingo** (tipo nuevo `busqueda-intensiva-domingo`, con `soloDias: [7]`):
+  - Proyecto 5:30–9:00 y 9:30–14:00 (con PRs de open source)
+  - 14:00 revisión semanal
+  - 15:00 inglés
+  - 16:00 libre
+- Con trabajo nuevo sigue la rutina de la ola 27 (29 h por semana de proyecto, 2 h de matemática), como dice el roadmap.
+- Horas de proyecto por semana: 50 (47,5 mientras dura Academy). PetrIA pide ~8 h por día (56).
+
+**Las horas extra de PetrIA (el "bloque a definir")**
+- No se eligen solas. En Ajustes → Plan T+18 → *Horas extra de PetrIA* elegís qué bloques pasan a proyecto hasta el trabajo nuevo.
+- Se pueden elegir inglés, inglés hablado, postulaciones, publicaciones, descanso, demo, entrevista simulada y revisión. Nunca sueño, entreno, Abi, trabajo ni matemática.
+- Mientras falten horas, Hoy lo avisa con la cuenta.
+
+**Sprint sin IA y algoritmos** (`#/estudio/prog/algoritmos`)
+- El sprint dura 14 días. Los primeros 30 min del proyecto de la mañana pasan a *Algoritmos sin IA · día n de 14*, también con trabajo.
+- Contador de problemas resueltos contra ≈ 100. Se mantiene la meta de la v5, solo para los sprints.
+- Los 16 temas de la tabla del roadmap, separando "Sorting + two pointers" y "BFS, DFS, orden topológico", cada uno con su proyecto y su modo (con o sin IA).
+- Registrar un spot guarda la fecha, el proyecto y la pregunta de entrevista que responde, más si lo validaste. Arma la línea para `docs/learning.md`.
+- El roadmap dice 20 temas: los 4 que faltan se suman a mano.
+- Con una entrevista en 48 h, la preparación toma el último bloque de proyecto de una hora o más (no la media hora de las 15:30).
+
+**Pendiente (ola 32):** revisión semanal en Trazo, hardware por fase con fechas límite, contadores de publicaciones y entrevistas simuladas, y la alerta de Security+.
+
 ---
 
 ## 7. Registro de cambios

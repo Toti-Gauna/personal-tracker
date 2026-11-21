@@ -1,6 +1,6 @@
 /** Acciones del plan T+18 sobre el estado: contadores, respuestas, Handyx, eventos y más. */
 import { PLAN, semanaDelPlan, type Capa, type Entrevista, type EventoRama, type MetaGenerada, type Postulacion } from '../data/plan';
-import { proyectoVacio, type Evidencia, type HandyxSemana, type Importacion, type PlanSettings, type PlanState, type TipoError } from '../data/plan-state';
+import { proyectoVacio, type Evidencia, type HandyxSemana, type Importacion, type PlanSettings, type PlanState, type RegistroSpot, type TipoError } from '../data/plan-state';
 import { newId } from '../data/schedule';
 import type { Vacante } from '../data/demanda';
 import { addDays, parseDate } from '../data/time';
@@ -118,6 +118,53 @@ export function publicarVersion(proyecto: string, version: string, fecha: string
     if (fecha) cur.publicada = fecha;
     else delete cur.publicada;
     return { ...p, versiones: { ...(p.versiones ?? {}), [proyecto]: { ...(p.versiones?.[proyecto] ?? {}), [version]: cur } } };
+  });
+}
+
+/** Ola 31 · registra (o actualiza) un algorithm spot plantado. `null` lo borra. */
+export function registrarSpot(tema: string, r: RegistroSpot | null) {
+  update((p) => {
+    const algoritmos = { ...(p.algoritmos ?? {}) };
+    if (r) algoritmos[tema] = r;
+    else delete algoritmos[tema];
+    return { ...p, algoritmos };
+  });
+}
+
+/** Ola 31 · suma un tema propio (el roadmap dice 20 y la tabla trae 16). */
+export function agregarTemaAlgoritmo(t: { tema: string; proyectos: string[]; modo: 'con-ia' | 'sin-ia' }) {
+  update((p) => ({ ...p, temasPropios: [...(p.temasPropios ?? []), { ...t, id: `propio-${newId()}` }] }));
+}
+
+export function borrarTemaAlgoritmo(id: string) {
+  update((p) => {
+    const { [id]: _, ...algoritmos } = p.algoritmos ?? {};
+    return { ...p, temasPropios: (p.temasPropios ?? []).filter((t) => t.id !== id), algoritmos };
+  });
+}
+
+/** Ola 31 · arranca un sprint sin IA (14 días desde `fecha`) o corta el que está en curso. */
+export function iniciarSprintSinIA(fecha: string) {
+  update((p) => ({ ...p, sprintsSinIA: [...(p.sprintsSinIA ?? []), { inicio: fecha }] }));
+}
+export function cortarSprintSinIA(fecha: string) {
+  update((p) => {
+    const xs = [...(p.sprintsSinIA ?? [])];
+    const i = xs.length - 1;
+    if (i < 0) return p;
+    // Si arrancó hoy, se borra; si no, termina ayer.
+    if (xs[i].inicio >= fecha) xs.pop();
+    else xs[i] = { ...xs[i], cortado: addDays(fecha, -1) };
+    return { ...p, sprintsSinIA: xs };
+  });
+}
+
+/** Ola 31 · suma (o resta) problemas sin IA resueltos en un día. */
+export function sumarProblemas(fecha: string, n: number) {
+  update((p) => {
+    const v = Math.max(0, (p.problemasSinIA?.[fecha] ?? 0) + n);
+    const { [fecha]: _, ...resto } = p.problemasSinIA ?? {};
+    return { ...p, problemasSinIA: v ? { ...resto, [fecha]: v } : resto };
   });
 }
 

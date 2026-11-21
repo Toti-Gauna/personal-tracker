@@ -1,0 +1,30 @@
+{
+ "version": 1,
+ "fuente": "docs/prompts/roadmap-completo-v7.md · Algoritmos plantados",
+ "temasRoadmap": 20,
+ "metaProblemas": 100,
+ "sprint": { "dias": 14, "minPorDia": 30, "cuando": "Antes de cada ciclo de entrevistas técnicas" },
+ "modos": {
+  "con-ia": "Claude propone; vos validás en voz alta la complejidad, los casos borde y los cambios.",
+  "sin-ia": "Recibís el problema, la complejidad esperada y 2–3 tests; lo escribís vos y Claude revisa."
+ },
+ "registro": "Cada spot se registra en docs/learning.md, con la pregunta de entrevista que responde.",
+ "temas": [
+  { "id": "hash-maps", "tema": "Hash maps", "proyectos": ["P1"], "modo": "sin-ia", "donde": "índice de pozos" },
+  { "id": "sliding-window", "tema": "Sliding window", "proyectos": ["P1"], "modo": "sin-ia" },
+  { "id": "binary-search", "tema": "Binary search", "proyectos": ["P1"], "modo": "sin-ia", "donde": "sobre series" },
+  { "id": "kd-tree", "tema": "k-d tree (árboles y recursión)", "proyectos": ["P1"], "modo": "con-ia" },
+  { "id": "lru", "tema": "LRU (hash map + lista doble)", "proyectos": ["P1"], "modo": "con-ia", "donde": "caché semántica" },
+  { "id": "stack", "tema": "Stack", "proyectos": ["P1"], "modo": "con-ia", "donde": "deshacer zonas" },
+  { "id": "queue", "tema": "Queue (token bucket)", "proyectos": ["P1"], "modo": "con-ia" },
+  { "id": "sorting", "tema": "Sorting", "proyectos": ["P2"], "modo": "sin-ia" },
+  { "id": "two-pointers", "tema": "Two pointers", "proyectos": ["P2"], "modo": "sin-ia" },
+  { "id": "heap", "tema": "Heap", "proyectos": ["P2", "P5", "Q4"], "modo": "sin-ia" },
+  { "id": "dp", "tema": "Programación dinámica", "proyectos": ["P3"], "modo": "con-ia", "donde": "presupuesto de fertilizante" },
+  { "id": "backtracking", "tema": "Backtracking", "proyectos": ["P4"], "modo": "con-ia", "donde": "planificación de pasadas (contra programación dinámica)" },
+  { "id": "dijkstra", "tema": "Dijkstra", "proyectos": ["P5"], "modo": "con-ia" },
+  { "id": "bfs", "tema": "BFS", "proyectos": ["P10"], "modo": "sin-ia" },
+  { "id": "dfs", "tema": "DFS", "proyectos": ["P10"], "modo": "sin-ia" },
+  { "id": "topologico", "tema": "Orden topológico", "proyectos": ["P10"], "modo": "sin-ia" }
+ ]
+}

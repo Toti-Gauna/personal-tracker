@@ -552,7 +552,7 @@
    ]
   },
   "busqueda-intensiva": {
-   "label": "Lunes a viernes · modo intensivo",
+   "label": "Lunes a viernes · modo intensivo (roadmap v7)",
    "reemplaza": "weekday",
    "modo": "busqueda-intensiva",
    "wake": {
@@ -593,10 +593,10 @@
     },
     {
      "id": "prog",
-     "label": "Programación · CV y portfolio (P0)",
+     "label": "Proyecto",
      "short": "programación",
      "start": "05:30",
-     "end": "08:30",
+     "end": "08:00",
      "area": "ing",
      "kind": "flex",
      "focus": true,
@@ -609,10 +609,10 @@
     },
     {
      "id": "abi",
-     "label": "Acompañar a Abi y correr",
+     "label": "Correr, ducha y Abi",
      "short": "Abi",
-     "start": "08:30",
-     "end": "10:00",
+     "start": "08:00",
+     "end": "09:30",
      "area": "salud",
      "kind": "fixed",
      "focus": false,
@@ -626,8 +626,8 @@
      "id": "trabajo",
      "label": "Trabajo actual",
      "short": "el trabajo",
-     "start": "10:00",
-     "end": "12:00",
+     "start": "09:30",
+     "end": "11:30",
      "area": "economia",
      "kind": "fixed",
      "focus": true,
@@ -637,10 +637,10 @@
     },
     {
      "id": "prog-tarde",
-     "label": "Programación",
+     "label": "Proyecto",
      "short": "programación",
-     "start": "12:00",
-     "end": "16:00",
+     "start": "11:30",
+     "end": "15:30",
      "area": "ing",
      "kind": "fixed",
      "focus": true,
@@ -652,11 +652,25 @@
      ]
     },
     {
+     "id": "prog-academy",
+     "label": "Proyecto",
+     "short": "proyecto",
+     "start": "15:30",
+     "end": "16:00",
+     "area": "ing",
+     "kind": "fixed",
+     "focus": true,
+     "rama": "programacion",
+     "tasks": [
+      "Seguir con el bloque de la tarde"
+     ]
+    },
+    {
      "id": "ingles",
-     "label": "Inglés técnico y de entrevista",
+     "label": "Inglés",
      "short": "inglés",
      "start": "16:00",
-     "end": "17:00",
+     "end": "16:30",
      "area": "ing",
      "kind": "fixed",
      "focus": true,
@@ -668,11 +682,26 @@
      ]
     },
     {
+     "id": "ingles-hablado",
+     "label": "Inglés hablado",
+     "short": "inglés hablado",
+     "start": "16:30",
+     "end": "17:00",
+     "area": "ing",
+     "kind": "fixed",
+     "focus": true,
+     "rama": "ingles",
+     "tasks": [
+      "Explicar en inglés lo que construiste hoy",
+      "Grabarte y escucharte"
+     ]
+    },
+    {
      "id": "busqueda",
-     "label": "Búsqueda laboral",
+     "label": "Postulaciones y mensajes",
      "short": "la búsqueda",
      "start": "17:00",
-     "end": "18:00",
+     "end": "17:40",
      "area": "rutina",
      "kind": "fixed",
      "focus": true,
@@ -680,6 +709,20 @@
      "tasks": [
       "5 postulaciones a medida",
       "5 mensajes directos"
+     ]
+    },
+    {
+     "id": "publicaciones",
+     "label": "Publicaciones",
+     "short": "las publicaciones",
+     "start": "17:40",
+     "end": "18:00",
+     "area": "rutina",
+     "kind": "fixed",
+     "focus": true,
+     "rama": "trabajo",
+     "tasks": [
+      "Publicación de lo que construiste (español e inglés)"
      ]
     },
     {
@@ -732,7 +775,7 @@
    ]
   },
   "busqueda-intensiva-finde": {
-   "label": "Fin de semana · modo intensivo",
+   "label": "Sábado · modo intensivo (roadmap v7)",
    "reemplaza": "weekend",
    "modo": "busqueda-intensiva",
    "wake": {
@@ -773,10 +816,10 @@
     },
     {
      "id": "prog",
-     "label": "Programación · CV y portfolio (P0)",
+     "label": "Proyecto",
      "short": "programación",
      "start": "05:30",
-     "end": "08:30",
+     "end": "09:00",
      "area": "ing",
      "kind": "flex",
      "focus": true,
@@ -788,26 +831,24 @@
      ]
     },
     {
-     "id": "abi",
-     "label": "Acompañar a Abi y correr",
-     "short": "Abi",
-     "start": "08:30",
-     "end": "10:00",
-     "area": "salud",
+     "id": "pausa",
+     "label": "Pausa",
+     "short": "la pausa",
+     "start": "09:00",
+     "end": "09:30",
+     "area": "rutina",
      "kind": "fixed",
      "focus": false,
-     "rama": "salud",
-     "tasks": [
-      "Correr y ducha",
-      "Audio de recall pasivo"
-     ]
+     "meta": false,
+     "rama": "main",
+     "tasks": []
     },
     {
      "id": "prog-2",
-     "label": "Programación",
+     "label": "Proyecto",
      "short": "programación",
-     "start": "10:00",
-     "end": "16:00",
+     "start": "09:30",
+     "end": "13:00",
      "area": "ing",
      "kind": "fixed",
      "focus": true,
@@ -819,11 +860,40 @@
      ]
     },
     {
+     "id": "demo",
+     "label": "Demo de la semana",
+     "short": "la demo",
+     "start": "13:00",
+     "end": "14:00",
+     "area": "rutina",
+     "kind": "fixed",
+     "focus": true,
+     "rama": "trabajo",
+     "tasks": [
+      "Grabar la demo de lo que salió esta semana (30 s)"
+     ]
+    },
+    {
+     "id": "simulada",
+     "label": "Entrevista simulada",
+     "short": "la entrevista simulada",
+     "start": "14:00",
+     "end": "15:00",
+     "area": "rutina",
+     "kind": "fixed",
+     "focus": true,
+     "rama": "trabajo",
+     "tasks": [
+      "Entrevista simulada completa",
+      "Anotar qué mejorar"
+     ]
+    },
+    {
      "id": "ingles",
-     "label": "Inglés técnico y de entrevista",
+     "label": "Inglés",
      "short": "inglés",
-     "start": "16:00",
-     "end": "17:00",
+     "start": "15:00",
+     "end": "16:00",
      "area": "ing",
      "kind": "fixed",
      "focus": true,
@@ -836,9 +906,9 @@
     },
     {
      "id": "cierre",
-     "label": "Descanso y visitas · recall en frío",
+     "label": "Libre · recall en frío",
      "short": "el descanso",
-     "start": "17:00",
+     "start": "16:00",
      "end": "21:00",
      "area": "rutina",
      "kind": "fixed",
@@ -969,6 +1039,158 @@
      "label": "Descanso y visitas · recall en frío",
      "short": "el descanso",
      "start": "17:00",
+     "end": "21:00",
+     "area": "rutina",
+     "kind": "fixed",
+     "focus": false,
+     "rama": "main",
+     "tasks": [
+      "Familia o amigos (sin entrenamiento)",
+      "Recall en frío (20 min): lo construido hoy",
+      "Cerrar el día en 5 min"
+     ]
+    },
+    {
+     "id": "sueno",
+     "label": "Dormir a las 21:00",
+     "short": "dormir",
+     "start": "21:00",
+     "end": "04:00",
+     "area": "rutina",
+     "kind": "fixed",
+     "focus": false,
+     "rama": "salud",
+     "tasks": [
+      "En la cama a las 21:00"
+     ]
+    }
+   ]
+  },
+  "busqueda-intensiva-domingo": {
+   "label": "Domingo · modo intensivo (roadmap v7)",
+   "reemplaza": "weekend",
+   "modo": "busqueda-intensiva",
+   "soloDias": [
+    7
+   ],
+   "wake": {
+    "completo": "04:00",
+    "corto": "05:00"
+   },
+   "blocks": [
+    {
+     "id": "rutina",
+     "label": "Despertar, cambiarse y necesidades",
+     "short": "la rutina",
+     "start": "04:00",
+     "end": "04:30",
+     "area": "rutina",
+     "kind": "flex",
+     "focus": false,
+     "rama": "main",
+     "tasks": [
+      "Agua y cama hecha",
+      "Movilidad 10 min"
+     ]
+    },
+    {
+     "id": "math",
+     "label": "Matemática · CONAMAT",
+     "short": "matemática",
+     "start": "04:30",
+     "end": "05:30",
+     "area": "ing",
+     "kind": "flex",
+     "focus": true,
+     "rama": "matematica",
+     "tasks": [
+      "Repaso de tarjetas",
+      "Capítulo del día",
+      "Test del capítulo"
+     ]
+    },
+    {
+     "id": "prog",
+     "label": "Proyecto",
+     "short": "programación",
+     "start": "05:30",
+     "end": "09:00",
+     "area": "ing",
+     "kind": "flex",
+     "focus": true,
+     "rama": "programacion",
+     "tasks": [
+      "Estudio de lo del día (20 a 30 min)",
+      "Construir con tests primero",
+      "Commit y nota para la revisión"
+     ]
+    },
+    {
+     "id": "pausa",
+     "label": "Pausa",
+     "short": "la pausa",
+     "start": "09:00",
+     "end": "09:30",
+     "area": "rutina",
+     "kind": "fixed",
+     "focus": false,
+     "meta": false,
+     "rama": "main",
+     "tasks": []
+    },
+    {
+     "id": "prog-2",
+     "label": "Proyecto con PRs de open source",
+     "short": "programación",
+     "start": "09:30",
+     "end": "14:00",
+     "area": "ing",
+     "kind": "fixed",
+     "focus": true,
+     "rama": "programacion",
+     "tasks": [
+      "PR de open source (1 a 2 por mes)",
+      "Construir con tests primero",
+      "Commit y push"
+     ]
+    },
+    {
+     "id": "revision",
+     "label": "Revisión semanal",
+     "short": "la revisión semanal",
+     "start": "14:00",
+     "end": "15:00",
+     "area": "rutina",
+     "kind": "fixed",
+     "focus": true,
+     "rama": "main",
+     "tasks": [
+      "Trazo: la semana y la que viene",
+      "learning.md, english.md y hours.md (repo privado)",
+      "El plan: diferencia contra el roadmap"
+     ]
+    },
+    {
+     "id": "ingles",
+     "label": "Inglés",
+     "short": "inglés",
+     "start": "15:00",
+     "end": "16:00",
+     "area": "ing",
+     "kind": "fixed",
+     "focus": true,
+     "rama": "ingles",
+     "tasks": [
+      "Explicar un proyecto en voz alta (inglés técnico)",
+      "Práctica de código en vivo en inglés",
+      "Preguntas de entrevista en inglés"
+     ]
+    },
+    {
+     "id": "cierre",
+     "label": "Libre · recall en frío",
+     "short": "el descanso",
+     "start": "16:00",
      "end": "21:00",
      "area": "rutina",
      "kind": "fixed",

@@ -11,7 +11,7 @@ describe('ola 27 · rutinas v3', () => {
   beforeEach(() => { resetState(); register('Toti', 'Abi', '2026-11-16'); });
 
   it('horas por semana de cada rutina', () => {
-    expect(horasSemana('busqueda-intensiva', 'busqueda-intensiva-finde')).toMatchObject({ Programación: 53, Matemática: 7, Inglés: 7, Entrenamiento: 10 });
+    expect(horasSemana('busqueda-intensiva', 'busqueda-intensiva-finde')).toMatchObject({ Programación: 50, Matemática: 7, Inglés: 7, Entrenamiento: 10 });
     expect(horasSemana('con-trabajo', 'con-trabajo-finde')).toMatchObject({ Programación: 29, Matemática: 14, Inglés: 6.5 });
   });
 
@@ -42,12 +42,16 @@ describe('ola 27 · rutinas v3', () => {
     expect(h.prog).toEqual(['05:30', 180]);
   });
 
-  it('el domingo, el cierre suma la revisión semanal y la mini-tesis', () => {
+  it('el domingo del modo intensivo (v7) tiene su bloque de revisión semanal; con trabajo, el cierre suma la revisión y la mini-tesis', () => {
     startDay('completo', '04:00', '2026-11-22');
-    const c = getState().days['2026-11-22'].blocks.find((b) => b.key === 'cierre')!;
+    const dom = getState().days['2026-11-22'].blocks;
+    expect(dom.find((b) => b.key === 'revision')).toMatchObject({ start: '14:00', min: 60 });
+    expect(dom.find((b) => b.key === 'cierre')!.tasks.map((t) => t.t)).not.toContain('Revisión semanal (30 min)');
+    startDay('completo', '04:00', '2027-01-10');
+    const c = getState().days['2027-01-10'].blocks.find((b) => b.key === 'cierre')!;
     expect(c.tasks.map((t) => t.t)).toEqual(expect.arrayContaining(['Revisión semanal (30 min)', 'Mini-tesis de una página']));
-    startDay('completo', '04:00', '2026-11-21');
-    expect(getState().days['2026-11-21'].blocks.find((b) => b.key === 'cierre')!.tasks.map((t) => t.t)).not.toContain('Revisión semanal (30 min)');
+    startDay('completo', '04:00', '2027-01-09');
+    expect(getState().days['2027-01-09'].blocks.find((b) => b.key === 'cierre')!.tasks.map((t) => t.t)).not.toContain('Revisión semanal (30 min)');
   });
 
   it('bloques pendientes: no pisan otras metas; el descanso del fin de semana cede su tiempo', () => {
@@ -57,7 +61,8 @@ describe('ola 27 · rutinas v3', () => {
     const p = conPendientes(planRoutine('busqueda-intensiva-finde', 'completo'), { clipping: { start: '17:00', min: 120, dias: 'finde' } }, 'busqueda-intensiva-finde');
     const h = Object.fromEntries(horario(p).map(([id, s, m]) => [id, [s, m]]));
     expect(h.clipping).toEqual(['17:00', 120]);
-    expect(h.cierre).toEqual(['19:00', 120]);
+    // v7: el sábado queda libre desde las 16:00; el clipping de 17 a 19 le deja al descanso la hora de antes.
+    expect(h.cierre).toEqual(['16:00', 60]);
     expect(h.sueno[0]).toBe('21:00');
     // Entre semana el día está lleno: no se suma.
     const lv = conPendientes(planRoutine('busqueda-intensiva', 'completo'), { handyx: { start: '17:00', min: 60, dias: 'todos' } }, 'busqueda-intensiva');
