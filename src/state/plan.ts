@@ -207,6 +207,17 @@ export function marcarRevisionHecha(lunes: string, fecha: string | null) {
   });
 }
 
+/** Ola 33 · horas reales cargadas a mano en un día (mandan sobre el foco). `null` las borra y vuelve a contar el foco. */
+export function cargarHorasManuales(fecha: string, rama: 'programacion' | 'matematica', horas: number | null) {
+  update((p) => {
+    const dia = { ...(p.horasManuales?.[fecha] ?? {}) };
+    if (horas == null) delete dia[rama];
+    else dia[rama] = Math.round(horas * 100) / 100;
+    const { [fecha]: _, ...resto } = p.horasManuales ?? {};
+    return { ...p, horasManuales: Object.keys(dia).length ? { ...resto, [fecha]: dia } : resto };
+  });
+}
+
 function evento(p: PlanState, rama: Rama, fecha: string, texto: string): PlanState {
   const e: EventoRama = { id: `e${newId()}`, rama, fecha, texto, origen: 'registro' };
   return { ...p, eventos: [...p.eventos, e] };

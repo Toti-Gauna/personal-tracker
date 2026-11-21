@@ -565,7 +565,8 @@ export function calendarioHoras(plan: PlanExtendido = PLAN_EXT, o: Opciones = {}
       horas = 0;
     } else {
       const base = b.horas != null ? b.horas * (1 + atraso / Math.max(1, b.base)) : semanas * unidad;
-      horas = Math.floor(base * (idx > ultimoCerrado ? h.factor ?? 1 : 1) + 1e-9);
+      // El factor de calibración (programación) no estira las ventanas de matemática.
+      horas = Math.floor(base * (idx > ultimoCerrado && b.tipo !== 'ventana' ? h.factor ?? 1 : 1) + 1e-9);
       const cap = b.tipo === 'ventana' && ventanaDia != null ? () => ventanaDia : (n: number) => h.capacidad(dia(n));
       let acc = 0;
       for (let guarda = 0; guarda < 4000; guarda++, d++) {

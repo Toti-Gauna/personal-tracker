@@ -185,7 +185,7 @@ export function alertas(hoy: string, plan: PlanState, t0 = T0_PLAN, clipping?: C
   }
   // Ola 27: matemática que habilita un proyecto que ya arranca, y el control de horas del modo intensivo (días 10 y 20).
   for (const a of alertasMatematica(hoy, t0)) out.push({ ...a, tipo: 'matematica' });
-  if (ctx) { const h = alertaHorasIntensivo(hoy, ctx.days, { t0, inicioTrabajo: ctx.inicioTrabajo }); if (h) out.push({ ...h, tipo: 'control' }); }
+  if (ctx) { const h = alertaHorasIntensivo(hoy, ctx.days, { t0, inicioTrabajo: ctx.inicioTrabajo, manual: plan.horasManuales }); if (h) out.push({ ...h, tipo: 'control' }); }
   // Ola 32: hardware por fase y trámites (30 días antes de cada fecha límite; los trámites, desde ya).
   for (const a of alertasCompras(plan, hoy)) out.push({ ...a, tipo: 'compra' });
   // Ola 21: exámenes de idiomas, trimestres y tesis anual.

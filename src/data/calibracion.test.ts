@@ -17,42 +17,42 @@ function dias(desde: string, hasta: string, h: number) {
   return out;
 }
 
-describe('ola 27 · calibración (factor al cerrar P2 y P3, sobre las horas del roadmap v7)', () => {
-  it('antes de cerrar P2 no hay factor; dice cuándo se calcula (8 feb 2027 con el roadmap v7)', () => {
-    const c = calibrar(cal, {}, emptyPlan(), '2026-12-05');
-    expect(c).toMatchObject({ listo: false, hito: null, factor: null, cuando: '2027-02-08', regla: null });
-    // P0 (días fijos, sin horas) cerrado por fechas y P1 en curso con las horas de los días que pasaron (8 por día).
+describe('ola 33 · calibración con PetrIA 1.0 y 1.1 (las horas de los demás llevan un 1,5 provisional)', () => {
+  it('antes de publicar la 1.0 no hay factor; dice cuándo la da el calendario', () => {
+    const c = calibrar(cal, {}, emptyPlan(), '2026-11-21');
+    expect(c).toMatchObject({ listo: false, hito: null, factor: null, cuando: '2026-11-28', regla: null });
+    expect(c.versiones.map((v) => [v.version, v.estimadas, v.reales, v.finTrazo])).toEqual([['1.0', 74, null, '2026-11-28'], ['1.1', 74, null, '2026-12-07']]);
+    // Las horas por proyecto siguen: P0 (días fijos) cerrado y P1 en curso a 8 h por día.
     const h = horasPorBloque(cal, {}, emptyPlan(), '2026-12-12');
     expect(h.map((x) => [x.id, x.cerrado])).toEqual([['P0', true], ['P1', false]]);
-    expect(h.find((x) => x.id === 'P0')!.estimadas).toBe(0);
     expect(h.find((x) => x.id === 'P1')!.estimadas).toBe(24 * 8);
-    // Cerrado, P1 vale sus 304 h.
-    expect(horasPorBloque(cal, {}, emptyPlan(), '2027-01-02').find((x) => x.id === 'P1')).toMatchObject({ estimadas: 304, cerrado: true });
   });
 
-  it('con P2 cerrado el factor sale de los cerrados; al cerrar P3 se recalcula', () => {
-    const lento = calibrar(cal, dias('2026-11-16', '2027-02-08', 80), emptyPlan(), '2027-02-09');
-    expect(lento).toMatchObject({ listo: true, hito: 'P2', cuando: '2027-04-24' });
-    expect(lento.factor).toBeGreaterThan(FACTOR_MAX);
-    expect(lento.regla).toBe('lento');
-    const s = sugerencia(lento, cal, '2027-02-09')!;
-    expect(s.recortar).toEqual(['A3', 'A6', 'Q2', 'Q6']);
-    // La v7 no tiene semanas extra de plataforma: no hay nada que apagar, solo alcance.
-    expect(s.claves).toEqual([]);
-    const rapido = calibrar(cal, dias('2026-11-16', '2027-02-08', 30), emptyPlan(), '2027-02-09');
-    expect(rapido.regla).toBe('rapido');
-    expect(rapido.factor!).toBeLessThan(FACTOR_MIN);
-    expect(sugerencia(rapido, cal, '2027-02-09')!.claves).toEqual([]);
-    // En plan: tantas horas como las estimadas (459 h en los 78 días de P0, P1 y P2).
-    const enPlan = calibrar(cal, dias('2026-11-16', '2027-02-08', 41), emptyPlan(), '2027-02-09');
-    expect(enPlan.regla).toBe('en-plan');
-    expect(sugerencia(enPlan, cal, '2027-02-09')).toBeNull();
-    // Al cerrar P3 se recalcula con P0 a P3.
-    const p3 = calibrar(cal, dias('2026-11-16', '2027-04-24', 40), emptyPlan(), '2027-04-25');
-    expect(p3.hito).toBe('P3');
-    expect(p3.filas.filter((f) => f.cerrado).map((f) => f.id)).toEqual(['P0', 'P1', 'P2', 'P3']);
+  it('con la 1.0 publicada el factor es horas reales / 74; con la 1.1, / 148', () => {
+    const v10 = { ...emptyPlan(), versiones: { P1: { '1.0': { publicada: '2026-12-01' } } } };
+    // 8 h por día del 19 nov al 1 dic (13 días): 104 h reales contra 74.
+    const lento = calibrar(cal, dias('2026-11-19', '2026-12-01', 56), v10, '2026-12-02');
+    expect(lento).toMatchObject({ listo: true, hito: '1.0', estimadas: 74, reales: 104, factor: 1.41, regla: 'lento', cuando: '2026-12-07' });
+    const v11 = { ...emptyPlan(), versiones: { P1: { '1.0': { publicada: '2026-12-01' }, '1.1': { publicada: '2026-12-10' } } } };
+    const c = calibrar(cal, dias('2026-11-19', '2026-12-10', 35), v11, '2026-12-11');
+    expect(c).toMatchObject({ hito: '1.1', estimadas: 148, reales: 110, factor: 0.74, regla: 'rapido', cuando: null });
+    // La 1.1 sola (sin la 1.0) no calibra.
+    expect(calibrar(cal, {}, { ...emptyPlan(), versiones: { P1: { '1.1': { publicada: '2026-12-10' } } } }, '2026-12-11').hito).toBeNull();
   });
 
+  it('las horas cargadas a mano mandan sobre el foco de ese día', () => {
+    const v10 = { ...emptyPlan(), versiones: { P1: { '1.0': { publicada: '2026-11-20' } } }, horasManuales: { '2026-11-19': { programacion: 8 }, '2026-11-20': { programacion: 9 } } };
+    // El 19 tiene 2 h de foco y 8 a mano: cuentan las 8.
+    const c = calibrar(cal, dias('2026-11-19', '2026-11-20', 14), v10, '2026-11-21');
+    expect(c).toMatchObject({ reales: 17, estimadas: 74, factor: 0.23 });
+  });
+
+  it('la sugerencia no recorta: dice cuántos días se corre el plan', () => {
+    const lento = calibrar(cal, dias('2026-11-19', '2026-12-01', 56), { ...emptyPlan(), versiones: { P1: { '1.0': { publicada: '2026-12-01' } } } }, '2026-12-02');
+    const s = sugerencia(lento, '2031-12-01', '2031-06-04')!;
+    expect(s.texto).toMatch(/^Vas más lento que lo estimado \(factor 1,41\): el plan se corre 180 días\. No se recorta profundidad: se mueven fechas\.$/);
+    expect(sugerencia({ ...lento, regla: 'en-plan' }, '2031-06-04', '2031-06-04')).toBeNull();
+  });
   it('proyectar y escenarios: salen del calendario por horas con el factor, no están escritos a mano', () => {
     const base = proyectar(1);
     expect(base.deltaDias).toBe(0);

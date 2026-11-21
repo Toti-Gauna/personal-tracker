@@ -7,6 +7,7 @@ import { horasMateDelDia } from './mate-horas';
 import { PLAN, T0_PLAN, TRAMOS, inicioDe, finDe, tramoActivo } from './plan';
 import { PLAN_EXT } from './plan-extendido';
 import { addDays, daysBetween } from './time';
+import type { PlanState } from './plan-state';
 import type { DayLog } from './types';
 
 export const UMBRAL_HORAS = 0.85;
@@ -17,14 +18,21 @@ export interface RegistroDia { fecha: string; proyecto: string; progReal: number
 
 const redondeo = (x: number) => Math.round(x * 10) / 10;
 
-/** Horas reales de foco por rama en un día. */
-export function realesDelDia(day: DayLog | undefined, rama: 'programacion' | 'matematica'): number {
+/** Horas reales por rama en un día: las cargadas a mano (ola 33) o, si no hay, el foco. */
+export function realesDelDia(day: DayLog | undefined, rama: 'programacion' | 'matematica', manual?: number): number {
+  if (manual != null) return manual;
   if (!day) return 0;
   const ramaDe = new Map(day.blocks.map((b) => [b.key, b.rama]));
   return redondeo(day.focus.filter((f) => ramaDe.get(f.key) === rama).reduce((s, f) => s + f.focusMin, 0) / 60);
 }
 
-export interface CfgControl { t0: string; inicioTrabajo: string; ventanas?: { inicio: string; fin: string }[] }
+export interface CfgControl {
+  t0: string;
+  inicioTrabajo: string;
+  ventanas?: { inicio: string; fin: string }[];
+  /** Ola 33: horas cargadas a mano (mandan sobre el foco). */
+  manual?: PlanState['horasManuales'];
+}
 
 /** El registro diario: horas reales de programación y de matemática contra las planificadas, y a qué proyecto o tramo cuentan. */
 export function registroDiario(days: Record<string, DayLog>, desde: string, hasta: string, c: CfgControl): RegistroDia[] {
@@ -33,8 +41,8 @@ export function registroDiario(days: Record<string, DayLog>, desde: string, hast
   for (let d = desde; d <= hasta; d = addDays(d, 1)) {
     out.push({
       fecha: d, proyecto: tramoActivo(d, c.t0).id,
-      progReal: realesDelDia(days[d], 'programacion'), progPlan: redondeo(horasDelDia(d, { t0: c.t0, inicioTrabajo: c.inicioTrabajo, pausas: true })),
-      mateReal: realesDelDia(days[d], 'matematica'), matePlan: redondeo(horasMateDelDia(d, { inicioTrabajo: c.inicioTrabajo, ventanas })),
+      progReal: realesDelDia(days[d], 'programacion', c.manual?.[d]?.programacion), progPlan: redondeo(horasDelDia(d, { t0: c.t0, inicioTrabajo: c.inicioTrabajo, pausas: true })),
+      mateReal: realesDelDia(days[d], 'matematica', c.manual?.[d]?.matematica), matePlan: redondeo(horasMateDelDia(d, { inicioTrabajo: c.inicioTrabajo, ventanas })),
     });
   }
   return out;
@@ -56,13 +64,13 @@ export function diaIntensivo(fecha: string, c: Pick<CfgControl, 't0' | 'inicioTr
 export interface ControlHoras { dia: number; planificadas: number; reales: number; porcentaje: number; debajo: boolean }
 
 /** Horas de programación reales contra las planificadas desde el inicio del modo intensivo hasta ayer. */
-export function controlHoras(fecha: string, days: Record<string, DayLog>, c: Pick<CfgControl, 't0' | 'inicioTrabajo'>): ControlHoras | null {
+export function controlHoras(fecha: string, days: Record<string, DayLog>, c: Pick<CfgControl, 't0' | 'inicioTrabajo' | 'manual'>): ControlHoras | null {
   const dia = diaIntensivo(fecha, c);
   if (!dia) return null;
   const ini = inicioIntensivo(c);
   let plan = 0;
   let real = 0;
-  for (let d = ini; d < fecha; d = addDays(d, 1)) { plan += horasDelDia(d, { t0: c.t0, inicioTrabajo: c.inicioTrabajo, pausas: true }); real += realesDelDia(days[d], 'programacion'); }
+  for (let d = ini; d < fecha; d = addDays(d, 1)) { plan += horasDelDia(d, { t0: c.t0, inicioTrabajo: c.inicioTrabajo, pausas: true }); real += realesDelDia(days[d], 'programacion', c.manual?.[d]?.programacion); }
   const porcentaje = plan > 0 ? real / plan : 1;
   return { dia, planificadas: redondeo(plan), reales: redondeo(real), porcentaje, debajo: plan > 0 && porcentaje < UMBRAL_HORAS };
 }
@@ -84,7 +92,7 @@ const n1 = (x: number) => String(x).replace('.', ',');
  * Alerta de los días 10 y 20 del modo intensivo: si las horas reales de programación quedan debajo del 85 % de las planificadas, ofrece los
  * recortes en orden. Se muestra el día del control y los dos siguientes.
  */
-export function alertaHorasIntensivo(fecha: string, days: Record<string, DayLog>, c: Pick<CfgControl, 't0' | 'inicioTrabajo'>): AvisoControl | null {
+export function alertaHorasIntensivo(fecha: string, days: Record<string, DayLog>, c: Pick<CfgControl, 't0' | 'inicioTrabajo' | 'manual'>): AvisoControl | null {
   for (const n of [...DIAS_CONTROL].reverse()) {
     const controlEl = addDays(inicioIntensivo(c), n - 1);
     if (fecha < controlEl || fecha > addDays(controlEl, 2)) continue;

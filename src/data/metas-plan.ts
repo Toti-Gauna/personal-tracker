@@ -59,13 +59,16 @@ const CONTADORES = new Set(['sesiones-tecnicas', 'clips', 'horas-clipping', 'pos
 const HORAS: Record<string, Rama> = { 'horas-mate': 'matematica', 'horas-prog': 'programacion', 'horas-handyx': 'handyx', 'horas-ingles': 'ingles', 'horas-busqueda': 'trabajo' };
 
 /** Horas de foco registradas en bloques de una rama entre dos fechas. */
-export function horasDeRama(days: Record<string, DayLog>, rama: Rama, desde: string, hasta: string) {
+export function horasDeRama(days: Record<string, DayLog>, rama: Rama, desde: string, hasta: string, manual?: PlanState['horasManuales']) {
   let m = 0;
   for (const [d, day] of Object.entries(days)) {
     if (d < desde || d > hasta) continue;
+    // Ola 33: las horas cargadas a mano mandan sobre el foco de ese día.
+    if ((rama === 'programacion' || rama === 'matematica') && manual?.[d]?.[rama] != null) continue;
     const ramaDe = new Map(day.blocks.map((b) => [b.key, b.rama]));
     for (const f of day.focus) if (ramaDe.get(f.key) === rama) m += f.focusMin;
   }
+  if (rama === 'programacion' || rama === 'matematica') for (const [d, h] of Object.entries(manual ?? {})) if (d >= desde && d <= hasta && h[rama] != null) m += h[rama]! * 60;
   return Math.round((m / 60) * 10) / 10;
 }
 
@@ -112,7 +115,7 @@ export function avanceMeta(m: MetaGenerada, desde: string, hasta: string, c: Ctx
   if (k === 'kit') return { v: c.plan.respuestas.filter((r) => r.veces > 0).length, auto: false };
   if (k === 'operaciones') return { v: Object.entries(c.plan.handyx).filter(([l]) => l >= lunes(desde) && l <= hasta).reduce((s, [, h]) => s + (h.operaciones ?? 0), 0), auto: false };
   if (CONTADORES.has(k)) {
-    const auto = HORAS[k] ? horasDeRama(c.days, HORAS[k], desde, hasta) : k === 'horas-clipping' ? horasDeBloque(c.days, 'clipping', desde, hasta) : 0;
+    const auto = HORAS[k] ? horasDeRama(c.days, HORAS[k], desde, hasta, c.plan.horasManuales) : k === 'horas-clipping' ? horasDeBloque(c.days, 'clipping', desde, hasta) : 0;
     const handyx = k === 'horas-handyx' ? Object.entries(c.plan.handyx).filter(([l]) => l >= lunes(desde) && l <= hasta).reduce((s, [, h]) => s + (h.horas ?? 0), 0) : 0;
     return { v: Math.round((auto + handyx + sumaContador(c.plan, k, desde, hasta)) * 10) / 10, auto: false };
   }

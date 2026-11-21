@@ -42,7 +42,7 @@ export function resumenSemana(
 ): ResumenSemana {
   const domingo = addDays(lunes, 6);
   const hasta = hoy < domingo ? hoy : domingo;
-  const reg = hasta >= lunes ? registroDiario(ctx.days, lunes, hasta, { t0: ctx.t0, inicioTrabajo: ctx.inicioTrabajo }) : [];
+  const reg = hasta >= lunes ? registroDiario(ctx.days, lunes, hasta, { t0: ctx.t0, inicioTrabajo: ctx.inicioTrabajo, manual: ctx.plan.horasManuales }) : [];
   const suma = (k: 'progReal' | 'progPlan' | 'mateReal' | 'matePlan') => r1(reg.reduce((s, x) => s + x[k], 0));
   const metas = metasSemanaGeneradas(lunes, ctx.t0, { intensiva: ctx.intensiva });
   const cont = (id: 'posts' | 'simulada', nombre: string) => {

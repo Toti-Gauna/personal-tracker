@@ -1,21 +1,42 @@
-/** Ola 24 · #/metas/calibracion: horas estimadas contra reales, el factor tras P3 y los escenarios del plan v2. */
-import { useMemo } from 'react';
-import { FACTOR_MAX, FACTOR_MIN, HORAS_PROG_SEMANA, calibrar, escenarios, proyectar, sugerencia } from '../data/calibracion';
+/**
+ * Ola 24 · #/metas/calibracion (ola 33: con PetrIA 1.0 y 1.1). Horas estimadas contra reales, el factor que sale de PetrIA (el proyecto
+ * medido) y se aplica a lo que viene después, cuántos días mueve el fin cada +10 % de horas, los escenarios y el registro diario, con
+ * la carga de horas a mano para los días sin foco.
+ */
+import { useMemo, useState } from 'react';
+import { FACTOR_MAX, FACTOR_MIN, calibrar, diasPorDiezPorCiento, escenarios, proyectar, sugerencia } from '../data/calibracion';
 import { deudaMatematica, registroDiario } from '../data/control';
 import { T0_PLAN } from '../data/plan';
+import { PLAN_EXT } from '../data/plan-extendido';
 import { addDays } from '../data/time';
 import { calendarioCompleto } from '../data/plan-vistas';
 import { RAMA_COLOR } from '../data/ramas';
 import type { DayLog } from '../data/types';
-import { apagarExtras } from '../state/plan';
+import { cargarHorasManuales } from '../state/plan';
 import { inicioTrabajo, useStore } from '../state/store';
-import { toast } from '../ui/avisos';
 import '../styles/plan.css';
 import '../styles/etapas.css';
 
 const MES = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'];
 const f = (d: string) => `${Number(d.slice(8))} ${MES[Number(d.slice(5, 7)) - 1]} ${d.slice(0, 4)}`;
 const n1 = (x: number) => String(x).replace('.', ',');
+
+/** Las horas de un día: el valor cargado a mano o, vacío, el del foco. */
+function HorasDia({ fecha, rama, foco, manual }: { fecha: string; rama: 'programacion' | 'matematica'; foco: number; manual?: number }) {
+  const [v, setV] = useState(manual != null ? String(manual) : '');
+  const guardar = () => {
+    const n = v.trim() === '' ? null : Number(v.replace(',', '.'));
+    if (n != null && !(n >= 0 && n <= 24)) { setV(manual != null ? String(manual) : ''); return; }
+    cargarHorasManuales(fecha, rama, n);
+  };
+  return (
+    <input
+      className="campo-texto mono cal-h" inputMode="decimal" value={v} placeholder={n1(foco)}
+      aria-label={`Horas de ${rama === 'programacion' ? 'programación' : 'matemática'} del ${f(fecha)}`}
+      onChange={(e) => setV(e.target.value)} onBlur={guardar} onKeyDown={(e) => e.key === 'Enter' && (e.target as HTMLInputElement).blur()}
+    />
+  );
+}
 
 export function Calibracion({ day }: { day: DayLog }) {
   const hoy = day.date;
@@ -28,41 +49,53 @@ export function Calibracion({ day }: { day: DayLog }) {
     const c = calibrar(cal, days, plan, hoy);
     const horas = cal.reduce((s, b) => s + (b.horas ?? 0), 0);
     const fin = cal.reduce((m, b) => (b.fin > m ? b.fin : m), cal[0].fin);
-    const cerrados = c.hito === 'P3' ? ['P0', 'P1', 'P2', 'P3'] : c.hito === 'P2' ? ['P0', 'P1', 'P2'] : [];
-    return { cal, c, horas, fin, sug: sugerencia(c, cal, hoy), proy: c.factor != null ? proyectar(c.factor, t0, cerrados) : null, esc: escenarios(t0, cerrados) };
+    const cerrados = c.hito ? ['P0', 'P1'] : [];
+    const proy = c.factor != null ? proyectar(c.factor, t0, cerrados) : null;
+    const base = proyectar(1, t0, cerrados);
+    return { cal, c, horas, fin, proy, sug: proy ? sugerencia(c, proy.fin, base.fin) : null, esc: escenarios(t0, cerrados), diez: diasPorDiezPorCiento(t0, cerrados) };
   }, [t0, plan, days, hoy]);
   const { c } = d;
+  const p1 = PLAN_EXT.bloques.find((b) => b.id === 'P1');
   const max = Math.max(1, ...c.filas.map((x) => Math.max(x.estimadas, x.reales)));
+  const desde = addDays(hoy, -6) < t0 ? t0 : addDays(hoy, -6);
   return (
     <main className="pantalla plan-proy cal-pag" style={{ ['--c' as string]: RAMA_COLOR.programacion }}>
       <div className="topbar"><a className="volver" href="#/metas/etapas">Las 4 etapas</a><span className="mono sub">{n1(d.horas)} h · hasta el {f(d.fin)}</span></div>
-      <header><h1 className="titulo">Calibración</h1><p>Horas estimadas contra horas reales de programación. El factor se calcula al cerrar P2 y otra vez al cerrar P3, y se aplica a lo que falta: Trazo propone, vos decidís.</p></header>
+      <header>
+        <h1 className="titulo">Calibración</h1>
+        <p>
+          Las horas de PetrIA están medidas ({p1?.horas} h; antes eran {p1?.horasAntes}, ×{n1(Math.round(((p1?.horas ?? 0) / (p1?.horasAntes ?? 1)) * 100) / 100)}). Las de los demás proyectos llevan un 1,5 provisional
+          hasta calibrar con las horas reales de PetrIA 1.0 y 1.1: el factor se calcula al publicar cada una y se aplica a lo que viene después. No se recorta: se mueven fechas.
+        </p>
+      </header>
 
       <section className="cal-factor" aria-labelledby="cal-f">
         <span className="etiqueta" id="cal-f">Factor real / estimado</span>
         {c.factor != null ? (
           <>
             <b className="mono cal-n">{n1(c.factor)}</b>
-            <span className="sub">{n1(c.reales)} h reales de {n1(c.estimadas)} h estimadas en los proyectos cerrados (hasta {c.hito}) · en plan entre {n1(FACTOR_MIN)} y {n1(FACTOR_MAX)}</span>
+            <span className="sub">{n1(c.reales)} h reales de {n1(c.estimadas)} h estimadas en PetrIA {c.hito === '1.1' ? '1.0 y 1.1' : '1.0'} · en plan entre {n1(FACTOR_MIN)} y {n1(FACTOR_MAX)}</span>
+            {c.hito === '1.0' && c.cuando && <span className="sub">Se recalcula al publicar la 1.1 (en el calendario, el {f(c.cuando)}).</span>}
           </>
         ) : (
           <>
-            <b className="cal-espera">Se calcula al cerrar P2{c.cuando ? `, el ${f(c.cuando)}` : ''}, y otra vez al cerrar P3</b>
-            <span className="sub">Las horas reales salen del foco de los bloques de programación. Estimadas: las horas de cada bloque del roadmap v7 (sin ellas, semanas del plan × {n1(HORAS_PROG_SEMANA)} h).</span>
+            <b className="cal-espera">Se calcula al publicar PetrIA 1.0{c.cuando ? ` (en el calendario, el ${f(c.cuando)})` : ''}, y otra vez con la 1.1</b>
+            <span className="sub">Las horas reales salen del foco de los bloques de programación o de lo que cargues a mano abajo. Se marca publicada en la ficha de PetrIA → Versiones.</span>
           </>
         )}
       </section>
 
-      {d.sug && (
-        <section className={`cal-sug ${c.regla}`}>
-          <p>{d.sug.texto}</p>
-          {d.sug.recortar.length > 0 && <p className="sub">Recortar alcance (a mano, en cada proyecto): {d.sug.recortar.join(', ')}.</p>}
-          {d.sug.claves.length > 0
-            ? <button className="btn-principal" onClick={() => { apagarExtras(d.sug!.claves); toast({ title: `${d.sug!.claves.length} extras apagadas`, sub: 'Se prenden de nuevo en cada proyecto o en Ajustes', color: RAMA_COLOR.programacion }, false); }}>Apagar {d.sug.claves.length} {d.sug.claves.length === 1 ? 'extra' : 'extras'}</button>
-            : <p className="sub">No queda nada por apagar: las extras sugeridas ya están apagadas o esos proyectos ya empezaron.</p>}
-        </section>
-      )}
+      <ul className="cal-filas" aria-label="Versiones de PetrIA que calibran">
+        {c.versiones.map((v) => (
+          <li key={v.version}>
+            <span className="cal-fila-t"><b className="mono">{v.version}</b> {v.nombre}<small className="mono sub">{v.publicada ? `publicada el ${f(v.publicada)} · ${n1(v.reales ?? 0)} h reales` : `sin publicar${v.finTrazo ? ` · el calendario la da el ${f(v.finTrazo)}` : ''}`} · {v.estimadas} h estimadas</small></span>
+          </li>
+        ))}
+      </ul>
+
+      {d.sug && <section className={`cal-sug ${c.regla}`}><p>{d.sug.texto}</p></section>}
       {c.regla === 'en-plan' && <p className="sub">Vas en plan: no hace falta tocar nada.</p>}
+      <p className="sub">Cada +10 % de horas en lo que falta corre el fin del plan <b>{d.diez} días</b>.</p>
 
       <span className="etiqueta">Horas por proyecto</span>
       {c.filas.length === 0 ? <p className="sub">Todavía no empezó ningún proyecto.</p> : (
@@ -77,19 +110,24 @@ export function Calibracion({ day }: { day: DayLog }) {
       )}
 
       <span className="etiqueta">Registro diario · últimos 7 días</span>
+      <p className="sub">Si trabajaste sin abrir el foco, cargá las horas a mano: mandan sobre el foco de ese día. Vacío, cuenta el foco.</p>
       <ul className="cal-filas" aria-label="Horas por día">
-        {registroDiario(days, addDays(hoy, -6) < t0 ? t0 : addDays(hoy, -6), hoy, { t0, inicioTrabajo: inicio }).map((r) => (
-          <li key={r.fecha}>
-            <span className="cal-fila-t"><b className="mono">{Number(r.fecha.slice(8))} {MES[Number(r.fecha.slice(5, 7)) - 1]}</b> {r.proyecto}<small className="mono sub">prog {n1(r.progReal)} / {n1(r.progPlan)} h · mate {n1(r.mateReal)} / {n1(r.matePlan)} h</small></span>
+        {registroDiario(days, desde, hoy, { t0, inicioTrabajo: inicio, manual: plan.horasManuales }).map((r) => (
+          <li key={r.fecha} className="cal-dia">
+            <span className="cal-fila-t"><b className="mono">{Number(r.fecha.slice(8))} {MES[Number(r.fecha.slice(5, 7)) - 1]}</b> {r.proyecto}<small className="mono sub">plan: prog {n1(r.progPlan)} h · mate {n1(r.matePlan)} h</small></span>
+            <span className="cal-cargar">
+              <label>prog <HorasDia fecha={r.fecha} rama="programacion" foco={r.progReal} manual={plan.horasManuales?.[r.fecha]?.programacion} /></label>
+              <label>mate <HorasDia fecha={r.fecha} rama="matematica" foco={r.mateReal} manual={plan.horasManuales?.[r.fecha]?.matematica} /></label>
+            </span>
           </li>
         ))}
       </ul>
-      {(() => { const deuda = deudaMatematica(hoy, { t0, inicioTrabajo: inicio }); return deuda.horas > 0 ? <p className="sub">Matemática: en el modo intensivo son 7 h por semana en lugar de 14. Deuda acumulada: <b>{n1(deuda.horas)} h</b> (se recupera con trabajo, a 14 h por semana).</p> : null; })()}
+      {(() => { const deuda = deudaMatematica(hoy, { t0, inicioTrabajo: inicio }); return deuda.horas > 0 ? <p className="sub">Matemática: en el modo intensivo es 1 h por día en lugar de 2. Deuda acumulada: <b>{n1(deuda.horas)} h</b> (se recupera con trabajo).</p> : null; })()}
 
       <span className="etiqueta">Escenarios</span>
       <ul className="cal-esc">
-        <li className="actual"><b>Calendario actual</b><span className="mono">{n1(d.horas)} h · {f(d.fin)}</span><small className="sub">Con las extras y la pausa como las tenés ahora.</small></li>
-        {d.proy && <li className="tuyo"><b>Con tu factor</b><span className="mono">{n1(d.proy.horas)} h · {f(d.proy.fin)}</span><small className="sub">Las horas de lo que falta × {n1(c.factor!)}; los descansos y la pausa de fin de año no cambian.</small></li>}
+        <li className="actual"><b>Calendario actual</b><span className="mono">{n1(d.horas)} h · {f(d.fin)}</span><small className="sub">Con las horas reales cargadas y el factor, si ya está.</small></li>
+        {d.proy && <li className="tuyo"><b>Con tu factor</b><span className="mono">{n1(d.proy.horas)} h · {f(d.proy.fin)}</span><small className="sub">Las horas de lo que viene después de PetrIA × {n1(c.factor!)}; las ventanas, los días fijos y las pausas no cambian.</small></li>}
         {d.esc.map((e) => <li key={e.id}><b>{e.nombre} · {n1(e.factor)}</b><span className="mono">{n1(e.horas)} h · {f(e.fin)}</span><small className="sub">{e.supuesto}</small></li>)}
       </ul>
       <p className="sub">Los tres escenarios salen del calendario por horas con un factor de 0,85, 1,00 y 1,15 sobre lo que falta; no son supuestos escritos a mano.</p>
