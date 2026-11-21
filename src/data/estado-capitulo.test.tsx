@@ -43,7 +43,8 @@ describe('ola 28 · el capítulo no avanza solo', () => {
     terminarEstudio(D, 'conamat', 1);
     expect(est(1)).toMatchObject({ estado: 'test', etiqueta: 'test mañana' });
     expect(getState().study.reviews.map((r) => [r.kind, r.unit, r.due])).toEqual([['cold', 1, '2026-11-19']]);
-    expect(focusUnit(act(), getState().study, '2026-11-19')!.n).toBe(2);
+    // v12.1: el cap. 2 no se abre hasta que el 1 pase por test y tesis.
+    expect(focusUnit(act(), getState().study, '2026-11-19')).toBeUndefined();
     expect(volverAEstudiar('conamat', 1)).toBe(true);
     expect(est(1).estado).toBe('estudiando');
     expect(getState().study.reviews).toHaveLength(0);
