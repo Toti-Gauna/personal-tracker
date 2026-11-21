@@ -1320,6 +1320,31 @@ Fuente: `docs/prompts/roadmap-completo-v7.md` (2026-11-20). Reglas: no se borra 
 
 **Pendiente (ola 33):** calibración con las horas reales de PetrIA 1.0 y 1.1 (carga manual de horas por día).
 
+
+## 6 quindecies. Ola 33: calibración con PetrIA 1.0 y 1.1
+
+La v7 dice: "Las horas de PetrIA están medidas. Las de los demás proyectos llevan un factor provisional de 1,5 hasta calibrar con las horas reales de PetrIA 1.0 y 1.1."
+
+**Horas reales a mano**
+- En Calibración → Registro diario, cada día tiene campos de programación y matemática.
+- Lo que cargues a mano manda sobre el foco de ese día. Vacío, cuenta el foco.
+- Sirve para los días en que trabajaste sin abrir el foco (el 19 nov quedó vacío).
+- Lo usan el calendario vivo, la calibración, las metas de horas, el control de los días 10 y 20 y la revisión semanal.
+
+**El factor**
+- Se calcula al publicar PetrIA 1.0 (Versiones, en la ficha de PetrIA) y otra vez con la 1.1.
+- Son las horas reales de programación desde el inicio de PetrIA hasta la publicación, contra las horas de esas versiones (74 y 74 h, medidas).
+- Se aplica a lo que viene después de PetrIA (P0 y P1 quedan como cerrados). PetrIA misma se corre con sus horas reales.
+- No estira las ventanas de matemática, los días fijos (certificaciones, descansos, cierres) ni las pausas.
+- Reemplaza a la calibración de la v3 (al cerrar P2 y P3).
+
+**Sin recortes**
+- Si vas lento o rápido, Trazo dice cuántos días se corre el plan. No propone qué apagar: con la v7 se mueven fechas.
+- La pantalla dice cuántos días mueve el fin cada +10 % de horas en lo que falta.
+- Siguen los escenarios 0,85 / 1,00 / 1,15.
+
+**Con esto se cierra el roadmap v7 en Trazo (olas 29 a 33).**
+
 ---
 
 ## 7. Registro de cambios

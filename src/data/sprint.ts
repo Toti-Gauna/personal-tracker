@@ -53,7 +53,7 @@ export function acompanaSprint(p: PlanState, days: Record<string, DayLog>, desde
     simulacros: contadorEntre(p, 'simulada', desde, hasta),
     cv: ['cv', 'linkedin', 'caso'].filter((k) => checks[k]).length,
     clips: contadorEntre(p, 'clips', desde, hasta),
-    mate: Math.round((horasDeRama(days, 'matematica', desde, hasta) + contadorEntre(p, 'horas-mate', desde, hasta)) * 10) / 10,
+    mate: Math.round((horasDeRama(days, 'matematica', desde, hasta, p.horasManuales) + contadorEntre(p, 'horas-mate', desde, hasta)) * 10) / 10,
     clipping: horasDeBloque(days, 'clipping', desde, hasta),
   };
 }

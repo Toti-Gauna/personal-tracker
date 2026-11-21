@@ -43,7 +43,7 @@ export function AvisosRamas({ date, day }: { date: string; day?: DayLog }) {
   const t0 = settings?.startDate ?? T0_PLAN;
   const inicio = inicioTrabajo(settings);
   // Ola 27: el control de horas del modo intensivo (días 10 y 20), la matemática que habilita un proyecto que ya arranca y la pausa de Navidad.
-  const horas = alertaHorasIntensivo(date, days, { t0, inicioTrabajo: inicio });
+  const horas = alertaHorasIntensivo(date, days, { t0, inicioTrabajo: inicio, manual: plan.horasManuales });
   const control: Aviso[] = [
     ...(horas ? [{ id: horas.id, de: 'programacion' as const, a: 'main' as const, titulo: horas.titulo, texto: horas.texto, href: horas.href }] : []),
     ...alertasMatematica(date, t0).map((a) => ({ id: a.id, de: 'matematica' as const, a: 'programacion' as const, titulo: a.titulo, texto: a.texto, href: a.href })),

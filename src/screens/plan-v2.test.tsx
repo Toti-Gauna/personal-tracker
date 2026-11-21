@@ -1,5 +1,7 @@
 import { fireEvent, render, screen, within } from '@testing-library/react';
 import { beforeEach, describe, expect, it } from 'vitest';
+import { cargarHorasManuales, publicarVersion } from '../state/plan';
+import { TRAMOS } from '../data/plan';
 import { getState, register, resetState, startDay } from '../state/store';
 import { Metas } from './Metas';
 import { Ajustes } from './Ajustes';
@@ -86,12 +88,30 @@ describe('ola 24 · pantallas del plan v2', () => {
     expect(screen.queryByText(/T\+18 el 31 dic 2028/)).toBeNull();
   });
 
-  it('Calibración: antes de P2 espera, muestra las horas por proyecto y los escenarios calculados con el factor', () => {
-    render(<Metas day={day()} tab="calibracion" />);
-    expect(screen.getByText(/Se calcula al cerrar P2, el 8 feb 2027, y otra vez al cerrar P3/)).toBeInTheDocument();
-    expect(screen.getAllByText(/P0/).length).toBeGreaterThan(0);
+  it('Calibración (v7): espera a PetrIA 1.0, carga horas a mano y, al publicar la 1.0, el factor corre el calendario', () => {
+    const { unmount } = render(<Metas day={day()} tab="calibracion" />);
+    expect(screen.getByText(/Se calcula al publicar PetrIA 1\.0 \(en el calendario, el 28 nov 2026\), y otra vez con la 1\.1/)).toBeInTheDocument();
+    expect(screen.getByText(/Cada \+10 % de horas en lo que falta corre el fin del plan/)).toBeInTheDocument();
     expect(screen.getByText('Calendario actual').parentElement!.textContent).toMatch(/ h · 4 jun 2031/);
     expect(screen.getByText(/Lento · 1,15/).parentElement!.textContent).toMatch(/ h · /);
-    expect(screen.getByText(/Rápido · 0,85/)).toBeInTheDocument();
+    // Horas a mano del día (mandan sobre el foco).
+    const prog = screen.getByLabelText('Horas de programación del 18 nov 2026');
+    fireEvent.change(prog, { target: { value: '7,5' } });
+    fireEvent.blur(prog);
+    expect(getState().plan.horasManuales).toEqual({ '2026-11-18': { programacion: 7.5 } });
+    fireEvent.change(prog, { target: { value: '' } });
+    fireEvent.blur(prog);
+    expect(getState().plan.horasManuales).toEqual({});
+    unmount();
+    // PetrIA 1.0 publicada con 104 h reales (8 h por día): factor 1,41 y lo que viene después de PetrIA se estira.
+    const finAntes = TRAMOS.find((t) => t.id === 'CIE2')!.fin!;
+    for (let d = new Date('2026-11-19T12:00'); d <= new Date('2026-12-01T12:00'); d.setDate(d.getDate() + 1)) cargarHorasManuales(d.toISOString().slice(0, 10), 'programacion', 8);
+    publicarVersion('P1', '1.0', '2026-12-01');
+    render(<Metas day={day()} tab="calibracion" />);
+    expect(screen.getByText('1,41')).toBeInTheDocument();
+    expect(screen.getByText(/Vas más lento que lo estimado \(factor 1,41\): el plan se corre \d+ días\. No se recorta profundidad/)).toBeInTheDocument();
+    expect(TRAMOS.find((t) => t.id === 'P2')!.horas).toBe(Math.floor(155 * 1.41));
+    expect(TRAMOS.find((t) => t.id === 'W1')!.horas).toBe(122); // las ventanas no se estiran
+    expect(TRAMOS.find((t) => t.id === 'CIE2')!.fin! > finAntes).toBe(true);
   });
 });

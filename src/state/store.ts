@@ -87,8 +87,8 @@ export function migrate(parsed: any): State {
 
 let state: State = load();
 
-/** Ola 27 · horas de programación reales por día (foco en bloques de la rama programación), solo de los días que ya pasaron. */
-function realesProg(days: Record<string, DayLog>, hoy: string): Record<string, number> {
+/** Ola 27 · horas de programación reales por día (foco en bloques de la rama programación), solo de los días que ya pasaron. Ola 33: las cargadas a mano mandan. */
+function realesProg(days: Record<string, DayLog>, hoy: string, manual?: PlanState['horasManuales']): Record<string, number> {
   const out: Record<string, number> = {};
   for (const [d, day] of Object.entries(days)) {
     if (d >= hoy) continue;
@@ -96,27 +96,28 @@ function realesProg(days: Record<string, DayLog>, hoy: string): Record<string, n
     const min = day.focus.filter((f) => ramaDe.get(f.key) === 'programacion').reduce((x, f) => x + f.focusMin, 0);
     if (min > 0) out[d] = Math.round((min / 60) * 100) / 100;
   }
+  for (const [d, h] of Object.entries(manual ?? {})) if (d < hoy && h.programacion != null) out[d] = h.programacion;
   return out;
 }
 
-/** Ola 27 · el factor real/estimado (al cerrar P2 y P3) y los bloques cerrados con los que se calculó. Cuando todavía no cierra P2, nada. */
+/** Ola 33 · el factor real/estimado con PetrIA 1.0 y 1.1 (al publicarlas): se aplica a lo que viene después de PetrIA. Sin publicar la 1.0, nada. */
 function factorCalendario(s: State, t0: string, hoy: string): { factor?: number; cerrados?: string[] } {
-  if (!s.plan.proyectos.P2?.examen && hoy < addDays(t0, 40)) return {};
+  if (!s.plan.versiones?.P1?.['1.0']?.publicada) return {};
   const c = calibrar(calendarioVivo(t0, { factor: null, cerrados: [] }), s.days, s.plan, hoy);
   if (c.factor == null || !c.hito) return {};
-  return { factor: c.factor, cerrados: c.hito === 'P3' ? ['P0', 'P1', 'P2', 'P3'] : ['P0', 'P1', 'P2'] };
+  return { factor: c.factor, cerrados: ['P0', 'P1'] };
 }
 
 /** Ola 27 · lo que hace falta para fechar el calendario por horas: T0, inicio del trabajo, extras, pausa, horas reales y factor. */
 function ajustesCalendario(s: State) {
   const t0 = s.settings?.startDate ?? T0_PLAN;
   const hoy = dateKey();
-  const reales = realesProg(s.days, hoy);
+  const reales = realesProg(s.days, hoy, s.plan.horasManuales);
   return { t0, hoy, reales, inicioTrabajo: s.settings?.plan?.t2 ?? addDays(t0, INICIO_TRABAJO_DIAS) };
 }
 const claveCalendario = (s: State) => {
   const a = ajustesCalendario(s);
-  return `${a.t0}|${s.settings?.plan?.t2 ?? ''}|${(s.plan.extrasApagados ?? []).join(',')}|${s.plan.pausaFinDeAnio !== false}|${a.hoy}|${Object.entries(a.reales).map(([d, h]) => `${d}:${h}`).join(',')}|${Object.entries(s.plan.proyectos).filter(([, p]) => p.examen).map(([id]) => id).join(',')}`;
+  return `${a.t0}|${s.settings?.plan?.t2 ?? ''}|${(s.plan.extrasApagados ?? []).join(',')}|${s.plan.pausaFinDeAnio !== false}|${a.hoy}|${Object.entries(a.reales).map(([d, h]) => `${d}:${h}`).join(',')}|${Object.entries(s.plan.proyectos).filter(([, p]) => p.examen).map(([id]) => id).join(',')}|${Object.entries(s.plan.versiones?.P1 ?? {}).map(([v, e]) => `${v}:${e.publicada ?? ''}`).join(',')}`;
 };
 let claveAplicada = '';
 function recalcularCalendario() {
