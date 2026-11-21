@@ -125,7 +125,8 @@ describe('pausas en metas, cortes y avisos', () => {
     expect(con.find((m) => m.clave === 'clips')).toMatchObject({ meta: 35, nota: 'mes 1 del roadmap · 5 por día' });
     setClippingActivo(false);
     const normal = metasSemanaGeneradas('2026-11-23', '2026-11-16');
-    expect(normal.some((m) => m.rama === 'handyx')).toBe(true);
+    // v12.1 (respuesta 7): Handyx está en pausa también fuera del modo intensivo.
+    expect(normal.some((m) => m.rama === 'handyx')).toBe(false);
     const ene = metasMesGeneradas('2027-02-01', '2026-11-16', undefined, { intensiva: true, pausa });
     expect(ene.some((m) => m.rama === 'handyx')).toBe(false);
   });
