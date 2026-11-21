@@ -94,7 +94,7 @@ export function PlanProyecto({ day, id }: { day: DayLog; id?: string }) {
       )}
 
       <MetasBloque bloque={t.id} date={date} titulo={`Metas de ${t.id}`} />
-      <Plegable id={`proy:${t.id}:ficha`} titulo="Ficha" resumen={t.tipo === 'cert' ? 'costo y versión' : 'feature, tecnología, validador'} color={RAMA_COLOR.programacion}><FichaBloque id={t.id} /></Plegable>
+      <Plegable id={`proy:${t.id}:ficha`} titulo="Ficha" resumen={t.tipo === 'cert' ? 'costo y versión' : t.tipo === 'proyecto' ? 'puesto, herramientas, capa física' : 'libros y contenido'} color={RAMA_COLOR.programacion}><FichaBloque id={t.id} /></Plegable>
       {t.tipo === 'proyecto' && <Plegable id={`proy:${t.id}:evidencia`} titulo="Puerta de evidencia" resumen={`${EVIDENCIAS.filter(([k]) => p.evidencia?.[k]).length} de 3`}><EvidenciaProyecto id={t.id} /></Plegable>}
       {(t.tipo === 'proyecto' || t.tipo === 'cert') && <Plegable id={`proy:${t.id}:extras`} titulo="Horas y fechas" resumen={t.horas ? `${t.horas} h` : `${semanas} ${semanas === 1 ? 'semana' : 'semanas'}`}><ExtrasProyecto id={t.id} t0={t0} /></Plegable>}
       {conArq && <Plegable id={`proy:${t.id}:arquitectura`} titulo="Arquitectura" resumen={`${avanceArquitectura(arq)} de 4`} color={RAMA_COLOR.programacion}><ArquitecturaProyecto id={t.id} /></Plegable>}

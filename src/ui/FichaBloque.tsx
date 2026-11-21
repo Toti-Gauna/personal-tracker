@@ -19,13 +19,14 @@ function ListaItems({ xs }: { xs: ItemV7[] }) {
   const extras = xs.filter((x) => x.extra);
   return (
     <>
-      <ul className="pp-items">{base.map((x) => <li key={x.nombre} className={x.estrella ? 'estrella' : ''}>{x.estrella ? <span aria-label="estrella">★ </span> : null}{x.nombre}</li>)}</ul>
+      <ul className="pp-items">{base.map((x) => <li key={x.nombre} className={x.estrella ? 'estrella' : ''}>{x.estrella ? <span aria-label="estrella">★ </span> : null}{x.nombre.charAt(0).toUpperCase() + x.nombre.slice(1)}</li>)}</ul>
       {extras.length > 0 && <p className="sub">Extras: {extras.map((x) => x.nombre).join(', ')}.</p>}
     </>
   );
 }
 
-const Lista = ({ xs }: { xs: string[] }) => (xs.length === 1 ? <>{xs[0]}</> : <ul className="pp-items">{xs.map((x) => <li key={x}>{x}</li>)}</ul>);
+const may1 = (x: string) => x.charAt(0).toUpperCase() + x.slice(1);
+const Lista = ({ xs }: { xs: string[] }) => (xs.length === 1 ? <>{may1(xs[0])}</> : <ul className="pp-items">{xs.map((x) => <li key={x}>{may1(x)}</li>)}</ul>);
 
 /** Ola 30 · la ficha de un proyecto según el roadmap v7 (★ = herramienta o demo estrella, dentro del alcance). */
 export function FichaV7Proyecto({ id }: { id: string }) {
@@ -54,10 +55,12 @@ export function FichaV7Proyecto({ id }: { id: string }) {
     ['Referencia externa', b?.ficha?.referencia],
     ['Quién lo valida', b?.ficha?.validador],
   ];
+  // Los textos del roadmap arrancan en minúscula ("partes a mano, …"): en la ficha van con mayúscula.
+  const may = (v: ReactNode) => (typeof v === 'string' ? v.charAt(0).toUpperCase() + v.slice(1) : v);
   return (
     <section className="pp-ficha">
       <div className="etiqueta pp-sec">Ficha · roadmap v7</div>
-      <dl>{filas.filter(([, v]) => v).map(([k, v]) => <div key={k}><dt>{k}</dt><dd>{v}</dd></div>)}</dl>
+      <dl>{filas.filter(([, v]) => v).map(([k, v]) => <div key={k}><dt>{k}</dt><dd>{may(v)}</dd></div>)}</dl>
       <p className="sub">★ herramienta o demo estrella, dentro del alcance.</p>
     </section>
   );
