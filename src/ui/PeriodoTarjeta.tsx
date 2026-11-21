@@ -12,6 +12,8 @@ const MES = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct
 export const fp = (d: string) => `${Number(d.slice(8))} ${MES[Number(d.slice(5, 7)) - 1]}${d.slice(0, 4) === '2026' ? '' : ` ${d.slice(0, 4)}`}`;
 const n1 = (x: number) => String(Math.round(x * 10) / 10).replace('.', ',');
 const pct = (x: number) => `${Math.round(x * 100)} %`;
+/** Para CSS: sin espacio ("40%"). */
+const css = (x: number) => `${Math.round(x * 1000) / 10}%`;
 
 export const ESTADO: Record<EstadoPeriodo, string> = { proximo: 'próximo', 'en-plan': 'en plan', adelantado: 'adelantado', atrasado: 'atrasado', vencido: 'vencido', hecho: 'hecho' };
 export const NIVEL: Record<NivelPeriodo, string> = { etapa: 'Etapa', fase: 'Fase', bloque: 'Bloque', version: 'Versión', lote: 'Lote', capitulo: 'Capítulo', paper: 'Paper', cert: 'Certificación', hito: 'Hito' };
@@ -39,14 +41,14 @@ export function PeriodoTarjeta({ p, hoy, enlace = true, compacta = false }: { p:
         <span className={`pd-estado ${p.estado}`}>{ESTADO[p.estado]}</span>
       </div>
       <div className="pd-barras" aria-hidden="true">
-        <span className="pd-l mono">tiempo</span><span className="pd-barra"><i style={{ width: pct(p.tiempo) }} /></span><span className="pd-n mono">{pct(p.tiempo)}</span>
-        <span className="pd-l mono">trabajo</span><span className="pd-barra trabajo"><i style={{ width: pct(p.trabajo) }} /></span><span className="pd-n mono">{pct(p.trabajo)}</span>
+        <span className="pd-l mono">tiempo</span><span className="pd-barra"><i style={{ width: css(p.tiempo) }} /></span><span className="pd-n mono">{pct(p.tiempo)}</span>
+        <span className="pd-l mono">trabajo</span><span className="pd-barra trabajo"><i style={{ width: css(p.trabajo) }} /></span><span className="pd-n mono">{pct(p.trabajo)}</span>
       </div>
       {p.marcas.deadline != null && !compacta && (
         <div className="pd-marcas" aria-label={`Estimado ${fp(p.fin)}, fecha límite ${fp(p.deadline!)}`}>
           <span className="pd-pista">
-            <i className="pd-hoy" style={{ left: pct(p.marcas.hoy) }} title="hoy" />
-            <i className="pd-est" style={{ left: pct(p.marcas.estimado!) }} title="estimado" />
+            <i className="pd-hoy" style={{ left: css(p.marcas.hoy) }} title="hoy" />
+            <i className="pd-est" style={{ left: css(p.marcas.estimado!) }} title="estimado" />
             <i className="pd-dl" style={{ left: '100%' }} title="fecha límite" />
           </span>
           <span className="pd-ley mono"><span>hoy</span><span>▲ estimado {fp(p.fin)}</span><span>■ límite {fp(p.deadline!)}</span></span>
