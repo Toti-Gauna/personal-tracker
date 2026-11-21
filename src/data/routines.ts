@@ -335,6 +335,8 @@ export interface Ajustes {
   activo?: { id: string; tipo: string; nombre: string };
   /** v12.1: martes y jueves, el post (EN + ES) y el hilo de X le sacan 30 min al tiempo de construir. */
   postDelDia?: boolean;
+  /** v12.1: el tema del post (la tesis de paper más reciente). */
+  postTema?: string | null;
 }
 
 /** Ola 31 (v7): la preparación de la certificación 1 (Anthropic Academy, 30 min por día) va hasta el 22 dic 2026; después, esa media hora es proyecto. */
@@ -417,7 +419,7 @@ export function ajustarDia(plan: PlannedRoutineBlock[], a: Ajustes): PlannedRout
     if (i >= 0 && out[i].min > 30) {
       const p = out[i];
       const fin = toMin(p.start) + p.min;
-      const post: PlannedRoutineBlock = { block: { ...p.block, id: 'post', label: 'Post del día · LinkedIn (EN + ES) + hilo de X (EN)', short: 'el post', area: 'rutina', rama: 'trabajo', tasks: ['Post de LinkedIn en inglés y español', 'Hilo de X en inglés'] }, start: toHHMM(fin - 30), min: 30 };
+      const post: PlannedRoutineBlock = { block: { ...p.block, id: 'post', label: 'Post del día · LinkedIn (EN + ES) + hilo de X (EN)', short: 'el post', area: 'rutina', rama: 'trabajo', tasks: a.postTema ? [`Post de LinkedIn (EN + ES) sobre la tesis de ${a.postTema}`, 'Hilo de X en inglés con la misma idea'] : ['Post de LinkedIn en inglés y español', 'Hilo de X en inglés'] }, start: toHHMM(fin - 30), min: 30 };
       out = [...out.slice(0, i), { ...p, min: p.min - 30 }, post, ...out.slice(i + 1)];
     }
   }

@@ -1,4 +1,5 @@
 import { puertaBloqueando } from '../data/puertas';
+import { temaDelPost } from '../data/papers';
 import { T0_PLAN } from '../data/plan';
 import { INICIO_TRABAJO_DIAS } from '../data/capacidad';
 import { sprintActivo } from '../data/algoritmos';
@@ -267,7 +268,7 @@ export function startDay(routine: RoutineId, wake: string, date = dateKey()) {
     const activo = tramoActivo(date, t0);
     const v12 = {
       ...(activo ? { activo: { id: activo.id, tipo: activo.tipo, nombre: activo.nombre } } : {}),
-      ...(isoDay(date) === 2 || isoDay(date) === 4 ? { postDelDia: true } : {}),
+      ...(isoDay(date) === 2 || isoDay(date) === 4 ? { postDelDia: true, postTema: temaDelPost(s.study, date) } : {}),
     };
     const v7 = {
       ...(antesDelTrabajo && date <= ACADEMY_HASTA ? { academy: true } : {}),
