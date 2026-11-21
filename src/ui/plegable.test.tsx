@@ -66,7 +66,7 @@ describe('ola 22 · Metas y Estudio livianos', () => {
     prog.open = true;
     fireEvent(prog, new Event('toggle'));
     expect(JSON.parse(localStorage.getItem('trazo.plegables')!)['semana:programacion']).toBe(true);
-    expect(prog.textContent).toContain('Horas de estudio y proyecto');
+    expect(prog.textContent).toContain('Horas de programación');
   });
 
   it('Programación: los 50 bloques van en 4 etapas y solo la de P0 viene abierta', () => {

@@ -110,8 +110,11 @@ describe('pausas en metas, cortes y avisos', () => {
     const { metasSemanaGeneradas, metasMesGeneradas } = await import('./metas-plan');
     const s = metasSemanaGeneradas('2026-11-23', '2026-11-16', { intensiva: true, pausa });
     expect(s.some((m) => m.rama === 'handyx')).toBe(false);
-    // v12.1: 10 h de lunes a viernes y 11 el fin de semana (72).
-    expect(s.find((m) => m.clave === 'horas-prog')).toMatchObject({ meta: 72, nota: '10 h de lunes a viernes y 11 el fin de semana (plan v12.1)' });
+    // v12.1: las horas de la semana salen de la rutina con el bloque activo: de las 72 (10 h × 5 + 11 × 2), 59 son de PetrIA;
+    // el resto es inglés, búsqueda, Anki y recall, cada uno con su meta.
+    expect(s.find((m) => m.clave === 'horas-prog')).toMatchObject({ meta: 59, texto: 'Horas de programación', nota: 'lo que da la rutina esta semana, con el bloque activo de cada día' });
+    expect(s.find((m) => m.clave === 'horas-mate')?.meta).toBe(2);
+    expect(s.find((m) => m.clave === 'horas-ingles')?.meta).toBe(2);
     expect(s.find((m) => m.clave === 'postulaciones')?.meta).toBe(25);
     expect(s.find((m) => m.clave === 'horas-clipping')).toBeUndefined();
     expect(s.find((m) => m.clave === 'clips')).toBeUndefined();

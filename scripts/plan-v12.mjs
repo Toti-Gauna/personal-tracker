@@ -347,6 +347,8 @@ const LLM = ['tokenization', 'next-token prediction', 'pretraining', 'scaling la
 
 const out = {
   version: 1, plan: 'v12.1', t0: '2026-11-16', archivado: 'data/archivo/roadmap-v7/ (roadmap v7, archived 20 Nov 2026)',
+  // Respuesta 7: en pausa, fuera de Hoy y de Metas; los datos quedan.
+  pausados: ['handyx', 'clipping', 'eclipse'],
   etapas: ETAPAS.map((e) => ({ ...e, semanasBase: bloques.filter((b) => b.etapa === e.n).reduce((s, b) => s + b.base, 0), semanasExtra: 0, semanasPlataforma: 0, semanasArquitectura: 0 })),
   fases: FASES, bloques,
   matematica: { ...V7.matematica, diarios: {} },

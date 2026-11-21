@@ -3,6 +3,11 @@
  "plan": "v12.1",
  "t0": "2026-11-16",
  "archivado": "data/archivo/roadmap-v7/ (roadmap v7, archived 20 Nov 2026)",
+ "pausados": [
+  "handyx",
+  "clipping",
+  "eclipse"
+ ],
  "etapas": [
   {
    "n": 1,

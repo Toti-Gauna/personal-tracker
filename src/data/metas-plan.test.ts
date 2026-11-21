@@ -30,7 +30,8 @@ describe('metas generadas desde el plan', () => {
 
   it('el mes de T0 trae las metas del mes 1; diciembre, lo que cierra y la búsqueda prorrateada', () => {
     const nov = metasMesGeneradas('2026-11-20', T0);
-    expect(nov.filter((m) => m.origen === 'plan').map((m) => m.texto)).toEqual(PLAN.etapaActual.mes.metas.map((m) => m.texto));
+    // v12.1 (respuesta 7): la meta de Handyx del mes 1 no sale, Handyx está en pausa.
+    expect(nov.filter((m) => m.origen === 'plan').map((m) => m.texto)).toEqual(PLAN.etapaActual.mes.metas.filter((m) => m.rama !== 'handyx').map((m) => m.texto));
     const dic = metasMesGeneradas('2026-12-14', T0);
     // v12.1: PetrIA se entrega el 9 de diciembre y VitalIA el 30: las dos cierran en diciembre, con la Cert window 1.
     expect(dic.find((m) => m.clave === 'casillas:P1')?.texto).toBe('PetrIA con los 12 puntos del estándar');

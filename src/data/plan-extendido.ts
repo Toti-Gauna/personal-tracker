@@ -251,6 +251,8 @@ export interface PlanExtendido {
   papersSueltos?: PaperV12[];
   plan?: string;
   archivado?: string;
+  /** v12.1: ramas y áreas en pausa (fuera de Hoy y de Metas, con sus datos guardados). */
+  pausados?: string[];
 }
 
 /** v7 · capacidad de programación que no sale de la rutina. */
