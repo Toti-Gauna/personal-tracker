@@ -270,6 +270,8 @@ export interface CfgHoras extends CfgCapacidad {
   /** Factor real/estimado (calibración en P2 y P3) y bloques ya cerrados. */
   factor?: number;
   cerrados?: string[];
+  /** v12.1: corrimientos confirmados (id → fechas nuevas). */
+  corrimientos?: Record<string, { inicio: string; fin: string }>;
 }
 export let CFG_HORAS: CfgHoras = { t0: PLAN.t0, inicioTrabajo: addDays(PLAN.t0, INICIO_TRABAJO_DIAS) };
 /** Horas de programación del día con la rutina y los registros con que se armó el calendario. */
@@ -290,6 +292,7 @@ export function calendarioVivo(t0?: string, o: { factor?: number | null; cerrado
   const cfg = { ...CFG_HORAS, t0: tt, inicioTrabajo: addDays(CFG_HORAS.inicioTrabajo, dias(CFG_HORAS.t0, tt)), pausas: PAUSAS };
   return calendario(PLAN_EXT, {
     ...opcionesDe(EXTRAS_APAGADOS, PAUSAS, tt),
+    ...(CFG_HORAS.corrimientos ? { corrimientos: CFG_HORAS.corrimientos } : {}),
     horas: { capacidad: (f) => horasDelDia(f, cfg), horasSemana: HORAS_SEMANA_PLAN, ...(factor ? { factor } : {}), ...(cerrados ? { cerrados } : {}) },
   });
 }
@@ -341,9 +344,9 @@ function progAuto(desde: number, hasta: number) {
  */
 export function aplicarCalendario(apagados: readonly string[] = [], pausas = true, horas: Partial<CfgHoras> = {}) {
   const t0 = horas.t0 ?? PLAN.t0;
-  CFG_HORAS = { t0, inicioTrabajo: horas.inicioTrabajo ?? addDays(t0, INICIO_TRABAJO_DIAS), ...(horas.reales ? { reales: horas.reales } : {}), ...(horas.hoy ? { hoy: horas.hoy } : {}), ...(horas.factor ? { factor: horas.factor } : {}), ...(horas.cerrados ? { cerrados: horas.cerrados } : {}) };
+  CFG_HORAS = { t0, inicioTrabajo: horas.inicioTrabajo ?? addDays(t0, INICIO_TRABAJO_DIAS), ...(horas.reales ? { reales: horas.reales } : {}), ...(horas.hoy ? { hoy: horas.hoy } : {}), ...(horas.factor ? { factor: horas.factor } : {}), ...(horas.cerrados ? { cerrados: horas.cerrados } : {}), ...(horas.corrimientos && Object.keys(horas.corrimientos).length ? { corrimientos: horas.corrimientos } : {}) };
   PAUSAS = pausas;
-  const cal = calendario(PLAN_EXT, { ...opcionesDe(apagados, pausas, t0), horas: { capacidad: capacidadDelDia, horasSemana: HORAS_SEMANA_PLAN, ...(CFG_HORAS.factor ? { factor: CFG_HORAS.factor } : {}), ...(CFG_HORAS.cerrados ? { cerrados: CFG_HORAS.cerrados } : {}) } }).filter((b) => b.etapa <= 2);
+  const cal = calendario(PLAN_EXT, { ...opcionesDe(apagados, pausas, t0), ...(CFG_HORAS.corrimientos ? { corrimientos: CFG_HORAS.corrimientos } : {}), horas: { capacidad: capacidadDelDia, horasSemana: HORAS_SEMANA_PLAN, ...(CFG_HORAS.factor ? { factor: CFG_HORAS.factor } : {}), ...(CFG_HORAS.cerrados ? { cerrados: CFG_HORAS.cerrados } : {}) } }).filter((b) => b.etapa <= 2);
   TRAMOS = cal.map((b) => {
     const base = BASE_TRAMOS.find((t) => t.id === b.id || t.id === ALIAS[b.id]);
     const tipo = b.tipo as TipoTramo;

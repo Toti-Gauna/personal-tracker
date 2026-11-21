@@ -127,6 +127,8 @@ export interface PlanState {
   compras?: Record<string, { fecha: string; costo?: string }>;
   /** Ola 32: versiones de examen que verificaste (C2 → fecha). */
   certVerificada?: Record<string, string>;
+  /** v12.1: corrimientos que confirmaste para bloques atrasados (id → fechas nuevas y cuándo lo confirmaste). Nunca automáticos. */
+  corrimientos?: Record<string, { inicio: string; fin: string; confirmado: string }>;
   /**
    * Ola 33 (v7): horas reales cargadas a mano por día (programación y matemática). Mandan sobre el foco de ese día: sirven cuando
    * trabajaste sin abrir el foco (el 19 nov quedó vacío) y son las que calibran el plan con PetrIA 1.0 y 1.1.

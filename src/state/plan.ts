@@ -443,3 +443,12 @@ export function setMercado(patch: { ofertas?: number; pct?: Record<string, numbe
     return { ...p, mercado: next as NonNullable<typeof p.mercado> };
   });
 }
+
+/** v12.1 · confirmar la sugerencia de correr bloques atrasados (solo los que elegiste). Las fechas fijas nunca llegan acá. */
+export function confirmarCorrimiento(cs: { id: string; nuevoInicio: string; nuevoFin: string }[], hoy: string) {
+  update((p) => ({ ...p, corrimientos: { ...(p.corrimientos ?? {}), ...Object.fromEntries(cs.map((c) => [c.id, { inicio: c.nuevoInicio, fin: c.nuevoFin, confirmado: hoy }])) } }));
+}
+/** Volver a las fechas del plan para esos bloques. */
+export function deshacerCorrimiento(ids: string[]) {
+  update((p) => ({ ...p, corrimientos: Object.fromEntries(Object.entries(p.corrimientos ?? {}).filter(([id]) => !ids.includes(id))) }));
+}

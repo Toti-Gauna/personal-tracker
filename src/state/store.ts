@@ -117,16 +117,16 @@ function ajustesCalendario(s: State) {
 }
 const claveCalendario = (s: State) => {
   const a = ajustesCalendario(s);
-  return `${a.t0}|${s.settings?.plan?.t2 ?? ''}|${(s.plan.extrasApagados ?? []).join(',')}|${s.plan.pausaFinDeAnio !== false}|${a.hoy}|${Object.entries(a.reales).map(([d, h]) => `${d}:${h}`).join(',')}|${Object.entries(s.plan.proyectos).filter(([, p]) => p.examen).map(([id]) => id).join(',')}|${Object.entries(s.plan.versiones?.P1 ?? {}).map(([v, e]) => `${v}:${e.publicada ?? ''}`).join(',')}`;
+  return `${a.t0}|${s.settings?.plan?.t2 ?? ''}|${(s.plan.extrasApagados ?? []).join(',')}|${s.plan.pausaFinDeAnio !== false}|${a.hoy}|${Object.entries(a.reales).map(([d, h]) => `${d}:${h}`).join(',')}|${Object.entries(s.plan.proyectos).filter(([, p]) => p.examen).map(([id]) => id).join(',')}|${Object.entries(s.plan.versiones?.P1 ?? {}).map(([v, e]) => `${v}:${e.publicada ?? ''}`).join(',')}|${Object.entries(s.plan.corrimientos ?? {}).map(([id, c]) => `${id}:${c.inicio}:${c.fin}`).join(',')}`;
 };
 let claveAplicada = '';
 function recalcularCalendario() {
   claveAplicada = claveCalendario(state);
   const a = ajustesCalendario(state);
   // Primero sin factor (para medir contra el calendario estimado); con las horas reales ya cargadas.
-  aplicarCalendario(state.plan.extrasApagados ?? [], state.plan.pausaFinDeAnio !== false, { t0: a.t0, inicioTrabajo: a.inicioTrabajo, reales: a.reales, hoy: a.hoy });
+  aplicarCalendario(state.plan.extrasApagados ?? [], state.plan.pausaFinDeAnio !== false, { t0: a.t0, inicioTrabajo: a.inicioTrabajo, reales: a.reales, hoy: a.hoy, corrimientos: state.plan.corrimientos });
   const f = factorCalendario(state, a.t0, a.hoy);
-  if (f.factor) aplicarCalendario(state.plan.extrasApagados ?? [], state.plan.pausaFinDeAnio !== false, { t0: a.t0, inicioTrabajo: a.inicioTrabajo, reales: a.reales, hoy: a.hoy, ...f });
+  if (f.factor) aplicarCalendario(state.plan.extrasApagados ?? [], state.plan.pausaFinDeAnio !== false, { t0: a.t0, inicioTrabajo: a.inicioTrabajo, reales: a.reales, hoy: a.hoy, corrimientos: state.plan.corrimientos, ...f });
 }
 applySettings(state.settings);
 setClippingActivo(!!state.settings?.plan?.bloquesPendientes?.clipping);

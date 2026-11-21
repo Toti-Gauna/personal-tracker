@@ -458,6 +458,8 @@ export interface Opciones {
   pausas?: boolean;
   /** Semanas de atraso por bloque (puerta de matemática sin aprobar, proyecto que se pasó). */
   atrasos?: Record<string, number>;
+  /** v12.1: fechas confirmadas que reemplazan a las del bloque (corrimientos por atraso). */
+  corrimientos?: Record<string, { inicio: string; fin: string }>;
 }
 
 export interface BloqueFechado extends BloqueExt {
@@ -616,7 +618,8 @@ export function calendarioHoras(plan: PlanExtendido = PLAN_EXT, o: Opciones = {}
       return;
     }
     // La pausa que cae justo antes del bloque va entre los dos (no con fechas explícitas: ya la tienen adentro).
-    while (!b.fechas && enPausa(cursor)) {
+    const fechas = o.corrimientos?.[b.id] ?? b.fechas;
+    while (!fechas && enPausa(cursor)) {
       const p = pausa(cursor, b.etapa);
       out.push(p);
       cursor = p.diaFin! + 1;
@@ -625,9 +628,9 @@ export function calendarioHoras(plan: PlanExtendido = PLAN_EXT, o: Opciones = {}
     const pausasDentro: number[] = [];
     const marcarPausa = (d: number) => { const w = semanaDe(lunesN(d)); if (!pausasDentro.includes(w)) pausasDentro.push(w); };
     // v12.1: fechas explícitas. El bloque va exactamente ahí; una pausa adentro lo parte (sin moverlo).
-    if (b.fechas) {
-      const fi = Math.round((parseDate(b.fechas.inicio).getTime() - parseDate(t0).getTime()) / 864e5);
-      const ff = Math.round((parseDate(b.fechas.fin).getTime() - parseDate(t0).getTime()) / 864e5);
+    if (fechas) {
+      const fi = Math.round((parseDate(fechas.inicio).getTime() - parseDate(t0).getTime()) / 864e5);
+      const ff = Math.round((parseDate(fechas.fin).getTime() - parseDate(t0).getTime()) / 864e5);
       for (let d = fi; d <= ff; d++) if (enPausa(d)) marcarPausa(d);
       cursor = ff + 1;
       const sem = Math.max(1, Math.round((ff - fi + 1 - pausasDentro.length * 7) / 7));
