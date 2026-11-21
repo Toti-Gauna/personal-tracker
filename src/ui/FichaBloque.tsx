@@ -1,25 +1,88 @@
-import { EVIDENCIAS, evidenciaCompleta } from '../data/plan-state';
+import { ENTREGABLES_VERSION, EVIDENCIAS, evidenciaCompleta } from '../data/plan-state';
+import type { ReactNode } from 'react';
 import { bloqueExtPorId, type BloqueFechado } from '../data/plan-extendido';
+import { PROY_V7, fichaV7, versionesFechadas, type ItemV7 } from '../data/proyectos-v7';
+import { capacidadDelDia } from '../data/plan';
 import { textoDelta } from '../data/diferencia';
 import { daysBetween } from '../data/time';
 import { RAMA_COLOR } from '../data/ramas';
-import { setExtraBloque, setVersionCert, tildarSalida, toggleArquitectura, toggleEvidencia, type TipoExtra } from '../state/plan';
+import { publicarVersion, setExtraBloque, setVersionCert, tildarSalida, toggleArquitectura, toggleEntregableVersion, toggleEvidencia, type TipoExtra } from '../state/plan';
 import { alertaVersion, avanceSalida, calendarioCompleto, salidaDe } from '../data/plan-vistas';
 import { useStore } from '../state/store';
 import { Casilla } from './Casilla';
 import { Plegable } from './Plegable';
+import '../styles/proyecto-v7.css';
+
+/** "★ A · ★ B · C" y, aparte, los extras (lo que no es del alcance mínimo). */
+function ListaItems({ xs }: { xs: ItemV7[] }) {
+  const base = xs.filter((x) => !x.extra);
+  const extras = xs.filter((x) => x.extra);
+  return (
+    <>
+      <ul className="pp-items">{base.map((x) => <li key={x.nombre} className={x.estrella ? 'estrella' : ''}>{x.estrella ? <span aria-label="estrella">★ </span> : null}{x.nombre.charAt(0).toUpperCase() + x.nombre.slice(1)}</li>)}</ul>
+      {extras.length > 0 && <p className="sub">Extras: {extras.map((x) => x.nombre).join(', ')}.</p>}
+    </>
+  );
+}
+
+const may1 = (x: string) => x.charAt(0).toUpperCase() + x.slice(1);
+const Lista = ({ xs }: { xs: string[] }) => (xs.length === 1 ? <>{may1(xs[0])}</> : <ul className="pp-items">{xs.map((x) => <li key={x}>{may1(x)}</li>)}</ul>);
+
+/** Ola 30 · la ficha de un proyecto según el roadmap v7 (★ = herramienta o demo estrella, dentro del alcance). */
+export function FichaV7Proyecto({ id }: { id: string }) {
+  const f = fichaV7(id);
+  const b = bloqueExtPorId(id);
+  if (!f) return null;
+  const filas: [string, ReactNode][] = [
+    ['Puesto', f.puesto],
+    ['Qué hace', f.queHace && <Lista xs={f.queHace} />],
+    ['Problema concreto', f.problema],
+    ['Valor', f.valor],
+    ['Diferencial', f.diferencial && <Lista xs={f.diferencial} />],
+    ['Herramientas', f.herramientas && <ListaItems xs={f.herramientas} />],
+    ['Capa física', f.capaFisica && <ListaItems xs={f.capaFisica} />],
+    [f.medir?.tipo === 'impacto' ? 'Impacto a medir' : 'Ahorro a medir', f.medir && <Lista xs={f.medir.items} />],
+    [`Notificaciones${f.notificaciones?.nota ? ` (${f.notificaciones.nota})` : ''}`, f.notificaciones && <ListaItems xs={f.notificaciones.items} />],
+    ['Voz', f.voz && <ListaItems xs={f.voz} />],
+    ['Escala', f.escala],
+    ['Operación', f.operacion],
+    ['Algorithm spots', f.spots && <Lista xs={f.spots} />],
+    ['Hardware', f.hardware],
+    ['Por qué hace ruido', f.ruido],
+    ['Entrevistas', f.entrevistas],
+    // De la ficha anterior siguen valiendo la pieza hecha a mano, contra qué se mide y quién lo valida (la puerta de evidencia).
+    ['Pieza matemática hecha a mano', b?.ficha?.pieza],
+    ['Referencia externa', b?.ficha?.referencia],
+    ['Quién lo valida', b?.ficha?.validador],
+  ];
+  // Los textos del roadmap arrancan en minúscula ("partes a mano, …"): en la ficha van con mayúscula.
+  const may = (v: ReactNode) => (typeof v === 'string' ? v.charAt(0).toUpperCase() + v.slice(1) : v);
+  return (
+    <section className="pp-ficha">
+      <div className="etiqueta pp-sec">Ficha · roadmap v7</div>
+      <dl>{filas.filter(([, v]) => v).map(([k, v]) => <div key={k}><dt>{k}</dt><dd>{may(v)}</dd></div>)}</dl>
+      <p className="sub">★ herramienta o demo estrella, dentro del alcance.</p>
+    </section>
+  );
+}
 
 /** Ficha del plan extendido (ola 16c): lo que hace distinto a un proyecto, una certificación o una ventana. */
 export function FichaBloque({ id }: { id: string }) {
   const b = bloqueExtPorId(id);
   if (!b) return null;
-  const f = b.ficha;
+  // Ola 30: con la ficha de la v7, esa manda.
+  const v7 = fichaV7(id);
+  const extra7 = PROY_V7.certs[id] ?? {};
+  const cont7 = PROY_V7.ventanas[id]?.contenido;
+  const f = v7 ? undefined : b.ficha;
   const filas: [string, string | undefined][] = f ? [
     ['Rubro', f.rubro], ['Feature diferencial', f.feature], ['Tecnología nueva', f.tecnologiaNueva], ['Visual', f.visual],
     ['Pieza matemática hecha a mano', f.pieza], ['Plataforma extra', f.plataforma], ['Arquitectura', f.arquitectura], ['Referencia externa', f.referencia], ['Quién lo valida', f.validador], ['Se recorta primero si te pasás de horas', b.recortarPrimero?.join(' y ')], ['Perfil al cerrar', f.perfil],
   ] : [];
   return (
     <>
+      {v7 && <FichaV7Proyecto id={id} />}
+      {v7 && (b.alternativa || b.recortable) && <p className="sub">{b.alternativa ? `Reemplazo propuesto, a confirmar: ${b.alternativa}. ` : ''}{b.recortable ? 'Recortable si falta tiempo.' : ''}</p>}
       {f && (
         <section className="pp-ficha">
           <div className="etiqueta pp-sec">Ficha</div>
@@ -35,6 +98,9 @@ export function FichaBloque({ id }: { id: string }) {
             <div><dt>Costo</dt><dd>{b.cert.costo ?? 'Sin verificar'}{b.cert.costo && !b.cert.verificado ? ' · sin verificar' : b.cert.verificado ? ' · verificado el 15 nov 2026' : ''}</dd></div>
             {b.cert.requiere && <div><dt>Requiere</dt><dd>{b.cert.requiere}</dd></div>}
             {b.cert.notas && <div><dt>Notas</dt><dd>{b.cert.notas}</dd></div>}
+            {b.numero != null && <div><dt>En el roadmap</dt><dd>Certificación {b.numero}</dd></div>}
+            {extra7.preparacion && <div><dt>Preparación</dt><dd>{extra7.preparacion}</dd></div>}
+            {extra7.requisito && <div><dt>Requisito</dt><dd>{extra7.requisito}</dd></div>}
           </dl>
           <p className="sub">Los precios y versiones cambian: reconfirmá al reservar el examen.</p>
         </section>
@@ -46,6 +112,7 @@ export function FichaBloque({ id }: { id: string }) {
             <div><dt>Libro principal</dt><dd>{b.mate.principal.join(' · ')}</dd></div>
             <div><dt>Habilita</dt><dd>{b.mate.habilita.join(', ')}</dd></div>
             <div><dt>Perfil</dt><dd>{b.mate.perfil}</dd></div>
+            {cont7 && <div><dt>Contenido (v7)</dt><dd>{cont7}</dd></div>}
           </dl>
           <a className="fila-link" href={`#/estudio/mate/${b.id}`}>Refuerzo según el tipo de error <span aria-hidden="true">→</span></a>
         </section>
@@ -189,6 +256,68 @@ export function HorasYRoadmap({ b }: { b: BloqueFechado }) {
   );
 }
 
+const ESTADO_VERSION = { publicada: 'publicada', 'en-curso': 'en curso', proxima: 'próxima', atrasada: 'atrasada' } as const;
+
+/**
+ * Ola 30 · las versiones de un proyecto (1.0 MVP, 1.1 Producto, 2.0 Plataforma, 3.0 Producción): fechas de Trazo sobre el calendario
+ * vivo contra las del roadmap, horas (medidas o repartidas por días), alcance y lo que sale con cada una (notas, video de 30 s, README).
+ */
+export function VersionesProyecto({ id, date, t0 }: { id: string; date: string; t0: string }) {
+  const plan = useStore((s) => s.plan);
+  useStore((s) => s.days);
+  const b = calendarioCompleto(t0).find((x) => x.id === id);
+  if (!b) return null;
+  const vs = versionesFechadas(id, b, capacidadDelDia, plan, date);
+  if (!vs.length) return null;
+  return (
+    <section className="pp-versiones-v7">
+      <ol className="pp-vers">
+        {vs.map((v) => {
+          const r = v.registro;
+          return (
+            <li key={v.id} className={v.estado}>
+              <div className="fila-t">
+                <b><span className="mono">{v.id}</span> {v.nombre}</b>
+                <span className={`pp-ver-estado ${v.estado} mono`}>{r.publicada ? `publicada ${fm(r.publicada)}` : ESTADO_VERSION[v.estado]}</span>
+              </div>
+              <p className="sub mono">
+                {v.enCurso && !v.inicioTrazo ? 'en curso · la arman los agentes' : `Trazo ${fm(v.inicioTrazo ?? v.inicio!)} — ${fm(v.finTrazo ?? v.fin!)}`}
+                {v.fin && v.finTrazo ? ` · roadmap ${fm(v.fin)} (${textoDelta(v.delta ?? 0)})` : ''}
+                {v.horas != null ? ` · ${v.derivadas ? '≈ ' : ''}${v.horas} h${v.derivadas ? ' (repartidas por días)' : ''}` : ''}
+              </p>
+              {v.alcance.length > 0 && <ul className="pp-items">{v.alcance.map((x) => <li key={x}>{x}</li>)}</ul>}
+              <div className="pp-ver-ent">
+                {ENTREGABLES_VERSION.map(([k, nombre]) => (
+                  <label key={k}><Casilla checked={!!r[k]} label={`${nombre} de la ${v.id}: marcar`} onChange={() => toggleEntregableVersion(id, v.id, k)} /> {nombre}</label>
+                ))}
+              </div>
+              {r.publicada
+                ? <button className="subrayado" onClick={() => publicarVersion(id, v.id, null)}>Deshacer publicada</button>
+                : <button className="btn-borde" onClick={() => publicarVersion(id, v.id, date)}>Publicada hoy</button>}
+            </li>
+          );
+        })}
+      </ol>
+      <p className="sub">Cada versión sale con notas de versión, un video demo de 30 s y el README actualizado. Si una se atrasa, se mueven fechas: no se recorta profundidad.</p>
+    </section>
+  );
+}
+
+/** Las versiones en su plegable, con el resumen: cuántas publicadas y cuál está en curso. */
+export function VersionesPlegable({ id, date, t0 }: { id: string; date: string; t0: string }) {
+  const plan = useStore((s) => s.plan);
+  const b = calendarioCompleto(t0).find((x) => x.id === id);
+  if (!b || !fichaV7(id)) return null;
+  const vs = versionesFechadas(id, b, capacidadDelDia, plan, date);
+  const pub = vs.filter((v) => v.estado === 'publicada').length;
+  const ahora = vs.find((v) => v.estado === 'en-curso' || v.estado === 'atrasada');
+  return (
+    <Plegable id={`proy:${id}:versiones`} titulo="Versiones" resumen={`${pub} de ${vs.length} publicadas${ahora ? ` · ${ahora.id} ${ESTADO_VERSION[ahora.estado]}` : ''}`} color={RAMA_COLOR.programacion}>
+      <VersionesProyecto id={id} date={date} t0={t0} />
+    </Plegable>
+  );
+}
+
 /** Versión del examen de una certificación (Security+): elegirla y ver si se retira antes del examen. */
 export function VersionExamen({ id, date, t0 }: { id: string; date: string; t0: string }) {
   const plan = useStore((s) => s.plan);
@@ -226,8 +355,13 @@ export function TecnologiasProyecto({ id }: { id: string }) {
   if (!b || !tec.length) return <p className="sub">Este bloque no suma tecnología nueva.</p>;
   const marcadas = tec.filter((t) => t.marca);
   const trabajo = tec.filter((t) => !t.marca);
+  const st = fichaV7(id)?.stack;
   return (
     <>
+      {st?.ambientes.length ? (
+        <dl className="pp-stack">{st.ambientes.map((a) => <div key={a.ambiente}><dt>{a.ambiente}</dt><dd>{a.texto}</dd></div>)}</dl>
+      ) : null}
+      {st?.ambientes.length ? <p className="sub">† propuesta a confirmar. Abajo, las tecnologías que cuenta la tabla de demanda.</p> : null}
       {marcadas.length > 0 && (
         <ul className="tec-lista">
           {marcadas.map((t) => (
@@ -241,8 +375,8 @@ export function TecnologiasProyecto({ id }: { id: string }) {
       )}
       {marcadas.length > 0 && <p className="sub">Una tecnología nueva por proyecto como máximo, y ninguna en bloques con certificación.</p>}
       <section className="re-sec">
-        <span className="etiqueta">Parte del trabajo</span>
-        <div className="pp-chips">{trabajo.map((t) => <span key={t.nombre} className={`mono${t.opcional ? ' opcional' : ''}`}>{t.nombre}{t.opcional ? ' · opcional' : ''}</span>)}</div>
+        <span className="etiqueta">{st?.ambientes.length ? 'Tecnologías' : 'Parte del trabajo'}</span>
+        <div className="pp-chips">{trabajo.map((t) => <span key={t.nombre} className={`mono${t.opcional ? ' opcional' : ''}`} title={t.ambiente}>{t.nombre}{t.opcional ? ' †' : ''}</span>)}</div>
       </section>
       {b.recortarPrimero?.length ? <p className="sub">Si {id} se pasa de horas, se recorta primero: <b>{b.recortarPrimero.join(' y ')}</b>.</p> : null}
       {b.historial?.length ? (

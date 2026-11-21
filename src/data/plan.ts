@@ -17,7 +17,11 @@ import type { Area, Rama } from './types';
 // ——— Tipos ———
 
 export type TipoTramo = 'proyecto' | 'cert' | 'ventana' | 'descanso' | 'colchon' | 'cierre' | 'sumas';
-export type Capa = 'ux' | 'tresd' | 'animacion' | 'docs' | 'venta' | 'ingenieria';
+/**
+ * Ola 30 (v7) · los 12 puntos del estándar de alto valor. Los 6 de antes (ux, tresd, animacion, docs, venta, ingenieria) quedan
+ * guardados en el estado de cada proyecto pero ya no se muestran ni cuentan.
+ */
+export type Capa = 'produccion' | 'datos' | 'metricas' | 'diseno' | 'seguridad' | 'llm' | 'escala' | 'operacion' | 'frontend' | 'spots' | 'entrevista' | 'opensource';
 
 /** Un tramo de la rama programación: proyecto, certificación, ventana de matemática, descanso o colchón. */
 export interface Tramo {
@@ -189,7 +193,7 @@ interface PlanFile {
   ramas: { id: Rama; nombre: string; color: string; contiene: string }[];
   hitos: Hito[];
   programacion: {
-    tramos: Tramo[]; pares: [string, string][]; estandar: { id: Capa; nombre: string; texto: string }[]; presupuesto: { nucleo: number; producto: number; lanzamiento: number }; laboratorios: string;
+    tramos: Tramo[]; pares: [string, string][]; estandar: { id: Capa; nombre: string; texto: string; detalle?: string[] }[]; presupuesto: { nucleo: number; producto: number; lanzamiento: number }; laboratorios: string;
     /** Créditos de la API de Claude (US$) por proyecto y reserva. */
     creditos: Record<string, number>;
     /** Semanas del calendario original, para el contador de semanas ganadas. */

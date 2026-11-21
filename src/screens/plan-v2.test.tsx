@@ -23,7 +23,10 @@ describe('ola 24 · pantallas del plan v2', () => {
   it('P1 (v7): la ficha sigue con su detalle; "Horas y fechas" muestra las horas de ahora y de antes y la diferencia contra el roadmap', () => {
     const { unmount } = render(<Metas day={day()} tab="proyecto/P1" />);
     const ficha = abrir('Ficha');
-    expect(within(ficha).getByText(/2 servicios con contrato OpenAPI/)).toBeInTheDocument();
+    // Ola 30: la ficha es la del roadmap v7 (★ = dentro del alcance).
+    expect(within(ficha).getByText('Full-stack AI Engineer (energía)')).toBeInTheDocument();
+    expect(within(ficha).getByText(/Sweet spots/).closest('li')).toHaveClass('estrella');
+    expect(within(ficha).getByText(/Extras: alertas, más cuencas, cumplimiento, yacimiento 3D/)).toBeInTheDocument();
     const h = abrir('Horas y fechas');
     expect(within(h).getByText(/304 h \(antes 122 h\) · 19 nov 2026 — 26 dic 2026/)).toBeInTheDocument();
     expect(within(h).getByText(/El roadmap estima 19 nov 2026 — 5 ene 2027: Trazo lo termina 10 días antes/)).toBeInTheDocument();

@@ -10,7 +10,8 @@ import type { Rama } from './types';
 export type TipoError = 'concepto' | 'tecnica' | 'descuido';
 
 export interface ProyectoEstado {
-  estandar: Partial<Record<Capa, boolean>>;
+  /** Puntos del estándar marcados (ola 30: los 12 de la v7; las 6 casillas de antes quedan guardadas sin mostrarse). */
+  estandar: Partial<Record<Capa | string, boolean>>;
   /** Minutos registrados por categoría. */
   tiempo: { nucleo: number; producto: number; lanzamiento: number };
   revisiones: { fecha: string; texto: string; tipo: TipoError }[];
@@ -113,7 +114,19 @@ export interface PlanState {
   metasBloque?: Record<string, MetaBloque[]>;
   /** Ola 20: criterios del nivel de salida tildados por ventana (W1 → índices). */
   salida?: Record<string, number[]>;
+  /** Ola 30 (v7): estado de cada versión de un proyecto (P1 → "1.0" → publicada y lo que sale con ella). */
+  versiones?: Record<string, Record<string, EstadoVersion>>;
 }
+
+/** Ola 30 · cada versión sale con notas de versión, un video demo de 30 s y el README actualizado. */
+export interface EstadoVersion {
+  /** Fecha en que la publicaste. */
+  publicada?: string;
+  notas?: boolean;
+  video?: boolean;
+  readme?: boolean;
+}
+export const ENTREGABLES_VERSION: [keyof Omit<EstadoVersion, 'publicada'>, string][] = [['notas', 'Notas de versión'], ['video', 'Video demo de 30 s'], ['readme', 'README actualizado']];
 
 export const emptyPlan = (): PlanState => ({
   entrevistas: [], postulaciones: [], contadores: {},

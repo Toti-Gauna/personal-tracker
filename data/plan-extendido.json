@@ -65,20 +65,31 @@
      "alias": [
       "nextjs",
       "next js"
-     ]
+     ],
+     "ambiente": "Frontend"
+    },
+    {
+     "nombre": "TypeScript",
+     "alias": [
+      "ts"
+     ],
+     "ambiente": "Frontend"
     },
     {
      "nombre": "Three.js",
      "alias": [
       "threejs",
       "three js"
-     ]
+     ],
+     "ambiente": "Frontend"
     },
     {
-     "nombre": "ElevenLabs"
+     "nombre": "Module Federation",
+     "ambiente": "Infra"
     },
     {
-     "nombre": "Higgsfield"
+     "nombre": "platform-kit",
+     "ambiente": "Infra"
     }
    ],
    "historial": [
@@ -101,6 +112,11 @@
      "fecha": "2026-11-20",
      "cambio": "Pasa a llamarse Constelación (antes Consolidación)",
      "motivo": "Roadmap v7"
+    },
+    {
+     "fecha": "2026-11-20",
+     "cambio": "Las tecnologías salen del stack de la v7, por ambiente",
+     "motivo": "Roadmap v7 (stack)"
     }
    ],
    "dias": 3,
@@ -134,67 +150,150 @@
    },
    "tecnologias": [
     {
-     "nombre": "Java"
-    },
-    {
-     "nombre": "Spring Boot",
+     "nombre": "Next.js",
      "alias": [
-      "spring"
-     ]
+      "nextjs",
+      "next js"
+     ],
+     "ambiente": "Frontend"
     },
     {
-     "nombre": "Python"
-    },
-    {
-     "nombre": "RAG"
-    },
-    {
-     "nombre": "Evals (set de preguntas de referencia y métrica de aciertos)",
+     "nombre": "TypeScript",
      "alias": [
-      "Evals",
-      "evaluaciones de LLM",
-      "LLM evals"
-     ]
+      "ts"
+     ],
+     "ambiente": "Frontend"
     },
     {
-     "nombre": "MCP"
-    },
-    {
-     "nombre": "Docker"
+     "nombre": "MapLibre GL",
+     "ambiente": "Frontend"
     },
     {
      "nombre": "Three.js",
      "alias": [
       "threejs",
       "three js"
-     ]
+     ],
+     "ambiente": "Frontend"
     },
     {
-     "nombre": "LangGraph (agente analista con herramientas)",
-     "marca": "nueva",
-     "alias": [
-      "LangGraph",
-      "LangChain",
-      "agentes"
-     ]
+     "nombre": "AR Quick Look",
+     "nota": "USDZ",
+     "ambiente": "Frontend"
     },
     {
-     "nombre": "Cola asíncrona para la ingesta (RabbitMQ o SQS)",
-     "alias": [
-      "RabbitMQ",
-      "SQS",
-      "colas de mensajes",
-      "message queue"
-     ]
+     "nombre": "Java",
+     "ambiente": "Backend"
     },
     {
-     "nombre": "Conector a una API de terceros en sandbox",
+     "nombre": "Spring Boot",
      "alias": [
-      "API de terceros",
-      "integración con APIs",
-      "integraciones con APIs",
-      "REST API"
-     ]
+      "spring"
+     ],
+     "ambiente": "Backend"
+    },
+    {
+     "nombre": "Node.js",
+     "alias": [
+      "node",
+      "nodejs"
+     ],
+     "ambiente": "Backend"
+    },
+    {
+     "nombre": "NestJS",
+     "ambiente": "Backend"
+    },
+    {
+     "nombre": "Python",
+     "ambiente": "IA por API"
+    },
+    {
+     "nombre": "FastAPI",
+     "ambiente": "IA por API"
+    },
+    {
+     "nombre": "LangGraph",
+     "ambiente": "IA por API"
+    },
+    {
+     "nombre": "Claude",
+     "ambiente": "IA por API"
+    },
+    {
+     "nombre": "pgvector",
+     "ambiente": "IA por API"
+    },
+    {
+     "nombre": "MCP",
+     "ambiente": "IA por API"
+    },
+    {
+     "nombre": "ElevenLabs",
+     "ambiente": "IA por API"
+    },
+    {
+     "nombre": "Twilio",
+     "ambiente": "IA por API"
+    },
+    {
+     "nombre": "LightGBM",
+     "opcional": true,
+     "nota": "propuesta a confirmar (†)",
+     "ambiente": "ML propio"
+    },
+    {
+     "nombre": "H3",
+     "opcional": true,
+     "nota": "propuesta a confirmar (†)",
+     "ambiente": "ML propio"
+    },
+    {
+     "nombre": "Arps",
+     "ambiente": "ML propio"
+    },
+    {
+     "nombre": "Postgres",
+     "alias": [
+      "postgresql"
+     ],
+     "ambiente": "DB"
+    },
+    {
+     "nombre": "PostGIS",
+     "ambiente": "DB"
+    },
+    {
+     "nombre": "RabbitMQ",
+     "ambiente": "Infra"
+    },
+    {
+     "nombre": "Pact",
+     "ambiente": "Infra"
+    },
+    {
+     "nombre": "MQTT",
+     "ambiente": "Infra"
+    },
+    {
+     "nombre": "GitHub Actions",
+     "ambiente": "Infra"
+    },
+    {
+     "nombre": "Render",
+     "ambiente": "Infra"
+    },
+    {
+     "nombre": "platform-kit",
+     "ambiente": "Infra"
+    },
+    {
+     "nombre": "AWS",
+     "alias": [
+      "amazon web services"
+     ],
+     "nota": "S3, SQS, Lambda, SES",
+     "ambiente": "Cloud"
     }
    ],
    "historial": [
@@ -227,6 +326,11 @@
      "fecha": "2026-11-20",
      "cambio": "Ya no tiene lista de recortes: si una versión se atrasa, se mueven fechas",
      "motivo": "Roadmap v7 (decisión de fondo)"
+    },
+    {
+     "fecha": "2026-11-20",
+     "cambio": "Las tecnologías salen del stack de la v7, por ambiente",
+     "motivo": "Roadmap v7 (stack)"
     }
    ],
    "horas": 304,
@@ -281,45 +385,92 @@
    },
    "tecnologias": [
     {
-     "nombre": "Go"
-    },
-    {
-     "nombre": "MCP"
-    },
-    {
-     "nombre": "OAuth"
-    },
-    {
-     "nombre": "OWASP LLM Top 10"
-    },
-    {
-     "nombre": "rate limiting"
-    },
-    {
-     "nombre": ".NET con FHIR (C# y ASP.NET Core)",
-     "marca": "nueva",
+     "nombre": "Next.js",
      "alias": [
-      ".NET",
-      "dotnet",
-      "C#",
-      "ASP.NET Core",
-      "FHIR"
-     ]
+      "nextjs",
+      "next js"
+     ],
+     "ambiente": "Frontend"
     },
     {
-     "nombre": "Despliegue en Azure con Azure OpenAI",
+     "nombre": "TypeScript",
      "alias": [
-      "Azure",
-      "Azure OpenAI"
-     ]
+      "ts"
+     ],
+     "ambiente": "Frontend"
     },
     {
-     "nombre": "Revisión de accesibilidad",
+     "nombre": "C#",
      "alias": [
-      "accesibilidad",
-      "a11y",
-      "WCAG"
-     ]
+      "csharp"
+     ],
+     "ambiente": "Backend"
+    },
+    {
+     "nombre": "ASP.NET Core",
+     "ambiente": "Backend"
+    },
+    {
+     "nombre": "Firely SDK",
+     "opcional": true,
+     "nota": "propuesta a confirmar (†)",
+     "ambiente": "Backend"
+    },
+    {
+     "nombre": "EF Core",
+     "opcional": true,
+     "nota": "propuesta a confirmar (†)",
+     "ambiente": "Backend"
+    },
+    {
+     "nombre": "YARP",
+     "ambiente": "Backend"
+    },
+    {
+     "nombre": "Rust",
+     "ambiente": "Backend"
+    },
+    {
+     "nombre": "WebAssembly",
+     "ambiente": "Backend"
+    },
+    {
+     "nombre": "Python",
+     "ambiente": "IA por API"
+    },
+    {
+     "nombre": "Azure OpenAI",
+     "ambiente": "IA por API"
+    },
+    {
+     "nombre": "Claude",
+     "ambiente": "IA por API"
+    },
+    {
+     "nombre": "SQL Server",
+     "opcional": true,
+     "nota": "propuesta a confirmar (†)",
+     "ambiente": "DB"
+    },
+    {
+     "nombre": "SMART on FHIR",
+     "ambiente": "Infra"
+    },
+    {
+     "nombre": "MQTT",
+     "ambiente": "Infra"
+    },
+    {
+     "nombre": "platform-kit",
+     "ambiente": "Infra"
+    },
+    {
+     "nombre": "Azure Health Data Services",
+     "ambiente": "Cloud"
+    },
+    {
+     "nombre": "Entra ID",
+     "ambiente": "Cloud"
     }
    ],
    "historial": [
@@ -347,6 +498,11 @@
      "fecha": "2026-11-20",
      "cambio": "Ya no tiene lista de recortes: si una versión se atrasa, se mueven fechas",
      "motivo": "Roadmap v7 (decisión de fondo)"
+    },
+    {
+     "fecha": "2026-11-20",
+     "cambio": "Las tecnologías salen del stack de la v7, por ambiente",
+     "motivo": "Roadmap v7 (stack)"
     }
    ],
    "horas": 155,
@@ -458,45 +614,76 @@
    },
    "tecnologias": [
     {
-     "nombre": "pandas"
-    },
-    {
-     "nombre": "scikit-learn"
-    },
-    {
-     "nombre": "incertidumbre"
-    },
-    {
-     "nombre": "MLflow"
-    },
-    {
      "nombre": "Three.js",
      "alias": [
       "threejs",
       "three js"
-     ]
+     ],
+     "ambiente": "Frontend"
     },
     {
      "nombre": "Ruby on Rails",
-     "marca": "nueva",
      "alias": [
       "Rails",
-      "Ruby"
-     ]
+      "Ruby",
+      "rails"
+     ],
+     "ambiente": "Frontend"
     },
     {
-     "nombre": "Gradient boosting y predicción conforme",
-     "alias": [
-      "gradient boosting",
-      "XGBoost"
-     ]
+     "nombre": "Expo",
+     "ambiente": "Frontend"
     },
     {
-     "nombre": "GraphQL en el backoffice de Rails",
-     "opcional": true,
+     "nombre": "GraphQL",
+     "ambiente": "Backend"
+    },
+    {
+     "nombre": "Claude",
+     "ambiente": "IA por API"
+    },
+    {
+     "nombre": "scikit-learn",
+     "ambiente": "ML propio"
+    },
+    {
+     "nombre": "MLflow",
+     "ambiente": "ML propio"
+    },
+    {
+     "nombre": "Dagster",
+     "ambiente": "ML propio"
+    },
+    {
+     "nombre": "Postgres",
      "alias": [
-      "GraphQL"
-     ]
+      "postgresql"
+     ],
+     "ambiente": "DB"
+    },
+    {
+     "nombre": "BigQuery",
+     "ambiente": "DB"
+    },
+    {
+     "nombre": "k3s",
+     "ambiente": "Infra"
+    },
+    {
+     "nombre": "Helm",
+     "ambiente": "Infra"
+    },
+    {
+     "nombre": "MQTT",
+     "ambiente": "Infra"
+    },
+    {
+     "nombre": "GCP",
+     "alias": [
+      "google cloud"
+     ],
+     "nota": "BigQuery, Vertex AI",
+     "ambiente": "Cloud"
     }
    ],
    "historial": [
@@ -509,6 +696,11 @@
      "fecha": "2026-11-20",
      "cambio": "Pasa a llamarse AgrIA (antes Surco v1 · agro); horas: antes 122 h, ahora ≈ 180 h",
      "motivo": "Roadmap v7"
+    },
+    {
+     "fecha": "2026-11-20",
+     "cambio": "Las tecnologías salen del stack de la v7, por ambiente",
+     "motivo": "Roadmap v7 (stack)"
     }
    ],
    "horas": 180,
@@ -540,24 +732,45 @@
    },
    "tecnologias": [
     {
-     "nombre": "Rust"
-    },
-    {
      "nombre": "Three.js",
      "alias": [
       "threejs",
       "three js"
-     ]
+     ],
+     "ambiente": "Frontend"
     },
     {
-     "nombre": "telemetría"
+     "nombre": "Expo",
+     "ambiente": "Frontend"
     },
     {
-     "nombre": "órbitas (SGP4)"
+     "nombre": "ViroReact",
+     "ambiente": "Frontend"
     },
     {
-     "nombre": "WebAssembly y estándares CCSDS",
-     "marca": "nueva"
+     "nombre": "Rust",
+     "nota": "SGP4, CCSDS",
+     "ambiente": "Backend"
+    },
+    {
+     "nombre": "websockets",
+     "ambiente": "Backend"
+    },
+    {
+     "nombre": "MQTT",
+     "ambiente": "Infra"
+    },
+    {
+     "nombre": "mTLS",
+     "ambiente": "Infra"
+    },
+    {
+     "nombre": "OTA",
+     "ambiente": "Infra"
+    },
+    {
+     "nombre": "AWS IoT",
+     "ambiente": "Cloud"
     }
    ],
    "horas": 215,
@@ -572,6 +785,11 @@
      "fecha": "2026-11-20",
      "cambio": "Pasa a llamarse Antena (antes Estación v1 · espacio); horas: antes 147 h, ahora ≈ 215 h",
      "motivo": "Roadmap v7"
+    },
+    {
+     "fecha": "2026-11-20",
+     "cambio": "Las tecnologías salen del stack de la v7, por ambiente",
+     "motivo": "Roadmap v7 (stack)"
     }
    ]
   },
@@ -614,12 +832,97 @@
     "perfil": "Sr Full-stack → AI Engineer (RAG multifuente y agentes)",
     "feature": "RAG con citas y evals sobre todo tu trabajo, modo reclutador y MCP público (2.0); voz, CV en AR, email y WhatsApp, métricas en vivo, plantilla open source y prueba de pico viral (2.1)"
    },
-   "tecnologias": [],
+   "tecnologias": [
+    {
+     "nombre": "Next.js",
+     "alias": [
+      "nextjs",
+      "next js"
+     ],
+     "ambiente": "Frontend"
+    },
+    {
+     "nombre": "TypeScript",
+     "alias": [
+      "ts"
+     ],
+     "ambiente": "Frontend"
+    },
+    {
+     "nombre": "Three.js",
+     "alias": [
+      "threejs",
+      "three js"
+     ],
+     "ambiente": "Frontend"
+    },
+    {
+     "nombre": "Node.js",
+     "alias": [
+      "node",
+      "nodejs"
+     ],
+     "ambiente": "Backend"
+    },
+    {
+     "nombre": "Python",
+     "ambiente": "IA por API"
+    },
+    {
+     "nombre": "FastAPI",
+     "ambiente": "IA por API"
+    },
+    {
+     "nombre": "LangGraph",
+     "ambiente": "IA por API"
+    },
+    {
+     "nombre": "Claude",
+     "ambiente": "IA por API"
+    },
+    {
+     "nombre": "MCP",
+     "ambiente": "IA por API"
+    },
+    {
+     "nombre": "Neon",
+     "ambiente": "DB"
+    },
+    {
+     "nombre": "Module Federation",
+     "ambiente": "Infra"
+    },
+    {
+     "nombre": "platform-kit",
+     "ambiente": "Infra"
+    },
+    {
+     "nombre": "Render",
+     "opcional": true,
+     "nota": "propuesta a confirmar (†)",
+     "ambiente": "Cloud"
+    },
+    {
+     "nombre": "Vercel",
+     "opcional": true,
+     "nota": "propuesta a confirmar (†)",
+     "ambiente": "Cloud"
+    },
+    {
+     "nombre": "SES",
+     "ambiente": "Cloud"
+    }
+   ],
    "historial": [
     {
      "fecha": "2026-11-20",
      "cambio": "La 2.0 y la 2.1 de Constelación se planifican aparte (≈ 75 h)",
      "motivo": "Roadmap v7"
+    },
+    {
+     "fecha": "2026-11-20",
+     "cambio": "Las tecnologías salen del stack de la v7, por ambiente",
+     "motivo": "Roadmap v7 (stack)"
     }
    ],
    "que": "Constelación con IA: 2.0 del 6 al 14 jul (RAG con citas y evals, modo reclutador, MCP público) y 2.1 del 15 al 23 jul (voz, CV en AR, notificaciones, plantilla open source)"
@@ -647,37 +950,95 @@
    },
    "tecnologias": [
     {
-     "nombre": "Terraform"
+     "nombre": "Next.js",
+     "alias": [
+      "nextjs",
+      "next js"
+     ],
+     "ambiente": "Frontend"
+    },
+    {
+     "nombre": "Three.js",
+     "alias": [
+      "threejs",
+      "three js"
+     ],
+     "ambiente": "Frontend"
+    },
+    {
+     "nombre": "Expo",
+     "ambiente": "Frontend"
+    },
+    {
+     "nombre": "AR",
+     "ambiente": "Frontend"
+    },
+    {
+     "nombre": "NFC",
+     "ambiente": "Frontend"
+    },
+    {
+     "nombre": "Go",
+     "ambiente": "Backend"
+    },
+    {
+     "nombre": "Modbus",
+     "ambiente": "Backend"
+    },
+    {
+     "nombre": "OPC UA",
+     "ambiente": "Backend"
+    },
+    {
+     "nombre": "DuckDB",
+     "ambiente": "DB"
+    },
+    {
+     "nombre": "Parquet",
+     "ambiente": "DB"
     },
     {
      "nombre": "Kubernetes",
      "alias": [
       "k8s"
-     ]
+     ],
+     "ambiente": "Infra"
     },
     {
-     "nombre": "GitOps"
+     "nombre": "GitOps",
+     "ambiente": "Infra"
     },
     {
-     "nombre": "SBOM y firmas"
+     "nombre": "mTLS",
+     "ambiente": "Infra"
     },
     {
-     "nombre": "políticas como código"
+     "nombre": "Falco",
+     "ambiente": "Infra"
     },
     {
-     "nombre": "IAM y OIDC"
+     "nombre": "SBOM",
+     "ambiente": "Infra"
     },
     {
-     "nombre": "detection engineering"
+     "nombre": "OPA",
+     "ambiente": "Infra"
     },
     {
-     "nombre": "eBPF con Falco",
-     "marca": "nueva"
+     "nombre": "AWS IoT Core",
+     "ambiente": "Cloud"
     },
     {
-     "nombre": "DuckDB y Parquet",
-     "marca": "movida",
-     "desde": "P1"
+     "nombre": "IoT SiteWise",
+     "ambiente": "Cloud"
+    },
+    {
+     "nombre": "Kinesis",
+     "ambiente": "Cloud"
+    },
+    {
+     "nombre": "GuardDuty",
+     "ambiente": "Cloud"
     }
    ],
    "historial": [
@@ -690,6 +1051,11 @@
      "fecha": "2026-11-20",
      "cambio": "Pasa a llamarse PetrIA Guard (antes Faro v2 · petróleo); horas: antes 98 h, ahora ≈ 170 h",
      "motivo": "Roadmap v7"
+    },
+    {
+     "fecha": "2026-11-20",
+     "cambio": "Las tecnologías salen del stack de la v7, por ambiente",
+     "motivo": "Roadmap v7 (stack)"
     }
    ],
    "horas": 170,
@@ -818,27 +1184,63 @@
    },
    "tecnologias": [
     {
-     "nombre": "PyTorch"
-    },
-    {
-     "nombre": "CNN"
-    },
-    {
-     "nombre": "GPU"
-    },
-    {
-     "nombre": "datos sintéticos"
-    },
-    {
      "nombre": "Three.js",
      "alias": [
       "threejs",
       "three js"
-     ]
+     ],
+     "ambiente": "Frontend"
     },
     {
-     "nombre": "Blender con Python para datos sintéticos",
-     "marca": "nueva"
+     "nombre": "Tauri",
+     "ambiente": "Frontend"
+    },
+    {
+     "nombre": "Expo",
+     "ambiente": "Frontend"
+    },
+    {
+     "nombre": "AR",
+     "ambiente": "Frontend"
+    },
+    {
+     "nombre": "Python",
+     "ambiente": "Backend"
+    },
+    {
+     "nombre": "SLO",
+     "ambiente": "Backend"
+    },
+    {
+     "nombre": "Claude",
+     "ambiente": "IA por API"
+    },
+    {
+     "nombre": "RAG",
+     "ambiente": "IA por API"
+    },
+    {
+     "nombre": "PyTorch",
+     "ambiente": "ML propio"
+    },
+    {
+     "nombre": "Blender",
+     "ambiente": "ML propio"
+    },
+    {
+     "nombre": "Postgres",
+     "alias": [
+      "postgresql"
+     ],
+     "ambiente": "DB"
+    },
+    {
+     "nombre": "AWS SageMaker",
+     "ambiente": "Cloud"
+    },
+    {
+     "nombre": "SES",
+     "ambiente": "Cloud"
     }
    ],
    "horas": 205,
@@ -853,6 +1255,11 @@
      "fecha": "2026-11-20",
      "cambio": "Pasa a llamarse AeroScan (antes Lupa v1 · aeroespacial); horas: antes 147 h, ahora ≈ 205 h",
      "motivo": "Roadmap v7"
+    },
+    {
+     "fecha": "2026-11-20",
+     "cambio": "Las tecnologías salen del stack de la v7, por ambiente",
+     "motivo": "Roadmap v7 (stack)"
     }
    ]
   },
@@ -878,20 +1285,51 @@
    },
    "tecnologias": [
     {
-     "nombre": "pipelines"
+     "nombre": "Next.js",
+     "alias": [
+      "nextjs",
+      "next js"
+     ],
+     "ambiente": "Frontend"
     },
     {
-     "nombre": "registro de modelos"
+     "nombre": "Expo",
+     "ambiente": "Frontend"
     },
     {
-     "nombre": "serving en K8s"
+     "nombre": "Python",
+     "ambiente": "Backend"
     },
     {
-     "nombre": "drift"
+     "nombre": "Kubernetes",
+     "alias": [
+      "k8s"
+     ],
+     "ambiente": "Backend"
     },
     {
-     "nombre": "PostGIS y STAC",
-     "marca": "nueva"
+     "nombre": "PCA",
+     "ambiente": "ML propio"
+    },
+    {
+     "nombre": "SVD",
+     "ambiente": "ML propio"
+    },
+    {
+     "nombre": "PostGIS",
+     "ambiente": "DB"
+    },
+    {
+     "nombre": "STAC",
+     "ambiente": "DB"
+    },
+    {
+     "nombre": "GCP",
+     "alias": [
+      "google cloud"
+     ],
+     "nota": "Vertex AI, Earth Engine†",
+     "ambiente": "Cloud"
     }
    ],
    "horas": 150,
@@ -906,6 +1344,11 @@
      "fecha": "2026-11-20",
      "cambio": "Pasa a llamarse AgrIA Sat (antes Surco v2 · agro); horas: antes 98 h, ahora ≈ 150 h",
      "motivo": "Roadmap v7"
+    },
+    {
+     "fecha": "2026-11-20",
+     "cambio": "Las tecnologías salen del stack de la v7, por ambiente",
+     "motivo": "Roadmap v7 (stack)"
     }
    ]
   },
@@ -1007,34 +1450,51 @@
    },
    "tecnologias": [
     {
-     "nombre": "simulación numérica"
-    },
-    {
-     "nombre": "ML adversarial"
-    },
-    {
-     "nombre": "robustez"
-    },
-    {
-     "nombre": "red teaming"
-    },
-    {
-     "nombre": "Three.js",
+     "nombre": "Next.js",
      "alias": [
-      "threejs",
-      "three js"
-     ]
+      "nextjs",
+      "next js"
+     ],
+     "ambiente": "Frontend"
     },
     {
-     "nombre": "garak y PyRIT",
-     "marca": "nueva",
-     "nota": "si se confirma el reemplazo"
+     "nombre": "Python",
+     "ambiente": "Backend"
     },
     {
-     "nombre": "vLLM y LoRA",
-     "marca": "movida",
-     "desde": "P2",
-     "nota": "atacar un modelo propio y medir evals y guardrails"
+     "nombre": "garak",
+     "ambiente": "Backend"
+    },
+    {
+     "nombre": "PyRIT",
+     "ambiente": "Backend"
+    },
+    {
+     "nombre": "Claude",
+     "ambiente": "IA por API"
+    },
+    {
+     "nombre": "Bedrock Guardrails",
+     "ambiente": "IA por API"
+    },
+    {
+     "nombre": "Azure AI Content Safety",
+     "ambiente": "IA por API"
+    },
+    {
+     "nombre": "LoRA",
+     "ambiente": "ML propio"
+    },
+    {
+     "nombre": "AWS",
+     "alias": [
+      "amazon web services"
+     ],
+     "ambiente": "Cloud"
+    },
+    {
+     "nombre": "Azure",
+     "ambiente": "Cloud"
     }
    ],
    "historial": [
@@ -1047,6 +1507,11 @@
      "fecha": "2026-11-20",
      "cambio": "Pasa a llamarse AdversarIA (antes Núcleo · nuclear); horas: antes 74 h, ahora ≈ 130 h",
      "motivo": "Roadmap v7"
+    },
+    {
+     "fecha": "2026-11-20",
+     "cambio": "Las tecnologías salen del stack de la v7, por ambiente",
+     "motivo": "Roadmap v7 (stack)"
     }
    ],
    "horas": 130,
@@ -1078,28 +1543,20 @@
    },
    "tecnologias": [
     {
-     "nombre": "C++"
+     "nombre": "Expo",
+     "ambiente": "Frontend"
     },
     {
-     "nombre": "Jetson"
+     "nombre": "ONNX Runtime",
+     "ambiente": "Frontend"
     },
     {
-     "nombre": "modelos optimizados"
+     "nombre": "SQLite",
+     "ambiente": "DB"
     },
     {
-     "nombre": "simulación"
-    },
-    {
-     "nombre": "Three.js",
-     "alias": [
-      "threejs",
-      "three js"
-     ]
-    },
-    {
-     "nombre": "ONNX Runtime y cuantización",
-     "marca": "nueva",
-     "nota": "si se confirma el reemplazo"
+     "nombre": "AWS IoT Greengrass",
+     "ambiente": "Cloud"
     }
    ],
    "horas": 165,
@@ -1114,6 +1571,11 @@
      "fecha": "2026-11-20",
      "cambio": "Pasa a llamarse AeroScan Edge (antes Lupa v2 · aeroespacial); horas: antes 122 h, ahora ≈ 165 h",
      "motivo": "Roadmap v7"
+    },
+    {
+     "fecha": "2026-11-20",
+     "cambio": "Las tecnologías salen del stack de la v7, por ambiente",
+     "motivo": "Roadmap v7 (stack)"
     }
    ]
   },
@@ -1159,20 +1621,43 @@
    },
    "tecnologias": [
     {
-     "nombre": "detección de anomalías"
+     "nombre": "Microfrontends",
+     "ambiente": "Frontend"
     },
     {
-     "nombre": "arquitectura"
+     "nombre": "Java",
+     "ambiente": "Backend"
     },
     {
-     "nombre": "SLO y costos"
+     "nombre": "Go",
+     "ambiente": "Backend"
     },
     {
-     "nombre": "multiempresa"
+     "nombre": "Kafka",
+     "ambiente": "Infra"
     },
     {
-     "nombre": "Kafka y autoencoders",
-     "marca": "nueva"
+     "nombre": "mTLS",
+     "ambiente": "Infra"
+    },
+    {
+     "nombre": "OpenTelemetry",
+     "ambiente": "Infra"
+    },
+    {
+     "nombre": "Pact",
+     "ambiente": "Infra"
+    },
+    {
+     "nombre": "AWS",
+     "alias": [
+      "amazon web services"
+     ],
+     "ambiente": "Cloud"
+    },
+    {
+     "nombre": "Azure",
+     "ambiente": "Cloud"
     }
    ],
    "horas": 205,
@@ -1187,6 +1672,11 @@
      "fecha": "2026-11-20",
      "cambio": "Pasa a llamarse Antena Ops (antes Estación v2 · espacio); horas: antes 172 h, ahora ≈ 205 h",
      "motivo": "Roadmap v7"
+    },
+    {
+     "fecha": "2026-11-20",
+     "cambio": "Las tecnologías salen del stack de la v7, por ambiente",
+     "motivo": "Roadmap v7 (stack)"
     }
    ]
   },
@@ -1278,8 +1768,55 @@
    },
    "tecnologias": [
     {
-     "nombre": "Vault y SPIFFE",
-     "marca": "nueva"
+     "nombre": "Tauri",
+     "ambiente": "Frontend"
+    },
+    {
+     "nombre": "Rust",
+     "ambiente": "Backend"
+    },
+    {
+     "nombre": "Go",
+     "ambiente": "Backend"
+    },
+    {
+     "nombre": "Postgres",
+     "alias": [
+      "postgresql"
+     ],
+     "opcional": true,
+     "nota": "propuesta a confirmar (†)",
+     "ambiente": "DB"
+    },
+    {
+     "nombre": "Vault",
+     "ambiente": "Infra"
+    },
+    {
+     "nombre": "SPIFFE",
+     "ambiente": "Infra"
+    },
+    {
+     "nombre": "mTLS",
+     "ambiente": "Infra"
+    },
+    {
+     "nombre": "cosign",
+     "opcional": true,
+     "nota": "propuesta a confirmar (†)",
+     "ambiente": "Infra"
+    },
+    {
+     "nombre": "AWS KMS",
+     "ambiente": "Cloud"
+    },
+    {
+     "nombre": "Secrets Manager",
+     "ambiente": "Cloud"
+    },
+    {
+     "nombre": "Azure Key Vault",
+     "ambiente": "Cloud"
     }
    ],
    "horas": 130,
@@ -1293,6 +1830,11 @@
      "fecha": "2026-11-20",
      "cambio": "Pasa a llamarse Bóveda (antes Cripta); horas: antes 98 h, ahora ≈ 130 h",
      "motivo": "Roadmap v7"
+    },
+    {
+     "fecha": "2026-11-20",
+     "cambio": "Las tecnologías salen del stack de la v7, por ambiente",
+     "motivo": "Roadmap v7 (stack)"
     }
    ]
   },
@@ -1338,8 +1880,42 @@
    },
    "tecnologias": [
     {
-     "nombre": "Burp Suite y fuzzing guiado por cobertura",
-     "marca": "nueva"
+     "nombre": "Python",
+     "ambiente": "Backend"
+    },
+    {
+     "nombre": "Burp",
+     "ambiente": "Herramientas"
+    },
+    {
+     "nombre": "ZAP",
+     "opcional": true,
+     "nota": "propuesta a confirmar (†)",
+     "ambiente": "Herramientas"
+    },
+    {
+     "nombre": "Semgrep",
+     "ambiente": "Herramientas"
+    },
+    {
+     "nombre": "SAST",
+     "ambiente": "Herramientas"
+    },
+    {
+     "nombre": "DAST",
+     "ambiente": "Herramientas"
+    },
+    {
+     "nombre": "SCA",
+     "ambiente": "Herramientas"
+    },
+    {
+     "nombre": "AWS Inspector",
+     "ambiente": "Cloud"
+    },
+    {
+     "nombre": "Security Hub",
+     "ambiente": "Cloud"
     }
    ],
    "horas": 165,
@@ -1353,6 +1929,11 @@
      "fecha": "2026-11-20",
      "cambio": "Pasa a llamarse Asedio (antes Bastión); horas: antes 122 h, ahora ≈ 165 h",
      "motivo": "Roadmap v7"
+    },
+    {
+     "fecha": "2026-11-20",
+     "cambio": "Las tecnologías salen del stack de la v7, por ambiente",
+     "motivo": "Roadmap v7 (stack)"
     }
    ]
   },
@@ -1378,8 +1959,28 @@
    },
    "tecnologias": [
     {
-     "nombre": "OpenSearch como SIEM y osquery",
-     "marca": "nueva"
+     "nombre": "Expo",
+     "ambiente": "Frontend"
+    },
+    {
+     "nombre": "Python",
+     "ambiente": "Backend"
+    },
+    {
+     "nombre": "Sigma",
+     "ambiente": "Backend"
+    },
+    {
+     "nombre": "ATT&CK",
+     "ambiente": "Backend"
+    },
+    {
+     "nombre": "OpenSearch",
+     "ambiente": "DB"
+    },
+    {
+     "nombre": "osquery",
+     "ambiente": "Infra"
     }
    ],
    "horas": 195,
@@ -1393,6 +1994,11 @@
      "fecha": "2026-11-20",
      "cambio": "Pasa a llamarse Vigía (antes Centinela); horas: antes 147 h, ahora ≈ 195 h",
      "motivo": "Roadmap v7"
+    },
+    {
+     "fecha": "2026-11-20",
+     "cambio": "Las tecnologías salen del stack de la v7, por ambiente",
+     "motivo": "Roadmap v7 (stack)"
     }
    ]
   },
@@ -1503,8 +2109,37 @@
    },
    "tecnologias": [
     {
-     "nombre": "Polars y Arrow, enlaces PyO3",
-     "marca": "nueva"
+     "nombre": "Tauri",
+     "ambiente": "Frontend"
+    },
+    {
+     "nombre": "Rust",
+     "ambiente": "Backend"
+    },
+    {
+     "nombre": "PyO3",
+     "ambiente": "Backend"
+    },
+    {
+     "nombre": "Claude",
+     "ambiente": "IA por API"
+    },
+    {
+     "nombre": "Parquet",
+     "ambiente": "DB"
+    },
+    {
+     "nombre": "DuckDB",
+     "opcional": true,
+     "nota": "propuesta a confirmar (†)",
+     "ambiente": "DB"
+    },
+    {
+     "nombre": "AWS",
+     "alias": [
+      "amazon web services"
+     ],
+     "ambiente": "Cloud"
     }
    ],
    "horas": 195,
@@ -1519,6 +2154,11 @@
      "fecha": "2026-11-20",
      "cambio": "Pasa a llamarse Alpha Lab (antes Ábaco); horas: antes 147 h, ahora ≈ 195 h",
      "motivo": "Roadmap v7"
+    },
+    {
+     "fecha": "2026-11-20",
+     "cambio": "Las tecnologías salen del stack de la v7, por ambiente",
+     "motivo": "Roadmap v7 (stack)"
     }
    ]
   },
@@ -1545,8 +2185,20 @@
    },
    "tecnologias": [
     {
+     "nombre": "Python",
+     "ambiente": "Backend"
+    },
+    {
      "nombre": "Quarto",
-     "marca": "nueva"
+     "ambiente": "Backend"
+    },
+    {
+     "nombre": "RAG",
+     "ambiente": "IA por API"
+    },
+    {
+     "nombre": "Claude",
+     "ambiente": "IA por API"
     }
    ],
    "horas": 165,
@@ -1561,6 +2213,11 @@
      "fecha": "2026-11-20",
      "cambio": "Pasa a llamarse Paper Trail (antes Brújula); horas: antes 122 h, ahora ≈ 165 h",
      "motivo": "Roadmap v7"
+    },
+    {
+     "fecha": "2026-11-20",
+     "cambio": "Las tecnologías salen del stack de la v7, por ambiente",
+     "motivo": "Roadmap v7 (stack)"
     }
    ]
   },
@@ -1673,7 +2330,36 @@
     "perfil": "Quant Developer (valuación y riesgo)",
     "plataforma": "VR (superficie de volatilidad)"
    },
-   "tecnologias": [],
+   "tecnologias": [
+    {
+     "nombre": "Next.js",
+     "alias": [
+      "nextjs",
+      "next js"
+     ],
+     "ambiente": "Frontend"
+    },
+    {
+     "nombre": "Three.js",
+     "alias": [
+      "threejs",
+      "three js"
+     ],
+     "ambiente": "Frontend"
+    },
+    {
+     "nombre": "C++",
+     "ambiente": "Backend"
+    },
+    {
+     "nombre": "Rust",
+     "ambiente": "Backend"
+    },
+    {
+     "nombre": "Python",
+     "ambiente": "Backend"
+    }
+   ],
    "horas": 200,
    "horasAntes": 147,
    "roadmap": {
@@ -1686,6 +2372,11 @@
      "fecha": "2026-11-20",
      "cambio": "Pasa a llamarse Volta (antes Prisma); horas: antes 147 h, ahora ≈ 200 h",
      "motivo": "Roadmap v7"
+    },
+    {
+     "fecha": "2026-11-20",
+     "cambio": "Las tecnologías salen del stack de la v7, por ambiente",
+     "motivo": "Roadmap v7 (stack)"
     }
    ]
   },
@@ -1712,8 +2403,16 @@
    },
    "tecnologias": [
     {
-     "nombre": "Protocolo FIX",
-     "marca": "nueva"
+     "nombre": "C++",
+     "ambiente": "Backend"
+    },
+    {
+     "nombre": "Rust",
+     "ambiente": "Backend"
+    },
+    {
+     "nombre": "FIX",
+     "ambiente": "Backend"
     }
    ],
    "horas": 160,
@@ -1728,6 +2427,11 @@
      "fecha": "2026-11-20",
      "cambio": "Pasa a llamarse Matchbook (antes Libro); horas: antes 122 h, ahora ≈ 160 h",
      "motivo": "Roadmap v7"
+    },
+    {
+     "fecha": "2026-11-20",
+     "cambio": "Las tecnologías salen del stack de la v7, por ambiente",
+     "motivo": "Roadmap v7 (stack)"
     }
    ]
   },
@@ -1821,8 +2525,30 @@
    },
    "tecnologias": [
     {
-     "nombre": ".NET para el gestor de órdenes y riesgo",
-     "marca": "nueva"
+     "nombre": "Expo",
+     "ambiente": "Frontend"
+    },
+    {
+     "nombre": ".NET",
+     "alias": [
+      "dotnet"
+     ],
+     "ambiente": "Backend"
+    },
+    {
+     "nombre": "Rust",
+     "ambiente": "Backend"
+    },
+    {
+     "nombre": "Postgres",
+     "alias": [
+      "postgresql"
+     ],
+     "ambiente": "DB"
+    },
+    {
+     "nombre": "Kafka",
+     "ambiente": "Infra"
     }
    ],
    "horas": 230,
@@ -1837,6 +2563,11 @@
      "fecha": "2026-11-20",
      "cambio": "Pasa a llamarse Comando (antes Tablero); horas: antes 172 h, ahora ≈ 230 h",
      "motivo": "Roadmap v7"
+    },
+    {
+     "fecha": "2026-11-20",
+     "cambio": "Las tecnologías salen del stack de la v7, por ambiente",
+     "motivo": "Roadmap v7 (stack)"
     }
    ]
   },
@@ -1863,8 +2594,16 @@
    },
    "tecnologias": [
     {
+     "nombre": "Python",
+     "ambiente": "Backend"
+    },
+    {
      "nombre": "ClickHouse",
-     "marca": "nueva"
+     "ambiente": "DB"
+    },
+    {
+     "nombre": "MCP",
+     "ambiente": "IA por API"
     }
    ],
    "horas": 185,
@@ -1879,6 +2618,11 @@
      "fecha": "2026-11-20",
      "cambio": "Pasa a llamarse Ticker (antes Nexo); horas: antes 122 h, ahora ≈ 185 h",
      "motivo": "Roadmap v7"
+    },
+    {
+     "fecha": "2026-11-20",
+     "cambio": "Las tecnologías salen del stack de la v7, por ambiente",
+     "motivo": "Roadmap v7 (stack)"
     }
    ]
   },
@@ -1993,8 +2737,28 @@
    },
    "tecnologias": [
     {
-     "nombre": "Julia para contrastar",
-     "marca": "nueva"
+     "nombre": "WebAssembly",
+     "ambiente": "Frontend"
+    },
+    {
+     "nombre": "WebXR",
+     "ambiente": "Frontend"
+    },
+    {
+     "nombre": "Rust",
+     "ambiente": "Backend"
+    },
+    {
+     "nombre": "C++",
+     "ambiente": "Backend"
+    },
+    {
+     "nombre": "Julia",
+     "ambiente": "Backend"
+    },
+    {
+     "nombre": "AWS Batch",
+     "ambiente": "Cloud"
     }
    ],
    "horas": 245,
@@ -2009,6 +2773,11 @@
      "fecha": "2026-11-20",
      "cambio": "Pasa a llamarse Trayecta (antes Trayectoria); horas: antes 172 h, ahora ≈ 245 h",
      "motivo": "Roadmap v7"
+    },
+    {
+     "fecha": "2026-11-20",
+     "cambio": "Las tecnologías salen del stack de la v7, por ambiente",
+     "motivo": "Roadmap v7 (stack)"
     }
    ]
   },
@@ -2084,8 +2853,24 @@
    },
    "tecnologias": [
     {
-     "nombre": "Gmsh y CalculiX para validar",
-     "marca": "nueva"
+     "nombre": "Rust",
+     "ambiente": "Backend"
+    },
+    {
+     "nombre": "C++",
+     "ambiente": "Backend"
+    },
+    {
+     "nombre": "Gmsh",
+     "ambiente": "Backend"
+    },
+    {
+     "nombre": "Tauri",
+     "ambiente": "Frontend"
+    },
+    {
+     "nombre": "WebAssembly",
+     "ambiente": "Frontend"
     }
    ],
    "horas": 235,
@@ -2100,6 +2885,11 @@
      "fecha": "2026-11-20",
      "cambio": "Pasa a llamarse Malla (antes Cuerda); horas: antes 172 h, ahora ≈ 235 h",
      "motivo": "Roadmap v7"
+    },
+    {
+     "fecha": "2026-11-20",
+     "cambio": "Las tecnologías salen del stack de la v7, por ambiente",
+     "motivo": "Roadmap v7 (stack)"
     }
    ]
   },
@@ -2206,7 +2996,20 @@
     "validador": "Ingeniero del rubro",
     "perfil": "CFD Software Engineer"
    },
-   "tecnologias": [],
+   "tecnologias": [
+    {
+     "nombre": "Rust",
+     "ambiente": "Backend"
+    },
+    {
+     "nombre": "C++",
+     "ambiente": "Backend"
+    },
+    {
+     "nombre": "Python",
+     "ambiente": "Backend"
+    }
+   ],
    "horas": 195,
    "horasAntes": 147,
    "roadmap": {
@@ -2219,6 +3022,11 @@
      "fecha": "2026-11-20",
      "cambio": "Pasa a llamarse Viento (antes Túnel); horas: antes 147 h, ahora ≈ 195 h",
      "motivo": "Roadmap v7"
+    },
+    {
+     "fecha": "2026-11-20",
+     "cambio": "Las tecnologías salen del stack de la v7, por ambiente",
+     "motivo": "Roadmap v7 (stack)"
     }
    ]
   },
@@ -2290,8 +3098,24 @@
    },
    "tecnologias": [
     {
-     "nombre": "ROS 2 y aprendizaje por refuerzo (solo en simulación)",
-     "marca": "nueva"
+     "nombre": "Expo",
+     "ambiente": "Frontend"
+    },
+    {
+     "nombre": "ROS 2",
+     "ambiente": "Backend"
+    },
+    {
+     "nombre": "PX4",
+     "ambiente": "Backend"
+    },
+    {
+     "nombre": "C++",
+     "ambiente": "Backend"
+    },
+    {
+     "nombre": "Python",
+     "ambiente": "Backend"
     }
    ],
    "horas": 250,
@@ -2306,6 +3130,11 @@
      "fecha": "2026-11-20",
      "cambio": "Pasa a llamarse Piloto (antes Rumbo); horas: antes 172 h, ahora ≈ 250 h",
      "motivo": "Roadmap v7"
+    },
+    {
+     "fecha": "2026-11-20",
+     "cambio": "Las tecnologías salen del stack de la v7, por ambiente",
+     "motivo": "Roadmap v7 (stack)"
     }
    ]
   },
@@ -2398,8 +3227,23 @@
    },
    "tecnologias": [
     {
-     "nombre": "Orekit (Java)",
-     "marca": "nueva"
+     "nombre": "Java",
+     "ambiente": "Backend"
+    },
+    {
+     "nombre": "Orekit",
+     "ambiente": "Backend"
+    },
+    {
+     "nombre": "Rust",
+     "ambiente": "Backend"
+    },
+    {
+     "nombre": "Postgres",
+     "alias": [
+      "postgresql"
+     ],
+     "ambiente": "DB"
     }
    ],
    "horas": 205,
@@ -2414,6 +3258,11 @@
      "fecha": "2026-11-20",
      "cambio": "horas: antes 147 h, ahora ≈ 205 h",
      "motivo": "Roadmap v7"
+    },
+    {
+     "fecha": "2026-11-20",
+     "cambio": "Las tecnologías salen del stack de la v7, por ambiente",
+     "motivo": "Roadmap v7 (stack)"
     }
    ]
   },
@@ -2493,8 +3342,28 @@
    },
    "tecnologias": [
     {
-     "nombre": "RTOS con Rust embebido o Ada/SPARK",
-     "marca": "nueva"
+     "nombre": "F Prime",
+     "ambiente": "Backend"
+    },
+    {
+     "nombre": "cFS",
+     "ambiente": "Backend"
+    },
+    {
+     "nombre": "Rust",
+     "ambiente": "Backend"
+    },
+    {
+     "nombre": "Ada/SPARK",
+     "ambiente": "Backend"
+    },
+    {
+     "nombre": "Python",
+     "ambiente": "Herramientas"
+    },
+    {
+     "nombre": "VR",
+     "ambiente": "Frontend"
     }
    ],
    "horas": 265,
@@ -2509,6 +3378,11 @@
      "fecha": "2026-11-20",
      "cambio": "horas: antes 196 h, ahora ≈ 265 h",
      "motivo": "Roadmap v7"
+    },
+    {
+     "fecha": "2026-11-20",
+     "cambio": "Las tecnologías salen del stack de la v7, por ambiente",
+     "motivo": "Roadmap v7 (stack)"
     }
    ]
   },

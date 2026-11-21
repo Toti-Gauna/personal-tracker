@@ -96,8 +96,9 @@ export function avanceMeta(m: MetaGenerada, desde: string, hasta: string, c: Ctx
   const k = m.clave;
   if (!k) return { v: m.hecho ?? 0, auto: false };
   if (k.startsWith('casillas:')) {
+    // Solo los 12 puntos de la v7: las casillas viejas que quedaron guardadas no cuentan.
     const e = c.plan.proyectos[k.slice(9)]?.estandar ?? {};
-    return { v: Object.values(e).filter(Boolean).length, auto: true };
+    return { v: PLAN.programacion.estandar.filter((x) => e[x.id]).length, auto: true };
   }
   if (k.startsWith('examen:')) {
     const ex = c.plan.proyectos[k.slice(7)]?.examen;
@@ -198,7 +199,7 @@ export function metasSemanaGeneradas(fecha: string, t0 = T0_PLAN, op: OpcionesPl
   const out = sinPausa(base, fecha, op.pausa);
   const t = tramoActivo(fecha, t0);
   if (t.tipo === 'proyecto' && t.id !== 'P0') {
-    out.push({ id: 's-casillas', rama: 'programacion', texto: 'Casillas del estándar', meta: 6, clave: `casillas:${t.id}`, origen: 'plan' });
+    out.push({ id: 's-casillas', rama: 'programacion', texto: 'Puntos del estándar', meta: PLAN.programacion.estandar.length, clave: `casillas:${t.id}`, origen: 'plan' });
     // Ola 8b: la entrevista técnica se entrena dentro del proyecto (2 de algoritmos y 1 de diseño).
     out.push({ id: 's-tecnicas', rama: 'programacion', texto: 'Sesiones técnicas de 45 min', meta: PLAN.programacion.tecnica.sesionesPorSemana, clave: 'sesiones-tecnicas', nota: '2 de algoritmos y 1 de diseño', origen: 'plan' });
   }
@@ -276,7 +277,7 @@ export function metasMesGeneradas(fecha: string, t0 = T0_PLAN, study?: StudyStat
     const cierran = TRAMOS.filter((t) => { const f = finDe(t, t0); return f >= a && f <= b && (t.tipo === 'proyecto' || t.tipo === 'cert') && t.id !== 'P0'; });
     for (const t of cierran) {
       if (t.tipo === 'proyecto') {
-        push({ id: `m-cas-${t.id}`, rama: 'programacion', texto: `${nombreTramo(t, false)} con tráiler, docs y landing`, meta: 6, clave: `casillas:${t.id}` });
+        push({ id: `m-cas-${t.id}`, rama: 'programacion', texto: `${nombreTramo(t, false)} con los ${PLAN.programacion.estandar.length} puntos del estándar`, meta: PLAN.programacion.estandar.length, clave: `casillas:${t.id}` });
         push({ id: `m-ex-${t.id}`, rama: 'programacion', texto: `Examen de ${nombreTramo(t, false)} de 85 % o más`, meta: 1, clave: `examen:${t.id}` });
       } else {
         push({ id: `m-cert-${t.id}`, rama: 'programacion', texto: `${t.corto ?? t.nombre} aprobada`, meta: 1 });

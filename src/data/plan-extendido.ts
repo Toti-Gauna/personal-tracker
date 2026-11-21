@@ -100,6 +100,8 @@ export interface Tecnologia {
   alias?: string[];
   opcional?: boolean;
   nota?: string;
+  /** v7 (ola 30): el ambiente del stack (Frontend, Backend, IA por API, ML propio, DB, Infra, Cloud). */
+  ambiente?: string;
 }
 export interface CambioProyecto { fecha: string; cambio: string; motivo: string }
 export interface Descartada { nombre: string; motivo: string; fecha: string }

@@ -7,38 +7,40 @@ const cal = calendarioCompleto();
 const v = (rol: string, stack: string[], extra: Partial<Vacante> = {}): Vacante => ({ id: rol, rol, stack, fecha: HOY, ...extra });
 
 describe('ola 26 · catálogo y detección de tecnologías', () => {
-  it('cada tecnología del plan la cubre un proyecto; las movidas, su destino; ninguna aparece dos veces', () => {
+  it('cada tecnología del plan la cubre el primer proyecto que la tiene (stack v7); ninguna aparece dos veces', () => {
     const c = catalogo();
     const cubre = (n: string) => c.find((x) => x.nombre === n)?.proyecto;
-    expect(cubre('DuckDB y Parquet')).toBe('P5');
-    expect(cubre('vLLM y LoRA')).toBe('P8');
-    expect(cubre('LangGraph (agente analista con herramientas)')).toBe('P1');
-    expect(cubre('Three.js')).toBe('P0'); // la primera que la tiene
+    expect(cubre('DuckDB')).toBe('P5');
+    expect(cubre('LoRA')).toBe('P8');
+    expect(cubre('LangGraph')).toBe('P1'); // P0 (la v1 de Constelación) solo lleva frontend e infra
+    expect(cubre('Three.js')).toBe('P0');
+    expect(cubre('Orekit')).toBe('A5');
     expect(new Set(c.map((x) => x.clave)).size).toBe(c.length);
   });
 
-  it('los alias salen del nombre, de lo que va entre paréntesis y de las partes de "X y Y"', () => {
-    const a = (n: string) => aliasDe(catalogo().find((x) => x.nombre === n)!.alias.length ? { nombre: n, alias: catalogo().find((x) => x.nombre === n)!.alias } : { nombre: n });
-    expect(a('DuckDB y Parquet')).toEqual(expect.arrayContaining(['DuckDB y Parquet', 'DuckDB', 'Parquet']));
-    expect(a('Cola asíncrona para la ingesta (RabbitMQ o SQS)')).toEqual(expect.arrayContaining(['RabbitMQ', 'SQS']));
+  it('los alias salen del nombre, de lo que va entre paréntesis y de las partes de "X y Y"; los de siempre se conservan', () => {
+    expect(aliasDe({ nombre: 'DuckDB y Parquet' })).toEqual(expect.arrayContaining(['DuckDB y Parquet', 'DuckDB', 'Parquet']));
+    expect(aliasDe({ nombre: 'Cola asíncrona para la ingesta (RabbitMQ o SQS)' })).toEqual(expect.arrayContaining(['RabbitMQ', 'SQS']));
     expect(aliasDe({ nombre: 'SBOM y firmas' })).toEqual(expect.arrayContaining(['SBOM']));
     expect(aliasDe({ nombre: 'SBOM y firmas' })).not.toContain('firmas');
+    expect(catalogo().find((x) => x.nombre === 'Kubernetes')!.alias).toContain('k8s');
+    expect(catalogo().find((x) => x.nombre === 'Next.js')!.alias).toContain('nextjs');
   });
 
-  it('un alias ambiguo no cuenta para dos tecnologías: "Java" es la de P1, no "Orekit (Java)" de A5', () => {
+  it('un alias ambiguo no cuenta para dos tecnologías; "Java" es la de P1', () => {
     const c = catalogo();
-    expect(c.find((x) => x.nombre === 'Orekit (Java)')!.alias).not.toContain('Java');
     expect(detectar('Backend en Java').filter((n) => /Java|Orekit/.test(n))).toEqual(['Java']);
+    expect(c.find((x) => x.nombre === 'Java')!.proyecto).toBe('P1');
     const alias = c.flatMap((e) => [...new Set(e.alias.map(norm))].filter((a) => a !== e.clave));
     expect(new Set(alias).size).toBe(alias.length);
   });
 
   it('detectar encuentra tecnologías en un texto sin confundirse: "Go" solo con mayúscula y como palabra', () => {
     const d = detectar('Buscamos backend con Python, Spring Boot y k8s. Sumá experiencia en RabbitMQ.');
-    expect(d).toEqual(expect.arrayContaining(['Python', 'Spring Boot', 'Kubernetes', 'Cola asíncrona para la ingesta (RabbitMQ o SQS)']));
+    expect(d).toEqual(expect.arrayContaining(['Python', 'Spring Boot', 'Kubernetes', 'RabbitMQ']));
     expect(detectar('Vamos a go adelante, ¿googlear no cuenta?')).not.toContain('Go');
     expect(detectar('Gateway en Go para pagos')).toContain('Go');
-    expect(detectar('Experiencia con Azure OpenAI y accesibilidad WCAG')).toEqual(expect.arrayContaining(['Despliegue en Azure con Azure OpenAI', 'Revisión de accesibilidad']));
+    expect(detectar('Experiencia con Azure OpenAI y Entra ID')).toEqual(expect.arrayContaining(['Azure OpenAI', 'Entra ID']));
     expect(norm('  Accesibilidad  ')).toBe('accesibilidad');
   });
 });
@@ -49,15 +51,16 @@ describe('ola 26 · cargar vacantes (texto o JSON)', () => {
     if (!r.ok) throw new Error(r.errores.join());
     expect(r.vacantes).toHaveLength(2);
     expect(r.vacantes[0]).toMatchObject({ rol: 'AI Engineer · Empresa X', fecha: HOY });
-    expect(r.vacantes[0].stack).toEqual(expect.arrayContaining(['Python', 'LangGraph (agente analista con herramientas)', 'Kubernetes', 'Terraform Cloud']));
-    expect(r.vacantes[1].stack).toEqual(expect.arrayContaining(['Java', 'Spring Boot', 'Docker']));
+    expect(r.vacantes[0].stack).toEqual(expect.arrayContaining(['Python', 'LangGraph', 'Kubernetes', 'Terraform Cloud']));
+    // Docker no está en ningún stack de la v7: en el texto libre no se detecta (en "Stack:" sí se cargaría).
+    expect(r.vacantes[1].stack).toEqual(['Java', 'Spring Boot']);
   });
 
   it('JSON: lista, { tipo: "vacantes", lista } o una sola; une el stack con lo que nombre "texto"', () => {
     const a = leerVacantes('{"tipo":"vacantes","lista":[{"rol":"ML Engineer","empresa":"Z","stack":["k8s","PyTorch"],"texto":"usamos DuckDB"}]}', HOY);
     if (!a.ok) throw new Error(a.errores.join());
     expect(a.vacantes[0]).toMatchObject({ rol: 'ML Engineer', empresa: 'Z' });
-    expect(a.vacantes[0].stack).toEqual(['Kubernetes', 'PyTorch', 'DuckDB y Parquet']);
+    expect(a.vacantes[0].stack).toEqual(['Kubernetes', 'PyTorch', 'DuckDB']);
     expect(leerVacantes('[{"rol":"A","stack":["Go"]},{"rol":"B","stack":["Rust"]}]', HOY)).toMatchObject({ ok: true });
     expect(leerVacantes('{"rol":"Solo","stack":["Java"]}', HOY)).toMatchObject({ ok: true });
   });
@@ -87,10 +90,10 @@ describe('ola 26 · la tabla de demanda', () => {
       v('C', ['DuckDB', 'Rust']),
     ], cal, HOY);
     const fila = (n: string) => t.filas.find((f) => f.tecnologia === n)!;
-    expect(fila('LangGraph (agente analista con herramientas)')).toMatchObject({ vacantes: 2, proyecto: 'P1', fecha: '2026-12-26', cubierta: false });
+    expect(fila('LangGraph')).toMatchObject({ vacantes: 2, proyecto: 'P1', fecha: '2026-12-26', cubierta: false });
     expect(fila('Python').vacantes).toBe(1);
     expect(fila('Kubernetes')).toMatchObject({ vacantes: 1, proyecto: 'P5' });
-    expect(fila('DuckDB y Parquet')).toMatchObject({ proyecto: 'P5', fecha: '2027-08-28' });
+    expect(fila('DuckDB')).toMatchObject({ proyecto: 'P5', fecha: '2027-08-28' });
     expect(t.filas[0].vacantes).toBe(2);
     expect(t.vacantes).toBe(3);
   });

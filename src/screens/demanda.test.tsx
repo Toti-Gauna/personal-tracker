@@ -47,17 +47,18 @@ describe('ola 26 · pantallas de tecnologías y demanda', () => {
     expect(within(desc).getByText(/El backend Python ya lo cubre FastAPI/)).toBeInTheDocument();
   });
 
-  it('el stack de un proyecto muestra la nueva, las movidas (de dónde vienen), lo opcional y el historial (la v7 ya no recorta)', () => {
+  it('el stack de un proyecto (v7) va por ambiente, con la † como propuesta y las tecnologías que cuenta la demanda; sin recortes', () => {
     const { unmount } = render(<ProgPlan day={day()} param="prog/P1/stack" />);
-    expect(screen.getByText('nueva').parentElement!.textContent).toMatch(/LangGraph \(agente analista con herramientas\)/);
+    const stack = document.querySelector('.pp-stack')!;
+    expect([...stack.querySelectorAll('dt')].map((x) => x.textContent)).toEqual(['Frontend', 'Backend', 'IA por API', 'ML propio', 'DB', 'Infra', 'Cloud']);
+    expect(within(stack as HTMLElement).getByText(/Java \+ Spring Boot/)).toBeInTheDocument();
+    expect(screen.getByText('LightGBM †')).toBeInTheDocument();
     expect(screen.queryByText(/se recorta primero:/)).toBeNull();
     expect(screen.getByText('Historial de cambios')).toBeInTheDocument();
     unmount();
-    const p5 = render(<ProgPlan day={day()} param="prog/P5/stack" />);
-    expect(screen.getByText('movida · de P1').parentElement!.textContent).toMatch(/DuckDB y Parquet/);
-    p5.unmount();
-    render(<ProgPlan day={day()} param="prog/P3/stack" />);
-    expect(screen.getByText(/GraphQL en el backoffice de Rails · opcional/)).toBeInTheDocument();
+    // A6 (Upstream) no tiene stack propio: "el de cada proyecto".
+    render(<ProgPlan day={day()} param="prog/A6/stack" />);
+    expect(screen.getByText(/Este bloque no suma tecnología nueva/)).toBeInTheDocument();
   });
 
   it('Estudio → Programación tiene el acceso a la Demanda', () => {

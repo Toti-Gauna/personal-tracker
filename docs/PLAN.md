@@ -1212,6 +1212,33 @@ Fuente: `docs/prompts/roadmap-completo-v7.md` (2026-11-20). Reglas: no se borra 
 
 **Pendiente (olas 30 a 33):** fichas, versiones y checklist de 12 puntos (30); rutina con trabajo, de dónde salen las 3 h que faltan para las 8 h por día y los 16 o 20 temas de algoritmos (31); revisión semanal, hardware, contadores y la alerta de Security+ (32); calibración con las horas reales de PetrIA 1.0 y 1.1 (33). `data/roadmap.json` y `data/bimesters.json` (la Ruta vieja) todavía nombran los proyectos de antes.
 
+
+## 6 duodecies. Ola 30: los proyectos por dentro (roadmap v7)
+
+**Paso 1 · Datos**
+- `scripts/roadmap-v7.mjs` lee `docs/prompts/roadmap-completo-v7.md` y arma `data/proyectos-v7.json`. Correrlo de nuevo da lo mismo.
+  - La ficha de cada proyecto: puesto, qué hace, problema, valor, diferencial, herramientas con ★ (y los extras aparte), capa física, ahorro o impacto a medir, notificaciones, voz, escala, operación, stack por ambiente, algorithm spots, hardware, por qué hace ruido y entrevistas.
+  - Las versiones con fechas y alcance.
+  - La preparación de las certificaciones, el contenido de las ventanas y el estándar de 12 puntos.
+- Constelación: la v1 (en curso, la arman los agentes) queda en P0; la 2.0 y la 2.1, en P0B.
+- Horas por versión: solo PetrIA las tiene medidas (74 + 74 + 64 + 92). Las demás se reparten por días entre las horas del bloque y se muestran como "≈ … (repartidas por días)".
+- Las fechas de las versiones se recalculan sobre el calendario vivo. Con 8 h por día, el MVP público de PetrIA cae el 28 nov 2026 (el roadmap dice 1 dic).
+- Las tecnologías de cada proyecto salen del stack v7, por ambiente, para la tabla de demanda:
+  - se parten los compuestos ("Java + Spring Boot", "LangGraph sobre Claude") y se descartan las frases ("portal seguro", "router");
+  - la † queda como "propuesta a confirmar";
+  - los alias se conservan;
+  - el historial de cada proyecto lo anota.
+  - Ya no hay marcas de "nueva" ni "movida" (el validador sigue para lo que se cargue a mano).
+  - Docker no figura en ningún stack de la v7.
+
+**Paso 2 · Pantallas**
+- Ficha del proyecto con lo de la v7. De la anterior siguen la pieza matemática, la referencia y quién lo valida (la puerta de evidencia los usa).
+- Plegable **Versiones**: fechas de Trazo contra las del roadmap, horas, alcance, los tres entregables (notas de versión, video de 30 s, README) y "Publicada hoy". Estados: publicada, en curso, próxima o atrasada.
+- **Estándar de alto valor**: los 12 puntos de la v7, con el detalle de operación y frontend. Las 6 casillas de antes quedan guardadas pero no se muestran ni cuentan. La meta semanal es de 12 puntos.
+- El stack del proyecto va por ambiente. Las certificaciones muestran su número, la preparación y el requisito; las ventanas, el contenido de la v7.
+
+**Pendiente:** los algorithm spots como tracker con el sprint sin IA y la rutina (ola 31); el hardware por fase y los contadores (ola 32).
+
 ---
 
 ## 7. Registro de cambios
