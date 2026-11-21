@@ -90,10 +90,10 @@ describe('ola 26 · la tabla de demanda', () => {
       v('C', ['DuckDB', 'Rust']),
     ], cal, HOY);
     const fila = (n: string) => t.filas.find((f) => f.tecnologia === n)!;
-    expect(fila('LangGraph')).toMatchObject({ vacantes: 2, proyecto: 'P1', fecha: '2026-12-26', cubierta: false });
+    expect(fila('LangGraph')).toMatchObject({ vacantes: 2, proyecto: 'P1', fecha: '2026-12-09', cubierta: false });
     expect(fila('Python').vacantes).toBe(1);
     expect(fila('Kubernetes')).toMatchObject({ vacantes: 1, proyecto: 'P5' });
-    expect(fila('DuckDB')).toMatchObject({ proyecto: 'P5', fecha: '2027-08-28' });
+    expect(fila('DuckDB')).toMatchObject({ proyecto: 'P5', fecha: '2027-04-30' }); // v12.1: PetrIA Guard entrega el 30 abr 2027
     expect(t.filas[0].vacantes).toBe(2);
     expect(t.vacantes).toBe(3);
   });

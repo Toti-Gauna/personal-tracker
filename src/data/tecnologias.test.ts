@@ -11,9 +11,10 @@ const nombres = (id: string) => bloque(id).tecnologias!.map((t) => t.nombre);
 const marca = (id: string, n: string) => bloque(id).tecnologias!.find((t) => t.nombre === n);
 
 describe('ola 30 · tecnologías de los proyectos (salen del stack del roadmap v7)', () => {
-  it('el JSON valida y cada proyecto lleva sus tecnologías; el calendario por semanas (sin horas) suma 243', () => {
+  it('el JSON valida y cada proyecto lleva sus tecnologías; el calendario por semanas (sin horas, v12.1 con fechas explícitas) suma 110', () => {
     expect(validar(raw)).toEqual([]);
-    expect(totalSemanas(calendario())).toBe(243);
+    // v12.1: los bloques llevan fechas explícitas (21 nov 2026 a 27 oct 2028); cada uno cuenta al menos 1 semana.
+    expect(totalSemanas(calendario())).toBe(110);
     expect(PLAN_EXT.bloques.filter((b) => b.tipo === 'proyecto').every((b) => Array.isArray(b.tecnologias))).toBe(true);
     // El stack ya no vive en data/plan.json: sale de las tecnologías.
     // (se lee del archivo: el módulo `plan` muta su copia al armar el calendario vivo).

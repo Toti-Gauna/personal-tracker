@@ -19,40 +19,43 @@ describe('búsqueda intensiva', () => {
     expect(enPausa(getState().plan, 'ventas', '2026-11-20')).toBe(true);
   });
 
-  it('las tres rutinas del modo intensivo (v7): lunes a viernes, sábado y domingo, con los horarios del roadmap', () => {
-    expect(metasOf('busqueda-intensiva').map((b) => b.start)).toEqual(['04:00', '04:30', '05:30', '08:00', '09:30', '11:30', '15:30', '16:00', '16:30', '17:00', '17:40', '18:00', '20:00', '21:00']);
-    expect(metasOf('busqueda-intensiva-finde').map((b) => b.id)).toEqual(['rutina', 'math', 'prog', 'prog-2', 'demo', 'simulada', 'ingles', 'cierre', 'sueno']);
-    expect(metasOf('busqueda-intensiva-domingo').map((b) => b.id)).toEqual(['rutina', 'math', 'prog', 'prog-2', 'revision', 'ingles', 'cierre', 'sueno']);
+  it('las tres rutinas del modo intensivo (v12.1): lunes a viernes, sábado y domingo, con el cierre de 15:45 (13:30 el fin de semana)', () => {
+    expect(metasOf('busqueda-intensiva').map((b) => b.start)).toEqual(['04:00', '04:30', '08:30', '10:00', '12:00', '15:45', '16:40', '16:55', '17:15', '17:30', '17:45', '18:00', '20:00', '21:00']);
+    expect(metasOf('busqueda-intensiva-finde').map((b) => b.id)).toEqual(['rutina', 'prog', 'abi', 'prog-2', 'prog-review', 'ingles', 'recall', 'anki', 'busqueda', 'leer', 'demo', 'cierre', 'sueno']);
+    expect(metasOf('busqueda-intensiva-domingo').map((b) => b.id)).toEqual(['rutina', 'prog', 'abi', 'prog-2', 'prog-review', 'ingles', 'recall', 'anki', 'busqueda', 'leer', 'revision', 'cierre', 'sueno']);
     const horas = (rama: string) => {
       const m = (t: 'busqueda-intensiva' | 'busqueda-intensiva-finde' | 'busqueda-intensiva-domingo') => planRoutine(t, 'completo').filter((p) => p.block.rama === rama || (rama === 'clipping' && p.block.id === 'clipping')).reduce((s, p) => s + p.min, 0);
       return (m('busqueda-intensiva') * 5 + m('busqueda-intensiva-finde') + m('busqueda-intensiva-domingo')) / 60;
     };
-    expect(horas('matematica')).toBe(7);
-    // 7 h por día de lunes a viernes (con la media hora de las 15:30), 7 el sábado y 8 el domingo.
-    expect(horas('programacion')).toBe(50);
-    expect(horas('ingles')).toBe(7);
-    // Postulaciones y publicaciones (1 h por día), la demo y la entrevista simulada del sábado.
-    expect(horas('trabajo')).toBe(7);
+    // v12.1: la matemática diaria (m1–m4) está archivada; queda Anki 15 min por día (las ventanas W1–W4 van por el calendario).
+    expect(horas('matematica')).toBe(1.75);
+    // Bloque 1 (4 h) + bloque 2 (3:45) + PR review (55 min) de lunes a viernes; 4 h + 3:30 + 55 min el fin de semana.
+    expect(horas('programacion')).toBeCloseTo(60.17, 2);
+    expect(horas('ingles')).toBe(1.75);
+    // Posts / applications (15 min por día) y la demo + simulada del sábado (1:15).
+    expect(horas('trabajo')).toBe(3);
     // Clipping en pausa: la rutina del modo intensivo no tiene su bloque.
     expect(horas('clipping')).toBe(0);
   });
 
   it('el día corto y "Otra hora" recorren solo la mañana (rutina, matemática y programación)', () => {
     const p = planRoutine('busqueda-intensiva', 'corto');
-    expect(p.slice(0, 4).map((x) => [x.start, x.min])).toEqual([['05:00', 20], ['05:20', 45], ['06:05', 115], ['08:00', 90]]);
-    expect(p[4].start).toBe('09:30');
+    expect(p.slice(0, 4).map((x) => [x.start, x.min])).toEqual([['05:00', 20], ['05:20', 190], ['08:30', 90], ['10:00', 120]]);
+    expect(p[4].start).toBe('12:00');
   });
 
-  it('el sábado y el domingo Hoy arma la rutina de cada día (v7)', () => {
+  it('el sábado y el domingo Hoy arma la rutina de cada día (v12.1: demo el sábado, revisión el domingo)', () => {
     startDay('completo', '04:30', '2026-11-21');
     const d = getState().days['2026-11-21'];
     expect(d.dayType).toBe('busqueda-intensiva-finde');
-    expect(d.blocks.map((b) => b.key)).toEqual(['rutina', 'math', 'prog', 'prog-2', 'demo', 'simulada', 'ingles', 'cierre', 'sueno']);
+    expect(d.blocks.map((b) => b.key)).toEqual(['rutina', 'prog', 'abi', 'prog-2', 'prog-review', 'ingles', 'recall', 'anki', 'busqueda', 'leer', 'demo', 'cierre', 'sueno']);
+    expect(d.blocks.find((b) => b.key === 'demo')!.title).toBe('Weekly demo + mock interview');
     startDay('completo', '04:30', '2026-11-22');
     const dom = getState().days['2026-11-22'];
     expect(dom.dayType).toBe('busqueda-intensiva-domingo');
-    expect(dom.blocks.map((b) => b.key)).toEqual(['rutina', 'math', 'prog', 'prog-2', 'revision', 'ingles', 'cierre', 'sueno']);
-    expect(dom.blocks.find((b) => b.key === 'prog-2')!.title).toBe('Proyecto con PRs de open source');
+    expect(dom.blocks.map((b) => b.key)).toEqual(['rutina', 'prog', 'abi', 'prog-2', 'prog-review', 'ingles', 'recall', 'anki', 'busqueda', 'leer', 'revision', 'cierre', 'sueno']);
+    expect(dom.blocks.find((b) => b.key === 'prog-2')!.title).toBe('Bloque 2 · deep focus');
+    expect(dom.blocks.find((b) => b.key === 'revision')!.title).toBe('Weekly review');
   });
 
   it('el día anterior a una entrevista, la búsqueda suma practicarla (y en inglés); sin modo propio', () => {
@@ -62,7 +65,7 @@ describe('búsqueda intensiva', () => {
     expect(b.find((x) => x.key === 'ingles')!.title).not.toMatch(/simulacro/);
     expect(b.some((x) => x.key === 'ingles-entrevista')).toBe(false);
     const busq = b.find((x) => x.key === 'busqueda')!;
-    expect(busq.min).toBe(40);
+    expect(busq.min).toBe(15);
     expect(busq.tasks.map((t) => t.t).slice(0, 2)).toEqual(['Practicar la entrevista de mañana de AI Engineer en Acme con el pitch armado', 'Practicarla en inglés']);
     // Con la entrevista en 48 h, el último bloque de programación pasa a preparación.
     expect(b.find((x) => x.key === 'prog-tarde')!.title).toMatch(/Preparación de la entrevista/);
@@ -107,8 +110,8 @@ describe('pausas en metas, cortes y avisos', () => {
     const { metasSemanaGeneradas, metasMesGeneradas } = await import('./metas-plan');
     const s = metasSemanaGeneradas('2026-11-23', '2026-11-16', { intensiva: true, pausa });
     expect(s.some((m) => m.rama === 'handyx')).toBe(false);
-    // v7: 8 h por día de PetrIA (56); la rutina da 53 y la nota lo dice.
-    expect(s.find((m) => m.clave === 'horas-prog')).toMatchObject({ meta: 56, nota: '8 h por día (roadmap v7); la rutina da 50; el resto sale de los bloques que elijas en Ajustes' });
+    // v12.1: 10 h de lunes a viernes y 11 el fin de semana (72).
+    expect(s.find((m) => m.clave === 'horas-prog')).toMatchObject({ meta: 72, nota: '10 h de lunes a viernes y 11 el fin de semana (plan v12.1)' });
     expect(s.find((m) => m.clave === 'postulaciones')?.meta).toBe(25);
     expect(s.find((m) => m.clave === 'horas-clipping')).toBeUndefined();
     expect(s.find((m) => m.clave === 'clips')).toBeUndefined();
@@ -156,7 +159,7 @@ describe('sprint e impacto', () => {
   it('horas por semana de la intensiva y el lanzamiento de Handyx según cuándo entre el trabajo', async () => {
     const { horasSemana, escenariosHandyx } = await import('./sprint');
     expect(horasSemana('con-trabajo', 'con-trabajo-finde')).toMatchObject({ Programación: 29, Matemática: 14, Inglés: 6.5 });
-    expect(horasSemana('busqueda-intensiva', 'busqueda-intensiva-finde')).toMatchObject({ Programación: 50, Matemática: 7, Inglés: 7, Búsqueda: 7, Clipping: 0, Entrenamiento: 10, Handyx: 0 });
+    expect(horasSemana('busqueda-intensiva', 'busqueda-intensiva-finde')).toMatchObject({ Programación: 60.2, Matemática: 1.8, Inglés: 1.8, Búsqueda: 3, Clipping: 0, Entrenamiento: 10, Handyx: 0 });
     expect(escenariosHandyx('2026-11-16', '2026-11-16').map((e) => e.lanza)).toEqual(['2027-03-14', '2027-04-11', '2027-05-09']);
   });
 });

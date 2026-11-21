@@ -11,6 +11,7 @@
  * que pasa la meta; puerta sin aprobar: cada semana se descuenta del colchón).
  */
 import { HORAS_SEMANA_PLAN } from './capacidad';
+import { PLAN_EXT } from './plan-extendido';
 import { FIN_PROGRAMACION, PLAN, T0_PLAN, TRAMOS, finDe, horasEntre, inicioSemana, semanaDelPlan, tramoActivo } from './plan';
 import { evidenciaCompleta, type PlanState } from './plan-state';
 
@@ -69,9 +70,13 @@ export function cierreProyecto(plan: PlanState, id: string) {
   return p.tecnica!.defensa! > ex ? p.tecnica!.defensa! : ex;
 }
 
-/** Contadores de Perfil: MCP publicados, agentes con trazas y defensas aprobadas, de 11. */
+/** v12.1: PetrIA v0 (archivado, 19–20 nov) no es un proyecto del plan, y P0 (sus metas de siempre) no suma ni resta semanas. */
+const archivado = (id: string) => !!PLAN_EXT.bloques.find((b) => b.id === id)?.archivado;
+const sinAtraso = (id: string) => !!PLAN_EXT.bloques.find((b) => b.id === id)?.sinAtraso;
+
+/** Contadores de Perfil: MCP publicados, agentes con trazas y defensas aprobadas, de los proyectos del plan. */
 export function contadoresAgenticos(plan: Pick<PlanState, 'proyectos'>) {
-  const ids = TRAMOS.filter((t) => t.tipo === 'proyecto').map((t) => t.id);
+  const ids = TRAMOS.filter((t) => t.tipo === 'proyecto' && !archivado(t.id)).map((t) => t.id);
   return {
     total: ids.length,
     mcp: ids.filter((i) => plan.proyectos[i]?.mcp).length,
@@ -83,7 +88,7 @@ export function contadoresAgenticos(plan: Pick<PlanState, 'proyectos'>) {
 /** Semanas ganadas (o perdidas) por cada proyecto contra su meta. */
 export function semanasDeProyecto(plan: PlanState, id: string, hoy: string, t0 = T0_PLAN) {
   const t = TRAMOS.find((x) => x.id === id);
-  if (!t || t.tipo !== 'proyecto') return 0;
+  if (!t || t.tipo !== 'proyecto' || archivado(id) || sinAtraso(id)) return 0;
   const fin = finDe(t, t0);
   const c = cierreProyecto(plan, id);
   // Ola 27: lo ganado se mide en horas de programación (la pausa de fin de año vale cero): cada 24,5 h son una semana del plan.
