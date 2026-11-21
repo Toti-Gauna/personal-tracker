@@ -212,6 +212,9 @@ export interface EtapaExt {
   semanasExtra: number;
   semanasPlataforma: number;
   semanasArquitectura: number;
+  /** v12.1: fechas explícitas de la etapa. */
+  inicio?: string;
+  fin?: string;
 }
 
 export interface PlanExtendido {
