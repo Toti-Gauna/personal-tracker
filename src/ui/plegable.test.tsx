@@ -69,10 +69,10 @@ describe('ola 22 · Metas y Estudio livianos', () => {
     expect(prog.textContent).toContain('Horas de programación');
   });
 
-  it('Programación: los 50 bloques van en 4 etapas y solo la de P0 viene abierta', () => {
+  it('Programación (v12.1): los bloques van por fase y solo el grupo de P0 viene abierto', () => {
     render(<ProgPlan day={day()} param="prog" />);
     expect(document.querySelectorAll('.esc-lista a').length).toBeGreaterThan(40);
-    expect([...document.querySelectorAll('.esc details')].map((d) => (d as HTMLDetailsElement).open)).toEqual([true, false, false, false]);
+    expect([...document.querySelectorAll('.esc details')].map((d) => (d as HTMLDetailsElement).open)).toEqual([true, ...Array(11).fill(false)]);
     expect(SemanaPlan).toBeTypeOf('function');
   });
 });

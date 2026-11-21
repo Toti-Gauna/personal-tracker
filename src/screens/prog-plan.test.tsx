@@ -72,18 +72,19 @@ describe('programación por proyectos', () => {
     expect(card).toHaveTextContent('P0 · Constelación');
   });
 
-  it('el roadmap: estás acá, hoy sos → vas a ser y la escalera de P0 a A7 por etapas', () => {
+  it('el roadmap: estás acá, hoy sos → vas a ser y la escalera de P0 a A7 por fases (v12.1)', () => {
     render(<ProgPlan day={day()} param="prog" />);
     expect(screen.getByRole('heading', { name: 'Programación' })).toBeInTheDocument();
     expect(screen.getByText('Recién empezás')).toBeInTheDocument();
     const ids = [...document.querySelectorAll('.esc-lista a')].map((a) => a.getAttribute('href')!.split('/').pop());
-    // Ola 22: solo la etapa en curso viene abierta; las otras, plegadas.
-    expect([...document.querySelectorAll('.esc details')].map((d) => (d as HTMLDetailsElement).open)).toEqual([true, false, false, false]);
+    // v12.1: un grupo por fase (11) más "antes del plan" (P0 y PetrIA v0); solo el del bloque en curso viene abierto.
+    expect([...document.querySelectorAll('.esc details')].map((d) => (d as HTMLDetailsElement).open)).toEqual([true, ...Array(11).fill(false)]);
     expect(ids[0]).toBe('P0');
     expect(ids).toContain('A7');
     expect(ids).toContain('W1');
     expect(ids.some((x) => x?.startsWith('DES'))).toBe(false);
-    expect(screen.getByText('Etapa 4 · aeroespacial')).toBeInTheDocument();
+    expect(screen.getByText('Antes del plan · P0 y PetrIA v0 (archivado)')).toBeInTheDocument();
+    expect(screen.getByText('Fase 11 · GNC / Mission Software')).toBeInTheDocument();
   });
 
   it('cada proyecto tiene sus subpáginas con botones: Resumen, Stack, Metas, Evidencia, Pieza matemática y Entrega', () => {

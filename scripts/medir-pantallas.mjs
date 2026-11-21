@@ -17,7 +17,7 @@ const { chromium } = createRequire(import.meta.url)('playwright');
 const BASE = process.env.BASE ?? 'http://127.0.0.1:4173/personal-tracker/';
 const PRESUPUESTO = Number(process.env.PRESUPUESTO ?? 3.2);
 const RUTAS = [
-  'hoy', 'estudio', 'estudio/mate', 'estudio/mate/W1', 'estudio/mate/m1', 'estudio/mate/libro/conamat', 'estudio/mate/libro/conamat/1', 'estudio/prog', 'estudio/prog/P3', 'estudio/prog/P3/metas', 'estudio/idiomas', 'estudio/idiomas/ingles',
+  'hoy', 'estudio', 'estudio/mate', 'estudio/mate/W1', 'estudio/mate/libro/conamat', 'estudio/mate/libro/conamat/1', 'estudio/prog', 'estudio/prog/P3', 'estudio/prog/P3/metas', 'estudio/idiomas', 'estudio/idiomas/ingles',
   'estudio/idiomas/frances', 'estudio/idiomas/biblioteca', 'estudio/idiomas/ascenso', 'estudio/libro/mwm', 'estudio/ruta/matematica',
   'metas/ruta', 'metas/semana', 'metas/mes', 'metas/bimestre', 'metas/anio', 'metas/etapas', 'metas/mapa', 'metas/evolucion', 'metas/sprint', 'metas/impacto',
   'metas/trabajo', 'metas/ingles', 'metas/handyx', 'metas/proyecto/P1', 'entreno', 'entreno-semana', 'entreno-motor', 'entreno-peso',
@@ -25,7 +25,9 @@ const RUTAS = [
   'cierre', 'actividad', 'meta-nueva/semana',
   // Ola 23 · el apartado Clipping (con una planilla de ejemplo cargada).
   'estudio/prog/demanda', 'estudio/prog/algoritmos', 'estudio/prog/P1/stack', 'estudio/prog/P5/stack',
-  'metas/calibracion', 'metas/diferencia', 'metas/revision', 'metas/compras', 'metas/proyecto/C8', 'metas/proyecto/Q1', 'estudio/prog/P1', 'metas/proyecto/C2', 'metas/proyecto/P10',
+  'metas/calibracion', 'metas/diferencia', 'metas/revision', 'metas/compras', 'metas/proyecto/CW8', 'metas/proyecto/Q1', 'estudio/prog/P1', 'metas/proyecto/CW6', 'metas/proyecto/P10',
+  // v12.1 · metas como períodos.
+  'metas/periodos', 'metas/periodos/P1', 'metas/periodos/F1', 'metas/periodos/P1%3Av1.0', 'metas/linea', 'metas/cert/claude-architect', 'metas/ventana/W1',
   'metas/clipping', 'metas/clipping/plan', 'metas/clipping/registro', 'metas/clipping/metricas', 'metas/clipping/cuentas',
   'metas/clipping/campanas', 'metas/clipping/retainers', 'metas/clipping/nichos', 'metas/clipping/riesgos', 'metas/clipping/semana1',
 ];

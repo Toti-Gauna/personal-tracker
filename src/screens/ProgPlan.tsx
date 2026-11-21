@@ -5,6 +5,7 @@
  */
 import { PLAN, T0_PLAN, tramoPorId, type Capa } from '../data/plan';
 import { proyectoVacio } from '../data/plan-state';
+import { PLAN_EXT } from '../data/plan-extendido';
 import { avanceSalida, calendarioCompleto, estadoEn, hoySos, salidaDe } from '../data/plan-vistas';
 import { avanceBloque } from '../data/metas-bloque';
 import { cierreProyecto } from '../data/puertas';
@@ -23,7 +24,6 @@ import '../styles/roadmap-estudio.css';
 import '../styles/etapas.css';
 import '../styles/metas.css';
 
-const ETAPA = ['', 'Etapa 1 · núcleo', 'Etapa 2 · ciberseguridad', 'Etapa 3 · quant', 'Etapa 4 · aeroespacial'];
 const MES = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'];
 const f = (d: string) => `${Number(d.slice(8))} ${MES[Number(d.slice(5, 7)) - 1]} ${d.slice(2, 4)}`;
 const TIPO: Record<string, string> = { proyecto: 'proyecto', ventana: 'ventana de matemática', cert: 'certificación', colchon: 'colchón', cierre: 'cierre', descanso: 'descanso' };
@@ -75,7 +75,11 @@ export function ProgPlan({ day, param }: { day: DayLog; param: string }) {
   const b = id ? p.cal.find((x) => x.id === id) : undefined;
   if (b) return <ProyectoProg day={day} id={b.id} sub={(SUBPAGINAS.find(([k]) => k === sub)?.[0] ?? 'resumen') as Sub} />;
   const { plan, cal, actual, perfil } = p;
-  const porEtapa = [1, 2, 3, 4].map((e) => cal.filter((x) => x.etapa === e && x.tipo !== 'descanso'));
+  // v12.1: la escalera va por fases (11), con P0 y PetrIA v0 (archivado) antes; la fase actual queda abierta.
+  const grupos = [
+    { id: 'antes', titulo: 'Antes del plan · P0 y PetrIA v0 (archivado)', xs: cal.filter((x) => !x.fase && !x.pausa && x.tipo !== 'descanso') },
+    ...(PLAN_EXT.fases ?? []).map((fa) => ({ id: fa.id, titulo: `Fase ${fa.id.slice(1)} · ${fa.nombre}`, xs: cal.filter((x) => x.fase === fa.id && x.tipo !== 'descanso') })),
+  ].filter((g) => g.xs.length);
   return (
     <main className="pantalla re" style={{ ['--c' as string]: COLOR }}>
       <div className="topbar"><a className="volver" href="#/estudio">Estudio</a><span className="mono sub">{cal.filter((x) => x.tipo === 'proyecto').length} proyectos</span></div>
@@ -99,9 +103,9 @@ export function ProgPlan({ day, param }: { day: DayLog; param: string }) {
       <a className="fila-link" href="#/estudio/prog/algoritmos">Algoritmos: los spots de cada proyecto y el sprint sin IA <span aria-hidden="true">→</span></a>
 
       <span className="etiqueta">La escalera · de P0 a A7</span>
-      <EscaleraCompacta etiqueta="Escalera de proyectos por etapa" color={COLOR} grupos={porEtapa.map((xs, k) => ({
-        id: `prog:etapa:${k + 1}`,
-        titulo: ETAPA[k + 1],
+      <EscaleraCompacta etiqueta="Escalera de proyectos por fase" color={COLOR} grupos={grupos.map(({ id: gid, titulo, xs }) => ({
+        id: `prog:fase:${gid}`,
+        titulo,
         resumen: `${xs.filter((x) => (x.tipo === 'proyecto' ? cierreProyecto(plan, x.id) : estadoEn(x, day.date) === 'hecho')).length} de ${xs.length} · ${xs.reduce((a, x) => a + x.semanas, 0)} sem`,
         abierto: false,
         items: xs.map((x) => {
