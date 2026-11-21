@@ -1,4 +1,5 @@
 import { BUILTIN_PRESETS } from './defaults';
+import { bloqueada } from './mazos';
 import { CARD_SEC, DIA, LADDER, PASS, REST_TEST, REVIEW_CAP, TEST_MIN, TEST_PREV, minutesFor } from './study-catalog';
 import { DAY, retrievability } from './fsrs';
 import type { Activity, Card, ErrType, ReviewItem, ReviewKind, Step, StudyState, TestResult, Tramo, Unit, UnitState } from './study-types';
@@ -367,13 +368,13 @@ export function cardsForDay(study: StudyState, date: string, budgetMin: number, 
   const seen = study.cards.filter((c) => reviewedOn(c, date));
   const introduced = study.cards.filter((c) => c.firstOn === date).length;
   const due = study.cards
-    .filter((c) => c.srs && c.srs.state !== 'new' && c.srs.due < eod && !reviewedOn(c, date))
+    .filter((c) => !bloqueada(c) && c.srs && c.srs.state !== 'new' && c.srs.due < eod && !reviewedOn(c, date))
     .sort((x, y) => retrievability((now - (x.srs!.last ?? now)) / DAY, x.srs!.s) - retrievability((now - (y.srs!.last ?? now)) / DAY, y.srs!.s));
   // Priorizar lo flojo: las tarjetas de temas flojos van primero (las más olvidadas, dentro de cada grupo).
   const temaDe = (c: Card) => (c.activityId && c.unit != null ? `${c.activityId}:${c.unit}` : `mazo:${cardFront(c, study.fronts)}`);
   if (weak?.size) due.sort((x, y) => (weak.has(temaDe(x)) ? 0 : 1) - (weak.has(temaDe(y)) ? 0 : 1));
   const nuevas = study.cards
-    .filter((c) => !c.srs || c.srs.state === 'new')
+    .filter((c) => !bloqueada(c) && (!c.srs || c.srs.state === 'new'))
     .filter((c) => !c.dueFrom || c.dueFrom <= date)
     .sort((x, y) => x.createdOn.localeCompare(y.createdOn))
     .slice(0, Math.max(0, study.rules.newPerDay - introduced));
@@ -605,7 +606,7 @@ export function forecast(study: StudyState, date: string, days = 7) {
     const items = study.reviews.filter((r) => CAPPED.includes(r.kind) && !r.doneOn && r.due === d).reduce((s, r) => s + r.min, 0);
     const eod = endOfDay(d);
     const sod = endOfDay(addDays(d, -1));
-    const cards = study.cards.filter((c) => c.srs && c.srs.state !== 'new' && c.srs.due < eod && c.srs.due >= sod).length;
+    const cards = study.cards.filter((c) => !bloqueada(c) && c.srs && c.srs.state !== 'new' && c.srs.due < eod && c.srs.due >= sod).length;
     out.push({ date: d, min: Math.min(study.rules.cap, items + cardsMin(cards)) });
   }
   return out;

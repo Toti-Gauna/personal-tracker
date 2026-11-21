@@ -4,6 +4,7 @@ import type { CardKind } from '../data/study-types';
 import type { DayLog } from '../data/types';
 import { useStore } from '../state/store';
 import { addCards } from '../state/study';
+import { MAZOS_V12 } from '../data/mazos';
 import { toast } from '../ui/avisos';
 import '../styles/estudio.css';
 import '../styles/repaso.css';
@@ -26,6 +27,8 @@ export function NuevaTarjeta({ day }: { day: DayLog }) {
   const [reves, setReves] = useState(false);
   const [mazo, setMazo] = useState(study.fronts[0]?.id ?? '');
   const [fuente, setFuente] = useState('');
+  // v12.1: el mazo dentro del área (un libro de inglés, de matemática, un paper o 20 LLM concepts); vacío, el del área.
+  const [sub, setSub] = useState('');
   const t = TIPOS.find((x) => x[0] === tipo)!;
   const front = study.fronts.find((f) => f.id === mazo);
 
@@ -37,7 +40,7 @@ export function NuevaTarjeta({ day }: { day: DayLog }) {
 
   const guardar = (otra: boolean) => {
     if (!valida) return;
-    const base = { deck: front?.name ?? 'General', frontId: front?.id, source: fuente.trim() };
+    const base = { deck: sub || (front?.name ?? 'General'), frontId: front?.id, source: fuente.trim() };
     const kind: CardKind = tipo === 'inversa' ? 'pregunta' : tipo;
     const drafts: { front: string; back: string; kind: CardKind; deck: string; frontId?: string; source: string }[] = [{ ...base, front: vista.f.trim(), back: vista.b.trim(), kind }];
     if (reves || tipo === 'inversa') drafts.push({ ...base, front: vista.b.trim(), back: vista.f.trim(), kind: 'inversa' });
@@ -80,10 +83,19 @@ export function NuevaTarjeta({ day }: { day: DayLog }) {
       <div className="mazo-fuente">
         <label>
           <span className="sub">Mazo</span>
-          <select className="select-plano" value={mazo} onChange={(e) => setMazo(e.target.value)}>
+          <select className="select-plano" value={mazo} onChange={(e) => { setMazo(e.target.value); setSub(''); }}>
             {study.fronts.map((f) => <option key={f.id} value={f.id}>{f.name}</option>)}
           </select>
         </label>
+        {MAZOS_V12[mazo]?.length ? (
+          <label>
+            <span className="sub">Dentro de</span>
+            <select className="select-plano" aria-label="Mazo dentro del área" value={sub} onChange={(e) => setSub(e.target.value)}>
+              <option value="">{front?.name ?? 'General'}</option>
+              {MAZOS_V12[mazo].map((m) => <option key={m} value={m}>{m}</option>)}
+            </select>
+          </label>
+        ) : null}
         <label>
           <span className="sub">Fuente</span>
           <input className="select-plano" value={fuente} onChange={(e) => setFuente(e.target.value)} placeholder="Tesis cap. 2" />
