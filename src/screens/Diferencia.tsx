@@ -54,14 +54,14 @@ export function Diferencia({ day }: { day: DayLog }) {
   useStore((s) => s.plan.pausaFinDeAnio);
   const d = useMemo(() => {
     const filas = diferenciaRoadmap(calendarioCompleto(t0));
-    const ventana = (PLAN_EXT.capacidad?.ventanaSemana ?? 43) / 7;
-    const chequeos = chequeosRoadmap(PLAN_EXT, (fecha, tipo) => (tipo === 'ventana' ? ventana : horasDelDia(fecha, { t0: PLAN_EXT.t0, inicioTrabajo: inicioRoadmap })), (fecha) => esDiaDePausa(fecha));
+    // v12.1: las ventanas de matemática usan el día entero de la rutina (10 h entre semana, 11 el fin de semana), como todo lo demás.
+    const chequeos = chequeosRoadmap(PLAN_EXT, (fecha) => horasDelDia(fecha, { t0: PLAN_EXT.t0, inicioTrabajo: inicioRoadmap }), (fecha) => esDiaDePausa(fecha));
     return { filas, resumen: resumenDiferencia(filas), chequeos, mate: diferenciaMate(PLAN_EXT, PLAN.matematica.tramos) };
   }, [t0, inicio, inicioRoadmap, day.date]);
   const r = d.resumen;
   return (
     <main className="pantalla et-pag dif-pag" style={{ ['--c' as string]: RAMA_COLOR.programacion }}>
-      <div className="topbar"><a className="volver" href="#/metas/etapas">Las 4 etapas</a><span className="mono sub">roadmap v7</span></div>
+      <div className="topbar"><a className="volver" href="#/metas/etapas">Las 4 etapas</a><span className="mono sub">plan v12.1</span></div>
       <header>
         <h1 className="titulo">Diferencia contra el roadmap</h1>
         <p>Las fechas del roadmap son estimaciones. Trazo recalcula con las horas de cada bloque y lo que da cada día{HORAS_ANTES_TRABAJO != null ? ` (${n1(HORAS_ANTES_TRABAJO)} h por día antes del trabajo nuevo, que empieza el ${f(inicio)}; 29 h por semana después; 43 en las ventanas)` : ''}, y con tus horas reales cuando las cargás. Acá se ve cuánto se corre cada bloque.</p>

@@ -19,16 +19,17 @@ beforeEach(() => {
 afterEach(() => cerrarEstadoEstudio());
 
 describe('ola 28 · Matemática: libros, capítulos, tarjetas y tests', () => {
-  it('Matemática muestra tus libros con el %, y el tramo m1 los dos libros (sin el link a M0-M10)', () => {
+  it('Matemática muestra tus libros con el %, y la ventana W1 manda Conamat (sin el link a M0-M10)', () => {
     const { unmount } = render(<MatePlan day={day()} param="mate" />);
     const libros = screen.getByText(/Tus libros/).closest('section')!;
     expect(within(libros).getAllByRole('link').map((a) => a.getAttribute('href'))).toEqual(['#/estudio/mate/libro/conamat', '#/estudio/mate/libro/conamat-algebra']);
     expect(within(libros).getByText(/Arranca al terminar Aritmética/)).toBeInTheDocument();
     expect(screen.queryByText(/Material de refuerzo: M0 a M10/)).toBeNull();
     unmount();
-    render(<MatePlan day={day()} param="mate/m1" />);
-    expect(screen.getByRole('heading', { level: 1 }).textContent).toBe('Aritmética y Álgebra');
-    expect(screen.getAllByRole('link').some((a) => a.getAttribute('href') === '#/estudio/mate/libro/conamat')).toBe(true);
+    // v12.1: los tramos diarios m1–m4 están archivados; la matemática va por ventanas (W1 con los libros de Conamat).
+    render(<MatePlan day={day()} param="mate/W1" />);
+    expect(screen.getByRole('heading', { level: 1 }).textContent).toBe('Math W1');
+    expect(screen.getByText('Conamat "Matemáticas simplificadas"')).toBeInTheDocument();
     expect(screen.queryByText(/Más material en/)).toBeNull();
     // Las reglas y el refuerzo quedan plegados.
     expect(screen.getByText('Reglas y refuerzo').closest('details')!.open).toBe(false);

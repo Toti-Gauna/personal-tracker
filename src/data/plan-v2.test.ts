@@ -94,18 +94,19 @@ describe('ola 24 · migración y calendario vivo', () => {
     resetState(s);
     const plan = await import('./plan');
     // La v7 no tiene semanas extra: lo apagado no cambia nada, pero se conserva.
-    expect(plan.TRAMOS.find((t) => t.id === 'P1')).toMatchObject({ extra: 0, plataforma: 0, meta: 5, horas: 304 });
+    expect(plan.TRAMOS.find((t) => t.id === 'P1')).toMatchObject({ extra: 0, plataforma: 0, meta: 3, horas: 194.5 });
     const conPausa = plan.SEMANAS;
-    // Apagar la pausa vuelve a contar sin ella; apagar la plataforma de P3 la saca solo de P3.
+    // v12.1: la pausa del 20 al 26 dic 2027 es fecha fija y cae después de las etapas 1 y 2: apagarla no cambia las semanas.
+    // Apagar la plataforma de P3 la saca solo de P3 (y se guarda).
     setPausaFinDeAnio(false);
-    expect(plan.SEMANAS).toBeLessThan(conPausa);
+    expect(plan.SEMANAS).toBe(conPausa);
     expect(plan.TRAMOS.some((t) => t.pausa)).toBe(false);
     setExtraBloque('P3', false, 'plataforma');
     expect(getState().plan.extrasApagados).toEqual(['P1', 'P3:plataforma']);
-    expect(plan.TRAMOS.find((t) => t.id === 'P3')).toMatchObject({ extra: 0, plataforma: 0, horas: 180 });
+    expect(plan.TRAMOS.find((t) => t.id === 'P3')).toMatchObject({ extra: 0, plataforma: 0, horas: 115 });
     setState((x) => x);
     resetState();
     expect([SEMANAS, TRAMOS.length]).toBeTruthy();
-    expect(plan.SEMANAS).toBe(111);
+    expect(plan.SEMANAS).toBe(53);
   });
 });

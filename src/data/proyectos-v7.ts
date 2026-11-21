@@ -71,7 +71,7 @@ export const fichaV7 = (id: string): FichaV7 | undefined => PROY_V7.proyectos[id
 export function validarV7(doc: ProyectosV7, bloques: { id: string; tipo: string; horas?: number; roadmap?: { inicio: string; fin: string } }[]): string[] {
   const err: string[] = [];
   if (doc.estandar.length !== 12) err.push(`el estándar tiene ${doc.estandar.length} puntos y son 12`);
-  for (const b of bloques.filter((x) => x.tipo === 'proyecto')) {
+  for (const b of bloques.filter((x) => x.tipo === 'proyecto' && !(x as { archivado?: unknown }).archivado)) {
     const p = doc.proyectos[b.id];
     if (!p) { err.push(`${b.id}: sin ficha v7`); continue; }
     if (!p.puesto) err.push(`${b.id}: sin puesto`);
