@@ -1345,6 +1345,46 @@ La v7 dice: "Las horas de PetrIA están medidas. Las de los demás proyectos lle
 
 **Con esto se cierra el roadmap v7 en Trazo (olas 29 a 33).**
 
+## 6 sexdecies. Plan v12.1: las metas como períodos
+
+El roadmap v7 queda archivado en `data/archivo/roadmap-v7/` ("roadmap v7 (archived, 20 Nov 2026)"); la app ya no lo lee. Lo cargado
+sigue: horas, lo hecho, el historial de recall, las notas y las metas de P0. Fuente: `docs/prompts/plan-v12.1.md`; datos generados con
+`scripts/plan-v12.mjs` → `data/plan-extendido.json` y `data/proyectos-v7.json`.
+
+**Estructura y fechas**
+- Etapa › Fase › Bloque › (Versión › Lote | Cert | Hito de matemática). 4 etapas, 11 fases (las que faltaban, derivadas y "a confirmar"), 73 bloques con fechas explícitas (hora de Buenos Aires).
+- El calendario ubica cada bloque en sus fechas; el factor de calibración y las horas reales ya no corren nada solo.
+- Días fijos: la pausa del 20 al 26 dic 2027 y los exámenes reservados.
+- Rutina: 10 h de lunes a viernes y 11 el fin de semana; el sábado demo + entrevista simulada y el domingo la revisión, de 15:45 a 17:00; post martes y jueves.
+- En pausa (fuera de Hoy y Metas, con sus datos): Handyx, el clipping y Eclipse. Archivados: los tramos diarios m1–m4, la rutina con trabajo y el plan de idiomas de 6 años.
+
+**Períodos** (`src/data/periodos.ts`, `periodos-plan.ts`)
+- Cada período tiene barra de tiempo (lo que pasó, al empezar el día) y de trabajo (lo hecho, ponderado: versiones y hitos por días, lotes por horas, certs por horas de estudio, semanas de inglés y búsqueda por días).
+- Estado: próximo, en plan, adelantado, atrasado, vencido, hecho. En plan = trabajo y tiempo a 10 puntos o menos (`TOLERANCIA`). Pasado el estimado sin terminar: atrasado; pasada la fecha límite: vencido.
+- Los proyectos llevan estimado y fecha límite (la de su última versión) en la barra; horas planificadas contra reales.
+- Lo hecho reusa `plan.hitos` (lotes, certs, hitos de matemática, bloques) y `plan.versiones` (versiones publicadas).
+- Atrasado o vencido: Trazo calcula el fin al ritmo del plan y sugiere correr lo que sigue, saltando las fechas fijas. Elegís qué y confirmás; lo confirmado (`plan.corrimientos`) mueve el calendario real. Se puede volver a las fechas del plan.
+
+**Pantallas**
+- Metas → Las 4 etapas → Períodos (`#/metas/periodos`): lo activo ahora, P0 con sus metas de siempre, las etapas y las fases de la actual, la semana. Cada tarjeta baja un nivel; la fase muestra salida, mercado y roles.
+- Línea de tiempo (`#/metas/linea`): Gantt por fase con la línea de hoy, la pausa rayada y horas planificadas contra reales.
+- Certificación (`#/metas/cert/<id>`): plan día por día, recursos, simulacros contra el % para estar listo, reserva (fecha fija), aprobada y renovación (validez habitual, "a verificar"; Cambridge C1 sin vencimiento).
+- Ventana de matemática (`#/metas/ventana/<W>`): hitos con su rango de días y capítulos de Conamat; no se cierra con hitos sin tildar.
+- Hoy: "Activo ahora: Fase 1 › PetrIA › v1.0 › lote 1.3", lo que vence hoy, la próxima fecha límite, avisos de reserva de exámenes y de hardware, y los hábitos con su racha (recall, Anki, post, demo, revisión: hechos cuando su bloque de la rutina queda hecho).
+- Programación: la escalera va por fases.
+
+**Estudio**
+- Un capítulo por vez: estudiar → test → tesis, y recién entonces el siguiente. Mientras, el resto del bloque es práctica del capítulo abierto.
+- Matemática entra en los bloques de la ventana W; fuera de las ventanas, solo Anki y recall. El repaso del día va en el bloque de Anki.
+- Papers: una actividad con un paper por unidad, en el orden de los bloques; la tesis más reciente es el tema del post del martes o el jueves.
+- Mazos dentro de cada área: English Made Simple, English Pronunciation Course, Cambridge C1, un mazo por libro de matemática, uno por paper y "20 LLM concepts". Una tarjeta sin dorso está bloqueada: no vence nunca hasta que lo escribas.
+
+**Metas de horas**: la semana y el mes piden lo que da la rutina con el bloque activo de cada día (no números fijos).
+
+**Calibración**: el factor proyecta el fin del plan en días hábiles; no mueve el calendario. Los corrimientos se sugieren y se confirman en Períodos.
+
+**Migración** (`src/state/migrar-v12.ts`, aditiva e idempotente): las certs aprobadas con ids de la v7 (C1…C13) se copian a sus ids nuevos; suma papers y el mazo de LLM. Las horas del 19 y 20 nov caen por fecha en "PetrIA v0 (archivado)" y no cuentan para la PetrIA de v12.1.
+
 ---
 
 ## 7. Registro de cambios
@@ -1531,3 +1571,12 @@ La v7 dice: "Las horas de PetrIA están medidas. Las de los demás proyectos lle
 - Hitos por rama (26 iniciales), rama clipping y pestaña Trimestre del mapa; hitos hechos, vencidos y movidos.
 - Sprint de búsqueda de 14 días y "Qué cambia en la ruta"; prompts 17 a 19 para el bloque de inglés.
 - Calendario de programación comprimido a 53 semanas, 30 hitos hasta el 21 feb, puertas de matemática, entrevista técnica por proyecto, portfolio agéntico (MCP, agentes, defensas), semanas ganadas, mapa de proyectos y revisión de mercado; prompts 20 a 23.
+
+**2026-11-21 · plan v12.1**
+
+- Roadmap v7 archivado; plan v12.1 con fechas explícitas, 11 fases, rutina de 10 y 11 h, pausa fija del 20 al 26 dic 2027.
+- Metas como períodos (tiempo contra trabajo, estado, estimado y fecha límite), bajar de etapa a lote, sugerencia de corrimiento con confirmación, semana y línea de tiempo.
+- Página de certificación (reserva fija, simulacros, renovación) y de ventana de matemática (no cierra con hitos abiertos).
+- Hoy con lo activo, lo que vence, la próxima fecha límite, avisos de reserva y hardware, y hábitos con racha.
+- Estudio de a un capítulo (el siguiente se abre con la tesis), papers como actividad, mazos por área y "20 LLM concepts" bloqueado.
+- Metas de horas desde la rutina; calibración como proyección; migración aditiva.
