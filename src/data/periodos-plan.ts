@@ -78,3 +78,21 @@ export function arbolPlan(cal: Fechado[], ctx: Ctx): Periodo[] {
     })),
   }));
 }
+
+export type AccionPeriodo = { tipo: 'hito'; clave: string } | { tipo: 'version'; proyecto: string; version: string };
+
+/** Qué se tilda para marcar hecho un período hoja: un hito de `plan.hitos` o publicar la versión. */
+export function accionDe(id: string): AccionPeriodo | null {
+  const m = /^([^:]+):(.+)$/.exec(id);
+  if (!m) return PLAN_EXT.bloques.some((b) => b.id === id) ? { tipo: 'hito', clave: claveHito.bloque(id) } : null;
+  const [, b, resto] = m;
+  let x: RegExpExecArray | null;
+  if ((x = /^lote:(.+)$/.exec(resto))) return { tipo: 'hito', clave: claveHito.lote(b, x[1]) };
+  if ((x = /^hito:(\d+)$/.exec(resto))) return { tipo: 'hito', clave: claveHito.mate(b, Number(x[1]) - 1) };
+  if ((x = /^v(\d+\.\d+)$/.exec(resto))) return { tipo: 'version', proyecto: b, version: x[1] };
+  if (PLAN_EXT.bloques.find((y) => y.id === b)?.certs?.some((c) => c.id === resto)) return { tipo: 'hito', clave: claveHito.cert(resto) };
+  return null;
+}
+
+/** El bloque al que pertenece un período (para sugerir correr lo que sigue). */
+export const bloqueDe = (id: string) => id.split(':')[0];
