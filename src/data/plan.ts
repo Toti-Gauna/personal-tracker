@@ -528,7 +528,10 @@ export const tramoMatematica = (fecha: string, t0 = T0_PLAN) => {
   const f = addDays(fecha, -dias(CFG_HORAS.t0, t0));
   const ts = PLAN.matematica.tramos;
   const dentro = (m: TramoMate) => !!m.inicio && !!m.fin && f >= m.inicio && f <= m.fin;
-  return ts.find((m) => /^W/.test(m.id) && dentro(m)) ?? ts.find((m) => /^m/.test(m.id) && dentro(m)) ?? (f < (ts[0].inicio ?? '') ? ts[0] : ts.filter((m) => /^m/.test(m.id)).pop()!);
+  // v12.1: sin tramos diarios (m1–m4 archivados), fuera de una ventana toca la próxima (o la última, después de todas).
+  const diarios = ts.filter((m) => /^m/.test(m.id));
+  return ts.find((m) => /^W/.test(m.id) && dentro(m)) ?? ts.find((m) => /^m/.test(m.id) && dentro(m))
+    ?? (f < (ts[0].inicio ?? '') ? ts[0] : diarios.length ? diarios[diarios.length - 1] : ts.find((m) => (m.inicio ?? '') > f) ?? ts[ts.length - 1]);
 };
 export const faseTrabajo = (fecha: string, t0 = T0_PLAN) => enRango(PLAN.trabajo.fases, Math.max(1, Math.min(SEMANAS, semanaDelPlan(fecha, t0))));
 export const faseIngles = (fecha: string, t0 = T0_PLAN) => enRango(PLAN.ingles.fases, Math.max(1, Math.min(SEMANAS, semanaDelPlan(fecha, t0))));
@@ -640,7 +643,7 @@ export function etapas(fecha: string, t0 = T0_PLAN): Etapa[] {
   };
   const mate: Etapa = {
     rama: 'matematica',
-    titulo: w.ahora ? `${w.ahora.id} · ${w.ahora.que}` : m.libros.join(' y '),
+    titulo: w.ahora ? `${w.ahora.id} · ${w.ahora.que}` : (m.libros ?? []).join(' y ') || m.id,
     sub: w.prox ? `${w.prox.id} (${w.prox.que.toLowerCase()}) el ${fmtCorta(inicioDe(w.prox, t0))}` : `Habilita: ${m.habilita}`,
     lado: `B${b.n} · ${PLAN.metasBimestre.matematica[b.n - 1]}`,
     avance: m.inicio && m.fin ? Math.max(0.01, Math.min(1, (dias(m.inicio, addDays(fecha, -dias(CFG_HORAS.t0, t0))) + 1) / (dias(m.inicio, m.fin) + 1))) : (s - m.desde + 1) / (m.hasta - m.desde + 1),
