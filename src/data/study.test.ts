@@ -204,3 +204,17 @@ describe('pomodoros y tarjetas', () => {
     ]);
   });
 });
+
+describe('v12.1 · dónde entra el estudio en la rutina nueva', () => {
+  it('matemática en el bloque que la ventana pasa a matemática; fuera de una ventana no entra; lo demás, en su bloque', async () => {
+    const { bloqueDeEstudio } = await import('./study');
+    const conamat = { block: 'math', front: 'math' };
+    const ventana = [{ key: 'prog', rama: 'matematica' }, { key: 'prog-tarde', rama: 'matematica' }, { key: 'anki', rama: 'matematica' }];
+    const proyecto = [{ key: 'prog', rama: 'programacion' }, { key: 'anki', rama: 'matematica' }];
+    expect(bloqueDeEstudio(conamat, ventana, true)).toBe('prog');
+    expect(bloqueDeEstudio(conamat, proyecto, true)).toBeNull();
+    expect(bloqueDeEstudio(conamat, proyecto, false)).toBe('math'); // la rutina vieja, como siempre
+    expect(bloqueDeEstudio(conamat, [{ key: 'math', rama: 'matematica' }], true)).toBe('math');
+    expect(bloqueDeEstudio({ block: 'leer', front: 'lectura' }, proyecto, true)).toBe('leer');
+  });
+});

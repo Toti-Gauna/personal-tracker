@@ -29,6 +29,17 @@ export function arranco(st: StudyState, a: Activity) {
 export const activitiesFor = (st: StudyState, date: string) =>
   st.activities.filter((a) => !a.archivada && a.days.includes(weekday(date)) && !libroCerrado(st, a) && arranco(st, a));
 
+/**
+ * v12.1 · el bloque del día donde entra una actividad: el suyo si el día lo tiene. En la rutina v12.1 no hay bloque de matemática:
+ * un libro de matemática va en el bloque de foco que la ventana W pasa a matemática; fuera de una ventana, la matemática es solo
+ * Anki y recall (null: hoy no entra). Lo demás, como siempre.
+ */
+export function bloqueDeEstudio(a: Pick<Activity, 'block' | 'front'>, blocks: { key: string; rama?: string }[], v12: boolean): string | null {
+  if (blocks.some((b) => b.key === a.block) || !v12) return a.block;
+  if (a.front === 'math') return blocks.find((b) => /^prog/.test(b.key) && b.rama === 'matematica')?.key ?? null;
+  return a.block;
+}
+
 /** Ola 28 · los libros de matemática con capítulos que están en curso (para preguntar en qué estado quedó cada uno). */
 export const librosMate = (st: StudyState) => st.activities.filter((a) => a.front === 'math' && !!a.units?.length && !a.archivada && arranco(st, a));
 
