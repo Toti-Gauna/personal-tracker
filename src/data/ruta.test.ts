@@ -1,5 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { getState, register, resetState, startDay, toggleTask } from '../state/store';
+import { setPlanSettings } from '../state/plan';
 import { addPilot, ensureDayRefs, saveWeek, syncBlockRuta, toggleItemManual, weekPlan } from '../state/ruta';
 import { completeLearn, saveTest } from '../state/study';
 import { marcarTarea } from '../ui/acciones';
@@ -124,6 +125,8 @@ describe('de la ruta a tu día', () => {
     vi.setSystemTime(new Date(2026, 10, 16, 7, 0));
     resetState();
     register('Toti', 'Abi', D);
+    // v12.1 no tiene bloque diario de matemática (m1–m4 archivados): la ruta se prueba con la rutina anterior, que sí lo tiene.
+    setPlanSettings({ modo: null });
     startDay('completo', '04:00', D);
   });
   afterEach(() => vi.useRealTimers());
@@ -133,9 +136,13 @@ describe('de la ruta a tu día', () => {
     expect(bl.math).toMatchObject({ ref: 'b1-conamat-arit-01', part: 'learn' });
     expect(bl.prog).toMatchObject({ ref: 'b1-prog-python', part: 'learn' });
     expect(bl.abi.ref).toBeUndefined();
-    // Con el modo intensivo no hay bloque de Handyx ni de clipping (sin bloque asignado).
-    expect(bl.handyx).toBeUndefined();
-    expect(bl.clipping).toBeUndefined();
+    // Con la rutina del plan v12.1 no hay bloque de Handyx ni de clipping (en pausa).
+    setPlanSettings({ modo: 'busqueda-intensiva' });
+    startDay('completo', '04:00', '2026-11-18');
+    const v12 = Object.fromEntries(getState().days['2026-11-18'].blocks.map((b) => [b.key, b]));
+    expect(v12.handyx).toBeUndefined();
+    expect(v12.clipping).toBeUndefined();
+    expect(v12.prog).toMatchObject({ ref: 'b1-prog-python', part: 'learn' });
   });
 
   it('marcar la meta suma a la mejora, avanza la meta semanal, mueve el carril y recalcula el ritmo', () => {
@@ -145,8 +152,8 @@ describe('de la ruta a tu día', () => {
     for (const t of math.tasks) marcarTarea(D, 'math', t.id);
     const s = getState();
     const p = progressMap(s.ruta.log);
-    // v7: 14 metas en el día de lunes a viernes del modo intensivo.
-    expect(mejoraDia(s.days[D])).toBeCloseTo(1 / 14);
+    // La rutina anterior de lunes a viernes: 10 metas.
+    expect(mejoraDia(s.days[D])).toBeCloseTo(1 / 10);
     expect(p['b1-conamat-arit-01']).toBe(0.5);
     expect(laneStatus(B1, 'math', D, p).done).toBe(antes.done + 0.5);
     const semana = weekPlan(D).plan.goals.find((g) => g.lane === 'math')!;

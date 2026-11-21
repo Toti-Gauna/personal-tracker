@@ -341,7 +341,7 @@ export interface Ajustes {
 export const ACADEMY_HASTA = '2026-12-22';
 
 /** Ola 31 · los bloques que pueden pasar a ser horas extra de proyecto (los que no son sueño, entreno, Abi, trabajo, matemática ni proyecto). */
-export const NO_CONVERTIBLES = new Set(['rutina', 'sueno', 'entreno', 'abi', 'trabajo', 'math', 'math-tarde', 'pausa']);
+export const NO_CONVERTIBLES = new Set(['rutina', 'sueno', 'entreno', 'abi', 'trabajo', 'math', 'math-tarde', 'pausa', 'recall', 'anki', 'post', 'demo', 'revision']);
 export const esConvertible = (b: Pick<RoutineBlock, 'id' | 'rama' | 'kind'>) => !NO_CONVERTIBLES.has(b.id) && b.rama !== 'programacion' && b.rama !== 'salud';
 
 /** Horario del trabajo nuevo (editable en Ajustes). De fábrica, de 10:00 a 16:00. */

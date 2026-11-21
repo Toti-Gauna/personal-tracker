@@ -1,5 +1,6 @@
 import { fireEvent, render, screen, within } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
+import { setPlanSettings } from '../state/plan';
 import { getState, register, resetState, startDay } from '../state/store';
 import { completeReview, saveTest, seguirEstudiando, terminarEstudio, tramoDone, volverAEstudiar } from '../state/study';
 import { marcarTarea } from '../ui/acciones';
@@ -92,6 +93,8 @@ describe('ola 28 · el capítulo no avanza solo', () => {
 
 describe('ola 28 · ¿en qué estado estás?', () => {
   it('al cerrar la meta de matemática en Hoy se abre la hoja, y desde ahí se marca el capítulo', () => {
+    // v12.1 no tiene bloque diario de matemática (m1–m4 archivados): se prueba con la rutina anterior, que sí lo tiene.
+    setPlanSettings({ modo: null });
     startDay('completo', '04:00', D);
     const b = getState().days[D].blocks.find((x) => x.key === 'math')!;
     for (const t of b.tasks) marcarTarea(D, 'math', t.id);

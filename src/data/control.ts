@@ -139,6 +139,8 @@ export function alertasMatematica(fecha: string, t0: string = T0_PLAN): AvisoCon
 
 /** Deuda de matemática del modo intensivo: 1 h por día respecto de las 2 h de antes, desde el inicio de P1 hasta ayer (o hasta el inicio del trabajo). */
 export function deudaMatematica(fecha: string, c: Pick<CfgControl, 't0' | 'inicioTrabajo'>): { horas: number; dias: number } {
+  // v12.1: sin tramos diarios (m1–m4 archivados) la matemática va en ventanas y en Anki y recall: no hay deuda diaria.
+  if (!PLAN.matematica.tramos.some((m) => /^m/.test(m.id))) return { horas: 0, dias: 0 };
   const ini = inicioIntensivo(c);
   const hasta = fecha < c.inicioTrabajo ? fecha : c.inicioTrabajo;
   const dias = Math.max(0, daysBetween(ini, hasta));

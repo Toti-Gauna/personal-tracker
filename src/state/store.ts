@@ -275,7 +275,7 @@ export function startDay(routine: RoutineId, wake: string, date = dateKey()) {
       ...(antesDelTrabajo && cfg.extraProyecto?.length ? { extraProyecto: cfg.extraProyecto } : {}),
     };
     const blocks = buildBlocks(planDay(date, routine, wake, dayType, { ventana, entrevista, puerta, prepara, ...(cfg.horarioTrabajo ? { trabajo: cfg.horarioTrabajo } : {}), ...(cfg.bloquesPendientes ? { pendientes: cfg.bloquesPendientes } : {}), ...v7, ...v12 }), carry)
-      .map((b) => (refs[b.key] ? { ...b, ...refs[b.key] } : b))
+      .map((b) => (refs[b.key] && !(ventana && b.key.startsWith('prog')) ? { ...b, ...refs[b.key] } : b))
       .map((b) => (b.rama === 'programacion' && delProyecto.length ? { ...b, tasks: [...delProyecto.map((t) => ({ id: newId(), t: `${proyecto} · ${t}`, done: false })), ...b.tasks] } : b))
       .map((b) => (b.key === 'cierre' && estirar ? { ...b, tasks: b.tasks.map((x) => (x.t === 'Estirar' ? { ...x, t: `Estirar: ${estirar}` } : x)) } : b))
       // Ola 27: el domingo, el cierre suma la revisión semanal de 30 min y la mini-tesis de una página.

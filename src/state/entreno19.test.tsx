@@ -100,7 +100,7 @@ describe('ola 19 · la sesión: calentamiento, RIR y el día', () => {
 
   it('el cierre de las 20:00 a 21:00 estira los músculos de la rutina del día', () => {
     const cierre = day(D).blocks.find((b) => b.key === 'cierre')!;
-    expect(cierre.title).toBe('Descanso final · recall en frío');
+    expect(cierre.title).toBe('Descanso');
     expect(cierre.tasks.map((x) => x.t)).toEqual(['Cena y ducha', 'Estirar: cuádriceps, aductores, glúteos y gemelos', 'Recall en frío (20 min): lo construido hoy', 'Cerrar el día en 5 min']);
   });
 

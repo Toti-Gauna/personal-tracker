@@ -10,54 +10,54 @@ const dia = (d: string) => { startDay('completo', '04:00', d); return bloques(d)
 
 beforeEach(() => { resetState(); register('Toti', 'Abi', '2026-11-16'); });
 
-describe('ola 31 · rutina del roadmap v7', () => {
-  it('lunes a viernes: proyecto 5:30–8:00 y 11:30–15:30, Anthropic Academy a las 15:30 hasta el 22 dic y proyecto desde el 23', () => {
+describe('v12.1 · rutina de lunes a viernes (10 h) y horas extra', () => {
+  it('lunes a viernes: proyecto 4:30–8:30 y 12:00–15:45, revisión del proyecto, el cierre de hábitos y el post de martes y jueves', () => {
     const b = dia('2026-11-18');
     expect(b.map((x) => [x.key, x.start])).toEqual([
-      ['rutina', '04:00'], ['math', '04:30'], ['prog', '05:30'], ['abi', '08:00'], ['trabajo', '09:30'], ['prog-tarde', '11:30'], ['academy', '15:30'],
-      ['ingles', '16:00'], ['ingles-hablado', '16:30'], ['busqueda', '17:00'], ['publicaciones', '17:40'], ['entreno', '18:00'], ['cierre', '20:00'], ['sueno', '21:00'],
+      ['rutina', '04:00'], ['prog', '04:30'], ['abi', '08:30'], ['trabajo', '10:00'], ['prog-tarde', '12:00'], ['prog-review', '15:45'],
+      ['ingles', '16:40'], ['recall', '16:55'], ['anki', '17:15'], ['busqueda', '17:30'], ['leer', '17:45'], ['entreno', '18:00'], ['cierre', '20:00'], ['sueno', '21:00'],
     ]);
-    expect(b.find((x) => x.key === 'academy')!.title).toMatch(/Anthropic Academy/);
-    expect(dia('2026-12-22').some((x) => x.key === 'academy')).toBe(true);
-    const d23 = dia('2026-12-23');
-    expect(d23.some((x) => x.key === 'academy')).toBe(false);
-    expect(d23.find((x) => x.key === 'prog-academy')).toMatchObject({ start: '15:30', min: 30, rama: 'programacion' });
+    // Anthropic Academy quedó en el roadmap v7 archivado: no hay bloque.
+    expect(b.some((x) => x.key === 'academy' || x.key === 'prog-academy')).toBe(false);
+    // Martes y jueves: los últimos 30 min de la tarde son el post del día.
+    const jue = dia('2026-11-19');
+    expect(jue.find((x) => x.key === 'prog-tarde')).toMatchObject({ start: '12:00', min: 195 });
+    expect(jue.find((x) => x.key === 'post')).toMatchObject({ start: '15:15', min: 30, rama: 'trabajo' });
   });
 
-  it('la rutina da 50 h por semana de proyecto (47,5 con Academy) y PetrIA pide 56: faltan 6 (u 8,5)', () => {
-    expect(horasRutinaIntensiva()).toEqual({ semana: 50, meta: 56, falta: 6 });
-    expect(horasRutinaIntensiva([], { academy: true })).toEqual({ semana: 47.5, meta: 56, falta: 8.5 });
-    // Lo que se puede pasar a proyecto: nunca sueño, entreno, Abi, trabajo ni matemática.
+  it('la rutina da 60,2 h por semana de proyecto; sin trabajo nuevo no hay meta de horas extra de PetrIA', () => {
+    expect(horasRutinaIntensiva()).toEqual({ semana: 60.2, meta: 0, falta: 0 });
+    // Lo que se puede pasar a proyecto: nunca sueño, entreno, Abi, trabajo ni la rutina.
     const ids = convertiblesIntensiva().map((c) => c.id);
-    expect(ids).toEqual(expect.arrayContaining(['ingles', 'ingles-hablado', 'busqueda', 'publicaciones', 'cierre', 'demo', 'simulada', 'revision']));
-    for (const no of ['sueno', 'entreno', 'abi', 'trabajo', 'math', 'rutina', 'prog']) expect(ids).not.toContain(no);
-    expect(convertiblesIntensiva().find((c) => c.id === 'ingles-hablado')).toMatchObject({ minSemana: 150, dias: 'L a V' });
-    // Inglés hablado (2 h 30) y publicaciones (1 h 40): todavía faltan 1,8 h.
-    expect(horasRutinaIntensiva(['ingles-hablado', 'publicaciones'])).toEqual({ semana: 54.2, meta: 56, falta: 1.8 });
+    expect(ids).toEqual(expect.arrayContaining(['ingles', 'busqueda', 'leer', 'cierre']));
+    // Los hábitos (recall, Anki, post, demo y revisión) no se convierten en horas de proyecto.
+    for (const h of ['recall', 'anki', 'post', 'demo', 'revision']) expect(ids).not.toContain(h);
+    for (const no of ['sueno', 'entreno', 'abi', 'trabajo', 'rutina', 'prog']) expect(ids).not.toContain(no);
+    expect(convertiblesIntensiva().find((c) => c.id === 'ingles')).toMatchObject({ minSemana: 105, dias: 'L a V, sábado, domingo' });
+    expect(horasRutinaIntensiva(['ingles'])).toEqual({ semana: 61.9, meta: 0, falta: 0 });
     // Aunque se pida, el entreno no se convierte.
-    expect(horasRutinaIntensiva(['entreno'])).toEqual({ semana: 50, meta: 56, falta: 6 });
+    expect(horasRutinaIntensiva(['entreno'])).toEqual({ semana: 60.2, meta: 0, falta: 0 });
   });
 
-  it('las horas extra elegidas pasan a proyecto hasta el trabajo nuevo; con trabajo, nada cambia', () => {
-    setPlanSettings({ extraProyecto: ['ingles-hablado'] });
+  it('las horas extra elegidas pasan a proyecto; sin fecha de trabajo nuevo, rigen todo el plan', () => {
+    setPlanSettings({ extraProyecto: ['ingles'] });
     const b = dia('2026-11-18');
-    expect(b.find((x) => x.key === 'prog-extra-ingles-hablado')).toMatchObject({ start: '16:30', min: 30, rama: 'programacion' });
-    expect(b.some((x) => x.key === 'ingles-hablado')).toBe(false);
-    const con = dia('2027-01-05');
-    expect(con.some((x) => x.key.startsWith('prog-extra'))).toBe(false);
+    expect(b.find((x) => x.key === 'prog-extra-ingles')).toMatchObject({ start: '16:40', min: 15, rama: 'programacion' });
+    expect(b.some((x) => x.key === 'ingles')).toBe(false);
+    expect(dia('2027-06-02').some((x) => x.key === 'prog-extra-ingles')).toBe(true);
   });
 
   it('el sprint sin IA parte el proyecto de la mañana: 30 min de algoritmos y después el proyecto', () => {
     iniciarSprintSinIA('2026-11-18');
     const b = dia('2026-11-19');
-    expect(b.find((x) => x.key === 'algoritmos')).toMatchObject({ start: '05:30', min: 30, title: 'Algoritmos sin IA · día 2 de 14' });
-    expect(b.find((x) => x.key === 'prog')).toMatchObject({ start: '06:00', min: 120 });
+    expect(b.find((x) => x.key === 'algoritmos')).toMatchObject({ start: '04:30', min: 30, title: 'Algoritmos sin IA · día 2 de 14' });
+    expect(b.find((x) => x.key === 'prog')).toMatchObject({ start: '05:00', min: 210 });
     // Pasados los 14 días, no.
     expect(dia('2026-12-02').some((x) => x.key === 'algoritmos')).toBe(false);
     expect(sprintActivo(getState().plan, '2026-12-01')).toMatchObject({ dia: 14, fin: '2026-12-01' });
-    // Funciona igual con trabajo (el proyecto de la mañana arranca a las 5:30).
-    const p = ajustarDia(planRoutine('con-trabajo', 'completo'), { sprintSinIA: { dia: 3 } });
-    expect(p.find((x) => x.block.id === 'algoritmos')!.start).toBe('05:30');
+    // Funciona igual el fin de semana (el proyecto de la mañana arranca a las 4:30).
+    const p = ajustarDia(planRoutine('busqueda-intensiva-finde', 'completo'), { sprintSinIA: { dia: 3 } });
+    expect(p.find((x) => x.block.id === 'algoritmos')!.start).toBe('04:30');
   });
 
   it('cortar el sprint termina ayer (o lo borra si arrancó hoy); los problemas se cuentan por día', () => {
