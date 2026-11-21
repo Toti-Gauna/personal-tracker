@@ -841,6 +841,20 @@
     "texto": "Entrenamientos",
     "meta": 5,
     "unidad": ""
+   },
+   {
+    "rama": "trabajo",
+    "id": "posts",
+    "texto": "Publicaciones",
+    "meta": 2,
+    "unidad": ""
+   },
+   {
+    "rama": "trabajo",
+    "id": "simulada",
+    "texto": "Entrevista simulada",
+    "meta": 1,
+    "unidad": ""
    }
   ]
  },

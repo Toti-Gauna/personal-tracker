@@ -123,6 +123,12 @@ export interface PlanState {
   /** Ola 31: sprints sin IA (14 días, 30 min por día) y los problemas resueltos por día. */
   sprintsSinIA?: { inicio: string; cortado?: string }[];
   problemasSinIA?: Record<string, number>;
+  /** Ola 32 (v7): compras de hardware, cuentas y trámites hechos (id → fecha y lo que costó). */
+  compras?: Record<string, { fecha: string; costo?: string }>;
+  /** Ola 32: versiones de examen que verificaste (C2 → fecha). */
+  certVerificada?: Record<string, string>;
+  /** Ola 32: revisiones semanales (lunes de la semana → checklist, nota y cuándo la hiciste). */
+  revisionesSemanales?: Record<string, { checks: number[]; nota?: string; hecha?: string }>;
 }
 
 /** Ola 31 · un algorithm spot plantado: cuándo, en qué proyecto, la pregunta de entrevista y si se validó. */

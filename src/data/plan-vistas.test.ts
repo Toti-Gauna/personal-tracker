@@ -4,7 +4,7 @@ import studyRaw from '../../data/study-roadmaps.json';
 import { PLAN, aplicarCalendario } from './plan';
 import { PLAN_EXT, validar, type PlanExtendido } from './plan-extendido';
 import { emptyPlan, proyectoVacio } from './plan-state';
-import { alertaVersion, alertas, calendarioCompleto, estadoEn, hoySos, lineaEtapas, perfilMate, refuerzoPara, rutaMate, semaforoPuerta } from './plan-vistas';
+import { alertaVerificar, alertaVersion, alertas, calendarioCompleto, estadoEn, hoySos, lineaEtapas, perfilMate, refuerzoPara, rutaMate, semaforoPuerta } from './plan-vistas';
 
 const T0 = '2026-11-16';
 const copia = () => structuredClone(raw) as unknown as PlanExtendido;
@@ -90,20 +90,28 @@ describe('matemática: un solo roadmap (absorbe la ola 15)', () => {
   });
 });
 
-describe('ola 24 · alerta de versión de examen (Security+)', () => {
-  // Con la v7 el examen de Security+ cae en septiembre de 2027 ("con la versión nueva"), después del retiro de la SY0-701: la alerta avisa que sirve la SY0-801.
-  it('con el examen después del retiro avisa (sirve la SY0-801); elegida la 801 no avisa; antes del retiro no avisa', () => {
+describe('ola 24 y 32 · versión de examen de Security+ (la v7 rinde la versión nueva)', () => {
+  it('sin elegir manda la SY0-801 del roadmap: no hay aviso de versión; si elegís la 701 en inglés, avisa que se retira antes', () => {
     const c2 = calendarioCompleto(T0).find((b) => b.id === 'C2')!;
-    expect(c2).toMatchObject({ inicio: '2027-08-29', fin: '2027-09-15', numero: 3 });
-    const a = alertas('2026-11-18', emptyPlan(), T0).find((x) => x.id === 'ver-C2')!;
-    expect(a).toMatchObject({ tipo: 'cert', titulo: 'Decisión el 22 nov 2026: versión de CompTIA Security+' });
-    expect(a.texto).toMatch(/SY0-701 en inglés ya está retirada/);
-    expect(a.texto).toMatch(/Sirven: SY0-801/);
-    expect(alertaVersion(c2, { ...emptyPlan(), versionCert: { C2: 'SY0-801' } }, '2026-11-18')).toBeNull();
+    expect(c2).toMatchObject({ inicio: '2027-08-29', fin: '2027-09-15', numero: 3, cert: { porDefecto: 'SY0-801' } });
+    expect(alertaVersion(c2, emptyPlan(), '2026-11-18')).toBeNull();
+    expect(alertas('2026-11-18', emptyPlan(), T0).some((x) => x.id === 'ver-C2')).toBe(false);
     expect(alertaVersion(c2, { ...emptyPlan(), versionCert: { C2: 'SY0-701-en' } }, '2026-11-18')!.titulo).toBe('SY0-701 en inglés se retira el 11 jun 2027, antes de tu examen (15 sep 2027)');
-    // Después del examen no avisa más; con el examen antes del retiro, tampoco.
     expect(alertaVersion(c2, { ...emptyPlan(), versionCert: { C2: 'SY0-701-en' } }, '2027-09-16')).toBeNull();
-    expect(alertaVersion({ ...c2, fin: '2027-05-31' }, emptyPlan(), '2026-11-18')).toBeNull();
+  });
+
+  it('la SY0-801 tenía que salir cerca del 17 nov 2026 y no está confirmada: pide verificarla hasta que la marques', () => {
+    const c2 = calendarioCompleto(T0).find((b) => b.id === 'C2')!;
+    // Antes de la fecha de salida no avisa.
+    expect(alertaVerificar(c2, emptyPlan(), '2026-11-16')).toBeNull();
+    const v = alertas('2026-11-21', emptyPlan(), T0).find((x) => x.id === 'verif-C2')!;
+    expect(v).toMatchObject({ tipo: 'cert', titulo: 'Verificá la SY0-801 de CompTIA Security+', href: '#/metas/proyecto/C2' });
+    expect(v.texto).toMatch(/Tenía que salir cerca del 17 nov 2026/);
+    expect(alertaVerificar(c2, { ...emptyPlan(), certVerificada: { C2: '2026-11-21' } }, '2026-11-21')).toBeNull();
+    // Si elegís la 701 en español (sin fecha de salida pendiente), no hay nada que verificar.
+    expect(alertaVerificar(c2, { ...emptyPlan(), versionCert: { C2: 'SY0-701-es' } }, '2026-11-21')).toBeNull();
+    // La decisión del 22 nov quedó resuelta por el roadmap: no avisa.
+    expect(alertas('2026-11-18', emptyPlan(), T0).some((x) => x.id === 'dec-secplus')).toBe(false);
   });
 });
 
@@ -128,10 +136,10 @@ describe('etapas, hoy sos y alertas', () => {
 
   it('alertas: la versión de Security+, una certificación que se acerca y una ventana que cierra', () => {
     const a = alertas('2026-11-16', emptyPlan(), T0);
-    // El examen cae después del retiro de la SY0-701: la alerta de versión reemplaza a la de la decisión.
-    expect(a.find((x) => x.id === 'ver-C2')).toMatchObject({ titulo: 'Decisión el 22 nov 2026: versión de CompTIA Security+' });
+    // Security+: la decisión quedó resuelta por el roadmap (SY0-801); sin aviso de versión.
+    expect(a.some((x) => x.id === 'ver-C2' || x.id === 'dec-secplus')).toBe(false);
     expect(a.find((x) => x.id === 'cert-C8')).toMatchObject({ titulo: 'Claude Certified Architect + GitHub Foundations empieza el 27 dic 2026' });
-    expect(alertas('2026-11-16', { ...emptyPlan(), versionCert: { C2: 'SY0-801' } }, T0).some((x) => x.id === 'ver-C2')).toBe(false);
+    expect(alertas('2026-11-16', { ...emptyPlan(), versionCert: { C2: 'SY0-701-en' } }, T0).some((x) => x.id === 'ver-C2')).toBe(true);
     const c1 = alertas('2027-06-05', emptyPlan(), T0).find((x) => x.id === 'cert-C1')!;
     expect(c1.texto).toMatch(/Costo sin verificar/);
     expect(alertas('2027-03-08', emptyPlan(), T0).find((x) => x.id === 'vent-W1')).toMatchObject({ titulo: 'W1 cierra el 11 mar 2027' });

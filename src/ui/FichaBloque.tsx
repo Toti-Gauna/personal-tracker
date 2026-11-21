@@ -6,8 +6,8 @@ import { capacidadDelDia } from '../data/plan';
 import { textoDelta } from '../data/diferencia';
 import { daysBetween } from '../data/time';
 import { RAMA_COLOR } from '../data/ramas';
-import { publicarVersion, setExtraBloque, setVersionCert, tildarSalida, toggleArquitectura, toggleEntregableVersion, toggleEvidencia, type TipoExtra } from '../state/plan';
-import { alertaVersion, avanceSalida, calendarioCompleto, salidaDe } from '../data/plan-vistas';
+import { marcarCertVerificada, publicarVersion, setExtraBloque, setVersionCert, tildarSalida, toggleArquitectura, toggleEntregableVersion, toggleEvidencia, type TipoExtra } from '../state/plan';
+import { alertaVerificar, alertaVersion, avanceSalida, calendarioCompleto, salidaDe } from '../data/plan-vistas';
 import { useStore } from '../state/store';
 import { Casilla } from './Casilla';
 import { Plegable } from './Plegable';
@@ -325,20 +325,32 @@ export function VersionExamen({ id, date, t0 }: { id: string; date: string; t0: 
   const vs = b?.cert?.versiones;
   if (!b || !vs?.length) return null;
   const alerta = alertaVersion(b, plan, date);
+  const verificar = alertaVerificar(b, plan, date);
   const elegida = plan.versionCert?.[id] ?? '';
+  // Ola 32: sin elegir, manda la del roadmap (Security+: la versión nueva).
+  const porDefecto = vs.find((v) => v.id === b.cert?.porDefecto);
+  const vale = vs.find((v) => v.id === (elegida || b.cert?.porDefecto));
   return (
     <section className="pp-ficha">
       <div className="etiqueta pp-sec">Versión del examen</div>
       <ul className="pp-versiones">
-        {vs.map((v) => <li key={v.id} className={v.retiro && v.retiro < b.fin ? 'retirada' : ''}><b>{v.nombre}</b><span className="mono sub">{v.retiro ? `se retira el ${fm(v.retiro)}` : v.sale ? `sale cerca del ${fm(v.sale)}` : ''}</span></li>)}
+        {vs.map((v) => <li key={v.id} className={v.retiro && v.retiro < b.fin ? 'retirada' : ''}><b>{v.nombre}</b><span className="mono sub">{v.retiro ? `se retira el ${fm(v.retiro)}` : v.sale ? `sale cerca del ${fm(v.sale)}${v.verificada === false ? ' · sin confirmar' : ''}` : ''}</span></li>)}
       </ul>
       <label className="pp-version">Elegida
         <select className="campo-texto" value={elegida} onChange={(e) => setVersionCert(id, e.target.value)}>
-          <option value="">Sin elegir</option>
+          <option value="">{porDefecto ? `La del roadmap (${porDefecto.nombre})` : 'Sin elegir'}</option>
           {vs.map((v) => <option key={v.id} value={v.id}>{v.nombre}</option>)}
         </select>
       </label>
-      {alerta ? <p className="pp-alerta-version" role="status"><b>{alerta.titulo}</b> {alerta.texto}</p> : elegida ? <p className="sub">La {vs.find((v) => v.id === elegida)?.nombre} llega a tu examen ({fm(b.fin)}).</p> : null}
+      {!elegida && porDefecto && b.cert?.porDefectoMotivo && <p className="sub">{b.cert.porDefectoMotivo}.</p>}
+      {alerta ? <p className="pp-alerta-version" role="status"><b>{alerta.titulo}</b> {alerta.texto}</p> : vale ? <p className="sub">La {vale.nombre} llega a tu examen ({fm(b.fin)}).</p> : null}
+      {verificar && (
+        <div className="pp-alerta-version">
+          <p><b>{verificar.titulo}</b> {verificar.texto}</p>
+          <button className="btn-borde" onClick={() => marcarCertVerificada(id, date)}>Ya la verifiqué</button>
+        </div>
+      )}
+      {plan.certVerificada?.[id] && <p className="sub">Verificada el {fm(plan.certVerificada[id])}. <button className="subrayado" onClick={() => marcarCertVerificada(id, null)}>Deshacer</button></p>}
     </section>
   );
 }

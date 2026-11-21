@@ -1,0 +1,163 @@
+{
+ "version": 1,
+ "fuente": "docs/prompts/roadmap-completo-v7.md · Hardware y cuentas por fase · Trámites",
+ "fases": [
+  {
+   "id": "fase1",
+   "nombre": "Fase 1",
+   "antes": "2027-02-01",
+   "para": "VitalIA 3.0 y AgrIA"
+  },
+  {
+   "id": "apple",
+   "nombre": "Apple Developer Program",
+   "antes": "2027-02-19",
+   "para": "TestFlight y AR con ViroReact sin Mac (Semana multiplataforma)"
+  },
+  {
+   "id": "fase2",
+   "nombre": "Fase 2",
+   "antes": "2027-05-01",
+   "para": "Antena y PetrIA Guard"
+  },
+  {
+   "id": "fase3",
+   "nombre": "Fase 3",
+   "antes": "2028-03-01",
+   "para": "AeroScan Edge"
+  },
+  {
+   "id": "fase4",
+   "nombre": "Fase 4",
+   "antes": "2028-07-01",
+   "para": "Bóveda"
+  },
+  {
+   "id": "fase5",
+   "nombre": "Fase 5",
+   "antes": null,
+   "para": "Etapas 3 y 4 (A4 a A7)",
+   "periodo": "2029–2031"
+  },
+  {
+   "id": "tramites",
+   "nombre": "Trámites",
+   "antes": null,
+   "para": "Arrancar ya: los necesitan las notificaciones de PetrIA 2.0"
+  }
+ ],
+ "items": [
+  {
+   "id": "kit-esp32",
+   "fase": "fase1",
+   "nombre": "Kit ESP32 con 37 sensores",
+   "costo": "≈ $41.300"
+  },
+  {
+   "id": "esp32-extra",
+   "fase": "fase1",
+   "nombre": "ESP32 extra",
+   "costo": "≈ $19.000 cada uno"
+  },
+  {
+   "id": "presion-caudal",
+   "fase": "fase1",
+   "nombre": "Sensor de presión y caudalímetro",
+   "nota": "Para la boca de pozo real de PetrIA",
+   "diferido": "PetrIA va solo con Wokwi por ahora: se compra cuando se decida la placa real"
+  },
+  {
+   "id": "max30102",
+   "fase": "fase1",
+   "nombre": "MAX30102",
+   "nota": "Oxímetro real de VitalIA 3.0"
+  },
+  {
+   "id": "suelo-clima",
+   "fase": "fase1",
+   "nombre": "Sensores de suelo y clima",
+   "nota": "Estación y humedad de suelo de AgrIA"
+  },
+  {
+   "id": "apple-dev",
+   "fase": "apple",
+   "nombre": "Apple Developer Program",
+   "costo": "USD 99 por año"
+  },
+  {
+   "id": "rtl-sdr",
+   "fase": "fase2",
+   "nombre": "RTL-SDR V4 con antenas",
+   "costo": "≈ USD 45"
+  },
+  {
+   "id": "raspberry",
+   "fase": "fase2",
+   "nombre": "Raspberry Pi",
+   "propuesta": true
+  },
+  {
+   "id": "kit-tanque",
+   "fase": "fase2",
+   "nombre": "Kit del tanque",
+   "nota": "Recipiente, sensor de nivel, bomba de 5–12 V, relé, RS485"
+  },
+  {
+   "id": "esp32-cam",
+   "fase": "fase3",
+   "nombre": "ESP32-CAM"
+  },
+  {
+   "id": "impresora-3d",
+   "fase": "fase3",
+   "nombre": "Impresora 3D",
+   "opcional": true,
+   "propuesta": true
+  },
+  {
+   "id": "llave-fisica",
+   "fase": "fase4",
+   "nombre": "Llave de seguridad física"
+  },
+  {
+   "id": "rfid",
+   "fase": "fase4",
+   "nombre": "Lector RFID"
+  },
+  {
+   "id": "display-led",
+   "fase": "fase5",
+   "nombre": "Display LED"
+  },
+  {
+   "id": "imu-barometro",
+   "fase": "fase5",
+   "nombre": "IMU y barómetro"
+  },
+  {
+   "id": "pixhawk",
+   "fase": "fase5",
+   "nombre": "Pixhawk con frame"
+  },
+  {
+   "id": "placa-cubesat",
+   "fase": "fase5",
+   "nombre": "Placa del cubesat"
+  },
+  {
+   "id": "whatsapp-business",
+   "fase": "tramites",
+   "nombre": "Verificación de WhatsApp Business en Meta"
+  },
+  {
+   "id": "ses-produccion",
+   "fase": "tramites",
+   "nombre": "Acceso a producción de Amazon SES"
+  },
+  {
+   "id": "spf-dkim-dmarc",
+   "fase": "tramites",
+   "nombre": "Registros SPF, DKIM y DMARC en el dominio de Hostinger"
+  }
+ ]
+}
