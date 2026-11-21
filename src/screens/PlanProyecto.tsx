@@ -14,7 +14,7 @@ import { guardarExamen, marcarCapa, setTecnica, sumarRevision, sumarTiempo, togg
 import { atrasoPuerta, puertaAprobada } from '../data/puertas';
 import { useStore } from '../state/store';
 import { Casilla } from '../ui/Casilla';
-import { ArquitecturaProyecto, EvidenciaProyecto, ExtrasProyecto, FichaBloque, NivelSalida, VersionExamen, avanceArquitectura } from '../ui/FichaBloque';
+import { ArquitecturaProyecto, EvidenciaProyecto, ExtrasProyecto, FichaBloque, NivelSalida, VersionExamen, VersionesPlegable, avanceArquitectura } from '../ui/FichaBloque';
 import { bloqueExtPorId } from '../data/plan-extendido';
 import { bloqueConFechas } from '../data/plan-vistas';
 import { MetasBloque } from '../ui/MetasBloque';
@@ -39,7 +39,7 @@ export function PlanProyecto({ day, id }: { day: DayLog; id?: string }) {
   const arqs = useStore((s) => s.plan.arquitectura);
   const activo = tramoActivo(date, t0);
   // Ola 16c: los bloques de las etapas 3 y 4 no están en el calendario vivo: tienen su ficha propia.
-  if (id && !tramoPorId(id) && bloqueConFechas(id, t0)) return <FichaExtendida id={id} t0={t0} />;
+  if (id && !tramoPorId(id) && bloqueConFechas(id, t0)) return <FichaExtendida id={id} t0={t0} date={date} />;
   const t = (id && tramoPorId(id)) || activo;
   const p = estado[t.id] ?? proyectoVacio();
   const inicio = inicioDe(t, t0);
@@ -111,7 +111,8 @@ export function PlanProyecto({ day, id }: { day: DayLog; id?: string }) {
 
       {conEstandar && (
         <>
-          <Plegable id={`proy:${t.id}:estandar`} titulo="Estándar de entrega" resumen={`${hechas} de ${capas.length}`} color={RAMA_COLOR.programacion}>
+          <VersionesPlegable id={t.id} date={date} t0={t0} />
+          <Plegable id={`proy:${t.id}:estandar`} titulo="Estándar de alto valor" resumen={`${hechas} de ${capas.length}`} color={RAMA_COLOR.programacion}>
           <ul className="pp-capas">
             {capas.map((c) => (
               <li key={c.id}>
@@ -119,6 +120,7 @@ export function PlanProyecto({ day, id }: { day: DayLog; id?: string }) {
                 <div>
                   <b className={p.estandar[c.id as Capa] ? 'resaltado' : ''} style={{ ['--c' as string]: RAMA_COLOR.programacion }}>{c.nombre}</b>
                   <p className="sub">{c.texto}</p>
+                  {c.detalle && <p className="sub pp-detalle">{c.detalle.join(' · ')}</p>}
                 </div>
               </li>
             ))}
@@ -302,7 +304,7 @@ const MESES = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'o
 const fl = (d: string) => `${Number(d.slice(8))} ${MESES[Number(d.slice(5, 7)) - 1]} ${d.slice(0, 4)}`;
 
 /** Ficha de un bloque de las etapas 3 y 4 (quant y aeroespacial). */
-function FichaExtendida({ id, t0 }: { id: string; t0: string }) {
+function FichaExtendida({ id, t0, date }: { id: string; t0: string; date: string }) {
   const b = bloqueConFechas(id, t0)!;
   const ETAPA = ['', 'núcleo', 'ciberseguridad', 'quant trading', 'ingeniería aeroespacial'];
   return (
@@ -313,6 +315,7 @@ function FichaExtendida({ id, t0 }: { id: string; t0: string }) {
       <div className="pp-cuando mono"><span><b>{b.horas ? `${b.horas} h · ` : ''}{b.semanas} {b.semanas === 1 ? 'semana' : 'semanas'}{b.semanas > b.base && !b.horas && !b.dias ? ` (${b.base} + ${b.semanas - b.base} extra)` : ''}</b> · {fl(b.inicio)} — {fl(b.fin)}</span></div>
       {b.dependeDe?.length ? <p className="sub">Va después de la ventana {b.dependeDe.join(' y ')}: sin aprobarla con 85 %, no arranca.</p> : null}
       <FichaBloque id={b.id} />
+      {b.tipo === 'proyecto' && <VersionesPlegable id={b.id} date={date} t0={t0} />}
       {b.tipo === 'proyecto' && <EvidenciaProyecto id={b.id} />}
       {(b.tipo === 'proyecto' || b.tipo === 'cert') && <Plegable id={`proy:${b.id}:extras`} titulo="Horas y fechas" resumen={b.horas ? `${b.horas} h` : `${b.semanas} ${b.semanas === 1 ? 'semana' : 'semanas'}`}><ExtrasProyecto id={b.id} t0={t0} /></Plegable>}
       {b.ficha?.entregablesArquitectura && <Plegable id={`proy:${b.id}:arquitectura`} titulo="Arquitectura" resumen="contrato, trazas, mTLS y ADR"><ArquitecturaProyecto id={b.id} /></Plegable>}

@@ -1,0 +1,20 @@
+/* Ola 30 · ficha v7, versiones y stack por ambiente */
+.pp-items { margin: 0; padding-left: 18px; display: grid; gap: 3px; }
+.pp-items li.estrella { font-weight: 600; }
+.pp-items li span[aria-label='estrella'] { color: var(--economia); }
+.pp-detalle { font-size: 12.5px; }
+.pp-stack { margin: 6px 0 8px; display: grid; }
+.pp-stack > div { display: grid; grid-template-columns: minmax(0, 7em) minmax(0, 1fr); gap: 10px; padding: 7px 0; border-top: 1px solid var(--linea); }
+.pp-stack dt { color: var(--sub); font-size: 13px; }
+.pp-stack dd { margin: 0; font-size: 14px; overflow-wrap: anywhere; }
+.pp-vers { list-style: none; margin: 0; padding: 0; display: grid; gap: 0; }
+.pp-vers > li { display: grid; gap: 6px; padding: 12px 0; border-top: 1px solid var(--linea); }
+.pp-vers > li .fila-t { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; flex-wrap: wrap; }
+.pp-vers p { margin: 0; }
+.pp-ver-estado { font-size: 12px; padding: 1px 8px; border-radius: 999px; border: 1px solid var(--linea); color: var(--sub); white-space: nowrap; }
+.pp-ver-estado.publicada { border-color: var(--salud); color: var(--salud); }
+.pp-ver-estado.en-curso { border-color: var(--ing); color: var(--ing); }
+.pp-ver-estado.atrasada { border-color: var(--rutina); color: var(--rutina); }
+.pp-ver-ent { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: 14px; }
+.pp-ver-ent label { display: inline-flex; align-items: center; gap: 6px; }
+.pp-vers .btn-borde, .pp-vers .subrayado { justify-self: start; }

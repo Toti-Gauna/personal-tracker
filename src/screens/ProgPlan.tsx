@@ -184,12 +184,12 @@ function ProyectoProg({ day, id, sub }: { day: DayLog; id: string; sub: Sub }) {
 
       {sub === 'entrega' && (
         <>
-          <div className="fila-t pp-sec"><span className="etiqueta">Estándar de entrega</span><span className="mono sub">{capas.filter((c) => p.estandar[c.id as Capa]).length} de {capas.length}</span></div>
+          <div className="fila-t pp-sec"><span className="etiqueta">Estándar de alto valor</span><span className="mono sub">{capas.filter((c) => p.estandar[c.id as Capa]).length} de {capas.length}</span></div>
           <ul className="pp-capas">
             {capas.map((c) => (
               <li key={c.id}>
                 <Casilla checked={!!p.estandar[c.id as Capa]} label={`${c.nombre}: marcar`} onChange={() => marcarCapa(id, c.id as Capa)} />
-                <div><b className={p.estandar[c.id as Capa] ? 'resaltado' : ''}>{c.nombre}</b><p className="sub">{c.texto}</p></div>
+                <div><b className={p.estandar[c.id as Capa] ? 'resaltado' : ''}>{c.nombre}</b><p className="sub">{c.texto}</p>{c.detalle && <p className="sub pp-detalle">{c.detalle.join(' · ')}</p>}</div>
               </li>
             ))}
           </ul>
