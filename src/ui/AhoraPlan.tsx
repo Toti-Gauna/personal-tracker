@@ -3,6 +3,7 @@
  * próxima fecha límite, los avisos para reservar exámenes y los hábitos con su racha.
  */
 import { recordatoriosActivos } from '../data/certs-v12';
+import { alertasCompras } from '../data/compras';
 import { estadoHabitos } from '../data/habitos';
 import { activoAhora, proximaFechaLimite, vencenHoy, type PeriodoMedido } from '../data/periodos';
 import { daysBetween } from '../data/time';
@@ -21,6 +22,8 @@ export function AhoraPlan({ hoy, arbol, day, conHabitos = true }: { hoy: string;
   const vence = vencenHoy(arbol, hoy).filter((p) => p.nivel !== 'etapa' && p.nivel !== 'fase');
   const prox = proximaFechaLimite(arbol, hoy, ['bloque', 'version', 'cert']);
   const avisos = recordatoriosActivos(plan, hoy);
+  // v12.1: hardware y trámites, 30 días antes de cada fecha límite (los trámites, desde ya).
+  const compras = alertasCompras(plan, hoy);
   const habitos = conHabitos ? estadoHabitos(day ? { ...days, [day.date]: day } : days, hoy) : [];
   return (
     <section className="pd-ahora" aria-label="Lo del plan para hoy">
@@ -35,6 +38,7 @@ export function AhoraPlan({ hoy, arbol, day, conHabitos = true }: { hoy: string;
           {!a.certs?.length && <> · <button className="subrayado" onClick={() => marcarHito(`v12:recordatorio:${a.id}`, hoy)}>ya reservé</button></>}
         </small>
       ))}
+      {compras.map((c) => <small key={c.id}><b>Hardware:</b> {c.titulo} · <a href={c.href}>ver</a></small>)}
       {habitos.length > 0 && (
         <ul className="pd-habitos" aria-label="Hábitos">
           {habitos.map((h) => (

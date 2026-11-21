@@ -121,6 +121,7 @@ describe('v12.1 · certificación, ventana, línea de tiempo y Hoy', () => {
     const ahora = screen.getByRole('region', { name: 'Lo del plan para hoy' });
     expect(ahora.textContent).toMatch(/Activo ahora: Fase 1 › PetrIA › v1\.0 › lote 0\.0/);
     expect(ahora.textContent).toMatch(/Reservar: Book Claude Architect \+ GitHub Foundations exams \(faltan 2\)/);
+    expect(ahora.textContent).toMatch(/Hardware: /);
     expect(within(ahora).getByRole('list', { name: 'Hábitos' }).textContent).toMatch(/Trazo recall.*Anki.*LinkedIn post.*Weekly demo.*Weekly review/);
   });
 });
