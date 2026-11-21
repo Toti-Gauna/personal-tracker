@@ -1,4 +1,5 @@
 import { beforeEach, describe, expect, it } from 'vitest';
+import { MAZO_LLM } from './mazos';
 import { getState, register, resetState, startDay } from '../state/store';
 import { addCards, completeLearn, saveTesis, saveTest } from '../state/study';
 import { BUILTIN_PRESETS, DEFAULT_BLOCK_PRESETS, DEFAULT_PRESETS } from './defaults';
@@ -176,7 +177,7 @@ describe('test completo', () => {
     register('Toti', 'Abi', D0);
     completeLearn(D0, 'conamat', 1);
     saveTest(D0, 'conamat', 1, { score: 13, total: 15, errors: { ...ok, concepto: 1, descuido: 1 }, mode: 'papel', wrong: [{ q: 'Calculá |3 − 7|.', a: '4', type: 'concepto' }, { q: 'Calculá |−2| − |5|.', a: '−3', type: 'descuido' }] });
-    const cards = getState().study.cards;
+    const cards = getState().study.cards.filter((c) => c.deck !== MAZO_LLM); // sin el mazo de LLM del registro
     expect(cards.map((c) => [c.front, c.back, c.dueFrom])).toEqual([['Calculá |3 − 7|.', '4', addDays(D0, 1)], ['Calculá |−2| − |5|.', '−3', addDays(D0, 1)]]);
   });
 

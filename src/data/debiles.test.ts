@@ -95,7 +95,7 @@ describe('con datos de la app', () => {
 
   it('las tarjetas que fallás bajan la fuerza del mazo', () => {
     addCards(D0, [{ front: 'look up', back: 'buscar', kind: 'pregunta', deck: 'Inglés', frontId: 'ingles', source: 'x' }]);
-    const id = getState().study.cards[0].id;
+    const id = getState().study.cards.find((c) => c.front === 'look up')!.id;
     for (let i = 0; i < 4; i++) gradeCard(D0, id, 1);
     gradeCard(D0, id, 3);
     expect(sources(getState().study, 'mazo:ingles').tarjetas).toBe(20);

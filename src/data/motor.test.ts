@@ -1,4 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { MAZO_LLM } from './mazos';
 import { getState, register, resetState, startDay } from '../state/store';
 import { addCards, completeLearn, gradeCard, saveColdRecall, saveTest, setRules } from '../state/study';
 import { DEFAULT_BLOCK_PRESETS, DEFAULT_PRESETS } from './defaults';
@@ -9,6 +10,9 @@ const D0 = '2026-11-11';
 const ok = { concepto: 0, tecnica: 0, descuido: 0, enunciado: 0 };
 const mkCards = (n: number, front = 'math') =>
   addCards(D0, Array.from({ length: n }, (_, i) => ({ front: `P${i}`, back: `R${i}`, kind: 'pregunta' as const, deck: 'Matemática', frontId: front, source: 'test' })));
+
+// v12.1: el mazo de LLM (bloqueado) viene desde el registro; acá cuentan solo las tarjetas que genera el motor.
+const propias = () => getState().study.cards.filter((c) => c.deck !== MAZO_LLM);
 
 describe('motor de repaso', () => {
   beforeEach(() => {
@@ -78,7 +82,7 @@ describe('motor de repaso', () => {
     const d1 = addDays(D0, 1);
     const s = saveColdRecall(d1, cold.id, ['Qué son los enteros :: naturales, cero y opuestos', 'Valor absoluto :: distancia al cero', 'Orden en la recta'], [true, false, false]);
     expect(s).toBeCloseTo(1 / 3);
-    const st = getState().study;
+    const st = { ...getState().study, cards: propias() };
     expect(st.cards.map((c) => c.front)).toEqual(['Valor absoluto', '¿Qué recordás de «Orden en la recta»?']);
     expect(st.cards.every((c) => c.dueFrom === addDays(d1, 1))).toBe(true);
     expect(dailyReview(st, d1).groups).toHaveLength(0);
@@ -90,7 +94,7 @@ describe('motor de repaso', () => {
     completeLearn(D0, 'conamat', 2);
     const cold = getState().study.reviews.find((r) => r.kind === 'cold')!;
     saveColdRecall(addDays(D0, 1), cold.id, ['a', 'b', 'c', 'd', 'e', 'f', 'g'], [true, true, true, true, true, true, false]);
-    expect(getState().study.cards).toHaveLength(0);
+    expect(propias()).toHaveLength(0);
     expect(getState().study.reviews.some((r) => r.kind === 'releer')).toBe(false);
   });
 

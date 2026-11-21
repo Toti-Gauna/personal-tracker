@@ -1,4 +1,5 @@
 import { puertaBloqueando } from '../data/puertas';
+import { migrarPlanV12, migrarStudyV12 } from './migrar-v12';
 import { temaDelPost } from '../data/papers';
 import { T0_PLAN } from '../data/plan';
 import { INICIO_TRABAJO_DIAS } from '../data/capacidad';
@@ -83,7 +84,10 @@ export function migrate(parsed: any): State {
   // (con Handyx y ventas en pausa desde T0); si ya se decidió, se respeta.
   let settings = parsed.settings ?? null;
   if (settings && settings.plan?.modo === undefined) ({ settings, plan } = aplicarIntensiva(settings, plan, settings.startDate || T0_PLAN));
-  return { ...empty(), ...parsed, settings, study, train, ruta, plan, estudioRuta: { ...emptyEstudioRuta(), ...(parsed.estudioRuta ?? {}) }, idiomas: { enlaces: {}, ...(parsed.idiomas ?? {}) }, clipping: migrarClipping(parsed.clipping), profile: migrarPerfil({ seals: {}, seen: Object.keys(parsed.profile?.seals ?? {}), ...(parsed.profile ?? {}) }), goals: migrateGoals(goals ?? seedGoals(parsed.settings?.startDate ?? dateKey())) };
+  // v12.1: aditiva (certs de la v7 a sus ids nuevos, papers y el mazo de LLM); no borra nada.
+  plan = migrarPlanV12(plan);
+  const studyV12 = settings ? migrarStudyV12(study, dateKey()) : study;
+  return { ...empty(), ...parsed, settings, study: studyV12, train, ruta, plan, estudioRuta: { ...emptyEstudioRuta(), ...(parsed.estudioRuta ?? {}) }, idiomas: { enlaces: {}, ...(parsed.idiomas ?? {}) }, clipping: migrarClipping(parsed.clipping), profile: migrarPerfil({ seals: {}, seen: Object.keys(parsed.profile?.seals ?? {}), ...(parsed.profile ?? {}) }), goals: migrateGoals(goals ?? seedGoals(parsed.settings?.startDate ?? dateKey())) };
 }
 
 let state: State = load();
@@ -239,6 +243,8 @@ export function register(me: string, partner: string, today = dateKey()) {
       blockPresets: DEFAULT_BLOCK_PRESETS,
     },
   }));
+  // v12.1: papers y el mazo "20 LLM concepts" (bloqueado) desde el primer día.
+  setState((s) => ({ ...s, study: migrarStudyV12(s.study, today) }));
   // Desde el primer día: búsqueda intensiva con Handyx y ventas en pausa.
   setState((s) => (s.settings ? { ...s, ...aplicarIntensiva(s.settings, s.plan, s.settings.startDate) } : s));
 }
