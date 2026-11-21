@@ -1,0 +1,18 @@
+/* Ola 31 · algorithm spots y sprint sin IA */
+.alg-lista { list-style: none; margin: 0; padding: 0; }
+.alg-tema { display: grid; gap: 6px; padding: 12px 0; border-top: 1px solid var(--linea); }
+.alg-tema .fila-t { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
+.alg-tema p { margin: 0; }
+.alg-tema.hecho b { text-decoration: none; color: var(--salud); }
+.alg-modo { font-size: 12px; padding: 1px 8px; border-radius: 999px; border: 1px solid var(--linea); white-space: nowrap; }
+.alg-modo.con-ia { color: var(--ing); border-color: var(--ing); }
+.alg-modo.sin-ia { color: var(--economia); border-color: var(--economia); }
+.alg-preg { display: grid; gap: 4px; }
+.alg-acc { display: flex; flex-wrap: wrap; gap: 8px 14px; align-items: center; font-size: 14px; }
+.alg-acc label { display: inline-flex; align-items: center; gap: 6px; }
+.alg-cont { display: flex; align-items: center; gap: 12px; }
+.alg-cont .btn-borde { width: 48px; min-width: 48px; min-height: 44px; flex: 0 0 48px; padding: 0; }
+.alg-cont .mono { white-space: nowrap; }
+.alg-sprint .subrayado { justify-self: start; }
+.alg-nuevo { display: grid; grid-template-columns: minmax(0, 1fr) 5em; gap: 8px; }
+.alg-nuevo select, .alg-nuevo button { grid-column: span 1; }

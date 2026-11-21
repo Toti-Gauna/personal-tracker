@@ -9,7 +9,7 @@ import { addDays } from '../data/time';
 import { setPlanSettings } from '../state/plan';
 import { inicioTrabajo, planSettings, useStore } from '../state/store';
 import { T0_PLAN } from '../data/plan';
-import { INICIO_TRABAJO_DIAS } from '../data/capacidad';
+import { INICIO_TRABAJO_DIAS, convertiblesIntensiva, horasRutinaIntensiva } from '../data/capacidad';
 
 const DIAS: [BloquePendiente['dias'], string][] = [['lv', 'Lunes a viernes'], ['finde', 'Fin de semana'], ['todos', 'Todos los días']];
 
@@ -39,6 +39,40 @@ export function FilasTrabajo() {
         </div>
       </li>
     </>
+  );
+}
+
+const durTxt = (m: number) => `${Math.floor(m / 60) ? `${Math.floor(m / 60)} h` : ''}${m % 60 ? `${Math.floor(m / 60) ? ' ' : ''}${m % 60} min` : ''}`;
+
+/**
+ * Ola 31 (v7) · de dónde salen las horas extra de PetrIA (~8 h por día hasta el trabajo nuevo). El roadmap lo deja "a definir":
+ * elegís qué bloques de la rutina intensiva pasan a proyecto. Sueño, entreno, Abi, trabajo y matemática no se pueden elegir.
+ */
+export function FilaExtraPetria() {
+  const settings = useStore((s) => s.settings)!;
+  const cfg = planSettings(settings);
+  const elegidos = cfg.extraProyecto ?? [];
+  const h = horasRutinaIntensiva(elegidos);
+  const n1 = (x: number) => String(x).replace('.', ',');
+  const cambiar = (id: string) => setPlanSettings({ extraProyecto: elegidos.includes(id) ? elegidos.filter((x) => x !== id) : [...elegidos, id] });
+  return (
+    <li className="aj-columna">
+      <span>
+        <b>Horas extra de PetrIA</b>
+        <small>
+          Hasta el trabajo nuevo PetrIA va a ~8 h por día ({h.meta} h por semana). La rutina da {n1(h.semana)} h
+          {h.falta > 0 ? `: faltan ${n1(h.falta)} h por semana.` : ', así que alcanza.'} Elegí qué bloques pasan a proyecto; nunca salen del sueño, el entreno ni Abi.
+        </small>
+      </span>
+      <ul className="aj-extras">
+        {convertiblesIntensiva().map((b) => (
+          <li key={b.id}>
+            <span><b>{b.label}</b><small className="sub"> · {b.dias} · {durTxt(b.minSemana)} por semana</small></span>
+            <button role="switch" className="switch" aria-checked={elegidos.includes(b.id)} aria-label={`${b.label} pasa a proyecto`} onClick={() => cambiar(b.id)} />
+          </li>
+        ))}
+      </ul>
+    </li>
   );
 }
 

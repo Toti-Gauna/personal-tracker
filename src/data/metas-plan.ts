@@ -164,7 +164,7 @@ export const SEMANA_INTENSIVA: (Omit<MetaGenerada, 'id' | 'origen'> & { clave: s
   { rama: 'trabajo', texto: 'Posts de LinkedIn en inglés', meta: 2, clave: 'posts', nota: 'dentro del bloque de idiomas' },
   // v7: PetrIA a ~8 h por día (56 por semana); la rutina intensiva da 53 y las 3 que faltan salen de un bloque a definir (ola 31).
   HORAS_ANTES_TRABAJO != null
-    ? { rama: 'programacion', texto: 'Horas de programación', meta: Math.round(HORAS_ANTES_TRABAJO * 7), unidad: 'h', clave: 'horas-prog', nota: `${String(HORAS_ANTES_TRABAJO).replace('.', ',')} h por día (roadmap v7); la rutina da ${horasPorSemana('busqueda-intensiva')}, el resto sale de un bloque a definir` }
+    ? { rama: 'programacion', texto: 'Horas de programación', meta: Math.round(HORAS_ANTES_TRABAJO * 7), unidad: 'h', clave: 'horas-prog', nota: `${String(HORAS_ANTES_TRABAJO).replace('.', ',')} h por día (roadmap v7); la rutina da ${horasPorSemana('busqueda-intensiva')}; el resto sale de los bloques que elijas en Ajustes` }
     : { rama: 'programacion', texto: 'Horas de programación', meta: 53, unidad: 'h', clave: 'horas-prog' },
   { rama: 'matematica', texto: 'Horas de matemática', meta: 7, unidad: 'h', clave: 'horas-mate' },
   { rama: 'ingles', texto: 'Horas de idiomas', meta: 7, unidad: 'h', clave: 'horas-ingles' },

@@ -211,8 +211,9 @@ export function nivelesIdiomas(hoy: string, t0 = IDIOMAS.t0) {
 
 /** Horas por semana que le da la rutina de búsqueda intensiva al bloque de idiomas (lunes a viernes y fin de semana). */
 export function horasDeLaRutina() {
-  const min = (t: 'busqueda-intensiva' | 'busqueda-intensiva-finde') => ROUTINES_FILE.dayRoutines[t].blocks.filter((b) => b.id === 'ingles').reduce((s, b) => s + blockMin(b), 0);
-  return Math.round(((min('busqueda-intensiva') * 5 + min('busqueda-intensiva-finde') * 2) / 60) * 10) / 10;
+  // Ola 31: cuenta todo lo de la rama (inglés e inglés hablado) y el domingo con su rutina.
+  const min = (t: 'busqueda-intensiva' | 'busqueda-intensiva-finde' | 'busqueda-intensiva-domingo') => ROUTINES_FILE.dayRoutines[t].blocks.filter((b) => b.rama === 'ingles').reduce((s, b) => s + blockMin(b), 0);
+  return Math.round(((min('busqueda-intensiva') * 5 + min('busqueda-intensiva-finde') + min('busqueda-intensiva-domingo')) / 60) * 10) / 10;
 }
 
 /** Las fases en semanas del plan T+18 (mismo t0), recortadas a `hasta`: lo que lee la rama de idiomas del plan. */

@@ -5,7 +5,7 @@
  * de fin de año vale cero, solo en los años que dice el plan (2027 a 2030). Puro.
  */
 import { PLAN_EXT } from './plan-extendido';
-import { planRoutine, type DayType } from './routines';
+import { ajustarDia, blockMin, domingoDe, esConvertible, planRoutine, type DayType } from './routines';
 import { addDays, parseDate } from './time';
 
 /** v7: días desde T0 hasta el trabajo nuevo si no lo cargaste (49: lunes 4 ene 2027 con T0 el 16 nov 2026). */
@@ -65,9 +65,36 @@ export function horasDelDia(f: string, c: CfgCapacidad): number {
   const fin = esFinde(f);
   if (f < c.inicioTrabajo && antes != null) return antes;
   if (f < addDays(c.t0, 7)) return HORAS_SEMANA_PLAN / 7;
-  if (f < c.inicioTrabajo) return horasTipo(fin ? 'busqueda-intensiva-finde' : 'busqueda-intensiva');
+  if (f < c.inicioTrabajo) return horasTipo(fin ? (parseDate(f).getDay() === 0 ? domingoDe('busqueda-intensiva-finde') : 'busqueda-intensiva-finde') : 'busqueda-intensiva');
   return horasTipo(fin ? 'con-trabajo-finde' : 'con-trabajo');
 }
 
 /** Horas por semana de la rutina de cada período (para mostrar: 53 y 29). */
-export const horasPorSemana = (t: 'busqueda-intensiva' | 'con-trabajo') => 5 * horasTipo(t) + 2 * horasTipo(`${t}-finde` as DayType);
+export const horasPorSemana = (t: 'busqueda-intensiva' | 'con-trabajo') => 5 * horasTipo(t) + horasTipo(`${t}-finde` as DayType) + horasTipo(domingoDe(`${t}-finde` as DayType));
+
+/**
+ * Ola 31 (v7) · horas de proyecto por semana que da la rutina intensiva con los bloques que pasaste a proyecto, contra las ~8 h por día
+ * que pide PetrIA: 50 h por semana (47,5 con Anthropic Academy, hasta el 22 dic); faltan 6 (u 8,5) para 56.
+ */
+export function horasRutinaIntensiva(extra: string[] = [], o: { academy?: boolean } = {}): { semana: number; meta: number; falta: number } {
+  const dia = (t: DayType) => ajustarDia(planRoutine(t, 'completo'), { extraProyecto: extra, ...(o.academy ? { academy: true } : {}) }).filter((p) => p.block.rama === 'programacion' && /^prog/.test(p.block.id)).reduce((s, p) => s + p.min, 0) / 60;
+  const semana = Math.round((5 * dia('busqueda-intensiva') + dia('busqueda-intensiva-finde') + dia(domingoDe('busqueda-intensiva-finde'))) * 10) / 10;
+  const meta = Math.round((HORAS_ANTES_TRABAJO ?? 0) * 7 * 10) / 10;
+  return { semana, meta, falta: Math.max(0, Math.round((meta - semana) * 10) / 10) };
+}
+
+/** Ola 31 · los bloques de la rutina intensiva que pueden pasar a proyecto, con cuánto suman por semana (por ejemplo, inglés hablado: 2 h 30). */
+export function convertiblesIntensiva(): { id: string; label: string; minSemana: number; dias: string }[] {
+  const tipos: [DayType, number, string][] = [['busqueda-intensiva', 5, 'L a V'], ['busqueda-intensiva-finde', 1, 'sábado'], [domingoDe('busqueda-intensiva-finde'), 1, 'domingo']];
+  const m = new Map<string, { id: string; label: string; minSemana: number; dias: string[] }>();
+  for (const [t, veces, dias] of tipos) {
+    for (const p of planRoutine(t, 'completo')) {
+      if (!esConvertible(p.block) || p.block.meta === false) continue;
+      const x = m.get(p.block.id) ?? { id: p.block.id, label: p.block.label, minSemana: 0, dias: [] };
+      x.minSemana += blockMin(p.block) * veces;
+      x.dias.push(dias);
+      m.set(p.block.id, x);
+    }
+  }
+  return [...m.values()].map((x) => ({ ...x, dias: x.dias.join(', ') }));
+}

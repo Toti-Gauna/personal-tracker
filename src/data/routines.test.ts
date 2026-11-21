@@ -179,7 +179,7 @@ describe('ola 17: rutina de las 08:00 y dormir a las 22:00', () => {
   });
 
   it('las rutinas v3 duermen a las 21:00 y las de siempre, a las 22:00', () => {
-    const V3 = ['busqueda-intensiva', 'busqueda-intensiva-finde', 'con-trabajo', 'con-trabajo-finde'];
+    const V3 = ['busqueda-intensiva', 'busqueda-intensiva-finde', 'busqueda-intensiva-domingo', 'con-trabajo', 'con-trabajo-finde'];
     for (const t of DAY_TYPES) expect([t, ROUTINES_FILE.dayRoutines[t].blocks.find((x) => x.id === 'sueno')?.start]).toEqual([t, V3.includes(t) ? '21:00' : '22:00']);
     expect(ROUTINES_FILE.tarde.blocks.find((x) => x.id === 'sueno')!.start).toBe('21:00');
   });

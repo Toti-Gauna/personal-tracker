@@ -7,7 +7,7 @@ import { MOTIVO_INTENSIVA, cortesCorridos } from './busqueda';
 import { horasDeBloque, horasDeRama } from './metas-plan';
 import { PLAN, T0_PLAN, finSemana } from './plan';
 import type { PlanState } from './plan-state';
-import { DAY_ROUTINES, blockMin, type DayType } from './routines';
+import { DAY_ROUTINES, blockMin, domingoDe, type DayType } from './routines';
 import { addDays } from './time';
 import type { DayLog } from './types';
 
@@ -65,7 +65,9 @@ export type FilaHoras = 'Programación' | 'Matemática' | 'Inglés' | 'Búsqueda
 /** Horas por semana de cada cosa con un par de rutinas (lunes a viernes × 5 + finde × 2). */
 export function horasSemana(semana: DayType, finde: DayType): Record<FilaHoras, number> {
   const de = (t: DayType, f: (b: { id: string; rama?: string; area: string }) => boolean) => DAY_ROUTINES[t].blocks.filter((b) => b.meta !== false && f(b)).reduce((s, b) => s + blockMin(b), 0) / 60;
-  const sem = (f: (b: { id: string; rama?: string; area: string }) => boolean) => Math.round((de(semana, f) * 5 + de(finde, f) * 2) * 10) / 10;
+  // Ola 31: el domingo puede tener su rutina (modo intensivo v7).
+  const domingo = domingoDe(finde);
+  const sem = (f: (b: { id: string; rama?: string; area: string }) => boolean) => Math.round((de(semana, f) * 5 + de(finde, f) + de(domingo, f)) * 10) / 10;
   return {
     Programación: sem((b) => b.rama === 'programacion'),
     Matemática: sem((b) => b.rama === 'matematica'),

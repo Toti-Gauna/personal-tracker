@@ -16,6 +16,7 @@ import { Casilla } from '../ui/Casilla';
 import { EvidenciaProyecto, FichaBloque, NivelSalida, TecnologiasProyecto } from '../ui/FichaBloque';
 import { MetasBloque } from '../ui/MetasBloque';
 import { Demanda } from './Demanda';
+import { Algoritmos } from './Algoritmos';
 import { EscaleraCompacta } from '../ui/EscaleraCompacta';
 import '../styles/estudio.css';
 import '../styles/roadmap-estudio.css';
@@ -69,6 +70,8 @@ export function ProgPlan({ day, param }: { day: DayLog; param: string }) {
   const p = useProg(day);
   // Ola 26: la tabla de demanda de tecnologías.
   if (id === 'demanda') return <Demanda day={day} />;
+  // Ola 31: los algorithm spots y el sprint sin IA.
+  if (id === 'algoritmos') return <Algoritmos day={day} />;
   const b = id ? p.cal.find((x) => x.id === id) : undefined;
   if (b) return <ProyectoProg day={day} id={b.id} sub={(SUBPAGINAS.find(([k]) => k === sub)?.[0] ?? 'resumen') as Sub} />;
   const { plan, cal, actual, perfil } = p;
@@ -93,6 +96,7 @@ export function ProgPlan({ day, param }: { day: DayLog; param: string }) {
       </section>
 
       <a className="fila-link" href="#/estudio/prog/demanda">Demanda: lo que piden las vacantes que cargaste <span aria-hidden="true">→</span></a>
+      <a className="fila-link" href="#/estudio/prog/algoritmos">Algoritmos: los spots de cada proyecto y el sprint sin IA <span aria-hidden="true">→</span></a>
 
       <span className="etiqueta">La escalera · de P0 a A7</span>
       <EscaleraCompacta etiqueta="Escalera de proyectos por etapa" color={COLOR} grupos={porEtapa.map((xs, k) => ({

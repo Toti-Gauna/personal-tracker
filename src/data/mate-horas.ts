@@ -3,7 +3,7 @@
  * reparte sobre las horas de matemática de la rutina de cada día: 7 por semana en el modo intensivo, 14 con trabajo. Durante una ventana W la
  * matemática diaria se pausa (la ventana la reemplaza) y se retoma al terminar. Puro.
  */
-import { planRoutine, type DayType } from './routines';
+import { domingoDe, planRoutine, type DayType } from './routines';
 import { addDays, parseDate } from './time';
 
 /** Horas de matemática que da una rutina en un día. */
@@ -20,7 +20,7 @@ export interface VentanaFechas { inicio: string; fin: string }
 export function horasMateDelDia(f: string, o: { inicioTrabajo: string; ventanas: VentanaFechas[] }): number {
   if (o.ventanas.some((v) => f >= v.inicio && f <= v.fin)) return 0;
   const fin = esFinde(f);
-  if (f < o.inicioTrabajo) return horasTipo(fin ? 'busqueda-intensiva-finde' : 'busqueda-intensiva');
+  if (f < o.inicioTrabajo) return horasTipo(fin ? (parseDate(f).getDay() === 0 ? domingoDe('busqueda-intensiva-finde') : 'busqueda-intensiva-finde') : 'busqueda-intensiva');
   return horasTipo(fin ? 'con-trabajo-finde' : 'con-trabajo');
 }
 

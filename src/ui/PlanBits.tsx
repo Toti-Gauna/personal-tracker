@@ -1,7 +1,8 @@
 import { useState } from 'react';
 /** Piezas del plan T+18 que se repiten: avisos entre ramas, contadores, etiqueta de rama. */
 import { avisoPasado, avisosEntreRamas, type Aviso } from '../data/avisos';
-import { esDiaDePausa } from '../data/capacidad';
+import { esDiaDePausa, horasRutinaIntensiva } from '../data/capacidad';
+import { ACADEMY_HASTA } from '../data/routines';
 import { alertaHorasIntensivo, alertasMatematica } from '../data/control';
 import { focusStartedAt } from '../data/focus';
 import { enPausa } from '../data/plan-state';
@@ -45,6 +46,12 @@ export function AvisosRamas({ date, day }: { date: string; day?: DayLog }) {
   const control: Aviso[] = [
     ...(horas ? [{ id: horas.id, de: 'programacion' as const, a: 'main' as const, titulo: horas.titulo, texto: horas.texto, href: horas.href }] : []),
     ...alertasMatematica(date, t0).map((a) => ({ id: a.id, de: 'matematica' as const, a: 'programacion' as const, titulo: a.titulo, texto: a.texto, href: a.href })),
+    // Ola 31 (v7): PetrIA pide ~8 h por día y la rutina no llega: hasta que elijas de dónde salen, Trazo lo dice.
+    ...(() => {
+      if (date >= inicio || !intensivaEn(settings, date)) return [];
+      const h = horasRutinaIntensiva(cfg.extraProyecto, { academy: date <= ACADEMY_HASTA });
+      return h.falta > 0 ? [{ id: 'horas-extra-petria', de: 'programacion' as const, a: 'main' as const, titulo: `Faltan ${String(h.falta).replace('.', ',')} h por semana para las 8 h por día de PetrIA`, texto: `La rutina da ${String(h.semana).replace('.', ',')} h de proyecto por semana y el roadmap pide ${h.meta}. Elegí en Ajustes qué bloques pasan a proyecto (nunca sueño, entreno ni Abi).`, href: '#/ajustes' }] : [];
+    })(),
     ...(intensivaEn(settings, date) && esDiaDePausa(date) ? [{ id: 'pausa-fin-de-anio', de: 'main' as const, a: 'salud' as const, titulo: 'Pausa de fin de año', texto: 'Es el único descanso del modo intensivo: esta semana no se programa; la matemática, los idiomas y el entreno siguen.' }] : []),
   ];
   const avisos = [...(pasado ? [pasado] : []), ...control, ...avisosEntreRamas(date, plan, cfg, settings?.startDate)];
