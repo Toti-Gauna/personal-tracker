@@ -52,12 +52,16 @@ describe('ola 24 · pantallas del plan v2', () => {
     expect([...document.querySelectorAll('details.plegable summary b')].map((b) => b.textContent)).not.toContain('Arquitectura');
   });
 
-  it('C2 (Security+): con el examen en septiembre de 2027 (después del retiro de la 701) avisa; elegida la SY0-801, deja de avisar', () => {
-    render(<Metas day={day()} tab="proyecto/C2" />);
-    expect(screen.getByRole('status')).toHaveTextContent(/Sirven: SY0-801/);
-    fireEvent.change(screen.getByLabelText('Elegida'), { target: { value: 'SY0-801' } });
-    expect(getState().plan.versionCert).toEqual({ C2: 'SY0-801' });
+  it('C2 (Security+): manda la SY0-801 del roadmap; pide verificarla y "Ya la verifiqué" lo guarda; la 701 en inglés avisa', () => {
+    render(<Metas day={getState().days['2026-11-18']} tab="proyecto/C2" />);
+    expect(screen.getByLabelText('Elegida')).toHaveDisplayValue('La del roadmap (SY0-801)');
     expect(screen.getByText(/La SY0-801 llega a tu examen \(15 sep 2027\)/)).toBeInTheDocument();
+    expect(screen.getByText(/Verificá la SY0-801 de CompTIA Security\+/)).toBeInTheDocument();
+    fireEvent.click(screen.getByRole('button', { name: 'Ya la verifiqué' }));
+    expect(getState().plan.certVerificada).toEqual({ C2: '2026-11-18' });
+    expect(screen.queryByText(/Verificá la SY0-801/)).toBeNull();
+    fireEvent.change(screen.getByLabelText('Elegida'), { target: { value: 'SY0-701-en' } });
+    expect(screen.getByRole('status')).toHaveTextContent(/SY0-701 en inglés se retira el 11 jun 2027/);
   });
 
   it('Etapas: la pausa aparece en la lista', () => {

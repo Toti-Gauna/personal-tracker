@@ -6,6 +6,7 @@
 .et-alerta { display: grid; gap: 2px; padding: 10px 14px 10px 18px; border: 1px solid var(--linea); border-radius: 10px; position: relative; color: var(--tinta); text-decoration: none; }
 .et-alerta::before { content: ''; position: absolute; left: 0; top: 10px; bottom: 10px; width: 4px; background: var(--c, var(--economia)); }
 .et-alerta.cert { --c: var(--handyx); }
+.et-alerta.compra { --c: var(--eclipse); }
 .et-alerta.ventana { --c: var(--economia); }
 .et-alerta.decision { --c: var(--rutina); }
 .et-alerta.idioma { --c: var(--idi); }

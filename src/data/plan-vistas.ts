@@ -6,6 +6,7 @@
  * - La línea de tiempo por etapas, el panel "hoy sos" y las alertas.
  */
 import { alertaHorasIntensivo, alertasMatematica } from './control';
+import { alertasCompras } from './compras';
 import { alertasIdiomas } from './idiomas';
 import { CFG_HORAS, PLAN, T0_PLAN, calendarioVivo, fechas } from './plan';
 import { PLAN_EXT, bloqueExtPorId, calendario, opcionesDe, type BloqueExt, type BloqueFechado, type MateTramo, type RolRefuerzo } from './plan-extendido';
@@ -135,7 +136,7 @@ export function hoySos(hoy: string, plan: PlanState, t0 = T0_PLAN) {
 
 export interface Alerta {
   id: string;
-  tipo: 'cert' | 'ventana' | 'decision' | 'idioma' | 'clipping' | 'matematica' | 'control';
+  tipo: 'cert' | 'ventana' | 'decision' | 'idioma' | 'clipping' | 'matematica' | 'control' | 'compra';
   titulo: string;
   texto: string;
   href?: string;
@@ -171,7 +172,13 @@ export function alertas(hoy: string, plan: PlanState, t0 = T0_PLAN, clipping?: C
     const a = alertaVersion(b, plan, hoy);
     if (a) out.push(a);
   }
+  // Ola 32: una versión que ya debería haber salido y no está confirmada (SY0-801): verificala antes de reservar.
+  for (const b of cal) {
+    const a = alertaVerificar(b, plan, hoy);
+    if (a) out.push(a);
+  }
   for (const d of PLAN_EXT.decisiones) {
+    if (d.resuelta) continue;
     // La de Security+ ya la dice la alerta de versión (con lo que sirve para tu fecha de examen).
     if (d.id === 'secplus' && out.some((a) => a.id === 'ver-C2')) continue;
     if (d.fecha && d.fecha >= hoy && daysBetween(hoy, d.fecha) <= 14) out.push({ id: `dec-${d.id}`, tipo: 'decision', fecha: d.fecha, titulo: `Decisión el ${fmt(d.fecha)}`, texto: d.texto });
@@ -179,6 +186,8 @@ export function alertas(hoy: string, plan: PlanState, t0 = T0_PLAN, clipping?: C
   // Ola 27: matemática que habilita un proyecto que ya arranca, y el control de horas del modo intensivo (días 10 y 20).
   for (const a of alertasMatematica(hoy, t0)) out.push({ ...a, tipo: 'matematica' });
   if (ctx) { const h = alertaHorasIntensivo(hoy, ctx.days, { t0, inicioTrabajo: ctx.inicioTrabajo }); if (h) out.push({ ...h, tipo: 'control' }); }
+  // Ola 32: hardware por fase y trámites (30 días antes de cada fecha límite; los trámites, desde ya).
+  for (const a of alertasCompras(plan, hoy)) out.push({ ...a, tipo: 'compra' });
   // Ola 21: exámenes de idiomas, trimestres y tesis anual.
   for (const a of alertasIdiomas(hoy, t0)) out.push({ ...a, tipo: 'idioma' });
   // Ola 23: las del clipping (lunes, viernes, fin de fase, mes 6, concentración y compuerta).
@@ -193,7 +202,8 @@ export function alertas(hoy: string, plan: PlanState, t0 = T0_PLAN, clipping?: C
 export function alertaVersion(b: BloqueFechado, plan: Pick<PlanState, 'versionCert'>, hoy: string): Alerta | null {
   const vs = b.cert?.versiones;
   if (!vs?.length || b.fin < hoy) return null;
-  const elegida = vs.find((v) => v.id === plan.versionCert?.[b.id]);
+  // Ola 32: sin elegir, manda la del roadmap (Security+: la versión nueva).
+  const elegida = vs.find((v) => v.id === (plan.versionCert?.[b.id] ?? b.cert?.porDefecto));
   const href = `#/metas/proyecto/${b.id}`;
   if (elegida) {
     if (elegida.retiro && elegida.retiro < b.fin) return { id: `ver-${b.id}`, tipo: 'cert', fecha: elegida.retiro, href, titulo: `${elegida.nombre} se retira el ${fmt(elegida.retiro)}, antes de tu examen (${fmt(b.fin)})`, texto: `Rendí antes del retiro o cambiá de versión. ${vs.filter((v) => v !== elegida && (!v.retiro || v.retiro >= b.fin)).map((v) => v.nombre).join(' o ') || 'Ninguna otra llega a esa fecha.'}` };
@@ -203,6 +213,22 @@ export function alertaVersion(b: BloqueFechado, plan: Pick<PlanState, 'versionCe
   if (!caen.length) return null;
   const sirven = vs.filter((v) => !v.retiro || v.retiro >= b.fin);
   return { id: `ver-${b.id}`, tipo: 'cert', fecha: b.cert?.decision ?? b.inicio, href, titulo: `${b.cert?.decision ? `Decisión el ${fmt(b.cert.decision)}: ` : ''}versión de ${b.nombre}`, texto: `Con el examen el ${fmt(b.fin)}, ${caen.map((v) => `${v.nombre} ya está retirada`).join(' y ')}. Sirven: ${sirven.map((v) => v.nombre).join(' o ')}.` };
+}
+
+/**
+ * Ola 32 · la versión con la que vas a rendir (la elegida o la del roadmap) tiene una fecha de salida sin confirmar que ya pasó:
+ * hay que verificarla en el sitio del examen (que salió, precio y objetivos) antes de reservar. Hasta que la marques verificada.
+ */
+export function alertaVerificar(b: BloqueFechado, plan: Pick<PlanState, 'versionCert' | 'certVerificada'>, hoy: string): Alerta | null {
+  const vs = b.cert?.versiones;
+  if (!vs?.length || b.fin < hoy || plan.certVerificada?.[b.id]) return null;
+  const v = vs.find((x) => x.id === (plan.versionCert?.[b.id] ?? b.cert?.porDefecto));
+  if (!v || v.verificada !== false || !v.sale || v.sale > hoy) return null;
+  return {
+    id: `verif-${b.id}`, tipo: 'cert', fecha: hoy, href: `#/metas/proyecto/${b.id}`,
+    titulo: `Verificá la ${v.nombre} de ${b.corto ?? b.nombre}`,
+    texto: `Tenía que salir cerca del ${fmt(v.sale)} y el dato no está confirmado. Mirá en el sitio oficial que ya está, el precio y los objetivos antes de reservar el examen (${fmt(b.fin)}).`,
+  };
 }
 
 const MES = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'];

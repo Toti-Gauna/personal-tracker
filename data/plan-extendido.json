@@ -1094,9 +1094,12 @@
      {
       "id": "SY0-801",
       "nombre": "SY0-801",
-      "sale": "2026-11-17"
+      "sale": "2026-11-17",
+      "verificada": false
      }
-    ]
+    ],
+    "porDefecto": "SY0-801",
+    "porDefectoMotivo": "Roadmap v7: Security+ \"con la versión nueva del examen\" (el examen cae en septiembre de 2027, cuando la SY0-701 ya se retiró en inglés y en español)"
    },
    "dias": 18,
    "roadmap": {
@@ -1104,7 +1107,8 @@
     "fin": "2027-09-20"
    },
    "numero": 3,
-   "nota": "Con la versión nueva del examen"
+   "nota": "Con la versión nueva del examen",
+   "historial": []
   },
   {
    "id": "W2",
@@ -3574,8 +3578,9 @@
  "decisiones": [
   {
    "id": "secplus",
-   "texto": "Security+ SY0-801 o SY0-701",
-   "fecha": "2026-11-22"
+   "texto": "Security+ SY0-801 o SY0-701: resuelta por el roadmap v7 (la versión nueva, SY0-801)",
+   "fecha": "2026-11-22",
+   "resuelta": "2026-11-20"
   },
   {
    "id": "precios",

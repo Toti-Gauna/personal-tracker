@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { avisoPasado, avisosEntreRamas, type Aviso } from '../data/avisos';
 import { esDiaDePausa, horasRutinaIntensiva } from '../data/capacidad';
 import { ACADEMY_HASTA } from '../data/routines';
+import { revisionHecha } from '../data/revision';
 import { alertaHorasIntensivo, alertasMatematica } from '../data/control';
 import { focusStartedAt } from '../data/focus';
 import { enPausa } from '../data/plan-state';
@@ -52,6 +53,8 @@ export function AvisosRamas({ date, day }: { date: string; day?: DayLog }) {
       const h = horasRutinaIntensiva(cfg.extraProyecto, { academy: date <= ACADEMY_HASTA });
       return h.falta > 0 ? [{ id: 'horas-extra-petria', de: 'programacion' as const, a: 'main' as const, titulo: `Faltan ${String(h.falta).replace('.', ',')} h por semana para las 8 h por día de PetrIA`, texto: `La rutina da ${String(h.semana).replace('.', ',')} h de proyecto por semana y el roadmap pide ${h.meta}. Elegí en Ajustes qué bloques pasan a proyecto (nunca sueño, entreno ni Abi).`, href: '#/ajustes' }] : [];
     })(),
+    // Ola 32: el domingo, la revisión semanal (hasta que la marques hecha).
+    ...(new Date(`${date}T12:00:00`).getDay() === 0 && !revisionHecha(plan, date) ? [{ id: 'revision-semanal', de: 'main' as const, a: 'main' as const, titulo: 'Revisión semanal', texto: 'Trazo, learning.md, english.md, hours.md y el plan: la semana en números y lo que viene.', href: '#/metas/revision' }] : []),
     ...(intensivaEn(settings, date) && esDiaDePausa(date) ? [{ id: 'pausa-fin-de-anio', de: 'main' as const, a: 'salud' as const, titulo: 'Pausa de fin de año', texto: 'Es el único descanso del modo intensivo: esta semana no se programa; la matemática, los idiomas y el entreno siguen.' }] : []),
   ];
   const avisos = [...(pasado ? [pasado] : []), ...control, ...avisosEntreRamas(date, plan, cfg, settings?.startDate)];

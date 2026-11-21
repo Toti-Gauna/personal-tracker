@@ -136,9 +136,19 @@ export interface CertInfo {
   requiere?: string;
   /** v2 (ola 24): versiones del examen, con la fecha en que se retiran o salen. */
   versiones?: VersionExamen[];
+  /** Ola 32 (v7): la versión que manda si no elegiste otra (Security+: SY0-801), y por qué. */
+  porDefecto?: string;
+  porDefectoMotivo?: string;
 }
 
-export interface VersionExamen { id: string; nombre: string; retiro?: string; sale?: string }
+export interface VersionExamen {
+  id: string;
+  nombre: string;
+  retiro?: string;
+  sale?: string;
+  /** Ola 32: false si la fecha de salida no está confirmada (Trazo pide verificarla cuando ya debería haber salido). */
+  verificada?: boolean;
+}
 
 export interface EtapaExt {
   n: 1 | 2 | 3 | 4;
@@ -167,7 +177,7 @@ export interface PlanExtendido {
   /** Perfiles vendibles por hito: el que tenés al cerrar ese bloque. */
   perfilesHito: { despues: string; perfil: string; nota: string }[];
   /** Decisiones abiertas: flags editables, no se resuelven en el código. */
-  decisiones: { id: string; texto: string; fecha?: string }[];
+  decisiones: { id: string; texto: string; fecha?: string; /** Ola 32: fecha en que se resolvió (no avisa más). */ resuelta?: string }[];
   /** Ola 26: tecnologías que se pidieron y se dejaron afuera "por ahora", con el motivo. */
   descartadas?: Descartada[];
   /** v3: horas que vale una semana del plan (24,5). Con este campo el calendario se mide en horas. */

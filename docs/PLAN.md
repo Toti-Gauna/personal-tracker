@@ -1287,6 +1287,39 @@ Fuente: `docs/prompts/roadmap-completo-v7.md` (2026-11-20). Reglas: no se borra 
 
 **Pendiente (ola 32):** revisión semanal en Trazo, hardware por fase con fechas límite, contadores de publicaciones y entrevistas simuladas, y la alerta de Security+.
 
+
+## 6 quaterdecies. Ola 32: seguimiento (revisión semanal, hardware, contadores y Security+)
+
+**Revisión semanal** (`#/metas/revision`, desde Las 4 etapas; el domingo Hoy la avisa hasta que esté hecha)
+- Los cinco puntos del roadmap: Trazo, learning.md, english.md, hours.md (repo privado) y el plan.
+- La semana en números:
+  - horas reales de programación y matemática contra las planificadas;
+  - publicaciones y entrevistas simuladas contra su meta, con + y −;
+  - versiones publicadas;
+  - spots plantados y problemas sin IA.
+- Lo que viene en dos semanas, la diferencia contra el roadmap, una nota y "Revisión hecha". Las anteriores quedan en el historial.
+- Cadencias de la v5 (2 publicaciones y 1 entrevista simulada por semana). Ahora también en las semanas con trabajo.
+
+**Hardware y trámites** (`#/metas/compras`, datos en `data/compras.json`)
+- Fases del roadmap con su fecha límite y para qué proyecto:
+  - Fase 1: 1 feb 2027.
+  - Apple Developer Program: 19 feb 2027.
+  - Fase 2: mayo 2027.
+  - Fase 3: marzo 2028.
+  - Fase 4: julio 2028.
+  - Fase 5: 2029–2031, sin fecha.
+  - Trámites: arrancar ya.
+- El sensor de presión y el caudalímetro quedan **diferidos**, porque PetrIA va solo con Wokwi. La impresora 3D es opcional. Ninguno de los dos cuenta como pendiente.
+- Avisos en Las 4 etapas: cada fase 30 días antes de su fecha (y vencida después); los trámites, desde ya hasta que estén hechos.
+
+**Security+**
+- La v7 rinde "con la versión nueva" y el examen cae en septiembre de 2027, cuando la SY0-701 ya se retiró en inglés y en español.
+- Sin elegir, manda la SY0-801. La decisión del 22 nov 2026 queda resuelta y no avisa más.
+- La SY0-801 tenía que salir cerca del 17 nov 2026 y el dato no está confirmado. Trazo pide verificarla (que salió, el precio y los objetivos) hasta que marques "Ya la verifiqué".
+- Si elegís la SY0-701, vuelve el aviso de que se retira antes del examen.
+
+**Pendiente (ola 33):** calibración con las horas reales de PetrIA 1.0 y 1.1 (carga manual de horas por día).
+
 ---
 
 ## 7. Registro de cambios

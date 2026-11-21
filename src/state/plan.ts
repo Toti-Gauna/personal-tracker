@@ -168,6 +168,45 @@ export function sumarProblemas(fecha: string, n: number) {
   });
 }
 
+/** Ola 32 · marca verificada la versión de examen de una certificación (o lo deshace con `null`). */
+export function marcarCertVerificada(cert: string, fecha: string | null) {
+  update((p) => {
+    const { [cert]: _, ...resto } = p.certVerificada ?? {};
+    return { ...p, certVerificada: fecha ? { ...resto, [cert]: fecha } : resto };
+  });
+}
+
+/** Ola 32 · marca comprado (o hecho, si es un trámite) un ítem de hardware, cuenta o trámite; `null` lo desmarca. */
+export function marcarCompra(id: string, x: { fecha: string; costo?: string } | null) {
+  update((p) => {
+    const { [id]: _, ...resto } = p.compras ?? {};
+    return { ...p, compras: x ? { ...resto, [id]: x } : resto };
+  });
+}
+
+/** Ola 32 · la revisión semanal: tildar un punto, la nota y marcarla hecha. `lunes` es el lunes de la semana. */
+export function tildarRevision(lunes: string, i: number) {
+  update((p) => {
+    const r = p.revisionesSemanales?.[lunes] ?? { checks: [] };
+    const checks = r.checks.includes(i) ? r.checks.filter((x) => x !== i) : [...r.checks, i].sort((a, b) => a - b);
+    return { ...p, revisionesSemanales: { ...(p.revisionesSemanales ?? {}), [lunes]: { ...r, checks } } };
+  });
+}
+export function notaRevision(lunes: string, nota: string) {
+  update((p) => {
+    const r = p.revisionesSemanales?.[lunes] ?? { checks: [] };
+    return { ...p, revisionesSemanales: { ...(p.revisionesSemanales ?? {}), [lunes]: { ...r, ...(nota.trim() ? { nota } : { nota: undefined }) } } };
+  });
+}
+export function marcarRevisionHecha(lunes: string, fecha: string | null) {
+  update((p) => {
+    const r = { ...(p.revisionesSemanales?.[lunes] ?? { checks: [] }) };
+    if (fecha) r.hecha = fecha;
+    else delete r.hecha;
+    return { ...p, revisionesSemanales: { ...(p.revisionesSemanales ?? {}), [lunes]: r } };
+  });
+}
+
 function evento(p: PlanState, rama: Rama, fecha: string, texto: string): PlanState {
   const e: EventoRama = { id: `e${newId()}`, rama, fecha, texto, origen: 'registro' };
   return { ...p, eventos: [...p.eventos, e] };

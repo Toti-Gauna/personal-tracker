@@ -47,6 +47,8 @@ export function PlanEtapas({ day }: { day: DayLog }) {
         </section>
       )}
 
+      <a className="fila-link" href="#/metas/revision">Revisión semanal <span aria-hidden="true">→</span></a>
+      <a className="fila-link" href="#/metas/compras">Hardware y trámites <span aria-hidden="true">→</span></a>
       <a className="fila-link" href="#/metas/diferencia">Diferencia contra el roadmap v7 <span aria-hidden="true">→</span></a>
       <a className="fila-link" href="#/metas/calibracion">Calibración con horas reales y escenarios <span aria-hidden="true">→</span></a>
 
