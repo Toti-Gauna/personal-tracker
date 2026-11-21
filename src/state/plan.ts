@@ -103,6 +103,24 @@ export function toggleArquitectura(proyecto: string, k: 'contrato' | 'trazas' | 
   });
 }
 
+/** Ola 30 · tilda un entregable de una versión (notas, video o README). */
+export function toggleEntregableVersion(proyecto: string, version: string, k: 'notas' | 'video' | 'readme') {
+  update((p) => {
+    const cur = p.versiones?.[proyecto]?.[version] ?? {};
+    return { ...p, versiones: { ...(p.versiones ?? {}), [proyecto]: { ...(p.versiones?.[proyecto] ?? {}), [version]: { ...cur, [k]: !cur[k] } } } };
+  });
+}
+
+/** Ola 30 · marca una versión como publicada en una fecha (o la desmarca con `null`). */
+export function publicarVersion(proyecto: string, version: string, fecha: string | null) {
+  update((p) => {
+    const cur = { ...(p.versiones?.[proyecto]?.[version] ?? {}) };
+    if (fecha) cur.publicada = fecha;
+    else delete cur.publicada;
+    return { ...p, versiones: { ...(p.versiones ?? {}), [proyecto]: { ...(p.versiones?.[proyecto] ?? {}), [version]: cur } } };
+  });
+}
+
 function evento(p: PlanState, rama: Rama, fecha: string, texto: string): PlanState {
   const e: EventoRama = { id: `e${newId()}`, rama, fecha, texto, origen: 'registro' };
   return { ...p, eventos: [...p.eventos, e] };

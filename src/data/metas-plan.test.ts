@@ -12,7 +12,7 @@ describe('metas generadas desde el plan', () => {
   it('la semana sigue la fase: búsqueda hasta T+2 y con trabajo después', () => {
     const s5 = metasSemanaGeneradas('2026-12-14', T0);
     expect(s5.find((m) => m.clave === 'postulaciones')?.meta).toBe(35);
-    expect(s5.find((m) => m.clave === 'casillas:P1')?.meta).toBe(6);
+    expect(s5.find((m) => m.clave === 'casillas:P1')).toMatchObject({ texto: 'Puntos del estándar', meta: 12 });
     const s20 = metasSemanaGeneradas('2027-04-01', T0);
     expect(s20.find((m) => m.clave === 'postulaciones')).toBeUndefined();
     // Ola 27: con trabajo, idiomas son 6,5 h por semana y programación 29.
@@ -31,7 +31,7 @@ describe('metas generadas desde el plan', () => {
     expect(nov.filter((m) => m.origen === 'plan').map((m) => m.texto)).toEqual(PLAN.etapaActual.mes.metas.map((m) => m.texto));
     const dic = metasMesGeneradas('2026-12-14', T0);
     // Con el roadmap v7, PetrIA se entrega el 26 de diciembre (a 8 h por día); VitalIA, en febrero.
-    expect(dic.find((m) => m.clave === 'casillas:P1')?.texto).toBe('PetrIA con tráiler, docs y landing');
+    expect(dic.find((m) => m.clave === 'casillas:P1')?.texto).toBe('PetrIA con los 12 puntos del estándar');
     expect(dic.find((m) => m.clave === 'casillas:P2')).toBeUndefined();
     expect(metasMesGeneradas('2027-01-10', T0).find((m) => /^casillas/.test(m.clave ?? ''))).toBeUndefined();
     expect(dic.find((m) => m.clave === 'postulaciones')?.meta).toBe(155);
@@ -78,8 +78,8 @@ describe('metas generadas desde el plan', () => {
 });
 
 describe('proyecto', () => {
-  it('casillas del estándar y examen de 85 % o más salen del estado del proyecto', () => {
-    const plan = { ...emptyPlan(), proyectos: { P1: { estandar: { ux: true, ingenieria: true }, tiempo: { nucleo: 0, producto: 0, lanzamiento: 0 }, revisiones: [], examen: { fecha: '2026-12-27', puntaje: 88 } } } };
+  it('los puntos del estándar (los 12 de la v7; las casillas viejas no cuentan) y el examen de 85 % o más salen del estado del proyecto', () => {
+    const plan = { ...emptyPlan(), proyectos: { P1: { estandar: { ux: true, produccion: true, seguridad: true }, tiempo: { nucleo: 0, producto: 0, lanzamiento: 0 }, revisiones: [], examen: { fecha: '2026-12-27', puntaje: 88 } } } };
     const c = ctx({ plan });
     expect(avanceMeta({ id: 'a', texto: 'Faro', meta: 6, clave: 'casillas:P1', origen: 'plan' }, '2026-12-01', '2026-12-31', c)).toEqual({ v: 2, auto: true });
     expect(avanceMeta({ id: 'b', texto: 'Examen', meta: 1, clave: 'examen:P1', origen: 'plan' }, '2026-12-01', '2026-12-31', c).v).toBe(1);

@@ -298,34 +298,84 @@
   ],
   "estandar": [
    {
-    "id": "ux",
-    "nombre": "UX/UI",
-    "texto": "Sistema de diseño propio, claro y oscuro, estados vacíos y de error, accesible."
+    "id": "produccion",
+    "nombre": "En producción",
+    "texto": "En producción, con demo pública (URL y video de 30 s)"
    },
    {
-    "id": "tresd",
-    "nombre": "3D útil",
-    "texto": "Un visor 3D que ayuda a entender el producto. Fluido en el celular."
+    "id": "datos",
+    "nombre": "Datos reales",
+    "texto": "Datos reales; lo simulado, marcado y explicado"
    },
    {
-    "id": "animacion",
-    "nombre": "Animación y tráiler",
-    "texto": "Transiciones con propósito y un tráiler de 60 a 90 s."
+    "id": "metricas",
+    "nombre": "Métricas en el README",
+    "texto": "Métricas en el README: calidad, p95, costo y confiabilidad"
    },
    {
-    "id": "docs",
-    "nombre": "Documentación",
-    "texto": "README en inglés, arquitectura, decisiones, guía de demo, API y runbook."
+    "id": "diseno",
+    "nombre": "Diseño de 1 página",
+    "texto": "Documento de diseño de 1 página en inglés antes de codear"
    },
    {
-    "id": "venta",
-    "nombre": "Venta",
-    "texto": "Landing, demo con datos de ejemplo, one-pager, precio y caso de estudio."
+    "id": "seguridad",
+    "nombre": "Seguridad base",
+    "texto": "Seguridad base: modelo de amenazas, permisos mínimos, secretos fuera del repo"
    },
    {
-    "id": "ingenieria",
-    "nombre": "Ingeniería",
-    "texto": "CI/CD, tests, evals, sección de seguridad y monitoreo."
+    "id": "llm",
+    "nombre": "Las 8 capas del LLM",
+    "texto": "Si usa LLM, las 8 capas: prompt, RAG, herramientas/MCP, accesos, guardrails, caché, router, observabilidad con evals"
+   },
+   {
+    "id": "escala",
+    "nombre": "Paquete de escala",
+    "texto": "Paquete de escala: load-lab y Scale report"
+   },
+   {
+    "id": "operacion",
+    "nombre": "Paquete de operación",
+    "texto": "Paquete de operación",
+    "detalle": [
+     "OpenTelemetry y Grafana",
+     "SLO y presupuesto de errores",
+     "Feature flags",
+     "Migraciones expand/contract",
+     "Estrategia de deploy",
+     "Backup con simulacro",
+     "Degradación controlada",
+     "Rate limiting",
+     "Runbooks y postmortem"
+    ]
+   },
+   {
+    "id": "frontend",
+    "nombre": "Frontend 10/10",
+    "texto": "Frontend 10/10",
+    "detalle": [
+     "Sistema de diseño con Storybook",
+     "Carga procedural",
+     "Core Web Vitals",
+     "WCAG AA con axe en el CI",
+     "Playwright",
+     "Español e inglés",
+     "UX para IA: streaming, citas, feedback e incertidumbre visible"
+    ]
+   },
+   {
+    "id": "spots",
+    "nombre": "Algorithm spots",
+    "texto": "Algorithm spots plantados"
+   },
+   {
+    "id": "entrevista",
+    "nombre": "Material de entrevista",
+    "texto": "Material de entrevista: artículo, explicación en 2 minutos y 3 preguntas de diseño de sistemas"
+   },
+   {
+    "id": "opensource",
+    "nombre": "Open source",
+    "texto": "Open source: 1–2 PRs por mes"
    }
   ],
   "presupuesto": {

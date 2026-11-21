@@ -1,3 +1,4 @@
+import { PLAN } from './plan';
 import { describe, expect, it } from 'vitest';
 import { avisosEntreRamas } from './avisos';
 import { colorDeBloque, etiquetaDeBloque, tituloDeBloque } from './etiquetas';
@@ -34,7 +35,7 @@ describe('avisos entre ramas', () => {
     // Con el roadmap v7, PetrIA (P1) se entrega el sábado 26 de diciembre.
     const a = avisosEntreRamas('2026-12-20', emptyPlan(), cfg).find((x) => x.de === 'programacion')!;
     expect(a).toMatchObject({ a: 'trabajo', titulo: 'PetrIA se entrega el sábado 26', href: '#/metas/proyecto/P1' });
-    const listo = { ...emptyPlan(), proyectos: { P1: { estandar: { ux: true, tresd: true, animacion: true, docs: true, venta: true, ingenieria: true }, tiempo: { nucleo: 0, producto: 0, lanzamiento: 0 }, revisiones: [] } } };
+    const listo = { ...emptyPlan(), proyectos: { P1: { estandar: Object.fromEntries(PLAN.programacion.estandar.map((c) => [c.id, true])), tiempo: { nucleo: 0, producto: 0, lanzamiento: 0 }, revisiones: [] } } };
     expect(avisosEntreRamas('2026-12-20', listo, cfg).some((x) => x.de === 'programacion')).toBe(false);
     expect(avisosEntreRamas('2026-12-10', emptyPlan(), cfg).some((x) => x.de === 'programacion')).toBe(false);
   });
