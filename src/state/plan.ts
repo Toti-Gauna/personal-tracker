@@ -452,3 +452,19 @@ export function confirmarCorrimiento(cs: { id: string; nuevoInicio: string; nuev
 export function deshacerCorrimiento(ids: string[]) {
   update((p) => ({ ...p, corrimientos: Object.fromEntries(Object.entries(p.corrimientos ?? {}).filter(([id]) => !ids.includes(id))) }));
 }
+
+/** v12.1 · cargar el puntaje de un simulacro (o borrar el último con `pct` null). */
+export function cargarMock(cert: string, fecha: string, pct: number | null) {
+  update((p) => {
+    const vs = p.mocks?.[cert] ?? [];
+    return { ...p, mocks: { ...(p.mocks ?? {}), [cert]: pct == null ? vs.slice(0, -1) : [...vs, { fecha, pct }] } };
+  });
+}
+/** v12.1 · reservar el examen en una fecha (queda fija) o deshacer la reserva. */
+export function reservarExamen(cert: string, examen: string | null, hoy: string) {
+  update((p) => {
+    const { [cert]: _, ...resto } = p.reservas ?? {};
+    void _;
+    return { ...p, reservas: examen ? { ...resto, [cert]: { examen, reservado: hoy } } : resto };
+  });
+}

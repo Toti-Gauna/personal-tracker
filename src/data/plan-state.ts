@@ -129,6 +129,10 @@ export interface PlanState {
   certVerificada?: Record<string, string>;
   /** v12.1: corrimientos que confirmaste para bloques atrasados (id → fechas nuevas y cuándo lo confirmaste). Nunca automáticos. */
   corrimientos?: Record<string, { inicio: string; fin: string; confirmado: string }>;
+  /** v12.1: puntajes de los simulacros por certificación (id del examen → fecha y %). */
+  mocks?: Record<string, { fecha: string; pct: number }[]>;
+  /** v12.1: exámenes reservados (id → fecha del examen y cuándo reservaste). Una fecha reservada es fija: nada la corre. */
+  reservas?: Record<string, { examen: string; reservado: string }>;
   /**
    * Ola 33 (v7): horas reales cargadas a mano por día (programación y matemática). Mandan sobre el foco de ese día: sirven cuando
    * trabajaste sin abrir el foco (el 19 nov quedó vacío) y son las que calibran el plan con PetrIA 1.0 y 1.1.
