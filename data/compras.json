@@ -1,36 +1,36 @@
 {
  "version": 1,
- "fuente": "docs/prompts/roadmap-completo-v7.md · Hardware y cuentas por fase · Trámites",
+ "fuente": "docs/prompts/plan-v12.1.md · One-off reminders (fechas v12.1); la lista de ítems sigue la de la v7",
  "fases": [
   {
    "id": "fase1",
    "nombre": "Fase 1",
-   "antes": "2027-02-01",
+   "antes": "2026-12-26",
    "para": "VitalIA 3.0 y AgrIA"
   },
   {
    "id": "apple",
    "nombre": "Apple Developer Program",
-   "antes": "2027-02-19",
-   "para": "TestFlight y AR con ViroReact sin Mac (Semana multiplataforma)"
+   "antes": "2027-03-18",
+   "para": "TestFlight y AR con ViroReact sin Mac"
   },
   {
    "id": "fase2",
    "nombre": "Fase 2",
-   "antes": "2027-05-01",
+   "antes": "2027-03-18",
    "para": "Antena y PetrIA Guard"
   },
   {
    "id": "fase3",
    "nombre": "Fase 3",
-   "antes": "2028-03-01",
-   "para": "AeroScan Edge"
+   "antes": "2027-07-31",
+   "para": "AeroScan Edge (ESP32-CAM, \"by Jul 2027\")"
   },
   {
    "id": "fase4",
    "nombre": "Fase 4",
-   "antes": "2028-07-01",
-   "para": "Bóveda"
+   "antes": "2027-09-25",
+   "para": "Bóveda (llave física y RFID)"
   },
   {
    "id": "fase5",

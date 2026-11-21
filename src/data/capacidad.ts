@@ -9,7 +9,12 @@ import { ajustarDia, blockMin, domingoDe, esConvertible, planRoutine, type DayTy
 import { addDays, parseDate } from './time';
 
 /** v7: días desde T0 hasta el trabajo nuevo si no lo cargaste (49: lunes 4 ene 2027 con T0 el 16 nov 2026). */
-export const INICIO_TRABAJO_DIAS = PLAN_EXT.capacidad?.inicioTrabajoDias ?? 56;
+export const INICIO_TRABAJO_DIAS = PLAN_EXT.capacidad?.inicioTrabajoDias === null ? 36500 : PLAN_EXT.capacidad?.inicioTrabajoDias ?? 56;
+/** v12.1: sin trabajo nuevo en el plan (la rutina es la misma hasta el final). */
+export const SIN_TRABAJO_NUEVO = PLAN_EXT.capacidad?.inicioTrabajoDias === null;
+/** v12.1: horas por día de lunes a viernes y el fin de semana (10 y 11 → 72 por semana). */
+export const HORAS_LV = PLAN_EXT.capacidad?.lv ?? null;
+export const HORAS_FINDE = PLAN_EXT.capacidad?.finde ?? null;
 /** v7: horas por día de proyecto antes del trabajo nuevo (8), o null si rige la rutina intensiva. */
 export const HORAS_ANTES_TRABAJO = PLAN_EXT.capacidad?.antesTrabajo ?? null;
 /** v7: años con pausa de diciembre (2027 a 2030); sin lista, todos. */
@@ -63,6 +68,8 @@ export function horasDelDia(f: string, c: CfgCapacidad): number {
   if (real != null && c.hoy && f < c.hoy) return real;
   const antes = c.antesTrabajo === undefined ? HORAS_ANTES_TRABAJO : c.antesTrabajo;
   const fin = esFinde(f);
+  // v12.1: 10 h de lunes a viernes y 11 el fin de semana, todo el plan (sin trabajo nuevo).
+  if (HORAS_LV != null && HORAS_FINDE != null && c.antesTrabajo === undefined) return fin ? HORAS_FINDE : HORAS_LV;
   if (f < c.inicioTrabajo && antes != null) return antes;
   if (f < addDays(c.t0, 7)) return HORAS_SEMANA_PLAN / 7;
   if (f < c.inicioTrabajo) return horasTipo(fin ? (parseDate(f).getDay() === 0 ? domingoDe('busqueda-intensiva-finde') : 'busqueda-intensiva-finde') : 'busqueda-intensiva');

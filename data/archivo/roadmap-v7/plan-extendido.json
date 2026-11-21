@@ -1,0 +1,3683 @@
+{
+ "version": 1,
+ "t0": "2026-11-16",
+ "etapas": [
+  {
+   "n": 1,
+   "nombre": "Núcleo",
+   "perfil": "Senior ML + DevSecOps + Cloud con arquitectura de sistemas distribuidos",
+   "semanasBase": 88,
+   "semanasExtra": 0,
+   "semanasPlataforma": 0,
+   "semanasArquitectura": 0
+  },
+  {
+   "n": 2,
+   "nombre": "Ciberseguridad",
+   "perfil": "Senior con foco en seguridad",
+   "semanasBase": 24,
+   "semanasExtra": 0,
+   "semanasPlataforma": 0,
+   "semanasArquitectura": 0
+  },
+  {
+   "n": 3,
+   "nombre": "Quant",
+   "perfil": "Quant Trading Engineer / ML Quant",
+   "semanasBase": 56,
+   "semanasExtra": 0,
+   "semanasPlataforma": 0,
+   "semanasArquitectura": 0
+  },
+  {
+   "n": 4,
+   "nombre": "Aeroespacial",
+   "perfil": "Aerospace Software Engineer",
+   "semanasBase": 71,
+   "semanasExtra": 0,
+   "semanasPlataforma": 0,
+   "semanasArquitectura": 0
+  }
+ ],
+ "bloques": [
+  {
+   "id": "P0",
+   "etapa": 1,
+   "tipo": "proyecto",
+   "nombre": "Constelación",
+   "base": 1,
+   "extra": 0,
+   "extraPlataforma": 0,
+   "extraArquitectura": 0,
+   "ficha": {
+    "rubro": "portfolio",
+    "feature": "Portfolio hub con Trazo como caso de estudio, CV, LinkedIn y pitch de 60 s con 6 historias STAR",
+    "visual": "Mapa 3D de proyectos",
+    "pieza": "Ninguna: solo diagnóstico",
+    "referencia": "El hub validado: ids repetidos, referencias rotas y ciclos de proyectos.json",
+    "perfil": "Sr Full-stack → AI Engineer (RAG multifuente y agentes)",
+    "plataforma": "PWA instalable y base del monorepo",
+    "arquitectura": "Shell de microfrontends (Module Federation)"
+   },
+   "tecnologias": [
+    {
+     "nombre": "Next.js",
+     "alias": [
+      "nextjs",
+      "next js"
+     ],
+     "ambiente": "Frontend"
+    },
+    {
+     "nombre": "TypeScript",
+     "alias": [
+      "ts"
+     ],
+     "ambiente": "Frontend"
+    },
+    {
+     "nombre": "Three.js",
+     "alias": [
+      "threejs",
+      "three js"
+     ],
+     "ambiente": "Frontend"
+    },
+    {
+     "nombre": "Module Federation",
+     "ambiente": "Infra"
+    },
+    {
+     "nombre": "platform-kit",
+     "ambiente": "Infra"
+    }
+   ],
+   "historial": [
+    {
+     "fecha": "2026-11-18",
+     "cambio": "Suma el caso de auditoría y refactor de una app generada con IA (informe de hallazgos y arreglos)",
+     "motivo": "Pedido v2.1"
+    },
+    {
+     "fecha": "2026-11-18",
+     "cambio": "El RAG para negocios pasa a otro dominio con datos de muestra",
+     "motivo": "Deja de usar el dominio anterior; pedido v2.1"
+    },
+    {
+     "fecha": "2026-11-18",
+     "cambio": "P0 queda en una semana: hub, Trazo como caso, CV, LinkedIn y pitch de 60 s con 6 historias STAR. Portfolio-mcp, la auditoría de una app generada con IA y el RAG para negocios pasan al backlog sin fecha",
+     "motivo": "Prompt v3 (una tecnología nueva por proyecto)"
+    },
+    {
+     "fecha": "2026-11-20",
+     "cambio": "Pasa a llamarse Constelación (antes Consolidación)",
+     "motivo": "Roadmap v7"
+    },
+    {
+     "fecha": "2026-11-20",
+     "cambio": "Las tecnologías salen del stack de la v7, por ambiente",
+     "motivo": "Roadmap v7 (stack)"
+    }
+   ],
+   "dias": 3,
+   "roadmap": {
+    "inicio": "2026-11-16",
+    "fin": "2026-11-18"
+   },
+   "nota": "La v1 la arman los agentes (en curso); la 2.0 y la 2.1 van en julio de 2027",
+   "que": "Portfolio como mapa 3D de proyectos; la v1 (mapa 3D, Trazo como caso, validador, shell con Module Federation) la arman los agentes"
+  },
+  {
+   "id": "P1",
+   "etapa": 1,
+   "tipo": "proyecto",
+   "nombre": "PetrIA",
+   "base": 7,
+   "extra": 0,
+   "extraPlataforma": 0,
+   "extraArquitectura": 0,
+   "ficha": {
+    "rubro": "petróleo",
+    "feature": "\"Faro Vaca Muerta\": preguntas en lenguaje natural sobre pozos reales con cita al dato, pozo tipo P10/P50/P90, verificador de cumplimiento y calendario de reportes",
+    "visual": "Yacimiento 3D con pozos reales, rama horizontal, etapas de fractura y producción acumulada",
+    "pieza": "Percentiles y similitud coseno",
+    "referencia": "Respuestas validadas contra el dato oficial de la Secretaría de Energía",
+    "validador": "Ingeniero de reservorios o de cumplimiento",
+    "perfil": "Full-stack AI Engineer (energía)",
+    "plataforma": "Escritorio (consola Electron): pasa a la Semana de sumas, después de P2",
+    "arquitectura": "2 servicios con contrato OpenAPI, gateway y pruebas de contrato",
+    "entregablesArquitectura": true
+   },
+   "tecnologias": [
+    {
+     "nombre": "Next.js",
+     "alias": [
+      "nextjs",
+      "next js"
+     ],
+     "ambiente": "Frontend"
+    },
+    {
+     "nombre": "TypeScript",
+     "alias": [
+      "ts"
+     ],
+     "ambiente": "Frontend"
+    },
+    {
+     "nombre": "MapLibre GL",
+     "ambiente": "Frontend"
+    },
+    {
+     "nombre": "Three.js",
+     "alias": [
+      "threejs",
+      "three js"
+     ],
+     "ambiente": "Frontend"
+    },
+    {
+     "nombre": "AR Quick Look",
+     "nota": "USDZ",
+     "ambiente": "Frontend"
+    },
+    {
+     "nombre": "Java",
+     "ambiente": "Backend"
+    },
+    {
+     "nombre": "Spring Boot",
+     "alias": [
+      "spring"
+     ],
+     "ambiente": "Backend"
+    },
+    {
+     "nombre": "Node.js",
+     "alias": [
+      "node",
+      "nodejs"
+     ],
+     "ambiente": "Backend"
+    },
+    {
+     "nombre": "NestJS",
+     "ambiente": "Backend"
+    },
+    {
+     "nombre": "Python",
+     "ambiente": "IA por API"
+    },
+    {
+     "nombre": "FastAPI",
+     "ambiente": "IA por API"
+    },
+    {
+     "nombre": "LangGraph",
+     "ambiente": "IA por API"
+    },
+    {
+     "nombre": "Claude",
+     "ambiente": "IA por API"
+    },
+    {
+     "nombre": "pgvector",
+     "ambiente": "IA por API"
+    },
+    {
+     "nombre": "MCP",
+     "ambiente": "IA por API"
+    },
+    {
+     "nombre": "ElevenLabs",
+     "ambiente": "IA por API"
+    },
+    {
+     "nombre": "Twilio",
+     "ambiente": "IA por API"
+    },
+    {
+     "nombre": "LightGBM",
+     "opcional": true,
+     "nota": "propuesta a confirmar (†)",
+     "ambiente": "ML propio"
+    },
+    {
+     "nombre": "H3",
+     "opcional": true,
+     "nota": "propuesta a confirmar (†)",
+     "ambiente": "ML propio"
+    },
+    {
+     "nombre": "Arps",
+     "ambiente": "ML propio"
+    },
+    {
+     "nombre": "Postgres",
+     "alias": [
+      "postgresql"
+     ],
+     "ambiente": "DB"
+    },
+    {
+     "nombre": "PostGIS",
+     "ambiente": "DB"
+    },
+    {
+     "nombre": "RabbitMQ",
+     "ambiente": "Infra"
+    },
+    {
+     "nombre": "Pact",
+     "ambiente": "Infra"
+    },
+    {
+     "nombre": "MQTT",
+     "ambiente": "Infra"
+    },
+    {
+     "nombre": "GitHub Actions",
+     "ambiente": "Infra"
+    },
+    {
+     "nombre": "Render",
+     "ambiente": "Infra"
+    },
+    {
+     "nombre": "platform-kit",
+     "ambiente": "Infra"
+    },
+    {
+     "nombre": "AWS",
+     "alias": [
+      "amazon web services"
+     ],
+     "nota": "S3, SQS, Lambda, SES",
+     "ambiente": "Cloud"
+    }
+   ],
+   "historial": [
+    {
+     "fecha": "2026-11-18",
+     "cambio": "Suma LangGraph (agente analista), evals, cola asíncrona para la ingesta y un conector a una API de terceros en sandbox",
+     "motivo": "Pedido v2.1"
+    },
+    {
+     "fecha": "2026-11-18",
+     "cambio": "LangGraph pasa a ser la tecnología nueva; las demás son parte del trabajo",
+     "motivo": "Una sola tecnología nueva por proyecto"
+    },
+    {
+     "fecha": "2026-11-18",
+     "cambio": "DuckDB y Parquet pasan a P5; la consola Electron usa SQLite local",
+     "motivo": "Pedido v2.1"
+    },
+    {
+     "fecha": "2026-11-18",
+     "cambio": "La consola Electron sale de P1 y va a la Semana de sumas; P1 queda en 5 semanas (122 h)",
+     "motivo": "Prompt v3"
+    },
+    {
+     "fecha": "2026-11-20",
+     "cambio": "Pasa a llamarse PetrIA (antes Faro v1 · petróleo); horas: antes 122 h, ahora ≈ 304 h",
+     "motivo": "Roadmap v7"
+    },
+    {
+     "fecha": "2026-11-20",
+     "cambio": "Ya no tiene lista de recortes: si una versión se atrasa, se mueven fechas",
+     "motivo": "Roadmap v7 (decisión de fondo)"
+    },
+    {
+     "fecha": "2026-11-20",
+     "cambio": "Las tecnologías salen del stack de la v7, por ambiente",
+     "motivo": "Roadmap v7 (stack)"
+    }
+   ],
+   "horas": 304,
+   "horasAntes": 122,
+   "roadmap": {
+    "inicio": "2026-11-19",
+    "fin": "2027-01-05"
+   },
+   "nota": "Horas medidas: 1.0 74 h, 1.1 74 h, 2.0 ≈ 64 h, 3.0 92 h. El roadmap las pone a ~8 h por día",
+   "que": "Mapa mundial real con los pozos de Vaca Muerta y las zonas de mayor productividad esperada. Valor y declinación de cada pozo, y lector de partes viejos. Asistente por texto, voz, WhatsApp y teléfono que cita el dato oficial. Uso y costo medidos por empresa"
+  },
+  {
+   "id": "C8",
+   "etapa": 1,
+   "tipo": "cert",
+   "nombre": "Claude Certified Architect + GitHub Foundations",
+   "base": 1,
+   "extra": 0,
+   "extraPlataforma": 0,
+   "extraArquitectura": 0,
+   "dias": 7,
+   "roadmap": {
+    "inicio": "2027-01-06",
+    "fin": "2027-01-12"
+   },
+   "numero": 1,
+   "corto": "Claude + GitHub Foundations",
+   "nota": "A confirmar acceso: la de Claude exige la Claude Partner Network; sin acceso, GitHub Copilot",
+   "cert": {
+    "verificado": false
+   }
+  },
+  {
+   "id": "P2",
+   "etapa": 1,
+   "tipo": "proyecto",
+   "nombre": "VitalIA",
+   "base": 5,
+   "extra": 0,
+   "extraPlataforma": 0,
+   "extraArquitectura": 0,
+   "ficha": {
+    "rubro": "medicina",
+    "feature": "Desidentificación de datos clínicos con enmascarado por rol y reporte \"quién accedió a este paciente\"",
+    "visual": "Recorrido del dato clínico y qué se enmascara",
+    "pieza": "Conteo y k-anonimato",
+    "referencia": "Precisión y recall de la detección de datos sensibles en un set sintético; banco de ataques contra herramientas existentes",
+    "validador": "Persona de salud digital",
+    "perfil": "AI Engineer en salud (.NET, Azure, seguridad)",
+    "plataforma": "Mobile (Expo y React Native): la app de prueba pasa a la Semana de sumas",
+    "arquitectura": "Gateway en el borde"
+   },
+   "tecnologias": [
+    {
+     "nombre": "Next.js",
+     "alias": [
+      "nextjs",
+      "next js"
+     ],
+     "ambiente": "Frontend"
+    },
+    {
+     "nombre": "TypeScript",
+     "alias": [
+      "ts"
+     ],
+     "ambiente": "Frontend"
+    },
+    {
+     "nombre": "C#",
+     "alias": [
+      "csharp"
+     ],
+     "ambiente": "Backend"
+    },
+    {
+     "nombre": "ASP.NET Core",
+     "ambiente": "Backend"
+    },
+    {
+     "nombre": "Firely SDK",
+     "opcional": true,
+     "nota": "propuesta a confirmar (†)",
+     "ambiente": "Backend"
+    },
+    {
+     "nombre": "EF Core",
+     "opcional": true,
+     "nota": "propuesta a confirmar (†)",
+     "ambiente": "Backend"
+    },
+    {
+     "nombre": "YARP",
+     "ambiente": "Backend"
+    },
+    {
+     "nombre": "Rust",
+     "ambiente": "Backend"
+    },
+    {
+     "nombre": "WebAssembly",
+     "ambiente": "Backend"
+    },
+    {
+     "nombre": "Python",
+     "ambiente": "IA por API"
+    },
+    {
+     "nombre": "Azure OpenAI",
+     "ambiente": "IA por API"
+    },
+    {
+     "nombre": "Claude",
+     "ambiente": "IA por API"
+    },
+    {
+     "nombre": "SQL Server",
+     "opcional": true,
+     "nota": "propuesta a confirmar (†)",
+     "ambiente": "DB"
+    },
+    {
+     "nombre": "SMART on FHIR",
+     "ambiente": "Infra"
+    },
+    {
+     "nombre": "MQTT",
+     "ambiente": "Infra"
+    },
+    {
+     "nombre": "platform-kit",
+     "ambiente": "Infra"
+    },
+    {
+     "nombre": "Azure Health Data Services",
+     "ambiente": "Cloud"
+    },
+    {
+     "nombre": "Entra ID",
+     "ambiente": "Cloud"
+    }
+   ],
+   "historial": [
+    {
+     "fecha": "2026-11-18",
+     "cambio": "Suma despliegue en Azure con Azure OpenAI, la app mobile en versión de prueba (TestFlight o Play interno) y la revisión de accesibilidad",
+     "motivo": "Pedido v2.1"
+    },
+    {
+     "fecha": "2026-11-18",
+     "cambio": "Queda .NET con FHIR (C# y ASP.NET Core) como tecnología nueva; el gateway en Go se mantiene. vLLM y LoRA pasan a P8",
+     "motivo": "Pedido v2.1"
+    },
+    {
+     "fecha": "2026-11-18",
+     "cambio": "La app de prueba de Expo sale de P2 y va a la Semana de sumas; P2 queda en 4 semanas (98 h)",
+     "motivo": "Prompt v3"
+    },
+    {
+     "fecha": "2026-11-20",
+     "cambio": "Pasa a llamarse VitalIA (antes Escudo · medicina); horas: antes 98 h, ahora ≈ 155 h",
+     "motivo": "Roadmap v7"
+    },
+    {
+     "fecha": "2026-11-20",
+     "cambio": "Ya no tiene lista de recortes: si una versión se atrasa, se mueven fechas",
+     "motivo": "Roadmap v7 (decisión de fondo)"
+    },
+    {
+     "fecha": "2026-11-20",
+     "cambio": "Las tecnologías salen del stack de la v7, por ambiente",
+     "motivo": "Roadmap v7 (stack)"
+    }
+   ],
+   "horas": 155,
+   "horasAntes": 98,
+   "roadmap": {
+    "inicio": "2027-01-13",
+    "fin": "2027-02-18"
+   },
+   "que": "brechas de cuidado y problemas de medicación con evidencia; traductor de sistemas viejos a FHIR; monitoreo remoto; dictado a nota"
+  },
+  {
+   "id": "SUM",
+   "etapa": 1,
+   "tipo": "sumas",
+   "nombre": "Semana multiplataforma",
+   "base": 1,
+   "extra": 0,
+   "extraPlataforma": 0,
+   "extraArquitectura": 0,
+   "que": "Lo que se sacó de P1 y P2 para no cargar dos tecnologías nuevas en un proyecto: la consola Electron (de P1) y la app de prueba de Expo (de P2), una semana cada una. La auditoría de una app generada con IA entra solo si sobra tiempo.",
+   "items": [
+    {
+     "nombre": "Consola Electron de Faro v1 (viene de P1)",
+     "desde": "P1"
+    },
+    {
+     "nombre": "App de prueba de Expo para Escudo (viene de P2)",
+     "desde": "P2"
+    },
+    {
+     "nombre": "Auditoría y refactor de una app generada con IA (solo si sobra tiempo)",
+     "opcional": true
+    }
+   ],
+   "horas": 40,
+   "roadmap": {
+    "inicio": "2027-02-19",
+    "fin": "2027-02-28"
+   }
+  },
+  {
+   "id": "W1",
+   "etapa": 1,
+   "tipo": "ventana",
+   "nombre": "Ventana W1 · matemática",
+   "base": 3,
+   "extra": 0,
+   "extraPlataforma": 0,
+   "extraArquitectura": 0,
+   "mate": {
+    "principal": [
+     "CONAMAT Álgebra (funciones, desigualdades)",
+     "Estadística básica"
+    ],
+    "refuerzo": [
+     {
+      "titulo": "Gelfand · Functions and Graphs",
+      "rol": "intuicion"
+     },
+     {
+      "titulo": "OpenIntro Statistics",
+      "rol": "intuicion"
+     },
+     {
+      "titulo": "Stewart, Redlin y Watson · Precalculus",
+      "rol": "banco"
+     }
+    ],
+    "habilita": [
+     "P3"
+    ],
+    "perfil": "Algebraico",
+    "fase": "M2",
+    "salida": [
+     "Resolver ecuaciones y desigualdades (lineales, cuadráticas y con valor absoluto) sin ayuda",
+     "Graficar funciones lineales, cuadráticas, exponenciales y logarítmicas a mano",
+     "Calcular media, varianza, desvío, percentiles y cuantiles de un conjunto de datos",
+     "Resolver triángulos y usar funciones trigonométricas básicas"
+    ]
+   },
+   "horas": 122,
+   "roadmap": {
+    "inicio": "2027-03-01",
+    "fin": "2027-03-20"
+   }
+  },
+  {
+   "id": "P3",
+   "etapa": 1,
+   "tipo": "proyecto",
+   "nombre": "AgrIA",
+   "base": 6,
+   "extra": 0,
+   "extraPlataforma": 0,
+   "extraArquitectura": 0,
+   "dependeDe": [
+    "W1"
+   ],
+   "ficha": {
+    "rubro": "agro",
+    "feature": "Simulador de escenarios por fecha de siembra",
+    "visual": "Terreno 3D con mapa de vegetación y zonas",
+    "pieza": "Cuantiles y predicción conforme",
+    "referencia": "Error contra una línea base simple y cobertura de los intervalos cercana a la nominal",
+    "validador": "Agrónomo",
+    "perfil": "Applied ML Engineer (agro)",
+    "plataforma": "Mobile (Expo)",
+    "arquitectura": "Monolito modular en Rails, a propósito"
+   },
+   "tecnologias": [
+    {
+     "nombre": "Three.js",
+     "alias": [
+      "threejs",
+      "three js"
+     ],
+     "ambiente": "Frontend"
+    },
+    {
+     "nombre": "Ruby on Rails",
+     "alias": [
+      "Rails",
+      "Ruby",
+      "rails"
+     ],
+     "ambiente": "Frontend"
+    },
+    {
+     "nombre": "Expo",
+     "ambiente": "Frontend"
+    },
+    {
+     "nombre": "GraphQL",
+     "ambiente": "Backend"
+    },
+    {
+     "nombre": "Claude",
+     "ambiente": "IA por API"
+    },
+    {
+     "nombre": "scikit-learn",
+     "ambiente": "ML propio"
+    },
+    {
+     "nombre": "MLflow",
+     "ambiente": "ML propio"
+    },
+    {
+     "nombre": "Dagster",
+     "ambiente": "ML propio"
+    },
+    {
+     "nombre": "Postgres",
+     "alias": [
+      "postgresql"
+     ],
+     "ambiente": "DB"
+    },
+    {
+     "nombre": "BigQuery",
+     "ambiente": "DB"
+    },
+    {
+     "nombre": "k3s",
+     "ambiente": "Infra"
+    },
+    {
+     "nombre": "Helm",
+     "ambiente": "Infra"
+    },
+    {
+     "nombre": "MQTT",
+     "ambiente": "Infra"
+    },
+    {
+     "nombre": "GCP",
+     "alias": [
+      "google cloud"
+     ],
+     "nota": "BigQuery, Vertex AI",
+     "ambiente": "Cloud"
+    }
+   ],
+   "historial": [
+    {
+     "fecha": "2026-11-18",
+     "cambio": "Suma GraphQL en el backoffice de Rails (opcional)",
+     "motivo": "Pedido v2.1"
+    },
+    {
+     "fecha": "2026-11-20",
+     "cambio": "Pasa a llamarse AgrIA (antes Surco v1 · agro); horas: antes 122 h, ahora ≈ 180 h",
+     "motivo": "Roadmap v7"
+    },
+    {
+     "fecha": "2026-11-20",
+     "cambio": "Las tecnologías salen del stack de la v7, por ambiente",
+     "motivo": "Roadmap v7 (stack)"
+    }
+   ],
+   "horas": 180,
+   "horasAntes": 122,
+   "roadmap": {
+    "inicio": "2027-03-21",
+    "fin": "2027-05-02"
+   },
+   "que": "rinde por departamento con rango de confianza, margen bruto con incertidumbre, atención por WhatsApp con audio"
+  },
+  {
+   "id": "P4",
+   "etapa": 1,
+   "tipo": "proyecto",
+   "nombre": "Antena",
+   "base": 7,
+   "extra": 0,
+   "extraPlataforma": 0,
+   "extraArquitectura": 0,
+   "ficha": {
+    "rubro": "espacio",
+    "feature": "Planificador de pasadas con estimación de calidad de enlace",
+    "visual": "Pasadas y visibilidad en 3D",
+    "pieza": "Propagación SGP4 de una pasada comparada con la librería",
+    "referencia": "Error de posición en km contra la librería",
+    "validador": "Operador de estación terrena o radioaficionado",
+    "perfil": "Systems / Ground Software Engineer",
+    "plataforma": "AR del cielo con sensores del dispositivo"
+   },
+   "tecnologias": [
+    {
+     "nombre": "Three.js",
+     "alias": [
+      "threejs",
+      "three js"
+     ],
+     "ambiente": "Frontend"
+    },
+    {
+     "nombre": "Expo",
+     "ambiente": "Frontend"
+    },
+    {
+     "nombre": "ViroReact",
+     "ambiente": "Frontend"
+    },
+    {
+     "nombre": "Rust",
+     "nota": "SGP4, CCSDS",
+     "ambiente": "Backend"
+    },
+    {
+     "nombre": "websockets",
+     "ambiente": "Backend"
+    },
+    {
+     "nombre": "MQTT",
+     "ambiente": "Infra"
+    },
+    {
+     "nombre": "mTLS",
+     "ambiente": "Infra"
+    },
+    {
+     "nombre": "OTA",
+     "ambiente": "Infra"
+    },
+    {
+     "nombre": "AWS IoT",
+     "ambiente": "Cloud"
+    }
+   ],
+   "horas": 215,
+   "horasAntes": 147,
+   "roadmap": {
+    "inicio": "2027-05-03",
+    "fin": "2027-06-23"
+   },
+   "que": "sigue satélites reales (incluidos los argentinos), decodifica telemetría, planifica pasadas, calcula enlaces",
+   "historial": [
+    {
+     "fecha": "2026-11-20",
+     "cambio": "Pasa a llamarse Antena (antes Estación v1 · espacio); horas: antes 147 h, ahora ≈ 215 h",
+     "motivo": "Roadmap v7"
+    },
+    {
+     "fecha": "2026-11-20",
+     "cambio": "Las tecnologías salen del stack de la v7, por ambiente",
+     "motivo": "Roadmap v7 (stack)"
+    }
+   ]
+  },
+  {
+   "id": "C1",
+   "etapa": 1,
+   "tipo": "cert",
+   "nombre": "AWS Solutions Architect Associate",
+   "base": 2,
+   "extra": 0,
+   "extraPlataforma": 0,
+   "extraArquitectura": 0,
+   "cert": {
+    "verificado": false,
+    "notas": "Confirmar precio y versión"
+   },
+   "dias": 12,
+   "roadmap": {
+    "inicio": "2027-06-24",
+    "fin": "2027-07-05"
+   },
+   "numero": 2
+  },
+  {
+   "id": "P0B",
+   "etapa": 1,
+   "tipo": "proyecto",
+   "nombre": "Constelación 2.0 y 2.1",
+   "base": 3,
+   "extra": 0,
+   "extraPlataforma": 0,
+   "extraArquitectura": 0,
+   "horas": 75,
+   "roadmap": {
+    "inicio": "2027-07-06",
+    "fin": "2027-07-23"
+   },
+   "ficha": {
+    "rubro": "portfolio",
+    "perfil": "Sr Full-stack → AI Engineer (RAG multifuente y agentes)",
+    "feature": "RAG con citas y evals sobre todo tu trabajo, modo reclutador y MCP público (2.0); voz, CV en AR, email y WhatsApp, métricas en vivo, plantilla open source y prueba de pico viral (2.1)"
+   },
+   "tecnologias": [
+    {
+     "nombre": "Next.js",
+     "alias": [
+      "nextjs",
+      "next js"
+     ],
+     "ambiente": "Frontend"
+    },
+    {
+     "nombre": "TypeScript",
+     "alias": [
+      "ts"
+     ],
+     "ambiente": "Frontend"
+    },
+    {
+     "nombre": "Three.js",
+     "alias": [
+      "threejs",
+      "three js"
+     ],
+     "ambiente": "Frontend"
+    },
+    {
+     "nombre": "Node.js",
+     "alias": [
+      "node",
+      "nodejs"
+     ],
+     "ambiente": "Backend"
+    },
+    {
+     "nombre": "Python",
+     "ambiente": "IA por API"
+    },
+    {
+     "nombre": "FastAPI",
+     "ambiente": "IA por API"
+    },
+    {
+     "nombre": "LangGraph",
+     "ambiente": "IA por API"
+    },
+    {
+     "nombre": "Claude",
+     "ambiente": "IA por API"
+    },
+    {
+     "nombre": "MCP",
+     "ambiente": "IA por API"
+    },
+    {
+     "nombre": "Neon",
+     "ambiente": "DB"
+    },
+    {
+     "nombre": "Module Federation",
+     "ambiente": "Infra"
+    },
+    {
+     "nombre": "platform-kit",
+     "ambiente": "Infra"
+    },
+    {
+     "nombre": "Render",
+     "opcional": true,
+     "nota": "propuesta a confirmar (†)",
+     "ambiente": "Cloud"
+    },
+    {
+     "nombre": "Vercel",
+     "opcional": true,
+     "nota": "propuesta a confirmar (†)",
+     "ambiente": "Cloud"
+    },
+    {
+     "nombre": "SES",
+     "ambiente": "Cloud"
+    }
+   ],
+   "historial": [
+    {
+     "fecha": "2026-11-20",
+     "cambio": "La 2.0 y la 2.1 de Constelación se planifican aparte (≈ 75 h)",
+     "motivo": "Roadmap v7"
+    },
+    {
+     "fecha": "2026-11-20",
+     "cambio": "Las tecnologías salen del stack de la v7, por ambiente",
+     "motivo": "Roadmap v7 (stack)"
+    }
+   ],
+   "que": "Constelación con IA: 2.0 del 6 al 14 jul (RAG con citas y evals, modo reclutador, MCP público) y 2.1 del 15 al 23 jul (voz, CV en AR, notificaciones, plantilla open source)"
+  },
+  {
+   "id": "P5",
+   "etapa": 1,
+   "tipo": "proyecto",
+   "nombre": "PetrIA Guard",
+   "base": 6,
+   "extra": 0,
+   "extraPlataforma": 0,
+   "extraArquitectura": 0,
+   "ficha": {
+    "rubro": "petróleo",
+    "feature": "Detección sobre tráfico industrial simulado (Modbus, OPC UA) mapeada a MITRE ATT&CK for ICS, con cada regla y su ataque simulado",
+    "visual": "Interior de planta con el equipo afectado y el recorrido del ataque",
+    "pieza": "Ajuste de curvas de declinación con intervalos y tasa de falsos positivos",
+    "referencia": "Cobertura medida y CIS Kubernetes Benchmark",
+    "validador": "Ingeniero de reservorios o de cumplimiento",
+    "perfil": "DevSecOps / OT Security Engineer",
+    "plataforma": "VR (WebXR)",
+    "arquitectura": "Malla de servicios con mTLS (Linkerd o Istio)",
+    "entregablesArquitectura": true
+   },
+   "tecnologias": [
+    {
+     "nombre": "Next.js",
+     "alias": [
+      "nextjs",
+      "next js"
+     ],
+     "ambiente": "Frontend"
+    },
+    {
+     "nombre": "Three.js",
+     "alias": [
+      "threejs",
+      "three js"
+     ],
+     "ambiente": "Frontend"
+    },
+    {
+     "nombre": "Expo",
+     "ambiente": "Frontend"
+    },
+    {
+     "nombre": "AR",
+     "ambiente": "Frontend"
+    },
+    {
+     "nombre": "NFC",
+     "ambiente": "Frontend"
+    },
+    {
+     "nombre": "Go",
+     "ambiente": "Backend"
+    },
+    {
+     "nombre": "Modbus",
+     "ambiente": "Backend"
+    },
+    {
+     "nombre": "OPC UA",
+     "ambiente": "Backend"
+    },
+    {
+     "nombre": "DuckDB",
+     "ambiente": "DB"
+    },
+    {
+     "nombre": "Parquet",
+     "ambiente": "DB"
+    },
+    {
+     "nombre": "Kubernetes",
+     "alias": [
+      "k8s"
+     ],
+     "ambiente": "Infra"
+    },
+    {
+     "nombre": "GitOps",
+     "ambiente": "Infra"
+    },
+    {
+     "nombre": "mTLS",
+     "ambiente": "Infra"
+    },
+    {
+     "nombre": "Falco",
+     "ambiente": "Infra"
+    },
+    {
+     "nombre": "SBOM",
+     "ambiente": "Infra"
+    },
+    {
+     "nombre": "OPA",
+     "ambiente": "Infra"
+    },
+    {
+     "nombre": "AWS IoT Core",
+     "ambiente": "Cloud"
+    },
+    {
+     "nombre": "IoT SiteWise",
+     "ambiente": "Cloud"
+    },
+    {
+     "nombre": "Kinesis",
+     "ambiente": "Cloud"
+    },
+    {
+     "nombre": "GuardDuty",
+     "ambiente": "Cloud"
+    }
+   ],
+   "historial": [
+    {
+     "fecha": "2026-11-18",
+     "cambio": "Suma DuckDB y Parquet, que vienen de P1",
+     "motivo": "Pedido v2.1"
+    },
+    {
+     "fecha": "2026-11-20",
+     "cambio": "Pasa a llamarse PetrIA Guard (antes Faro v2 · petróleo); horas: antes 98 h, ahora ≈ 170 h",
+     "motivo": "Roadmap v7"
+    },
+    {
+     "fecha": "2026-11-20",
+     "cambio": "Las tecnologías salen del stack de la v7, por ambiente",
+     "motivo": "Roadmap v7 (stack)"
+    }
+   ],
+   "horas": 170,
+   "horasAntes": 98,
+   "roadmap": {
+    "inicio": "2027-07-24",
+    "fin": "2027-09-02"
+   },
+   "que": "gemelo digital de una batería de tanques en tiempo real; detecta ataques al SCADA por física y pérdidas en ductos; escala alarmas por todos los canales"
+  },
+  {
+   "id": "C2",
+   "etapa": 1,
+   "tipo": "cert",
+   "nombre": "CompTIA Security+",
+   "base": 3,
+   "extra": 0,
+   "extraPlataforma": 0,
+   "extraArquitectura": 0,
+   "cert": {
+    "costo": "US$ 439 (579 con reintento)",
+    "verificado": true,
+    "notas": "SY0-801 sale cerca del 17 nov 2026; SY0-701 se retira el 11 jun 2027 (inglés) y el 13 ago 2027 (español). Decisión el domingo 22 nov 2026.",
+    "decision": "2026-11-22",
+    "versiones": [
+     {
+      "id": "SY0-701-en",
+      "nombre": "SY0-701 en inglés",
+      "retiro": "2027-06-11"
+     },
+     {
+      "id": "SY0-701-es",
+      "nombre": "SY0-701 en español",
+      "retiro": "2027-08-13"
+     },
+     {
+      "id": "SY0-801",
+      "nombre": "SY0-801",
+      "sale": "2026-11-17",
+      "verificada": false
+     }
+    ],
+    "porDefecto": "SY0-801",
+    "porDefectoMotivo": "Roadmap v7: Security+ \"con la versión nueva del examen\" (el examen cae en septiembre de 2027, cuando la SY0-701 ya se retiró en inglés y en español)"
+   },
+   "dias": 18,
+   "roadmap": {
+    "inicio": "2027-09-03",
+    "fin": "2027-09-20"
+   },
+   "numero": 3,
+   "nota": "Con la versión nueva del examen",
+   "historial": []
+  },
+  {
+   "id": "W2",
+   "etapa": 1,
+   "tipo": "ventana",
+   "nombre": "Ventana W2 · matemática",
+   "base": 3,
+   "extra": 0,
+   "extraPlataforma": 0,
+   "extraArquitectura": 0,
+   "mate": {
+    "principal": [
+     "CONAMAT Cálculo diferencial",
+     "Vectores y matrices básicos"
+    ],
+    "refuerzo": [
+     {
+      "titulo": "3Blue1Brown",
+      "rol": "intuicion"
+     },
+     {
+      "titulo": "Stewart · Calculus",
+      "rol": "banco"
+     },
+     {
+      "titulo": "MIT 18.01SC",
+      "rol": "curso"
+     },
+     {
+      "titulo": "Strang cap. 1 a 3",
+      "rol": "duro"
+     },
+     {
+      "titulo": "Parr y Howard · Matrix Calculus",
+      "rol": "duro"
+     }
+    ],
+    "habilita": [
+     "P6"
+    ],
+    "perfil": "Calculista",
+    "fase": "M3",
+    "salida": [
+     "Derivar con regla de la cadena, producto y cociente sin ayuda",
+     "Encontrar máximos y mínimos de una función y explicar el resultado",
+     "Operar vectores y matrices: producto punto, producto de matrices y transpuesta",
+     "Explicar el gradiente como la dirección de máximo crecimiento"
+    ]
+   },
+   "horas": 147,
+   "roadmap": {
+    "inicio": "2027-09-21",
+    "fin": "2027-10-14"
+   }
+  },
+  {
+   "id": "P6",
+   "etapa": 1,
+   "tipo": "proyecto",
+   "nombre": "AeroScan",
+   "base": 7,
+   "extra": 0,
+   "extraPlataforma": 0,
+   "extraArquitectura": 0,
+   "dependeDe": [
+    "W2"
+   ],
+   "ficha": {
+    "rubro": "aeroespacial",
+    "feature": "Informe de inspección automático con el defecto ubicado en el modelo 3D, severidad y cola de revisión humana",
+    "visual": "Defectos sobre la aeronave",
+    "pieza": "Autograd y backpropagation (regla de la cadena)",
+    "referencia": "Gradient check contra PyTorch y caída sintético → real medida",
+    "validador": "Ingeniero del rubro",
+    "perfil": "ML Engineer (computer vision)",
+    "plataforma": "Escritorio (Tauri)"
+   },
+   "tecnologias": [
+    {
+     "nombre": "Three.js",
+     "alias": [
+      "threejs",
+      "three js"
+     ],
+     "ambiente": "Frontend"
+    },
+    {
+     "nombre": "Tauri",
+     "ambiente": "Frontend"
+    },
+    {
+     "nombre": "Expo",
+     "ambiente": "Frontend"
+    },
+    {
+     "nombre": "AR",
+     "ambiente": "Frontend"
+    },
+    {
+     "nombre": "Python",
+     "ambiente": "Backend"
+    },
+    {
+     "nombre": "SLO",
+     "ambiente": "Backend"
+    },
+    {
+     "nombre": "Claude",
+     "ambiente": "IA por API"
+    },
+    {
+     "nombre": "RAG",
+     "ambiente": "IA por API"
+    },
+    {
+     "nombre": "PyTorch",
+     "ambiente": "ML propio"
+    },
+    {
+     "nombre": "Blender",
+     "ambiente": "ML propio"
+    },
+    {
+     "nombre": "Postgres",
+     "alias": [
+      "postgresql"
+     ],
+     "ambiente": "DB"
+    },
+    {
+     "nombre": "AWS SageMaker",
+     "ambiente": "Cloud"
+    },
+    {
+     "nombre": "SES",
+     "ambiente": "Cloud"
+    }
+   ],
+   "horas": 205,
+   "horasAntes": 147,
+   "roadmap": {
+    "inicio": "2027-10-15",
+    "fin": "2027-12-02"
+   },
+   "que": "inspecciona superficies de aviones, genera la orden de trabajo, consulta manuales, registra daños en 3D por matrícula",
+   "historial": [
+    {
+     "fecha": "2026-11-20",
+     "cambio": "Pasa a llamarse AeroScan (antes Lupa v1 · aeroespacial); horas: antes 147 h, ahora ≈ 205 h",
+     "motivo": "Roadmap v7"
+    },
+    {
+     "fecha": "2026-11-20",
+     "cambio": "Las tecnologías salen del stack de la v7, por ambiente",
+     "motivo": "Roadmap v7 (stack)"
+    }
+   ]
+  },
+  {
+   "id": "P7",
+   "etapa": 1,
+   "tipo": "proyecto",
+   "nombre": "AgrIA Sat",
+   "base": 6,
+   "extra": 0,
+   "extraPlataforma": 0,
+   "extraArquitectura": 0,
+   "ficha": {
+    "rubro": "agro",
+    "feature": "Zonas de manejo por lote y alerta temprana de estrés de cultivo",
+    "visual": "Mapa de estrés por lote",
+    "pieza": "PCA y SVD",
+    "referencia": "Drift detectado contra drift inyectado",
+    "validador": "Agrónomo",
+    "perfil": "ML / MLOps Engineer",
+    "plataforma": "AR (zonas de manejo sobre el lote)",
+    "arquitectura": "Pipeline de reentrenamiento orquestado"
+   },
+   "tecnologias": [
+    {
+     "nombre": "Next.js",
+     "alias": [
+      "nextjs",
+      "next js"
+     ],
+     "ambiente": "Frontend"
+    },
+    {
+     "nombre": "Expo",
+     "ambiente": "Frontend"
+    },
+    {
+     "nombre": "Python",
+     "ambiente": "Backend"
+    },
+    {
+     "nombre": "Kubernetes",
+     "alias": [
+      "k8s"
+     ],
+     "ambiente": "Backend"
+    },
+    {
+     "nombre": "PCA",
+     "ambiente": "ML propio"
+    },
+    {
+     "nombre": "SVD",
+     "ambiente": "ML propio"
+    },
+    {
+     "nombre": "PostGIS",
+     "ambiente": "DB"
+    },
+    {
+     "nombre": "STAC",
+     "ambiente": "DB"
+    },
+    {
+     "nombre": "GCP",
+     "alias": [
+      "google cloud"
+     ],
+     "nota": "Vertex AI, Earth Engine†",
+     "ambiente": "Cloud"
+    }
+   ],
+   "horas": 150,
+   "horasAntes": 98,
+   "roadmap": {
+    "inicio": "2027-12-03",
+    "fin": "2028-01-14"
+   },
+   "que": "monitorea lotes con Sentinel-2, alerta estrés, genera dosis variable, estima pérdidas en USD",
+   "historial": [
+    {
+     "fecha": "2026-11-20",
+     "cambio": "Pasa a llamarse AgrIA Sat (antes Surco v2 · agro); horas: antes 98 h, ahora ≈ 150 h",
+     "motivo": "Roadmap v7"
+    },
+    {
+     "fecha": "2026-11-20",
+     "cambio": "Las tecnologías salen del stack de la v7, por ambiente",
+     "motivo": "Roadmap v7 (stack)"
+    }
+   ]
+  },
+  {
+   "id": "C3",
+   "etapa": 1,
+   "tipo": "cert",
+   "nombre": "AWS Machine Learning Engineer Associate",
+   "base": 2,
+   "extra": 0,
+   "extraPlataforma": 0,
+   "extraArquitectura": 0,
+   "cert": {
+    "costo": "US$ 150 según la mayoría de las fuentes; una dice 300",
+    "verificado": false,
+    "notas": "Confirmar en AWS"
+   },
+   "dias": 12,
+   "roadmap": {
+    "inicio": "2028-01-15",
+    "fin": "2028-01-26"
+   },
+   "numero": 4
+  },
+  {
+   "id": "W3",
+   "etapa": 1,
+   "tipo": "ventana",
+   "nombre": "Ventana W3 · matemática",
+   "base": 3,
+   "extra": 0,
+   "extraPlataforma": 0,
+   "extraArquitectura": 0,
+   "mate": {
+    "principal": [
+     "Blitzstein y Hwang · Introduction to Probability",
+     "EDOs y optimización"
+    ],
+    "refuerzo": [
+     {
+      "titulo": "Harvard Stat 110",
+      "rol": "curso"
+     },
+     {
+      "titulo": "ISL",
+      "rol": "intuicion"
+     },
+     {
+      "titulo": "Simmons · Differential Equations cap. 1 a 3 con MIT 18.03SC",
+      "rol": "banco"
+     },
+     {
+      "titulo": "Chapra y Canale (Euler, RK2, RK4)",
+      "rol": "banco"
+     },
+     {
+      "titulo": "Boyd y Vandenberghe cap. 1 a 4",
+      "rol": "duro"
+     }
+    ],
+    "habilita": [
+     "P8"
+    ],
+    "perfil": "Probabilista para IA",
+    "fase": "M4",
+    "salida": [
+     "Calcular probabilidades condicionales y aplicar Bayes en un problema real",
+     "Usar las distribuciones normal, binomial y Poisson con su esperanza y varianza",
+     "Resolver una EDO de primer orden y simularla con Euler o RK2",
+     "Plantear una optimización con restricciones y resolverla con descenso de gradiente"
+    ]
+   },
+   "horas": 122,
+   "roadmap": {
+    "inicio": "2028-01-27",
+    "fin": "2028-02-15"
+   }
+  },
+  {
+   "id": "P8",
+   "etapa": 1,
+   "tipo": "proyecto",
+   "nombre": "AdversarIA",
+   "base": 4,
+   "extra": 0,
+   "extraPlataforma": 0,
+   "extraArquitectura": 0,
+   "dependeDe": [
+    "W3"
+   ],
+   "alternativa": "red teaming de agentes",
+   "ficha": {
+    "rubro": "nuclear",
+    "feature": "Gemelo digital de un reactor simplificado con red team de sensores (modelo educativo); propuesta: laboratorio de red teaming de agentes mapeado a OWASP LLM Top 10",
+    "pieza": "Bayes y tasa base",
+    "referencia": "Tasa de éxito de ataques por herramienta",
+    "validador": "Pentester o analista SOC",
+    "perfil": "AI Security Engineer"
+   },
+   "tecnologias": [
+    {
+     "nombre": "Next.js",
+     "alias": [
+      "nextjs",
+      "next js"
+     ],
+     "ambiente": "Frontend"
+    },
+    {
+     "nombre": "Python",
+     "ambiente": "Backend"
+    },
+    {
+     "nombre": "garak",
+     "ambiente": "Backend"
+    },
+    {
+     "nombre": "PyRIT",
+     "ambiente": "Backend"
+    },
+    {
+     "nombre": "Claude",
+     "ambiente": "IA por API"
+    },
+    {
+     "nombre": "Bedrock Guardrails",
+     "ambiente": "IA por API"
+    },
+    {
+     "nombre": "Azure AI Content Safety",
+     "ambiente": "IA por API"
+    },
+    {
+     "nombre": "LoRA",
+     "ambiente": "ML propio"
+    },
+    {
+     "nombre": "AWS",
+     "alias": [
+      "amazon web services"
+     ],
+     "ambiente": "Cloud"
+    },
+    {
+     "nombre": "Azure",
+     "ambiente": "Cloud"
+    }
+   ],
+   "historial": [
+    {
+     "fecha": "2026-11-18",
+     "cambio": "Suma vLLM y LoRA, que vienen de P2: atacar un modelo propio y medir evals y guardrails",
+     "motivo": "Pedido v2.1"
+    },
+    {
+     "fecha": "2026-11-20",
+     "cambio": "Pasa a llamarse AdversarIA (antes Núcleo · nuclear); horas: antes 74 h, ahora ≈ 130 h",
+     "motivo": "Roadmap v7"
+    },
+    {
+     "fecha": "2026-11-20",
+     "cambio": "Las tecnologías salen del stack de la v7, por ambiente",
+     "motivo": "Roadmap v7 (stack)"
+    }
+   ],
+   "horas": 130,
+   "horasAntes": 74,
+   "roadmap": {
+    "inicio": "2028-02-16",
+    "fin": "2028-03-17"
+   },
+   "que": "escanea agentes de chat y voz propios o autorizados, los ataca y compara defensas"
+  },
+  {
+   "id": "P9",
+   "etapa": 1,
+   "tipo": "proyecto",
+   "nombre": "AeroScan Edge",
+   "base": 6,
+   "extra": 0,
+   "extraPlataforma": 0,
+   "extraArquitectura": 0,
+   "ficha": {
+    "rubro": "aeroespacial",
+    "feature": "Modo sin conexión con cola de sincronización y presupuesto de latencia medido",
+    "visual": "Latencia y energía en vivo",
+    "pieza": "Error de cuantización y su cota",
+    "referencia": "Latencia y pérdida de exactitud contra el modelo original",
+    "validador": "Ingeniero del rubro",
+    "perfil": "Edge AI Engineer",
+    "plataforma": "Mobile (ONNX Runtime Mobile) y AR"
+   },
+   "tecnologias": [
+    {
+     "nombre": "Expo",
+     "ambiente": "Frontend"
+    },
+    {
+     "nombre": "ONNX Runtime",
+     "ambiente": "Frontend"
+    },
+    {
+     "nombre": "SQLite",
+     "ambiente": "DB"
+    },
+    {
+     "nombre": "AWS IoT Greengrass",
+     "ambiente": "Cloud"
+    }
+   ],
+   "horas": 165,
+   "horasAntes": 122,
+   "roadmap": {
+    "inicio": "2028-03-18",
+    "fin": "2028-04-26"
+   },
+   "que": "inspección offline en el hangar, walkaround guiado por voz, sincronización",
+   "historial": [
+    {
+     "fecha": "2026-11-20",
+     "cambio": "Pasa a llamarse AeroScan Edge (antes Lupa v2 · aeroespacial); horas: antes 122 h, ahora ≈ 165 h",
+     "motivo": "Roadmap v7"
+    },
+    {
+     "fecha": "2026-11-20",
+     "cambio": "Las tecnologías salen del stack de la v7, por ambiente",
+     "motivo": "Roadmap v7 (stack)"
+    }
+   ]
+  },
+  {
+   "id": "C9",
+   "etapa": 1,
+   "tipo": "cert",
+   "nombre": "AWS Generative AI Developer – Professional",
+   "base": 3,
+   "extra": 0,
+   "extraPlataforma": 0,
+   "extraArquitectura": 0,
+   "dias": 18,
+   "roadmap": {
+    "inicio": "2028-04-27",
+    "fin": "2028-05-14"
+   },
+   "numero": 5,
+   "corto": "AWS GenAI Pro",
+   "cert": {
+    "verificado": false
+   }
+  },
+  {
+   "id": "P10",
+   "etapa": 1,
+   "tipo": "proyecto",
+   "nombre": "Antena Ops",
+   "base": 7,
+   "extra": 0,
+   "extraPlataforma": 0,
+   "extraArquitectura": 0,
+   "ficha": {
+    "rubro": "espacio",
+    "feature": "Triage de anomalías con explicación y priorización para reducir falsas alarmas",
+    "visual": "Línea de tiempo de alertas",
+    "pieza": "Distribución de errores y probabilidad aplicada a SLO",
+    "referencia": "Métricas sobre SMAP y MSL de la NASA contra una línea base publicada",
+    "validador": "Operador de estación terrena o radioaficionado",
+    "perfil": "Senior ML + DevSecOps + Cloud",
+    "arquitectura": "Microservicios completos (Kafka, saga y outbox, mTLS, OpenTelemetry, Pact, ADRs) y microfrontends sobre el shell de P0",
+    "entregablesArquitectura": true
+   },
+   "tecnologias": [
+    {
+     "nombre": "Microfrontends",
+     "ambiente": "Frontend"
+    },
+    {
+     "nombre": "Java",
+     "ambiente": "Backend"
+    },
+    {
+     "nombre": "Go",
+     "ambiente": "Backend"
+    },
+    {
+     "nombre": "Kafka",
+     "ambiente": "Infra"
+    },
+    {
+     "nombre": "mTLS",
+     "ambiente": "Infra"
+    },
+    {
+     "nombre": "OpenTelemetry",
+     "ambiente": "Infra"
+    },
+    {
+     "nombre": "Pact",
+     "ambiente": "Infra"
+    },
+    {
+     "nombre": "AWS",
+     "alias": [
+      "amazon web services"
+     ],
+     "ambiente": "Cloud"
+    },
+    {
+     "nombre": "Azure",
+     "ambiente": "Cloud"
+    }
+   ],
+   "horas": 205,
+   "horasAntes": 172,
+   "roadmap": {
+    "inicio": "2028-05-15",
+    "fin": "2028-07-02"
+   },
+   "que": "centro de control de todos tus productos: anomalías en telemetría de la NASA, agente SRE, status page, costos en vivo, Jarvis central",
+   "historial": [
+    {
+     "fecha": "2026-11-20",
+     "cambio": "Pasa a llamarse Antena Ops (antes Estación v2 · espacio); horas: antes 172 h, ahora ≈ 205 h",
+     "motivo": "Roadmap v7"
+    },
+    {
+     "fecha": "2026-11-20",
+     "cambio": "Las tecnologías salen del stack de la v7, por ambiente",
+     "motivo": "Roadmap v7 (stack)"
+    }
+   ]
+  },
+  {
+   "id": "COL",
+   "etapa": 1,
+   "tipo": "colchon",
+   "nombre": "Consolidación",
+   "base": 2,
+   "extra": 0,
+   "extraPlataforma": 0,
+   "extraArquitectura": 0,
+   "dias": 12,
+   "roadmap": {
+    "inicio": "2028-07-03",
+    "fin": "2028-07-14"
+   },
+   "que": "Cierre de la etapa 1: absorbe los atrasos de las puertas de matemática y prepara las entrevistas senior"
+  },
+  {
+   "id": "W4",
+   "etapa": 2,
+   "tipo": "ventana",
+   "nombre": "Ventana W4 · matemática discreta y cripto",
+   "base": 1,
+   "extra": 0,
+   "extraPlataforma": 0,
+   "extraArquitectura": 0,
+   "que": "Matemática discreta y criptografía",
+   "libros": [
+    "Lehman, Leighton y Meyer · Mathematics for Computer Science"
+   ],
+   "habilita": "S1",
+   "mate": {
+    "principal": [
+     "Lehman, Leighton y Meyer · Mathematics for Computer Science"
+    ],
+    "refuerzo": [
+     {
+      "titulo": "Paar y Pelzl · Understanding Cryptography",
+      "rol": "intuicion"
+     },
+     {
+      "titulo": "Boneh y Shoup · A Graduate Course in Applied Cryptography",
+      "rol": "duro"
+     }
+    ],
+    "habilita": [
+     "S1"
+    ],
+    "perfil": "Criptógrafo aplicado",
+    "salida": [
+     "Hacer demostraciones por inducción y por contradicción",
+     "Calcular con aritmética modular: inversos, exponenciación rápida y MCD extendido",
+     "Explicar RSA y Diffie-Hellman con un ejemplo hecho a mano",
+     "Contar combinaciones y permutaciones en problemas de seguridad"
+    ]
+   },
+   "horas": 49,
+   "roadmap": {
+    "inicio": "2028-07-15",
+    "fin": "2028-07-22"
+   }
+  },
+  {
+   "id": "S1",
+   "etapa": 2,
+   "tipo": "proyecto",
+   "nombre": "Bóveda",
+   "base": 4,
+   "extra": 0,
+   "extraPlataforma": 0,
+   "extraArquitectura": 0,
+   "dependeDe": [
+    "W4"
+   ],
+   "que": "secretos, cifrado de sobre, rotación, credenciales efímeras para agentes de IA",
+   "perfil": "Security Engineer (cripto y secretos)",
+   "ficha": {
+    "rubro": "seguridad",
+    "feature": "Inventario de secretos y escáner de secretos expuestos en repos",
+    "pieza": "RSA y curvas elípticas",
+    "referencia": "Primitivas de laboratorio comparadas con una biblioteca auditada",
+    "validador": "Pentester o analista SOC",
+    "perfil": "Security Engineer (identidad y secretos)",
+    "plataforma": "Escritorio (Tauri)",
+    "arquitectura": "Identidad de servicios con SPIFFE",
+    "entregablesArquitectura": true
+   },
+   "tecnologias": [
+    {
+     "nombre": "Tauri",
+     "ambiente": "Frontend"
+    },
+    {
+     "nombre": "Rust",
+     "ambiente": "Backend"
+    },
+    {
+     "nombre": "Go",
+     "ambiente": "Backend"
+    },
+    {
+     "nombre": "Postgres",
+     "alias": [
+      "postgresql"
+     ],
+     "opcional": true,
+     "nota": "propuesta a confirmar (†)",
+     "ambiente": "DB"
+    },
+    {
+     "nombre": "Vault",
+     "ambiente": "Infra"
+    },
+    {
+     "nombre": "SPIFFE",
+     "ambiente": "Infra"
+    },
+    {
+     "nombre": "mTLS",
+     "ambiente": "Infra"
+    },
+    {
+     "nombre": "cosign",
+     "opcional": true,
+     "nota": "propuesta a confirmar (†)",
+     "ambiente": "Infra"
+    },
+    {
+     "nombre": "AWS KMS",
+     "ambiente": "Cloud"
+    },
+    {
+     "nombre": "Secrets Manager",
+     "ambiente": "Cloud"
+    },
+    {
+     "nombre": "Azure Key Vault",
+     "ambiente": "Cloud"
+    }
+   ],
+   "horas": 130,
+   "horasAntes": 98,
+   "roadmap": {
+    "inicio": "2028-07-23",
+    "fin": "2028-08-22"
+   },
+   "historial": [
+    {
+     "fecha": "2026-11-20",
+     "cambio": "Pasa a llamarse Bóveda (antes Cripta); horas: antes 98 h, ahora ≈ 130 h",
+     "motivo": "Roadmap v7"
+    },
+    {
+     "fecha": "2026-11-20",
+     "cambio": "Las tecnologías salen del stack de la v7, por ambiente",
+     "motivo": "Roadmap v7 (stack)"
+    }
+   ]
+  },
+  {
+   "id": "C10",
+   "etapa": 2,
+   "tipo": "cert",
+   "nombre": "Azure AI-103",
+   "base": 2,
+   "extra": 0,
+   "extraPlataforma": 0,
+   "extraArquitectura": 0,
+   "dias": 12,
+   "roadmap": {
+    "inicio": "2028-08-23",
+    "fin": "2028-09-03"
+   },
+   "numero": 6,
+   "corto": "Azure AI-103",
+   "nota": "Reemplazo de AI-102",
+   "cert": {
+    "verificado": false
+   }
+  },
+  {
+   "id": "S2",
+   "etapa": 2,
+   "tipo": "proyecto",
+   "nombre": "Asedio",
+   "base": 6,
+   "extra": 0,
+   "extraPlataforma": 0,
+   "extraArquitectura": 0,
+   "que": "modelo de amenazas y pentest de tus productos (IA e IoT incluidos), con un bot que corrige",
+   "perfil": "Application Security Engineer",
+   "ficha": {
+    "rubro": "seguridad",
+    "feature": "Cada hallazgo se reprueba solo en CI",
+    "pieza": "Lógica y análisis de programas",
+    "referencia": "Informe con CVSS de Faro, Escudo y Estación",
+    "validador": "Pentester o analista SOC",
+    "perfil": "AppSec / Offensive Security Engineer"
+   },
+   "tecnologias": [
+    {
+     "nombre": "Python",
+     "ambiente": "Backend"
+    },
+    {
+     "nombre": "Burp",
+     "ambiente": "Herramientas"
+    },
+    {
+     "nombre": "ZAP",
+     "opcional": true,
+     "nota": "propuesta a confirmar (†)",
+     "ambiente": "Herramientas"
+    },
+    {
+     "nombre": "Semgrep",
+     "ambiente": "Herramientas"
+    },
+    {
+     "nombre": "SAST",
+     "ambiente": "Herramientas"
+    },
+    {
+     "nombre": "DAST",
+     "ambiente": "Herramientas"
+    },
+    {
+     "nombre": "SCA",
+     "ambiente": "Herramientas"
+    },
+    {
+     "nombre": "AWS Inspector",
+     "ambiente": "Cloud"
+    },
+    {
+     "nombre": "Security Hub",
+     "ambiente": "Cloud"
+    }
+   ],
+   "horas": 165,
+   "horasAntes": 122,
+   "roadmap": {
+    "inicio": "2028-09-04",
+    "fin": "2028-10-13"
+   },
+   "historial": [
+    {
+     "fecha": "2026-11-20",
+     "cambio": "Pasa a llamarse Asedio (antes Bastión); horas: antes 122 h, ahora ≈ 165 h",
+     "motivo": "Roadmap v7"
+    },
+    {
+     "fecha": "2026-11-20",
+     "cambio": "Las tecnologías salen del stack de la v7, por ambiente",
+     "motivo": "Roadmap v7 (stack)"
+    }
+   ]
+  },
+  {
+   "id": "S3",
+   "etapa": 2,
+   "tipo": "proyecto",
+   "nombre": "Vigía",
+   "base": 7,
+   "extra": 0,
+   "extraPlataforma": 0,
+   "extraArquitectura": 0,
+   "que": "SOC en una caja para pymes, con agente investigador y llamada al dueño",
+   "perfil": "Detection & Response / Cloud Security Engineer",
+   "ficha": {
+    "rubro": "seguridad",
+    "feature": "Playbooks ejecutables con aprobación humana y medición de tiempo de detección y de respuesta",
+    "pieza": "Precisión, recall y costo de falsos positivos",
+    "referencia": "Detección como código (Sigma y MITRE ATT&CK) contra un laboratorio propio",
+    "validador": "Pentester o analista SOC",
+    "perfil": "Detection & Response / Cloud Security Engineer",
+    "plataforma": "Mobile (alertas y aprobación de playbooks)"
+   },
+   "tecnologias": [
+    {
+     "nombre": "Expo",
+     "ambiente": "Frontend"
+    },
+    {
+     "nombre": "Python",
+     "ambiente": "Backend"
+    },
+    {
+     "nombre": "Sigma",
+     "ambiente": "Backend"
+    },
+    {
+     "nombre": "ATT&CK",
+     "ambiente": "Backend"
+    },
+    {
+     "nombre": "OpenSearch",
+     "ambiente": "DB"
+    },
+    {
+     "nombre": "osquery",
+     "ambiente": "Infra"
+    }
+   ],
+   "horas": 195,
+   "horasAntes": 147,
+   "roadmap": {
+    "inicio": "2028-10-14",
+    "fin": "2028-11-29"
+   },
+   "historial": [
+    {
+     "fecha": "2026-11-20",
+     "cambio": "Pasa a llamarse Vigía (antes Centinela); horas: antes 147 h, ahora ≈ 195 h",
+     "motivo": "Roadmap v7"
+    },
+    {
+     "fecha": "2026-11-20",
+     "cambio": "Las tecnologías salen del stack de la v7, por ambiente",
+     "motivo": "Roadmap v7 (stack)"
+    }
+   ]
+  },
+  {
+   "id": "C4",
+   "etapa": 2,
+   "tipo": "cert",
+   "nombre": "PNPT",
+   "base": 3,
+   "extra": 0,
+   "extraPlataforma": 0,
+   "extraArquitectura": 0,
+   "corto": "PNPT",
+   "que": "Practical Network Penetration Tester (TCM Security)",
+   "cert": {
+    "costo": "US$ 499",
+    "verificado": true,
+    "notas": "12 meses de entrenamiento y 1 reintento; examen de 5 días más 2 para el informe; no vence"
+   },
+   "dias": 18,
+   "roadmap": {
+    "inicio": "2028-11-30",
+    "fin": "2028-12-17"
+   },
+   "numero": 7
+  },
+  {
+   "id": "CIE2",
+   "etapa": 2,
+   "tipo": "cierre",
+   "nombre": "Cierre de etapa",
+   "base": 1,
+   "extra": 0,
+   "extraPlataforma": 0,
+   "extraArquitectura": 0,
+   "que": "Cierre de la etapa 2 (T+18), después de la pausa del 18 al 24 dic 2028",
+   "dias": 6,
+   "roadmap": {
+    "inicio": "2028-12-25",
+    "fin": "2028-12-30"
+   }
+  },
+  {
+   "id": "WQ1",
+   "etapa": 3,
+   "tipo": "ventana",
+   "nombre": "Ventana WQ1 · estadística, series de tiempo, portafolios",
+   "base": 2,
+   "extra": 0,
+   "extraPlataforma": 0,
+   "extraArquitectura": 0,
+   "mate": {
+    "principal": [
+     "Wasserman · All of Statistics",
+     "Hyndman y Athanasopoulos · Forecasting",
+     "Tsay · Analysis of Financial Time Series"
+    ],
+    "refuerzo": [
+     {
+      "titulo": "Bodie, Kane y Marcus · Investments",
+      "rol": "intuicion"
+     },
+     {
+      "titulo": "Hull (capítulos introductorios)",
+      "rol": "intuicion"
+     }
+    ],
+    "habilita": [
+     "Q1",
+     "Q2"
+    ],
+    "perfil": "Quant: estadística y series de tiempo",
+    "fase": "M4",
+    "salida": [
+     "Estimar parámetros por máxima verosimilitud con su intervalo de confianza",
+     "Hacer un test de hipótesis y corregir por comparaciones múltiples",
+     "Ajustar un modelo ARIMA a una serie y validarlo fuera de muestra",
+     "Armar una cartera de mínima varianza con dos o más activos"
+    ]
+   },
+   "horas": 74,
+   "roadmap": {
+    "inicio": "2028-12-31",
+    "fin": "2029-01-11"
+   }
+  },
+  {
+   "id": "Q1",
+   "etapa": 3,
+   "tipo": "proyecto",
+   "nombre": "Alpha Lab",
+   "base": 7,
+   "extra": 0,
+   "extraPlataforma": 0,
+   "extraArquitectura": 0,
+   "dependeDe": [
+    "WQ1"
+   ],
+   "ficha": {
+    "rubro": "quant",
+    "feature": "Registro de experimentos reproducibles (hash de datos, código y parámetros)",
+    "visual": "Superficie parámetros × desempeño",
+    "pieza": "Sharpe deflactado y validación purgada",
+    "referencia": "Validación walk-forward y purgada",
+    "validador": "Trader o quant",
+    "perfil": "Quant Developer",
+    "plataforma": "Escritorio (Tauri)"
+   },
+   "tecnologias": [
+    {
+     "nombre": "Tauri",
+     "ambiente": "Frontend"
+    },
+    {
+     "nombre": "Rust",
+     "ambiente": "Backend"
+    },
+    {
+     "nombre": "PyO3",
+     "ambiente": "Backend"
+    },
+    {
+     "nombre": "Claude",
+     "ambiente": "IA por API"
+    },
+    {
+     "nombre": "Parquet",
+     "ambiente": "DB"
+    },
+    {
+     "nombre": "DuckDB",
+     "opcional": true,
+     "nota": "propuesta a confirmar (†)",
+     "ambiente": "DB"
+    },
+    {
+     "nombre": "AWS",
+     "alias": [
+      "amazon web services"
+     ],
+     "ambiente": "Cloud"
+    }
+   ],
+   "horas": 195,
+   "horasAntes": 147,
+   "roadmap": {
+    "inicio": "2029-01-12",
+    "fin": "2029-02-27"
+   },
+   "que": "backtester de eventos con costos, deslizamiento y walk-forward",
+   "historial": [
+    {
+     "fecha": "2026-11-20",
+     "cambio": "Pasa a llamarse Alpha Lab (antes Ábaco); horas: antes 147 h, ahora ≈ 195 h",
+     "motivo": "Roadmap v7"
+    },
+    {
+     "fecha": "2026-11-20",
+     "cambio": "Las tecnologías salen del stack de la v7, por ambiente",
+     "motivo": "Roadmap v7 (stack)"
+    }
+   ]
+  },
+  {
+   "id": "Q2",
+   "etapa": 3,
+   "tipo": "proyecto",
+   "nombre": "Paper Trail",
+   "base": 6,
+   "extra": 0,
+   "extraPlataforma": 0,
+   "extraArquitectura": 0,
+   "dependeDe": [
+    "WQ1"
+   ],
+   "alternativa": "réplica de papers",
+   "ficha": {
+    "rubro": "quant",
+    "feature": "Propuesta: réplica de 3 papers académicos con el backtester y un informe con las diferencias",
+    "pieza": "Inferencia y corrección por comparaciones múltiples",
+    "referencia": "Los resultados de los papers originales",
+    "validador": "Trader o quant",
+    "perfil": "Junior Quant Researcher"
+   },
+   "tecnologias": [
+    {
+     "nombre": "Python",
+     "ambiente": "Backend"
+    },
+    {
+     "nombre": "Quarto",
+     "ambiente": "Backend"
+    },
+    {
+     "nombre": "RAG",
+     "ambiente": "IA por API"
+    },
+    {
+     "nombre": "Claude",
+     "ambiente": "IA por API"
+    }
+   ],
+   "horas": 165,
+   "horasAntes": 122,
+   "roadmap": {
+    "inicio": "2029-02-28",
+    "fin": "2029-04-08"
+   },
+   "que": "agente que lee papers de finanzas y replica sus estrategias con Alpha Lab",
+   "historial": [
+    {
+     "fecha": "2026-11-20",
+     "cambio": "Pasa a llamarse Paper Trail (antes Brújula); horas: antes 122 h, ahora ≈ 165 h",
+     "motivo": "Roadmap v7"
+    },
+    {
+     "fecha": "2026-11-20",
+     "cambio": "Las tecnologías salen del stack de la v7, por ambiente",
+     "motivo": "Roadmap v7 (stack)"
+    }
+   ]
+  },
+  {
+   "id": "C5",
+   "etapa": 3,
+   "tipo": "cert",
+   "nombre": "CKA",
+   "base": 2,
+   "extra": 0,
+   "extraPlataforma": 0,
+   "extraArquitectura": 0,
+   "corto": "CKA",
+   "que": "Certified Kubernetes Administrator, requisito de CKS",
+   "cert": {
+    "verificado": false,
+    "notas": "Requisito de CKS"
+   },
+   "dias": 16,
+   "roadmap": {
+    "inicio": "2029-04-09",
+    "fin": "2029-04-24"
+   },
+   "numero": 8
+  },
+  {
+   "id": "DES3",
+   "etapa": 3,
+   "tipo": "descanso",
+   "nombre": "Descanso",
+   "base": 1,
+   "extra": 0,
+   "extraPlataforma": 0,
+   "extraArquitectura": 0,
+   "dias": 7,
+   "roadmap": {
+    "inicio": "2029-04-25",
+    "fin": "2029-05-01"
+   }
+  },
+  {
+   "id": "WQ2",
+   "etapa": 3,
+   "tipo": "ventana",
+   "nombre": "Ventana WQ2 · cálculo estocástico y derivados",
+   "base": 2,
+   "extra": 0,
+   "extraPlataforma": 0,
+   "extraArquitectura": 0,
+   "mate": {
+    "principal": [
+     "Shreve · Stochastic Calculus for Finance I y II",
+     "Hull"
+    ],
+    "refuerzo": [
+     {
+      "titulo": "Wilmott",
+      "rol": "intuicion"
+     },
+     {
+      "titulo": "Joshi",
+      "rol": "banco"
+     },
+     {
+      "titulo": "Glasserman (selectivo)",
+      "rol": "duro"
+     },
+     {
+      "titulo": "Gatheral · The Volatility Surface",
+      "rol": "duro"
+     }
+    ],
+    "habilita": [
+     "Q3",
+     "Q4"
+    ],
+    "perfil": "Quant: cálculo estocástico y derivados",
+    "salida": [
+     "Explicar el movimiento browniano y aplicar el lema de Itô a un caso simple",
+     "Valuar una opción europea con Black-Scholes y con un árbol binomial",
+     "Calcular las griegas (delta, gamma y vega) y explicar qué cubren",
+     "Simular precios con Monte Carlo y comparar contra la fórmula cerrada"
+    ]
+   },
+   "horas": 98,
+   "roadmap": {
+    "inicio": "2029-05-02",
+    "fin": "2029-05-17"
+   }
+  },
+  {
+   "id": "Q3",
+   "etapa": 3,
+   "tipo": "proyecto",
+   "nombre": "Volta",
+   "base": 7,
+   "extra": 0,
+   "extraPlataforma": 0,
+   "extraArquitectura": 0,
+   "dependeDe": [
+    "WQ2"
+   ],
+   "ficha": {
+    "rubro": "quant",
+    "feature": "Riesgo de cartera de opciones con griegas agregadas y escenarios de estrés",
+    "visual": "Superficie de volatilidad",
+    "pieza": "Black–Scholes derivado y Monte Carlo",
+    "referencia": "Validación contra QuantLib",
+    "validador": "Trader o quant",
+    "perfil": "Quant Developer (valuación y riesgo)",
+    "plataforma": "VR (superficie de volatilidad)"
+   },
+   "tecnologias": [
+    {
+     "nombre": "Next.js",
+     "alias": [
+      "nextjs",
+      "next js"
+     ],
+     "ambiente": "Frontend"
+    },
+    {
+     "nombre": "Three.js",
+     "alias": [
+      "threejs",
+      "three js"
+     ],
+     "ambiente": "Frontend"
+    },
+    {
+     "nombre": "C++",
+     "ambiente": "Backend"
+    },
+    {
+     "nombre": "Rust",
+     "ambiente": "Backend"
+    },
+    {
+     "nombre": "Python",
+     "ambiente": "Backend"
+    }
+   ],
+   "horas": 200,
+   "horasAntes": 147,
+   "roadmap": {
+    "inicio": "2029-05-18",
+    "fin": "2029-07-04"
+   },
+   "que": "valuación de opciones con griegas y estrés, validada contra QuantLib",
+   "historial": [
+    {
+     "fecha": "2026-11-20",
+     "cambio": "Pasa a llamarse Volta (antes Prisma); horas: antes 147 h, ahora ≈ 200 h",
+     "motivo": "Roadmap v7"
+    },
+    {
+     "fecha": "2026-11-20",
+     "cambio": "Las tecnologías salen del stack de la v7, por ambiente",
+     "motivo": "Roadmap v7 (stack)"
+    }
+   ]
+  },
+  {
+   "id": "Q4",
+   "etapa": 3,
+   "tipo": "proyecto",
+   "nombre": "Matchbook",
+   "base": 6,
+   "extra": 0,
+   "extraPlataforma": 0,
+   "extraArquitectura": 0,
+   "dependeDe": [
+    "WQ2"
+   ],
+   "ficha": {
+    "rubro": "quant",
+    "feature": "Análisis de costos de transacción (slippage contra VWAP y precio de llegada)",
+    "visual": "Libro de órdenes animado",
+    "pieza": "Avellaneda–Stoikov y Almgren–Chriss",
+    "referencia": "Latencia p99 medida",
+    "validador": "Trader o quant",
+    "perfil": "Trading Systems Engineer"
+   },
+   "tecnologias": [
+    {
+     "nombre": "C++",
+     "ambiente": "Backend"
+    },
+    {
+     "nombre": "Rust",
+     "ambiente": "Backend"
+    },
+    {
+     "nombre": "FIX",
+     "ambiente": "Backend"
+    }
+   ],
+   "horas": 160,
+   "horasAntes": 122,
+   "roadmap": {
+    "inicio": "2029-07-05",
+    "fin": "2029-08-12"
+   },
+   "que": "motor de matching con libro de órdenes, market maker simulado y FIX",
+   "historial": [
+    {
+     "fecha": "2026-11-20",
+     "cambio": "Pasa a llamarse Matchbook (antes Libro); horas: antes 122 h, ahora ≈ 160 h",
+     "motivo": "Roadmap v7"
+    },
+    {
+     "fecha": "2026-11-20",
+     "cambio": "Las tecnologías salen del stack de la v7, por ambiente",
+     "motivo": "Roadmap v7 (stack)"
+    }
+   ]
+  },
+  {
+   "id": "C6",
+   "etapa": 3,
+   "tipo": "cert",
+   "nombre": "CKS",
+   "base": 2,
+   "extra": 0,
+   "extraPlataforma": 0,
+   "extraArquitectura": 0,
+   "corto": "CKS",
+   "que": "Certified Kubernetes Security Specialist",
+   "cert": {
+    "costo": "US$ 445",
+    "verificado": true,
+    "notas": "Incluye 1 reintento; exige haber aprobado CKA; vale 2 años",
+    "requiere": "C5"
+   },
+   "dias": 14,
+   "roadmap": {
+    "inicio": "2029-08-13",
+    "fin": "2029-08-26"
+   },
+   "numero": 9
+  },
+  {
+   "id": "WQ3",
+   "etapa": 3,
+   "tipo": "ventana",
+   "nombre": "Ventana WQ3 · optimización convexa y ML financiero",
+   "base": 1,
+   "extra": 0,
+   "extraPlataforma": 0,
+   "extraArquitectura": 0,
+   "mate": {
+    "principal": [
+     "Boyd y Vandenberghe cap. 5 a 8"
+    ],
+    "refuerzo": [
+     {
+      "titulo": "Grinold y Kahn · Active Portfolio Management",
+      "rol": "intuicion"
+     },
+     {
+      "titulo": "López de Prado · Advances in Financial Machine Learning",
+      "rol": "duro"
+     }
+    ],
+    "habilita": [
+     "Q5",
+     "Q6"
+    ],
+    "perfil": "Quant: optimización y ML financiero",
+    "salida": [
+     "Reconocer si un problema es convexo y plantear su forma estándar",
+     "Escribir el dual y las condiciones KKT de un problema chico",
+     "Optimizar una cartera con restricciones con un solver",
+     "Validar un modelo de ML financiero con validación cruzada purgada"
+    ]
+   },
+   "horas": 49,
+   "roadmap": {
+    "inicio": "2029-08-27",
+    "fin": "2029-09-03"
+   }
+  },
+  {
+   "id": "Q5",
+   "etapa": 3,
+   "tipo": "proyecto",
+   "nombre": "Comando",
+   "base": 8,
+   "extra": 0,
+   "extraPlataforma": 0,
+   "extraArquitectura": 0,
+   "dependeDe": [
+    "WQ3"
+   ],
+   "ficha": {
+    "rubro": "quant",
+    "feature": "Conciliación de posiciones y límites previos a cada orden; solo paper trading, con kill-switch",
+    "pieza": "Optimización convexa de portafolio",
+    "referencia": "12 semanas o más de paper trading con resultados netos de costos",
+    "validador": "Trader o quant",
+    "perfil": "Quant Trading Engineer",
+    "plataforma": "Mobile (aprobación de órdenes y kill-switch con doble factor)",
+    "arquitectura": "Componentes en servicios separados: datos, señales, órdenes y riesgo",
+    "entregablesArquitectura": true
+   },
+   "tecnologias": [
+    {
+     "nombre": "Expo",
+     "ambiente": "Frontend"
+    },
+    {
+     "nombre": ".NET",
+     "alias": [
+      "dotnet"
+     ],
+     "ambiente": "Backend"
+    },
+    {
+     "nombre": "Rust",
+     "ambiente": "Backend"
+    },
+    {
+     "nombre": "Postgres",
+     "alias": [
+      "postgresql"
+     ],
+     "ambiente": "DB"
+    },
+    {
+     "nombre": "Kafka",
+     "ambiente": "Infra"
+    }
+   ],
+   "horas": 230,
+   "horasAntes": 172,
+   "roadmap": {
+    "inicio": "2029-09-04",
+    "fin": "2029-10-29"
+   },
+   "que": "de señales a órdenes en paper trading con Alpaca, con riesgo previo, kill-switch y conciliación",
+   "historial": [
+    {
+     "fecha": "2026-11-20",
+     "cambio": "Pasa a llamarse Comando (antes Tablero); horas: antes 172 h, ahora ≈ 230 h",
+     "motivo": "Roadmap v7"
+    },
+    {
+     "fecha": "2026-11-20",
+     "cambio": "Las tecnologías salen del stack de la v7, por ambiente",
+     "motivo": "Roadmap v7 (stack)"
+    }
+   ]
+  },
+  {
+   "id": "Q6",
+   "etapa": 3,
+   "tipo": "proyecto",
+   "nombre": "Ticker",
+   "base": 6,
+   "extra": 0,
+   "extraPlataforma": 0,
+   "extraArquitectura": 0,
+   "dependeDe": [
+    "WQ3"
+   ],
+   "alternativa": "pipeline de datos de mercado",
+   "ficha": {
+    "rubro": "quant",
+    "feature": "Calidad de datos de mercado: huecos, outliers, ajustes corporativos y linaje",
+    "pieza": "Series de tiempo y controles de calidad",
+    "referencia": "Replay de datos de mercado contra la fuente",
+    "validador": "Trader o quant",
+    "perfil": "AI Quant / Data Engineer"
+   },
+   "tecnologias": [
+    {
+     "nombre": "Python",
+     "ambiente": "Backend"
+    },
+    {
+     "nombre": "ClickHouse",
+     "ambiente": "DB"
+    },
+    {
+     "nombre": "MCP",
+     "ambiente": "IA por API"
+    }
+   ],
+   "horas": 185,
+   "horasAntes": 122,
+   "roadmap": {
+    "inicio": "2029-10-30",
+    "fin": "2029-12-13"
+   },
+   "que": "ingesta de datos de mercado en tiempo real con control de calidad",
+   "historial": [
+    {
+     "fecha": "2026-11-20",
+     "cambio": "Pasa a llamarse Ticker (antes Nexo); horas: antes 122 h, ahora ≈ 185 h",
+     "motivo": "Roadmap v7"
+    },
+    {
+     "fecha": "2026-11-20",
+     "cambio": "Las tecnologías salen del stack de la v7, por ambiente",
+     "motivo": "Roadmap v7 (stack)"
+    }
+   ]
+  },
+  {
+   "id": "C7",
+   "etapa": 3,
+   "tipo": "cert",
+   "nombre": "AWS Security Specialty (SCS-C03)",
+   "base": 4,
+   "extra": 0,
+   "extraPlataforma": 0,
+   "extraArquitectura": 0,
+   "corto": "AWS SCS",
+   "que": "AWS Security Specialty (SCS-C03)",
+   "cert": {
+    "costo": "US$ 300",
+    "verificado": true,
+    "notas": "65 preguntas, 170 min, aprobación 750/1000"
+   },
+   "dias": 18,
+   "roadmap": {
+    "inicio": "2029-12-14",
+    "fin": "2030-01-07"
+   },
+   "numero": 10,
+   "nota": "La pausa del 24 al 30 dic cae adentro"
+  },
+  {
+   "id": "CIE3",
+   "etapa": 3,
+   "tipo": "cierre",
+   "nombre": "Cierre de etapa",
+   "base": 2,
+   "extra": 0,
+   "extraPlataforma": 0,
+   "extraArquitectura": 0,
+   "dias": 12,
+   "roadmap": {
+    "inicio": "2030-01-08",
+    "fin": "2030-01-19"
+   }
+  },
+  {
+   "id": "WA1",
+   "etapa": 4,
+   "tipo": "ventana",
+   "nombre": "Ventana WA1 · física y EDOs",
+   "base": 2,
+   "extra": 0,
+   "extraPlataforma": 0,
+   "extraArquitectura": 0,
+   "mate": {
+    "principal": [
+     "Young y Freedman · University Physics (mecánica)",
+     "Simmons · Differential Equations"
+    ],
+    "refuerzo": [
+     {
+      "titulo": "MIT 8.01SC y 18.03SC",
+      "rol": "curso"
+     },
+     {
+      "titulo": "Serway",
+      "rol": "banco"
+     },
+     {
+      "titulo": "Taylor · Classical Mechanics",
+      "rol": "duro"
+     },
+     {
+      "titulo": "Stevens y Lewis",
+      "rol": "duro"
+     }
+    ],
+    "habilita": [
+     "A1"
+    ],
+    "perfil": "Físico general",
+    "fase": "M7",
+    "salida": [
+     "Plantear y resolver problemas de cinemática y dinámica con las leyes de Newton",
+     "Aplicar conservación de energía y de momento",
+     "Resolver EDOs de segundo orden (oscilador amortiguado) a mano y numéricamente"
+    ]
+   },
+   "horas": 98,
+   "roadmap": {
+    "inicio": "2030-01-20",
+    "fin": "2030-02-04"
+   }
+  },
+  {
+   "id": "A1",
+   "etapa": 4,
+   "tipo": "proyecto",
+   "nombre": "Trayecta",
+   "base": 8,
+   "extra": 0,
+   "extraPlataforma": 0,
+   "extraArquitectura": 0,
+   "dependeDe": [
+    "WA1"
+   ],
+   "ficha": {
+    "rubro": "aeroespacial",
+    "feature": "Dispersión Monte Carlo con cono de incertidumbre",
+    "pieza": "EDOs, RK4 y cuaterniones",
+    "referencia": "Validado contra soluciones analíticas",
+    "validador": "Ingeniero del rubro",
+    "perfil": "Flight Dynamics Engineer",
+    "plataforma": "VR (trayectoria en 3D)"
+   },
+   "tecnologias": [
+    {
+     "nombre": "WebAssembly",
+     "ambiente": "Frontend"
+    },
+    {
+     "nombre": "WebXR",
+     "ambiente": "Frontend"
+    },
+    {
+     "nombre": "Rust",
+     "ambiente": "Backend"
+    },
+    {
+     "nombre": "C++",
+     "ambiente": "Backend"
+    },
+    {
+     "nombre": "Julia",
+     "ambiente": "Backend"
+    },
+    {
+     "nombre": "AWS Batch",
+     "ambiente": "Cloud"
+    }
+   ],
+   "horas": 245,
+   "horasAntes": 172,
+   "roadmap": {
+    "inicio": "2030-02-05",
+    "fin": "2030-04-04"
+   },
+   "que": "simulador de vuelo 6-DOF para cohetes amateur",
+   "historial": [
+    {
+     "fecha": "2026-11-20",
+     "cambio": "Pasa a llamarse Trayecta (antes Trayectoria); horas: antes 172 h, ahora ≈ 245 h",
+     "motivo": "Roadmap v7"
+    },
+    {
+     "fecha": "2026-11-20",
+     "cambio": "Las tecnologías salen del stack de la v7, por ambiente",
+     "motivo": "Roadmap v7 (stack)"
+    }
+   ]
+  },
+  {
+   "id": "WA2",
+   "etapa": 4,
+   "tipo": "ventana",
+   "nombre": "Ventana WA2 · estática, materiales, álgebra lineal numérica",
+   "base": 2,
+   "extra": 0,
+   "extraPlataforma": 0,
+   "extraArquitectura": 0,
+   "mate": {
+    "principal": [
+     "Hibbeler · Statics y Dynamics",
+     "Beer y Johnston · Mechanics of Materials"
+    ],
+    "refuerzo": [
+     {
+      "titulo": "Beer · Vector Mechanics",
+      "rol": "banco"
+     },
+     {
+      "titulo": "Callister (selectivo)",
+      "rol": "intuicion"
+     },
+     {
+      "titulo": "Trefethen y Bau (selectivo)",
+      "rol": "duro"
+     },
+     {
+      "titulo": "Megson (al final)",
+      "rol": "duro"
+     }
+    ],
+    "habilita": [
+     "A2"
+    ],
+    "perfil": "Mecánico",
+    "fase": "M8",
+    "salida": [
+     "Hacer el diagrama de cuerpo libre y resolver el equilibrio de una estructura",
+     "Calcular tensiones y deformaciones en barras y vigas simples",
+     "Resolver sistemas lineales grandes con factorización LU y explicar el condicionamiento"
+    ]
+   },
+   "horas": 74,
+   "roadmap": {
+    "inicio": "2030-04-05",
+    "fin": "2030-04-16"
+   }
+  },
+  {
+   "id": "A2",
+   "etapa": 4,
+   "tipo": "proyecto",
+   "nombre": "Malla",
+   "base": 8,
+   "extra": 0,
+   "extraPlataforma": 0,
+   "extraArquitectura": 0,
+   "dependeDe": [
+    "WA2"
+   ],
+   "ficha": {
+    "rubro": "aeroespacial",
+    "feature": "Verificación de convergencia de malla y reporte de margen",
+    "pieza": "Matriz de rigidez de una viga",
+    "referencia": "Ejemplos de Beer y Johnston",
+    "validador": "Ingeniero del rubro",
+    "perfil": "CAE Software Engineer",
+    "plataforma": "Escritorio (Tauri)"
+   },
+   "tecnologias": [
+    {
+     "nombre": "Rust",
+     "ambiente": "Backend"
+    },
+    {
+     "nombre": "C++",
+     "ambiente": "Backend"
+    },
+    {
+     "nombre": "Gmsh",
+     "ambiente": "Backend"
+    },
+    {
+     "nombre": "Tauri",
+     "ambiente": "Frontend"
+    },
+    {
+     "nombre": "WebAssembly",
+     "ambiente": "Frontend"
+    }
+   ],
+   "horas": 235,
+   "horasAntes": 172,
+   "roadmap": {
+    "inicio": "2030-04-17",
+    "fin": "2030-06-12"
+   },
+   "que": "solver de elementos finitos verificado contra CalculiX",
+   "historial": [
+    {
+     "fecha": "2026-11-20",
+     "cambio": "Pasa a llamarse Malla (antes Cuerda); horas: antes 172 h, ahora ≈ 235 h",
+     "motivo": "Roadmap v7"
+    },
+    {
+     "fecha": "2026-11-20",
+     "cambio": "Las tecnologías salen del stack de la v7, por ambiente",
+     "motivo": "Roadmap v7 (stack)"
+    }
+   ]
+  },
+  {
+   "id": "C11",
+   "etapa": 4,
+   "tipo": "cert",
+   "nombre": "GitHub Actions + GitHub Copilot",
+   "base": 2,
+   "extra": 0,
+   "extraPlataforma": 0,
+   "extraArquitectura": 0,
+   "dias": 12,
+   "roadmap": {
+    "inicio": "2030-06-13",
+    "fin": "2030-06-24"
+   },
+   "numero": 11,
+   "corto": "GitHub Actions + Copilot",
+   "cert": {
+    "verificado": false
+   }
+  },
+  {
+   "id": "DES4",
+   "etapa": 4,
+   "tipo": "descanso",
+   "nombre": "Descanso",
+   "base": 1,
+   "extra": 0,
+   "extraPlataforma": 0,
+   "extraArquitectura": 0,
+   "dias": 7,
+   "roadmap": {
+    "inicio": "2030-06-25",
+    "fin": "2030-07-01"
+   }
+  },
+  {
+   "id": "WA3",
+   "etapa": 4,
+   "tipo": "ventana",
+   "nombre": "Ventana WA3 · termodinámica, fluidos, PDEs",
+   "base": 2,
+   "extra": 0,
+   "extraPlataforma": 0,
+   "extraArquitectura": 0,
+   "mate": {
+    "principal": [
+     "Çengel y Boles · Thermodynamics",
+     "White · Fluid Mechanics",
+     "Anderson · Introduction to Flight"
+    ],
+    "refuerzo": [
+     {
+      "titulo": "Munson",
+      "rol": "banco"
+     },
+     {
+      "titulo": "Incropera (selectivo)",
+      "rol": "banco"
+     },
+     {
+      "titulo": "Anderson · Fundamentals of Aerodynamics y Modern Compressible Flow",
+      "rol": "duro"
+     }
+    ],
+    "habilita": [
+     "A3"
+    ],
+    "perfil": "Termofluidista",
+    "fase": "M9",
+    "salida": [
+     "Aplicar la primera y la segunda ley de la termodinámica a un ciclo",
+     "Usar Bernoulli y la ecuación de continuidad en un ducto",
+     "Explicar sustentación y resistencia con los coeficientes de un perfil",
+     "Resolver la ecuación del calor en 1D con diferencias finitas"
+    ]
+   },
+   "horas": 98,
+   "roadmap": {
+    "inicio": "2030-07-02",
+    "fin": "2030-07-17"
+   }
+  },
+  {
+   "id": "A3",
+   "etapa": 4,
+   "tipo": "proyecto",
+   "nombre": "Viento",
+   "base": 7,
+   "extra": 0,
+   "extraPlataforma": 0,
+   "extraArquitectura": 0,
+   "dependeDe": [
+    "WA3"
+   ],
+   "recortable": true,
+   "ficha": {
+    "rubro": "aeroespacial",
+    "feature": "Método de paneles 2D, vortex lattice y Euler 2D (si falta tiempo se recorta Euler 2D)",
+    "pieza": "Discretización de una PDE",
+    "referencia": "Comparado con OpenFOAM o SU2",
+    "validador": "Ingeniero del rubro",
+    "perfil": "CFD Software Engineer"
+   },
+   "tecnologias": [
+    {
+     "nombre": "Rust",
+     "ambiente": "Backend"
+    },
+    {
+     "nombre": "C++",
+     "ambiente": "Backend"
+    },
+    {
+     "nombre": "Python",
+     "ambiente": "Backend"
+    }
+   ],
+   "horas": 195,
+   "horasAntes": 147,
+   "roadmap": {
+    "inicio": "2030-07-18",
+    "fin": "2030-09-02"
+   },
+   "que": "aerodinámica con paneles, vortex lattice y Euler 2D, comparada contra OpenFOAM o SU2",
+   "historial": [
+    {
+     "fecha": "2026-11-20",
+     "cambio": "Pasa a llamarse Viento (antes Túnel); horas: antes 147 h, ahora ≈ 195 h",
+     "motivo": "Roadmap v7"
+    },
+    {
+     "fecha": "2026-11-20",
+     "cambio": "Las tecnologías salen del stack de la v7, por ambiente",
+     "motivo": "Roadmap v7 (stack)"
+    }
+   ]
+  },
+  {
+   "id": "WA4",
+   "etapa": 4,
+   "tipo": "ventana",
+   "nombre": "Ventana WA4 · control y estimación",
+   "base": 2,
+   "extra": 0,
+   "extraPlataforma": 0,
+   "extraArquitectura": 0,
+   "mate": {
+    "principal": [
+     "Nise · Control Systems Engineering",
+     "Simon · Optimal State Estimation"
+    ],
+    "refuerzo": [
+     {
+      "titulo": "Labbe · Kalman and Bayesian Filters in Python",
+      "rol": "intuicion"
+     },
+     {
+      "titulo": "Onramps de MATLAB, Simulink y Control Design",
+      "rol": "curso"
+     },
+     {
+      "titulo": "Ogata (consulta)",
+      "rol": "duro"
+     }
+    ],
+    "habilita": [
+     "A4"
+    ],
+    "perfil": "Control y estimación",
+    "fase": "M10",
+    "salida": [
+     "Modelar un sistema con función de transferencia y analizar su estabilidad",
+     "Diseñar un PID y ajustar su respuesta al escalón",
+     "Implementar un filtro de Kalman para estimar posición y velocidad"
+    ]
+   },
+   "horas": 74,
+   "roadmap": {
+    "inicio": "2030-09-03",
+    "fin": "2030-09-14"
+   }
+  },
+  {
+   "id": "A4",
+   "etapa": 4,
+   "tipo": "proyecto",
+   "nombre": "Piloto",
+   "base": 9,
+   "extra": 0,
+   "extraPlataforma": 0,
+   "extraArquitectura": 0,
+   "dependeDe": [
+    "WA4"
+   ],
+   "ficha": {
+    "rubro": "aeroespacial",
+    "feature": "Banco de fallas de sensor y GPS con evaluación de modos seguros",
+    "pieza": "LQR y Kalman",
+    "referencia": "Controlador de dron en PX4 o ArduPilot en simulación",
+    "validador": "Ingeniero del rubro",
+    "perfil": "GNC Software Engineer",
+    "plataforma": "Mobile (estación de control en simulación)"
+   },
+   "tecnologias": [
+    {
+     "nombre": "Expo",
+     "ambiente": "Frontend"
+    },
+    {
+     "nombre": "ROS 2",
+     "ambiente": "Backend"
+    },
+    {
+     "nombre": "PX4",
+     "ambiente": "Backend"
+    },
+    {
+     "nombre": "C++",
+     "ambiente": "Backend"
+    },
+    {
+     "nombre": "Python",
+     "ambiente": "Backend"
+    }
+   ],
+   "horas": 250,
+   "horasAntes": 172,
+   "roadmap": {
+    "inicio": "2030-09-15",
+    "fin": "2030-11-13"
+   },
+   "que": "control de vuelo con PID, LQR y Kalman, y banco de fallas",
+   "historial": [
+    {
+     "fecha": "2026-11-20",
+     "cambio": "Pasa a llamarse Piloto (antes Rumbo); horas: antes 172 h, ahora ≈ 250 h",
+     "motivo": "Roadmap v7"
+    },
+    {
+     "fecha": "2026-11-20",
+     "cambio": "Las tecnologías salen del stack de la v7, por ambiente",
+     "motivo": "Roadmap v7 (stack)"
+    }
+   ]
+  },
+  {
+   "id": "C12",
+   "etapa": 4,
+   "tipo": "cert",
+   "nombre": "AWS Solutions Architect Professional",
+   "base": 3,
+   "extra": 0,
+   "extraPlataforma": 0,
+   "extraArquitectura": 0,
+   "dias": 18,
+   "roadmap": {
+    "inicio": "2030-11-14",
+    "fin": "2030-12-01"
+   },
+   "numero": 12,
+   "corto": "AWS SA Pro",
+   "cert": {
+    "verificado": false
+   }
+  },
+  {
+   "id": "WA5",
+   "etapa": 4,
+   "tipo": "ventana",
+   "nombre": "Ventana WA5 · mecánica orbital y propulsión",
+   "base": 1,
+   "extra": 0,
+   "extraPlataforma": 0,
+   "extraArquitectura": 0,
+   "mate": {
+    "principal": [
+     "Curtis · Orbital Mechanics for Engineering Students",
+     "Sutton · Rocket Propulsion Elements (por capítulos)"
+    ],
+    "refuerzo": [
+     {
+      "titulo": "Fortescue · Spacecraft Systems Engineering",
+      "rol": "intuicion"
+     },
+     {
+      "titulo": "Wertz · Space Mission Engineering",
+      "rol": "duro"
+     },
+     {
+      "titulo": "Vallado (consulta)",
+      "rol": "duro"
+     }
+    ],
+    "habilita": [
+     "A5",
+     "A6"
+    ],
+    "perfil": "Pre-aeroespacial",
+    "fase": "M10",
+    "salida": [
+     "Calcular una órbita a partir de su estado (elementos orbitales)",
+     "Calcular el delta-v de una transferencia de Hohmann",
+     "Aplicar la ecuación del cohete de Tsiolkovsky a una misión simple"
+    ]
+   },
+   "horas": 49,
+   "roadmap": {
+    "inicio": "2030-12-02",
+    "fin": "2030-12-09"
+   }
+  },
+  {
+   "id": "A5",
+   "etapa": 4,
+   "tipo": "proyecto",
+   "nombre": "Órbita",
+   "base": 8,
+   "extra": 0,
+   "extraPlataforma": 0,
+   "extraArquitectura": 0,
+   "dependeDe": [
+    "WA5"
+   ],
+   "ficha": {
+    "rubro": "aeroespacial",
+    "feature": "Ventanas de comunicación y screening de conjunciones con TLE públicos",
+    "pieza": "Kepler, Lambert y Hohmann",
+    "referencia": "Comparado con GMAT u Orekit",
+    "validador": "Ingeniero del rubro",
+    "perfil": "Mission Analysis Engineer",
+    "plataforma": "AR de órbitas"
+   },
+   "tecnologias": [
+    {
+     "nombre": "Java",
+     "ambiente": "Backend"
+    },
+    {
+     "nombre": "Orekit",
+     "ambiente": "Backend"
+    },
+    {
+     "nombre": "Rust",
+     "ambiente": "Backend"
+    },
+    {
+     "nombre": "Postgres",
+     "alias": [
+      "postgresql"
+     ],
+     "ambiente": "DB"
+    }
+   ],
+   "horas": 205,
+   "horasAntes": 147,
+   "roadmap": {
+    "inicio": "2030-12-10",
+    "fin": "2031-02-03"
+   },
+   "que": "propagador con J2 y arrastre, ventanas de comunicación, screening de conjunciones",
+   "historial": [
+    {
+     "fecha": "2026-11-20",
+     "cambio": "horas: antes 147 h, ahora ≈ 205 h",
+     "motivo": "Roadmap v7"
+    },
+    {
+     "fecha": "2026-11-20",
+     "cambio": "Las tecnologías salen del stack de la v7, por ambiente",
+     "motivo": "Roadmap v7 (stack)"
+    }
+   ]
+  },
+  {
+   "id": "A6",
+   "etapa": 4,
+   "tipo": "proyecto",
+   "nombre": "Upstream",
+   "base": 4,
+   "extra": 0,
+   "extraPlataforma": 0,
+   "extraArquitectura": 0,
+   "dependeDe": [
+    "WA5"
+   ],
+   "alternativa": "contribuciones open source",
+   "recortable": true,
+   "ficha": {
+    "rubro": "aeroespacial",
+    "feature": "Diseño preliminar de lanzador; propuesta: contribuciones a open source (PX4, Orekit o F Prime)",
+    "referencia": "PR aceptado en un proyecto open source",
+    "validador": "Ingeniero del rubro",
+    "perfil": "Systems Engineer"
+   },
+   "tecnologias": [],
+   "horas": 120,
+   "horasAntes": 98,
+   "roadmap": {
+    "inicio": "2031-02-04",
+    "fin": "2031-03-04"
+   },
+   "que": "contribuciones a PX4, Orekit o F Prime",
+   "historial": [
+    {
+     "fecha": "2026-11-20",
+     "cambio": "Pasa a llamarse Upstream (antes Cohete); horas: antes 98 h, ahora ≈ 120 h",
+     "motivo": "Roadmap v7"
+    }
+   ]
+  },
+  {
+   "id": "C13",
+   "etapa": 4,
+   "tipo": "cert",
+   "nombre": "GitHub Advanced Security",
+   "base": 1,
+   "extra": 0,
+   "extraPlataforma": 0,
+   "extraArquitectura": 0,
+   "dias": 8,
+   "roadmap": {
+    "inicio": "2031-03-05",
+    "fin": "2031-03-12"
+   },
+   "numero": 13,
+   "corto": "GitHub Advanced Security",
+   "cert": {
+    "verificado": false
+   }
+  },
+  {
+   "id": "A7",
+   "etapa": 4,
+   "tipo": "proyecto",
+   "nombre": "Horizonte",
+   "base": 9,
+   "extra": 0,
+   "extraPlataforma": 0,
+   "extraArquitectura": 0,
+   "ficha": {
+    "rubro": "aeroespacial",
+    "feature": "Operador asistido: el agente propone el runbook y el operador aprueba",
+    "referencia": "Gemelo digital de misión sobre F Prime o cFS",
+    "validador": "Ingeniero del rubro",
+    "perfil": "Aerospace Software Engineer",
+    "plataforma": "VR (sala de control del operador)"
+   },
+   "tecnologias": [
+    {
+     "nombre": "F Prime",
+     "ambiente": "Backend"
+    },
+    {
+     "nombre": "cFS",
+     "ambiente": "Backend"
+    },
+    {
+     "nombre": "Rust",
+     "ambiente": "Backend"
+    },
+    {
+     "nombre": "Ada/SPARK",
+     "ambiente": "Backend"
+    },
+    {
+     "nombre": "Python",
+     "ambiente": "Herramientas"
+    },
+    {
+     "nombre": "VR",
+     "ambiente": "Frontend"
+    }
+   ],
+   "horas": 265,
+   "horasAntes": 196,
+   "roadmap": {
+    "inicio": "2031-03-13",
+    "fin": "2031-05-15"
+   },
+   "que": "misión de un cubesat ficticio con operador asistido por IA",
+   "historial": [
+    {
+     "fecha": "2026-11-20",
+     "cambio": "horas: antes 196 h, ahora ≈ 265 h",
+     "motivo": "Roadmap v7"
+    },
+    {
+     "fecha": "2026-11-20",
+     "cambio": "Las tecnologías salen del stack de la v7, por ambiente",
+     "motivo": "Roadmap v7 (stack)"
+    }
+   ]
+  },
+  {
+   "id": "CIE4",
+   "etapa": 4,
+   "tipo": "cierre",
+   "nombre": "Cierre y renovaciones",
+   "base": 2,
+   "extra": 0,
+   "extraPlataforma": 0,
+   "extraArquitectura": 0,
+   "dias": 12,
+   "roadmap": {
+    "inicio": "2031-05-16",
+    "fin": "2031-05-27"
+   },
+   "numero": 14,
+   "que": "Cierre del plan y renovación de las certificaciones que vencen (Certificación 14)"
+  }
+ ],
+ "matematica": {
+  "principio": "La matemática va antes del proyecto que la pide, se aplica dentro de él con una pieza hecha a mano y los errores vuelven a Trazo como repasos. El libro principal manda; el refuerzo se abre por tema y tipo de error.",
+  "reglaRefuerzo": {
+   "concepto": [
+    "intuicion",
+    "curso"
+   ],
+   "tecnica": [
+    "banco"
+   ],
+   "enunciado": [
+    "banco"
+   ],
+   "descuido": [],
+   "profundidad": [
+    "duro"
+   ]
+  },
+  "diarios": {
+   "m1": {
+    "nombre": "T+0 a T+2 · diario",
+    "principal": [
+     "CONAMAT Aritmética",
+     "CONAMAT Álgebra"
+    ],
+    "refuerzo": [
+     {
+      "titulo": "Baldor",
+      "rol": "banco"
+     },
+     {
+      "titulo": "The Humongous Book of Basic Math and Pre-Algebra Problems",
+      "rol": "banco"
+     },
+     {
+      "titulo": "Lang · Basic Mathematics",
+      "rol": "duro"
+     }
+    ],
+    "habilita": [
+     "todo lo demás"
+    ],
+    "perfil": "Aritmético",
+    "fase": "M1",
+    "horas": 126,
+    "finRoadmap": "2027-02-11"
+   },
+   "m2": {
+    "nombre": "T+3 a T+6 · diario",
+    "principal": [
+     "CONAMAT Geometría y trigonometría",
+     "CONAMAT Geometría analítica"
+    ],
+    "refuerzo": [
+     {
+      "titulo": "Gelfand · Trigonometry",
+      "rol": "intuicion"
+     },
+     {
+      "titulo": "Stewart · Precalculus",
+      "rol": "banco"
+     },
+     {
+      "titulo": "Sullivan · Precalculus",
+      "rol": "banco"
+     }
+    ],
+    "habilita": [
+     "P4",
+     "P9"
+    ],
+    "perfil": "Precalculista",
+    "fase": "M2",
+    "horas": 196,
+    "finRoadmap": "2027-06-09"
+   },
+   "m3": {
+    "nombre": "T+7 a T+8 · diario",
+    "principal": [
+     "CONAMAT Cálculo integral",
+     "Strang · Introduction to Linear Algebra"
+    ],
+    "refuerzo": [
+     {
+      "titulo": "MIT 18.06",
+      "rol": "curso"
+     },
+     {
+      "titulo": "Stewart (integrales)",
+      "rol": "banco"
+     }
+    ],
+    "habilita": [
+     "P7"
+    ],
+    "perfil": "Calculista y lineal",
+    "fase": "M3",
+    "horas": 112,
+    "finRoadmap": "2027-08-04"
+   },
+   "m4": {
+    "nombre": "T+9 a T+18 · diario",
+    "principal": [
+     "Deisenroth · Mathematics for Machine Learning",
+     "Cálculo multivariable"
+    ],
+    "refuerzo": [
+     {
+      "titulo": "Schey · Div, Grad, Curl",
+      "rol": "intuicion"
+     },
+     {
+      "titulo": "Stewart",
+      "rol": "banco"
+     },
+     {
+      "titulo": "MIT 18.02SC",
+      "rol": "curso"
+     },
+     {
+      "titulo": "Wasserman · All of Statistics",
+      "rol": "duro"
+     }
+    ],
+    "habilita": [
+     "perfil senior en ML",
+     "base de la etapa 3"
+    ],
+    "perfil": "Matemático para ML",
+    "fase": "M4",
+    "horas": 504,
+    "finRoadmap": "2028-06-02"
+   }
+  }
+ },
+ "perfilesHito": [
+  {
+   "despues": "COL",
+   "perfil": "Senior ML + DevSecOps + Cloud",
+   "nota": "Cierre de etapa 1, con las certificaciones 1 a 5"
+  },
+  {
+   "despues": "CIE2",
+   "perfil": "Senior con foco en seguridad",
+   "nota": "Cierre de T+18, con las certificaciones 6 y 7"
+  },
+  {
+   "despues": "Q4",
+   "perfil": "Trading Systems Engineer",
+   "nota": "Cierre de Q4"
+  },
+  {
+   "despues": "CIE3",
+   "perfil": "Quant Trading Engineer / ML Quant",
+   "nota": "Cierre de etapa 3, con CKA, CKS y AWS Security Specialty"
+  },
+  {
+   "despues": "A5",
+   "perfil": "Mission Analysis y GNC",
+   "nota": "Cierre de A5"
+  },
+  {
+   "despues": "CIE4",
+   "perfil": "Aerospace Software Engineer",
+   "nota": "Cierre de etapa 4, con las certificaciones 11 a 13 y las renovaciones"
+  }
+ ],
+ "decisiones": [
+  {
+   "id": "secplus",
+   "texto": "Security+ SY0-801 o SY0-701: resuelta por el roadmap v7 (la versión nueva, SY0-801)",
+   "fecha": "2026-11-22",
+   "resuelta": "2026-11-20"
+  },
+  {
+   "id": "precios",
+   "texto": "Precios sin verificar: AWS SAA, CKA y AWS MLA; OSCP+ solo con un fragmento"
+  },
+  {
+   "id": "reemplazos",
+   "texto": "Confirmar los reemplazos propuestos: P8 (red teaming), P9 (inferencia en CPU), Q2 (réplica de papers), Q6 (datos de mercado) y A6 (open source)"
+  },
+  {
+   "id": "mercado",
+   "texto": "Revisión de mercado: seguir o achicar quant y aeroespacial",
+   "fecha": "2028-04-01"
+  },
+  {
+   "id": "legal",
+   "texto": "Marco legal e impositivo de trading desde Argentina antes de capital real"
+  },
+  {
+   "id": "canvas",
+   "texto": "Alinear las páginas del canvas visual de Trazo con este calendario"
+  },
+  {
+   "id": "titulo",
+   "texto": "Si una carrera universitaria entra o no al plan: hoy no, camino autodidacta"
+  },
+  {
+   "id": "plataformas",
+   "texto": "Confirmar la capa de plataformas (mobile, escritorio, VR y AR) y si se aligera la etapa 1"
+  },
+  {
+   "id": "arquitectura",
+   "texto": "Confirmar microservicios y microfrontends como entregables de P1, P5, P10, S1 y Q5"
+  },
+  {
+   "id": "dispositivo",
+   "texto": "Qué dispositivo de VR y AR vas a usar para probar"
+  },
+  {
+   "id": "demanda",
+   "texto": "Verificar la demanda de mercado de las tecnologías nuevas (y de microservicios, microfrontends, mobile, VR y AR) contra ofertas reales"
+  }
+ ],
+ "descartadas": [
+  {
+   "nombre": "Django",
+   "motivo": "El backend Python ya lo cubre FastAPI.",
+   "fecha": "2026-11-18"
+  },
+  {
+   "nombre": "Supabase",
+   "motivo": "Postgres, auth y vectores ya están con Spring Security y pgvector.",
+   "fecha": "2026-11-18"
+  },
+  {
+   "nombre": "CRM/ERP",
+   "motivo": "Fuera de los rubros del plan.",
+   "fecha": "2026-11-18"
+  },
+  {
+   "nombre": "APIs de bolsa",
+   "motivo": "La etapa 3 usa paper trading y datos de mercado propios (Q6); el capital real queda detrás de su puerta escrita.",
+   "fecha": "2026-11-18"
+  }
+ ],
+ "horasPorSemana": 24.5,
+ "backlog": [
+  {
+   "nombre": "portfolio-mcp",
+   "motivo": "Una tecnología nueva por proyecto: P0 queda solo con hub, caso, CV, LinkedIn y pitch. Puede hacerse en el colchón de enero de 2028",
+   "fecha": "2026-11-18"
+  },
+  {
+   "nombre": "Auditoría y refactor de una app generada con IA",
+   "motivo": "Entra en la Semana de sumas solo si sobra tiempo",
+   "fecha": "2026-11-18"
+  },
+  {
+   "nombre": "RAG para negocios (dominio de muestra)",
+   "motivo": "Sale de P0 con la v3; sin fecha hasta que haya lugar",
+   "fecha": "2026-11-18"
+  },
+  {
+   "nombre": "3 automatizaciones de P0",
+   "motivo": "Salen de P0 con la v3; sin fecha hasta que haya lugar",
+   "fecha": "2026-11-18"
+  }
+ ],
+ "capacidad": {
+  "antesTrabajo": 8,
+  "ventanaSemana": 43,
+  "pausasDiciembre": [
+   2027,
+   2028,
+   2029,
+   2030
+  ],
+  "inicioTrabajoDias": 49
+ }
+}

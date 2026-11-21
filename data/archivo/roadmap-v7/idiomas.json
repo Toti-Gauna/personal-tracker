@@ -1,0 +1,671 @@
+{
+ "version": 1,
+ "t0": "2026-11-16",
+ "horasSemana": 11.5,
+ "nota": "Roadmap maestro v3 (16 nov 2026): un idioma por año durante 6 años. Fuente: docs/prompts/roadmap-idiomas-libros.md. Corte de 85 % en todo (decidido el 16 nov). Las fechas salen de las semanas desde t0.",
+ "idiomas": [
+  {
+   "id": "ingles",
+   "nombre": "Inglés",
+   "anio": 1,
+   "nivelInicial": "B1–B2"
+  },
+  {
+   "id": "frances",
+   "nombre": "Francés",
+   "anio": 2,
+   "horasC1": 962
+  },
+  {
+   "id": "italiano",
+   "nombre": "Italiano",
+   "anio": 3,
+   "horasC1": 788
+  },
+  {
+   "id": "aleman",
+   "nombre": "Alemán",
+   "anio": 4,
+   "horasC1": 1312
+  },
+  {
+   "id": "japones",
+   "nombre": "Japonés",
+   "anio": 5,
+   "horasC1": 2275
+  },
+  {
+   "id": "chino",
+   "nombre": "Chino",
+   "anio": 6,
+   "horasC1": 2450
+  }
+ ],
+ "anios": [
+  {
+   "n": 1,
+   "idioma": "ingles",
+   "examen": "Cambridge C1 Advanced",
+   "nivelInicial": "B1–B2",
+   "nivelFinal": "C1",
+   "horasInicial": 530,
+   "fases": [
+    {
+     "id": "mwm",
+     "nombre": "Measure What Matters",
+     "semanas": 6,
+     "recurso": "Measure What Matters (libro inicial, en inglés)",
+     "hito": "Tesis final + 3 min hablados sin leer",
+     "tipo": "libro",
+     "tareas": [
+      "Unidad del libro: 2 capítulos",
+      "Micro-tesis de cada capítulo",
+      "Repasar las tarjetas"
+     ],
+     "libro": "mwm"
+    },
+    {
+     "id": "pronunciacion",
+     "nombre": "Pronunciación",
+     "semanas": 6,
+     "recurso": "Curso de pronunciación de Udemy + pronunciación aplicada",
+     "hito": "Grabación de control (85 %)",
+     "tipo": "curso",
+     "tareas": [
+      "Curso de Udemy: una lección",
+      "Pronunciación aplicada: shadowing y lectura en voz alta",
+      "Grabarte y comparar"
+     ],
+     "udemy": "udemy-ingles"
+    },
+    {
+     "id": "gramatica",
+     "nombre": "Gramática",
+     "semanas": 7,
+     "recurso": "English Made Simple + English Grammar in Use",
+     "hito": "Test (85 %) + simulacro diagnóstico",
+     "tipo": "curso",
+     "tareas": [
+      "English Made Simple: una unidad",
+      "English Grammar in Use: una unidad con sus ejercicios",
+      "Test de la unidad (85 %)"
+     ]
+    },
+    {
+     "id": "cambridge",
+     "nombre": "Preparación Cambridge C1",
+     "semanas": 20,
+     "recurso": "Preparación Cambridge C1 Advanced + Advanced Grammar in Use",
+     "hito": "Simulacros sobre 180",
+     "tipo": "curso",
+     "tareas": [
+      "Cambridge C1: una parte del examen (Reading, Use of English, Writing, Listening o Speaking)",
+      "Advanced Grammar in Use: una unidad",
+      "Errores del último simulacro"
+     ]
+    },
+    {
+     "id": "examen",
+     "nombre": "Colchón y examen",
+     "semanas": 7,
+     "recurso": "Colchón y examen real",
+     "hito": "Examen Cambridge C1 Advanced (fecha a confirmar)",
+     "tipo": "examen",
+     "tareas": [
+      "Simulacro completo o la parte más floja",
+      "Repasar los errores del último simulacro",
+      "Fecha, sede y costo del examen"
+     ]
+    },
+    {
+     "id": "consolidacion",
+     "nombre": "Consolidación",
+     "semanas": 12,
+     "recurso": "Make It Stick + Getting to Yes",
+     "hito": "Tesis de los dos libros + artefactos",
+     "tipo": "libros",
+     "tareas": [
+      "Libro de la consolidación: una unidad (2 capítulos)",
+      "Micro-tesis y tarjetas",
+      "Artefacto del libro"
+     ],
+     "libros": [
+      "make-it-stick",
+      "getting-to-yes"
+     ]
+    }
+   ]
+  },
+  {
+   "n": 2,
+   "idioma": "frances",
+   "examen": "DELF B1",
+   "nivelFinal": "B1",
+   "horasInicial": 460,
+   "pctC1": 48,
+   "horasSemanaC1": 24,
+   "fases": [
+    {
+     "id": "made-simple",
+     "nombre": "Francés básico",
+     "semanas": 5,
+     "recurso": "French Made Simple (Haze)",
+     "hito": "Libro terminado",
+     "tipo": "curso",
+     "tareas": [
+      "French Made Simple: una unidad",
+      "Micro-tesis y tarjetas",
+      "Test de la unidad (85 %)"
+     ]
+    },
+    {
+     "id": "gramatica",
+     "nombre": "Gramática",
+     "semanas": 11,
+     "recurso": "Practice Makes Perfect: Complete French Grammar (Heminway)",
+     "hito": "Test (85 %) de cada unidad",
+     "tipo": "curso",
+     "tareas": [
+      "Gramática: una unidad con sus ejercicios",
+      "Tarjetas de lo nuevo",
+      "Test de la unidad (85 %)"
+     ]
+    },
+    {
+     "id": "udemy",
+     "nombre": "Pronunciación (Udemy)",
+     "semanas": 3,
+     "recurso": "Udemy: Sound Like a Native: French Pronunciation o Mastering French Pronunciation",
+     "hito": "Curso terminado",
+     "tipo": "curso",
+     "tareas": [
+      "Curso de Udemy: una lección",
+      "Repetir en voz alta",
+      "Grabarte y comparar"
+     ],
+     "udemy": "udemy-frances"
+    },
+    {
+     "id": "aplicada",
+     "nombre": "Pronunciación aplicada",
+     "semanas": 5,
+     "recurso": "Shadowing, lectura en voz alta y grabaciones",
+     "hito": "Grabación de control (85 %)",
+     "tipo": "curso",
+     "tareas": [
+      "Shadowing de un audio corto",
+      "Lectura en voz alta",
+      "Grabarte y comparar"
+     ]
+    },
+    {
+     "id": "examen",
+     "nombre": "Preparación y examen DELF B1",
+     "semanas": 16,
+     "recurso": "Preparación del DELF B1",
+     "hito": "Examen DELF B1",
+     "tipo": "examen",
+     "tareas": [
+      "DELF B1: una parte del examen",
+      "Simulacro según el plan de la semana",
+      "Errores del último simulacro"
+     ]
+    },
+    {
+     "id": "consolidacion",
+     "nombre": "Consolidación",
+     "semanas": 12,
+     "recurso": "How to Read a Book + Thinking, Fast and Slow",
+     "hito": "Tesis de los dos libros + artefactos",
+     "tipo": "libros",
+     "tareas": [
+      "Libro de la consolidación: una unidad (2 capítulos)",
+      "Micro-tesis y tarjetas",
+      "Artefacto del libro"
+     ],
+     "libros": [
+      "how-to-read-a-book",
+      "thinking-fast-and-slow"
+     ]
+    }
+   ]
+  },
+  {
+   "n": 3,
+   "idioma": "italiano",
+   "examen": "CILS o PLIDA B1",
+   "nivelFinal": "B1 alto",
+   "horasInicial": 460,
+   "pctC1": 58,
+   "horasSemanaC1": 20,
+   "fases": [
+    {
+     "id": "made-simple",
+     "nombre": "Italiano básico",
+     "semanas": 5,
+     "recurso": "Italian Made Simple (Mazzoni)",
+     "hito": "Libro terminado",
+     "tipo": "curso",
+     "tareas": [
+      "Italian Made Simple: una unidad",
+      "Micro-tesis y tarjetas",
+      "Test de la unidad (85 %)"
+     ]
+    },
+    {
+     "id": "gramatica",
+     "nombre": "Gramática",
+     "semanas": 11,
+     "recurso": "Practice Makes Perfect: Complete Italian Grammar (Danesi)",
+     "hito": "Test (85 %) de cada unidad",
+     "tipo": "curso",
+     "tareas": [
+      "Gramática: una unidad con sus ejercicios",
+      "Tarjetas de lo nuevo",
+      "Test de la unidad (85 %)"
+     ]
+    },
+    {
+     "id": "udemy",
+     "nombre": "Pronunciación (Udemy)",
+     "semanas": 3,
+     "recurso": "Udemy: Learn Italian Language: Italian Pronunciation",
+     "hito": "Curso terminado",
+     "tipo": "curso",
+     "tareas": [
+      "Curso de Udemy: una lección",
+      "Repetir en voz alta",
+      "Grabarte y comparar"
+     ],
+     "udemy": "udemy-italiano"
+    },
+    {
+     "id": "aplicada",
+     "nombre": "Pronunciación aplicada",
+     "semanas": 5,
+     "recurso": "Shadowing, lectura en voz alta y grabaciones",
+     "hito": "Grabación de control (85 %)",
+     "tipo": "curso",
+     "tareas": [
+      "Shadowing de un audio corto",
+      "Lectura en voz alta",
+      "Grabarte y comparar"
+     ]
+    },
+    {
+     "id": "examen",
+     "nombre": "Preparación y examen CILS o PLIDA B1",
+     "semanas": 16,
+     "recurso": "Preparación del CILS o PLIDA B1",
+     "hito": "Examen CILS o PLIDA B1",
+     "tipo": "examen",
+     "tareas": [
+      "CILS o PLIDA B1: una parte del examen",
+      "Simulacro según el plan de la semana",
+      "Errores del último simulacro"
+     ]
+    },
+    {
+     "id": "consolidacion",
+     "nombre": "Consolidación",
+     "semanas": 12,
+     "recurso": "Influence + Basic Economics",
+     "hito": "Tesis de los dos libros + artefactos",
+     "tipo": "libros",
+     "tareas": [
+      "Libro de la consolidación: una unidad (2 capítulos)",
+      "Micro-tesis y tarjetas",
+      "Artefacto del libro"
+     ],
+     "libros": [
+      "influence",
+      "basic-economics"
+     ]
+    }
+   ]
+  },
+  {
+   "n": 4,
+   "idioma": "aleman",
+   "examen": "Goethe A2",
+   "nivelFinal": "A2 alto",
+   "horasInicial": 460,
+   "pctC1": 35,
+   "horasSemanaC1": 33,
+   "fases": [
+    {
+     "id": "made-simple",
+     "nombre": "Alemán básico",
+     "semanas": 5,
+     "recurso": "German Made Simple",
+     "hito": "Libro terminado",
+     "tipo": "curso",
+     "tareas": [
+      "German Made Simple: una unidad",
+      "Micro-tesis y tarjetas",
+      "Test de la unidad (85 %)"
+     ]
+    },
+    {
+     "id": "gramatica",
+     "nombre": "Gramática",
+     "semanas": 11,
+     "recurso": "Hammer's German Grammar and Usage (Durrell)",
+     "hito": "Test (85 %) de cada unidad",
+     "tipo": "curso",
+     "tareas": [
+      "Gramática: una unidad con sus ejercicios",
+      "Tarjetas de lo nuevo",
+      "Test de la unidad (85 %)"
+     ]
+    },
+    {
+     "id": "udemy",
+     "nombre": "Pronunciación (Udemy)",
+     "semanas": 3,
+     "recurso": "Udemy: German Pronunciation Masterclass",
+     "hito": "Curso terminado",
+     "tipo": "curso",
+     "tareas": [
+      "Curso de Udemy: una lección",
+      "Repetir en voz alta",
+      "Grabarte y comparar"
+     ],
+     "udemy": "udemy-aleman"
+    },
+    {
+     "id": "aplicada",
+     "nombre": "Pronunciación aplicada",
+     "semanas": 5,
+     "recurso": "Shadowing, lectura en voz alta y grabaciones",
+     "hito": "Grabación de control (85 %)",
+     "tipo": "curso",
+     "tareas": [
+      "Shadowing de un audio corto",
+      "Lectura en voz alta",
+      "Grabarte y comparar"
+     ]
+    },
+    {
+     "id": "examen",
+     "nombre": "Preparación y examen Goethe A2",
+     "semanas": 16,
+     "recurso": "Preparación del Goethe A2",
+     "hito": "Examen Goethe A2",
+     "tipo": "examen",
+     "tareas": [
+      "Goethe A2: una parte del examen",
+      "Simulacro según el plan de la semana",
+      "Errores del último simulacro"
+     ]
+    },
+    {
+     "id": "consolidacion",
+     "nombre": "Consolidación",
+     "semanas": 12,
+     "recurso": "The Effective Executive + The Intelligent Investor",
+     "hito": "Tesis de los dos libros + artefactos",
+     "tipo": "libros",
+     "tareas": [
+      "Libro de la consolidación: una unidad (2 capítulos)",
+      "Micro-tesis y tarjetas",
+      "Artefacto del libro"
+     ],
+     "libros": [
+      "the-effective-executive",
+      "the-intelligent-investor"
+     ]
+    }
+   ]
+  },
+  {
+   "n": 5,
+   "idioma": "japones",
+   "examen": "JLPT N4",
+   "nivelFinal": "N4",
+   "horasInicial": 460,
+   "pctC1": 20,
+   "horasSemanaC1": 57,
+   "fases": [
+    {
+     "id": "made-simple",
+     "nombre": "Japonés básico",
+     "semanas": 5,
+     "recurso": "Japanese Demystified (Sato)",
+     "hito": "Libro terminado",
+     "tipo": "curso",
+     "tareas": [
+      "Japanese Demystified: una unidad",
+      "Micro-tesis y tarjetas",
+      "Test de la unidad (85 %)"
+     ]
+    },
+    {
+     "id": "gramatica",
+     "nombre": "Gramática",
+     "semanas": 11,
+     "recurso": "Dictionary of Basic / Intermediate / Advanced Japanese Grammar",
+     "hito": "Test (85 %) de cada unidad",
+     "tipo": "curso",
+     "tareas": [
+      "Gramática: una unidad con sus ejercicios",
+      "Tarjetas de lo nuevo",
+      "Test de la unidad (85 %)"
+     ]
+    },
+    {
+     "id": "udemy",
+     "nombre": "Pronunciación (Udemy)",
+     "semanas": 3,
+     "recurso": "Udemy: Learn Japanese for Beginners: The Ultimate 100-Lesson Course",
+     "hito": "Curso terminado",
+     "tipo": "curso",
+     "tareas": [
+      "Curso de Udemy: una lección",
+      "Repetir en voz alta",
+      "Grabarte y comparar"
+     ],
+     "udemy": "udemy-japones"
+    },
+    {
+     "id": "aplicada",
+     "nombre": "Pronunciación aplicada",
+     "semanas": 5,
+     "recurso": "Shadowing, lectura en voz alta y grabaciones",
+     "hito": "Grabación de control (85 %)",
+     "tipo": "curso",
+     "tareas": [
+      "Shadowing de un audio corto",
+      "Lectura en voz alta",
+      "Grabarte y comparar"
+     ]
+    },
+    {
+     "id": "examen",
+     "nombre": "Preparación y examen JLPT N4",
+     "semanas": 16,
+     "recurso": "Preparación del JLPT N4",
+     "hito": "Examen JLPT N4",
+     "tipo": "examen",
+     "tareas": [
+      "JLPT N4: una parte del examen",
+      "Simulacro según el plan de la semana",
+      "Errores del último simulacro"
+     ]
+    },
+    {
+     "id": "consolidacion",
+     "nombre": "Consolidación",
+     "semanas": 12,
+     "recurso": "High Output Management + Good Strategy Bad Strategy",
+     "hito": "Tesis de los dos libros + artefactos",
+     "tipo": "libros",
+     "tareas": [
+      "Libro de la consolidación: una unidad (2 capítulos)",
+      "Micro-tesis y tarjetas",
+      "Artefacto del libro"
+     ],
+     "libros": [
+      "high-output-management",
+      "good-strategy-bad-strategy"
+     ]
+    }
+   ]
+  },
+  {
+   "n": 6,
+   "idioma": "chino",
+   "examen": "HSK elemental (2 a 3)",
+   "nivelFinal": "Elemental",
+   "horasInicial": 460,
+   "pctC1": 19,
+   "horasSemanaC1": 61,
+   "fases": [
+    {
+     "id": "made-simple",
+     "nombre": "Chino básico",
+     "semanas": 5,
+     "recurso": "Chinese Demystified (Ross)",
+     "hito": "Libro terminado",
+     "tipo": "curso",
+     "tareas": [
+      "Chinese Demystified: una unidad",
+      "Micro-tesis y tarjetas",
+      "Test de la unidad (85 %)"
+     ]
+    },
+    {
+     "id": "gramatica",
+     "nombre": "Gramática",
+     "semanas": 11,
+     "recurso": "Modern Mandarin Chinese Grammar (Ross y Ma)",
+     "hito": "Test (85 %) de cada unidad",
+     "tipo": "curso",
+     "tareas": [
+      "Gramática: una unidad con sus ejercicios",
+      "Tarjetas de lo nuevo",
+      "Test de la unidad (85 %)"
+     ]
+    },
+    {
+     "id": "udemy",
+     "nombre": "Pronunciación (Udemy)",
+     "semanas": 3,
+     "recurso": "Udemy: Professional Mandarin Chinese Pronunciation o Unlock the Power of Chinese Pronunciation",
+     "hito": "Curso terminado",
+     "tipo": "curso",
+     "tareas": [
+      "Curso de Udemy: una lección",
+      "Repetir en voz alta",
+      "Grabarte y comparar"
+     ],
+     "udemy": "udemy-chino"
+    },
+    {
+     "id": "aplicada",
+     "nombre": "Pronunciación aplicada",
+     "semanas": 5,
+     "recurso": "Shadowing, lectura en voz alta y grabaciones",
+     "hito": "Grabación de control (85 %)",
+     "tipo": "curso",
+     "tareas": [
+      "Shadowing de un audio corto",
+      "Lectura en voz alta",
+      "Grabarte y comparar"
+     ]
+    },
+    {
+     "id": "examen",
+     "nombre": "Preparación y examen HSK elemental (2 a 3)",
+     "semanas": 16,
+     "recurso": "Preparación del HSK elemental (2 a 3)",
+     "hito": "Examen HSK elemental (2 a 3)",
+     "tipo": "examen",
+     "tareas": [
+      "HSK elemental (2 a 3): una parte del examen",
+      "Simulacro según el plan de la semana",
+      "Errores del último simulacro"
+     ]
+    },
+    {
+     "id": "consolidacion",
+     "nombre": "Consolidación",
+     "semanas": 12,
+     "recurso": "Rhetoric + Disciplined Entrepreneurship",
+     "hito": "Tesis de los dos libros + artefactos",
+     "tipo": "libros",
+     "tareas": [
+      "Libro de la consolidación: una unidad (2 capítulos)",
+      "Micro-tesis y tarjetas",
+      "Artefacto del libro"
+     ],
+     "libros": [
+      "rhetoric",
+      "disciplined-entrepreneurship"
+     ]
+    }
+   ]
+  }
+ ],
+ "faseB": {
+  "texto": "Desde el año 7: cada idioma sube a C1 (N1 en japonés, HSK 6 en chino) y se leen los 30 libros núcleo restantes. 40 % de las horas a libros (unos 4 por año) y 60 % al ascenso, de menos a más horas restantes: italiano, francés, alemán, japonés y chino.",
+  "hitos": [
+   {
+    "id": "italiano-c1",
+    "texto": "Italiano C1",
+    "fecha": "2033-11",
+    "cert": "CILS TRE-C1 (o PLIDA C1, CELI 4)"
+   },
+   {
+    "id": "frances-c1",
+    "texto": "Francés C1",
+    "fecha": "2035-04",
+    "cert": "DALF C1"
+   },
+   {
+    "id": "aleman-c1",
+    "texto": "Alemán C1",
+    "fecha": "2037-08",
+    "cert": "Goethe-Zertifikat C1"
+   },
+   {
+    "id": "libros-42",
+    "texto": "42 libros núcleo completos",
+    "fecha": "2040-06"
+   },
+   {
+    "id": "japones-n1",
+    "texto": "Japonés N1",
+    "fecha": "2041-10",
+    "cert": "JLPT N1 (certifica lectura y comprensión, no el C1 europeo completo)"
+   },
+   {
+    "id": "chino-hsk6",
+    "texto": "Chino avanzado",
+    "fecha": "2045-02",
+    "cert": "HSK 6 + HSKK avanzado (meta élite: HSK 7–9)"
+   }
+  ]
+ },
+ "reglas": [
+  "Unidad: libros, 2 capítulos; lenguajes, 1 capítulo, unidad o bloque. Micro-tesis por capítulo y tesis final por libro.",
+  "Test al día siguiente: aprobás con 85 % o más. Si no, repasás ese día y re-test al siguiente.",
+  "Tesis al día siguiente de aprobar; repasos espaciados con el motor de Trazo.",
+  "Artefacto por libro (framework, análisis, política o speech): sin artefacto no cuenta como terminado.",
+  "Cada trimestre (13 semanas): ensayo integrador y examen trimestral. Cada año: tesis anual, en la última semana.",
+  "Sin mantenimiento aparte: cada idioma nuevo se estudia con material en el anterior."
+ ],
+ "alertas": [
+  "Riesgo de olvido: sin sesiones de mantenimiento, un idioma anterior puede caerse. Si pasa, sumá sesiones cortas.",
+  "Con 13,5 h por semana el total baja a unos 16,5 años; con 20 h, a unos 13. Bajar la meta de japonés y chino (N2 y HSK 5) recorta un 30 % de esas etapas.",
+  "Francés arranca el 27 de diciembre de 2027, antes de que termine T+18 (decidido: arranca igual)."
+ ],
+ "sinVerificar": [
+  "El curso de Udemy de inglés",
+  "Los capítulos de English Made Simple",
+  "La disponibilidad actual de los recursos de cada idioma",
+  "Los niveles estimados por año",
+  "Los avales académicos de los libros",
+  "Costos y fechas de los exámenes"
+ ]
+}

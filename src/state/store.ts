@@ -263,12 +263,18 @@ export function startDay(routine: RoutineId, wake: string, date = dateKey()) {
     // Ola 31 (v7): Academy hasta el 22 dic, el sprint sin IA y las horas extra de PetrIA (solo antes del trabajo nuevo).
     const antesDelTrabajo = date < inicioTrabajo(s.settings);
     const sprint = sprintActivo(s.plan, date);
+    // v12.1: el bloque activo da sentido a los bloques 1 y 2; martes y jueves, el post.
+    const activo = tramoActivo(date, t0);
+    const v12 = {
+      ...(activo ? { activo: { id: activo.id, tipo: activo.tipo, nombre: activo.nombre } } : {}),
+      ...(isoDay(date) === 2 || isoDay(date) === 4 ? { postDelDia: true } : {}),
+    };
     const v7 = {
       ...(antesDelTrabajo && date <= ACADEMY_HASTA ? { academy: true } : {}),
       ...(sprint ? { sprintSinIA: { dia: sprint.dia } } : {}),
       ...(antesDelTrabajo && cfg.extraProyecto?.length ? { extraProyecto: cfg.extraProyecto } : {}),
     };
-    const blocks = buildBlocks(planDay(date, routine, wake, dayType, { ventana, entrevista, puerta, prepara, ...(cfg.horarioTrabajo ? { trabajo: cfg.horarioTrabajo } : {}), ...(cfg.bloquesPendientes ? { pendientes: cfg.bloquesPendientes } : {}), ...v7 }), carry)
+    const blocks = buildBlocks(planDay(date, routine, wake, dayType, { ventana, entrevista, puerta, prepara, ...(cfg.horarioTrabajo ? { trabajo: cfg.horarioTrabajo } : {}), ...(cfg.bloquesPendientes ? { pendientes: cfg.bloquesPendientes } : {}), ...v7, ...v12 }), carry)
       .map((b) => (refs[b.key] ? { ...b, ...refs[b.key] } : b))
       .map((b) => (b.rama === 'programacion' && delProyecto.length ? { ...b, tasks: [...delProyecto.map((t) => ({ id: newId(), t: `${proyecto} · ${t}`, done: false })), ...b.tasks] } : b))
       .map((b) => (b.key === 'cierre' && estirar ? { ...b, tasks: b.tasks.map((x) => (x.t === 'Estirar' ? { ...x, t: `Estirar: ${estirar}` } : x)) } : b))

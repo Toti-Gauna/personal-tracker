@@ -87,113 +87,8 @@
   }
  ],
  "proyectos": {
-  "P0": {
-   "puesto": "Sr Full-stack → AI Engineer (RAG multifuente y agentes)",
-   "queHace": [
-    "portfolio como mapa 3D de proyectos",
-    "después, un agente que responde sobre todo tu trabajo por texto y voz"
-   ],
-   "problema": "los reclutadores no recorren cinco repos",
-   "valor": "convierte una visita en conversación y en entrevista",
-   "diferencial": [
-    "validador de referencias y ciclos, RAG multifuente con citas y evals, MCP público, plantilla open source"
-   ],
-   "herramientas": [
-    {
-     "nombre": "modo reclutador",
-     "estrella": true
-    },
-    {
-     "nombre": "plantilla open source",
-     "estrella": true
-    },
-    {
-     "nombre": "métricas en vivo desde el CI"
-    }
-   ],
-   "capaFisica": [
-    {
-     "nombre": "CV o tarjeta en AR (AR Quick Look)",
-     "estrella": true
-    }
-   ],
-   "medir": {
-    "tipo": "impacto",
-    "items": [
-     "visitas",
-     "conversaciones",
-     "emails respondidos",
-     "entrevistas"
-    ]
-   },
-   "notificaciones": {
-    "items": [
-     {
-      "nombre": "email de seguimiento al reclutador",
-      "estrella": true
-     },
-     {
-      "nombre": "WhatsApp para vos cuando alguien lo usa"
-     }
-    ]
-   },
-   "voz": [
-    {
-     "nombre": "\"Preguntale a Ignacio\"",
-     "estrella": true
-    }
-   ],
-   "escala": "pico viral ×50 en minutos",
-   "operacion": "CDN, caché e invalidación",
-   "stack": {
-    "ambientes": [
-     {
-      "ambiente": "Frontend",
-      "texto": "Next.js, TypeScript, Three.js"
-     },
-     {
-      "ambiente": "Backend",
-      "texto": "Node + TypeScript"
-     },
-     {
-      "ambiente": "IA por API",
-      "texto": "Python, FastAPI, LangGraph sobre Claude, MCP hacia cada proyecto"
-     },
-     {
-      "ambiente": "ML propio",
-      "texto": "no aplica"
-     },
-     {
-      "ambiente": "DB",
-      "texto": "JSON en la v1; Neon con pgvector en la 2.0"
-     },
-     {
-      "ambiente": "Infra",
-      "texto": "Module Federation, `platform-kit`"
-     },
-     {
-      "ambiente": "Cloud",
-      "texto": "Render o Vercel†, SES"
-     }
-    ]
-   },
-   "entrevistas": "medio con la v1; alto desde la 2.0",
-   "versiones": [
-    {
-     "id": "1.0",
-     "nombre": "Base",
-     "enCurso": true,
-     "alcance": [
-      "mapa 3D",
-      "Trazo como caso",
-      "validador",
-      "shell con Module Federation"
-     ]
-    }
-   ]
-  },
   "P1": {
-   "puesto": "Full-stack AI Engineer (energía)",
+   "puesto": "Full-stack AI Engineer (energy)",
    "queHace": [
     "Mapa mundial real con los pozos de Vaca Muerta y las zonas de mayor productividad esperada",
     "Valor y declinación de cada pozo, y lector de partes viejos",
@@ -337,9 +232,10 @@
     {
      "id": "1.0",
      "nombre": "MVP",
-     "inicio": "2026-11-19",
-     "fin": "2026-12-01",
-     "horas": 74,
+     "inicio": "2026-11-21",
+     "fin": "2026-11-25",
+     "deadline": "2026-12-01",
+     "horas": 47,
      "alcance": [
       "ingesta",
       "detector P10/P50/P90 con validación espacial",
@@ -353,9 +249,10 @@
     {
      "id": "1.1",
      "nombre": "Producto",
-     "inicio": "2026-12-02",
-     "fin": "2026-12-12",
-     "horas": 74,
+     "inicio": "2026-11-26",
+     "fin": "2026-11-30",
+     "deadline": "2026-12-12",
+     "horas": 48.5,
      "alcance": [
       "Herramientas: valor del pozo, declinación, lector de partes",
       "IA: 40–60 evals, tope de costo, router, caché",
@@ -367,9 +264,10 @@
     {
      "id": "2.0",
      "nombre": "Plataforma",
-     "inicio": "2026-12-13",
-     "fin": "2026-12-22",
-     "horas": 64,
+     "inicio": "2026-12-01",
+     "fin": "2026-12-04",
+     "deadline": "2026-12-22",
+     "horas": 40,
      "alcance": [
       "notification-service",
       "voice-gateway",
@@ -380,9 +278,10 @@
     {
      "id": "3.0",
      "nombre": "Producción",
-     "inicio": "2026-12-23",
-     "fin": "2027-01-05",
-     "horas": 92,
+     "inicio": "2026-12-05",
+     "fin": "2026-12-09",
+     "deadline": "2027-01-05",
+     "horas": 58,
      "alcance": [
       "load-lab completo",
       "caos",
@@ -399,7 +298,7 @@
    ]
   },
   "P2": {
-   "puesto": "AI Engineer en salud (.NET, Azure, seguridad)",
+   "puesto": "AI Engineer, health (.NET, Azure)",
    "queHace": [
     "brechas de cuidado y problemas de medicación con evidencia",
     "traductor de sistemas viejos a FHIR",
@@ -537,8 +436,8 @@
     {
      "id": "1.0",
      "nombre": "MVP",
-     "inicio": "2027-01-13",
-     "fin": "2027-01-21",
+     "inicio": "2026-12-21",
+     "fin": "2026-12-22",
      "alcance": [
       "FHIR con Synthea",
       "motor con 8–10 reglas",
@@ -546,14 +445,14 @@
       "panel con línea de tiempo",
       "deploy en Azure"
      ],
-     "horas": 38,
+     "horas": 20,
      "derivadas": true
     },
     {
      "id": "1.1",
      "nombre": "Producto",
-     "inicio": "2027-01-22",
-     "fin": "2027-01-30",
+     "inicio": "2026-12-23",
+     "fin": "2026-12-25",
      "alcance": [
       "conciliación",
       "HL7 a FHIR",
@@ -564,14 +463,14 @@
       "desidentificador en Rust",
       "frontend"
      ],
-     "horas": 38,
+     "horas": 30,
      "derivadas": true
     },
     {
      "id": "2.0",
      "nombre": "Plataforma",
-     "inicio": "2027-01-31",
-     "fin": "2027-02-09",
+     "inicio": "2026-12-26",
+     "fin": "2026-12-28",
      "alcance": [
       "avisos por WhatsApp y email",
       "llamada de recordatorio",
@@ -579,14 +478,14 @@
       "monitoreo en Wokwi",
       "escáner de cajas"
      ],
-     "horas": 42,
+     "horas": 30,
      "derivadas": true
     },
     {
      "id": "3.0",
      "nombre": "Producción",
-     "inicio": "2027-02-10",
-     "fin": "2027-02-18",
+     "inicio": "2026-12-29",
+     "fin": "2026-12-30",
      "alcance": [
       "100 mil pacientes",
       "1 M de mensajes",
@@ -595,7 +494,7 @@
       "oxímetro real",
       "Scale report"
      ],
-     "horas": 37,
+     "horas": 20,
      "derivadas": true
     }
    ]
@@ -717,22 +616,22 @@
     {
      "id": "1.0",
      "nombre": "MVP",
-     "inicio": "2027-03-21",
-     "fin": "2027-04-01",
+     "inicio": "2027-02-19",
+     "fin": "2027-02-21",
      "alcance": [
       "ingesta",
       "modelo de rinde con predicción conforme",
       "mapa por departamento",
       "deploy"
      ],
-     "horas": 50,
+     "horas": 29,
      "derivadas": true
     },
     {
      "id": "1.1",
      "nombre": "Producto",
-     "inicio": "2027-04-02",
-     "fin": "2027-04-12",
+     "inicio": "2027-02-22",
+     "fin": "2027-02-24",
      "alcance": [
       "margen P10–P90",
       "simulador",
@@ -741,14 +640,14 @@
       "MLflow y Dagster",
       "frontend"
      ],
-     "horas": 46,
+     "horas": 29,
      "derivadas": true
     },
     {
      "id": "2.0",
      "nombre": "Plataforma",
-     "inicio": "2027-04-13",
-     "fin": "2027-04-22",
+     "inicio": "2027-02-25",
+     "fin": "2027-02-27",
      "alcance": [
       "WhatsApp con audio",
       "email",
@@ -757,21 +656,21 @@
       "GPS",
       "AR"
      ],
-     "horas": 42,
+     "horas": 29,
      "derivadas": true
     },
     {
      "id": "3.0",
      "nombre": "Producción",
-     "inicio": "2027-04-23",
-     "fin": "2027-05-02",
+     "inicio": "2027-02-28",
+     "fin": "2027-03-02",
      "alcance": [
       "recálculo masivo",
       "backfills",
       "estación y humedad de suelo reales",
       "Scale report"
      ],
-     "horas": 42,
+     "horas": 28,
      "derivadas": true
     }
    ]
@@ -886,49 +785,49 @@
     {
      "id": "1.0",
      "nombre": "MVP",
-     "inicio": "2027-05-03",
-     "fin": "2027-05-15",
+     "inicio": "2027-03-18",
+     "fin": "2027-03-21",
      "alcance": [
       "SGP4",
       "satélites argentinos",
       "planificador de pasadas"
      ],
-     "horas": 54,
+     "horas": 40,
      "derivadas": true
     },
     {
      "id": "1.1",
      "nombre": "Producto",
-     "inicio": "2027-05-16",
-     "fin": "2027-05-28",
+     "inicio": "2027-03-22",
+     "fin": "2027-03-25",
      "alcance": [
       "decodificador CCSDS en WebAssembly con benchmark",
       "calculadora de enlace",
       "copiloto",
       "frontend"
      ],
-     "horas": 54,
+     "horas": 40,
      "derivadas": true
     },
     {
      "id": "2.0",
      "nombre": "Plataforma",
-     "inicio": "2027-05-29",
-     "fin": "2027-06-10",
+     "inicio": "2027-03-26",
+     "fin": "2027-03-29",
      "alcance": [
       "AR",
       "alertas por WhatsApp",
       "voz",
       "rotor en Wokwi"
      ],
-     "horas": 54,
+     "horas": 40,
      "derivadas": true
     },
     {
      "id": "3.0",
      "nombre": "Producción",
-     "inicio": "2027-06-11",
-     "fin": "2027-06-23",
+     "inicio": "2027-03-30",
+     "fin": "2027-04-02",
      "alcance": [
       "estación real en SatNOGS",
       "rotor real",
@@ -936,13 +835,136 @@
       "backpressure",
       "Scale report"
      ],
-     "horas": 53,
+     "horas": 40,
+     "derivadas": true
+    }
+   ]
+  },
+  "P0B": {
+   "puesto": "Sr Full-stack → AI Engineer (RAG multifuente y agentes)",
+   "queHace": [
+    "portfolio como mapa 3D de proyectos",
+    "después, un agente que responde sobre todo tu trabajo por texto y voz"
+   ],
+   "problema": "los reclutadores no recorren cinco repos",
+   "valor": "convierte una visita en conversación y en entrevista",
+   "diferencial": [
+    "validador de referencias y ciclos, RAG multifuente con citas y evals, MCP público, plantilla open source"
+   ],
+   "herramientas": [
+    {
+     "nombre": "modo reclutador",
+     "estrella": true
+    },
+    {
+     "nombre": "plantilla open source",
+     "estrella": true
+    },
+    {
+     "nombre": "métricas en vivo desde el CI"
+    }
+   ],
+   "capaFisica": [
+    {
+     "nombre": "CV o tarjeta en AR (AR Quick Look)",
+     "estrella": true
+    }
+   ],
+   "medir": {
+    "tipo": "impacto",
+    "items": [
+     "visitas",
+     "conversaciones",
+     "emails respondidos",
+     "entrevistas"
+    ]
+   },
+   "notificaciones": {
+    "items": [
+     {
+      "nombre": "email de seguimiento al reclutador",
+      "estrella": true
+     },
+     {
+      "nombre": "WhatsApp para vos cuando alguien lo usa"
+     }
+    ]
+   },
+   "voz": [
+    {
+     "nombre": "\"Preguntale a Ignacio\"",
+     "estrella": true
+    }
+   ],
+   "escala": "pico viral ×50 en minutos",
+   "operacion": "CDN, caché e invalidación",
+   "stack": {
+    "ambientes": [
+     {
+      "ambiente": "Frontend",
+      "texto": "Next.js, TypeScript, Three.js"
+     },
+     {
+      "ambiente": "Backend",
+      "texto": "Node + TypeScript"
+     },
+     {
+      "ambiente": "IA por API",
+      "texto": "Python, FastAPI, LangGraph sobre Claude, MCP hacia cada proyecto"
+     },
+     {
+      "ambiente": "ML propio",
+      "texto": "no aplica"
+     },
+     {
+      "ambiente": "DB",
+      "texto": "JSON en la v1; Neon con pgvector en la 2.0"
+     },
+     {
+      "ambiente": "Infra",
+      "texto": "Module Federation, `platform-kit`"
+     },
+     {
+      "ambiente": "Cloud",
+      "texto": "Render o Vercel†, SES"
+     }
+    ]
+   },
+   "entrevistas": "medio con la v1; alto desde la 2.0",
+   "versiones": [
+    {
+     "id": "2.0",
+     "nombre": "Con IA",
+     "inicio": "2027-04-13",
+     "fin": "2027-04-14",
+     "alcance": [
+      "RAG con citas y evals (READMEs, ADRs, código, `learning.md`)",
+      "modo reclutador",
+      "MCP público"
+     ],
+     "horas": 20,
+     "derivadas": true
+    },
+    {
+     "id": "2.1",
+     "nombre": "Completa",
+     "inicio": "2027-04-15",
+     "fin": "2027-04-17",
+     "alcance": [
+      "voz",
+      "CV en AR",
+      "email y WhatsApp",
+      "métricas en vivo",
+      "plantilla open source",
+      "CDN y prueba de pico viral"
+     ],
+     "horas": 30,
      "derivadas": true
     }
    ]
   },
   "P5": {
-   "puesto": "DevSecOps / OT Security Engineer",
+   "puesto": "DevSecOps / OT Security",
    "queHace": [
     "gemelo digital de una batería de tanques en tiempo real",
     "detecta ataques al SCADA por física y pérdidas en ductos",
@@ -1061,21 +1083,21 @@
     {
      "id": "1.0",
      "nombre": "MVP",
-     "inicio": "2027-07-24",
-     "fin": "2027-08-02",
+     "inicio": "2027-04-18",
+     "fin": "2027-04-20",
      "alcance": [
       "gemelo con SCADA simulado por Modbus",
       "niveles en vivo",
       "tiempo del x% al y%"
      ],
-     "horas": 41,
+     "horas": 30,
      "derivadas": true
     },
     {
      "id": "1.1",
      "nombre": "Producto",
-     "inicio": "2027-08-03",
-     "fin": "2027-08-12",
+     "inicio": "2027-04-21",
+     "fin": "2027-04-23",
      "alcance": [
       "detector de ataques",
       "pérdidas en ductos",
@@ -1083,14 +1105,14 @@
       "despacho",
       "frontend"
      ],
-     "horas": 41,
+     "horas": 30,
      "derivadas": true
     },
     {
      "id": "2.0",
      "nombre": "Plataforma",
-     "inicio": "2027-08-13",
-     "fin": "2027-08-23",
+     "inicio": "2027-04-24",
+     "fin": "2027-04-27",
      "alcance": [
       "WhatsApp con botones",
       "llamada",
@@ -1099,14 +1121,14 @@
       "AR",
       "NFC"
      ],
-     "horas": 46,
+     "horas": 40,
      "derivadas": true
     },
     {
      "id": "3.0",
      "nombre": "Producción",
-     "inicio": "2027-08-24",
-     "fin": "2027-09-02",
+     "inicio": "2027-04-28",
+     "fin": "2027-04-30",
      "alcance": [
       "tanque real por RS485",
       "10 mil lecturas por segundo",
@@ -1114,13 +1136,13 @@
       "Kubernetes endurecido",
       "Scale report"
      ],
-     "horas": 42,
+     "horas": 30,
      "derivadas": true
     }
    ]
   },
   "P6": {
-   "puesto": "ML Engineer (computer vision)",
+   "puesto": "ML Engineer (CV)",
    "queHace": [
     "inspecciona superficies de aviones, genera la orden de trabajo, consulta manuales, registra daños en 3D por matrícula"
    ],
@@ -1216,22 +1238,22 @@
     {
      "id": "1.0",
      "nombre": "MVP",
-     "inicio": "2027-10-15",
-     "fin": "2027-10-26",
+     "inicio": "2027-06-19",
+     "fin": "2027-06-22",
      "alcance": [
       "datos sintéticos",
       "modelo PyTorch",
       "inspección por foto",
       "caída sintético→real"
      ],
-     "horas": 50,
+     "horas": 39,
      "derivadas": true
     },
     {
      "id": "1.1",
      "nombre": "Producto",
-     "inicio": "2027-10-27",
-     "fin": "2027-11-07",
+     "inicio": "2027-06-23",
+     "fin": "2027-06-25",
      "alcance": [
       "orden de trabajo",
       "RAG de manuales",
@@ -1240,14 +1262,14 @@
       "autograd",
       "frontend"
      ],
-     "horas": 50,
+     "horas": 29,
      "derivadas": true
     },
     {
      "id": "2.0",
      "nombre": "Plataforma",
-     "inicio": "2027-11-08",
-     "fin": "2027-11-20",
+     "inicio": "2027-06-26",
+     "fin": "2027-06-28",
      "alcance": [
       "daños en 3D",
       "AR",
@@ -1256,14 +1278,14 @@
       "email con PDF",
       "WhatsApp"
      ],
-     "horas": 54,
+     "horas": 29,
      "derivadas": true
     },
     {
      "id": "3.0",
      "nombre": "Producción",
-     "inicio": "2027-11-21",
-     "fin": "2027-12-02",
+     "inicio": "2027-06-29",
+     "fin": "2027-07-02",
      "alcance": [
       "GPU con autoescalado",
       "batching",
@@ -1271,7 +1293,7 @@
       "costo por imagen",
       "Scale report"
      ],
-     "horas": 51,
+     "horas": 38,
      "derivadas": true
     }
    ]
@@ -1369,35 +1391,35 @@
     {
      "id": "1.0",
      "nombre": "MVP",
-     "inicio": "2027-12-03",
-     "fin": "2027-12-11",
+     "inicio": "2027-07-06",
+     "fin": "2027-07-07",
      "alcance": [
       "Sentinel-2",
       "índices",
       "mapa de estrés"
      ],
-     "horas": 38,
+     "horas": 20,
      "derivadas": true
     },
     {
      "id": "1.1",
      "nombre": "Producto",
-     "inicio": "2027-12-12",
-     "fin": "2027-12-19",
+     "inicio": "2027-07-08",
+     "fin": "2027-07-10",
      "alcance": [
       "dosis variable",
       "pérdida en USD",
       "PCA y SVD",
       "frontend"
      ],
-     "horas": 33,
+     "horas": 30,
      "derivadas": true
     },
     {
      "id": "2.0",
      "nombre": "Plataforma",
-     "inicio": "2027-12-27",
-     "fin": "2028-01-05",
+     "inicio": "2027-07-11",
+     "fin": "2027-07-13",
      "alcance": [
       "WhatsApp con imagen",
       "email con prescripción",
@@ -1405,14 +1427,14 @@
       "recorrida offline",
       "fertilizadora en Wokwi"
      ],
-     "horas": 42,
+     "horas": 30,
      "derivadas": true
     },
     {
      "id": "3.0",
      "nombre": "Producción",
-     "inicio": "2028-01-06",
-     "fin": "2028-01-14",
+     "inicio": "2027-07-14",
+     "fin": "2027-07-15",
      "alcance": [
       "puertas de calidad",
       "sombra y canary",
@@ -1420,7 +1442,7 @@
       "drift",
       "reentrenamiento con aprobación"
      ],
-     "horas": 37,
+     "horas": 20,
      "derivadas": true
     }
    ]
@@ -1513,54 +1535,54 @@
     {
      "id": "1.0",
      "nombre": "MVP",
-     "inicio": "2028-02-16",
-     "fin": "2028-02-23",
+     "inicio": "2027-08-02",
+     "fin": "2027-08-03",
      "alcance": [
       "ataques contra PetrIA y VitalIA",
       "informe OWASP LLM Top 10"
      ],
-     "horas": 34,
+     "horas": 19,
      "derivadas": true
     },
     {
      "id": "1.1",
      "nombre": "Producto",
-     "inicio": "2028-02-24",
-     "fin": "2028-03-02",
+     "inicio": "2027-08-04",
+     "fin": "2027-08-05",
      "alcance": [
       "\"Escaneá tu chatbot\"",
       "GitHub Action",
       "comparativa"
      ],
-     "horas": 34,
+     "horas": 19,
      "derivadas": true
     },
     {
      "id": "2.0",
      "nombre": "Plataforma",
-     "inicio": "2028-03-03",
-     "fin": "2028-03-10",
+     "inicio": "2027-08-06",
+     "fin": "2027-08-08",
      "alcance": [
       "voz",
       "cartel y audio",
       "email",
       "WhatsApp"
      ],
-     "horas": 34,
+     "horas": 28,
      "derivadas": true
     },
     {
      "id": "3.0",
      "nombre": "Producción",
-     "inicio": "2028-03-11",
-     "fin": "2028-03-17",
+     "inicio": "2027-08-09",
+     "fin": "2027-08-10",
      "alcance": [
       "guardián con LoRA y adaptadores por cliente",
       "colas justas",
       "abuso",
       "Scale report"
      ],
-     "horas": 28,
+     "horas": 19,
      "derivadas": true
     }
    ]
@@ -1649,54 +1671,54 @@
     {
      "id": "1.0",
      "nombre": "MVP",
-     "inicio": "2028-03-18",
-     "fin": "2028-03-27",
+     "inicio": "2027-08-11",
+     "fin": "2027-08-13",
      "alcance": [
       "modelo cuantizado con ONNX",
       "app offline"
      ],
-     "horas": 41,
+     "horas": 29,
      "derivadas": true
     },
     {
      "id": "1.1",
      "nombre": "Producto",
-     "inicio": "2028-03-28",
-     "fin": "2028-04-06",
+     "inicio": "2027-08-14",
+     "fin": "2027-08-16",
      "alcance": [
       "walkaround guiado",
       "modelo chico",
       "presupuesto de latencia",
       "frontend"
      ],
-     "horas": 41,
+     "horas": 29,
      "derivadas": true
     },
     {
      "id": "2.0",
      "nombre": "Plataforma",
-     "inicio": "2028-04-07",
-     "fin": "2028-04-16",
+     "inicio": "2027-08-17",
+     "fin": "2027-08-20",
      "alcance": [
       "AR",
       "voz offline",
       "sincronización con AeroScan"
      ],
-     "horas": 41,
+     "horas": 38,
      "derivadas": true
     },
     {
      "id": "3.0",
      "nombre": "Producción",
-     "inicio": "2028-04-17",
-     "fin": "2028-04-26",
+     "inicio": "2027-08-21",
+     "fin": "2027-08-23",
      "alcance": [
       "OTA firmada",
       "1.000 dispositivos",
       "ESP32-CAM vs celular",
       "batería y latencia medidas"
      ],
-     "horas": 42,
+     "horas": 29,
      "derivadas": true
     }
    ]
@@ -1804,20 +1826,20 @@
     {
      "id": "1.0",
      "nombre": "MVP",
-     "inicio": "2028-05-15",
-     "fin": "2028-05-26",
+     "inicio": "2027-08-24",
+     "fin": "2027-08-27",
      "alcance": [
       "autoencoders sobre telemetría de la NASA",
       "triage explicado"
      ],
-     "horas": 50,
+     "horas": 39,
      "derivadas": true
     },
     {
      "id": "1.1",
      "nombre": "Producto",
-     "inicio": "2028-05-27",
-     "fin": "2028-06-07",
+     "inicio": "2027-08-28",
+     "fin": "2027-08-30",
      "alcance": [
       "centro de control",
       "status page",
@@ -1825,14 +1847,14 @@
       "saga",
       "outbox"
      ],
-     "horas": 50,
+     "horas": 29,
      "derivadas": true
     },
     {
      "id": "2.0",
      "nombre": "Plataforma",
-     "inicio": "2028-06-08",
-     "fin": "2028-06-20",
+     "inicio": "2027-08-31",
+     "fin": "2027-09-02",
      "alcance": [
       "agente SRE",
       "Jarvis con Face ID",
@@ -1841,14 +1863,14 @@
       "llamada por SLO",
       "postmortem por email"
      ],
-     "horas": 54,
+     "horas": 29,
      "derivadas": true
     },
     {
      "id": "3.0",
      "nombre": "Producción",
-     "inicio": "2028-06-21",
-     "fin": "2028-07-02",
+     "inicio": "2027-09-03",
+     "fin": "2027-09-06",
      "alcance": [
       "chaos",
       "caída de una nube con failover",
@@ -1856,7 +1878,7 @@
       "FinOps",
       "plan de capacidad"
      ],
-     "horas": 51,
+     "horas": 38,
      "derivadas": true
     }
    ]
@@ -1937,32 +1959,32 @@
     {
      "id": "1.0",
      "nombre": "MVP",
-     "inicio": "2028-07-23",
-     "fin": "2028-07-30",
+     "inicio": "2027-09-25",
+     "fin": "2027-09-26",
      "alcance": [
       "Vault",
       "cifrado de sobre"
      ],
-     "horas": 34,
+     "horas": 19,
      "derivadas": true
     },
     {
      "id": "1.1",
      "nombre": "Producto",
-     "inicio": "2028-07-31",
-     "fin": "2028-08-07",
+     "inicio": "2027-09-27",
+     "fin": "2027-09-28",
      "alcance": [
       "rotación automática",
       "credenciales efímeras"
      ],
-     "horas": 34,
+     "horas": 19,
      "derivadas": true
     },
     {
      "id": "2.0",
      "nombre": "Plataforma",
-     "inicio": "2028-08-08",
-     "fin": "2028-08-15",
+     "inicio": "2027-09-29",
+     "fin": "2027-10-01",
      "alcance": [
       "GitHub App",
       "aprobación por WhatsApp",
@@ -1970,21 +1992,21 @@
       "llave física",
       "SoftHSM"
      ],
-     "horas": 34,
+     "horas": 28,
      "derivadas": true
     },
     {
      "id": "3.0",
      "nombre": "Producción",
-     "inicio": "2028-08-16",
-     "fin": "2028-08-22",
+     "inicio": "2027-10-02",
+     "fin": "2027-10-03",
      "alcance": [
       "rotación masiva sin cortes",
       "SPIFFE",
       "mTLS",
       "comparativa"
      ],
-     "horas": 28,
+     "horas": 19,
      "derivadas": true
     }
    ]
@@ -2052,51 +2074,51 @@
     {
      "id": "1.0",
      "nombre": "MVP",
-     "inicio": "2028-09-04",
-     "fin": "2028-09-13",
+     "inicio": "2027-10-04",
+     "fin": "2027-10-06",
      "alcance": [
       "STRIDE y pentest de PetrIA",
       "informe CVSS"
      ],
-     "horas": 41,
+     "horas": 29,
      "derivadas": true
     },
     {
      "id": "1.1",
      "nombre": "Producto",
-     "inicio": "2028-09-14",
-     "fin": "2028-09-23",
+     "inicio": "2027-10-07",
+     "fin": "2027-10-09",
      "alcance": [
       "pentest de IA y del ESP32",
       "reprueba en el CI"
      ],
-     "horas": 41,
+     "horas": 29,
      "derivadas": true
     },
     {
      "id": "2.0",
      "nombre": "Plataforma",
-     "inicio": "2028-09-24",
-     "fin": "2028-10-03",
+     "inicio": "2027-10-10",
+     "fin": "2027-10-11",
      "alcance": [
       "bot de PR",
       "agente asistente",
       "email semanal",
       "Slack"
      ],
-     "horas": 41,
+     "horas": 19,
      "derivadas": true
     },
     {
      "id": "3.0",
      "nombre": "Producción",
-     "inicio": "2028-10-04",
-     "fin": "2028-10-13",
+     "inicio": "2027-10-12",
+     "fin": "2027-10-14",
      "alcance": [
       "muchos repos sin frenar el CI",
       "caza de CVE"
      ],
-     "horas": 42,
+     "horas": 28,
      "derivadas": true
     }
    ]
@@ -2182,34 +2204,34 @@
     {
      "id": "1.0",
      "nombre": "MVP",
-     "inicio": "2028-10-14",
-     "fin": "2028-10-25",
+     "inicio": "2027-10-15",
+     "fin": "2027-10-17",
      "alcance": [
       "OpenSearch",
       "osquery",
       "reglas Sigma sobre el colector de PetrIA Guard"
      ],
-     "horas": 50,
+     "horas": 29,
      "derivadas": true
     },
     {
      "id": "1.1",
      "nombre": "Producto",
-     "inicio": "2028-10-26",
-     "fin": "2028-11-06",
+     "inicio": "2027-10-18",
+     "fin": "2027-10-20",
      "alcance": [
       "agente investigador evaluado",
       "purple team",
       "tiempos medidos"
      ],
-     "horas": 50,
+     "horas": 29,
      "derivadas": true
     },
     {
      "id": "2.0",
      "nombre": "Plataforma",
-     "inicio": "2028-11-07",
-     "fin": "2028-11-18",
+     "inicio": "2027-10-21",
+     "fin": "2027-10-24",
      "alcance": [
       "SOC con un comando",
       "llamada",
@@ -2217,21 +2239,21 @@
       "email",
       "RFID en Wokwi"
      ],
-     "horas": 50,
+     "horas": 38,
      "derivadas": true
     },
     {
      "id": "3.0",
      "nombre": "Producción",
-     "inicio": "2028-11-19",
-     "fin": "2028-11-29",
+     "inicio": "2027-10-25",
+     "fin": "2027-10-27",
      "alcance": [
       "millones de eventos",
       "costo de retención",
       "RFID real",
       "comparativa"
      ],
-     "horas": 45,
+     "horas": 29,
      "derivadas": true
     }
    ]
@@ -2298,50 +2320,50 @@
     {
      "id": "1.0",
      "nombre": "MVP",
-     "inicio": "2029-01-12",
-     "fin": "2029-01-23",
+     "inicio": "2027-11-30",
+     "fin": "2027-12-02",
      "alcance": [
       "backtester en Rust con costos y deslizamiento"
      ],
-     "horas": 50,
+     "horas": 29,
      "derivadas": true
     },
     {
      "id": "1.1",
      "nombre": "Producto",
-     "inicio": "2029-01-24",
-     "fin": "2029-02-04",
+     "inicio": "2027-12-03",
+     "fin": "2027-12-05",
      "alcance": [
       "walk-forward",
       "registro con hash",
       "Sharpe deflactado",
       "benchmark"
      ],
-     "horas": 50,
+     "horas": 29,
      "derivadas": true
     },
     {
      "id": "2.0",
      "nombre": "Plataforma",
-     "inicio": "2029-02-05",
-     "fin": "2029-02-16",
+     "inicio": "2027-12-06",
+     "fin": "2027-12-09",
      "alcance": [
       "\"¿Tu estrategia es suerte?\"",
       "asistente"
      ],
-     "horas": 50,
+     "horas": 38,
      "derivadas": true
     },
     {
      "id": "3.0",
      "nombre": "Producción",
-     "inicio": "2029-02-17",
-     "fin": "2029-02-27",
+     "inicio": "2027-12-10",
+     "fin": "2027-12-12",
      "alcance": [
       "backtests en paralelo",
       "informes por email"
      ],
-     "horas": 45,
+     "horas": 29,
      "derivadas": true
     }
    ]
@@ -2394,49 +2416,50 @@
     {
      "id": "1.0",
      "nombre": "MVP",
-     "inicio": "2029-02-28",
-     "fin": "2029-03-09",
+     "inicio": "2027-12-13",
+     "fin": "2027-12-15",
      "alcance": [
       "un paper replicado"
      ],
-     "horas": 41,
+     "horas": 18,
      "derivadas": true
     },
     {
      "id": "1.1",
      "nombre": "Producto",
-     "inicio": "2029-03-10",
-     "fin": "2029-03-19",
+     "inicio": "2027-12-16",
+     "fin": "2027-12-18",
      "alcance": [
       "agente que extrae la estrategia",
       "3 papers replicados"
      ],
-     "horas": 41,
+     "horas": 18,
      "derivadas": true
     },
     {
      "id": "2.0",
      "nombre": "Plataforma",
-     "inicio": "2029-03-20",
-     "fin": "2029-03-29",
+     "inicio": "2027-12-19",
+     "fin": "2027-12-27",
+     "nota": "19 Dec + 27 Dec (pause in between)",
      "alcance": [
       "página pública",
       "newsletter",
       "WhatsApp"
      ],
-     "horas": 41,
+     "horas": 53,
      "derivadas": true
     },
     {
      "id": "3.0",
      "nombre": "Producción",
-     "inicio": "2029-03-30",
-     "fin": "2029-04-08",
+     "inicio": "2027-12-28",
+     "fin": "2027-12-30",
      "alcance": [
       "lotes en paralelo",
       "porcentaje replicado"
      ],
-     "horas": 42,
+     "horas": 16,
      "derivadas": true
     }
    ]
@@ -2496,51 +2519,51 @@
     {
      "id": "1.0",
      "nombre": "MVP",
-     "inicio": "2029-05-18",
-     "fin": "2029-05-29",
+     "inicio": "2028-01-17",
+     "fin": "2028-01-19",
      "alcance": [
       "Black-Scholes",
       "binomial y Monte Carlo contra QuantLib"
      ],
-     "horas": 50,
+     "horas": 30,
      "derivadas": true
     },
     {
      "id": "1.1",
      "nombre": "Producto",
-     "inicio": "2029-05-30",
-     "fin": "2029-06-10",
+     "inicio": "2028-01-20",
+     "fin": "2028-01-22",
      "alcance": [
       "griegas",
       "estrés",
       "calculadora argentina"
      ],
-     "horas": 50,
+     "horas": 30,
      "derivadas": true
     },
     {
      "id": "2.0",
      "nombre": "Plataforma",
-     "inicio": "2029-06-11",
-     "fin": "2029-06-22",
+     "inicio": "2028-01-23",
+     "fin": "2028-01-26",
      "alcance": [
       "superficie en AR",
       "email matinal",
       "podcast"
      ],
-     "horas": 50,
+     "horas": 40,
      "derivadas": true
     },
     {
      "id": "3.0",
      "nombre": "Producción",
-     "inicio": "2029-06-23",
-     "fin": "2029-07-04",
+     "inicio": "2028-01-27",
+     "fin": "2028-01-29",
      "alcance": [
       "API con SLO",
       "benchmark"
      ],
-     "horas": 50,
+     "horas": 30,
      "derivadas": true
     }
    ]
@@ -2582,49 +2605,49 @@
     {
      "id": "1.0",
      "nombre": "MVP",
-     "inicio": "2029-07-05",
-     "fin": "2029-07-14",
+     "inicio": "2028-01-30",
+     "fin": "2028-02-01",
      "alcance": [
       "matching por precio y tiempo"
      ],
-     "horas": 41,
+     "horas": 29,
      "derivadas": true
     },
     {
      "id": "1.1",
      "nombre": "Producto",
-     "inicio": "2029-07-15",
-     "fin": "2029-07-24",
+     "inicio": "2028-02-02",
+     "fin": "2028-02-04",
      "alcance": [
       "market maker",
       "FIX",
       "costos de transacción"
      ],
-     "horas": 41,
+     "horas": 29,
      "derivadas": true
     },
     {
      "id": "2.0",
      "nombre": "Plataforma",
-     "inicio": "2029-07-25",
-     "fin": "2029-08-02",
+     "inicio": "2028-02-05",
+     "fin": "2028-02-06",
      "alcance": [
       "simulador en formato juego"
      ],
-     "horas": 37,
+     "horas": 19,
      "derivadas": true
     },
     {
      "id": "3.0",
      "nombre": "Producción",
-     "inicio": "2029-08-03",
-     "fin": "2029-08-12",
+     "inicio": "2028-02-07",
+     "fin": "2028-02-09",
      "alcance": [
       "p99 bajo carga",
       "replay",
       "fuzzing"
      ],
-     "horas": 41,
+     "horas": 28,
      "derivadas": true
     }
    ]
@@ -2691,53 +2714,53 @@
     {
      "id": "1.0",
      "nombre": "MVP",
-     "inicio": "2029-09-04",
-     "fin": "2029-09-17",
+     "inicio": "2028-02-25",
+     "fin": "2028-02-28",
      "alcance": [
       "señales a órdenes en paper trading"
      ],
-     "horas": 58,
+     "horas": 40,
      "derivadas": true
     },
     {
      "id": "1.1",
      "nombre": "Producto",
-     "inicio": "2029-09-18",
-     "fin": "2029-10-01",
+     "inicio": "2028-02-29",
+     "fin": "2028-03-03",
      "alcance": [
       "riesgo previo",
       "kill-switch",
       "conciliación"
      ],
-     "horas": 58,
+     "horas": 40,
      "derivadas": true
     },
     {
      "id": "2.0",
      "nombre": "Plataforma",
-     "inicio": "2029-10-02",
-     "fin": "2029-10-15",
+     "inicio": "2028-03-04",
+     "fin": "2028-03-06",
      "alcance": [
       "WhatsApp",
       "Face ID",
       "email diario",
       "tablero público"
      ],
-     "horas": 58,
+     "horas": 30,
      "derivadas": true
     },
     {
      "id": "3.0",
      "nombre": "Producción",
-     "inicio": "2029-10-16",
-     "fin": "2029-10-29",
+     "inicio": "2028-03-07",
+     "fin": "2028-03-10",
      "alcance": [
       "una sola ejecución por orden",
       "conciliación ante fallas",
       "Kafka",
       "meses en vivo"
      ],
-     "horas": 56,
+     "horas": 40,
      "derivadas": true
     }
    ]
@@ -2803,51 +2826,51 @@
     {
      "id": "1.0",
      "nombre": "MVP",
-     "inicio": "2029-10-30",
-     "fin": "2029-11-10",
+     "inicio": "2028-03-11",
+     "fin": "2028-03-13",
      "alcance": [
       "ingesta en ClickHouse con calidad"
      ],
-     "horas": 49,
+     "horas": 30,
      "derivadas": true
     },
     {
      "id": "1.1",
      "nombre": "Producto",
-     "inicio": "2029-11-11",
-     "fin": "2029-11-21",
+     "inicio": "2028-03-14",
+     "fin": "2028-03-16",
      "alcance": [
       "MEP y CCL en vivo",
       "MCP"
      ],
-     "horas": 45,
+     "horas": 30,
      "derivadas": true
     },
     {
      "id": "2.0",
      "nombre": "Plataforma",
-     "inicio": "2029-11-22",
-     "fin": "2029-12-02",
+     "inicio": "2028-03-17",
+     "fin": "2028-03-19",
      "alcance": [
       "WhatsApp",
       "voz",
       "LED en Wokwi"
      ],
-     "horas": 45,
+     "horas": 30,
      "derivadas": true
     },
     {
      "id": "3.0",
      "nombre": "Producción",
-     "inicio": "2029-12-03",
-     "fin": "2029-12-13",
+     "inicio": "2028-03-20",
+     "fin": "2028-03-22",
      "alcance": [
       "ticks masivos",
       "replay",
       "SLA",
       "LED real"
      ],
-     "horas": 46,
+     "horas": 30,
      "derivadas": true
     }
    ]
@@ -2912,50 +2935,50 @@
     {
      "id": "1.0",
      "nombre": "MVP",
-     "inicio": "2030-02-05",
-     "fin": "2030-02-19",
+     "inicio": "2028-04-26",
+     "fin": "2028-04-29",
      "alcance": [
       "6-DOF validado"
      ],
-     "horas": 62,
+     "horas": 41,
      "derivadas": true
     },
     {
      "id": "1.1",
      "nombre": "Producto",
-     "inicio": "2030-02-20",
-     "fin": "2030-03-06",
+     "inicio": "2028-04-30",
+     "fin": "2028-05-04",
      "alcance": [
       "simulador web contra OpenRocket"
      ],
-     "horas": 62,
+     "horas": 51,
      "derivadas": true
     },
     {
      "id": "2.0",
      "nombre": "Plataforma",
-     "inicio": "2030-03-07",
-     "fin": "2030-03-20",
+     "inicio": "2028-05-05",
+     "fin": "2028-05-09",
      "alcance": [
       "Monte Carlo",
       "VR",
       "voz",
       "computadora de vuelo en Wokwi"
      ],
-     "horas": 58,
+     "horas": 51,
      "derivadas": true
     },
     {
      "id": "3.0",
      "nombre": "Producción",
-     "inicio": "2030-03-21",
-     "fin": "2030-04-04",
+     "inicio": "2028-05-10",
+     "fin": "2028-05-13",
      "alcance": [
       "un millón de corridas",
       "modelo sustituto",
       "HIL real"
      ],
-     "horas": 63,
+     "horas": 42,
      "derivadas": true
     }
    ]
@@ -3003,48 +3026,48 @@
     {
      "id": "1.0",
      "nombre": "MVP",
-     "inicio": "2030-04-17",
-     "fin": "2030-05-01",
+     "inicio": "2028-05-22",
+     "fin": "2028-05-25",
      "alcance": [
       "solver 1D contra CalculiX"
      ],
-     "horas": 62,
+     "horas": 39,
      "derivadas": true
     },
     {
      "id": "1.1",
      "nombre": "Producto",
-     "inicio": "2030-05-02",
-     "fin": "2030-05-15",
+     "inicio": "2028-05-26",
+     "fin": "2028-05-30",
      "alcance": [
       "2D",
       "convergencia",
       "margen"
      ],
-     "horas": 58,
+     "horas": 49,
      "derivadas": true
     },
     {
      "id": "2.0",
      "nombre": "Plataforma",
-     "inicio": "2030-05-16",
-     "fin": "2030-05-29",
+     "inicio": "2028-05-31",
+     "fin": "2028-06-04",
      "alcance": [
       "calculadora en el navegador"
      ],
-     "horas": 58,
+     "horas": 49,
      "derivadas": true
     },
     {
      "id": "3.0",
      "nombre": "Producción",
-     "inicio": "2030-05-30",
-     "fin": "2030-06-12",
+     "inicio": "2028-06-05",
+     "fin": "2028-06-08",
      "alcance": [
       "experimento real",
       "usuarios en universidades"
      ],
-     "horas": 57,
+     "horas": 38,
      "derivadas": true
     }
    ]
@@ -3089,49 +3112,49 @@
     {
      "id": "1.0",
      "nombre": "MVP",
-     "inicio": "2030-07-18",
-     "fin": "2030-07-29",
+     "inicio": "2028-06-26",
+     "fin": "2028-06-29",
      "alcance": [
       "método de paneles"
      ],
-     "horas": 50,
+     "horas": 39,
      "derivadas": true
     },
     {
      "id": "1.1",
      "nombre": "Producto",
-     "inicio": "2030-07-30",
-     "fin": "2030-08-10",
+     "inicio": "2028-06-30",
+     "fin": "2028-07-03",
      "alcance": [
       "vortex lattice",
       "Euler 2D",
       "comparación"
      ],
-     "horas": 50,
+     "horas": 39,
      "derivadas": true
     },
     {
      "id": "2.0",
      "nombre": "Plataforma",
-     "inicio": "2030-08-11",
-     "fin": "2030-08-22",
+     "inicio": "2028-07-04",
+     "fin": "2028-07-06",
      "alcance": [
       "optimizador",
       "AR"
      ],
-     "horas": 50,
+     "horas": 29,
      "derivadas": true
     },
     {
      "id": "3.0",
      "nombre": "Producción",
-     "inicio": "2030-08-23",
-     "fin": "2030-09-02",
+     "inicio": "2028-07-07",
+     "fin": "2028-07-10",
      "alcance": [
       "lote",
       "modelo sustituto"
      ],
-     "horas": 45,
+     "horas": 38,
      "derivadas": true
     }
    ]
@@ -3184,50 +3207,50 @@
     {
      "id": "1.0",
      "nombre": "MVP",
-     "inicio": "2030-09-15",
-     "fin": "2030-09-29",
+     "inicio": "2028-07-22",
+     "fin": "2028-07-26",
      "alcance": [
       "PID",
       "LQR y Kalman en PX4 SITL"
      ],
-     "horas": 63,
+     "horas": 50,
      "derivadas": true
     },
     {
      "id": "1.1",
      "nombre": "Producto",
-     "inicio": "2030-09-30",
-     "fin": "2030-10-14",
+     "inicio": "2028-07-27",
+     "fin": "2028-07-31",
      "alcance": [
       "banco de fallas",
       "modos seguros",
       "ajuste automático"
      ],
-     "horas": 63,
+     "horas": 50,
      "derivadas": true
     },
     {
      "id": "2.0",
      "nombre": "Plataforma",
-     "inicio": "2030-10-15",
-     "fin": "2030-10-29",
+     "inicio": "2028-08-01",
+     "fin": "2028-08-04",
      "alcance": [
       "estación de tierra por voz",
       "celular como sensor"
      ],
-     "horas": 63,
+     "horas": 40,
      "derivadas": true
     },
     {
      "id": "3.0",
      "nombre": "Producción",
-     "inicio": "2030-10-30",
-     "fin": "2030-11-13",
+     "inicio": "2028-08-05",
+     "fin": "2028-08-09",
      "alcance": [
       "dron real",
       "RL con escudo vs LQR"
      ],
-     "horas": 61,
+     "horas": 50,
      "derivadas": true
     }
    ]
@@ -3280,49 +3303,49 @@
     {
      "id": "1.0",
      "nombre": "MVP",
-     "inicio": "2030-12-10",
-     "fin": "2030-12-22",
+     "inicio": "2028-08-31",
+     "fin": "2028-09-03",
      "alcance": [
       "propagador",
       "ventanas de comunicación"
      ],
-     "horas": 54,
+     "horas": 39,
      "derivadas": true
     },
     {
      "id": "1.1",
      "nombre": "Producto",
-     "inicio": "2030-12-30",
-     "fin": "2031-01-12",
+     "inicio": "2028-09-04",
+     "fin": "2028-09-07",
      "alcance": [
       "screening del catálogo completo"
      ],
-     "horas": 59,
+     "horas": 39,
      "derivadas": true
     },
     {
      "id": "2.0",
      "nombre": "Plataforma",
-     "inicio": "2031-01-13",
-     "fin": "2031-01-23",
+     "inicio": "2028-09-08",
+     "fin": "2028-09-11",
      "alcance": [
       "WhatsApp",
       "newsletter",
       "AR"
      ],
-     "horas": 46,
+     "horas": 39,
      "derivadas": true
     },
     {
      "id": "3.0",
      "nombre": "Producción",
-     "inicio": "2031-01-24",
-     "fin": "2031-02-03",
+     "inicio": "2028-09-12",
+     "fin": "2028-09-15",
      "alcance": [
       "servicio diario",
       "reingresos sobre Argentina"
      ],
-     "horas": 46,
+     "horas": 38,
      "derivadas": true
     }
    ]
@@ -3342,34 +3365,34 @@
     {
      "id": "1.0",
      "nombre": "MVP",
-     "inicio": "2031-02-04",
-     "fin": "2031-02-13",
+     "inicio": "2028-09-16",
+     "fin": "2028-09-18",
      "alcance": [
       "primer PR aceptado"
      ],
-     "horas": 41,
+     "horas": 30,
      "derivadas": true
     },
     {
      "id": "2.0",
      "nombre": "Plataforma",
-     "inicio": "2031-02-14",
-     "fin": "2031-02-23",
+     "inicio": "2028-09-19",
+     "fin": "2028-09-22",
      "alcance": [
       "PR de funcionalidad en un segundo proyecto"
      ],
-     "horas": 41,
+     "horas": 40,
      "derivadas": true
     },
     {
      "id": "3.0",
      "nombre": "Producción",
-     "inicio": "2031-02-24",
-     "fin": "2031-03-04",
+     "inicio": "2028-09-23",
+     "fin": "2028-09-25",
      "alcance": [
       "contribución de peso"
      ],
-     "horas": 38,
+     "horas": 30,
      "derivadas": true
     }
    ]
@@ -3432,52 +3455,52 @@
     {
      "id": "1.0",
      "nombre": "MVP",
-     "inicio": "2031-03-13",
-     "fin": "2031-03-28",
+     "inicio": "2028-09-26",
+     "fin": "2028-09-30",
      "alcance": [
       "gemelo digital del cubesat"
      ],
-     "horas": 66,
+     "horas": 50,
      "derivadas": true
     },
     {
      "id": "1.1",
      "nombre": "Producto",
-     "inicio": "2031-03-29",
-     "fin": "2031-04-13",
+     "inicio": "2028-10-01",
+     "fin": "2028-10-05",
      "alcance": [
       "sala de control en VR conectada a Antena Ops"
      ],
-     "horas": 66,
+     "horas": 50,
      "derivadas": true
     },
     {
      "id": "2.0",
      "nombre": "Plataforma",
-     "inicio": "2031-04-14",
-     "fin": "2031-04-29",
+     "inicio": "2028-10-06",
+     "fin": "2028-10-10",
      "alcance": [
       "\"Houston\" por voz"
      ],
-     "horas": 66,
+     "horas": 50,
      "derivadas": true
     },
     {
      "id": "3.0",
      "nombre": "Producción",
-     "inicio": "2031-04-30",
-     "fin": "2031-05-15",
+     "inicio": "2028-10-11",
+     "fin": "2028-10-15",
      "alcance": [
       "HIL real",
       "comandos firmados",
       "caso de seguridad"
      ],
-     "horas": 67,
+     "horas": 50,
      "derivadas": true
     }
    ]
   },
-  "P0B": {
+  "P0": {
    "puesto": "Sr Full-stack → AI Engineer (RAG multifuente y agentes)",
    "queHace": [
     "portfolio como mapa 3D de proyectos",
@@ -3570,33 +3593,15 @@
    "entrevistas": "medio con la v1; alto desde la 2.0",
    "versiones": [
     {
-     "id": "2.0",
-     "nombre": "Con IA",
-     "inicio": "2027-07-06",
-     "fin": "2027-07-14",
+     "id": "1.0",
+     "nombre": "Base",
+     "enCurso": true,
      "alcance": [
-      "RAG con citas y evals (READMEs, ADRs, código, `learning.md`)",
-      "modo reclutador",
-      "MCP público"
-     ],
-     "horas": 38,
-     "derivadas": true
-    },
-    {
-     "id": "2.1",
-     "nombre": "Completa",
-     "inicio": "2027-07-15",
-     "fin": "2027-07-23",
-     "alcance": [
-      "voz",
-      "CV en AR",
-      "email y WhatsApp",
-      "métricas en vivo",
-      "plantilla open source",
-      "CDN y prueba de pico viral"
-     ],
-     "horas": 37,
-     "derivadas": true
+      "mapa 3D",
+      "Trazo como caso",
+      "validador",
+      "shell con Module Federation"
+     ]
     }
    ]
   }
@@ -3656,5 +3661,6 @@
   "WA5": {
    "contenido": "mecánica orbital"
   }
- }
+ },
+ "plan": "v12.1"
 }

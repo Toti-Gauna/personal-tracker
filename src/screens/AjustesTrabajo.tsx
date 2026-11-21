@@ -9,7 +9,7 @@ import { addDays } from '../data/time';
 import { setPlanSettings } from '../state/plan';
 import { inicioTrabajo, planSettings, useStore } from '../state/store';
 import { T0_PLAN } from '../data/plan';
-import { INICIO_TRABAJO_DIAS, convertiblesIntensiva, horasRutinaIntensiva } from '../data/capacidad';
+import { HORAS_ANTES_TRABAJO, INICIO_TRABAJO_DIAS, SIN_TRABAJO_NUEVO, convertiblesIntensiva, horasRutinaIntensiva } from '../data/capacidad';
 
 const DIAS: [BloquePendiente['dias'], string][] = [['lv', 'Lunes a viernes'], ['finde', 'Fin de semana'], ['todos', 'Todos los días']];
 
@@ -25,9 +25,9 @@ export function FilasTrabajo() {
   return (
     <>
       <li>
-        <span><b>Inicio del trabajo</b><small>Desde esa fecha rige la rutina con trabajo (el modo intensivo termina el día anterior) y el calendario del plan se recalcula con las horas de esa rutina. {cfg.t2 ? `Cargado: ${fechaCorta(cfg.t2)}.` : `Por defecto, el supuesto del roadmap (${fechaCorta(porDefecto)}).`}</small></span>
+        <span><b>Inicio del trabajo</b><small>Desde esa fecha rige la rutina con trabajo (el modo intensivo termina el día anterior) y el calendario del plan se recalcula con las horas de esa rutina. {cfg.t2 ? `Cargado: ${fechaCorta(cfg.t2)}.` : SIN_TRABAJO_NUEVO ? 'El plan v12.1 no tiene trabajo nuevo: la rutina de 10 y 11 h sigue hasta el final. Si entra uno, cargá la fecha.' : `Por defecto, el supuesto del roadmap (${fechaCorta(porDefecto)}).`}</small></span>
         <span className="aj-dos">
-          <input className="campo-texto mono" type="date" value={inicio} onChange={(e) => e.target.value && setPlanSettings({ t2: e.target.value })} aria-label="Inicio del trabajo" />
+          <input className="campo-texto mono" type="date" value={cfg.t2 ?? (SIN_TRABAJO_NUEVO ? '' : inicio)} onChange={(e) => e.target.value && setPlanSettings({ t2: e.target.value })} aria-label="Inicio del trabajo" />
           {cfg.t2 && <button className="subrayado" onClick={() => setPlanSettings({ t2: undefined })}>Restaurar</button>}
         </span>
       </li>
@@ -50,6 +50,8 @@ const durTxt = (m: number) => `${Math.floor(m / 60) ? `${Math.floor(m / 60)} h` 
  */
 export function FilaExtraPetria() {
   const settings = useStore((s) => s.settings)!;
+  // v12.1: la rutina de 10 y 11 h ya es el plan; no hay horas extra que elegir.
+  if (HORAS_ANTES_TRABAJO == null) return null;
   const cfg = planSettings(settings);
   const elegidos = cfg.extraProyecto ?? [];
   const h = horasRutinaIntensiva(elegidos);
