@@ -40,6 +40,8 @@ export function Marco({ titulo, rotulo, intro, volver, migas, acciones, info, ch
     o.observe(h1.current);
     return () => o.disconnect();
   }, []);
+  // En las pantallas raíz (sin "volver") el rótulo ocupa el lugar libre de la barra de arriba.
+  const enBarra = !volver && !migas?.length && !!rotulo;
   if (import.meta.env.DEV) {
     if (contarPalabras(titulo) > PRESUPUESTO.titulo) console.warn(`Trazo 2.0: el título "${titulo}" pasa las ${PRESUPUESTO.titulo} palabras.`);
     if (intro && contarPalabras(intro) > PRESUPUESTO.intro) console.warn(`Trazo 2.0: la intro de "${titulo}" pasa las ${PRESUPUESTO.intro} palabras.`);
@@ -47,7 +49,8 @@ export function Marco({ titulo, rotulo, intro, volver, migas, acciones, info, ch
   return (
     <main className={`v2 v2-pantalla m-marco ${className ?? ''}`}>
       <div className={`m-barra${compacta ? ' compacta' : ''}`}>
-        {volver ? <a className="m-volver" href={volver.href} data-transicion="atras"><Icono nombre="atras" lado={20} /><span>{volver.nombre}</span></a> : <span />}
+        {volver ? <a className="m-volver" href={volver.href} data-transicion="atras"><Icono nombre="atras" lado={20} /><span>{volver.nombre}</span></a>
+          : enBarra ? <p className="t-rotulo m-rotulo-barra">{rotulo}</p> : <span />}
         <span className="m-titulo-chico" aria-hidden="true">{titulo}</span>
         <div className="m-acciones">{acciones}</div>
       </div>
@@ -56,7 +59,7 @@ export function Marco({ titulo, rotulo, intro, volver, migas, acciones, info, ch
           <nav className="m-migas" aria-label="Camino">
             {migas.map((m, i) => <span key={m.nombre + i}>{m.href ? <a href={m.href} data-transicion="atras">{m.nombre}</a> : <span aria-current="page">{m.nombre}</span>}{i < migas.length - 1 && <Icono nombre="siguiente" lado={12} />}</span>)}
           </nav>
-        ) : rotulo && <p className="t-rotulo">{rotulo}</p>}
+        ) : rotulo && !enBarra && <p className="t-rotulo">{rotulo}</p>}
         <h1 className="t-titulo" ref={h1}>{titulo}{info && <Info titulo={titulo}>{info}</Info>}</h1>
         {intro && <p className="t-cuerpo-l m-intro">{intro}</p>}
       </header>

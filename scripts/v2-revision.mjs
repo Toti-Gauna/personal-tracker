@@ -54,7 +54,8 @@ const SEMBRAR = () => {
 
 /** Mide una pantalla ya renderizada: palabras del título, la intro y lo visible antes de desplazar, y el alto. */
 const medir = () => {
-  const palabras = (t) => (t ?? '').trim().split(/\s+/).filter(Boolean).length;
+  // Una palabra tiene al menos una letra o un número: los separadores (·, ›, –) no cuentan.
+  const palabras = (t) => (t ?? '').trim().split(/\s+/).filter((x) => /[\p{L}\p{N}]/u.test(x)).length;
   const main = document.querySelector('main');
   const titulo = palabras(document.querySelector('h1')?.textContent);
   const intro = palabras(document.querySelector('.m-intro')?.textContent);
@@ -63,10 +64,11 @@ const medir = () => {
   while (w.nextNode()) {
     const n = w.currentNode;
     const el = n.parentElement;
-    if (!el || !n.textContent.trim() || el.closest('.b2, .c-avisos, .h-velo, script, style')) continue;
+    // No cuenta lo que no se ve: la navegación, lo que flota, el texto solo para lector de pantalla y el título chico (oculto arriba).
+    if (!el || !n.textContent.trim() || el.closest('.b2, .c-avisos, .h-velo, .v2-oculto, .m-titulo-chico, script, style')) continue;
     const r = el.getBoundingClientRect();
     if (r.height === 0 || getComputedStyle(el).visibility === 'hidden') continue;
-    if (r.top >= 0 && r.top < 844 - 78) pliegue += n.textContent.trim().split(/\s+/).length;
+    if (r.top >= 0 && r.top < 844 - 78) pliegue += palabras(n.textContent);
   }
   return {
     marco: !!document.querySelector('.m-marco'),

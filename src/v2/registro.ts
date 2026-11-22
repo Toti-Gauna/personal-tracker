@@ -25,6 +25,7 @@ export type RegistroV2 = Partial<Record<Pantalla, EntradaV2>>;
 
 /** Las pantallas llegan de a una; las de `taller` no cuentan como pantallas convertidas. */
 export const PANTALLAS_V2: RegistroV2 = {
+  hoy: { nombre: 'Hoy', Componente: lazy(() => import('./hoy/HoyV2')) },
   ajustes: { nombre: 'Ajustes', Componente: lazy(() => import('./pantallas/AjustesV2')) },
   v2: { nombre: 'Taller 2.0', taller: true, Componente: lazy(() => import('./pantallas/Taller')) },
 };

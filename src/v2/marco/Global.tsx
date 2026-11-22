@@ -7,6 +7,7 @@ import { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import type { Pantalla, Seccion } from '../../lib/routes';
 import { marcarPesoPreguntado } from '../../state/train';
+import { ponerPuenteAvisos } from '../../ui/avisos';
 import { Checkins, cerrarHojas, useHojaAbierta } from '../../ui/checkins';
 import { Icono } from '../iconos';
 import CapasV2, { aviso } from '../kit/capas';
@@ -42,8 +43,21 @@ function AccionDeMarca({ pantalla }: { pantalla: Pantalla }) {
 
 interface Props { activa: Seccion | 'avance'; pantalla: Pantalla; pendientes: number; conBarra: boolean; conCheckins: boolean }
 
+/** Los avisos que disparan las acciones de la 1.0 (una meta cumplida, un horario cambiado) salen con el estilo de la 2.0. */
+function usePuenteAvisos() {
+  useEffect(() => {
+    ponerPuenteAvisos((t) => {
+      const deshacer = t.action?.label === 'Deshacer' ? t.action.run : undefined;
+      aviso({ titulo: t.title, sub: t.sub, tono: t.evento === 'tarea' ? 'hecho' : 'info', deshacer, accion: !deshacer && t.action ? { etiqueta: t.action.label, run: t.action.run } : undefined });
+      return true;
+    });
+    return () => ponerPuenteAvisos(null);
+  }, []);
+}
+
 export default function GlobalV2({ activa, pantalla, pendientes, conBarra, conCheckins }: Props) {
   useTemaV2();
+  usePuenteAvisos();
   return (
     <>
       {conBarra && <BarraV2 activa={activa} pendientes={pendientes} />}

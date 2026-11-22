@@ -32,8 +32,13 @@ const subscribe = (f: () => void) => {
   return () => subs.delete(f);
 };
 
+/** UX 2.0: con la 2.0 prendida, sus avisos reemplazan a estos. El puente recibe el aviso y devuelve `true` si lo mostró. */
+let puente: ((t: Omit<Toast, 'id'>) => boolean) | null = null;
+export function ponerPuenteAvisos(f: ((t: Omit<Toast, 'id'>) => boolean) | null) { puente = f; }
+
 /** Toast arriba, 4 s, con sonido. */
 export function toast(t: Omit<Toast, 'id'>, sound = true) {
+  if (puente?.(t)) { if (sound) play(t.evento ?? 'pomodoro'); return; }
   const id = ++seq;
   // Como mucho 3 a la vez: el más viejo se va.
   toasts = [...toasts, { ...t, id }].slice(-3);

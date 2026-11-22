@@ -8,6 +8,28 @@ import { Icono } from '../iconos';
 import { GLOSARIO } from '../reglas';
 import './superficies.css';
 
+/**
+ * Varias hojas pueden convivir un instante (una se cierra mientras otra se abre): el bloqueo del scroll se cuenta, para que
+ * la que se va no destrabe la página de la que llega, ni la deje trabada al revés.
+ */
+let abiertas = 0;
+let desbordePrevio = '';
+function bloquear() {
+  if (abiertas++ > 0) return;
+  desbordePrevio = document.body.style.overflow;
+  document.body.style.overflow = 'hidden';
+  // Con una hoja abierta, los avisos suben arriba de todo para no tapar sus botones.
+  document.documentElement.dataset.hoja = '1';
+}
+/** Devuelve `true` si era la última hoja abierta. */
+function liberar() {
+  abiertas = Math.max(0, abiertas - 1);
+  if (abiertas > 0) return false;
+  document.body.style.overflow = desbordePrevio;
+  delete document.documentElement.dataset.hoja;
+  return true;
+}
+
 const ENFOCABLES = 'a[href], button:not([disabled]), input:not([disabled]), select, textarea, [tabindex]:not([tabindex="-1"])';
 const SALIDA_MS = 260;
 
@@ -42,12 +64,10 @@ export function Hoja({ abierta, onCerrar, titulo, children, alto = 'auto', pie }
   useEffect(() => {
     if (!montada || saliendo) return;
     previo.current = document.activeElement as HTMLElement | null;
-    const desborde = document.body.style.overflow;
-    document.body.style.overflow = 'hidden';
-    // Con una hoja abierta, los avisos suben arriba de todo para no tapar sus botones.
-    document.documentElement.dataset.hoja = '1';
+    bloquear();
     caja.current?.focus();
-    return () => { document.body.style.overflow = desborde; delete document.documentElement.dataset.hoja; previo.current?.focus?.(); };
+    // El foco vuelve a quien abrió la hoja, salvo que ya haya otra hoja abierta (que lo tiene ella).
+    return () => { if (liberar()) previo.current?.focus?.(); };
   }, [montada, saliendo]);
 
   if (!montada) return null;
@@ -79,7 +99,7 @@ export function Hoja({ abierta, onCerrar, titulo, children, alto = 'auto', pie }
   };
 
   return createPortal(
-    <div className={`h-velo${saliendo ? ' saliendo' : ''}`} onClick={onCerrar}>
+    <div className={`h-velo${saliendo ? ' saliendo' : ''}`} data-v2-nav="" onClick={onCerrar}>
       <div ref={caja} className={`h-hoja capa-3${completa ? ' completa' : ''}${saliendo ? ' saliendo' : ''}${arrastre ? ' arrastrando' : ''}`}
         role="dialog" aria-modal="true" aria-labelledby={id} tabIndex={-1} onKeyDown={teclas} onClick={(e) => e.stopPropagation()}
         style={arrastre ? { transform: `translateY(${arrastre}px)` } : undefined}>

@@ -30,8 +30,8 @@ export function DeA({ de, a }: { de: RamaOMain; a: RamaOMain }) {
   );
 }
 
-/** Avisos entre ramas, arriba de la lista de Hoy. */
-export function AvisosRamas({ date, day }: { date: string; day?: DayLog }) {
+/** Los avisos entre ramas como datos: la 1.0 los dibuja en `AvisosRamas`; la 2.0, en su hoja de avisos. */
+export function useAvisosRamas(date: string, day?: DayLog): { avisos: Aviso[]; aplicarRutinaConTrabajo: () => void } {
   const plan = useStore((s) => s.plan);
   const settings = useStore((s) => s.settings);
   const focoKey = useStore((s) => s.focus?.key);
@@ -58,12 +58,21 @@ export function AvisosRamas({ date, day }: { date: string; day?: DayLog }) {
     ...(intensivaEn(settings, date) && esDiaDePausa(date) ? [{ id: 'pausa-fin-de-anio', de: 'main' as const, a: 'salud' as const, titulo: 'Pausa de fin de año', texto: 'Es el único descanso del modo intensivo: esta semana no se programa; la matemática, los idiomas y el entreno siguen.' }] : []),
   ];
   const avisos = [...(pasado ? [pasado] : []), ...control, ...avisosEntreRamas(date, plan, cfg, settings?.startDate)];
-  if (!avisos.length) return null;
-  const pasar = () => {
-    if (!window.confirm('¿Pasás a la rutina con trabajo de lunes a viernes? Se aplica desde el próximo día que empieces.')) return;
+  const aplicarRutinaConTrabajo = () => {
     // Con trabajo nuevo termina la búsqueda intensiva: Handyx y ventas salen de la pausa.
     if (cfg.modo === 'busqueda-intensiva') desactivarIntensiva(date);
     setPlanSettings({ rutina: 'con-trabajo' });
+  };
+  return { avisos, aplicarRutinaConTrabajo };
+}
+
+/** Avisos entre ramas, arriba de la lista de Hoy. */
+export function AvisosRamas({ date, day }: { date: string; day?: DayLog }) {
+  const { avisos, aplicarRutinaConTrabajo } = useAvisosRamas(date, day);
+  if (!avisos.length) return null;
+  const pasar = () => {
+    if (!window.confirm('¿Pasás a la rutina con trabajo de lunes a viernes? Se aplica desde el próximo día que empieces.')) return;
+    aplicarRutinaConTrabajo();
     toast({ title: 'Rutina con trabajo', sub: 'Desde el próximo Buen día', color: 'var(--rutina)' }, false);
   };
   return (
@@ -89,8 +98,10 @@ export function AvisosRamas({ date, day }: { date: string; day?: DayLog }) {
   );
 }
 
-/** Sumar a la semana con los contadores del plan: postulación, respuesta ensayada, operación de Handyx y entrenamiento. */
-export function SumarPlan({ date }: { date: string }) {
+export interface ItemSemana { id: string; label: string; v: number; meta?: number; rama: RamaOMain; color?: string; run: () => void }
+
+/** Los contadores de la semana como datos (`abrirClips` es lo que hace el de clips): la 1.0 y la 2.0 los dibujan distinto. */
+export function useItemsSemana(date: string, abrirClips: () => void): ItemSemana[] {
   const plan = useStore((s) => s.plan);
   const t0 = useStore((s) => s.settings?.startDate);
   const sesiones = useStore((s) => s.train.sessions.filter((x) => x.date >= lunesDe(date) && x.date <= addDays(lunesDe(date), 6)).length);
@@ -101,17 +112,23 @@ export function SumarPlan({ date }: { date: string }) {
   const clippingOn = useStore((s) => !!planSettings(s.settings).bloquesPendientes?.clipping);
   // Ola 23: los clips salen de la planilla del clipping; el botón abre la hoja Registrar.
   const clipping = useStore((s) => s.clipping);
-  const [hojaClip, setHojaClip] = useState(false);
   const l = lunesDe(date);
   const clipsSem = clipsEntre(clipping, l, addDays(l, 6)) + contador(plan, date, 'clips');
-  const items: { id: string; label: string; v: number; meta?: number; rama: RamaOMain; color?: string; run: () => void }[] = [
+  const items: ItemSemana[] = [
     { id: 'postulaciones', label: intensiva ? '+1 Postulación a medida' : '+1 Postulación', v: contador(plan, date, 'postulaciones'), meta: metas.postulaciones, rama: 'trabajo', run: () => sumarContador(date, 'postulaciones') },
     { id: 'respuestas', label: '+1 Respuesta ensayada', v: ensayadas, meta: plan.respuestas.length, rama: 'ingles', run: () => ensayarRespuesta(date) },
     // Una rama en pausa no genera contadores nuevos.
     ...(enPausa(plan, 'handyx', date) ? [] : [{ id: 'operaciones', label: '+1 Operación Handyx', v: ops, rama: 'handyx' as RamaOMain, run: () => sumarHandyx(date, { operaciones: 1 }) }]),
-    ...(intensiva && clippingOn ? [{ id: 'clips', label: 'Registrar clips', v: clipsSem, meta: planEntre(l, addDays(l, 6)).clips, rama: 'main' as RamaOMain, color: 'var(--eclipse)', run: () => setHojaClip(true) }] : []),
+    ...(intensiva && clippingOn ? [{ id: 'clips', label: 'Registrar clips', v: clipsSem, meta: planEntre(l, addDays(l, 6)).clips, rama: 'main' as RamaOMain, color: 'var(--eclipse)', run: abrirClips }] : []),
     { id: 'entrenos', label: '+1 Entrené', v: sesiones + contador(plan, date, 'entrenos'), meta: metas.entrenos, rama: 'salud', run: () => sumarContador(date, 'entrenos') },
   ];
+  return items;
+}
+
+/** Sumar a la semana con los contadores del plan: postulación, respuesta ensayada, operación de Handyx y entrenamiento. */
+export function SumarPlan({ date }: { date: string }) {
+  const [hojaClip, setHojaClip] = useState(false);
+  const items = useItemsSemana(date, () => setHojaClip(true));
   return (
     <section className="sumar-sem" aria-label="Sumar a la semana">
       <span className="etiqueta">Sumar a la semana</span>

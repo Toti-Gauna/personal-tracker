@@ -252,3 +252,29 @@ metadata); one floating action per screen at most; the breadcrumb is a compact p
 
 Current result: no failures in the 2.0 frame. Pending: the plan page (`#/ajustes/plan`) still shows 1.0's controls (163
 words above the fold), rebuilt in batch 3.3.
+
+## 14. Hoy 2.0 (`src/v2/hoy/`, batch 2.1)
+
+The first hero screen. It answers the three questions above the fold in 59 words (1.0: 179) and is 2.9 screens tall.
+
+| Where | What |
+|---|---|
+| Top bar | date and day number on the left; on the right the streak chip (links to Perfil), the bell with the count of alerts, and "⋯" (tools) |
+| **Ahora** (hero) | what is running now: a ring with the time left, the goal's name and branch, its steps to tick right there (up to 3), **Entrar en foco**, and "Después" with what follows. If the current goal is done it shows the next one ("Lo próximo"); with nothing ahead it invites to close the day; closed, it shows the XP |
+| **Tu día** | ring of goals done, "2 de 14 Metas", and the day's improvement counting up |
+| **El día** | the timeline: one row per goal on a rail, the node is a progress ring that becomes the yellow tick when done, the running one has its time highlighted; if the time falls in a gap, a "now" marker sits there. A row shows only the duration (steps appear when half-way); read aloud it says everything |
+| Goal sheet | tap any row: steps (tick, edit in place, delete with undo, add), **Dar por hecho** with a note, **Cambiar horario** (24 h, push or shorten what follows; says why when it can't), **Saltear hoy / Volver a hoy**, **Quitar de hoy** for goals added today (asks first) |
+| **Plan** | three rows instead of a text box: what is active now, what is due today (opens a list) and the next deadline; background work as chips |
+| Bell | every alert in one sheet (cross-branch alerts, exams to book, hardware and paperwork, background reminders), each with "Ver" and its action |
+| **Hábitos** | each habit is a goal of the routine: a real button marks it (ticks that goal's steps, with undo), the week as labelled dots, and "Racha: n" |
+| **Esta semana** | the weekly counters with a progress bar and a named "+1" |
+| "⋯" | Meta para hoy, Adaptar el día, Pomodoros, JSON del día, Importar |
+| Desktop | two columns: Ahora, Tu día and Plan on the left; the day on the right |
+
+Behaviour is 1.0's, untouched: the same store actions run (ticking a step, marking done, rescheduling, skipping, adding a
+goal, counters), so toasts, sounds, the route sync and the "how did the chapter go?" question still fire. Two additive
+hooks in `ui/PlanBits.tsx` (`useAvisosRamas`, `useItemsSemana`) expose 1.0's logic as data. With 2.0 on, 1.0's toasts are
+shown as 2.0 toasts through a small bridge (`ponerPuenteAvisos`).
+
+Still 1.0 inside this screen: the clip-logging sheet and the chapter-state dialog (rebuilt with their own screens), and
+the destinations of the links (focus, Cierre, Pomodoros, JSON, Importar).

@@ -101,7 +101,7 @@ Demo: flip to 2.0 in Ajustes → new shell, Ajustes, splash and the component ga
 
 | Batch | What | Model | Effort |
 |---|---|---|---|
-| 2.1 | **Hoy 2.0**: Now card with live countdown ring and what's next; day ring; timeline with a "now" line and labelled sub-goal rings; habits with real check buttons and 7-day dots; background work as chips; tools in one "⋯" sheet; "Cerrar el día" as a ritual. ≤60 words above the fold (now 179) | Fable 5.2 | xhigh |
+| 2.1 | ✅ **Hoy 2.0**: Now card with live countdown ring and what's next; day ring; timeline with a "now" line and labelled sub-goal rings; habits with real check buttons and 7-day dots; background work as chips; tools in one "⋯" sheet; "Cerrar el día" as a ritual. ≤60 words above the fold (now 179) | Fable 5.2 | xhigh |
 | 2.2 | **Plan hub + GoalCard**: one card for every period (ring + pace track + forecast + calm status), zoom Etapa → Lote with shared-element transitions, Semana/Mes/Bim/Año as zoom, Análisis page. Replaces 9 views | Opus 5.5 | xhigh |
 | 2.3 | **Línea 2.0 + 3D constellation**: pinch-zoom, sticky lanes, tappable bars with hints, glowing today; three.js constellation (phases as orbits, blocks as stars that light up), loaded only there | Fable 5.2 | xhigh |
 | 2.4 | **Project, cert and version pages + De fondo hub**: cover hero per project (generated SVG art), tabs Resumen / Ficha / Stack (P1: 811 words today), versions as a stepper, cert countdown (fixed date field, no duplicated subtitle), Open source as package cards, Imán as an 8-segment ring, Pistas as cards | Sonnet 5.5 | high |

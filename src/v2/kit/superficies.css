@@ -33,7 +33,7 @@
 .s-anillo { position: relative; flex: none; display: grid; place-items: center; }
 .s-anillo svg { position: absolute; inset: 0; overflow: visible; }
 .s-anillo circle { fill: none; }
-.s-anillo-fondo { stroke: var(--capa-3); }
+.s-anillo-fondo { stroke: var(--raya-fuerte); }
 .s-anillo-valor { stroke: var(--area, var(--texto)); stroke-linecap: round; transition: stroke-dashoffset var(--dur-4) var(--curva-salida), stroke var(--dur-3); }
 .s-anillo.completo .s-anillo-valor { stroke: var(--trazo); }
 .s-anillo-centro { position: relative; display: grid; justify-items: center; gap: 2px; text-align: center; }
@@ -42,7 +42,7 @@
 
 /* ——— Ritmo ——— */
 .s-ritmo { display: grid; gap: var(--sp-2); }
-.s-ritmo-riel { position: relative; height: 12px; border-radius: var(--r-pildora); background: var(--capa-3); }
+.s-ritmo-riel { position: relative; height: 12px; border-radius: var(--r-pildora); background: var(--raya-fuerte); }
 .s-ritmo-hecho { position: absolute; inset: 0 auto 0 0; border-radius: inherit; background: var(--area, var(--texto)); transition: width var(--dur-4) var(--curva-salida); }
 .s-ritmo.completo .s-ritmo-hecho { background: var(--trazo); }
 /* La marca fantasma: dónde deberías estar según el tiempo. */
@@ -55,7 +55,7 @@
 .s-ritmo.atras .s-ritmo-frase { color: var(--texto); font-weight: 550; }
 
 /* ——— Barra ——— */
-.s-barra { height: 6px; border-radius: var(--r-pildora); background: var(--capa-3); overflow: hidden; }
+.s-barra { height: 6px; border-radius: var(--r-pildora); background: var(--raya-fuerte); overflow: hidden; }
 .s-barra span { display: block; height: 100%; border-radius: inherit; background: var(--area, var(--texto)); transition: width var(--dur-4) var(--curva-salida); }
 .s-barra.completo span { background: var(--trazo); }
 
@@ -99,7 +99,7 @@
 .h-asa { display: grid; place-items: center; height: 24px; cursor: grab; touch-action: none; flex: none; }
 .h-asa i { width: 36px; height: 5px; border-radius: var(--r-pildora); background: var(--raya-fuerte); }
 .h-cabeza { display: flex; align-items: center; justify-content: space-between; gap: var(--sp-3); padding: 0 var(--sp-3) var(--sp-2) var(--margen); flex: none; }
-.h-cuerpo { flex: 1; overflow: auto; padding: var(--sp-2) var(--margen) var(--sp-5); display: grid; gap: var(--sp-3); align-content: start; overscroll-behavior: contain; }
+.h-cuerpo { flex: 1; overflow: auto; padding: var(--sp-2) var(--margen) var(--sp-5); display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--sp-3); align-content: start; overscroll-behavior: contain; }
 .h-pie { flex: none; display: flex; gap: var(--sp-2); padding: var(--sp-3) var(--margen) var(--sp-4); border-top: 1px solid var(--raya); }
 .h-pie > * { flex: 1; }
 .h-info { display: inline-grid; place-items: center; width: 32px; height: 32px; margin: -4px 0; border-radius: 50%; color: var(--texto-2); vertical-align: middle; transition: color var(--dur-2), background-color var(--dur-2); }
@@ -118,7 +118,8 @@
 .c-aviso-texto b { font-weight: 600; }
 .c-aviso-texto small { font-size: var(--t-13); color: var(--texto-2); }
 
-html[data-ui='v2'][data-hoja] .c-avisos { bottom: auto; top: calc(env(safe-area-inset-top, 0px) + 12px); }
+/* Con una hoja abierta (de la 2.0 o un modal de la 1.0), los avisos van arriba: no tapan sus botones. */
+html[data-ui='v2'][data-hoja] .c-avisos, html[data-ui='v2']:has(.modal-fondo) .c-avisos { bottom: auto; top: calc(env(safe-area-inset-top, 0px) + 12px); }
 @media (min-width: 720px) { .c-avisos { left: var(--lat-w, 0px); bottom: var(--sp-5); } }
 
 /* ——— Diálogo de confirmación ——— */

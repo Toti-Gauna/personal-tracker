@@ -52,6 +52,8 @@ html[data-ui='v2'] { --bar-h: 78px; }
 .m-volver { justify-self: start; display: inline-flex; align-items: center; gap: 2px; min-height: var(--toque); padding-right: var(--sp-2); color: var(--texto-2); text-decoration: none; font: 500 var(--t-15)/1 var(--font-text); max-width: 100%; }
 .m-volver span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .m-volver:active { color: var(--texto); }
+.m-rotulo-barra { justify-self: start; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; padding-left: 6px; transition: opacity var(--dur-2); }
+.m-barra.compacta .m-rotulo-barra { opacity: 0; }
 .m-titulo-chico { font: 650 var(--t-17)/1 var(--font-text); letter-spacing: -0.01em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 46vw; opacity: 0; transform: translateY(6px); transition: opacity var(--dur-2), transform var(--dur-2) var(--curva-salida); }
 .m-barra.compacta .m-titulo-chico { opacity: 1; transform: none; }
 .m-acciones { justify-self: end; display: flex; align-items: center; gap: var(--sp-1); }

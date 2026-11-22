@@ -43,7 +43,7 @@ describe('2.0 · lint de los estilos', () => {
   });
 
   it('todo selector cuelga de la 2.0 (no pisa elementos sueltos de la 1.0)', () => {
-    const suelto = /^\s*(html|body|main|nav|ul|li|a|h1|h2|h3|p|button|input|textarea|section|header|footer|span|svg|img)\b\s*[,{:.#\[]/;
+    const suelto = /^\s*(html|body|main|nav|ul|li|a|h1|h2|h3|p|button|input|textarea|section|header|footer|span|svg|img)\b\s*[,{:\[]/; // `a.mi-clase` está bien: lo ata su clase
     const malos: string[] = [];
     for (const f of ARCHIVOS) for (const l of lineas(f)) {
       if (!/\{/.test(l.texto) || /^\s*@/.test(l.texto)) continue;
