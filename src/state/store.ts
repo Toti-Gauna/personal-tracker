@@ -1,4 +1,6 @@
 import { puertaBloqueando } from '../data/puertas';
+import { planPropio, setRutinasPropias } from '../data/rutinas-propias';
+import { rutinaParaFecha } from '../data/motor-rutinas';
 import { migrarPlanV12, migrarStudyV12 } from './migrar-v12';
 import { temaDelPost } from '../data/papers';
 import { T0_PLAN } from '../data/plan';
@@ -91,6 +93,7 @@ export function migrate(parsed: any): State {
 }
 
 let state: State = load();
+setRutinasPropias(state.plan.rutinasPropias, state.plan.asignacionesRutina);
 
 /** Ola 27 · horas de programación reales por día (foco en bloques de la rama programación), solo de los días que ya pasaron. Ola 33: las cargadas a mano mandan. */
 function realesProg(days: Record<string, DayLog>, hoy: string, manual?: PlanState['horasManuales']): Record<string, number> {
@@ -148,6 +151,7 @@ export function setState(fn: (s: State) => State) {
   const prevLibros = state.study.librosPropios;
   state = fn(state);
   if (state.study.librosPropios !== prevLibros) aplicarLibrosPropios(state.study.librosPropios);
+  setRutinasPropias(state.plan.rutinasPropias, state.plan.asignacionesRutina);
   if (state.settings !== prev) { applySettings(state.settings); setClippingActivo(!!state.settings?.plan?.bloquesPendientes?.clipping); }
   // Ola 16b: el calendario vivo se recalcula si cambian los extras de feature apagados.
   if (state.plan.extrasApagados !== prevExtras || state.plan.pausaFinDeAnio !== prevPausa || claveCalendario(state) !== claveAplicada) recalcularCalendario();
@@ -162,6 +166,7 @@ export function resetState(s: State = empty()) {
   setClippingActivo(!!s.settings?.plan?.bloquesPendientes?.clipping);
   recalcularCalendario();
   aplicarLibrosPropios(s.study.librosPropios);
+  setRutinasPropias(s.plan.rutinasPropias, s.plan.asignacionesRutina);
   subs.forEach((f) => f());
 }
 
@@ -281,6 +286,12 @@ export function startDay(routine: RoutineId, wake: string, date = dateKey()) {
       ...(sprint ? { sprintSinIA: { dia: sprint.dia } } : {}),
       ...(antesDelTrabajo && cfg.extraProyecto?.length ? { extraProyecto: cfg.extraProyecto } : {}),
     };
+    // Ola 34: una rutina propia asignada a esta fecha se usa tal cual, sin las reglas automáticas del plan.
+    const propia = rutinaParaFecha(date, s.plan.asignacionesRutina, s.plan.rutinasPropias);
+    if (propia) {
+      const day: DayLog = { date, wake, routine, dayType, rutinaPropia: propia.nombre, blocks: buildBlocks(planPropio(propia.bloques), carry), notes: [], focus: [] };
+      return { ...s, days: { ...s.days, [date]: day }, carry: restCarry };
+    }
     const blocks = buildBlocks(planDay(date, routine, wake, dayType, { ventana, entrevista, puerta, prepara, ...(cfg.horarioTrabajo ? { trabajo: cfg.horarioTrabajo } : {}), ...(cfg.bloquesPendientes ? { pendientes: cfg.bloquesPendientes } : {}), ...v7, ...v12 }), carry)
       .map((b) => (refs[b.key] && !(ventana && b.key.startsWith('prog')) ? { ...b, ...refs[b.key] } : b))
       .map((b) => (b.rama === 'programacion' && delProyecto.length ? { ...b, tasks: [...delProyecto.map((t) => ({ id: newId(), t: `${proyecto} · ${t}`, done: false })), ...b.tasks] } : b))

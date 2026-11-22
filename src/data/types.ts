@@ -98,6 +98,8 @@ export interface DayLog {
   routine: RoutineId;
   /** Rutina del día: lunes a viernes, fin de semana, con trabajo o día libre. */
   dayType?: 'weekday' | 'weekend' | 'con-trabajo' | 'con-trabajo-finde' | 'libre' | 'busqueda-intensiva' | 'busqueda-intensiva-finde' | 'busqueda-intensiva-domingo';
+  /** Ola 34: la rutina propia que rigió ese día (su nombre), usada tal cual. */
+  rutinaPropia?: string;
   /** Ventana de matemática del plan si cayó ese día ("W1"). */
   ventana?: string;
   blocks: Block[];
