@@ -124,7 +124,7 @@ function InterfazAjuste() {
   const guardada = useStore((s) => s.settings?.interfaz);
   const activa = interfazActiva(guardada);
   const forzada = forzadaPorUrl();
-  const listas = Object.values(PANTALLAS_V2).map((e) => e!.nombre);
+  const listas = Object.values(PANTALLAS_V2).filter((e) => !e!.taller).map((e) => e!.nombre);
   return (
     <section aria-label="Interfaz">
       <div className="etiqueta aj-t">Interfaz</div>
@@ -135,6 +135,7 @@ function InterfazAjuste() {
         {forzada ? `La dirección fuerza la ${forzada === 'v1' ? '1.0' : '2.0'} (?ui=${forzada === 'v1' ? 1 : 2}). Sacá ?ui de la dirección para usar lo que elegiste. ` : ''}
         Mismos datos en las dos: cambiar no borra nada. {listas.length ? `Ya en 2.0: ${listas.join(', ')}.` : 'Todavía no hay pantallas 2.0: el resto se ve como siempre.'}
       </p>
+      {activa === 'v2' && <a className="fila-link" href="#/v2">El lenguaje de la 2.0, en vivo <span aria-hidden="true">→</span></a>}
     </section>
   );
 }

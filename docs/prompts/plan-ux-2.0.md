@@ -87,7 +87,7 @@ Each wave = one PR with before/after screenshots (both modes), small commits, te
 | Batch | What | Model | Effort |
 |---|---|---|---|
 | 1.1 | ✅ **The 2.0 switch & architecture**: `settings.interfaz` + additive migration, Ajustes "Interfaz", `src/v2/` lazy bundle, route resolver with per-screen fallback and "1.0" chip, error boundary, `?ui=1`, tests | Sonnet 5.5 | medium |
-| 1.2 | **Design language + writing rules**: art direction, tokens (8-step type scale, 4 pt spacing, 3 radii, 4 surface depths, grain/glow), area colors ≠ status colors, dark + light themes, copy guide + glossary, word budgets, the new structure | Fable 5.2 | high |
+| 1.2 | ✅ **Design language + writing rules**: art direction, tokens (8-step type scale, 4 pt spacing, 3 radii, 4 surface depths, grain/glow), area colors ≠ status colors, dark + light themes, copy guide + glossary, word budgets, the new structure | Fable 5.2 | high |
 | 1.3 | **Custom SVG icon set** (~50, one stroke grid, each checked against what people expect: a real gear for settings, a dumbbell for Entreno…) + the illustration style for empty states | Fable 5.2 | medium |
 | 1.4 | **Controls**: Button (primary / secondary / ghost / destructive, icon button, loading + disabled with reason), check button with drawn tick, switch, segmented, chips, stepper, text field, 24 h time picker, date picker, select sheet | Sonnet 5.5 | high |
 | 1.5 | **Feedback & surfaces**: Toast (stacked, undo, swipe away, success/warning/error), bottom sheet (drag, snap points), confirm dialog, ⓘ InfoSheet, tooltip, skeleton loaders per layout, empty state, Ring, PaceTrack, progress bar, StatusPill, Stat (always labelled), Card/Surface, list row | Opus 5.5 | high |

@@ -130,6 +130,7 @@ export function App() {
       case 'ajustes-rutinas': contenido = <Rutinas key={ruta.param ?? ''} day={day} param={ruta.param} />; break;
       case 'ajustes-companera': contenido = <AjustesCompanera />; break;
       case 'ajustes-datos': contenido = <AjustesDatos today={today} />; break;
+      case 'v2': contenido = <main className="pantalla"><div className="topbar"><a className="volver" href="#/ajustes">Ajustes</a></div><h1 className="titulo">Trazo 2.0</h1><p className="sub">Esto es parte de la 2.0. Prendela en Ajustes → Interfaz para verlo.</p></main>; break;
       case 'sonidos': contenido = <Sonidos today={today} />; break;
     }
   }

@@ -1,0 +1,37 @@
+/*
+ * Trazo 2.0 · la base: los 8 roles de texto, las superficies y la marca. Las pantallas y los componentes 2.0 usan estas
+ * clases; ninguna pisa a la 1.0 (todas llevan el prefijo de la 2.0 o cuelgan de .v2).
+ */
+.v2 { color: var(--texto); font: 400 var(--t-15)/1.45 var(--font-text); }
+.v2 :focus-visible { outline: 2px solid var(--trazo-texto); outline-offset: 2px; border-radius: var(--r-s); }
+
+/* ——— Texto: ocho roles ——— */
+.t-heroe, .t-titulo, .t-seccion { font-family: var(--font-title); margin: 0; }
+.t-heroe { font-size: var(--t-44); font-weight: 900; font-stretch: 125%; line-height: 1; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
+.t-titulo { font-size: var(--t-32); font-weight: 900; font-stretch: 125%; line-height: 1.05; letter-spacing: -0.02em; }
+.t-seccion { font-size: var(--t-24); font-weight: 800; font-stretch: 112%; line-height: 1.1; letter-spacing: -0.015em; }
+.t-encabezado { font: 650 var(--t-20)/1.2 var(--font-text); letter-spacing: -0.01em; margin: 0; }
+.t-cuerpo-l { font: 450 var(--t-17)/1.4 var(--font-text); margin: 0; }
+.t-cuerpo { font: 400 var(--t-15)/1.45 var(--font-text); margin: 0; }
+.t-nota { font: 400 var(--t-13)/1.35 var(--font-text); color: var(--texto-2); margin: 0; }
+.t-rotulo { font: 500 var(--t-11)/1.2 var(--font-mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--texto-2); margin: 0; }
+/* Los números de dato: mono y alineados, del tamaño del texto que los rodea. */
+.t-dato { font-family: var(--font-mono); font-weight: 500; font-variant-numeric: tabular-nums; }
+
+/* ——— Superficies ——— */
+.capa-1, .capa-2, .capa-3 { border-radius: var(--r-m); box-shadow: var(--brillo), var(--sombra-1); }
+.capa-1 { background: var(--capa-1); }
+.capa-2 { background: var(--capa-2); }
+.capa-3 { background: var(--capa-3); box-shadow: var(--brillo), var(--sombra-2); border-radius: var(--r-l); }
+/* El héroe de una pantalla: halo del área y grano. */
+.capa-heroe { position: relative; isolation: isolate; overflow: hidden; background: var(--halo), var(--capa-1); border-radius: var(--r-l); box-shadow: var(--brillo), var(--sombra-1); }
+.capa-heroe::after { content: ''; position: absolute; inset: 0; z-index: -1; background: var(--grano); opacity: var(--grano-opacidad); mix-blend-mode: overlay; pointer-events: none; }
+
+/* ——— La marca: el trazo del resaltador. Solo dice "acá estás" o "hecho". ——— */
+.trazo-marca { position: relative; isolation: isolate; color: var(--sobre-trazo); padding: 0 var(--sp-2); }
+.trazo-marca::before { content: ''; position: absolute; inset: -1px -2px; z-index: -1; background: var(--trazo); clip-path: var(--bisel); transform-origin: left center; }
+.trazo-marca.entra::before { animation: trazo-pasa var(--dur-3) var(--curva-salida) both; }
+@keyframes trazo-pasa { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+
+/* ——— El marcador de área: un punto, nunca un fondo de alarma. ——— */
+.area-punto { display: inline-block; width: 8px; height: 8px; border-radius: 2px; background: var(--area); flex: none; }
