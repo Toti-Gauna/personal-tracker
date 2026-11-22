@@ -516,10 +516,18 @@ screen and the new-seal screen are `parte: true` in the registry (they belong to
 `closeDay`, `reopenDay`, `claimSeal`, `unclaimSeal`, `markSealSeen`. XP, levels, seals and their rules come from `data/profile`
 untouched. The word stays **Sellos** (it is what the history text and the 24 definitions say); what changes is how they look.
 
-**The seal** (`Sello.tsx`): a minted piece of metal in its area color (radial gradient: light, color, shadow), a darker rim, a dotted
-inner ring and the mark stamped in the title font. A **sheen** crosses it once when it appears (staggered across a row), again
-on hover or focus, and in a slow loop on the big one. Locked is only a dashed outline with a dim mark. In the light theme the
-metal is deeper and the mark is light, so the contrast holds. It is a drawing: the name is given by whoever uses it.
+**The seal** (`Sello.tsx`, `formas.ts`): a minted piece with the **silhouette of its group**, so the wall reads before the names do:
+Constancia = coin (milled edge), Cuerpo = hexagon (a weight plate), Estudio = shield, Trabajo = rosette (a wax stamp). Layers: bevelled
+rim (light top-left, dark bottom-right), a face with the area color as a radial gradient, a dotted inner ring, the mark engraved
+(a light copy offset under a dark one), a soft gloss and a **sheen** that crosses it once on appearing (staggered across a row) and
+again on hover or focus. **Locked** is the empty silhouette with a **progress ring drawn along its outline** (the seal's own
+`progress()` rule: 18 of 30 days = 60 % of the ring), so the wall tells you how close each one is; seals with no measurable rule
+(manual or one-off) show no ring. In the light theme the metal is deeper and the mark darker so the contrast holds. It is a drawing:
+the name is given by whoever uses it; the wall buttons say "100 días: bloqueado, 36 %".
+**Big seal** (`SelloInclinable`): follows the mouse, or a sideways drag, tilting up to 17° in 3D with the sheen moving with the light;
+it settles back on release. Off with reduced motion. Used in the detail sheet and in the new-seal screen.
+**Vitrina** ("Lo último" in Perfil): the last three seals you earned as a podium under a spotlight of the newest one's area color
+(newest in the middle and bigger). Seals sit on the shelf with a contact shadow.
 
 **The year** (`Calor.tsx`, `datos.ts`): one row per month, one cell per day (12 × 31), which fits a phone at a readable size where a
 53-week grid does not. Five levels with the same thresholds as the 1.0 calendar (no data, nothing done, something, half or more,

@@ -18,7 +18,7 @@ import { FilaHoja } from '../proyecto/piezas';
 import type { PropsV2 } from '../registro';
 import { Calor } from './Calor';
 import { colorDeSello, mapaDelAnio, resumen } from './datos';
-import { SelloV2 } from './Sello';
+import { SelloDe, SelloInclinable } from './Sello';
 import '../proyecto/proyecto.css';
 import './perfil.css';
 
@@ -47,6 +47,13 @@ export default function PerfilV2({ day }: PropsV2) {
   const d = ultimo;
   const ganadoEl = d ? s.profile.seals[d.id] : undefined;
   const avance = d && !ganadoEl && d.progress ? d.progress({ s, date: day.date }) : null;
+  /** Cuánto del camino lleva un sello bloqueado (de 0 a 1), si su regla lo puede decir. */
+  const caminoDe = (x: SealDef) => { const p = !s.profile.seals[x.id] && x.progress ? x.progress({ s, date: day.date }) : null; return p && p.target > 0 ? p.value / p.target : undefined; };
+  // Lo último que ganaste, para la vitrina: el más reciente al centro.
+  const ganadosPorFecha = SEALS.filter((x) => s.profile.seals[x.id]).sort((a, b) => s.profile.seals[b.id].localeCompare(s.profile.seals[a.id]) || SEALS.indexOf(b) - SEALS.indexOf(a));
+  const podio = ganadosPorFecha.slice(0, 3);
+  const enPodio = podio.length === 3 ? [podio[1], podio[0], podio[2]] : podio;
+  const LADO_PODIO = (x: SealDef) => (x.id === podio[0]?.id ? 112 : 84);
 
   return (
     <Marco className="pf" titulo="Perfil" info={INFO} acciones={<Boton soloIcono variante="fantasma" icono="ajustes" etiqueta="Ajustes" href="#/ajustes" />}>
@@ -67,6 +74,22 @@ export default function PerfilV2({ day }: PropsV2) {
         </div>
       </Tarjeta>
 
+      {podio.length > 0 && (
+        <Grupo titulo="Lo último">
+          <ul className="capa-1 pf-vitrina" style={{ ['--v-c' as string]: colorDeSello(podio[0].color) }}>
+            {enPodio.map((x, k) => (
+              <li key={x.id} className={x.id === podio[0].id ? 'pf-vitrina-primero' : undefined}>
+                <button type="button" onClick={() => abrir(x)} aria-label={`${x.name}: ganado el ${fmtFecha(s.profile.seals[x.id]).toLowerCase()}`}>
+                  <SelloInclinable marca={x.mark} color={x.color} grupo={x.group} ganado lado={LADO_PODIO(x)} i={k} className="sl-grande" />
+                  <b className="t-nota">{x.name}</b>
+                  <span className="t-rotulo">{fmtFecha(s.profile.seals[x.id]).split(' ').slice(1).join(' ')}</span>
+                </button>
+              </li>
+            ))}
+          </ul>
+        </Grupo>
+      )}
+
       <Grupo titulo="El año" extremo={<span className="t-rotulo">{mapa.cargados ? `${mapa.cargados} ${mapa.cargados === 1 ? 'día' : 'días'} · promedio ${Math.round((mapa.promedio ?? 0) * 100)} %` : 'Sin días cargados'}</span>}>
         <div className="capa-1 pf-anio">
           <Calor mapa={mapa} nombre={`El año, día por día: ${mapa.cargados} ${mapa.cargados === 1 ? 'día cargado' : 'días cargados'}${mapa.promedio != null ? `, promedio ${Math.round(mapa.promedio * 100)} %` : ''}. Mejor racha: ${r.mejorRacha}.`} />
@@ -79,7 +102,7 @@ export default function PerfilV2({ day }: PropsV2) {
             {hs.map(({ def, p }) => (
               <li key={def.id}>
                 <button type="button" onClick={() => abrir(def)} aria-label={`${def.name}: ${p.hint}`}>
-                  <SelloV2 marca={def.mark} color={def.color} ganado={false} lado={40} />
+                  <SelloDe def={def} ganado={false} lado={44} progreso={p.target > 0 ? p.value / p.target : 0} />
                   <span className="pf-hito-texto">
                     <span className="pf-hito-cab"><b className="t-cuerpo">{def.name}</b><span className="t-dato">{def.id.startsWith('peso-') ? `${Math.round(p.value)} %` : `${fmt1(p.value)} de ${p.target}`}</span></span>
                     <Barra valor={p.value} max={p.target} nombre={`${def.name}: avance`} area={colorDeSello(def.color)} />
@@ -100,10 +123,11 @@ export default function PerfilV2({ day }: PropsV2) {
               <ul className="pf-sellos">
                 {defs.map((x, i) => {
                   const ganado = !!s.profile.seals[x.id];
+                  const camino = caminoDe(x);
                   return (
                     <li key={x.id}>
-                      <button type="button" onClick={() => abrir(x)} aria-label={`${x.name}: ${ganado ? 'ganado' : 'bloqueado'}`}>
-                        <SelloV2 marca={x.mark} color={x.color} ganado={ganado} lado={64} i={i} />
+                      <button type="button" onClick={() => abrir(x)} aria-label={`${x.name}: ${ganado ? 'ganado' : `bloqueado${camino ? `, ${Math.round(camino * 100)} %` : ''}`}`}>
+                        <span className="pf-pieza"><SelloDe def={x} ganado={ganado} lado={70} i={i} progreso={camino} /></span>
                         <span className={ganado ? undefined : 'pf-apagado'}>{x.name}</span>
                       </button>
                     </li>
@@ -132,7 +156,7 @@ export default function PerfilV2({ day }: PropsV2) {
       <Hoja abierta={!!abierto} onCerrar={() => setAbierto(null)} titulo={d?.name ?? 'Sello'}>
         {d && (
           <div className="pf-detalle">
-            <SelloV2 marca={d.mark} color={d.color} ganado={!!ganadoEl} lado={120} nombre={d.name} className="sl-grande" />
+            <SelloInclinable marca={d.mark} color={d.color} grupo={d.group} ganado={!!ganadoEl} lado={176} nombre={d.name} progreso={avance ? avance.value / avance.target : undefined} className="sl-grande" />
             <p className="t-cuerpo-l">{d.how}</p>
             {ganadoEl ? <p className="t-dato">Ganado el {fmtFecha(ganadoEl).toLowerCase()} · +{SEAL_XP} XP</p> : avance && (
               <div className="pf-detalle-avance">

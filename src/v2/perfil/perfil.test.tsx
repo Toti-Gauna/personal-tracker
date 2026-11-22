@@ -16,7 +16,8 @@ import CierreV2 from './CierreV2';
 import { mapaDelAnio, nivelDe, resumen, ultimosDias } from './datos';
 import LogroV2 from './LogroV2';
 import PerfilV2 from './PerfilV2';
-import { SelloV2 } from './Sello';
+import { SelloDe, SelloInclinable, SelloV2 } from './Sello';
+import { CONTORNO, FORMA_DE_GRUPO } from './formas';
 
 const HOY = '2026-11-23';
 const dia = () => getState().days[HOY];
@@ -98,6 +99,52 @@ describe('Perfil 2.0 · los datos', () => {
   });
 });
 
+describe('Perfil 2.0 · las siluetas de los sellos', () => {
+  it('cada grupo tiene la suya, y las cuatro son distintas', () => {
+    expect(FORMA_DE_GRUPO).toEqual({ constancia: 'moneda', cuerpo: 'hexagono', estudio: 'escudo', trabajo: 'roseton' });
+    expect(new Set(Object.values(CONTORNO)).size).toBe(4);
+    for (const d of Object.values(CONTORNO)) expect(d).toMatch(/^M[\d. ]+[A-Za-z]/); // arranca arriba al centro
+  });
+
+  it('el sello de una definición toma el grupo: un hexágono para Cuerpo, un escudo para Estudio', () => {
+    const def = (id: string) => SEALS.find((d) => d.id === id)!;
+    const { container } = render(<><SelloDe def={def('primer-entreno')} ganado nombre="Primer entreno" /><SelloDe def={def('primer-capitulo')} ganado nombre="Primer capítulo" /><SelloDe def={def('mvp')} ganado={false} nombre="MVP" /></>);
+    expect(screen.getByRole('img', { name: 'Primer entreno' }).getAttribute('data-forma')).toBe('hexagono');
+    expect(screen.getByRole('img', { name: 'Primer capítulo' }).getAttribute('data-forma')).toBe('escudo');
+    expect(screen.getByRole('img', { name: 'MVP (bloqueado)' }).getAttribute('data-forma')).toBe('roseton');
+    expect(container.querySelectorAll('.sl-canto')).toHaveLength(2);
+  });
+
+  it('bloqueado con camino dibuja el anillo de avance sobre el contorno (de 0 a 1); sin camino, no', () => {
+    const { container, rerender } = render(<SelloV2 marca="30" color="var(--ing)" grupo="constancia" ganado={false} progreso={0.6} />);
+    const anillo = container.querySelector<SVGPathElement>('.sl-avance')!;
+    expect(anillo.getAttribute('pathLength')).toBe('1');
+    expect(anillo.style.strokeDashoffset).toBe('0.4');
+    rerender(<SelloV2 marca="30" color="var(--ing)" ganado={false} progreso={0} />);
+    expect(container.querySelector('.sl-avance')).toBeNull();
+    rerender(<SelloV2 marca="30" color="var(--ing)" ganado={false} />);
+    expect(container.querySelector('.sl-avance')).toBeNull();
+    rerender(<SelloV2 marca="30" color="var(--ing)" ganado progreso={0.6} />);
+    expect(container.querySelector('.sl-avance')).toBeNull(); // un sello ganado ya no mide nada
+  });
+
+  it('el sello grande se inclina hacia el puntero y vuelve a su lugar al soltarlo', () => {
+    const { container } = render(<SelloInclinable marca="7" color="var(--ing)" ganado lado={176} nombre="7 seguidos" />);
+    const caja = container.querySelector<HTMLElement>('.sl-inclinable')!;
+    caja.getBoundingClientRect = () => ({ left: 0, top: 0, width: 200, height: 200, right: 200, bottom: 200, x: 0, y: 0, toJSON: () => ({}) });
+    fireEvent.pointerMove(caja, { clientX: 200, clientY: 100 });
+    expect(caja.classList.contains('sl-vivo')).toBe(true);
+    expect(caja.style.getPropertyValue('--ry')).toBe('17.0deg'); // la derecha: gira hacia ese lado
+    expect(caja.style.getPropertyValue('--rx')).toBe('0.0deg');
+    expect(caja.style.getPropertyValue('--fx')).toBe('150'); // el brillo, hasta el borde
+    fireEvent.pointerMove(caja, { clientX: 100, clientY: 0 });
+    expect(caja.style.getPropertyValue('--rx')).toBe('17.0deg');
+    fireEvent.pointerLeave(caja);
+    expect(caja.classList.contains('sl-vivo')).toBe(false);
+    expect(caja.style.getPropertyValue('--ry')).toBe('');
+  });
+});
+
 describe('Perfil 2.0 · el sello y el año', () => {
   it('ganado tiene metal y brillo; bloqueado, solo el contorno', () => {
     const { container, rerender } = render(<SelloV2 marca="7" color="var(--ing)" ganado nombre="7 seguidos" />);
@@ -153,7 +200,8 @@ describe('Perfil 2.0 · la pantalla', () => {
     const sellos = screen.getByRole('region', { name: 'Sellos' });
     for (const g of ['Constancia', 'Cuerpo', 'Estudio', 'Trabajo']) expect(within(within(sellos).getByRole('region', { name: g })).getAllByRole('button')).toHaveLength(6);
     expect(within(sellos).getByRole('button', { name: 'Hombre nuevo: ganado' })).toBeTruthy();
-    expect(within(sellos).getByRole('button', { name: '100 días: bloqueado' })).toBeTruthy();
+    expect(within(sellos).getByRole('button', { name: /^100 días: bloqueado, 3 %$/ })).toBeTruthy(); // lleva el 3 % del camino
+    expect(within(sellos).getByRole('button', { name: 'Mitad del camino: bloqueado' })).toBeTruthy(); // sin pesajes no hay camino que medir
   });
 
   it('un sello abre su hoja: cómo se gana, cuánto falta o cuándo lo ganaste', () => {
@@ -163,7 +211,7 @@ describe('Perfil 2.0 · la pantalla', () => {
     fireEvent.click(screen.getByRole('button', { name: 'Hombre nuevo: ganado' }));
     expect(within(dialogo()).getByText('Empezar el día 0 de la ruta.')).toBeTruthy();
     expect(within(dialogo()).getByText(/^Ganado el .* · \+50 XP$/)).toBeTruthy();
-    fireEvent.click(screen.getByRole('button', { name: '100 días: bloqueado' }));
+    fireEvent.click(screen.getByRole('button', { name: /^100 días: bloqueado/ }));
     expect(within(dialogo()).getByText('3 días cerrados')).toBeTruthy();
     expect(within(dialogo()).getByRole('progressbar', { name: '100 días: avance' })).toBeTruthy();
   });
@@ -186,6 +234,44 @@ describe('Perfil 2.0 · la pantalla', () => {
     expect(within(dialogo()).getAllByRole('listitem')).toHaveLength(2);
     expect(screen.getByRole('link', { name: /^Avance/ }).getAttribute('href')).toBe('#/avance');
     expect(screen.getByRole('link', { name: /^Portfolio agéntico/ }).getAttribute('href')).toBe('#/metas/proyecto');
+  });
+
+  it('la vitrina muestra lo último que ganaste: el más nuevo al centro y más grande', () => {
+    act(() => { claimSeal('hombre-nuevo', '2026-11-01'); claimSeal('siete', '2026-11-10'); claimSeal('madrugador', '2026-11-20'); claimSeal('primer-entreno', '2026-11-22'); });
+    abrir();
+    const vitrina = within(screen.getByRole('region', { name: 'Lo último' }));
+    const botones = vitrina.getAllByRole('button');
+    expect(botones.map((b) => b.getAttribute('aria-label')?.split(':')[0])).toEqual(['Madrugador', 'Primer entreno', '7 seguidos']); // los tres últimos; el más nuevo, al medio
+    expect(botones[1].closest('li')!.classList.contains('pf-vitrina-primero')).toBe(true);
+    expect(botones[1].querySelector('svg')!.getAttribute('width')).toBe('112');
+    expect(botones[0].querySelector('svg')!.getAttribute('width')).toBe('84');
+    expect(botones[1].getAttribute('aria-label')).toMatch(/^Primer entreno: ganado el /);
+    fireEvent.click(botones[1]);
+    expect(within(dialogo()).getByText('Terminar tu primer entrenamiento.')).toBeTruthy();
+  });
+
+  it('sin sellos ganados no hay vitrina; con uno o dos, se acomodan sin hueco', () => {
+    abrir();
+    expect(screen.queryByRole('region', { name: 'Lo último' })).toBeNull();
+    act(() => { claimSeal('hombre-nuevo', '2026-11-01'); });
+    const { unmount } = abrir();
+    expect(within(screen.getAllByRole('region', { name: 'Lo último' })[0]).getAllByRole('button')).toHaveLength(1);
+    unmount();
+  });
+
+  it('el muro dibuja una silueta por grupo y un anillo de avance en los bloqueados con camino', () => {
+    historia(3);
+    act(() => { syncSeals(HOY); });
+    abrir();
+    const sellos = screen.getByRole('region', { name: 'Sellos' });
+    const forma = (g: string) => [...new Set([...within(within(sellos).getByRole('region', { name: g })).getAllByRole('button')].map((b) => b.querySelector('svg')!.getAttribute('data-forma')))];
+    expect(forma('Constancia')).toEqual(['moneda']);
+    expect(forma('Cuerpo')).toEqual(['hexagono']);
+    expect(forma('Estudio')).toEqual(['escudo']);
+    expect(forma('Trabajo')).toEqual(['roseton']);
+    const cien = within(sellos).getByRole('button', { name: /^100 días: bloqueado/ });
+    expect(cien.querySelector('.sl-avance')).toBeTruthy();
+    expect(within(sellos).getByRole('button', { name: 'Hombre nuevo: ganado' }).querySelector('.sl-avance')).toBeNull();
   });
 
   it('el primer día ya tiene un hito a la vista (madrugar) y un historial que dice cómo se llena', () => {

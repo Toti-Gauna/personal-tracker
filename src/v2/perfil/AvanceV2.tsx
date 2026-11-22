@@ -26,7 +26,7 @@ import type { PropsV2 } from '../registro';
 import { Mes } from './Calor';
 import { mapaDelAnio, resumen } from './datos';
 import Presentacion from './Presentacion';
-import { SelloV2 } from './Sello';
+import { SelloDe } from './Sello';
 import '../entreno/entreno.css';
 import './perfil.css';
 
@@ -143,7 +143,7 @@ function Vista({ day }: PropsV2) {
       <Grupo titulo="Sellos" extremo={<a className="pt-enlace t-nota" href="#/perfil">{ganados.length} de {SEALS.length}</a>}>
         {ganados.length === 0 ? <p className="t-nota">Todavía no ganaste sellos. El primero llega al cerrar tu primer día.</p> : (
           <ul className="pf-fila-sellos">
-            {ganados.map((d, i) => <li key={d.id}><SelloV2 marca={d.mark} color={d.color} ganado lado={56} nombre={d.name} i={i} /></li>)}
+            {ganados.map((d, i) => <li key={d.id}><SelloDe def={d} ganado lado={56} nombre={d.name} i={i} /></li>)}
           </ul>
         )}
       </Grupo>

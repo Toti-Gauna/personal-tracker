@@ -24,7 +24,7 @@ import { reducido } from '../movimiento/movimiento';
 import { Meta } from './AvanceV2';
 import { Calor } from './Calor';
 import { mapaDelAnio, resumen, ultimosDias } from './datos';
-import { SelloV2 } from './Sello';
+import { SelloDe } from './Sello';
 import '../tokens.css';
 import '../base.css';
 import '../kit/kit.css';
@@ -121,7 +121,7 @@ export default function Presentacion({ day }: { day: DayLog }) {
           <p className="t-rotulo wr-sobre">Sellos · nivel {r.nivel}</p>
           <p className="wr-numero"><Numero valor={r.sellos} /> <span className="wr-chico">de {r.sellosTotal}</span></p>
           <h2 className="wr-frase">{ganados.length ? ganados[ganados.length - 1].line : 'El primero llega al cerrar un día.'}</h2>
-          {ganados.length > 0 && <ul className="wr-pieza pf-fila-sellos">{ganados.slice(-10).map((d, k) => <li key={d.id}><SelloV2 marca={d.mark} color={d.color} ganado lado={64} nombre={d.name} i={k} /></li>)}</ul>}
+          {ganados.length > 0 && <ul className="wr-pieza pf-fila-sellos">{ganados.slice(-10).map((d, k) => <li key={d.id}><SelloDe def={d} ganado lado={64} nombre={d.name} i={k} /></li>)}</ul>}
         </>
       ) },
       { id: 'cierre', nombre: 'Cierre', area: 'var(--trazo)', contenido: (

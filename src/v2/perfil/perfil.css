@@ -1,22 +1,40 @@
 /* ——— Perfil, Avance, Cierre y la presentación (tanda 3.2) ——— */
 
-/* El sello: metal acuñado con el color de su área. */
-.sl { --sl-tinta: color-mix(in oklab, var(--sl-c) 22%, black); --sl-luz: color-mix(in oklab, var(--sl-c) 52%, white); --sl-sombra: color-mix(in oklab, var(--sl-c) 58%, black); display: block; flex: none; overflow: visible; }
-html[data-ui='v2'][data-theme='light'] .sl { --sl-tinta: color-mix(in oklab, var(--sl-c) 8%, white); --sl-luz: color-mix(in oklab, var(--sl-c) 62%, white); --sl-sombra: color-mix(in oklab, var(--sl-c) 72%, black); }
+/* El sello: una pieza acuñada con la silueta de su grupo y el color de su área. */
+.sl { --sl-tinta: color-mix(in oklab, var(--sl-c) 24%, black); --sl-luz: color-mix(in oklab, var(--sl-c) 48%, white); --sl-sombra: color-mix(in oklab, var(--sl-c) 56%, black); --sl-canto-claro: color-mix(in oklab, var(--sl-c) 30%, white); --sl-canto-oscuro: color-mix(in oklab, var(--sl-c) 40%, black); display: block; flex: none; overflow: visible; filter: drop-shadow(0 2px 3px color-mix(in oklab, black 38%, transparent)); }
+html[data-ui='v2'][data-theme='light'] .sl { --sl-tinta: color-mix(in oklab, var(--sl-c) 12%, black); --sl-luz: color-mix(in oklab, var(--sl-c) 52%, white); --sl-sombra: color-mix(in oklab, var(--sl-c) 70%, black); filter: drop-shadow(0 2px 3px color-mix(in oklab, black 22%, transparent)); }
+.sl-bloqueado { filter: none; }
+.sl-r0 { stop-color: var(--sl-canto-claro); }
+.sl-r1 { stop-color: color-mix(in oklab, var(--sl-c) 70%, var(--sl-canto-oscuro)); }
+.sl-r2 { stop-color: var(--sl-canto-oscuro); }
 .sl-g0 { stop-color: var(--sl-luz); }
 .sl-g1 { stop-color: var(--sl-c); }
 .sl-g2 { stop-color: var(--sl-sombra); }
-.sl-canto { fill: var(--sl-sombra); }
-.sl-aro { fill: none; stroke: var(--sl-tinta); stroke-width: 1.2; stroke-dasharray: 1.4 3.2; stroke-linecap: round; opacity: 0.55; }
+.sl-canto { stroke: var(--sl-canto-oscuro); stroke-width: 0.8; stroke-linejoin: round; }
+.sl-estrias { fill: none; stroke: var(--sl-canto-oscuro); stroke-width: 2.4; stroke-dasharray: 1 1.55; opacity: 0.55; }
+.sl-cara { stroke: color-mix(in oklab, var(--sl-canto-oscuro) 80%, transparent); stroke-width: 1; stroke-linejoin: round; }
+.sl-aro { fill: none; stroke: var(--sl-tinta); stroke-width: 1.1; stroke-dasharray: 1.4 3; stroke-linecap: round; opacity: 0.5; }
 .sl-marca { font-family: var(--font-title); font-weight: 900; font-stretch: 110%; letter-spacing: -0.02em; fill: var(--texto-3); }
 .sl-ganado .sl-marca { fill: var(--sl-tinta); }
-.sl-hueco { fill: color-mix(in oklab, var(--texto) 4%, transparent); stroke: var(--raya-fuerte); stroke-width: 1.5; stroke-dasharray: 3 4; }
-.sl-brillo { opacity: 0.5; transform-origin: 40px 40px; transform: rotate(20deg) translateX(0); animation: sl-brilla 1100ms var(--curva-salida) calc(360ms + var(--i, 0) * 90ms) both; }
-.sl-grande .sl-brillo { animation: sl-brilla-lento 3.2s ease-in-out 700ms infinite both; }
+.sl-ganado .sl-marca-luz { fill: color-mix(in oklab, var(--sl-luz) 80%, white); opacity: 0.7; }
+.sl-hueco { fill: color-mix(in oklab, var(--texto) 4%, transparent); stroke: var(--raya-fuerte); stroke-width: 1.6; stroke-dasharray: 3 4; stroke-linejoin: round; }
+.sl-pista { fill: none; stroke: var(--raya-fuerte); stroke-width: 3.4; stroke-linejoin: round; opacity: 0.5; }
+.sl-avance { fill: none; stroke: var(--sl-c); stroke-width: 3.6; stroke-linecap: round; stroke-linejoin: round; animation: sl-traza 900ms var(--curva-salida) calc(240ms + var(--i, 0) * 60ms) backwards; }
+.sl-bloqueado .sl-marca { opacity: 0.8; }
+.sl-reflejo { opacity: 0.55; }
+.sl-brillo { opacity: 0.55; transform-origin: 40px 40px; transform: rotate(20deg) translateX(0); animation: sl-brilla 1100ms var(--curva-salida) calc(360ms + var(--i, 0) * 90ms) both; }
+.sl-grande .sl-brillo { animation: sl-brilla-lento 3.6s ease-in-out 700ms infinite both; }
 .sl-cae { animation: sl-cae 640ms var(--curva-ida-vuelta) both; transform-origin: center; }
 @keyframes sl-brilla { to { transform: rotate(20deg) translateX(150px); } }
 @keyframes sl-brilla-lento { 0% { transform: rotate(20deg) translateX(0); } 40%, 100% { transform: rotate(20deg) translateX(150px); } }
+@keyframes sl-brilla-otra { from { transform: rotate(20deg) translateX(0); } to { transform: rotate(20deg) translateX(150px); } }
+@keyframes sl-traza { from { stroke-dashoffset: 1; } }
 @keyframes sl-cae { 0% { opacity: 0; transform: scale(1.7) rotate(-18deg); } 62% { opacity: 1; transform: scale(0.95) rotate(-5deg); } 100% { transform: scale(1) rotate(-8deg); } }
+/* Se inclina hacia donde lo llevás, con el brillo siguiendo la luz. */
+.sl-inclinable { perspective: 640px; touch-action: pan-y; display: grid; place-items: center; }
+.sl-inclinable > .sl { transform: rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)); transition: transform 520ms var(--curva-salida); will-change: transform; }
+.sl-inclinable.sl-vivo > .sl { transition: transform 70ms linear; }
+.sl-inclinable.sl-vivo .sl-brillo { animation: none; transform: rotate(20deg) translateX(calc(var(--fx, 0) * 1px)); opacity: 0.8; }
 
 /* El año, día por día. */
 .ca { --ca-c: var(--trazo); display: grid; gap: 3px; margin: 0; }
@@ -64,13 +82,29 @@ html[data-ui='v2'][data-theme='light'] .ca-calendario > i.ca-n3 > b, html[data-u
 .pf-grupo-cab { display: flex; justify-content: space-between; align-items: baseline; margin: var(--sp-2) 0; }
 .pf-grupo-cab h3 { margin: 0; color: var(--texto-2); font-weight: 500; }
 .pf-grupo-cab .t-dato { color: var(--texto-3); }
-.pf-sellos { list-style: none; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--sp-1); margin: 0; padding: var(--sp-3) var(--sp-2); border-radius: var(--r-l); background: var(--capa-1); box-shadow: var(--brillo), inset 0 0 0 1px var(--raya); }
-.pf-sellos button { display: grid; justify-items: center; align-content: start; gap: var(--sp-2); width: 100%; min-height: 108px; padding: var(--sp-2) 2px; background: none; border: 0; border-radius: var(--r-m); color: var(--texto); font: 500 var(--t-13)/1.25 var(--font-text); text-align: center; cursor: pointer; -webkit-tap-highlight-color: transparent; transition: transform var(--dur-1) var(--curva-salida); }
+.pf-sellos { list-style: none; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--sp-1); margin: 0; padding: var(--sp-3) var(--sp-2) var(--sp-2); border-radius: var(--r-l); background: linear-gradient(to bottom, var(--capa-1), color-mix(in oklab, var(--capa-1) 82%, var(--capa-0))); box-shadow: var(--brillo), inset 0 0 0 1px var(--raya); }
+.pf-sellos button { display: grid; justify-items: center; align-content: start; gap: var(--sp-2); width: 100%; min-height: 118px; padding: var(--sp-2) 2px; background: none; border: 0; border-radius: var(--r-m); color: var(--texto); font: 500 var(--t-13)/1.25 var(--font-text); text-align: center; cursor: pointer; -webkit-tap-highlight-color: transparent; transition: transform var(--dur-1) var(--curva-salida); }
 .pf-sellos button:active { transform: scale(0.96); }
 .pf-sellos button:hover .sl-brillo, .pf-sellos button:focus-visible .sl-brillo { animation: sl-brilla-otra 900ms var(--curva-salida) both; }
+/* La pieza se apoya: una sombra de contacto debajo, como en una vitrina. */
+.pf-pieza { position: relative; display: grid; place-items: center; width: 70px; height: 74px; }
+.pf-pieza::after { content: ''; position: absolute; left: 12%; right: 12%; bottom: 0; height: 7px; border-radius: 50%; background: radial-gradient(closest-side, color-mix(in oklab, black 46%, transparent), transparent); opacity: 0.9; pointer-events: none; }
+.pf-pieza > .sl { position: relative; z-index: 1; margin-bottom: 4px; }
+.pf-sellos button:has(.sl-bloqueado) .pf-pieza::after { opacity: 0.25; }
+html[data-ui='v2'][data-theme='light'] .pf-pieza::after { background: radial-gradient(closest-side, color-mix(in oklab, black 30%, transparent), transparent); }
+/* La vitrina: lo último que ganaste, el más nuevo al centro, bajo un foco del color de su área. */
+.pf-vitrina { --v-c: var(--trazo); list-style: none; display: flex; align-items: flex-end; justify-content: center; gap: var(--sp-3); margin: 0; padding: var(--sp-5) var(--sp-3) var(--sp-4); border-radius: var(--r-l); background: radial-gradient(75% 95% at 50% 0%, color-mix(in oklab, var(--v-c) 26%, transparent), transparent 72%), var(--capa-1); box-shadow: var(--brillo), inset 0 0 0 1px var(--raya); overflow: hidden; }
+.pf-vitrina > li { flex: 1 1 0; min-width: 0; max-width: 140px; }
+.pf-vitrina button { display: grid; justify-items: center; gap: 4px; width: 100%; padding: 0; background: none; border: 0; color: var(--texto); text-align: center; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+.pf-vitrina button .sl-inclinable { margin-bottom: var(--sp-2); }
+.pf-vitrina button b { font-weight: 500; }
+.pf-vitrina button .t-rotulo { color: var(--texto-3); }
+.pf-vitrina-primero button b { font-weight: 700; color: var(--texto); }
+.pf-vitrina-primero .sl { filter: drop-shadow(0 6px 10px color-mix(in oklab, var(--v-c) 45%, transparent)) drop-shadow(0 2px 3px color-mix(in oklab, black 38%, transparent)); }
 @keyframes sl-brilla-otra { from { transform: rotate(20deg) translateX(0); } to { transform: rotate(20deg) translateX(150px); } }
 .pf-apagado { color: var(--texto-3); }
 .pf-detalle { display: grid; justify-items: center; gap: var(--sp-3); text-align: center; padding-bottom: var(--sp-2); }
+.pf-detalle .sl-inclinable { margin: var(--sp-2) 0; }
 .pf-detalle p { margin: 0; }
 .pf-detalle-avance { width: 100%; display: grid; gap: var(--sp-2); }
 .pf-fila-sellos { list-style: none; display: flex; flex-wrap: wrap; gap: var(--sp-3); margin: 0; padding: 0; }
@@ -170,6 +204,7 @@ html[data-ui='v2'][data-theme='light'] .ca-calendario > i.ca-n3 > b, html[data-u
 .wr-fin { display: flex; flex-wrap: wrap; gap: var(--sp-3); padding: 0; background: none; box-shadow: none; backdrop-filter: none; pointer-events: auto; }
 
 @media (prefers-reduced-motion: reduce) {
-  .sl-brillo, .sl-grande .sl-brillo, .sl-cae, .ci-metas > i.ci-on, .wr-fondo > i, .wr-lamina > * { animation: none; }
+  .sl-brillo, .sl-grande .sl-brillo, .sl-cae, .sl-avance, .ci-metas > i.ci-on, .wr-fondo > i, .wr-lamina > * { animation: none; }
   .sl-cae { transform: rotate(-8deg); }
+  .sl-inclinable > .sl { transform: none; }
 }
