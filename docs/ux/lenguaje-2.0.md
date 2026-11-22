@@ -508,3 +508,56 @@ case (two people, a set done, a rest running; 2.2 screens), summary 43 (1.65), w
 Demo: `docs/demo/ux-2.0/entreno-centro.png` (today's routine on the figure), `entreno-volumen.png` (weekly heat),
 `entreno-sesion.png` and `entreno-sesion-dos.png` (player, alone and with a partner), `entreno-resumen.png`, `entreno-peso.png`
 (light), `entreno-motor.png`, `entreno-claro.png` and `entreno-escritorio.png`.
+
+## 20. Perfil, Avance and Cierre (`src/v2/perfil/`, batch 3.2)
+
+2.0 screens: `#/perfil`, `#/avance` (and its presentation, `#/avance/presentacion`), `#/cierre` and `#/logro/<id>`. The close-day
+screen and the new-seal screen are `parte: true` in the registry (they belong to Hoy and Perfil). Same store actions as 1.0:
+`closeDay`, `reopenDay`, `claimSeal`, `unclaimSeal`, `markSealSeen`. XP, levels, seals and their rules come from `data/profile`
+untouched. The word stays **Sellos** (it is what the history text and the 24 definitions say); what changes is how they look.
+
+**The seal** (`Sello.tsx`): a minted piece of metal in its area color (radial gradient: light, color, shadow), a darker rim, a dotted
+inner ring and the mark stamped in the title font. A **sheen** crosses it once when it appears (staggered across a row), again
+on hover or focus, and in a slow loop on the big one. Locked is only a dashed outline with a dim mark. In the light theme the
+metal is deeper and the mark is light, so the contrast holds. It is a drawing: the name is given by whoever uses it.
+
+**The year** (`Calor.tsx`, `datos.ts`): one row per month, one cell per day (12 × 31), which fits a phone at a readable size where a
+53-week grid does not. Five levels with the same thresholds as the 1.0 calendar (no data, nothing done, something, half or more,
+85 % or more), today with a ring, future days as outlines. The year starts the month you started and moves on with you after 12
+months. The numbers (days loaded, average) sit next to it, not inside.
+
+**Perfil**: the identity card (level ring with XP inside the level, name, XP, how much is left) and four numbers; the year; the
+three closest milestones with a bar (tap = the seal's sheet); the 24 seals in their four groups; and "Más": Avance (on a phone
+Avance hangs from Perfil), the history (sheet) and the agentic portfolio. A seal's sheet says how it is earned and either when you
+earned it or how far you are; the two manual seals are claimed and removed there, with Undo. The Ajustes gear is in the header:
+the temporary patch that added it on top of the 1.0 Perfil is gone.
+
+**Avance**: four numbers; study by week, month or year (bars against the goal); the year's goals and the study fronts as bars; the
+month as a calendar with the same heat levels; runs; the weight curve (the same `Curva` as Entreno); and the seals earned. On a
+desktop the groups go in two columns. "Presentar" opens the presentation.
+
+**Presentation** (`Presentacion.tsx`): eight full-screen slides, one idea and one big number each (day and streak, days loaded with
+the year map, accumulated improvement with the last 14 days, hours of study by front, the year's goals, training with the body
+figure, seals, a closing line). A progress strip on top; it advances by itself every 7 seconds and can be paused; tap the right
+70 % to go on and the left 30 % to go back; arrows, space (pause) and Esc (exit) on a keyboard. With reduced motion it starts
+paused. Nothing private: no body weight and no money (the goals in USD or kg show their name with the value covered), as in 1.0.
+
+**Cierre** (`CierreV2.tsx`): three cards in a horizontal rail with scroll-snap (swipe, or the three numbered steps on top, or
+"Siguiente"). 1 · *Hoy*: the improvement as the big number, against yesterday, one segment per goal, three numbers, the last days
+and the areas. 2 · *Mañana*: what is left, ticked = it moves to tomorrow, and the two notes. 3 · *Cerrar*: the totals, the JSON
+(in a sheet) and the one button that copies the JSON and closes the day. Only the card in view is reachable (`inert` on the others).
+A closed day shows what was written, lets you copy again and reopen. If closing earns a seal, the new-seal screen opens.
+
+**New seal**: the seal drops in with a spring, a burst and its sound, with its line and "+50 XP". If more than one was earned they
+are shown one after another ("Siguiente sello"), which 1.0 did not do.
+
+**System changes.** `GlobalV2` no longer injects an Ajustes button over the 1.0 Perfil (dead code now). The revision measures the
+close-day screen with three goals done (seeded only for that route, so Hoy is measured as before) and labels the presentation as
+"2.0 (pantalla completa)": it has no frame, so the title and fold budgets do not apply to it.
+
+Budgets (words above the fold, 60 max; height in screens, 4 max): Perfil 37 (2.85 screens), Avance 35 (2.49), Cierre 39 (2.18),
+new seal 23 (1). 1.0's Cierre had 848 words on one page.
+
+Demo: `docs/demo/ux-2.0/perfil-centro.png`, `perfil-sellos.png`, `perfil-claro.png`, `avance.png`, `avance-escritorio.png`,
+`presentacion.png` (the eight slides), `presentacion-mejora.png`, `presentacion-cuerpo.png`, `cierre-1.png`, `cierre-2.png`,
+`cierre-3.png` and `sello-nuevo.png`.

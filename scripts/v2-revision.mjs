@@ -67,6 +67,10 @@ const PANTALLAS = [
   { id: 'entreno-peso', hash: '#/entreno-peso' },
   { id: 'entreno-motor', hash: '#/entreno-motor' },
   { id: 'perfil', hash: '#/perfil' },
+  { id: 'avance', hash: '#/avance' },
+  { id: 'avance-presentacion', hash: '#/avance/presentacion' },
+  { id: 'cierre', hash: '#/cierre', antes: 'DIA_AVANZADO' },
+  { id: 'sello-nuevo', hash: '#/logro/hombre-nuevo' },
   { id: 'ajustes', hash: '#/ajustes' },
   { id: 'ajustes-bimestres', hash: '#/ajustes/bimestres' },
   { id: 'ajustes-plan', hash: '#/ajustes/plan' },
@@ -85,11 +89,19 @@ const SEMBRAR = () => {
   s.train.sessions.push({ id: 'rev-pull', date: '2026-11-16', routineId: r.id, routineName: r.name, minutes: 84, athletes: ['me'], sets, skipped: [], deload: false, note: '', records: [] });
   s.train.weights.push({ date: '2026-11-08', kg: 82.1 }, { date: '2026-11-15', kg: 82.4 }, { date: '2026-11-22', kg: 82.8 });
   s.train.pesoPreguntado.push('2026-11-23');
+  // Perfil con un sello ganado (para la pantalla del sello nuevo).
+  s.profile.seals['hombre-nuevo'] = '2026-11-23';
   localStorage.setItem('trazo.v1', JSON.stringify(s));
 };
 
 /** Estados que solo valen para una pantalla: se siembran antes de medirla y después se vuelve a lo anterior. */
 const ANTES = {
+  /** El día de hoy con tres metas cumplidas: el cierre con algo que mostrar (y pendientes para pasar a mañana). */
+  DIA_AVANZADO: () => {
+    const s = JSON.parse(localStorage.getItem('trazo.v1'));
+    s.days['2026-11-23'].blocks.slice(0, 3).forEach((b) => b.tasks.forEach((t) => { t.done = true; }));
+    localStorage.setItem('trazo.v1', JSON.stringify(s));
+  },
   /** Un entreno en curso de a dos, con una serie hecha y un descanso corriendo: la sesión en su caso más cargado. */
   EN_CURSO: () => {
     const s = JSON.parse(localStorage.getItem('trazo.v1'));
@@ -128,6 +140,8 @@ const medir = () => {
   }
   return {
     marco: !!document.querySelector('.m-marco'),
+    // La presentación ocupa toda la pantalla y no usa el marco: es 2.0, pero sin título ni pliegue que medir.
+    completa: !!document.querySelector('main.wr'),
     taller: !!document.querySelector('main.lenguaje'),
     titulo,
     intro,
@@ -199,7 +213,7 @@ for (const f of filas) for (const e of f.errores) fallos.push(`${f.tema} ${f.pan
 const tabla = [
   '| tema | pantalla | marco | título | intro | antes de desplazar | alto (pantallas) |',
   '|---|---|---|---|---|---|---|',
-  ...filas.map((f) => `| ${f.tema} | ${f.pantalla} | ${f.taller ? 'taller' : f.marco ? '2.0' : '1.0 (dentro de la 2.0)'} | ${f.titulo} | ${f.intro} | ${f.pliegue} | ${f.pantallas} |`),
+  ...filas.map((f) => `| ${f.tema} | ${f.pantalla} | ${f.taller ? 'taller' : f.marco ? '2.0' : f.completa ? '2.0 (pantalla completa)' : '1.0 (dentro de la 2.0)'} | ${f.titulo} | ${f.intro} | ${f.pliegue} | ${f.pantallas} |`),
 ];
 const informe = [
   '# Revisión 2.0',
