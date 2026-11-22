@@ -26,6 +26,11 @@ export interface EntradaV2 {
 export type RegistroV2 = Partial<Record<Pantalla, EntradaV2>>;
 
 /** Las pantallas llegan de a una; las de `taller` no cuentan como pantallas convertidas. */
+/** Qué rutas de #/estudio/… son 2.0: el centro, Matemática y cada uno de sus libros. */
+export function cubreEstudio(param?: string): boolean {
+  return !param || param === 'mate' || /^mate\/libro\/[^/]+$/.test(param);
+}
+
 /** Qué rutas de #/metas/… son 2.0 (el resto, y P0, siguen en la 1.0 con su marca). */
 export function cubreMetas(param?: string): boolean {
   if (!param) return true;
@@ -41,6 +46,13 @@ export const PANTALLAS_V2: RegistroV2 = {
   // las páginas de bloque, certificación y ventana, y De fondo con sus pistas, ítems, Imán y open source (2.4). Lo demás de Metas
   // sigue en 1.0, y también P0 (Constelación v1): sus metas propias no se tocan hasta la 3.3.
   metas: { nombre: 'Plan', Componente: lazy(() => import('./plan/PlanV2')), cubre: (r) => cubreMetas(r.param) },
+  // Estudio (2.5): el centro con el metro de caminos, Matemática y sus libros con el mapa de calor, el repaso y los puntos débiles,
+  // las tarjetas que giran y Cómo funciona. El capítulo, cada tramo, idiomas, programación y los tests siguen en la 1.0.
+  estudio: { nombre: 'Estudio', Componente: lazy(() => import('./estudio/EstudioV2')), cubre: (r) => cubreEstudio(r.param) },
+  repaso: { nombre: 'Repasar', Componente: lazy(() => import('./estudio/Pantallas').then((m) => ({ default: m.Repaso }))) },
+  flojo: { nombre: 'Puntos débiles', Componente: lazy(() => import('./estudio/Pantallas').then((m) => ({ default: m.Flojo }))), cubre: (r) => !r.param || r.param === 'recall' || r.param === 'analisis' },
+  tarjetas: { nombre: 'Tarjetas', Componente: lazy(() => import('./estudio/Pantallas').then((m) => ({ default: m.Tarjetas }))) },
+  como: { nombre: 'Cómo funciona', Componente: lazy(() => import('./estudio/Pantallas').then((m) => ({ default: m.Como }))) },
   ajustes: { nombre: 'Ajustes', Componente: lazy(() => import('./pantallas/AjustesV2')) },
   v2: { nombre: 'Taller 2.0', taller: true, Componente: lazy(() => import('./pantallas/Taller')) },
 };
