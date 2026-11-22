@@ -24,7 +24,7 @@ describe('diferencia contra el plan v12.1 (fechas explícitas)', () => {
 
   it('el resumen: el plan termina el 27 oct 2028, en fecha; nada se adelanta ni se atrasa', () => {
     const r = resumenDiferencia(diferenciaRoadmap(calendarioVivo()))!;
-    expect(r).toMatchObject({ fin: '2028-10-27', finRoadmap: '2028-10-27', delta: 0, horas: 6478.5, masAntes: null, masDespues: null });
+    expect(r).toMatchObject({ fin: '2028-10-27', finRoadmap: '2028-10-27', delta: 0, horas: 6482.5, masAntes: null, masDespues: null });
     expect(resumenDiferencia([])).toBeNull();
   });
 

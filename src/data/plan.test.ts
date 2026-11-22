@@ -48,7 +48,7 @@ describe('el calendario del plan (v12.1: fechas explícitas, 10 h entre semana y
     // Las horas de cada bloque son las de la v12.1; los de días fijos sin horas (P0, P1V0, COL, CIE2) dan 0.
     for (const t of TRAMOS) expect(t.horas).toBe(PLAN_EXT.bloques.find((b) => b.id === t.id)!.horas ?? 0);
     const sum = (e: number) => TRAMOS.filter((t) => t.etapa === e && !t.pausa).reduce((a, t) => a + (t.horas ?? 0), 0);
-    expect([sum(1), sum(2)]).toEqual([2950.5, 561]);
+    expect([sum(1), sum(2)]).toEqual([2954.5, 561]);
   });
 
   it('las fechas coinciden con el calendario del plan extendido (fechas explícitas de la v12.1)', () => {
@@ -63,7 +63,7 @@ describe('el calendario del plan (v12.1: fechas explícitas, 10 h entre semana y
     expect(TRAMOS.find((t) => t.id === 'CW1')).toMatchObject({ tipo: 'cert', nombre: 'Cert window 1', horas: 42, inicio: '2026-12-10', fin: '2026-12-13' });
     expect(TRAMOS.find((t) => t.id === 'E1')).toMatchObject({ tipo: 'ingles', horas: 72, inicio: '2026-12-14', fin: '2026-12-20' });
     expect(TRAMOS.find((t) => t.id === 'J5')).toMatchObject({ tipo: 'busqueda', inicio: '2027-04-09', fin: '2027-04-12' });
-    expect(TRAMOS.find((t) => t.id === 'P2')).toMatchObject({ nombre: 'VitalIA', horas: 100, inicio: '2026-12-21', fin: '2026-12-30' });
+    expect(TRAMOS.find((t) => t.id === 'P2')).toMatchObject({ nombre: 'VitalIA', horas: 104, inicio: '2026-12-21', fin: '2026-12-30' });
     expect(TRAMOS.find((t) => t.id === 'SUM')).toMatchObject({ tipo: 'sumas', nombre: 'Multiplatform week', horas: 25 });
     expect(TRAMOS.find((t) => t.id === 'P0B')).toMatchObject({ tipo: 'proyecto', nombre: 'Constelación 2.0 + 2.1', horas: 50 });
     expect(TRAMOS.find((t) => t.id === 'CIE2')).toMatchObject({ tipo: 'cierre', etapa: 2 });

@@ -31,6 +31,10 @@ export interface EstadoItem {
   leads?: Lead[];
   /** Pausado a mano (por el uso de Claude), con la fecha. */
   pausado?: string;
+  /** Herramientas (§14): el segundo ítem que la necesita (las extraídas no se publican sin él), el link del paquete y las descargas (a mano). */
+  necesitadoPor?: string;
+  enlace?: string;
+  descargas?: number;
 }
 
 export interface EntradaRevision { id: string; fecha: string; inicio?: string; min: number; item: string; tipo: 'walkthrough' | 'diseño' | 'comercial' | 'otro'; nota?: string }

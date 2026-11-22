@@ -37,7 +37,7 @@ describe('ola 30 · versiones y estándar de alto valor en la pantalla del proye
 
   it('VitalIA: las horas por versión se marcan como repartidas por días', () => {
     render(<Metas day={getState().days[D]} tab="proyecto/P2" />);
-    expect(abrir('Versiones').querySelectorAll('.pp-vers > li')[0].textContent).toMatch(/≈ 20 h \(repartidas por días\)/);
+    expect(abrir('Versiones').querySelectorAll('.pp-vers > li')[0].textContent).toMatch(/≈ 21 h \(repartidas por días\)/); // §14: VitalIA 104 h
   });
 
   it('el estándar de alto valor tiene los 12 puntos (vienen de la v7), con el detalle', () => {

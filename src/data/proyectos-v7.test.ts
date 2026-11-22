@@ -43,7 +43,7 @@ describe('ola 30 · los proyectos del roadmap v7 por dentro', () => {
     expect(fichaV7('P1')!.versiones[1].alcance[0]).toBe('Herramientas: valor del pozo, declinación, lector de partes');
     const p2 = fichaV7('P2')!.versiones;
     expect(p2.every((v) => v.derivadas)).toBe(true);
-    expect(p2.reduce((s, v) => s + v.horas!, 0)).toBe(100);
+    expect(p2.reduce((s, v) => s + v.horas!, 0)).toBe(104); // §14: VitalIA 104 h
     // AgrIA Sat (v12.1: 6 a 15 jul 2027, sin pausa en el medio); Upstream no tiene 1.1.
     expect(fichaV7('P7')!.versiones.map((v) => v.inicio)).toEqual(['2027-07-06', '2027-07-08', '2027-07-11', '2027-07-14']);
     expect(fichaV7('A6')!.versiones.map((v) => v.id)).toEqual(['1.0', '2.0', '3.0']);

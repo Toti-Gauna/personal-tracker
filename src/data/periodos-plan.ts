@@ -6,6 +6,7 @@
  */
 import { fichaV7 } from './proyectos-v7';
 import { detalleDe } from './v12-2';
+import { PRIMER_ARRANQUE, textoArranque } from './herramientas';
 import type { BloqueExt } from './plan-extendido';
 import { PLAN_EXT } from './plan-extendido';
 import type { Periodo } from './periodos';
@@ -43,6 +44,14 @@ function versiones(b: Fechado, ctx: Ctx): Periodo[] {
     // v12.2: la línea de la versión es su checklist de entregables; sin lotes, el trabajo es lo tildado.
     const entregables = detalleDe(b.id)?.versiones.find((x) => x.id === v.id)?.entregables ?? [];
     const checklist = entregables.map((texto, i) => ({ clave: claveHito.entregable(b.id, v.id, i), texto, hecho: !!ctx.plan.hitos?.[claveHito.entregable(b.id, v.id, i)]?.hecho }));
+    // §14: la primera versión de cada proyecto principal desde VitalIA arranca con "0.1 · Arranque" y su preset en Alawys.
+    if (b.fechas && b.fechas.inicio >= PRIMER_ARRANQUE && v.id === f.versiones.find((x) => x.inicio && !x.enCurso)?.id) {
+      const k = (x: string) => `v12:${b.id}:${x}`;
+      checklist.unshift(
+        { clave: k('arranque'), texto: textoArranque(b.id), hecho: !!ctx.plan.hitos?.[k('arranque')]?.hecho },
+        { clave: k('preset-alawys'), texto: 'Preset agregado a Alawys', hecho: !!ctx.plan.hitos?.[k('preset-alawys')]?.hecho },
+      );
+    }
     const tildados = checklist.length ? checklist.filter((c) => c.hecho).length / checklist.length : 0;
     return {
       id: `${b.id}:v${v.id}`, nombre: `v${v.id} ${v.nombre}`, nivel: 'version' as const, inicio: v.inicio!, fin: v.fin!,

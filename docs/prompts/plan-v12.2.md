@@ -58,7 +58,7 @@ PHASE 1 · AI Full-stack Engineer (21 Nov 2026 – 14 Jan 2027)
   · BACKGROUND → secondary: HandyX v1.0 · commercial: #1 Aquasol
 - ENGLISH E#1 · 14–20 Dec 2026 · 72 h
   · BACKGROUND → secondary: HandyX v1.0, HandyX v2.0 · commercial: #1 Aquasol
-- PROJECT VitalIA · 21–30 Dec 2026 · 100 h (lim 125)
+- PROJECT VitalIA · 21–30 Dec 2026 · 104 h (lim 125) · scope note: batch 0.1 = Alawys v0.1 + scaffold VitalIA with it (§14: 100 → 104 h)
   · BACKGROUND → secondary: HandyX v2.0 · commercial: —
   · Puesto: AI Engineer en salud (.NET, Azure, seguridad)
   · Descripción: brechas de cuidado y problemas de medicación con evidencia; traductor de sistemas viejos a FHIR; monitoreo remoto; dictado a nota
@@ -669,3 +669,56 @@ No commercial slot during PNPT or inside a principal project block. "TO DEFINE" 
 - 2027-06-15: Secondary handover: Clip Studio → Roofy. Check Clip Studio reached v3.0 or log what's left.
 - 2027-08-29: Pick the next secondary from "Ver a futuro".
 - 7 days before every commercial slot: prepare its brief (hook, wow moment, reuse).
+
+## 14. ADDENDUM · Alawys and the open-source tools (22 Nov 2026)
+
+> Replaces an earlier "Andamio" addendum that never reached Trazo. Answers of 22 Nov included below.
+
+**Alawys** (track principal, type tool, open source, versioned across the whole plan). Packages: create-alawys (`npm create alawys@latest`) + scope `@alawys/*`. Repo on the personal account, MIT. npm with 2FA and `--provenance`.
+- Puesto: Platform / Developer Experience Engineer, AI Full-stack · Peso en entrevistas: muy alto.
+- Descripción: CLI que arma un proyecto completo con un comando: front, back, DB, Docker, CI, variables y pack de agentes.
+- Problema: cada proyecto arranca con un scaffold distinto, que lleva tiempo y gasta tokens.
+- Valor: arranques iguales, sin tokens, con mis estándares ya puestos.
+- Diferencial: varios lenguajes, proyectos que nacen con agentes, Docker primero, seguridad por defecto.
+- Stack: Node + TypeScript, capas combinables, tests de snapshot, CI matricial que genera y compila cada preset.
+- Imán hook: "De cero a un proyecto con agentes, Docker y CI en 60 segundos". Metric: tokens and minutes per scaffold, Claude vs Alawys, measured on VitalIA.
+- v0.1 · 21 Dec 2026 · inside VitalIA batch 0.1: interactive mode + flags; presets web-next, mern, petria (from the PetrIA repo), vitalia (.NET); agents pack (CLAUDE.md + subagents); Docker compose; CI; validated .env.example; gitleaks hook. Generate VitalIA with Alawys and record the metric.
+- v1.0 LAUNCH · 30 Dec 2026: npm publish, README, 60 s demo. Imán gate. Launch post Thu 31 Dec 2026.
+- v1.x · recurring: batch 0.1 of every later principal project adds its stack preset if missing ("preset added to Alawys" checkbox on each "0.1 · Arranque").
+- v2.0 · inside Constelación (13–17 Apr 2027): "alawys add agents|mcp" + @alawys/mcp server.
+- Nothing for Alawys runs in the background before 21 Dec. v0.1 and v1.0 count inside VitalIA's 104 h (no separate time).
+
+**VitalIA**: planned hours 100 → 104 h (lim 125). Batch 0.1 = "Alawys v0.1 + scaffold VitalIA with it".
+
+**Tool extraction rule** (shown on every project): max ONE NEW tool per project (extending an existing tool, such as a new Alawys version or preset or a new mcp-ar server, doesn't count). It's a deliverable of the project's closing batch, with the checklist "tests · README · example · semver · published with provenance".
+- kind **extracted** (a library pulled out of a project; extracted when a second project needs it; "published" is blocked until the second item is linked as "needed by"): @alawys/notify, llm-router, usage-meter, evals-action, showcase-kit, seat-picker, voice-agent, captions, tour3d.
+- kind **standalone** (public product from day one, no reuse rule): Alawys, mcp-ar, sgp4-wasm, ask-widget, chatbot-scan, agent-creds, Semgrep pack, Sigma + osquery pack, backtester, opciones-ar, fem-wasm, bkt.
+- Imán gate on two launches only: Alawys v1.0 (30 Dec 2026) and mcp-ar v2 with the dollar server (inside Ticker, Mar 2028). Every other tool: the 5-point extraction checklist plus one Thursday post.
+
+| Origin | Tool |
+|---|---|
+| AgrIA | mcp-ar v1 (energy + agro public data, MCP) |
+| Antena | @alawys/sgp4-wasm (npm, Rust → WASM); mcp-ar adds satellites |
+| Constelación | @alawys/ask-widget (npm) + Alawys v2.0 |
+| PetrIA Guard | @alawys/notify (WhatsApp → call → email fallback) |
+| AeroScan | @alawys/llm-router (cascade, semantic cache, cost cap) |
+| AgrIA Sat | @alawys/evals-action (GitHub Action) |
+| AdversarIA | chatbot-scan (GitHub Action + CLI) |
+| Antena Ops | @alawys/usage-meter (costs and quotas) |
+| Bóveda | @alawys/agent-creds + MCP |
+| Asedio | Semgrep rules pack for LLM code |
+| Vigía | Sigma + osquery pack for small businesses |
+| Alpha Lab | backtester (crate + PyPI) |
+| Volta | opciones-ar (PyPI + MCP) |
+| Ticker | mcp-ar v2: dollar MEP/CCL (big launch) |
+| Malla | @alawys/fem-wasm (npm) |
+| Órbita | mcp-ar adds conjunctions and reentries |
+| Commercial #2 Cinemacenter | @alawys/showcase-kit |
+| Commercial #3 miboletería | @alawys/seat-picker |
+| Commercial #4 McDonald's | @alawys/voice-agent |
+| JulIA v3 | @alawys/bkt |
+| Clip Studio v2 | @alawys/captions |
+| Roofy v2 | @alawys/tour3d |
+| HandyX | Mercado Pago escrow: stays INTERNAL (payments), never published |
+
+Every published tool gets a post (Thursday slot) and appears on the "Open source" page: package, version, project of origin, downloads (manual), link.

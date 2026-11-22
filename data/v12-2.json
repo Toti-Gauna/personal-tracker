@@ -78,7 +78,8 @@
    "pesoEntrevistas": "muy alto"
   },
   "P2": {
-   "horas": 100,
+   "notaAlcance": "batch 0.1 = Alawys v0.1 + scaffold VitalIA with it (§14: 100 → 104 h)",
+   "horas": 104,
    "horasLim": 125,
    "versiones": [
     {
@@ -2638,6 +2639,395 @@
   {
    "nombre": "Coach de entrenamiento.",
    "destacado": false
+  }
+ ],
+ "herramientas": [
+  {
+   "id": "alawys",
+   "nombre": "Alawys",
+   "paquete": "create-alawys · @alawys/*",
+   "registro": "npm",
+   "kind": "standalone",
+   "versiones": [
+    {
+     "id": "0.1",
+     "origen": "P2",
+     "donde": "fecha",
+     "fecha": "2026-12-21",
+     "linea": "modo interactivo + flags; presets web-next, mern, petria (del repo de PetrIA), vitalia (.NET); pack de agentes (CLAUDE.md + subagentes); Docker compose; CI; .env.example validado; hook de gitleaks. Generar VitalIA con Alawys y anotar la métrica."
+    },
+    {
+     "id": "1.0",
+     "origen": "P2",
+     "donde": "fecha",
+     "fecha": "2026-12-30",
+     "linea": "npm publish, README, demo de 60 s",
+     "lanzamiento": true,
+     "post": "2026-12-31"
+    },
+    {
+     "id": "1.x",
+     "origen": null,
+     "donde": "recurrente",
+     "linea": "el arranque (0.1) de cada proyecto principal posterior suma el preset de su stack si falta"
+    },
+    {
+     "id": "2.0",
+     "origen": "P0B",
+     "donde": "bloque",
+     "linea": "\"alawys add agents|mcp\" + servidor @alawys/mcp"
+    }
+   ],
+   "licencia": "MIT",
+   "ficha": {
+    "puesto": "Platform / Developer Experience Engineer, AI Full-stack",
+    "pesoEntrevistas": "muy alto",
+    "descripcion": "CLI que arma un proyecto completo con un comando: front, back, DB, Docker, CI, variables y pack de agentes.",
+    "problema": "cada proyecto arranca con un scaffold distinto, que lleva tiempo y gasta tokens.",
+    "valor": "arranques iguales, sin tokens, con mis estándares ya puestos.",
+    "diferencial": "varios lenguajes, proyectos que nacen con agentes, Docker primero, seguridad por defecto.",
+    "stack": "Node + TypeScript, capas combinables, tests de snapshot, CI matricial que genera y compila cada preset.",
+    "hook": "De cero a un proyecto con agentes, Docker y CI en 60 segundos",
+    "metrica": "tokens and minutes per scaffold, Claude vs Alawys, measured on VitalIA"
+   }
+  },
+  {
+   "id": "mcp-ar",
+   "nombre": "mcp-ar",
+   "paquete": "mcp-ar",
+   "registro": "MCP",
+   "kind": "standalone",
+   "versiones": [
+    {
+     "origen": "P3",
+     "donde": "cierre",
+     "linea": "v1: datos públicos de energía y agro (MCP)",
+     "id": "v1"
+    },
+    {
+     "origen": "P4",
+     "donde": "cierre",
+     "linea": "suma satélites",
+     "id": "+satélites"
+    },
+    {
+     "origen": "Q6",
+     "donde": "cierre",
+     "linea": "v2: dólar MEP/CCL (gran lanzamiento)",
+     "id": "v2",
+     "lanzamiento": true
+    },
+    {
+     "origen": "A5",
+     "donde": "cierre",
+     "linea": "suma conjunciones y reingresos",
+     "id": "+conjunciones"
+    }
+   ]
+  },
+  {
+   "id": "sgp4-wasm",
+   "nombre": "@alawys/sgp4-wasm",
+   "paquete": "@alawys/sgp4-wasm",
+   "registro": "npm",
+   "kind": "standalone",
+   "versiones": [
+    {
+     "origen": "P4",
+     "donde": "cierre",
+     "linea": "SGP4 en Rust compilado a WASM",
+     "id": "1.0"
+    }
+   ]
+  },
+  {
+   "id": "ask-widget",
+   "nombre": "@alawys/ask-widget",
+   "paquete": "@alawys/ask-widget",
+   "registro": "npm",
+   "kind": "standalone",
+   "versiones": [
+    {
+     "origen": "P0B",
+     "donde": "cierre",
+     "linea": "widget \"preguntale a…\" embebible",
+     "id": "1.0"
+    }
+   ]
+  },
+  {
+   "id": "notify",
+   "nombre": "@alawys/notify",
+   "paquete": "@alawys/notify",
+   "registro": "npm",
+   "kind": "extracted",
+   "versiones": [
+    {
+     "origen": "P5",
+     "donde": "cierre",
+     "linea": "WhatsApp → llamada → email de respaldo",
+     "id": "1.0"
+    }
+   ]
+  },
+  {
+   "id": "llm-router",
+   "nombre": "@alawys/llm-router",
+   "paquete": "@alawys/llm-router",
+   "registro": "npm",
+   "kind": "extracted",
+   "versiones": [
+    {
+     "origen": "P6",
+     "donde": "cierre",
+     "linea": "cascada, caché semántica y tope de costo",
+     "id": "1.0"
+    }
+   ]
+  },
+  {
+   "id": "evals-action",
+   "nombre": "@alawys/evals-action",
+   "paquete": "@alawys/evals-action",
+   "registro": "GitHub Action",
+   "kind": "extracted",
+   "versiones": [
+    {
+     "origen": "P7",
+     "donde": "cierre",
+     "linea": "evals en el CI como GitHub Action",
+     "id": "1.0"
+    }
+   ]
+  },
+  {
+   "id": "chatbot-scan",
+   "nombre": "chatbot-scan",
+   "paquete": "chatbot-scan",
+   "registro": "GitHub Action + CLI",
+   "kind": "standalone",
+   "versiones": [
+    {
+     "origen": "P8",
+     "donde": "cierre",
+     "linea": "escaneo de chatbots (Action + CLI)",
+     "id": "1.0"
+    }
+   ]
+  },
+  {
+   "id": "usage-meter",
+   "nombre": "@alawys/usage-meter",
+   "paquete": "@alawys/usage-meter",
+   "registro": "npm",
+   "kind": "extracted",
+   "versiones": [
+    {
+     "origen": "P10",
+     "donde": "cierre",
+     "linea": "costos y cuotas",
+     "id": "1.0"
+    }
+   ]
+  },
+  {
+   "id": "agent-creds",
+   "nombre": "@alawys/agent-creds",
+   "paquete": "@alawys/agent-creds",
+   "registro": "npm + MCP",
+   "kind": "standalone",
+   "versiones": [
+    {
+     "origen": "S1",
+     "donde": "cierre",
+     "linea": "credenciales efímeras para agentes + MCP",
+     "id": "1.0"
+    }
+   ]
+  },
+  {
+   "id": "semgrep-llm",
+   "nombre": "Semgrep pack",
+   "paquete": "semgrep-rules-llm",
+   "registro": "reglas Semgrep",
+   "kind": "standalone",
+   "versiones": [
+    {
+     "origen": "S2",
+     "donde": "cierre",
+     "linea": "reglas de Semgrep para código hecho con LLM",
+     "id": "1.0"
+    }
+   ]
+  },
+  {
+   "id": "sigma-osquery",
+   "nombre": "Sigma + osquery pack",
+   "paquete": "sigma-osquery-pymes",
+   "registro": "reglas Sigma + osquery",
+   "kind": "standalone",
+   "versiones": [
+    {
+     "origen": "S3",
+     "donde": "cierre",
+     "linea": "pack de detección para pymes",
+     "id": "1.0"
+    }
+   ]
+  },
+  {
+   "id": "backtester",
+   "nombre": "backtester",
+   "paquete": "backtester",
+   "registro": "crate + PyPI",
+   "kind": "standalone",
+   "versiones": [
+    {
+     "origen": "Q1",
+     "donde": "cierre",
+     "linea": "backtester de eventos (Rust + Python)",
+     "id": "1.0"
+    }
+   ]
+  },
+  {
+   "id": "opciones-ar",
+   "nombre": "opciones-ar",
+   "paquete": "opciones-ar",
+   "registro": "PyPI + MCP",
+   "kind": "standalone",
+   "versiones": [
+    {
+     "origen": "Q3",
+     "donde": "cierre",
+     "linea": "opciones argentinas con griegas",
+     "id": "1.0"
+    }
+   ]
+  },
+  {
+   "id": "fem-wasm",
+   "nombre": "@alawys/fem-wasm",
+   "paquete": "@alawys/fem-wasm",
+   "registro": "npm",
+   "kind": "standalone",
+   "versiones": [
+    {
+     "origen": "A2",
+     "donde": "cierre",
+     "linea": "elementos finitos en WASM",
+     "id": "1.0"
+    }
+   ]
+  },
+  {
+   "id": "showcase-kit",
+   "nombre": "@alawys/showcase-kit",
+   "paquete": "@alawys/showcase-kit",
+   "registro": "npm",
+   "kind": "extracted",
+   "versiones": [
+    {
+     "origen": "com-2",
+     "donde": "cierre",
+     "linea": "kit de showcase premium",
+     "id": "1.0"
+    }
+   ]
+  },
+  {
+   "id": "seat-picker",
+   "nombre": "@alawys/seat-picker",
+   "paquete": "@alawys/seat-picker",
+   "registro": "npm",
+   "kind": "extracted",
+   "versiones": [
+    {
+     "origen": "com-3",
+     "donde": "cierre",
+     "linea": "selector de butacas 3D",
+     "id": "1.0"
+    }
+   ]
+  },
+  {
+   "id": "voice-agent",
+   "nombre": "@alawys/voice-agent",
+   "paquete": "@alawys/voice-agent",
+   "registro": "npm",
+   "kind": "extracted",
+   "versiones": [
+    {
+     "origen": "com-4",
+     "donde": "cierre",
+     "linea": "agente de voz para pedidos",
+     "id": "1.0"
+    }
+   ]
+  },
+  {
+   "id": "bkt",
+   "nombre": "@alawys/bkt",
+   "paquete": "@alawys/bkt",
+   "registro": "npm",
+   "kind": "standalone",
+   "versiones": [
+    {
+     "origen": "julia",
+     "donde": "cierre",
+     "linea": "knowledge tracing (BKT)",
+     "id": "1.0",
+     "version": "3.0"
+    }
+   ]
+  },
+  {
+   "id": "captions",
+   "nombre": "@alawys/captions",
+   "paquete": "@alawys/captions",
+   "registro": "npm",
+   "kind": "extracted",
+   "versiones": [
+    {
+     "origen": "clip-studio",
+     "donde": "cierre",
+     "linea": "subtítulos animados (Remotion)",
+     "id": "1.0",
+     "version": "2.0"
+    }
+   ]
+  },
+  {
+   "id": "tour3d",
+   "nombre": "@alawys/tour3d",
+   "paquete": "@alawys/tour3d",
+   "registro": "npm",
+   "kind": "extracted",
+   "versiones": [
+    {
+     "origen": "roofy",
+     "donde": "cierre",
+     "linea": "tour 3D y AR",
+     "id": "1.0",
+     "version": "2.0"
+    }
+   ]
+  },
+  {
+   "id": "mp-escrow",
+   "nombre": "Escrow de Mercado Pago (HandyX)",
+   "paquete": "—",
+   "registro": "interna",
+   "kind": "interna",
+   "versiones": [
+    {
+     "origen": "handyx",
+     "donde": "cierre",
+     "linea": "escrow de pagos: queda interno, nunca se publica",
+     "id": "1.0",
+     "version": "1.0"
+    }
+   ]
   }
  ]
 }

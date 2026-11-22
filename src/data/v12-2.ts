@@ -89,6 +89,31 @@ export interface DatosV122 {
   comerciales: Comercial[];
   recordatorios: { id: string; fecha: string; texto: string }[];
   backlog: { nombre: string; destacado: boolean }[];
+  herramientas: Herramienta[];
+}
+
+/** §14 · una versión de una herramienta: nace en un ítem y toma sus fechas (un día, el bloque o el cierre). */
+export interface VersionHerramienta {
+  id: string;
+  origen: string | null;
+  donde: 'fecha' | 'bloque' | 'cierre' | 'recurrente';
+  fecha?: string;
+  /** La versión del ítem de origen que la trae (apps secundarias). */
+  version?: string;
+  linea: string;
+  lanzamiento?: boolean;
+  post?: string;
+}
+export interface Herramienta {
+  id: string;
+  nombre: string;
+  paquete: string;
+  registro: string;
+  /** standalone: producto público desde el día uno. extracted: sale de un proyecto cuando un segundo lo necesita. interna: nunca se publica. */
+  kind: 'standalone' | 'extracted' | 'interna';
+  licencia?: string;
+  ficha?: Record<string, string>;
+  versiones: VersionHerramienta[];
 }
 
 export const V122 = raw as unknown as DatosV122;

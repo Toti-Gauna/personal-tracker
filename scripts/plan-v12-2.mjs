@@ -183,7 +183,68 @@ for (const [id, f] of Object.entries(fondo)) {
   if (!c || c.fin < b.fechas.inicio || c.inicio > b.fechas.fin) avisos.push(`${id}: el BACKGROUND dice #${f.comercial} y ese slot no cae en el bloque`);
 }
 
-const out = { version: 1, plan: 'v12.2', fuente: 'docs/prompts/plan-v12.2.md', detalle, fondo, secundarias, comerciales, recordatorios, backlog };
+// ——— §14: Alawys y las herramientas open source ———
+// Cada herramienta: kind standalone (producto público desde el día uno) o extracted (sale de un proyecto cuando un segundo lo
+// necesita), o interna (nunca se publica). Cada versión nace en un ítem (proyecto principal, app secundaria o slot comercial) y
+// toma sus fechas: el día dado, el arranque (0.1) o el cierre (la última versión, o la versión indicada).
+const T = (id, nombre, paquete, registro, kind, versiones, extra = {}) => ({ id, nombre, paquete, registro, kind, versiones, ...extra });
+const cierre = (origen, linea, extra = {}) => ({ origen, donde: 'cierre', linea, ...extra });
+const herramientas = [
+  T('alawys', 'Alawys', 'create-alawys · @alawys/*', 'npm', 'standalone', [
+    { id: '0.1', origen: 'P2', donde: 'fecha', fecha: '2026-12-21', linea: 'modo interactivo + flags; presets web-next, mern, petria (del repo de PetrIA), vitalia (.NET); pack de agentes (CLAUDE.md + subagentes); Docker compose; CI; .env.example validado; hook de gitleaks. Generar VitalIA con Alawys y anotar la métrica.' },
+    { id: '1.0', origen: 'P2', donde: 'fecha', fecha: '2026-12-30', linea: 'npm publish, README, demo de 60 s', lanzamiento: true, post: '2026-12-31' },
+    { id: '1.x', origen: null, donde: 'recurrente', linea: 'el arranque (0.1) de cada proyecto principal posterior suma el preset de su stack si falta' },
+    { id: '2.0', origen: 'P0B', donde: 'bloque', linea: '"alawys add agents|mcp" + servidor @alawys/mcp' },
+  ], {
+    licencia: 'MIT', ficha: {
+      puesto: 'Platform / Developer Experience Engineer, AI Full-stack', pesoEntrevistas: 'muy alto',
+      descripcion: 'CLI que arma un proyecto completo con un comando: front, back, DB, Docker, CI, variables y pack de agentes.',
+      problema: 'cada proyecto arranca con un scaffold distinto, que lleva tiempo y gasta tokens.',
+      valor: 'arranques iguales, sin tokens, con mis estándares ya puestos.',
+      diferencial: 'varios lenguajes, proyectos que nacen con agentes, Docker primero, seguridad por defecto.',
+      stack: 'Node + TypeScript, capas combinables, tests de snapshot, CI matricial que genera y compila cada preset.',
+      hook: 'De cero a un proyecto con agentes, Docker y CI en 60 segundos',
+      metrica: 'tokens and minutes per scaffold, Claude vs Alawys, measured on VitalIA',
+    },
+  }),
+  T('mcp-ar', 'mcp-ar', 'mcp-ar', 'MCP', 'standalone', [
+    cierre('P3', 'v1: datos públicos de energía y agro (MCP)', { id: 'v1' }),
+    cierre('P4', 'suma satélites', { id: '+satélites' }),
+    cierre('Q6', 'v2: dólar MEP/CCL (gran lanzamiento)', { id: 'v2', lanzamiento: true }),
+    cierre('A5', 'suma conjunciones y reingresos', { id: '+conjunciones' }),
+  ]),
+  T('sgp4-wasm', '@alawys/sgp4-wasm', '@alawys/sgp4-wasm', 'npm', 'standalone', [cierre('P4', 'SGP4 en Rust compilado a WASM', { id: '1.0' })]),
+  T('ask-widget', '@alawys/ask-widget', '@alawys/ask-widget', 'npm', 'standalone', [cierre('P0B', 'widget "preguntale a…" embebible', { id: '1.0' })]),
+  T('notify', '@alawys/notify', '@alawys/notify', 'npm', 'extracted', [cierre('P5', 'WhatsApp → llamada → email de respaldo', { id: '1.0' })]),
+  T('llm-router', '@alawys/llm-router', '@alawys/llm-router', 'npm', 'extracted', [cierre('P6', 'cascada, caché semántica y tope de costo', { id: '1.0' })]),
+  T('evals-action', '@alawys/evals-action', '@alawys/evals-action', 'GitHub Action', 'extracted', [cierre('P7', 'evals en el CI como GitHub Action', { id: '1.0' })]),
+  T('chatbot-scan', 'chatbot-scan', 'chatbot-scan', 'GitHub Action + CLI', 'standalone', [cierre('P8', 'escaneo de chatbots (Action + CLI)', { id: '1.0' })]),
+  T('usage-meter', '@alawys/usage-meter', '@alawys/usage-meter', 'npm', 'extracted', [cierre('P10', 'costos y cuotas', { id: '1.0' })]),
+  T('agent-creds', '@alawys/agent-creds', '@alawys/agent-creds', 'npm + MCP', 'standalone', [cierre('S1', 'credenciales efímeras para agentes + MCP', { id: '1.0' })]),
+  T('semgrep-llm', 'Semgrep pack', 'semgrep-rules-llm', 'reglas Semgrep', 'standalone', [cierre('S2', 'reglas de Semgrep para código hecho con LLM', { id: '1.0' })]),
+  T('sigma-osquery', 'Sigma + osquery pack', 'sigma-osquery-pymes', 'reglas Sigma + osquery', 'standalone', [cierre('S3', 'pack de detección para pymes', { id: '1.0' })]),
+  T('backtester', 'backtester', 'backtester', 'crate + PyPI', 'standalone', [cierre('Q1', 'backtester de eventos (Rust + Python)', { id: '1.0' })]),
+  T('opciones-ar', 'opciones-ar', 'opciones-ar', 'PyPI + MCP', 'standalone', [cierre('Q3', 'opciones argentinas con griegas', { id: '1.0' })]),
+  T('fem-wasm', '@alawys/fem-wasm', '@alawys/fem-wasm', 'npm', 'standalone', [cierre('A2', 'elementos finitos en WASM', { id: '1.0' })]),
+  T('showcase-kit', '@alawys/showcase-kit', '@alawys/showcase-kit', 'npm', 'extracted', [cierre('com-2', 'kit de showcase premium', { id: '1.0' })]),
+  T('seat-picker', '@alawys/seat-picker', '@alawys/seat-picker', 'npm', 'extracted', [cierre('com-3', 'selector de butacas 3D', { id: '1.0' })]),
+  T('voice-agent', '@alawys/voice-agent', '@alawys/voice-agent', 'npm', 'extracted', [cierre('com-4', 'agente de voz para pedidos', { id: '1.0' })]),
+  T('bkt', '@alawys/bkt', '@alawys/bkt', 'npm', 'standalone', [cierre('julia', 'knowledge tracing (BKT)', { id: '1.0', version: '3.0' })]),
+  T('captions', '@alawys/captions', '@alawys/captions', 'npm', 'extracted', [cierre('clip-studio', 'subtítulos animados (Remotion)', { id: '1.0', version: '2.0' })]),
+  T('tour3d', '@alawys/tour3d', '@alawys/tour3d', 'npm', 'extracted', [cierre('roofy', 'tour 3D y AR', { id: '1.0', version: '2.0' })]),
+  T('mp-escrow', 'Escrow de Mercado Pago (HandyX)', '—', 'interna', 'interna', [cierre('handyx', 'escrow de pagos: queda interno, nunca se publica', { id: '1.0', version: '1.0' })]),
+];
+// Validaciones: los orígenes existen y cada ítem tiene a lo sumo UNA herramienta nueva (la primera versión de cada una).
+const existe = (id) => PLAN.bloques.some((b) => b.id === id) || secundarias.some((s) => s.id === id) || comerciales.some((c) => c.id === id);
+const nuevas = {};
+for (const h of herramientas) {
+  for (const v of h.versiones) if (v.origen && !existe(v.origen)) avisos.push(`${h.id} ${v.id}: el origen ${v.origen} no existe`);
+  const o = h.versiones.find((v) => v.origen)?.origen;
+  if (o) (nuevas[o] ??= []).push(h.id);
+}
+for (const [o, hs] of Object.entries(nuevas)) if (hs.length > 1) avisos.push(`${o}: ${hs.length} herramientas nuevas (${hs.join(', ')}); el máximo es una`);
+
+const out = { version: 1, plan: 'v12.2', fuente: 'docs/prompts/plan-v12.2.md', detalle, fondo, secundarias, comerciales, recordatorios, backlog, herramientas };
 writeFileSync(join(RAIZ, 'data/v12-2.json'), JSON.stringify(out, null, 1) + '\n');
-console.log(`${Object.keys(detalle).length} proyectos con detalle · ${Object.keys(fondo).length} líneas de fondo · ${secundarias.length} secundarias · ${comerciales.length} comerciales · ${recordatorios.length} recordatorios`);
+console.log(`${herramientas.length} herramientas · ${Object.keys(detalle).length} proyectos con detalle · ${Object.keys(fondo).length} líneas de fondo · ${secundarias.length} secundarias · ${comerciales.length} comerciales · ${recordatorios.length} recordatorios`);
 if (avisos.length) console.log(`Avisos (${avisos.length}):\n- ${avisos.join('\n- ')}`);

@@ -87,7 +87,7 @@ add({ id: 'CW1', fase: 'F1', tipo: 'cert', nombre: 'Cert window 1', inicio: '202
 add({ id: 'E1', fase: 'F1', tipo: 'ingles', nombre: 'English E#1', inicio: '2026-12-14', fin: '2026-12-20', horas: 72,
   ingles: { libros: ['English Made Simple'], objetivo: 'English Made Simple: chapter 1 → half', reparto: { lv: { ingles: 5.5, entrevistas: 1.5, recall: 0.5, busqueda: 2.5 }, finde: { ingles: 8, busqueda: 3 } } },
   mercado: ['PetrIA', 'Claude Architect', 'GitHub Foundations'], roles: ['AI Full-stack', 'AI Engineer', 'Applied AI'] });
-add({ id: 'P2', fase: 'F1', tipo: 'proyecto', nombre: 'VitalIA', inicio: '2026-12-21', fin: '2026-12-30', horas: 100, horasLim: 125, rol: 'AI Engineer, health (.NET, Azure)', entrevista: 'very high',
+add({ id: 'P2', fase: 'F1', tipo: 'proyecto', nombre: 'VitalIA', inicio: '2026-12-21', fin: '2026-12-30', horas: 104, horasLim: 125, rol: 'AI Engineer, health (.NET, Azure)', entrevista: 'very high',
   versiones: [v('1.0', '2026-12-21', '2026-12-22'), v('1.1', '2026-12-23', '2026-12-25'), v('2.0', '2026-12-26', '2026-12-28'), v('3.0', '2026-12-29', '2026-12-30')] });
 add({ id: 'CW2', fase: 'F1', tipo: 'cert', nombre: 'Cert window 2', inicio: '2026-12-31', fin: '2027-01-07', horas: 82, certs: [
   cert('ai-103', 'Azure AI-103 (AI App and Agent Developer Associate)', 45, ['MS Learn AI-103 path', 'Practice assessment', 'Azure sandbox'], [['2026-12-31', 'Path'], ['2027-01-01', 'Path'], ['2027-01-02', 'Path'], ['2027-01-03', 'Labs'], ['2027-01-04', '2 practice assessments'], ['2027-01-05', 'Exam']], '2027-01-05', { listo: 85, reserva: '2026-12-20' }),

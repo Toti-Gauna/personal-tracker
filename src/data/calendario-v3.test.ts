@@ -72,7 +72,7 @@ describe('v12.1 · calendario con fechas explícitas y capacidad 10/11 h', () =>
     const cfg = { t0: T0, inicioTrabajo: SIN_TRABAJO };
     const base = calendarioHoras(PLAN_EXT, { horas: { capacidad: (d) => horasDelDia(d, cfg) } });
     const lento = calendarioHoras(PLAN_EXT, { horas: { capacidad: (d) => horasDelDia(d, cfg), factor: 1.15, cerrados: ['P0', 'P1', 'P2'] } });
-    expect(lento.find((b) => b.id === 'P2')).toMatchObject({ inicio: base.find((b) => b.id === 'P2')!.inicio, horas: 100 });
+    expect(lento.find((b) => b.id === 'P2')).toMatchObject({ inicio: base.find((b) => b.id === 'P2')!.inicio, horas: 104 }); // §14: VitalIA 104 h
     expect(lento.find((b) => b.id === 'P3')).toMatchObject({ inicio: '2027-02-19', fin: '2027-03-02' });
     expect(lento[lento.length - 1].fin).toBe(base[base.length - 1].fin);
   });

@@ -445,7 +445,7 @@
       "panel con línea de tiempo",
       "deploy en Azure"
      ],
-     "horas": 20,
+     "horas": 21,
      "derivadas": true
     },
     {
@@ -463,7 +463,7 @@
       "desidentificador en Rust",
       "frontend"
      ],
-     "horas": 30,
+     "horas": 31,
      "derivadas": true
     },
     {
@@ -478,7 +478,7 @@
       "monitoreo en Wokwi",
       "escáner de cajas"
      ],
-     "horas": 30,
+     "horas": 31,
      "derivadas": true
     },
     {
@@ -494,7 +494,7 @@
       "oxímetro real",
       "Scale report"
      ],
-     "horas": 20,
+     "horas": 21,
      "derivadas": true
     }
    ]
