@@ -66,47 +66,49 @@ Clipping's charts, Entreno motor bars, the "Buen día" modal, the depth of the d
 - **Entreno**, **Perfil** (Avance, logros, Ajustes as a labelled row and button).
 - Breadcrumb is a compact path; "back" always goes to the parent in the hub.
 
-## 4. The three waves
+## 4. Decisions (answered 22 Nov 2026)
 
-Each wave = one PR with before/after screenshots (both modes), small commits, tests green, v2 off by default until you flip it.
+1. Screen-height budget for v2 screens: **~4 screens** (1.0 keeps 3.2).
+2. **three.js** for the constellation (lazy, only on that screen). **Custom SVG icons** drawn for Trazo (no icon library).
+3. Theme: **dark is the signature; light is a full second theme**, both follow the phone by default.
+4. **No fixes in 1.0.** Every clarity fix (gear, tabs, cert texts, 24 h, wording, weight check, theme, splash) lands in 2.0 only.
+5. Components and animations get their own batches: every control, toast, sheet and transition is rebuilt.
 
-### Wave 1 · Foundations + the switch
+## 5. Roadmap: three waves
+
+Each wave = one PR with before/after screenshots (both modes), small commits, tests green, 2.0 off by default until you flip it.
+
+### Wave 1 · Foundations, components, motion and the switch
 
 | Batch | What | Model | Effort |
 |---|---|---|---|
-| 1.1 | **v2 switch & architecture**: setting + migration, Ajustes "Interfaz", `src/v2/` lazy bundle, route resolver with per-screen fallback, error boundary, `?ui=1`, tests | Opus 5.5 | high |
-| 1.2 | **Clarity pass on 1.0** (you keep using it): gear icon + "Ajustes" row in Perfil, Unidades tabs, duplicated cert subtitle, truncated date, 24 h times, "1 días" / "del", weight sheet only on Entreno/Today card, theme follows system, splash loading, disabled-button look | Sonnet 5.5 | high |
-| 1.3 | **Design language + writing rules**: art direction, tokens (type, spacing, radii, surfaces, area vs status colors), copy guide + glossary (T+18, seguidas, Día 00…), the IA map above | Fable 5.2 | high |
-| 1.4 | **Component kit v2**: Button (3 variants + real disabled), Surface, Stat (always labelled), Ring, PaceTrack, StatusPill, Segmented, Sheet, InfoSheet ⓘ, EmptyState, Skeleton, Toast, Field + 24 h TimePicker + DatePicker, ~40 icons with a semantics check | Opus 5.5 | xhigh |
-| 1.5 | **Motion system**: duration/easing tokens, View Transitions (GSAP fallback), staggered fades, number tickers, press feedback, completion burst, skeleton shimmer, reduced motion | Opus 5.5 | high |
-| 1.6 | **v2 shell**: glass bottom bar with sliding indicator, large title that collapses on scroll, ⓘ, breadcrumb, Ajustes 2.0, new splash and onboarding, desktop 2-column layout | Fable 5.2 | high |
-| 1.7 | **QA harness**: capture script in the repo (both modes, contact sheets), word-budget script, 390 px budget, token lint (no raw hex/px in v2) | Sonnet 5.5 | medium |
+| 1.1 | **The 2.0 switch & architecture**: `settings.interfaz` + additive migration, Ajustes "Interfaz", `src/v2/` lazy bundle, route resolver with per-screen fallback and "1.0" chip, error boundary, `?ui=1`, tests | Opus 5.5 | high |
+| 1.2 | **Design language + writing rules**: art direction, tokens (8-step type scale, 4 pt spacing, 3 radii, 4 surface depths, grain/glow), area colors ≠ status colors, dark + light themes, copy guide + glossary, word budgets, the new structure | Fable 5.2 | high |
+| 1.3 | **Custom SVG icon set** (~50, one stroke grid, each checked against what people expect: a real gear for settings, a dumbbell for Entreno…) + the illustration style for empty states | Fable 5.2 | high |
+| 1.4 | **Controls**: Button (primary / secondary / ghost / destructive, icon button, loading + disabled with reason), check button with drawn tick, switch, segmented, chips, stepper, text field, 24 h time picker, date picker, select sheet | Opus 5.5 | xhigh |
+| 1.5 | **Feedback & surfaces**: Toast (stacked, undo, swipe away, success/warning/error), bottom sheet (drag, snap points), confirm dialog, ⓘ InfoSheet, tooltip, skeleton loaders per layout, empty state, Ring, PaceTrack, progress bar, StatusPill, Stat (always labelled), Card/Surface, list row | Opus 5.5 | xhigh |
+| 1.6 | **Motion system**: duration/easing tokens, screen transitions (View Transitions + GSAP fallback), zoom between plan levels, staggered fades, count-up numbers, press feedback, completion burst, toast/sheet springs, skeleton shimmer, reduced motion | Opus 5.5 | high |
+| 1.7 | **2.0 shell**: glass bottom bar with sliding indicator, large title that collapses on scroll, breadcrumb, ⓘ entry, Ajustes 2.0 (gear + labelled row), theme follows the phone, new splash + onboarding, weight check as a Today card (no sheet chasing you), desktop 2-column layout | Fable 5.2 | high |
+| 1.8 | **QA harness**: capture script for both modes + contact sheets, word-budget script, ~4-screen height budget, token lint (no raw hex/px in v2), component gallery page `#/v2/kit` | Sonnet 5.5 | medium |
 
-Demo: flip to 2.0 in Ajustes → new shell, Ajustes, splash; every other screen shows its 1.0 version with the "1.0" chip.
+Demo: flip to 2.0 in Ajustes → new shell, Ajustes, splash and the component gallery; other screens show their 1.0 version with the "1.0" chip.
 
 ### Wave 2 · The daily core: Hoy, Plan, Estudio
 
 | Batch | What | Model | Effort |
 |---|---|---|---|
-| 2.1 | **Hoy 2.0**: Now card with live countdown ring and what's next; day ring; timeline with a "now" line and labelled sub-goal rings; habits with real check buttons and 7-day dots; background work as chips; "Cerrar el día" as a ritual. ≤60 words above the fold (now 179) | Fable 5.2 | xhigh |
-| 2.2 | **Plan hub + GoalCard**: one card for every period (ring + pace track + forecast + calm status), zoom Etapa → Lote with shared-element transitions, Semana/Mes/Bim/Año as zoom, Análisis page. Replaces 9 views (Mapa 649 words, Períodos 586, Roadmap 674) | Opus 5.5 | xhigh |
+| 2.1 | **Hoy 2.0**: Now card with live countdown ring and what's next; day ring; timeline with a "now" line and labelled sub-goal rings; habits with real check buttons and 7-day dots; background work as chips; tools in one "⋯" sheet; "Cerrar el día" as a ritual. ≤60 words above the fold (now 179) | Fable 5.2 | xhigh |
+| 2.2 | **Plan hub + GoalCard**: one card for every period (ring + pace track + forecast + calm status), zoom Etapa → Lote with shared-element transitions, Semana/Mes/Bim/Año as zoom, Análisis page. Replaces 9 views | Opus 5.5 | xhigh |
 | 2.3 | **Línea 2.0 + 3D constellation**: pinch-zoom, sticky lanes, tappable bars with hints, glowing today; three.js constellation (phases as orbits, blocks as stars that light up), loaded only there | Fable 5.2 | max |
-| 2.4 | **Project, cert and version pages + De fondo hub**: cover hero per project (generated SVG art), tabs Resumen / Ficha / Stack instead of one long page (P1: 811 words), versions as a stepper, cert countdown, Open source as package cards, Imán as an 8-segment ring, Pistas as cards (no blue links) | Opus 5.5 | high |
-| 2.5 | **Estudio 2.0**: roadmaps as a subway map, chapter heatmap per book, review cards that flip, review forecast, illustrated 4-step "Cómo funciona", Repasar area | Opus 5.5 | high |
+| 2.4 | **Project, cert and version pages + De fondo hub**: cover hero per project (generated SVG art), tabs Resumen / Ficha / Stack (P1: 811 words today), versions as a stepper, cert countdown (fixed date field, no duplicated subtitle), Open source as package cards, Imán as an 8-segment ring, Pistas as cards | Opus 5.5 | high |
+| 2.5 | **Estudio 2.0**: roadmaps as a subway map, book tabs that fit (no overlap), chapter heatmap, review cards that flip, review forecast, illustrated 4-step "Cómo funciona", Repasar area | Opus 5.5 | high |
 
 ### Wave 3 · Body, self, everything else, launch
 
 | Batch | What | Model | Effort |
 |---|---|---|---|
-| 3.1 | **Entreno 2.0 with anatomy**: SVG body front/back lighting the muscles each session trains + weekly volume heat; session player (sets as bars, rest-timer ring); weight curve; motor explained by the graphic, not text (now 461 words) | Fable 5.2 | xhigh |
-| 3.2 | **Perfil, Avance, Cierre**: identity card with level ring, medals with sheen, year heat map; Cierre (848 words, the wordiest) as 3 swipeable cards; Presentation mode as a "Wrapped"-style recap | Fable 5.2 | high |
-| 3.3 | **Sweep of the remaining ~45 screens** onto the kit: Clipping (10), Ajustes sub-pages, Rutinas, JSON/Importar, Pomodoros, Revisión, Compras, Calibración… one floating action per screen | Sonnet 5.5 | high |
-| 3.4 | **Empty states + illustrations + final copy pass**: ~15 line illustrations, day-0 states that invite action, every screen within the word budget | Fable 5.2 | medium |
-| 3.5 | **Performance, accessibility, launch**: Lighthouse ≥ 95, bundle budget, AA contrast, reduced motion, before/after gallery, docs, high-effort code review; then you decide when 2.0 becomes the default | Opus 5.5 | high |
-
-## 5. Open decisions
-
-1. Screen-height budget for v2: keep 3.2 screens or raise to ~4 (heroes add height, text diet removes it).
-2. three.js for the constellation (~150 KB, lazy) and icons: custom set or Lucide.
-3. Theme: dark as the signature with light as a full second theme, or equal care.
-4. Should the 1.0 clarity fixes (batch 1.2) ship to 1.0 too? (Proposed: yes, since you keep using it.)
+| 3.1 | **Entreno 2.0 with anatomy**: custom SVG body front/back lighting the muscles each session trains + weekly volume heat; session player (sets as bars, rest-timer ring); weight curve; the motor explained by the graphic (now 461 words) | Fable 5.2 | xhigh |
+| 3.2 | **Perfil, Avance, Cierre**: identity card with level ring, medals with sheen, year heat map; Cierre (848 words) as 3 swipeable cards; Presentation mode as a "Wrapped"-style recap | Fable 5.2 | high |
+| 3.3 | **Sweep of the remaining ~45 screens** onto the kit: Clipping (10), Ajustes sub-pages, Rutinas (24 h pickers), JSON/Importar, Pomodoros, Revisión, Compras, Calibración… one floating action per screen | Sonnet 5.5 | high |
+| 3.4 | **Empty states + illustrations + final copy pass**: ~15 custom line illustrations, day-0 states that invite action, every screen within the word budget, wording bugs ("1 días", "de El") | Fable 5.2 | medium |
+| 3.5 | **Performance, accessibility, launch**: Lighthouse ≥ 95, bundle budget, AA contrast in both themes, reduced motion, before/after gallery, docs, high-effort code review; then you decide when 2.0 becomes the default | Opus 5.5 | high |
