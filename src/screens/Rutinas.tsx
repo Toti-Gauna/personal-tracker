@@ -83,7 +83,7 @@ function Inicio({ day }: { day: DayLog }) {
 
 function ListaBloques({ bloques }: { bloques: RoutineBlock[] }) {
   return (
-    <ol className="rd-bloques">
+    <ol className="rd-bloques ru-bloques">
       {bloques.map((b) => (
         <li key={b.id + b.start} className={isMeta(b) ? '' : 'no-meta'} style={{ ['--c' as string]: AREAS[b.area]?.css }}>
           <span className="mono">{b.start}–{b.end}</span>
@@ -111,10 +111,10 @@ const FIJO_VACIO: Fijo = { label: '', start: '13:00', end: '14:00' };
 function EditorFijos({ fijos, set }: { fijos: Fijo[]; set: (f: Fijo[]) => void }) {
   const cambiar = (i: number, x: Partial<Fijo>) => set(fijos.map((f, j) => (j === i ? { ...f, ...x } : f)));
   return (
-    <ul className="cp-lista">
+    <ul className="ru-campos">
       {fijos.map((f, i) => (
-        <li key={i} className="cp-mocks">
-          <input className="campo-texto" aria-label={`Fijo ${i + 1}: nombre`} value={f.label} placeholder="Abi + correr" onChange={(e) => cambiar(i, { label: e.target.value })} />
+        <li key={i} className="ru-fila">
+          <input className="campo-texto ru-nombre" aria-label={`Fijo ${i + 1}: nombre`} value={f.label} placeholder="Abi + correr" onChange={(e) => cambiar(i, { label: e.target.value })} />
           <input className="campo-texto mono" type="time" aria-label={`Fijo ${i + 1}: desde`} value={f.start} onChange={(e) => cambiar(i, { start: e.target.value })} />
           <input className="campo-texto mono" type="time" aria-label={`Fijo ${i + 1}: hasta`} value={f.end} onChange={(e) => cambiar(i, { end: e.target.value })} />
           <button className="subrayado" onClick={() => set(fijos.filter((_, j) => j !== i))}>Sacar</button>
@@ -128,10 +128,10 @@ function EditorFijos({ fijos, set }: { fijos: Fijo[]; set: (f: Fijo[]) => void }
 function EditorNecesidades({ ns, set }: { ns: Necesidad[]; set: (n: Necesidad[]) => void }) {
   const cambiar = (i: number, x: Partial<Necesidad>) => set(ns.map((n, j) => (j === i ? { ...n, ...x } : n)));
   return (
-    <ul className="cp-lista">
+    <ul className="ru-campos">
       {ns.map((n, i) => (
-        <li key={i} className="cp-mocks">
-          <input className="campo-texto" aria-label={`Necesidad ${i + 1}: nombre`} value={n.label} placeholder="Foco" onChange={(e) => cambiar(i, { label: e.target.value })} />
+        <li key={i} className="ru-fila">
+          <input className="campo-texto ru-nombre" aria-label={`Necesidad ${i + 1}: nombre`} value={n.label} placeholder="Foco" onChange={(e) => cambiar(i, { label: e.target.value })} />
           <input className="campo-texto mono" inputMode="decimal" aria-label={`Necesidad ${i + 1}: horas`} value={horas(n.min)} onChange={(e) => { const h = Number(e.target.value.replace(',', '.')); if (h >= 0 && h <= 20) cambiar(i, { min: Math.round(h * 60) }); }} />
           <select className="select-plano" aria-label={`Necesidad ${i + 1}: rama`} value={n.rama ?? ''} onChange={(e) => cambiar(i, { rama: (e.target.value || undefined) as RamaOMain | undefined })}>
             {RAMAS.map(([v, t]) => <option key={v} value={v}>{t}</option>)}
@@ -161,8 +161,8 @@ function Editor({ day, id }: { day: DayLog; id?: string }) {
     <main className="pantalla ajustes">
       <div className="topbar"><a className="volver" href="#/ajustes-rutinas">Rutinas del día</a></div>
       <h1 className="titulo">{id ? 'Editar rutina' : 'Generar una rutina'}</h1>
-      <label className="cp-mocks"><span className="sub">Nombre</span><input className="campo-texto" aria-label="Nombre de la rutina" value={nombre} onChange={(e) => setNombre(e.target.value)} /></label>
-      <div className="cp-mocks">
+      <label className="ru-campo"><span className="sub">Nombre</span><input className="campo-texto" aria-label="Nombre de la rutina" value={nombre} onChange={(e) => setNombre(e.target.value)} /></label>
+      <div className="ru-horas">
         <label><span className="sub">Me levanto</span> <input className="campo-texto mono" type="time" aria-label="Hora de levantarse" value={r.despertar} onChange={(e) => setR({ ...r, despertar: e.target.value })} /></label>
         <label><span className="sub">Me acuesto</span> <input className="campo-texto mono" type="time" aria-label="Hora de dormir" value={r.dormir} onChange={(e) => setR({ ...r, dormir: e.target.value })} /></label>
       </div>
@@ -224,17 +224,16 @@ function AdaptarHoy({ day }: { day: DayLog }) {
       <div className="topbar"><a className="volver" href="#/hoy">Hoy</a><a className="mono sub" href="#/ajustes-rutinas">Rutinas →</a></div>
       <h1 className="titulo">Adaptar hoy</h1>
       <p className="sub">Lo fijo queda en su lugar y lo flexible se acomoda alrededor; un compromiso nuevo manda sobre lo fijo que pisa. Lo que ya hiciste hoy no se toca.</p>
-      <div className="cp-mocks">
+      <div className="ru-horas">
         <label><span className="sub">Me levanté</span> <input className="campo-texto mono" type="time" aria-label="Hora de levantarse" value={despertar} onChange={(e) => setDespertar(e.target.value)} /></label>
         <label><span className="sub">Me acuesto</span> <input className="campo-texto mono" type="time" aria-label="Hora de dormir" value={dormir} onChange={(e) => setDormir(e.target.value)} /></label>
       </div>
       <span className="etiqueta">Compromisos de hoy</span>
       <EditorFijos fijos={nuevos} set={setNuevos} />
       {r0.fijos.length > 0 && (
-        <>
-          <span className="etiqueta">Hoy no va</span>
+        <Plegable id="rutina:hoy-no-va" titulo="Hoy no va" resumen={quitar.length ? `${quitar.length} fuera` : `${r0.fijos.length} fijos`}>
           <ul className="cp-lista">{r0.fijos.map((f) => <li key={f.id} className="cp-mocks"><Casilla checked={quitar.includes(f.id!)} label={`Hoy no va: ${f.label}`} onChange={() => setQuitar((x) => (x.includes(f.id!) ? x.filter((y) => y !== f.id) : [...x, f.id!]))} />{f.label} <span className="mono sub">{f.start}–{f.end}</span></li>)}</ul>
-        </>
+        </Plegable>
       )}
       <Resultado g={g} />
       <button className="btn-principal" disabled={g.errores.length > 0} onClick={() => setHecho(adaptarDia(day.date, cambio))}>Usar hoy</button>
