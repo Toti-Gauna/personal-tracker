@@ -126,3 +126,31 @@ describe('v12.2 · revisión del domingo, Hoy y papers', () => {
     expect(dia('2027-06-20').blocks.find((b) => b.key === 'prog')!.tasks.some((t) => /^Paper:/.test(t.t))).toBe(false);
   });
 });
+
+describe('§14 · Open source', () => {
+  it('la página: Alawys con su ficha y el Imán en v1.0; una extraída pide "la necesita"; publicar, link, descargas y el post', () => {
+    render(<Metas day={dia('2026-12-30')} tab="open-source" />);
+    expect(screen.getByText(/Todavía ninguna: la primera es Alawys v1\.0/)).toBeInTheDocument();
+    const alawys = screen.getByRole('listitem', { name: 'Alawys 1.0' });
+    expect(alawys.textContent).toMatch(/lanzamiento \(Imán\)/);
+    expect(alawys.textContent).toMatch(/El Imán \(es un lanzamiento\)/);
+    // Alawys v0.1: con el checklist completo se publica.
+    const v01 = screen.getByRole('listitem', { name: 'Alawys 0.1' });
+    for (const c of within(v01).getAllByRole('checkbox')) fireEvent.click(c);
+    fireEvent.click(within(screen.getByRole('listitem', { name: 'Alawys 0.1' })).getByRole('button', { name: 'Alawys 0.1 publicada hoy' }));
+    expect(getState().plan.fondo!.alawys.versiones!['0.1'].publicada).toBe('2026-12-30');
+    expect(screen.getByRole('region', { name: 'Publicadas' }).textContent).toMatch(/0\.1create-alawys · @alawys\/\*VitalIA/);
+    const notify = screen.getByRole('listitem', { name: '@alawys/notify 1.0' });
+    expect(notify.textContent).toMatch(/La necesita: el segundo ítem que la usa/);
+    fireEvent.change(screen.getByRole('combobox', { name: '@alawys/notify: la necesita' }), { target: { value: 'P10' } });
+    expect(getState().plan.fondo!.notify.necesitadoPor).toBe('P10');
+    expect(screen.getByRole('listitem', { name: 'Escrow de Mercado Pago (HandyX) 1.0' }).textContent).toMatch(/Interna: nunca se publica/);
+  });
+
+  it('cada proyecto muestra su herramienta y la regla', () => {
+    render(<Metas day={dia('2027-03-01')} tab="periodos/P4" />);
+    const s = screen.getByRole('region', { name: 'Herramientas' });
+    expect(s.textContent).toMatch(/mcp-ar \+satélites.*@alawys\/sgp4-wasm 1\.0/);
+    expect(s.textContent).toMatch(/Como máximo UNA herramienta nueva por proyecto/);
+  });
+});

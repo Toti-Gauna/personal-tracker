@@ -23,6 +23,7 @@ import { fondoEn, periodosComerciales, periodosSecundarias } from '../data/fondo
 import { marcarHito } from '../state/plan';
 import { V122 } from '../data/v12-2';
 import { DetalleProyecto } from '../ui/DetalleProyecto';
+import { HerramientasDelItem } from './OpenSource';
 import { Plegable } from '../ui/Plegable';
 import { useStore } from '../state/store';
 import '../styles/plan.css';
@@ -64,6 +65,7 @@ export function Periodos({ day, id }: { day: DayLog; id?: string }) {
           {p.nivel === 'bloque' && V122.detalle[p.id] && (
             <>
               <a className="fila-link" href={`#/metas/fondo/${p.id}`}>Repo, lanzamiento e Imán <span aria-hidden="true">→</span></a>
+              <HerramientasDelItem id={p.id} />
               <Plegable id={`detalle:${p.id}`} titulo="Detalle del proyecto" resumen={V122.detalle[p.id].puesto ?? ''}><DetalleProyecto id={p.id} /></Plegable>
             </>
           )}
@@ -103,6 +105,7 @@ function Raiz({ hoy, arbol, day }: { hoy: string; arbol: PeriodoMedido[]; day: D
       <AhoraPlan hoy={hoy} arbol={arbol} day={day} />
       <a className="fila-link" href="#/metas/proyecto/P0">P0 · Constelación v1: tus metas de siempre <span aria-hidden="true">→</span></a>
       <a className="fila-link" href="#/metas/roadmap">El plan entero, con lo de fondo <span aria-hidden="true">→</span></a>
+      <a className="fila-link" href="#/metas/open-source">Open source: Alawys y las herramientas <span aria-hidden="true">→</span></a>
       <div className="pd-chips" role="radiogroup" aria-label="Pista">
         {PISTAS.map(([k, n]) => <button key={k} role="radio" aria-checked={pista === k} className="chip" onClick={() => setPista(k)}>{n}</button>)}
       </div>

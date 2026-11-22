@@ -20,6 +20,7 @@ import { agregarLead, agregarPost, estadoLead, marcarForeground, marcarSeguridad
 import { useStore } from '../state/store';
 import { Casilla } from '../ui/Casilla';
 import { DetalleProyecto } from '../ui/DetalleProyecto';
+import { HerramientasDelItem } from './OpenSource';
 import { Plegable } from '../ui/Plegable';
 import { PeriodoTarjeta, fp } from '../ui/PeriodoTarjeta';
 import '../styles/plan.css';
@@ -146,6 +147,7 @@ export function FondoItem({ day, id }: { day: DayLog; id: string }) {
         </label>
       )}
       {sec && <VersionesSecundaria id={id} hoy={hoy} lanzamiento={lanz} />}
+      {(sec || com) && <HerramientasDelItem id={id} />}
       {com && <Comercial id={id} hoy={hoy} />}
     </main>
   );

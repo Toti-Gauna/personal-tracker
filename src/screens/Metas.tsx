@@ -27,6 +27,7 @@ import { Linea } from './Linea';
 import { CertPagina } from './CertPagina';
 import { VentanaPagina } from './VentanaPagina';
 import { FondoItem, ImanPagina, Pista, Roadmap } from './Fondo';
+import { OpenSource } from './OpenSource';
 import '../styles/metas.css';
 
 const TABS = [['ruta', 'Ruta'], ['semana', 'Semana'], ['mes', 'Mes'], ['bimestre', 'Bim.'], ['anio', 'Año']] as const;
@@ -56,6 +57,7 @@ export function Metas({ day, tab }: { day: DayLog; tab?: string }) {
   if (tab?.startsWith('fondo/')) return <FondoItem key={tab} day={day} id={tab.slice(6)} />;
   if (tab?.startsWith('iman/')) return <ImanPagina key={tab} day={day} id={tab.slice(5)} />;
   if (tab === 'roadmap') return <Roadmap day={day} />;
+  if (tab === 'open-source') return <OpenSource day={day} />;
   if (tab === 'evolucion') return <RutaEvolucion day={day} />;
   if (tab === 'sprint') return <SprintBusqueda day={day} />;
   if (tab === 'impacto') return <RutaImpacto day={day} />;
