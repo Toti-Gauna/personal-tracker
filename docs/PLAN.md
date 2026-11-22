@@ -1437,6 +1437,18 @@ domingo con Claude, pausas, revisión de fondo, próxima secundaria y marcas a d
 **Datos** (aditivos en `plan`): `fondo`, `revisionFondo`, `iman`, `seguridadShowcase`, `posts`, `usoClaude`, `umbralClaude`.
 Migración: los papers pasan del bloque "leer" al Block 1.
 
+**Adenda §14 · Alawys y las herramientas open source** (22 nov 2026)
+- Una herramienta es un ítem principal (tipo herramienta) con versiones que nacen en un ítem de origen (proyecto, app secundaria o
+  slot comercial) y toman sus fechas: un día, el bloque o el cierre. No tiene bloque propio ni horas aparte.
+- Alawys (create-alawys · @alawys/*, MIT): v0.1 el 21 dic y v1.0 (lanzamiento, con Imán) el 30 dic, dentro de VitalIA (104 h);
+  v1.x: el "0.1 · Arranque" de cada proyecto principal desde VitalIA tiene la casilla "Preset agregado a Alawys"; v2.0 en
+  Constelación.
+- Tipos: propia (producto público desde el día uno), extraída (no se publica hasta cargar el segundo ítem que la necesita) e interna
+  (el escrow de HandyX: nunca se publica). Como máximo una herramienta nueva por ítem (sumar a una existente no cuenta). Checklist de
+  extracción: tests · README · ejemplo · semver · publicada con provenance. Imán solo en Alawys v1.0 y mcp-ar v2 (Ticker).
+- Página Open source (`#/metas/open-source`): las publicadas primero (paquete, versión, origen, descargas a mano, link), cada una con
+  su post del jueves; la regla y la herramienta de cada proyecto en su página.
+
 ---
 
 ## 7. Registro de cambios
@@ -1646,3 +1658,8 @@ Migración: los papers pasan del bloque "leer" al Block 1.
 - Imán de 8 puntos en el lanzamiento, checklist de seguridad de los showcases y posts unidos a la serie.
 - Atrasos que frenan en los absorbedores (mínimo 3 días); trabajo ponderado por horas; papers en el Block 1.
 - Hoy con lo de fondo, línea de tiempo con tres pistas, páginas de pistas, ítems e Imán, y el plan entero en una página.
+
+**2026-11-22 · v12.2 · adenda Alawys**
+
+- Herramientas open source: Alawys versionada en todo el plan y 21 más (propias, extraídas con "la necesita" y una interna), con fechas del origen.
+- VitalIA en 104 h; "0.1 · Arranque" con el preset de Alawys en cada proyecto desde VitalIA; página Open source.

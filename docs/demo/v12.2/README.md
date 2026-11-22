@@ -16,3 +16,5 @@ showcase #1 Aquasol de fondo).
 | 9 | [PetrIA](09-petria-detalle.png) | El lanzamiento v3.0 pide el Imán; el detalle del proyecto en castellano, tal cual |
 | 10 | [El plan entero](10-roadmap.png) | Etapa › fase › bloque con fechas, horas, versiones o plan del día y la línea de fondo |
 | 11 | [Revisión del domingo](11-revision-domingo.png) | Uso de Claude y umbral, revisión de fondo contra la meta y el registro de tiempo |
+| 12 | [Open source](12-open-source.png) | §14: la regla, las publicadas primero y las 22 herramientas (propias, extraídas e interna); 30 dic 2026 |
+| 13 | [Antena](13-antena-herramienta.png) | La herramienta del proyecto (sgp4-wasm nueva y mcp-ar suma satélites) con la regla |
