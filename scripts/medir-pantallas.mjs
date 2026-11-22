@@ -27,6 +27,7 @@ const RUTAS = [
   'estudio/prog/demanda', 'estudio/prog/algoritmos', 'estudio/prog/P1/stack', 'estudio/prog/P5/stack',
   'metas/calibracion', 'metas/diferencia', 'metas/revision', 'metas/compras', 'metas/proyecto/CW8', 'metas/proyecto/Q1', 'estudio/prog/P1', 'metas/proyecto/CW6', 'metas/proyecto/P10',
   // v12.1 · metas como períodos.
+  'ajustes-rutinas/nueva', 'ajustes-rutinas/hoy',
   'metas/periodos', 'metas/periodos/P1', 'metas/periodos/F1', 'metas/periodos/P1%3Av1.0', 'metas/linea', 'metas/cert/claude-architect', 'metas/ventana/W1',
   'metas/clipping', 'metas/clipping/plan', 'metas/clipping/registro', 'metas/clipping/metricas', 'metas/clipping/cuentas',
   'metas/clipping/campanas', 'metas/clipping/retainers', 'metas/clipping/nichos', 'metas/clipping/riesgos', 'metas/clipping/semana1',

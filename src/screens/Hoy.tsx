@@ -98,7 +98,7 @@ export function Hoy({ day }: { day: DayLog }) {
       <Marca date={day.date} plan />
       <header>
         <h1 className="titulo">Hoy</h1>
-        <p>{fmtFecha(day.date)}, día {String(n).padStart(2, '0')} de {bim.name}. {frase(activos, now)}</p>
+        <p>{fmtFecha(day.date)}, día {String(n).padStart(2, '0')} de {bim.name}. {frase(activos, now)}{day.rutinaPropia ? <> Rutina: <a href="#/ajustes-rutinas">{day.rutinaPropia}</a>.</> : null}</p>
       </header>
 
       <div className="dia-avance" aria-label={`${hechas} de ${tareas.length} tareas`}>
@@ -199,6 +199,7 @@ export function Hoy({ day }: { day: DayLog }) {
       </a>
 
       <nav className="hoy-links" aria-label="Más">
+        <a href="#/ajustes-rutinas/hoy">Adaptar el día <span aria-hidden="true">→</span></a>
         <a href="#/pomodoros">Pomodoros a medida <span aria-hidden="true">→</span></a>
         <a href="#/json">JSON del día <span aria-hidden="true">→</span></a>
       </nav>

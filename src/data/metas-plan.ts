@@ -5,6 +5,7 @@
  */
 import { HORAS_ANTES_TRABAJO, HORAS_FINDE, HORAS_LV, horasPorSemana } from './capacidad';
 import { PLAN_EXT } from './plan-extendido';
+import { horasPropiasDia } from './rutinas-propias';
 import { ajustarDia, domingoDe, planRoutine, type DayType } from './routines';
 import { IDIOMAS, IDIOMAS_ARCHIVADO, calendarioIdiomas } from './idiomas';
 import { clippingActivo } from './clipping-activo';
@@ -203,6 +204,9 @@ export const sinPausa = (ms: MetaGenerada[], fecha: string, pausa?: Pick<PlanSta
  * bloques 1 y 2 tomados por el bloque activo del plan (matemática en una ventana, inglés en una semana E, búsqueda en una J).
  */
 export function horasRutinaDia(fecha: string, t0 = T0_PLAN): Partial<Record<RamaOMain, number>> {
+  // Ola 34: si ese día rige una rutina propia, sus horas.
+  const propia = horasPropiasDia(fecha);
+  if (propia) return propia;
   const iso = ((parseDate(fecha).getDay() + 6) % 7) + 1;
   const t: DayType = iso <= 5 ? 'busqueda-intensiva' : iso === 6 ? 'busqueda-intensiva-finde' : domingoDe('busqueda-intensiva-finde');
   const act = tramoActivo(fecha, t0);

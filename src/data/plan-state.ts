@@ -129,6 +129,9 @@ export interface PlanState {
   certVerificada?: Record<string, string>;
   /** v12.1: corrimientos que confirmaste para bloques atrasados (id → fechas nuevas y cuándo lo confirmaste). Nunca automáticos. */
   corrimientos?: Record<string, { inicio: string; fin: string; confirmado: string }>;
+  /** Ola 34: tus rutinas del día (generadas, adaptadas o copiadas de una plantilla) y a qué días se aplican. */
+  rutinasPropias?: import('./motor-rutinas').RutinaPropia[];
+  asignacionesRutina?: import('./motor-rutinas').AsignacionRutina[];
   /** v12.1: puntajes de los simulacros por certificación (id del examen → fecha y %). */
   mocks?: Record<string, { fecha: string; pct: number }[]>;
   /** v12.1: exámenes reservados (id → fecha del examen y cuándo reservaste). Una fecha reservada es fija: nada la corre. */

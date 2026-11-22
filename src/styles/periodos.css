@@ -77,3 +77,14 @@ a.pd-tit .pd-nombre::after { content: ' →'; color: var(--sub); font-weight: 40
 .vm-hitos li { display: flex; gap: 10px; align-items: flex-start; }
 .vm-hitos li div { display: grid; gap: 2px; min-width: 0; }
 .vm-hitos li .sub { overflow-wrap: anywhere; }
+
+/* Ola 34 · motor de rutinas */
+.rd-bloques.ru-bloques li { grid-template-columns: 96px minmax(0, 1fr); }
+.ru-fila { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) auto; gap: 6px 8px; align-items: center; }
+.ru-fila > .ru-nombre { grid-column: 1 / -1; }
+.ru-fila input[type='time'], .ru-horas input[type='time'] { min-width: 104px; width: 100%; }
+.ru-horas { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.ru-horas label { display: grid; gap: 4px; }
+.ru-campos { display: grid; gap: 10px; margin: 0; padding: 0; list-style: none; }
+.ru-campos li { padding-bottom: 10px; border-bottom: 1px solid var(--linea); }
+.ru-campo { display: grid; gap: 4px; margin-bottom: 10px; }

@@ -1385,6 +1385,18 @@ sigue: horas, lo hecho, el historial de recall, las notas y las metas de P0. Fue
 
 **Migración** (`src/state/migrar-v12.ts`, aditiva e idempotente): las certs aprobadas con ids de la v7 (C1…C13) se copian a sus ids nuevos; suma papers y el mazo de LLM. Las horas del 19 y 20 nov caen por fecha en "PetrIA v0 (archivado)" y no cuentan para la PetrIA de v12.1.
 
+## 6 septdecies. Ola 34: el motor de rutinas
+
+Las rutinas del día ya no son solo las del archivo: en Ajustes → Rutinas del día se generan, se adaptan y se copian de una plantilla.
+
+- **Generar** (`#/ajustes-rutinas/nueva`): a qué hora te levantás y te acostás, lo fijo (no se mueve) y lo que pide horas, en orden de prioridad. Trazo ubica cada cosa en los huecos (en bloques de hasta 4 h), deja lo que sobra como libre y avisa lo que no entra y los fijos que se pisan (con un fijo pisado no se puede guardar).
+- **Adaptar**: a un día, a días de la semana desde una fecha o a unas fechas. Un día manda sobre unas fechas, y unas fechas sobre los días de la semana. Sin asignación, rige la rutina del plan.
+- **Adaptar hoy** (`#/ajustes-rutinas/hoy`, también desde Hoy): otra hora de levantarte o de dormir, compromisos nuevos y fijos que hoy no van. Lo fijo queda en su lugar, lo flexible se acomoda en el orden que tenía y un compromiso nuevo manda sobre el fijo que pisa. Lo que ya hiciste hoy no se toca.
+- **Plantillas**: las tres del plan v12.1 (lunes a viernes, sábado y domingo) y las archivadas (las de antes, con trabajo, día libre y la de las 08:00). "Usar como base" la copia como rutina tuya.
+- **Una rutina tuya se usa tal cual**: sin las reglas automáticas del plan (los bloques 1 y 2 según el bloque activo, el post de martes y jueves, la demo y la revisión). Hoy dice qué rutina rige.
+- Las metas de horas de la semana y del mes salen de la rutina tuya los días que rige.
+- Datos: `plan.rutinasPropias` y `plan.asignacionesRutina` (aditivo). Motor puro en `src/data/motor-rutinas.ts`.
+
 ---
 
 ## 7. Registro de cambios
@@ -1580,3 +1592,9 @@ sigue: horas, lo hecho, el historial de recall, las notas y las metas de P0. Fue
 - Hoy con lo activo, lo que vence, la próxima fecha límite, avisos de reserva y hardware, y hábitos con racha.
 - Estudio de a un capítulo (el siguiente se abre con la tesis), papers como actividad, mazos por área y "20 LLM concepts" bloqueado.
 - Metas de horas desde la rutina; calibración como proyección; migración aditiva.
+
+**2026-11-22 · ola 34 · motor de rutinas**
+
+- Generar rutinas desde restricciones (despertar, dormir, fijos y horas por cosa), con vista previa y lo que no entra.
+- Adaptarlas a un día, a días de la semana o a unas fechas; Adaptar hoy sin perder lo hecho.
+- Plantillas de v12.1 y archivadas; las rutinas propias se usan tal cual y alimentan las metas de horas.

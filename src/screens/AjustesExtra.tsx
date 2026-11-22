@@ -1,62 +1,10 @@
 import { useRef, useState } from 'react';
-import { AREAS } from '../data/defaults';
-import { fmtPct } from '../data/mejora';
-import { DAY_ROUTINES, DAY_TYPES, WAKE, blockMin, isMeta, metasOf } from '../data/routines';
-import { fmtDur } from '../data/time';
-import { Plegable } from '../ui/Plegable';
 import { getState, resetState, setState, useStore } from '../state/store';
 import { markBackup, setNames } from '../state/profile';
 import { reviewsJson, testsJson } from '../data/debiles';
 import { toast } from '../ui/avisos';
 import '../styles/perfil.css';
 
-const ISO = ['', 'lun', 'mar', 'mié', 'jue', 'vie', 'sáb', 'dom'];
-
-/**
- * Rutinas del día: lunes a viernes y fin de semana, con sus bloques. Se eligen solas por el día
- * de la semana. Salen de data/routines.json y se cambian ahí.
- */
-export function AjustesRutinas() {
-  return (
-    <main className="pantalla ajustes">
-      <div className="topbar"><a className="volver" href="#/ajustes">Ajustes</a></div>
-      <h1 className="titulo">Rutinas del día</h1>
-      <p className="sub">
-        Cada día usa la suya: de lunes a viernes, la de la semana; sábado y domingo, la del fin de semana. En Buen día, {WAKE.completo} arma el día completo,
-        {' '}{WAKE.corto} el corto (se acortan las metas flexibles de la mañana) y "Otra hora" corre los bloques. Los fijos no se mueven. El 1 % del día se reparte entre las metas.
-      </p>
-      {DAY_TYPES.map((t) => {
-        const r = DAY_ROUTINES[t];
-        const metas = metasOf(t);
-        let n = 0;
-        return (
-          <Plegable key={t} id={`rutina:${t}`} titulo={r.label} resumen={`${metas.length} metas`} abierto={t === DAY_TYPES[0]}>
-          <section className="rutina-aj" aria-label={r.label}>
-            <div className="fila-t"><span className="mono sub">{r.days ? r.days.map((d) => ISO[d]).join(' ') : r.libre ? 'día libre' : 'desde T+2'}</span></div>
-            <p className="sub rd-res">{metas.length} {metas.length === 1 ? 'meta' : 'metas'} · cada una vale {fmtPct(1 / metas.length, 3).replace(/,?0+$/, '')} %</p>
-            <ol className="rd-bloques">
-              {r.blocks.map((b) => {
-                const meta = isMeta(b);
-                if (meta) n++;
-                return (
-                  <li key={b.id} className={meta ? '' : 'no-meta'} style={{ ['--c' as string]: AREAS[b.area].css }}>
-                    <span className="mono">{b.start}–{b.end}</span>
-                    <span className="mono rd-n">{meta ? n : ''}</span>
-                    <span className="rd-t"><b>{b.label}</b><small className="sub">{meta ? `${fmtDur(blockMin(b))} · ${b.kind === 'fixed' ? 'fijo' : 'flexible'}${b.focus ? '' : ' · sin foco'}` : 'no cuenta como meta'}</small></span>
-                  </li>
-                );
-              })}
-            </ol>
-          </section>
-          </Plegable>
-        );
-      })}
-      <p className="sub nota-izq">Para cambiar horarios o bloques, se edita data/routines.json en el repo.</p>
-    </main>
-  );
-}
-
-/** Compañera de entrenamiento y tu nombre. */
 export function AjustesCompanera() {
   const settings = useStore((s) => s.settings)!;
   const [yo, setYo] = useState(settings.names.me);
