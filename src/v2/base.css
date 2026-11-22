@@ -35,3 +35,8 @@
 
 /* ——— El marcador de área: un punto, nunca un fondo de alarma. ——— */
 .area-punto { display: inline-block; width: 8px; height: 8px; border-radius: 2px; background: var(--area); flex: none; }
+
+/* ——— Íconos e ilustraciones ——— */
+.icono { flex: none; display: block; }
+.ilustracion { display: block; color: var(--texto-3); }
+.ilustracion .il-trazo { fill: var(--trazo); stroke: none; opacity: 0.92; }

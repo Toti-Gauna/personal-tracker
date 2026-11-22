@@ -3,6 +3,7 @@
  * cada estado (ícono + palabra + tono, nunca solo color) y el glosario de la jerga. El detalle está en docs/ux/lenguaje-2.0.md.
  */
 import type { EstadoPeriodo } from '../data/periodos';
+import type { NombreIcono } from './iconos';
 
 /** Topes por pantalla 2.0. El script de la tanda 1.8 los controla en cada PR. */
 export const PRESUPUESTO = {
@@ -26,12 +27,12 @@ export const contarPalabras = (texto: string) => texto.trim().split(/\s+/).filte
  */
 export type TonoEstado = 'neutro' | 'atencion' | 'critico' | 'hecho';
 
-export interface EstadoVisual { palabra: string; icono: string; tono: TonoEstado }
+export interface EstadoVisual { palabra: string; icono: NombreIcono; tono: TonoEstado }
 
 export const ESTADOS: Record<EstadoPeriodo, EstadoVisual> = {
   proximo: { palabra: 'Próximo', icono: 'reloj', tono: 'neutro' },
   'en-plan': { palabra: 'En plan', icono: 'ritmo', tono: 'neutro' },
-  adelantado: { palabra: 'Adelantado', icono: 'adelante', tono: 'neutro' },
+  adelantado: { palabra: 'Adelantado', icono: 'adelantado', tono: 'neutro' },
   pausado: { palabra: 'En pausa', icono: 'pausa', tono: 'neutro' },
   atrasado: { palabra: 'Atrasado', icono: 'atencion', tono: 'atencion' },
   vencido: { palabra: 'Vencido', icono: 'alerta', tono: 'critico' },

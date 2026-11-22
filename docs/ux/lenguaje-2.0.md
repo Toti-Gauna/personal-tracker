@@ -92,11 +92,17 @@ hues, so nothing may rely on color alone; the test checks that no two colors sit
 - Reduced motion: movement becomes a 150 ms fade; nothing loops.
 - Motion must explain something: where a screen came from, what just changed, what you just finished.
 
-## 6. Icons (drawn in batch 1.3)
+## 6. Icons and illustrations (`src/v2/iconos.tsx`)
 
 24 px grid, 1.75 stroke, round caps and joins, no fills except the mark. One metaphor per meaning, checked against
 what people expect (a gear is settings, a sun is theme). An icon without a universal meaning carries a text label.
 No emoji in the interface.
+
+66 icons: `<Icono nombre="ajustes" />` (24 by default, 20 in dense rows, 16 inside a pill). Pass `titulo` only when the
+icon stands alone; next to a word it is decorative. The gear is generated (8 teeth) so it can never read as a sun.
+
+Empty-state illustrations: `<Ilustracion nombre="plan" />`, 120 × 96, thin line in the tertiary text color plus exactly
+one yellow stroke. Always paired with one line and one action.
 
 ## 7. Writing
 

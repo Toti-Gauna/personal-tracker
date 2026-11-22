@@ -39,7 +39,6 @@
 /* Estados: la forma dice el tono. */
 .lenguaje .mu-estados { display: flex; flex-wrap: wrap; gap: var(--sp-2); }
 .mu-pildora { flex: none; display: inline-flex; align-items: center; gap: 6px; height: 28px; padding: 0 10px 0 8px; border-radius: var(--r-pildora); font: 550 var(--t-13)/1 var(--font-text); white-space: nowrap; color: var(--texto-2); box-shadow: inset 0 0 0 1px var(--raya-fuerte); }
-.mu-pildora svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 1.75; stroke-linecap: round; stroke-linejoin: round; }
 .mu-pildora.atencion { background: var(--texto); color: var(--capa-0); box-shadow: none; }
 .mu-pildora.critico { background: var(--e-critico); color: var(--sobre-critico); box-shadow: none; }
 .mu-pildora.hecho { background: var(--trazo); color: var(--sobre-trazo); box-shadow: none; border-radius: 0; clip-path: var(--bisel); padding: 0 14px 0 12px; }
@@ -78,3 +77,14 @@
 @media (min-width: 720px) {
   .lenguaje .mu-escritura { grid-template-columns: 1fr 1fr; }
 }
+
+/* Íconos */
+.lenguaje .mu-iconos { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(76px, 1fr)); gap: var(--sp-2); }
+.lenguaje .mu-iconos li { display: grid; justify-items: center; gap: 6px; padding: var(--sp-3) var(--sp-1) var(--sp-2); background: var(--capa-1); border-radius: var(--r-m); box-shadow: var(--brillo); color: var(--texto); }
+.lenguaje .mu-iconos span { font: 500 10.5px/1.2 var(--font-mono); color: var(--texto-2); max-width: 100%; overflow: hidden; text-overflow: ellipsis; }
+.lenguaje .mu-tamanos { display: flex; align-items: flex-end; gap: var(--sp-5); padding: var(--sp-4); }
+.lenguaje .mu-tamanos > span { display: grid; justify-items: center; gap: 6px; }
+.lenguaje .mu-conpalabra { margin-left: auto; align-self: center; display: inline-flex; align-items: center; gap: var(--sp-2); min-height: var(--toque); padding: 0 var(--sp-4); border-radius: var(--r-m); background: var(--capa-2); box-shadow: var(--brillo), inset 0 0 0 1px var(--raya); color: var(--texto); text-decoration: none; font: 550 var(--t-15)/1 var(--font-text); }
+.lenguaje .mu-vacios { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--sp-2); }
+.lenguaje .mu-vacios > div { display: grid; justify-items: center; gap: var(--sp-2); padding: var(--sp-4) var(--sp-2); text-align: center; }
+.lenguaje .mu-vacios svg { width: 100%; height: auto; max-width: 120px; }

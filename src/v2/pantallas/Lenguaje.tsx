@@ -5,6 +5,7 @@
  */
 import { useEffect, useState, type ReactNode } from 'react';
 import { contraste } from '../color';
+import { Icono, Ilustracion, NOMBRES_ICONO } from '../iconos';
 import { ESTADOS, GLOSARIO, PRESUPUESTO, contarPalabras, type EstadoVisual } from '../reglas';
 import '../tokens.css';
 import '../base.css';
@@ -26,21 +27,10 @@ const ROLES: { clase: string; nombre: string; ficha: string; muestra: string }[]
 const ANTES = 'Cada meta es un período: la barra de tiempo dice cuánto pasó y la de trabajo cuánto está hecho. Si algo se atrasa, Trazo sugiere correr lo que sigue y no cambia nada hasta que lo confirmes.';
 const AHORA = 'Tu plan, de la etapa al lote.';
 
-/** Íconos de muestra (16 px, trazo de 1,75). El juego completo es la tanda 1.3. */
-const ICONOS: Record<string, ReactNode> = {
-  reloj: <><circle cx="8" cy="8" r="5.6" /><path d="M8 5v3.2l2 1.3" /></>,
-  ritmo: <path d="M1.8 8h2.6l1.6-4 2.6 8 1.7-4h3.9" />,
-  adelante: <path d="M3 4l4 4-4 4M9 4l4 4-4 4" />,
-  pausa: <path d="M5.5 3.5v9M10.5 3.5v9" />,
-  atencion: <><path d="M8 2.6l6 10.4H2z" /><path d="M8 6.8v2.8M8 11.4v.1" /></>,
-  alerta: <><circle cx="8" cy="8" r="5.6" /><path d="M8 5v3.4M8 10.8v.1" /></>,
-  tilde: <path d="M3 8.4l3.2 3.2L13 4.6" />,
-};
-
 function Pildora({ e }: { e: EstadoVisual }) {
   return (
     <span className={`mu-pildora ${e.tono}`}>
-      <svg viewBox="0 0 16 16" aria-hidden="true">{ICONOS[e.icono]}</svg>
+      <Icono nombre={e.icono} lado={16} />
       {e.palabra}
     </span>
   );
@@ -128,6 +118,23 @@ export default function Lenguaje() {
       <Seccion titulo="Estados" nota="ícono + palabra">
         <div className="mu-estados">{Object.values(ESTADOS).map((e) => <Pildora key={e.palabra} e={e} />)}</div>
         <p className="t-nota">El rojo es uno solo y se reserva para lo vencido. Atrasado va lleno y sin tinte: pide atención sin gritar.</p>
+      </Seccion>
+
+      <Seccion titulo="Íconos" nota={`${NOMBRES_ICONO.length} · dibujados para Trazo`}>
+        <ul className="mu-iconos">
+          {NOMBRES_ICONO.map((n) => <li key={n}><Icono nombre={n} /><span>{n}</span></li>)}
+        </ul>
+        <div className="mu-tamanos capa-1">
+          {[16, 20, 24, 32].map((l) => <span key={l}><Icono nombre="ajustes" lado={l} /><small className="t-rotulo">{l}</small></span>)}
+          <a className="mu-conpalabra" href="#/ajustes"><Icono nombre="ajustes" lado={20} />Ajustes</a>
+        </div>
+        <p className="t-nota">El engranaje es Ajustes; el sol, el tema. Si un ícono no es universal, va con su palabra.</p>
+      </Seccion>
+
+      <Seccion titulo="Vacíos" nota="línea fina + un trazo">
+        <div className="mu-vacios">
+          {([['plan', 'Armá tu primera meta'], ['datos', 'Cargá el primer dato'], ['repaso', 'Estás al día']] as const).map(([n, t]) => <div key={n} className="capa-1"><Ilustracion nombre={n} /><span className="t-nota">{t}</span></div>)}
+        </div>
       </Seccion>
 
       <Seccion titulo="Tipografía" nota="8 tamaños">
