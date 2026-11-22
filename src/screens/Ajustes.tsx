@@ -28,6 +28,14 @@ if (typeof window !== 'undefined') {
   window.addEventListener('beforeinstallprompt', (e) => { e.preventDefault(); diferido = e as BeforeInstall; });
 }
 
+/** UX 2.0: pide la instalación si el navegador la ofreció; `false` si hay que explicarla a mano. */
+export async function pedirInstalacion(): Promise<boolean> {
+  if (!diferido) return false;
+  await diferido.prompt();
+  diferido = null;
+  return true;
+}
+
 /** 6.4 Ajustes: tema, bimestres, áreas, plan T+18, rutinas del día, Abi y datos. */
 export function Ajustes() {
   const settings = useStore((s) => s.settings)!;
@@ -143,7 +151,7 @@ function InterfazAjuste() {
 const DIAS_LIBRE: [number | null, string][] = [[null, 'Ninguno'], [1, 'Lunes'], [2, 'Martes'], [3, 'Miércoles'], [4, 'Jueves'], [5, 'Viernes'], [6, 'Sábado'], [7, 'Domingo']];
 
 /** Ajustes → Plan T+18: inicio, rutina activa, T+2, día libre, umbrales de Handyx y colores de las ramas. */
-function PlanT18() {
+export function PlanT18() {
   const settings = useStore((s) => s.settings)!;
   const cfg = planSettings(settings);
   const t0 = settings.startDate || T0_PLAN;

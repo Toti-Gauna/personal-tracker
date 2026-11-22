@@ -64,7 +64,9 @@ import { ensureDayRefs, ensureWeek } from './state/ruta';
 import { useNow } from './ui/useNow';
 import { useEntrada } from './ui/useEntrada';
 
-const CapasV2 = lazy(() => import('./v2/kit/capas'));
+const GlobalV2 = lazy(() => import('./v2/marco/Global'));
+const SplashV2 = lazy(() => import('./v2/marco/SplashV2'));
+const DespertarV2 = lazy(() => import('./v2/pantallas/DespertarV2'));
 
 export function App() {
   const ruta = useRuta();
@@ -88,7 +90,8 @@ export function App() {
     contenido = <Instalar />;
     conBarra = false;
   } else if (!day) {
-    contenido = <Despertar date={today} />;
+    // UX 2.0: el "Buen día" nuevo. (El registro del primer día sigue en 1.0: todavía no hay ajustes donde elegir la 2.0.)
+    contenido = interfazActiva(settings.interfaz) === 'v2' ? <Suspense fallback={<div className="splash" />}><DespertarV2 date={today} /></Suspense> : <Despertar date={today} />;
     conBarra = false;
   } else {
     switch (ruta.pantalla) {
@@ -155,13 +158,14 @@ export function App() {
     <div className={`app${hayFoco && conBarra && !sinMini ? ' con-mini' : ''}${presentacion ? ' presentacion' : ''}${ruta.pantalla === 'avance' ? ' ancha' : ''}`}>
       <div className="envoltura" ref={entrada}>{contenido}</div>
       {conBarra && !sinMini && <FocoMini />}
-      {conBarra && !presentacion && <SideNav activa={ruta.seccion} pendientes={pendientes} />}
-      {conBarra && !presentacion && <BottomBar activa={activaBarra} pendientes={pendientes} />}
+      {interfaz !== 'v2' && conBarra && !presentacion && <SideNav activa={ruta.seccion} pendientes={pendientes} />}
+      {interfaz !== 'v2' && conBarra && !presentacion && <BottomBar activa={activaBarra} pendientes={pendientes} />}
       <Avisos />
-      {settings && interfaz === 'v2' && <Suspense fallback={null}><CapasV2 /></Suspense>}
-      {settings && <Checkins />}
+      {/* UX 2.0: la navegación, los avisos, las transiciones y los check-ins de la 2.0, en un solo pedazo que la 1.0 no descarga. */}
+      {interfaz === 'v2' && settings && <Suspense fallback={null}><GlobalV2 activa={ruta.seccion} pantalla={ruta.pantalla} pendientes={pendientes} conBarra={conBarra && !presentacion} conCheckins /></Suspense>}
+      {interfaz !== 'v2' && settings && <Checkins />}
       {settings && <EstadoEstudio />}
-      {cargando && <Splash onFin={fin} />}
+      {cargando && (interfaz === 'v2' ? <Suspense fallback={<div className="splash" />}><SplashV2 onFin={fin} /></Suspense> : <Splash onFin={fin} />)}
     </div>
   );
 }

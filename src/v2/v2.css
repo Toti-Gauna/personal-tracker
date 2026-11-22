@@ -1,4 +1,4 @@
 /* UX 2.0 · todo lo de la 2.0 cuelga de html[data-ui="v2"]: la 1.0 no se entera. */
-html[data-ui="v2"] .v2-marca-fila { max-width: 720px; margin: 0 auto; padding: calc(8px + env(safe-area-inset-top, 0px)) var(--gutter) 0; display: flex; justify-content: flex-end; }
+html[data-ui="v2"] .v2-marca-fila { max-width: 720px; margin: 0 auto; padding: calc(8px + env(safe-area-inset-top, 0px)) var(--gutter) 0; display: flex; justify-content: flex-end; align-items: center; gap: 8px; min-height: 36px; }
 html[data-ui="v2"] .v2-marca { font: 500 10px/1 var(--font-mono); letter-spacing: 0.08em; padding: 4px 7px; border: 1px solid var(--linea); border-radius: 999px; color: var(--sub); }
 html[data-ui="v2"] .v2-carga { min-height: 60vh; }

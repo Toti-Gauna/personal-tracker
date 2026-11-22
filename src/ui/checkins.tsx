@@ -21,6 +21,8 @@ const cerrar = () => { abierta = null; emit(); };
 /** Solo para tests: qué hoja está abierta. */
 export const hojaAbierta = () => abierta;
 export const cerrarHojas = cerrar;
+/** UX 2.0: la hoja abierta, para que el marco de la 2.0 decida cómo mostrarla. */
+export const useHojaAbierta = () => useSyncExternalStore(subscribe, () => abierta);
 
 const num = (t: string) => Number(t.replace(',', '.'));
 const fmt = (n: number) => String(n).replace('.', ',');

@@ -44,8 +44,10 @@ export function Hoja({ abierta, onCerrar, titulo, children, alto = 'auto', pie }
     previo.current = document.activeElement as HTMLElement | null;
     const desborde = document.body.style.overflow;
     document.body.style.overflow = 'hidden';
+    // Con una hoja abierta, los avisos suben arriba de todo para no tapar sus botones.
+    document.documentElement.dataset.hoja = '1';
     caja.current?.focus();
-    return () => { document.body.style.overflow = desborde; previo.current?.focus?.(); };
+    return () => { document.body.style.overflow = desborde; delete document.documentElement.dataset.hoja; previo.current?.focus?.(); };
   }, [montada, saliendo]);
 
   if (!montada) return null;

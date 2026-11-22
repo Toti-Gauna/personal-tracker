@@ -118,6 +118,9 @@
 .c-aviso-texto b { font-weight: 600; }
 .c-aviso-texto small { font-size: var(--t-13); color: var(--texto-2); }
 
+html[data-hoja] .c-avisos { bottom: auto; top: calc(env(safe-area-inset-top, 0px) + 12px); }
+@media (min-width: 720px) { .c-avisos { left: var(--lat-w, 0px); bottom: var(--sp-5); } }
+
 /* ——— Diálogo de confirmación ——— */
 .c-dialogo { width: 100%; max-width: 360px; padding: var(--sp-6) var(--sp-5) var(--sp-5); display: grid; gap: var(--sp-3); animation: c-dialogo var(--dur-3) var(--curva-resorte) both; outline: none; }
 @keyframes c-dialogo { from { opacity: 0; transform: scale(0.94); } }

@@ -11,7 +11,7 @@ describe('2.0 · la página del lenguaje', () => {
     render(<Lenguaje />);
     const h1 = screen.getByRole('heading', { level: 1 });
     expect(contarPalabras(h1.textContent!)).toBeLessThanOrEqual(PRESUPUESTO.titulo);
-    expect(contarPalabras(h1.parentElement!.querySelector('.mu-intro')!.textContent!)).toBeLessThanOrEqual(PRESUPUESTO.intro);
+    expect(contarPalabras(h1.parentElement!.querySelector('.m-intro')!.textContent!)).toBeLessThanOrEqual(PRESUPUESTO.intro);
   });
 
   it('muestra los 7 estados con su palabra, las 7 áreas y los 8 roles de texto', () => {

@@ -12,7 +12,7 @@ const STEP = 10;
 
 const MODOS = [['completo', 'Día completo'], ['corto', 'Día corto'], ['tarde', 'Día tarde']] as const;
 
-function defaultChoice(now: number, t: DayType): { r: RoutineId; otra: number } {
+export function defaultChoice(now: number, t: DayType): { r: RoutineId; otra: number } {
   const { min, max } = wakeRange(t);
   const w = wakeDe(t);
   const otra = toMin(w.completo) + 40;
