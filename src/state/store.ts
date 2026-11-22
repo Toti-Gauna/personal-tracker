@@ -1,4 +1,6 @@
 import { puertaBloqueando } from '../data/puertas';
+import { migrarPlanV12, migrarStudyV12 } from './migrar-v12';
+import { temaDelPost } from '../data/papers';
 import { T0_PLAN } from '../data/plan';
 import { INICIO_TRABAJO_DIAS } from '../data/capacidad';
 import { sprintActivo } from '../data/algoritmos';
@@ -82,7 +84,10 @@ export function migrate(parsed: any): State {
   // (con Handyx y ventas en pausa desde T0); si ya se decidió, se respeta.
   let settings = parsed.settings ?? null;
   if (settings && settings.plan?.modo === undefined) ({ settings, plan } = aplicarIntensiva(settings, plan, settings.startDate || T0_PLAN));
-  return { ...empty(), ...parsed, settings, study, train, ruta, plan, estudioRuta: { ...emptyEstudioRuta(), ...(parsed.estudioRuta ?? {}) }, idiomas: { enlaces: {}, ...(parsed.idiomas ?? {}) }, clipping: migrarClipping(parsed.clipping), profile: migrarPerfil({ seals: {}, seen: Object.keys(parsed.profile?.seals ?? {}), ...(parsed.profile ?? {}) }), goals: migrateGoals(goals ?? seedGoals(parsed.settings?.startDate ?? dateKey())) };
+  // v12.1: aditiva (certs de la v7 a sus ids nuevos, papers y el mazo de LLM); no borra nada.
+  plan = migrarPlanV12(plan);
+  const studyV12 = settings ? migrarStudyV12(study, dateKey()) : study;
+  return { ...empty(), ...parsed, settings, study: studyV12, train, ruta, plan, estudioRuta: { ...emptyEstudioRuta(), ...(parsed.estudioRuta ?? {}) }, idiomas: { enlaces: {}, ...(parsed.idiomas ?? {}) }, clipping: migrarClipping(parsed.clipping), profile: migrarPerfil({ seals: {}, seen: Object.keys(parsed.profile?.seals ?? {}), ...(parsed.profile ?? {}) }), goals: migrateGoals(goals ?? seedGoals(parsed.settings?.startDate ?? dateKey())) };
 }
 
 let state: State = load();
@@ -117,16 +122,16 @@ function ajustesCalendario(s: State) {
 }
 const claveCalendario = (s: State) => {
   const a = ajustesCalendario(s);
-  return `${a.t0}|${s.settings?.plan?.t2 ?? ''}|${(s.plan.extrasApagados ?? []).join(',')}|${s.plan.pausaFinDeAnio !== false}|${a.hoy}|${Object.entries(a.reales).map(([d, h]) => `${d}:${h}`).join(',')}|${Object.entries(s.plan.proyectos).filter(([, p]) => p.examen).map(([id]) => id).join(',')}|${Object.entries(s.plan.versiones?.P1 ?? {}).map(([v, e]) => `${v}:${e.publicada ?? ''}`).join(',')}`;
+  return `${a.t0}|${s.settings?.plan?.t2 ?? ''}|${(s.plan.extrasApagados ?? []).join(',')}|${s.plan.pausaFinDeAnio !== false}|${a.hoy}|${Object.entries(a.reales).map(([d, h]) => `${d}:${h}`).join(',')}|${Object.entries(s.plan.proyectos).filter(([, p]) => p.examen).map(([id]) => id).join(',')}|${Object.entries(s.plan.versiones?.P1 ?? {}).map(([v, e]) => `${v}:${e.publicada ?? ''}`).join(',')}|${Object.entries(s.plan.corrimientos ?? {}).map(([id, c]) => `${id}:${c.inicio}:${c.fin}`).join(',')}`;
 };
 let claveAplicada = '';
 function recalcularCalendario() {
   claveAplicada = claveCalendario(state);
   const a = ajustesCalendario(state);
   // Primero sin factor (para medir contra el calendario estimado); con las horas reales ya cargadas.
-  aplicarCalendario(state.plan.extrasApagados ?? [], state.plan.pausaFinDeAnio !== false, { t0: a.t0, inicioTrabajo: a.inicioTrabajo, reales: a.reales, hoy: a.hoy });
+  aplicarCalendario(state.plan.extrasApagados ?? [], state.plan.pausaFinDeAnio !== false, { t0: a.t0, inicioTrabajo: a.inicioTrabajo, reales: a.reales, hoy: a.hoy, corrimientos: state.plan.corrimientos });
   const f = factorCalendario(state, a.t0, a.hoy);
-  if (f.factor) aplicarCalendario(state.plan.extrasApagados ?? [], state.plan.pausaFinDeAnio !== false, { t0: a.t0, inicioTrabajo: a.inicioTrabajo, reales: a.reales, hoy: a.hoy, ...f });
+  if (f.factor) aplicarCalendario(state.plan.extrasApagados ?? [], state.plan.pausaFinDeAnio !== false, { t0: a.t0, inicioTrabajo: a.inicioTrabajo, reales: a.reales, hoy: a.hoy, corrimientos: state.plan.corrimientos, ...f });
 }
 applySettings(state.settings);
 setClippingActivo(!!state.settings?.plan?.bloquesPendientes?.clipping);
@@ -238,6 +243,8 @@ export function register(me: string, partner: string, today = dateKey()) {
       blockPresets: DEFAULT_BLOCK_PRESETS,
     },
   }));
+  // v12.1: papers y el mazo "20 LLM concepts" (bloqueado) desde el primer día.
+  setState((s) => ({ ...s, study: migrarStudyV12(s.study, today) }));
   // Desde el primer día: búsqueda intensiva con Handyx y ventas en pausa.
   setState((s) => (s.settings ? { ...s, ...aplicarIntensiva(s.settings, s.plan, s.settings.startDate) } : s));
 }
@@ -263,13 +270,19 @@ export function startDay(routine: RoutineId, wake: string, date = dateKey()) {
     // Ola 31 (v7): Academy hasta el 22 dic, el sprint sin IA y las horas extra de PetrIA (solo antes del trabajo nuevo).
     const antesDelTrabajo = date < inicioTrabajo(s.settings);
     const sprint = sprintActivo(s.plan, date);
+    // v12.1: el bloque activo da sentido a los bloques 1 y 2; martes y jueves, el post.
+    const activo = tramoActivo(date, t0);
+    const v12 = {
+      ...(activo ? { activo: { id: activo.id, tipo: activo.tipo, nombre: activo.nombre } } : {}),
+      ...(isoDay(date) === 2 || isoDay(date) === 4 ? { postDelDia: true, postTema: temaDelPost(s.study, date) } : {}),
+    };
     const v7 = {
       ...(antesDelTrabajo && date <= ACADEMY_HASTA ? { academy: true } : {}),
       ...(sprint ? { sprintSinIA: { dia: sprint.dia } } : {}),
       ...(antesDelTrabajo && cfg.extraProyecto?.length ? { extraProyecto: cfg.extraProyecto } : {}),
     };
-    const blocks = buildBlocks(planDay(date, routine, wake, dayType, { ventana, entrevista, puerta, prepara, ...(cfg.horarioTrabajo ? { trabajo: cfg.horarioTrabajo } : {}), ...(cfg.bloquesPendientes ? { pendientes: cfg.bloquesPendientes } : {}), ...v7 }), carry)
-      .map((b) => (refs[b.key] ? { ...b, ...refs[b.key] } : b))
+    const blocks = buildBlocks(planDay(date, routine, wake, dayType, { ventana, entrevista, puerta, prepara, ...(cfg.horarioTrabajo ? { trabajo: cfg.horarioTrabajo } : {}), ...(cfg.bloquesPendientes ? { pendientes: cfg.bloquesPendientes } : {}), ...v7, ...v12 }), carry)
+      .map((b) => (refs[b.key] && !(ventana && b.key.startsWith('prog')) ? { ...b, ...refs[b.key] } : b))
       .map((b) => (b.rama === 'programacion' && delProyecto.length ? { ...b, tasks: [...delProyecto.map((t) => ({ id: newId(), t: `${proyecto} · ${t}`, done: false })), ...b.tasks] } : b))
       .map((b) => (b.key === 'cierre' && estirar ? { ...b, tasks: b.tasks.map((x) => (x.t === 'Estirar' ? { ...x, t: `Estirar: ${estirar}` } : x)) } : b))
       // Ola 27: el domingo, el cierre suma la revisión semanal de 30 min y la mini-tesis de una página.

@@ -4,7 +4,7 @@ import { getState, register, resetState, startDay } from '../state/store';
 import { IdiomasPlan } from '../screens/Idiomas';
 import { tituloDeBloque } from './etiquetas';
 import {
-  ERRORES_IDIOMAS, IDIOMAS, alertasIdiomas, aniosIdiomas, calendarioIdiomas, eventosIdiomas, faseIdiomaEn, horasDeLaRutina, nivelesIdiomas, validarIdiomas, type IdiomasFile,
+  ERRORES_IDIOMAS, IDIOMAS, IDIOMAS_ARCHIVADO, alertasIdiomas, aniosIdiomas, calendarioIdiomas, eventosIdiomas, faseIdiomaEn, horasDeLaRutina, nivelesIdiomas, validarIdiomas, type IdiomasFile,
 } from './idiomas';
 import { BIBLIOTECA, nucleo, validarBiblioteca } from './libros';
 import { alertas } from './plan-vistas';
@@ -60,14 +60,11 @@ describe('data/idiomas.json · el roadmap maestro v3', () => {
     expect(eventosIdiomas(T0).filter((e) => e.anio === 2 && e.tipo === 'trimestre')).toHaveLength(4);
   });
 
-  it('las alertas: el examen desde 8 semanas antes, el trimestre en 7 días y la tesis en 14', () => {
-    expect(alertasIdiomas('2027-06-20', T0)).toEqual([]);
-    expect(alertasIdiomas('2027-06-21', T0).map((a) => a.id)).toEqual(['idioma-a1-examen']);
-    expect(alertasIdiomas('2027-06-21', T0)[0].texto).toMatch(/sin verificar/);
-    expect(alertasIdiomas('2027-02-08', T0).map((a) => a.id)).toEqual(['idioma-a1-t1']);
-    expect(alertasIdiomas('2027-12-14', T0).map((a) => a.id)).toContain('idioma-a1-tesis');
-    // Entran al panel de alertas de las etapas.
-    expect(alertas('2027-06-21', emptyPlan(), T0).some((a) => a.tipo === 'idioma')).toBe(true);
+  it('las alertas del plan de 6 años no salen: quedó archivado en v12.1 (el inglés vive en los bloques del plan)', () => {
+    expect(IDIOMAS_ARCHIVADO).toBe(true);
+    // Antes: el examen desde 8 semanas antes (21 jun 2027), el trimestre en 7 días (8 feb 2027) y la tesis en 14 (14 dic 2027).
+    for (const f of ['2027-06-21', '2027-02-08', '2027-12-14']) expect(alertasIdiomas(f, T0)).toEqual([]);
+    expect(alertas('2027-06-21', emptyPlan(), T0).some((a) => a.tipo === 'idioma')).toBe(false);
   });
 
   it('hoy sos → vas a ser: inglés B1–B2 hacia C1; con el año 1 cerrado, inglés C1 hacia francés B1', () => {
@@ -75,31 +72,33 @@ describe('data/idiomas.json · el roadmap maestro v3', () => {
     expect(nivelesIdiomas('2028-01-10', T0)).toMatchObject({ sos: ['Inglés C1'], vasASer: 'Francés B1' });
   });
 
-  it('el modo intensivo le da al bloque de idiomas 7 h por semana (el roadmap pide 11,5)', () => {
-    expect(horasDeLaRutina()).toBe(7);
+  it('el modo intensivo (v12.1) le da al inglés 15 min por día del cierre: 1,8 h por semana', () => {
+    expect(horasDeLaRutina()).toBe(1.8);
   });
 });
 
 describe('integración con el plan T+18', () => {
-  it('la rama de idiomas del plan lee las fases del roadmap (sin "modo entrevista" ni "45 min por día")', () => {
-    expect(PLAN.ingles.fases.map((f) => f.id).slice(0, 6)).toEqual(['a1-mwm', 'a1-pronunciacion', 'a1-gramatica', 'a1-cambridge', 'a1-examen', 'a1-consolidacion']);
-    expect(PLAN.ingles.fases[6].nombre).toBe('Francés · Francés básico');
+  it('la rama de idiomas del plan lee las fases del año de inglés (sin "modo entrevista" ni "45 min por día")', () => {
+    // v12.1: el calendario por semanas termina en T+18 (semana 53), así que solo entra el año de inglés.
+    expect(PLAN.ingles.fases.map((f) => f.id)).toEqual(['a1-mwm', 'a1-pronunciacion', 'a1-gramatica', 'a1-cambridge', 'a1-examen', 'a1-consolidacion']);
+    expect(PLAN.ingles.fases[5].hasta).toBe(53);
     expect(JSON.stringify(PLAN.ingles.fases)).not.toMatch(/entrevista|45 min/i);
     expect(PLAN.metasBimestre.ingles[0]).toBe('Measure What Matters y Pronunciación');
     expect(PLAN.hitos.find((h) => h.id === 'T+18')!.titulo).not.toMatch(/examen C1/);
   });
 
-  it('el bloque de idiomas de Hoy es inglés (y aparte, el inglés hablado), con las tareas de la rutina', () => {
+  it('el bloque de inglés de Hoy (v12.1) es el 2-min English + learning.md del cierre, sin inglés hablado aparte', () => {
     vi.useFakeTimers({ toFake: ['Date'] });
     vi.setSystemTime(new Date(2026, 10, 17, 7, 0));
     resetState();
     register('Toti', 'Abi', T0);
     startDay('completo', '04:00', '2026-11-17');
     const b = getState().days['2026-11-17'].blocks.find((x) => x.key === 'ingles')!;
-    // v7: "Inglés" (16:00 a 16:30); el inglés hablado va aparte, de 16:30 a 17:00.
-    expect(tituloDeBloque(b, '2026-11-17')).toBe('Inglés');
-    expect(getState().days['2026-11-17'].blocks.find((x) => x.key === 'ingles-hablado')).toMatchObject({ start: '16:30', min: 30 });
-    expect(b.tasks.map((t) => t.t)).toEqual(['Explicar un proyecto en voz alta (inglés técnico)', 'Práctica de código en vivo en inglés', 'Preguntas de entrevista en inglés']);
+    // v12.1: 16:40 a 16:55, dentro del cierre de las 15:45.
+    expect(tituloDeBloque(b, '2026-11-17')).toBe('2-min English + learning.md');
+    expect(b).toMatchObject({ start: '16:40', min: 15 });
+    expect(getState().days['2026-11-17'].blocks.find((x) => x.key === 'ingles-hablado')).toBeUndefined();
+    expect(b.tasks.map((t) => t.t)).toEqual(['Explicar en inglés en 2 minutos lo que hiciste', 'Anotar en learning.md']);
     // La fase del roadmap sigue disponible en Estudio · Idiomas.
     expect(faseIdiomaEn('2026-11-17').tareas.length).toBeGreaterThan(0);
     vi.useRealTimers();
@@ -130,7 +129,7 @@ describe('pantallas de Idiomas', () => {
     expect(screen.getByText('Inglés · Measure What Matters')).toBeInTheDocument();
     expect(screen.getByText('Inglés B1–B2')).toBeInTheDocument();
     expect(screen.getByText('Inglés C1')).toBeInTheDocument();
-    expect(screen.getByText(/pide 11,5 h por semana · la búsqueda intensiva le da 7 h/)).toBeInTheDocument();
+    expect(screen.getByText(/pide 11,5 h por semana · la búsqueda intensiva le da 1,8 h/)).toBeInTheDocument();
     const tl = document.querySelector('.re-tl') as HTMLElement;
     expect(within(tl).getAllByRole('link').map((a) => a.querySelector('b')!.textContent)).toEqual(['Inglés', 'Francés', 'Italiano', 'Alemán', 'Japonés', 'Chino']);
   });

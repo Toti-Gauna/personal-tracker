@@ -1,4 +1,5 @@
 import { BUILTIN_PRESETS } from './defaults';
+import { bloqueada } from './mazos';
 import { CARD_SEC, DIA, LADDER, PASS, REST_TEST, REVIEW_CAP, TEST_MIN, TEST_PREV, minutesFor } from './study-catalog';
 import { DAY, retrievability } from './fsrs';
 import type { Activity, Card, ErrType, ReviewItem, ReviewKind, Step, StudyState, TestResult, Tramo, Unit, UnitState } from './study-types';
@@ -28,6 +29,17 @@ export function arranco(st: StudyState, a: Activity) {
 export const activitiesFor = (st: StudyState, date: string) =>
   st.activities.filter((a) => !a.archivada && a.days.includes(weekday(date)) && !libroCerrado(st, a) && arranco(st, a));
 
+/**
+ * v12.1 · el bloque del día donde entra una actividad: el suyo si el día lo tiene. En la rutina v12.1 no hay bloque de matemática:
+ * un libro de matemática va en el bloque de foco que la ventana W pasa a matemática; fuera de una ventana, la matemática es solo
+ * Anki y recall (null: hoy no entra). Lo demás, como siempre.
+ */
+export function bloqueDeEstudio(a: Pick<Activity, 'block' | 'front'>, blocks: { key: string; rama?: string }[], v12: boolean): string | null {
+  if (blocks.some((b) => b.key === a.block) || !v12) return a.block;
+  if (a.front === 'math') return blocks.find((b) => /^prog/.test(b.key) && b.rama === 'matematica')?.key ?? null;
+  return a.block;
+}
+
 /** Ola 28 · los libros de matemática con capítulos que están en curso (para preguntar en qué estado quedó cada uno). */
 export const librosMate = (st: StudyState) => st.activities.filter((a) => a.front === 'math' && !!a.units?.length && !a.archivada && arranco(st, a));
 
@@ -37,8 +49,24 @@ export const librosMate = (st: StudyState) => st.activities.filter((a) => a.fron
  */
 export function focusUnit(a: Activity, st: StudyState, date: string): Unit | undefined {
   if (!a.units) return undefined;
-  return a.units.find((u) => unitState(st, a.id, u.n).learnedOn === date) ?? a.units.find((u) => !unitState(st, a.id, u.n).learnedOn);
+  const hoy = a.units.find((u) => unitState(st, a.id, u.n).learnedOn === date);
+  if (hoy) return hoy;
+  // v12.1: estudiar → test → tesis, y recién entonces el capítulo (o paper) siguiente.
+  if (capituloAbierto(a, st)) return undefined;
+  return a.units.find((u) => !unitState(st, a.id, u.n).learnedOn);
 }
+
+/** ¿Este capítulo ya pasó por estudiar, test y tesis? (Flojo cuenta como cerrado: sigue en repasos.) */
+export function capituloCerrado(st: StudyState, actId: string, n: number) {
+  const s = unitState(st, actId, n);
+  if (s.flojo) return true;
+  if (!s.approvedOn) return false;
+  return !st.reviews.some((r) => r.activityId === actId && r.unit === n && r.kind === 'tesis' && !r.doneOn);
+}
+
+/** v12.1 · el capítulo estudiado que todavía no terminó su test y su tesis: mientras exista, el siguiente no se abre. */
+export const capituloAbierto = (a: Activity, st: StudyState): Unit | undefined =>
+  a.units?.find((u) => !!unitState(st, a.id, u.n).learnedOn && !capituloCerrado(st, a.id, u.n));
 
 /**
  * ¿Toca hoy el test de esta unidad? El día 2 (o después, si quedó atrasado) si nunca lo
@@ -273,6 +301,12 @@ export function planActivity(a: Activity, ctx: PlanCtx): Tramo[] {
       title = unitName(a, unit);
       paso = `${title}, de corrido`;
       ref = `learn:${a.id}:${unit.n}`;
+    } else if (capituloAbierto(a, study)) {
+      // v12.1: el siguiente se abre con la tesis; mientras, el resto del bloque es práctica del capítulo abierto.
+      const ab = capituloAbierto(a, study)!;
+      title = `Práctica · ${lower1(unitShort(a, ab.n))}`;
+      paso = `${unitShort(a, ab.n)}: ejercicios y tarjetas; el capítulo siguiente se abre con su tesis`;
+      ref = `practica:${a.id}:${ab.n}`;
     } else {
       title = 'Repaso general';
       paso = 'Repaso general antes del examen';
@@ -345,13 +379,13 @@ export function cardsForDay(study: StudyState, date: string, budgetMin: number, 
   const seen = study.cards.filter((c) => reviewedOn(c, date));
   const introduced = study.cards.filter((c) => c.firstOn === date).length;
   const due = study.cards
-    .filter((c) => c.srs && c.srs.state !== 'new' && c.srs.due < eod && !reviewedOn(c, date))
+    .filter((c) => !bloqueada(c) && c.srs && c.srs.state !== 'new' && c.srs.due < eod && !reviewedOn(c, date))
     .sort((x, y) => retrievability((now - (x.srs!.last ?? now)) / DAY, x.srs!.s) - retrievability((now - (y.srs!.last ?? now)) / DAY, y.srs!.s));
   // Priorizar lo flojo: las tarjetas de temas flojos van primero (las más olvidadas, dentro de cada grupo).
   const temaDe = (c: Card) => (c.activityId && c.unit != null ? `${c.activityId}:${c.unit}` : `mazo:${cardFront(c, study.fronts)}`);
   if (weak?.size) due.sort((x, y) => (weak.has(temaDe(x)) ? 0 : 1) - (weak.has(temaDe(y)) ? 0 : 1));
   const nuevas = study.cards
-    .filter((c) => !c.srs || c.srs.state === 'new')
+    .filter((c) => !bloqueada(c) && (!c.srs || c.srs.state === 'new'))
     .filter((c) => !c.dueFrom || c.dueFrom <= date)
     .sort((x, y) => x.createdOn.localeCompare(y.createdOn))
     .slice(0, Math.max(0, study.rules.newPerDay - introduced));
@@ -583,7 +617,7 @@ export function forecast(study: StudyState, date: string, days = 7) {
     const items = study.reviews.filter((r) => CAPPED.includes(r.kind) && !r.doneOn && r.due === d).reduce((s, r) => s + r.min, 0);
     const eod = endOfDay(d);
     const sod = endOfDay(addDays(d, -1));
-    const cards = study.cards.filter((c) => c.srs && c.srs.state !== 'new' && c.srs.due < eod && c.srs.due >= sod).length;
+    const cards = study.cards.filter((c) => !bloqueada(c) && c.srs && c.srs.state !== 'new' && c.srs.due < eod && c.srs.due >= sod).length;
     out.push({ date: d, min: Math.min(study.rules.cap, items + cardsMin(cards)) });
   }
   return out;

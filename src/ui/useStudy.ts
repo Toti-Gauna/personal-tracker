@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import { BLOCKS } from '../data/defaults';
 import { weakSet } from '../data/debiles';
-import { activitiesFor, dailyReview, groupSteps, planActivity, planReview, sumMin, type PlanStep } from '../data/study';
+import { activitiesFor, bloqueDeEstudio, dailyReview, groupSteps, planActivity, planReview, sumMin, type PlanStep } from '../data/study';
 import type { Activity, ReviewItem, Tramo } from '../data/study-types';
 import type { DayLog } from '../data/types';
 import { useStore } from '../state/store';
@@ -39,11 +39,17 @@ export function useStudyPlan(day: DayLog) {
       const tramos = planReview(review, study, groups);
       const steps = groupSteps(tramos);
       contenidos.push({
-        id: 'repaso', title: 'Repaso del día', front: 'Repaso · todos', color: 'economia', blockKey: blockOfReview(review, study.activities),
+        id: 'repaso', title: 'Repaso del día', front: 'Repaso · todos', color: 'economia',
+        // v12.1: el repaso del día va en el bloque de Anki (si el día lo tiene).
+        blockKey: day.blocks.some((b) => b.key === 'anki') ? 'anki' : blockOfReview(review, study.activities),
         tramos, steps, total: sumMin(tramos), done: isDone, falta: sumMin(steps.filter((s) => !isDone(s))),
       });
     }
-    for (const a of activitiesFor(study, date)) {
+    const v12 = !!day.dayType?.startsWith('busqueda-intensiva');
+    for (const a0 of activitiesFor(study, date)) {
+      const key = bloqueDeEstudio(a0, day.blocks, v12);
+      if (!key) continue; // v12.1: matemática fuera de una ventana (queda el repaso del día)
+      const a = key === a0.block ? a0 : { ...a0, block: key };
       const block = day.blocks.find((b) => b.key === a.block) ?? BLOCKS.find((b) => b.key === a.block);
       const blockMin = block && 'min' in block ? block.min : 60;
       const tramos = planActivity(a, { study, date, blockMin, presets: settings.presets, blockPresets: settings.blockPresets, review, groups });

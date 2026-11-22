@@ -1,6 +1,5 @@
 import { fireEvent, render, screen, within } from '@testing-library/react';
 import { beforeEach, describe, expect, it } from 'vitest';
-import { setPlanSettings } from '../state/plan';
 import { getState, register, resetState, startDay } from '../state/store';
 import { Ajustes } from './Ajustes';
 import { Hoy } from './Hoy';
@@ -50,21 +49,14 @@ describe('ola 31 · pantallas de la rutina v7 y los algoritmos', () => {
     expect(screen.getByRole('link', { name: /Algoritmos: los spots de cada proyecto/ })).toHaveAttribute('href', '#/estudio/prog/algoritmos');
   });
 
-  it('Ajustes: elegir de dónde salen las horas extra de PetrIA; la cuenta dice cuánto falta', () => {
+  it('Ajustes (v12.1): sin fecha de trabajo nuevo no hay meta de horas extra de PetrIA, así que no aparece la fila para elegirlas', () => {
     render(<Ajustes />);
     abrir(/^Plan T\+18/);
-    expect(screen.getByText(/La rutina da 50 h: faltan 6 h por semana/)).toBeInTheDocument();
-    fireEvent.click(screen.getByRole('switch', { name: 'Inglés hablado pasa a proyecto' }));
-    expect(getState().settings!.plan!.extraProyecto).toEqual(['ingles-hablado']);
-    expect(screen.getByText(/La rutina da 52,5 h: faltan 3,5 h por semana/)).toBeInTheDocument();
-    expect(screen.queryByRole('switch', { name: /Entrenamiento pasa a proyecto/ })).toBeNull();
+    expect(screen.queryByText(/La rutina da .* h/)).toBeNull();
+    expect(screen.queryByRole('switch', { name: /pasa a proyecto/ })).toBeNull();
   });
 
-  it('Hoy avisa cuánto falta para las 8 h por día de PetrIA hasta que lo elijas', () => {
-    const { unmount } = render(<Hoy day={getState().days[D]} />);
-    expect(screen.getByText('Faltan 8,5 h por semana para las 8 h por día de PetrIA')).toBeInTheDocument();
-    unmount();
-    setPlanSettings({ extraProyecto: ['ingles-hablado', 'publicaciones', 'busqueda', 'cierre'] });
+  it('Hoy (v12.1) no avisa de horas extra de PetrIA: la rutina de 10/11 h ya es la del plan', () => {
     render(<Hoy day={getState().days[D]} />);
     expect(screen.queryByText(/para las 8 h por día de PetrIA/)).toBeNull();
   });

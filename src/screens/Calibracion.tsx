@@ -64,8 +64,8 @@ export function Calibracion({ day }: { day: DayLog }) {
       <header>
         <h1 className="titulo">Calibración</h1>
         <p>
-          Las horas de PetrIA están medidas ({p1?.horas} h; antes eran {p1?.horasAntes}, ×{n1(Math.round(((p1?.horas ?? 0) / (p1?.horasAntes ?? 1)) * 100) / 100)}). Las de los demás proyectos llevan un 1,5 provisional
-          hasta calibrar con las horas reales de PetrIA 1.0 y 1.1: el factor se calcula al publicar cada una y se aplica a lo que viene después. No se recorta: se mueven fechas.
+          Las horas de PetrIA salen de sus lotes ({n1(p1?.horas ?? 0)} h{p1?.horasAntes ? `; antes eran ${n1(p1.horasAntes)}` : ''}). El factor real/estimado se calcula al publicar PetrIA 1.0 y otra vez con la 1.1,
+          y proyecta lo que viene después. Las fechas del plan no se mueven solas: si hace falta correr bloques, Trazo lo sugiere en Períodos y vos lo confirmás.
         </p>
       </header>
 
@@ -127,10 +127,10 @@ export function Calibracion({ day }: { day: DayLog }) {
       <span className="etiqueta">Escenarios</span>
       <ul className="cal-esc">
         <li className="actual"><b>Calendario actual</b><span className="mono">{n1(d.horas)} h · {f(d.fin)}</span><small className="sub">Con las horas reales cargadas y el factor, si ya está.</small></li>
-        {d.proy && <li className="tuyo"><b>Con tu factor</b><span className="mono">{n1(d.proy.horas)} h · {f(d.proy.fin)}</span><small className="sub">Las horas de lo que viene después de PetrIA × {n1(c.factor!)}; las ventanas, los días fijos y las pausas no cambian.</small></li>}
+        {d.proy && <li className="tuyo"><b>Con tu factor</b><span className="mono">{n1(d.proy.horas)} h · {f(d.proy.fin)}</span><small className="sub">Los días de los proyectos que vienen después de PetrIA × {n1(c.factor!)}; las ventanas, las certificaciones, los días fijos y la pausa no cambian.</small></li>}
         {d.esc.map((e) => <li key={e.id}><b>{e.nombre} · {n1(e.factor)}</b><span className="mono">{n1(e.horas)} h · {f(e.fin)}</span><small className="sub">{e.supuesto}</small></li>)}
       </ul>
-      <p className="sub">Los tres escenarios salen del calendario por horas con un factor de 0,85, 1,00 y 1,15 sobre lo que falta; no son supuestos escritos a mano.</p>
+      <p className="sub">Los tres escenarios proyectan el plan con un factor de 0,85, 1,00 y 1,15 sobre los proyectos que faltan; son proyecciones, el calendario no cambia.</p>
     </main>
   );
 }

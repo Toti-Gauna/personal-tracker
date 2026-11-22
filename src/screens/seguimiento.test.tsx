@@ -48,7 +48,7 @@ describe('ola 32 · pantallas de seguimiento', () => {
   it('Hardware y trámites: fases con su fecha límite, lo diferido aparte y marcar comprado', () => {
     render(<Metas day={getState().days['2026-11-22']} tab="compras" />);
     const f1 = abrir(/^Fase 1$/);
-    expect(f1.querySelector('summary')!.textContent).toMatch(/0 de 4 · antes del 1 feb 2027/);
+    expect(f1.querySelector('summary')!.textContent).toMatch(/0 de 4 · antes del 26 dic 2026/);
     expect(within(f1).getByText(/Diferido: PetrIA va solo con Wokwi/)).toBeInTheDocument();
     fireEvent.click(within(f1).getByRole('checkbox', { name: 'MAX30102: marcar comprado' }));
     expect(getState().plan.compras).toEqual({ max30102: { fecha: '2026-11-22' } });
@@ -62,6 +62,7 @@ describe('ola 32 · pantallas de seguimiento', () => {
     expect(screen.getByRole('link', { name: /Revisión semanal/ })).toHaveAttribute('href', '#/metas/revision');
     expect(screen.getByRole('link', { name: /Hardware y trámites/ })).toHaveAttribute('href', '#/metas/compras');
     expect(screen.getByText('Trámites: 3 sin hacer')).toBeInTheDocument();
-    expect(screen.getByText('Verificá la SY0-801 de CompTIA Security+')).toBeInTheDocument();
+    // v12.1: Security+ se rinde con la versión vigente al reservar; ya no hay una versión del roadmap que verificar.
+    expect(screen.queryByText(/Verificá la SY0-801/)).toBeNull();
   });
 });

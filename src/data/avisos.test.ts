@@ -32,18 +32,18 @@ describe('avisos entre ramas', () => {
   });
 
   it('proyecto que cierra en 14 días o menos con el estándar sin marcar → programacion → trabajo', () => {
-    // Con el roadmap v7, PetrIA (P1) se entrega el sábado 26 de diciembre.
-    const a = avisosEntreRamas('2026-12-20', emptyPlan(), cfg).find((x) => x.de === 'programacion')!;
-    expect(a).toMatchObject({ a: 'trabajo', titulo: 'PetrIA se entrega el sábado 26', href: '#/metas/proyecto/P1' });
+    // v12.1: PetrIA (P1) se entrega el miércoles 9 de diciembre.
+    const a = avisosEntreRamas('2026-12-05', emptyPlan(), cfg).find((x) => x.de === 'programacion')!;
+    expect(a).toMatchObject({ a: 'trabajo', titulo: 'PetrIA se entrega el miércoles 9', href: '#/metas/proyecto/P1' });
     const listo = { ...emptyPlan(), proyectos: { P1: { estandar: Object.fromEntries(PLAN.programacion.estandar.map((c) => [c.id, true])), tiempo: { nucleo: 0, producto: 0, lanzamiento: 0 }, revisiones: [] } } };
-    expect(avisosEntreRamas('2026-12-20', listo, cfg).some((x) => x.de === 'programacion')).toBe(false);
-    expect(avisosEntreRamas('2026-12-10', emptyPlan(), cfg).some((x) => x.de === 'programacion')).toBe(false);
+    expect(avisosEntreRamas('2026-12-05', listo, cfg).some((x) => x.de === 'programacion')).toBe(false);
+    expect(avisosEntreRamas('2026-11-24', emptyPlan(), cfg).some((x) => x.de === 'programacion')).toBe(false);
   });
 
   it('ventana W que empieza en 7 días o menos → matematica → programacion', () => {
-    // Con el roadmap v7, W1 empieza el sábado 20 de febrero.
-    expect(avisosEntreRamas('2027-02-15', emptyPlan(), cfg).find((x) => x.de === 'matematica' && x.id.startsWith('w-'))).toMatchObject({ a: 'programacion', titulo: 'La ventana W1 empieza el sábado 20' });
-    expect(avisosEntreRamas('2027-02-11', emptyPlan(), cfg).some((x) => x.de === 'matematica' && x.id.startsWith('w-'))).toBe(false);
+    // v12.1: W1 empieza el viernes 15 de enero.
+    expect(avisosEntreRamas('2027-01-08', emptyPlan(), cfg).find((x) => x.de === 'matematica' && x.id.startsWith('w-'))).toMatchObject({ a: 'programacion', titulo: 'La ventana W1 empieza el viernes 15' });
+    expect(avisosEntreRamas('2027-01-07', emptyPlan(), cfg).some((x) => x.de === 'matematica' && x.id.startsWith('w-'))).toBe(false);
   });
 
   it('el inicio del trabajo es una fecha: ya no hay aviso de T+2 que pida cambiar de rutina', () => {
@@ -54,16 +54,16 @@ describe('avisos entre ramas', () => {
 describe('etiqueta de rama en Hoy', () => {
   const dia = (date: string, entrevista: { rol: string } | false = false): DayLog => ({ date, wake: '04:00', routine: 'completo', dayType: 'weekday', blocks: buildBlocks(planDay(date, 'completo', undefined, 'weekday', { entrevista })), notes: [], focus: [] });
 
-  it('el lunes 14 dic: cada meta dice su rama y su etapa', () => {
-    const p = { ...emptyPlan(), entrevistas: [{ id: 'e', fecha: '2026-12-17', rol: 'AI', prep: {} }] };
-    const d = dia('2026-12-14');
+  it('el martes 1 dic: cada meta dice su rama y su etapa', () => {
+    const p = { ...emptyPlan(), entrevistas: [{ id: 'e', fecha: '2026-12-04', rol: 'AI', prep: {} }] };
+    const d = dia('2026-12-01');
     const tag = (k: string) => etiquetaDeBloque(d.blocks.find((b) => b.key === k)!, { day: d, plan: p, study: emptyStudy() });
     expect(tag('rutina')).toBe('main · rutina');
     expect(tag('math')).toBe('matematica · Aritmética cap. 1 de 11');
-    expect(tag('prog')).toBe('programacion · P1 · semana 4 de 5');
+    expect(tag('prog')).toBe('programacion · P1 · semana 2 de 3');
     expect(tag('trabajo')).toBe('fuera del plan');
-    expect(tag('busqueda')).toBe('trabajo · semana 5 de 8 · 1 h 30 hoy');
-    expect(tag('handyx')).toBe('handyx · Lanzar · semana 5 de 13');
+    expect(tag('busqueda')).toBe('trabajo · semana 3 de 8 · 1 h 30 hoy');
+    expect(tag('handyx')).toBe('handyx · Lanzar · semana 3 de 13');
     expect(tag('prog-tarde')).toBe('programacion · PetrIA');
     expect(tag('entreno')).toBe('salud · fuerza');
     expect(tag('cierre')).toBe('main · JSON del día');

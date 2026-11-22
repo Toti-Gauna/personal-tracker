@@ -1,0 +1,3660 @@
+{
+ "version": 1,
+ "fuente": "docs/prompts/roadmap-completo-v7.md",
+ "generado": "scripts/roadmap-v7.mjs",
+ "versionesBase": [
+  "1.0 MVP: el núcleo funcionando de punta a punta, desplegado, público y con README",
+  "1.1 Producto: el resto de las herramientas ★, las 8 capas y evals completos, autenticación, el paquete de frontend y los algorithm spots",
+  "2.0 Plataforma: notificaciones, voz, integraciones y capa física simulada o con el celular",
+  "3.0 Producción: escala con load-lab, estándar de operación, hardware real, Scale report, artículo y video",
+  "Cada versión sale con notas de versión, un video demo de 30 s y el README actualizado"
+ ],
+ "reglas": [
+  "Resuelve un dolor concreto de un puesto",
+  "Se entiende en 30 s",
+  "Es gratis y está online",
+  "Corre en una nube real",
+  "Lleva una publicación por herramienta, en español e inglés"
+ ],
+ "estandar": [
+  {
+   "n": 1,
+   "texto": "En producción, con demo pública (URL y video de 30 s)"
+  },
+  {
+   "n": 2,
+   "texto": "Datos reales; lo simulado, marcado y explicado"
+  },
+  {
+   "n": 3,
+   "texto": "Métricas en el README: calidad, p95, costo y confiabilidad"
+  },
+  {
+   "n": 4,
+   "texto": "Documento de diseño de 1 página en inglés antes de codear"
+  },
+  {
+   "n": 5,
+   "texto": "Seguridad base: modelo de amenazas, permisos mínimos, secretos fuera del repo"
+  },
+  {
+   "n": 6,
+   "texto": "Si usa LLM, las 8 capas: prompt, RAG, herramientas/MCP, accesos, guardrails, caché, router, observabilidad con evals"
+  },
+  {
+   "n": 7,
+   "texto": "Paquete de escala: load-lab y Scale report"
+  },
+  {
+   "n": 8,
+   "texto": "Paquete de operación",
+   "detalle": [
+    "OpenTelemetry y Grafana",
+    "SLO y presupuesto de errores",
+    "Feature flags",
+    "Migraciones expand/contract",
+    "Estrategia de deploy",
+    "Backup con simulacro",
+    "Degradación controlada",
+    "Rate limiting",
+    "Runbooks y postmortem"
+   ]
+  },
+  {
+   "n": 9,
+   "texto": "Frontend 10/10",
+   "detalle": [
+    "Sistema de diseño con Storybook",
+    "Carga procedural",
+    "Core Web Vitals",
+    "WCAG AA con axe en el CI",
+    "Playwright",
+    "Español e inglés",
+    "UX para IA: streaming, citas, feedback e incertidumbre visible"
+   ]
+  },
+  {
+   "n": 10,
+   "texto": "Algorithm spots plantados"
+  },
+  {
+   "n": 11,
+   "texto": "Material de entrevista: artículo, explicación en 2 minutos y 3 preguntas de diseño de sistemas"
+  },
+  {
+   "n": 12,
+   "texto": "Open source: 1–2 PRs por mes"
+  }
+ ],
+ "proyectos": {
+  "P0": {
+   "puesto": "Sr Full-stack → AI Engineer (RAG multifuente y agentes)",
+   "queHace": [
+    "portfolio como mapa 3D de proyectos",
+    "después, un agente que responde sobre todo tu trabajo por texto y voz"
+   ],
+   "problema": "los reclutadores no recorren cinco repos",
+   "valor": "convierte una visita en conversación y en entrevista",
+   "diferencial": [
+    "validador de referencias y ciclos, RAG multifuente con citas y evals, MCP público, plantilla open source"
+   ],
+   "herramientas": [
+    {
+     "nombre": "modo reclutador",
+     "estrella": true
+    },
+    {
+     "nombre": "plantilla open source",
+     "estrella": true
+    },
+    {
+     "nombre": "métricas en vivo desde el CI"
+    }
+   ],
+   "capaFisica": [
+    {
+     "nombre": "CV o tarjeta en AR (AR Quick Look)",
+     "estrella": true
+    }
+   ],
+   "medir": {
+    "tipo": "impacto",
+    "items": [
+     "visitas",
+     "conversaciones",
+     "emails respondidos",
+     "entrevistas"
+    ]
+   },
+   "notificaciones": {
+    "items": [
+     {
+      "nombre": "email de seguimiento al reclutador",
+      "estrella": true
+     },
+     {
+      "nombre": "WhatsApp para vos cuando alguien lo usa"
+     }
+    ]
+   },
+   "voz": [
+    {
+     "nombre": "\"Preguntale a Ignacio\"",
+     "estrella": true
+    }
+   ],
+   "escala": "pico viral ×50 en minutos",
+   "operacion": "CDN, caché e invalidación",
+   "stack": {
+    "ambientes": [
+     {
+      "ambiente": "Frontend",
+      "texto": "Next.js, TypeScript, Three.js"
+     },
+     {
+      "ambiente": "Backend",
+      "texto": "Node + TypeScript"
+     },
+     {
+      "ambiente": "IA por API",
+      "texto": "Python, FastAPI, LangGraph sobre Claude, MCP hacia cada proyecto"
+     },
+     {
+      "ambiente": "ML propio",
+      "texto": "no aplica"
+     },
+     {
+      "ambiente": "DB",
+      "texto": "JSON en la v1; Neon con pgvector en la 2.0"
+     },
+     {
+      "ambiente": "Infra",
+      "texto": "Module Federation, `platform-kit`"
+     },
+     {
+      "ambiente": "Cloud",
+      "texto": "Render o Vercel†, SES"
+     }
+    ]
+   },
+   "entrevistas": "medio con la v1; alto desde la 2.0",
+   "versiones": [
+    {
+     "id": "1.0",
+     "nombre": "Base",
+     "enCurso": true,
+     "alcance": [
+      "mapa 3D",
+      "Trazo como caso",
+      "validador",
+      "shell con Module Federation"
+     ]
+    }
+   ]
+  },
+  "P1": {
+   "puesto": "Full-stack AI Engineer (energía)",
+   "queHace": [
+    "Mapa mundial real con los pozos de Vaca Muerta y las zonas de mayor productividad esperada",
+    "Valor y declinación de cada pozo, y lector de partes viejos",
+    "Asistente por texto, voz, WhatsApp y teléfono que cita el dato oficial",
+    "Uso y costo medidos por empresa"
+   ],
+   "problema": "partes a mano, valuación en Excel, ingeniero de campo sin manos libres",
+   "valor": "dónde perforar, cuánto vale cada pozo, papel convertido en datos",
+   "diferencial": [
+    "P10/P50/P90 en todo, validación espacial, abstención, 8 capas, costo por consulta y por empresa con cuotas, Scale report, notificaciones con respaldo"
+   ],
+   "herramientas": [
+    {
+     "nombre": "Sweet spots",
+     "estrella": true
+    },
+    {
+     "nombre": "Valor del pozo: ingresos en USD y ARS, regalías, costos, valor presente, repago, precio de equilibrio",
+     "estrella": true
+    },
+    {
+     "nombre": "Declinación con Arps en P10/P50/P90",
+     "estrella": true
+    },
+    {
+     "nombre": "Lector de partes: de PDF, Excel o foto a datos validados",
+     "estrella": true
+    },
+    {
+     "nombre": "alertas",
+     "extra": true
+    },
+    {
+     "nombre": "más cuencas",
+     "extra": true
+    },
+    {
+     "nombre": "cumplimiento",
+     "extra": true
+    },
+    {
+     "nombre": "yacimiento 3D",
+     "extra": true
+    }
+   ],
+   "capaFisica": [
+    {
+     "nombre": "Pozo en tu mesa (AR Quick Look con USDZ)",
+     "estrella": true
+    },
+    {
+     "nombre": "Celular como escáner de partes",
+     "estrella": true
+    },
+    {
+     "nombre": "Boca de pozo con presión y caudal en Wokwi por MQTT"
+    },
+    {
+     "nombre": "la placa real, después"
+    },
+    {
+     "nombre": "GPS \"pozos cerca de mí\""
+    }
+   ],
+   "medir": {
+    "tipo": "ahorro",
+    "items": [
+     "minutos por parte",
+     "errores de tipeo",
+     "horas de Excel por pozo"
+    ]
+   },
+   "notificaciones": {
+    "items": [
+     {
+      "nombre": "WhatsApp: resumen, preguntas, alertas",
+      "estrella": true
+     },
+     {
+      "nombre": "Email: informe semanal en PDF y registro",
+      "estrella": true
+     },
+     {
+      "nombre": "Llamada: línea de campo",
+      "estrella": true
+     },
+     {
+      "nombre": "Respaldo WhatsApp → llamada → email"
+     }
+    ]
+   },
+   "voz": [
+    {
+     "nombre": "\"PetrIA, mostrame los mejores pozos de Loma Campana\", y el mapa se mueve",
+     "estrella": true
+    }
+   ],
+   "escala": "500 usuarios concurrentes, 20 empresas, 1 M de filas, p95 < 300 ms; 100 M de filas con la PC",
+   "operacion": "el estándar completo",
+   "stack": {
+    "ambientes": [
+     {
+      "ambiente": "Frontend",
+      "texto": "Next.js, TypeScript, MapLibre GL, Three.js, sistema de diseño, carga procedural; AR Quick Look (USDZ)"
+     },
+     {
+      "ambiente": "Backend",
+      "texto": "Java + Spring Boot (OIDC, multiempresa, JPA†, Flyway†, OpenAPI, medición de uso y cuotas); Node + NestJS (notificaciones y voz)"
+     },
+     {
+      "ambiente": "IA por API",
+      "texto": "Python, FastAPI, LangGraph sobre Claude; pgvector, caché semántica, router, salida estructurada, batch, MCP, evals, trazas con costo; ElevenLabs y Twilio"
+     },
+     {
+      "ambiente": "ML propio",
+      "texto": "LightGBM† con cuantiles, validación por bloques espaciales, H3†, Arps"
+     },
+     {
+      "ambiente": "DB",
+      "texto": "Postgres con PostGIS y pgvector (Neon)"
+     },
+     {
+      "ambiente": "Infra",
+      "texto": "6 servicios, gateway, RabbitMQ, Pact, idempotencia, MQTT, GitHub Actions, Render, `platform-kit`"
+     },
+     {
+      "ambiente": "Cloud",
+      "texto": "AWS (S3, SQS, Lambda, SES)"
+     }
+    ]
+   },
+   "spots": [
+    "Sin IA: hash map (índice de pozos), sliding window, binary search sobre series",
+    "Con IA: k-d tree, LRU (caché semántica), stack (deshacer zonas), token bucket",
+    "KNN como línea base del detector"
+   ],
+   "hardware": "solo Wokwi por ahora",
+   "ruido": "\"¿Cuánto vale cada pozo de Vaca Muerta?\" y el video del pozo en AR",
+   "entrevistas": "muy alto",
+   "versiones": [
+    {
+     "id": "1.0",
+     "nombre": "MVP",
+     "inicio": "2026-11-19",
+     "fin": "2026-12-01",
+     "horas": 74,
+     "alcance": [
+      "ingesta",
+      "detector P10/P50/P90 con validación espacial",
+      "mapa con pozos",
+      "mapa de calor y concesiones",
+      "asistente con citas y abstención",
+      "20 evals",
+      "deploy y README"
+     ]
+    },
+    {
+     "id": "1.1",
+     "nombre": "Producto",
+     "inicio": "2026-12-02",
+     "fin": "2026-12-12",
+     "horas": 74,
+     "alcance": [
+      "Herramientas: valor del pozo, declinación, lector de partes",
+      "IA: 40–60 evals, tope de costo, router, caché",
+      "Plataforma: Keycloak y multiempresa",
+      "Frontend y pruebas: Pact, Playwright, accesibilidad, Lighthouse, español e inglés",
+      "Operación y seguridad: OpenTelemetry con un escenario k6, MCP, modelo de amenazas"
+     ]
+    },
+    {
+     "id": "2.0",
+     "nombre": "Plataforma",
+     "inicio": "2026-12-13",
+     "fin": "2026-12-22",
+     "horas": 64,
+     "alcance": [
+      "notification-service",
+      "voice-gateway",
+      "medición de uso y cuotas por empresa",
+      "sistema de diseño con Storybook"
+     ]
+    },
+    {
+     "id": "3.0",
+     "nombre": "Producción",
+     "inicio": "2026-12-23",
+     "fin": "2027-01-05",
+     "horas": 92,
+     "alcance": [
+      "load-lab completo",
+      "caos",
+      "simulacro de backups",
+      "feature flags",
+      "Scale report",
+      "ingesta en AWS",
+      "pozo en AR Quick Look",
+      "celular como escáner",
+      "boca de pozo en Wokwi",
+      "GPS"
+     ]
+    }
+   ]
+  },
+  "P2": {
+   "puesto": "AI Engineer en salud (.NET, Azure, seguridad)",
+   "queHace": [
+    "brechas de cuidado y problemas de medicación con evidencia",
+    "traductor de sistemas viejos a FHIR",
+    "monitoreo remoto",
+    "dictado a nota"
+   ],
+   "problema": "controles y medicación que se pierden, conciliación manual, sistemas que no se hablan, médicos escribiendo",
+   "valor": "previene complicaciones y moderniza sistemas hospitalarios",
+   "diferencial": [
+    "Regla, fuente y evidencia en cada alerta",
+    "Cero alertas inventadas",
+    "Precisión con feedback médico",
+    "\"Quién accedió a este paciente\"",
+    "Privacidad por diseño"
+   ],
+   "herramientas": [
+    {
+     "nombre": "brechas de cuidado",
+     "estrella": true
+    },
+    {
+     "nombre": "conciliación de medicación",
+     "estrella": true
+    },
+    {
+     "nombre": "traductor de HL7 v2 o CSV a FHIR",
+     "estrella": true
+    },
+    {
+     "nombre": "SBAR",
+     "extra": true
+    },
+    {
+     "nombre": "tablero de población",
+     "extra": true
+    },
+    {
+     "nombre": "CQL",
+     "extra": true
+    },
+    {
+     "nombre": "banco de ataques",
+     "extra": true
+    }
+   ],
+   "capaFisica": [
+    {
+     "nombre": "Monitoreo remoto: oxímetro real, y glucómetro y tensiómetro en Wokwi",
+     "estrella": true
+    },
+    {
+     "nombre": "Escáner de cajas de medicación",
+     "estrella": true
+    },
+    {
+     "nombre": "AR de interacciones"
+    }
+   ],
+   "medir": {
+    "tipo": "ahorro",
+    "items": [
+     "minutos de conciliación",
+     "horas de migración",
+     "brechas cerradas",
+     "minutos de notas"
+    ]
+   },
+   "notificaciones": {
+    "nota": "sin datos clínicos",
+    "items": [
+     {
+      "nombre": "WhatsApp \"tenés una novedad en tu portal\"",
+      "estrella": true
+     },
+     {
+      "nombre": "email al médico"
+     },
+     {
+      "nombre": "llamada de recordatorio a pacientes simulados, con consentimiento",
+      "estrella": true
+     }
+    ]
+   },
+   "voz": [
+    {
+     "nombre": "escriba clínico",
+     "estrella": true
+    },
+    {
+     "nombre": "\"¿qué tiene pendiente la cama 12?\""
+    }
+   ],
+   "escala": "100 mil pacientes de Synthea; migración de 1 M de mensajes HL7",
+   "operacion": "blue-green en Azure; retención con auditoría",
+   "stack": {
+    "ambientes": [
+     {
+      "ambiente": "Frontend",
+      "texto": "Next.js + TypeScript, portal seguro"
+     },
+     {
+      "ambiente": "Backend",
+      "texto": "C#, ASP.NET Core, Firely SDK†, EF Core†, YARP; desidentificador en Rust compilado a WebAssembly"
+     },
+     {
+      "ambiente": "IA por API",
+      "texto": "Python con Azure OpenAI o Claude; explica, nunca decide"
+     },
+     {
+      "ambiente": "ML propio",
+      "texto": "no aplica (reglas deterministas)"
+     },
+     {
+      "ambiente": "DB",
+      "texto": "SQL Server† y servidor FHIR"
+     },
+     {
+      "ambiente": "Infra",
+      "texto": "SMART on FHIR, MQTT, `platform-kit`"
+     },
+     {
+      "ambiente": "Cloud",
+      "texto": "Azure Health Data Services, Azure OpenAI, Entra ID"
+     }
+    ]
+   },
+   "spots": [
+    "sorting + two pointers (sin IA)",
+    "heap (sin IA)"
+   ],
+   "hardware": "MAX30102 (fase 1)",
+   "ruido": "\"Convertí un sistema hospitalario de 20 años a FHIR en una tarde\"",
+   "entrevistas": "muy alto",
+   "versiones": [
+    {
+     "id": "1.0",
+     "nombre": "MVP",
+     "inicio": "2027-01-13",
+     "fin": "2027-01-21",
+     "alcance": [
+      "FHIR con Synthea",
+      "motor con 8–10 reglas",
+      "explicación con citas",
+      "panel con línea de tiempo",
+      "deploy en Azure"
+     ],
+     "horas": 38,
+     "derivadas": true
+    },
+    {
+     "id": "1.1",
+     "nombre": "Producto",
+     "inicio": "2027-01-22",
+     "fin": "2027-01-30",
+     "alcance": [
+      "conciliación",
+      "HL7 a FHIR",
+      "evals",
+      "feedback médico",
+      "auditoría",
+      "SMART on FHIR",
+      "desidentificador en Rust",
+      "frontend"
+     ],
+     "horas": 38,
+     "derivadas": true
+    },
+    {
+     "id": "2.0",
+     "nombre": "Plataforma",
+     "inicio": "2027-01-31",
+     "fin": "2027-02-09",
+     "alcance": [
+      "avisos por WhatsApp y email",
+      "llamada de recordatorio",
+      "escriba por voz",
+      "monitoreo en Wokwi",
+      "escáner de cajas"
+     ],
+     "horas": 42,
+     "derivadas": true
+    },
+    {
+     "id": "3.0",
+     "nombre": "Producción",
+     "inicio": "2027-02-10",
+     "fin": "2027-02-18",
+     "alcance": [
+      "100 mil pacientes",
+      "1 M de mensajes",
+      "blue-green",
+      "retención",
+      "oxímetro real",
+      "Scale report"
+     ],
+     "horas": 37,
+     "derivadas": true
+    }
+   ]
+  },
+  "P3": {
+   "puesto": "Applied ML Engineer (agro)",
+   "queHace": [
+    "rinde por departamento con rango de confianza, margen bruto con incertidumbre, atención por WhatsApp con audio"
+   ],
+   "problema": "el productor decide sin ver el riesgo y no usa planillas",
+   "valor": "decisiones con la plata y el riesgo a la vista",
+   "diferencial": [
+    "predicción conforme con cobertura medida, datos reales de Estimaciones Agrícolas, batch con conciliación"
+   ],
+   "herramientas": [
+    {
+     "nombre": "rinde por departamento",
+     "estrella": true
+    },
+    {
+     "nombre": "margen P10–P90 en USD y ARS",
+     "estrella": true
+    },
+    {
+     "nombre": "asistente por WhatsApp",
+     "estrella": true
+    },
+    {
+     "nombre": "riesgo climático (Open-Meteo†)",
+     "extra": true
+    },
+    {
+     "nombre": "simulador de fecha de siembra",
+     "extra": true
+    }
+   ],
+   "capaFisica": [
+    {
+     "nombre": "cobertura del cultivo con una foto",
+     "estrella": true
+    },
+    {
+     "nombre": "estación meteorológica y humedad de suelo (Wokwi y real)",
+     "estrella": true
+    },
+    {
+     "nombre": "GPS del lote"
+    },
+    {
+     "nombre": "AR"
+    }
+   ],
+   "medir": {
+    "tipo": "ahorro",
+    "items": [
+     "diferencia de margen con la fecha recomendada",
+     "horas de cálculo"
+    ]
+   },
+   "notificaciones": {
+    "items": [
+     {
+      "nombre": "WhatsApp con audio",
+      "estrella": true
+     },
+     {
+      "nombre": "email de campaña"
+     },
+     {
+      "nombre": "línea telefónica"
+     }
+    ]
+   },
+   "voz": [
+    {
+     "nombre": "\"AgrIA, ¿qué pasa si siembro 15 días después?\""
+    }
+   ],
+   "escala": "recálculo idempotente de todos los departamentos y campañas",
+   "operacion": "backfills y reprocesos seguros",
+   "stack": {
+    "ambientes": [
+     {
+      "ambiente": "Frontend",
+      "texto": "Three.js, backoffice en Rails, Expo"
+     },
+     {
+      "ambiente": "Backend",
+      "texto": "Rails como monolito modular; GraphQL opcional"
+     },
+     {
+      "ambiente": "IA por API",
+      "texto": "asistente con herramientas sobre Claude"
+     },
+     {
+      "ambiente": "ML propio",
+      "texto": "scikit-learn, gradient boosting, predicción conforme, MLflow, Dagster"
+     },
+     {
+      "ambiente": "DB",
+      "texto": "Postgres y BigQuery"
+     },
+     {
+      "ambiente": "Infra",
+      "texto": "batch con cola, k3s, Helm, MQTT"
+     },
+     {
+      "ambiente": "Cloud",
+      "texto": "GCP (BigQuery, Vertex AI)"
+     }
+    ]
+   },
+   "spots": [
+    "programación dinámica, presupuesto de fertilizante (con IA)"
+   ],
+   "hardware": "fase 1",
+   "entrevistas": "alto",
+   "versiones": [
+    {
+     "id": "1.0",
+     "nombre": "MVP",
+     "inicio": "2027-03-21",
+     "fin": "2027-04-01",
+     "alcance": [
+      "ingesta",
+      "modelo de rinde con predicción conforme",
+      "mapa por departamento",
+      "deploy"
+     ],
+     "horas": 50,
+     "derivadas": true
+    },
+    {
+     "id": "1.1",
+     "nombre": "Producto",
+     "inicio": "2027-04-02",
+     "fin": "2027-04-12",
+     "alcance": [
+      "margen P10–P90",
+      "simulador",
+      "riesgo climático",
+      "backoffice",
+      "MLflow y Dagster",
+      "frontend"
+     ],
+     "horas": 46,
+     "derivadas": true
+    },
+    {
+     "id": "2.0",
+     "nombre": "Plataforma",
+     "inicio": "2027-04-13",
+     "fin": "2027-04-22",
+     "alcance": [
+      "WhatsApp con audio",
+      "email",
+      "línea telefónica",
+      "foto de cobertura",
+      "GPS",
+      "AR"
+     ],
+     "horas": 42,
+     "derivadas": true
+    },
+    {
+     "id": "3.0",
+     "nombre": "Producción",
+     "inicio": "2027-04-23",
+     "fin": "2027-05-02",
+     "alcance": [
+      "recálculo masivo",
+      "backfills",
+      "estación y humedad de suelo reales",
+      "Scale report"
+     ],
+     "horas": 42,
+     "derivadas": true
+    }
+   ]
+  },
+  "P4": {
+   "puesto": "Systems / Ground Software Engineer",
+   "queHace": [
+    "sigue satélites reales (incluidos los argentinos), decodifica telemetría, planifica pasadas, calcula enlaces"
+   ],
+   "problema": "operar una estación terrena exige atención manual en cada pasada",
+   "valor": "sistemas en tiempo real con datos reales",
+   "diferencial": [
+    "decodificador en Rust compilado a WebAssembly con benchmark",
+    "estación real en SatNOGS",
+    "p99 medido"
+   ],
+   "herramientas": [
+    {
+     "nombre": "\"Seguí a los satélites argentinos\"",
+     "estrella": true
+    },
+    {
+     "nombre": "decodificador en el navegador",
+     "estrella": true
+    },
+    {
+     "nombre": "calculadora de enlace",
+     "estrella": true
+    },
+    {
+     "nombre": "copiloto",
+     "extra": true
+    },
+    {
+     "nombre": "observaciones en SatNOGS",
+     "extra": true
+    }
+   ],
+   "capaFisica": [
+    {
+     "nombre": "\"Apuntá al cielo\" (AR con la cámara, ViroReact)",
+     "estrella": true
+    },
+    {
+     "nombre": "estación real con SDR, Raspberry Pi y rotor con ESP32",
+     "estrella": true
+    },
+    {
+     "nombre": "señal IQ sintética"
+    }
+   ],
+   "medir": {
+    "tipo": "ahorro",
+    "items": [
+     "horas de operación manual automatizadas"
+    ]
+   },
+   "notificaciones": {
+    "items": [
+     {
+      "nombre": "WhatsApp \"avisame cuando pase SAOCOM con cielo despejado\"",
+      "estrella": true
+     }
+    ]
+   },
+   "voz": [
+    {
+     "nombre": "\"Antena, apuntá al próximo satélite\", y el rotor se mueve",
+     "estrella": true
+    }
+   ],
+   "escala": "10 mil websockets, miles de mensajes por segundo",
+   "operacion": "backpressure y limitación de carga",
+   "stack": {
+    "ambientes": [
+     {
+      "ambiente": "Frontend",
+      "texto": "Three.js, Expo con ViroReact"
+     },
+     {
+      "ambiente": "Backend",
+      "texto": "Rust (SGP4, CCSDS), websockets"
+     },
+     {
+      "ambiente": "IA por API",
+      "texto": "copiloto con la telemetría como evidencia"
+     },
+     {
+      "ambiente": "ML propio",
+      "texto": "no aplica"
+     },
+     {
+      "ambiente": "DB",
+      "texto": "series de tiempo (a definir)"
+     },
+     {
+      "ambiente": "Infra",
+      "texto": "MQTT con mTLS, OTA"
+     },
+     {
+      "ambiente": "Cloud",
+      "texto": "AWS IoT, comparado con AWS Ground Station"
+     }
+    ]
+   },
+   "spots": [
+    "backtracking vs programación dinámica, planificación de pasadas (con IA)"
+   ],
+   "hardware": "fase 2",
+   "entrevistas": "alto",
+   "versiones": [
+    {
+     "id": "1.0",
+     "nombre": "MVP",
+     "inicio": "2027-05-03",
+     "fin": "2027-05-15",
+     "alcance": [
+      "SGP4",
+      "satélites argentinos",
+      "planificador de pasadas"
+     ],
+     "horas": 54,
+     "derivadas": true
+    },
+    {
+     "id": "1.1",
+     "nombre": "Producto",
+     "inicio": "2027-05-16",
+     "fin": "2027-05-28",
+     "alcance": [
+      "decodificador CCSDS en WebAssembly con benchmark",
+      "calculadora de enlace",
+      "copiloto",
+      "frontend"
+     ],
+     "horas": 54,
+     "derivadas": true
+    },
+    {
+     "id": "2.0",
+     "nombre": "Plataforma",
+     "inicio": "2027-05-29",
+     "fin": "2027-06-10",
+     "alcance": [
+      "AR",
+      "alertas por WhatsApp",
+      "voz",
+      "rotor en Wokwi"
+     ],
+     "horas": 54,
+     "derivadas": true
+    },
+    {
+     "id": "3.0",
+     "nombre": "Producción",
+     "inicio": "2027-06-11",
+     "fin": "2027-06-23",
+     "alcance": [
+      "estación real en SatNOGS",
+      "rotor real",
+      "10 mil websockets",
+      "backpressure",
+      "Scale report"
+     ],
+     "horas": 53,
+     "derivadas": true
+    }
+   ]
+  },
+  "P5": {
+   "puesto": "DevSecOps / OT Security Engineer",
+   "queHace": [
+    "gemelo digital de una batería de tanques en tiempo real",
+    "detecta ataques al SCADA por física y pérdidas en ductos",
+    "escala alarmas por todos los canales"
+   ],
+   "problema": "rebalses, rondas manuales, pérdidas sin detectar, alarmas sin atender",
+   "valor": "operación y seguridad industrial juntas",
+   "diferencial": [
+    "balance de masa, tanque real con agua, reglas de MITRE ATT&CK for ICS probadas con su ataque"
+   ],
+   "herramientas": [
+    {
+     "nombre": "gemelo de tanques (niveles, tiempo del x% al y%, rebalse, despacho)",
+     "estrella": true
+    },
+    {
+     "nombre": "detector de ataques",
+     "estrella": true
+    },
+    {
+     "nombre": "balance de masa",
+     "estrella": true
+    },
+    {
+     "nombre": "copiloto",
+     "extra": true
+    },
+    {
+     "nombre": "yacimiento 3D",
+     "extra": true
+    }
+   ],
+   "capaFisica": [
+    {
+     "nombre": "tanque en la pared (AR)",
+     "estrella": true
+    },
+    {
+     "nombre": "tanque real con sensor, bomba, relé, ESP32 y Modbus por RS485",
+     "estrella": true
+    },
+    {
+     "nombre": "ronda con NFC"
+    }
+   ],
+   "medir": {
+    "tipo": "ahorro",
+    "items": [
+     "rebalses evitados",
+     "horas de ronda",
+     "m³ perdidos × precio del crudo"
+    ]
+   },
+   "notificaciones": {
+    "items": [
+     {
+      "nombre": "WhatsApp con botones",
+      "estrella": true
+     },
+     {
+      "nombre": "llamada con escalamiento",
+      "estrella": true
+     },
+     {
+      "nombre": "email de registro"
+     }
+    ]
+   },
+   "voz": [
+    {
+     "nombre": "\"¿Cuánto falta para que el tanque 3 llegue al 90%?\""
+    }
+   ],
+   "escala": "10 mil lecturas por segundo, tormenta de alarmas",
+   "operacion": "deduplicación de alertas, reducción de series de tiempo",
+   "stack": {
+    "ambientes": [
+     {
+      "ambiente": "Frontend",
+      "texto": "Next.js, Three.js, Expo con AR y NFC"
+     },
+     {
+      "ambiente": "Backend",
+      "texto": "Go, Modbus, OPC UA"
+     },
+     {
+      "ambiente": "IA por API",
+      "texto": "copiloto con aprobación humana"
+     },
+     {
+      "ambiente": "ML propio",
+      "texto": "anomalías por balance de masa"
+     },
+     {
+      "ambiente": "DB",
+      "texto": "DuckDB, Parquet, series de tiempo"
+     },
+     {
+      "ambiente": "Infra",
+      "texto": "Kubernetes endurecido, GitOps, firmas, mTLS, Falco, SBOM, OPA"
+     },
+     {
+      "ambiente": "Cloud",
+      "texto": "AWS IoT Core, IoT SiteWise, Kinesis, GuardDuty"
+     }
+    ]
+   },
+   "spots": [
+    "Dijkstra para el despacho (con IA)",
+    "heap para la prioridad de alarmas (sin IA)"
+   ],
+   "hardware": "kit del tanque (fase 2)",
+   "ruido": "\"Ataqué un tanque de crudo y lo detecté con física\"",
+   "entrevistas": "muy alto",
+   "versiones": [
+    {
+     "id": "1.0",
+     "nombre": "MVP",
+     "inicio": "2027-07-24",
+     "fin": "2027-08-02",
+     "alcance": [
+      "gemelo con SCADA simulado por Modbus",
+      "niveles en vivo",
+      "tiempo del x% al y%"
+     ],
+     "horas": 41,
+     "derivadas": true
+    },
+    {
+     "id": "1.1",
+     "nombre": "Producto",
+     "inicio": "2027-08-03",
+     "fin": "2027-08-12",
+     "alcance": [
+      "detector de ataques",
+      "pérdidas en ductos",
+      "reglas ATT&CK",
+      "despacho",
+      "frontend"
+     ],
+     "horas": 41,
+     "derivadas": true
+    },
+    {
+     "id": "2.0",
+     "nombre": "Plataforma",
+     "inicio": "2027-08-13",
+     "fin": "2027-08-23",
+     "alcance": [
+      "WhatsApp con botones",
+      "llamada",
+      "email",
+      "copiloto",
+      "AR",
+      "NFC"
+     ],
+     "horas": 46,
+     "derivadas": true
+    },
+    {
+     "id": "3.0",
+     "nombre": "Producción",
+     "inicio": "2027-08-24",
+     "fin": "2027-09-02",
+     "alcance": [
+      "tanque real por RS485",
+      "10 mil lecturas por segundo",
+      "tormenta de alarmas",
+      "Kubernetes endurecido",
+      "Scale report"
+     ],
+     "horas": 42,
+     "derivadas": true
+    }
+   ]
+  },
+  "P6": {
+   "puesto": "ML Engineer (computer vision)",
+   "queHace": [
+    "inspecciona superficies de aviones, genera la orden de trabajo, consulta manuales, registra daños en 3D por matrícula"
+   ],
+   "problema": "inspecciones en papel, manos ocupadas, horas buscando en manuales",
+   "valor": "digitaliza el mantenimiento",
+   "diferencial": [
+    "cascada de modelos, aprendizaje activo, caída de sintético a real medida, autograd a mano"
+   ],
+   "herramientas": [
+    {
+     "nombre": "de la inspección a la orden de trabajo",
+     "estrella": true
+    },
+    {
+     "nombre": "manuales públicos de la FAA",
+     "estrella": true
+    },
+    {
+     "nombre": "libro de daños en 3D",
+     "estrella": true
+    }
+   ],
+   "capaFisica": [
+    {
+     "nombre": "dron simulado en 3D",
+     "estrella": true
+    },
+    {
+     "nombre": "daños en AR con el celular",
+     "estrella": true
+    },
+    {
+     "nombre": "LiDAR si el celular lo tiene"
+    }
+   ],
+   "medir": {
+    "tipo": "ahorro",
+    "items": [
+     "minutos por inspección",
+     "búsqueda en manuales",
+     "errores de transcripción"
+    ]
+   },
+   "notificaciones": {
+    "items": [
+     {
+      "nombre": "email con la orden en PDF",
+      "estrella": true
+     },
+     {
+      "nombre": "WhatsApp al jefe"
+     }
+    ]
+   },
+   "voz": [
+    {
+     "nombre": "el inspector dicta mientras revisa",
+     "estrella": true
+    }
+   ],
+   "escala": "cola de imágenes con autoescalado en GPU; costo por imagen",
+   "operacion": "batching dinámico, escalado a cero",
+   "stack": {
+    "ambientes": [
+     {
+      "ambiente": "Frontend",
+      "texto": "Three.js, Tauri, Expo con AR"
+     },
+     {
+      "ambiente": "Backend",
+      "texto": "Python, inferencia con batching y SLO"
+     },
+     {
+      "ambiente": "IA por API",
+      "texto": "Claude con visión para casos dudosos; RAG de manuales"
+     },
+     {
+      "ambiente": "ML propio",
+      "texto": "PyTorch, Blender, aprendizaje activo"
+     },
+     {
+      "ambiente": "DB",
+      "texto": "Postgres, dataset versionado†"
+     },
+     {
+      "ambiente": "Cloud",
+      "texto": "AWS SageMaker, SES"
+     }
+    ]
+   },
+   "entrevistas": "alto",
+   "versiones": [
+    {
+     "id": "1.0",
+     "nombre": "MVP",
+     "inicio": "2027-10-15",
+     "fin": "2027-10-26",
+     "alcance": [
+      "datos sintéticos",
+      "modelo PyTorch",
+      "inspección por foto",
+      "caída sintético→real"
+     ],
+     "horas": 50,
+     "derivadas": true
+    },
+    {
+     "id": "1.1",
+     "nombre": "Producto",
+     "inicio": "2027-10-27",
+     "fin": "2027-11-07",
+     "alcance": [
+      "orden de trabajo",
+      "RAG de manuales",
+      "cascada con Claude visión",
+      "aprendizaje activo",
+      "autograd",
+      "frontend"
+     ],
+     "horas": 50,
+     "derivadas": true
+    },
+    {
+     "id": "2.0",
+     "nombre": "Plataforma",
+     "inicio": "2027-11-08",
+     "fin": "2027-11-20",
+     "alcance": [
+      "daños en 3D",
+      "AR",
+      "dron simulado",
+      "dictado",
+      "email con PDF",
+      "WhatsApp"
+     ],
+     "horas": 54,
+     "derivadas": true
+    },
+    {
+     "id": "3.0",
+     "nombre": "Producción",
+     "inicio": "2027-11-21",
+     "fin": "2027-12-02",
+     "alcance": [
+      "GPU con autoescalado",
+      "batching",
+      "escalado a cero",
+      "costo por imagen",
+      "Scale report"
+     ],
+     "horas": 51,
+     "derivadas": true
+    }
+   ]
+  },
+  "P7": {
+   "puesto": "ML / MLOps Engineer",
+   "queHace": [
+    "monitorea lotes con Sentinel-2, alerta estrés, genera dosis variable, estima pérdidas en USD"
+   ],
+   "problema": "fertilizante parejo en lotes que no son parejos",
+   "valor": "plata ahorrada en fertilizante",
+   "diferencial": [
+    "puertas de calidad en el CI, canary con rollback, drift inyectado vs detectado, reentrenamiento con aprobación"
+   ],
+   "herramientas": [
+    {
+     "nombre": "mapa de estrés",
+     "estrella": true
+    },
+    {
+     "nombre": "dosis variable (shapefile o ISOXML)",
+     "estrella": true
+    },
+    {
+     "nombre": "pérdida en USD",
+     "estrella": true
+    }
+   ],
+   "capaFisica": [
+    {
+     "nombre": "fertilizadora con ESP32 guiada por GPS",
+     "estrella": true
+    },
+    {
+     "nombre": "recorrida a campo offline",
+     "estrella": true
+    },
+    {
+     "nombre": "AR de zonas"
+    }
+   ],
+   "medir": {
+    "tipo": "ahorro",
+    "items": [
+     "★ kg de fertilizante ahorrados × precio"
+    ]
+   },
+   "notificaciones": {
+    "items": [
+     {
+      "nombre": "WhatsApp con la imagen del lote",
+      "estrella": true
+     },
+     {
+      "nombre": "email con la prescripción",
+      "estrella": true
+     },
+     {
+      "nombre": "llamada ante alerta severa"
+     }
+    ]
+   },
+   "escala": "despliegue en sombra con tráfico duplicado",
+   "operacion": "rollback automático de modelos",
+   "stack": {
+    "ambientes": [
+     {
+      "ambiente": "Frontend",
+      "texto": "Next.js, Expo"
+     },
+     {
+      "ambiente": "Backend",
+      "texto": "Python con serving en Kubernetes"
+     },
+     {
+      "ambiente": "IA por API",
+      "texto": "resúmenes para el productor"
+     },
+     {
+      "ambiente": "ML propio",
+      "texto": "drift, PCA, SVD, reentrenamiento"
+     },
+     {
+      "ambiente": "DB",
+      "texto": "PostGIS, STAC"
+     },
+     {
+      "ambiente": "Cloud",
+      "texto": "GCP (Vertex AI, Earth Engine†)"
+     }
+    ]
+   },
+   "entrevistas": "muy alto",
+   "versiones": [
+    {
+     "id": "1.0",
+     "nombre": "MVP",
+     "inicio": "2027-12-03",
+     "fin": "2027-12-11",
+     "alcance": [
+      "Sentinel-2",
+      "índices",
+      "mapa de estrés"
+     ],
+     "horas": 38,
+     "derivadas": true
+    },
+    {
+     "id": "1.1",
+     "nombre": "Producto",
+     "inicio": "2027-12-12",
+     "fin": "2027-12-19",
+     "alcance": [
+      "dosis variable",
+      "pérdida en USD",
+      "PCA y SVD",
+      "frontend"
+     ],
+     "horas": 33,
+     "derivadas": true
+    },
+    {
+     "id": "2.0",
+     "nombre": "Plataforma",
+     "inicio": "2027-12-27",
+     "fin": "2028-01-05",
+     "alcance": [
+      "WhatsApp con imagen",
+      "email con prescripción",
+      "llamada",
+      "recorrida offline",
+      "fertilizadora en Wokwi"
+     ],
+     "horas": 42,
+     "derivadas": true
+    },
+    {
+     "id": "3.0",
+     "nombre": "Producción",
+     "inicio": "2028-01-06",
+     "fin": "2028-01-14",
+     "alcance": [
+      "puertas de calidad",
+      "sombra y canary",
+      "rollback",
+      "drift",
+      "reentrenamiento con aprobación"
+     ],
+     "horas": 37,
+     "derivadas": true
+    }
+   ]
+  },
+  "P8": {
+   "puesto": "AI Security Engineer",
+   "queHace": [
+    "escanea agentes de chat y voz propios o autorizados, los ataca y compara defensas"
+   ],
+   "problema": "agentes lanzados sin probar su seguridad",
+   "valor": "seguridad para IA",
+   "diferencial": [
+    "OWASP LLM Top 10, GitHub Action open source, defensa propia con LoRA, comparativa entre nubes"
+   ],
+   "herramientas": [
+    {
+     "nombre": "\"Escaneá tu chatbot\" (nota A–F, verificación de propiedad)",
+     "estrella": true
+    },
+    {
+     "nombre": "GitHub Action",
+     "estrella": true
+    },
+    {
+     "nombre": "comparativa de guardrails (AWS, Azure, propio)",
+     "estrella": true
+    }
+   ],
+   "capaFisica": [
+    {
+     "nombre": "prompt injection con un cartel frente a la cámara",
+     "estrella": true
+    },
+    {
+     "nombre": "inyección por audio"
+    }
+   ],
+   "medir": {
+    "tipo": "ahorro",
+    "items": [
+     "horas de pentest manual",
+     "costo de incidente evitado (hipótesis)"
+    ]
+   },
+   "notificaciones": {
+    "items": [
+     {
+      "nombre": "email con el informe",
+      "estrella": true
+     },
+     {
+      "nombre": "WhatsApp con la nota"
+     }
+    ]
+   },
+   "voz": [
+    {
+     "nombre": "ataques por voz contra tus agentes telefónicos, y la defensa",
+     "estrella": true
+    }
+   ],
+   "escala": "muchos escaneos a la vez sin que un cliente tape a otro",
+   "operacion": "colas justas, protección contra abuso",
+   "stack": {
+    "ambientes": [
+     {
+      "ambiente": "Frontend",
+      "texto": "Next.js"
+     },
+     {
+      "ambiente": "Backend",
+      "texto": "Python, garak, PyRIT"
+     },
+     {
+      "ambiente": "IA por API",
+      "texto": "Claude, Bedrock Guardrails, Azure AI Content Safety"
+     },
+     {
+      "ambiente": "ML propio",
+      "texto": "guardián con LoRA sobre vLLM"
+     },
+     {
+      "ambiente": "Cloud",
+      "texto": "AWS y Azure"
+     }
+    ]
+   },
+   "entrevistas": "muy alto",
+   "versiones": [
+    {
+     "id": "1.0",
+     "nombre": "MVP",
+     "inicio": "2028-02-16",
+     "fin": "2028-02-23",
+     "alcance": [
+      "ataques contra PetrIA y VitalIA",
+      "informe OWASP LLM Top 10"
+     ],
+     "horas": 34,
+     "derivadas": true
+    },
+    {
+     "id": "1.1",
+     "nombre": "Producto",
+     "inicio": "2028-02-24",
+     "fin": "2028-03-02",
+     "alcance": [
+      "\"Escaneá tu chatbot\"",
+      "GitHub Action",
+      "comparativa"
+     ],
+     "horas": 34,
+     "derivadas": true
+    },
+    {
+     "id": "2.0",
+     "nombre": "Plataforma",
+     "inicio": "2028-03-03",
+     "fin": "2028-03-10",
+     "alcance": [
+      "voz",
+      "cartel y audio",
+      "email",
+      "WhatsApp"
+     ],
+     "horas": 34,
+     "derivadas": true
+    },
+    {
+     "id": "3.0",
+     "nombre": "Producción",
+     "inicio": "2028-03-11",
+     "fin": "2028-03-17",
+     "alcance": [
+      "guardián con LoRA y adaptadores por cliente",
+      "colas justas",
+      "abuso",
+      "Scale report"
+     ],
+     "horas": 28,
+     "derivadas": true
+    }
+   ]
+  },
+  "P9": {
+   "puesto": "Edge AI Engineer",
+   "queHace": [
+    "inspección offline en el hangar, walkaround guiado por voz, sincronización"
+   ],
+   "problema": "sin señal ni manos libres en el hangar",
+   "valor": "inspección donde la nube no llega",
+   "diferencial": [
+    "medición en teléfono real, modelos firmados por OTA"
+   ],
+   "herramientas": [
+    {
+     "nombre": "app offline",
+     "estrella": true
+    },
+    {
+     "nombre": "walkaround guiado",
+     "estrella": true
+    },
+    {
+     "nombre": "sincronización"
+    }
+   ],
+   "capaFisica": [
+    {
+     "nombre": "walkaround en AR",
+     "estrella": true
+    },
+    {
+     "nombre": "ESP32-CAM real vs celular",
+     "estrella": true
+    }
+   ],
+   "medir": {
+    "tipo": "ahorro",
+    "items": [
+     "minutos por walkaround"
+    ]
+   },
+   "notificaciones": {
+    "items": [
+     {
+      "nombre": "WhatsApp con resumen, en cola hasta que vuelve la señal"
+     }
+    ]
+   },
+   "voz": [
+    {
+     "nombre": "comandos offline",
+     "estrella": true
+    }
+   ],
+   "escala": "1.000 dispositivos sincronizando con conflictos",
+   "operacion": "resolución de conflictos, reintentos escalonados",
+   "stack": {
+    "ambientes": [
+     {
+      "ambiente": "Frontend",
+      "texto": "Expo con ONNX Runtime Mobile"
+     },
+     {
+      "ambiente": "Backend",
+      "texto": "servicio de sincronización†"
+     },
+     {
+      "ambiente": "ML propio",
+      "texto": "cuantización, modelo de lenguaje chico en el dispositivo"
+     },
+     {
+      "ambiente": "DB",
+      "texto": "SQLite"
+     },
+     {
+      "ambiente": "Cloud",
+      "texto": "AWS IoT Greengrass"
+     }
+    ]
+   },
+   "hardware": "ESP32-CAM (fase 3)",
+   "entrevistas": "alto",
+   "versiones": [
+    {
+     "id": "1.0",
+     "nombre": "MVP",
+     "inicio": "2028-03-18",
+     "fin": "2028-03-27",
+     "alcance": [
+      "modelo cuantizado con ONNX",
+      "app offline"
+     ],
+     "horas": 41,
+     "derivadas": true
+    },
+    {
+     "id": "1.1",
+     "nombre": "Producto",
+     "inicio": "2028-03-28",
+     "fin": "2028-04-06",
+     "alcance": [
+      "walkaround guiado",
+      "modelo chico",
+      "presupuesto de latencia",
+      "frontend"
+     ],
+     "horas": 41,
+     "derivadas": true
+    },
+    {
+     "id": "2.0",
+     "nombre": "Plataforma",
+     "inicio": "2028-04-07",
+     "fin": "2028-04-16",
+     "alcance": [
+      "AR",
+      "voz offline",
+      "sincronización con AeroScan"
+     ],
+     "horas": 41,
+     "derivadas": true
+    },
+    {
+     "id": "3.0",
+     "nombre": "Producción",
+     "inicio": "2028-04-17",
+     "fin": "2028-04-26",
+     "alcance": [
+      "OTA firmada",
+      "1.000 dispositivos",
+      "ESP32-CAM vs celular",
+      "batería y latencia medidas"
+     ],
+     "horas": 42,
+     "derivadas": true
+    }
+   ]
+  },
+  "P10": {
+   "puesto": "Senior ML + DevSecOps + Cloud",
+   "queHace": [
+    "centro de control de todos tus productos: anomalías en telemetría de la NASA, agente SRE, status page, costos en vivo, Jarvis central"
+   ],
+   "problema": "caídas detectadas tarde, costos de nube sin control",
+   "valor": "confiabilidad y costos en un solo lugar",
+   "diferencial": [
+    "SLO públicos, chaos engineering, flota de 1.000 dispositivos, Face ID"
+   ],
+   "herramientas": [
+    {
+     "nombre": "centro de control",
+     "estrella": true
+    },
+    {
+     "nombre": "status page",
+     "estrella": true
+    },
+    {
+     "nombre": "FinOps",
+     "estrella": true
+    }
+   ],
+   "capaFisica": [
+    {
+     "nombre": "flota simulada",
+     "estrella": true
+    },
+    {
+     "nombre": "aprobación con Face ID",
+     "estrella": true
+    },
+    {
+     "nombre": "mapa 3D"
+    }
+   ],
+   "medir": {
+    "tipo": "ahorro",
+    "items": [
+     "★ ahorro en la factura de nube",
+     "tiempo de recuperación × costo de caída (hipótesis)"
+    ]
+   },
+   "notificaciones": {
+    "items": [
+     {
+      "nombre": "Slack y WhatsApp en el incidente",
+      "estrella": true
+     },
+     {
+      "nombre": "llamada si se rompe un SLO",
+      "estrella": true
+     },
+     {
+      "nombre": "email con el postmortem"
+     }
+    ]
+   },
+   "voz": [
+    {
+     "nombre": "Jarvis central con Face ID",
+     "estrella": true
+    }
+   ],
+   "escala": "caos en todos los productos, caída de una nube",
+   "operacion": "failover entre nubes, plan de capacidad, FinOps",
+   "stack": {
+    "ambientes": [
+     {
+      "ambiente": "Frontend",
+      "texto": "microfrontends sobre Constelación"
+     },
+     {
+      "ambiente": "Backend",
+      "texto": "Java y Go"
+     },
+     {
+      "ambiente": "IA por API",
+      "texto": "agente SRE con runbooks"
+     },
+     {
+      "ambiente": "ML propio",
+      "texto": "autoencoders"
+     },
+     {
+      "ambiente": "Infra",
+      "texto": "Kafka, saga y outbox, mTLS, OpenTelemetry, Pact, chaos"
+     },
+     {
+      "ambiente": "Cloud",
+      "texto": "AWS (EKS, MSK) y Azure"
+     }
+    ]
+   },
+   "spots": [
+    "BFS, DFS y orden topológico (sin IA)"
+   ],
+   "entrevistas": "muy alto",
+   "versiones": [
+    {
+     "id": "1.0",
+     "nombre": "MVP",
+     "inicio": "2028-05-15",
+     "fin": "2028-05-26",
+     "alcance": [
+      "autoencoders sobre telemetría de la NASA",
+      "triage explicado"
+     ],
+     "horas": 50,
+     "derivadas": true
+    },
+    {
+     "id": "1.1",
+     "nombre": "Producto",
+     "inicio": "2028-05-27",
+     "fin": "2028-06-07",
+     "alcance": [
+      "centro de control",
+      "status page",
+      "Kafka",
+      "saga",
+      "outbox"
+     ],
+     "horas": 50,
+     "derivadas": true
+    },
+    {
+     "id": "2.0",
+     "nombre": "Plataforma",
+     "inicio": "2028-06-08",
+     "fin": "2028-06-20",
+     "alcance": [
+      "agente SRE",
+      "Jarvis con Face ID",
+      "Slack",
+      "WhatsApp",
+      "llamada por SLO",
+      "postmortem por email"
+     ],
+     "horas": 54,
+     "derivadas": true
+    },
+    {
+     "id": "3.0",
+     "nombre": "Producción",
+     "inicio": "2028-06-21",
+     "fin": "2028-07-02",
+     "alcance": [
+      "chaos",
+      "caída de una nube con failover",
+      "flota de 1.000 dispositivos",
+      "FinOps",
+      "plan de capacidad"
+     ],
+     "horas": 51,
+     "derivadas": true
+    }
+   ]
+  },
+  "S1": {
+   "puesto": "Security Engineer (identidad y secretos)",
+   "queHace": [
+    "secretos, cifrado de sobre, rotación, credenciales efímeras para agentes de IA"
+   ],
+   "problema": "rotar credenciales a mano es lento y riesgoso",
+   "valor": "menos secretos filtrados, rotación sin cortes",
+   "diferencial": [
+    "primitivas propias vs librería auditada, aplicadas a tus productos"
+   ],
+   "herramientas": [
+    {
+     "nombre": "credenciales efímeras por agente y herramienta",
+     "estrella": true
+    },
+    {
+     "nombre": "GitHub App \"¿Filtraste tu API key?\"",
+     "estrella": true
+    },
+    {
+     "nombre": "comparativa AWS vs Azure"
+    }
+   ],
+   "capaFisica": [
+    {
+     "nombre": "el celular como llave (passkeys)",
+     "estrella": true
+    },
+    {
+     "nombre": "llave física"
+    },
+    {
+     "nombre": "SoftHSM"
+    }
+   ],
+   "notificaciones": {
+    "items": [
+     {
+      "nombre": "WhatsApp para aprobar rotaciones"
+     },
+     {
+      "nombre": "email con el informe mensual"
+     }
+    ]
+   },
+   "escala": "rotar miles de secretos sin cortar el servicio",
+   "stack": {
+    "ambientes": [
+     {
+      "ambiente": "Frontend",
+      "texto": "Tauri"
+     },
+     {
+      "ambiente": "Backend",
+      "texto": "Rust, Go"
+     },
+     {
+      "ambiente": "DB",
+      "texto": "Postgres†"
+     },
+     {
+      "ambiente": "Infra",
+      "texto": "Vault, SPIFFE, mTLS, cosign†"
+     },
+     {
+      "ambiente": "Cloud",
+      "texto": "AWS KMS y Secrets Manager, Azure Key Vault"
+     }
+    ]
+   },
+   "hardware": "llave física (fase 4)",
+   "entrevistas": "muy alto",
+   "versiones": [
+    {
+     "id": "1.0",
+     "nombre": "MVP",
+     "inicio": "2028-07-23",
+     "fin": "2028-07-30",
+     "alcance": [
+      "Vault",
+      "cifrado de sobre"
+     ],
+     "horas": 34,
+     "derivadas": true
+    },
+    {
+     "id": "1.1",
+     "nombre": "Producto",
+     "inicio": "2028-07-31",
+     "fin": "2028-08-07",
+     "alcance": [
+      "rotación automática",
+      "credenciales efímeras"
+     ],
+     "horas": 34,
+     "derivadas": true
+    },
+    {
+     "id": "2.0",
+     "nombre": "Plataforma",
+     "inicio": "2028-08-08",
+     "fin": "2028-08-15",
+     "alcance": [
+      "GitHub App",
+      "aprobación por WhatsApp",
+      "celular como llave",
+      "llave física",
+      "SoftHSM"
+     ],
+     "horas": 34,
+     "derivadas": true
+    },
+    {
+     "id": "3.0",
+     "nombre": "Producción",
+     "inicio": "2028-08-16",
+     "fin": "2028-08-22",
+     "alcance": [
+      "rotación masiva sin cortes",
+      "SPIFFE",
+      "mTLS",
+      "comparativa"
+     ],
+     "horas": 28,
+     "derivadas": true
+    }
+   ]
+  },
+  "S2": {
+   "puesto": "AppSec / Offensive Security Engineer",
+   "queHace": [
+    "modelo de amenazas y pentest de tus productos (IA e IoT incluidos), con un bot que corrige"
+   ],
+   "problema": "los hallazgos quedan en un PDF y nadie los arregla",
+   "valor": "cada hallazgo termina en un PR y una prueba",
+   "diferencial": [
+    "hallazgos reprobados en el CI",
+    "CVE propio con divulgación responsable"
+   ],
+   "herramientas": [
+    {
+     "nombre": "bot que abre el PR con la corrección",
+     "estrella": true
+    },
+    {
+     "nombre": "caza de CVE",
+     "estrella": true
+    },
+    {
+     "nombre": "agente asistente de pentest"
+    }
+   ],
+   "capaFisica": [
+    {
+     "nombre": "pentest al ESP32 vulnerable",
+     "estrella": true
+    }
+   ],
+   "notificaciones": {
+    "items": [
+     {
+      "nombre": "email con informe semanal (CVSS)",
+      "estrella": true
+     },
+     {
+      "nombre": "Slack para críticos"
+     }
+    ]
+   },
+   "escala": "escaneo de muchos repos sin frenar el CI",
+   "stack": {
+    "ambientes": [
+     {
+      "ambiente": "Backend",
+      "texto": "Python"
+     },
+     {
+      "ambiente": "Herramientas",
+      "texto": "Burp, ZAP†, fuzzing, Semgrep, SAST, DAST, SCA"
+     },
+     {
+      "ambiente": "Cloud",
+      "texto": "AWS Inspector, Security Hub"
+     }
+    ]
+   },
+   "entrevistas": "muy alto",
+   "versiones": [
+    {
+     "id": "1.0",
+     "nombre": "MVP",
+     "inicio": "2028-09-04",
+     "fin": "2028-09-13",
+     "alcance": [
+      "STRIDE y pentest de PetrIA",
+      "informe CVSS"
+     ],
+     "horas": 41,
+     "derivadas": true
+    },
+    {
+     "id": "1.1",
+     "nombre": "Producto",
+     "inicio": "2028-09-14",
+     "fin": "2028-09-23",
+     "alcance": [
+      "pentest de IA y del ESP32",
+      "reprueba en el CI"
+     ],
+     "horas": 41,
+     "derivadas": true
+    },
+    {
+     "id": "2.0",
+     "nombre": "Plataforma",
+     "inicio": "2028-09-24",
+     "fin": "2028-10-03",
+     "alcance": [
+      "bot de PR",
+      "agente asistente",
+      "email semanal",
+      "Slack"
+     ],
+     "horas": 41,
+     "derivadas": true
+    },
+    {
+     "id": "3.0",
+     "nombre": "Producción",
+     "inicio": "2028-10-04",
+     "fin": "2028-10-13",
+     "alcance": [
+      "muchos repos sin frenar el CI",
+      "caza de CVE"
+     ],
+     "horas": 42,
+     "derivadas": true
+    }
+   ]
+  },
+  "S3": {
+   "puesto": "Detection & Response / Cloud Security Engineer",
+   "queHace": [
+    "SOC en una caja para pymes, con agente investigador y llamada al dueño"
+   ],
+   "problema": "una pyme no puede pagar un SOC tercerizado",
+   "valor": "detección y respuesta al alcance de una pyme",
+   "diferencial": [
+    "agente evaluado contra incidentes etiquetados",
+    "tiempos de detección y respuesta medidos"
+   ],
+   "herramientas": [
+    {
+     "nombre": "SOC con un comando",
+     "estrella": true
+    },
+    {
+     "nombre": "agente investigador",
+     "estrella": true
+    },
+    {
+     "nombre": "purple team"
+    }
+   ],
+   "capaFisica": [
+    {
+     "nombre": "lector RFID real cruzado con inicios de sesión",
+     "estrella": true
+    }
+   ],
+   "medir": {
+    "tipo": "ahorro",
+    "items": [
+     "★ costo de un SOC tercerizado vs tu caja"
+    ]
+   },
+   "notificaciones": {
+    "items": [
+     {
+      "nombre": "llamada al dueño que responde por voz",
+      "estrella": true
+     },
+     {
+      "nombre": "WhatsApp con botones"
+     },
+     {
+      "nombre": "email con constancia"
+     }
+    ]
+   },
+   "escala": "millones de eventos por día con costo de retención controlado",
+   "stack": {
+    "ambientes": [
+     {
+      "ambiente": "Frontend",
+      "texto": "Expo"
+     },
+     {
+      "ambiente": "Backend",
+      "texto": "Python, Sigma, ATT&CK"
+     },
+     {
+      "ambiente": "DB",
+      "texto": "OpenSearch"
+     },
+     {
+      "ambiente": "Infra",
+      "texto": "osquery"
+     },
+     {
+      "ambiente": "Cloud",
+      "texto": "comparativa con Sentinel y Security Lake"
+     }
+    ]
+   },
+   "hardware": "RFID (fase 4)",
+   "entrevistas": "muy alto",
+   "versiones": [
+    {
+     "id": "1.0",
+     "nombre": "MVP",
+     "inicio": "2028-10-14",
+     "fin": "2028-10-25",
+     "alcance": [
+      "OpenSearch",
+      "osquery",
+      "reglas Sigma sobre el colector de PetrIA Guard"
+     ],
+     "horas": 50,
+     "derivadas": true
+    },
+    {
+     "id": "1.1",
+     "nombre": "Producto",
+     "inicio": "2028-10-26",
+     "fin": "2028-11-06",
+     "alcance": [
+      "agente investigador evaluado",
+      "purple team",
+      "tiempos medidos"
+     ],
+     "horas": 50,
+     "derivadas": true
+    },
+    {
+     "id": "2.0",
+     "nombre": "Plataforma",
+     "inicio": "2028-11-07",
+     "fin": "2028-11-18",
+     "alcance": [
+      "SOC con un comando",
+      "llamada",
+      "WhatsApp",
+      "email",
+      "RFID en Wokwi"
+     ],
+     "horas": 50,
+     "derivadas": true
+    },
+    {
+     "id": "3.0",
+     "nombre": "Producción",
+     "inicio": "2028-11-19",
+     "fin": "2028-11-29",
+     "alcance": [
+      "millones de eventos",
+      "costo de retención",
+      "RFID real",
+      "comparativa"
+     ],
+     "horas": 45,
+     "derivadas": true
+    }
+   ]
+  },
+  "Q1": {
+   "puesto": "Quant Developer",
+   "queHace": [
+    "backtester de eventos con costos, deslizamiento y walk-forward"
+   ],
+   "problema": "la mayoría de las estrategias \"ganadoras\" son sobreajuste",
+   "valor": "separa la suerte de la señal",
+   "diferencial": [
+    "Sharpe deflactado, registro con hash, benchmark Rust vs Python"
+   ],
+   "herramientas": [
+    {
+     "nombre": "\"¿Tu estrategia es suerte?\"",
+     "estrella": true
+    },
+    {
+     "nombre": "asistente con freno al sobreajuste",
+     "estrella": true
+    }
+   ],
+   "notificaciones": {
+    "items": [
+     {
+      "nombre": "email con el informe"
+     }
+    ]
+   },
+   "voz": [
+    {
+     "nombre": "consultas sobre resultados"
+    }
+   ],
+   "escala": "miles de backtests en paralelo",
+   "stack": {
+    "ambientes": [
+     {
+      "ambiente": "Frontend",
+      "texto": "Tauri"
+     },
+     {
+      "ambiente": "Backend",
+      "texto": "Rust con PyO3"
+     },
+     {
+      "ambiente": "IA por API",
+      "texto": "Claude"
+     },
+     {
+      "ambiente": "DB",
+      "texto": "Parquet, DuckDB†"
+     },
+     {
+      "ambiente": "Cloud",
+      "texto": "AWS"
+     }
+    ]
+   },
+   "entrevistas": "alto",
+   "versiones": [
+    {
+     "id": "1.0",
+     "nombre": "MVP",
+     "inicio": "2029-01-12",
+     "fin": "2029-01-23",
+     "alcance": [
+      "backtester en Rust con costos y deslizamiento"
+     ],
+     "horas": 50,
+     "derivadas": true
+    },
+    {
+     "id": "1.1",
+     "nombre": "Producto",
+     "inicio": "2029-01-24",
+     "fin": "2029-02-04",
+     "alcance": [
+      "walk-forward",
+      "registro con hash",
+      "Sharpe deflactado",
+      "benchmark"
+     ],
+     "horas": 50,
+     "derivadas": true
+    },
+    {
+     "id": "2.0",
+     "nombre": "Plataforma",
+     "inicio": "2029-02-05",
+     "fin": "2029-02-16",
+     "alcance": [
+      "\"¿Tu estrategia es suerte?\"",
+      "asistente"
+     ],
+     "horas": 50,
+     "derivadas": true
+    },
+    {
+     "id": "3.0",
+     "nombre": "Producción",
+     "inicio": "2029-02-17",
+     "fin": "2029-02-27",
+     "alcance": [
+      "backtests en paralelo",
+      "informes por email"
+     ],
+     "horas": 45,
+     "derivadas": true
+    }
+   ]
+  },
+  "Q2": {
+   "puesto": "Junior Quant Researcher",
+   "queHace": [
+    "agente que lee papers de finanzas y replica sus estrategias con Alpha Lab"
+   ],
+   "problema": "muchos papers no se replican",
+   "valor": "saber si un paper funciona antes de invertir tiempo",
+   "diferencial": [
+    "porcentaje de replicación medido y publicado"
+   ],
+   "herramientas": [
+    {
+     "nombre": "página \"¿Funciona este paper?\"",
+     "estrella": true
+    }
+   ],
+   "notificaciones": {
+    "items": [
+     {
+      "nombre": "newsletter por email"
+     },
+     {
+      "nombre": "WhatsApp"
+     }
+    ]
+   },
+   "escala": "lotes de papers en paralelo",
+   "stack": {
+    "ambientes": [
+     {
+      "ambiente": "Backend",
+      "texto": "Python, Quarto"
+     },
+     {
+      "ambiente": "IA por API",
+      "texto": "RAG sobre PDF con Claude"
+     },
+     {
+      "ambiente": "Base",
+      "texto": "Alpha Lab"
+     }
+    ]
+   },
+   "entrevistas": "alto",
+   "versiones": [
+    {
+     "id": "1.0",
+     "nombre": "MVP",
+     "inicio": "2029-02-28",
+     "fin": "2029-03-09",
+     "alcance": [
+      "un paper replicado"
+     ],
+     "horas": 41,
+     "derivadas": true
+    },
+    {
+     "id": "1.1",
+     "nombre": "Producto",
+     "inicio": "2029-03-10",
+     "fin": "2029-03-19",
+     "alcance": [
+      "agente que extrae la estrategia",
+      "3 papers replicados"
+     ],
+     "horas": 41,
+     "derivadas": true
+    },
+    {
+     "id": "2.0",
+     "nombre": "Plataforma",
+     "inicio": "2029-03-20",
+     "fin": "2029-03-29",
+     "alcance": [
+      "página pública",
+      "newsletter",
+      "WhatsApp"
+     ],
+     "horas": 41,
+     "derivadas": true
+    },
+    {
+     "id": "3.0",
+     "nombre": "Producción",
+     "inicio": "2029-03-30",
+     "fin": "2029-04-08",
+     "alcance": [
+      "lotes en paralelo",
+      "porcentaje replicado"
+     ],
+     "horas": 42,
+     "derivadas": true
+    }
+   ]
+  },
+  "Q3": {
+   "puesto": "Quant Developer (valuación y riesgo)",
+   "queHace": [
+    "valuación de opciones con griegas y estrés, validada contra QuantLib"
+   ],
+   "problema": "no hay herramientas simples para opciones argentinas (GGAL)",
+   "valor": "riesgo visible por posición y por cartera",
+   "diferencial": [
+    "validación contra QuantLib, API con SLO"
+   ],
+   "herramientas": [
+    {
+     "nombre": "calculadora de opciones argentinas con griegas",
+     "estrella": true
+    },
+    {
+     "nombre": "estrés por cartera"
+    }
+   ],
+   "capaFisica": [
+    {
+     "nombre": "superficie de volatilidad en AR",
+     "estrella": true
+    }
+   ],
+   "notificaciones": {
+    "items": [
+     {
+      "nombre": "email matinal"
+     }
+    ]
+   },
+   "voz": [
+    {
+     "nombre": "podcast de riesgo"
+    }
+   ],
+   "escala": "API con SLO y benchmark",
+   "stack": {
+    "ambientes": [
+     {
+      "ambiente": "Frontend",
+      "texto": "Next.js, Three.js"
+     },
+     {
+      "ambiente": "Backend",
+      "texto": "C++ o Rust con Python"
+     }
+    ]
+   },
+   "entrevistas": "alto",
+   "versiones": [
+    {
+     "id": "1.0",
+     "nombre": "MVP",
+     "inicio": "2029-05-18",
+     "fin": "2029-05-29",
+     "alcance": [
+      "Black-Scholes",
+      "binomial y Monte Carlo contra QuantLib"
+     ],
+     "horas": 50,
+     "derivadas": true
+    },
+    {
+     "id": "1.1",
+     "nombre": "Producto",
+     "inicio": "2029-05-30",
+     "fin": "2029-06-10",
+     "alcance": [
+      "griegas",
+      "estrés",
+      "calculadora argentina"
+     ],
+     "horas": 50,
+     "derivadas": true
+    },
+    {
+     "id": "2.0",
+     "nombre": "Plataforma",
+     "inicio": "2029-06-11",
+     "fin": "2029-06-22",
+     "alcance": [
+      "superficie en AR",
+      "email matinal",
+      "podcast"
+     ],
+     "horas": 50,
+     "derivadas": true
+    },
+    {
+     "id": "3.0",
+     "nombre": "Producción",
+     "inicio": "2029-06-23",
+     "fin": "2029-07-04",
+     "alcance": [
+      "API con SLO",
+      "benchmark"
+     ],
+     "horas": 50,
+     "derivadas": true
+    }
+   ]
+  },
+  "Q4": {
+   "puesto": "Trading Systems Engineer",
+   "queHace": [
+    "motor de matching con libro de órdenes, market maker simulado y FIX"
+   ],
+   "problema": "entender la microestructura sin acceso a un exchange",
+   "valor": "latencia y corrección probadas",
+   "diferencial": [
+    "p99 en microsegundos, replay determinístico, fuzzing"
+   ],
+   "herramientas": [
+    {
+     "nombre": "simulador educativo del libro, en formato juego",
+     "estrella": true
+    }
+   ],
+   "escala": "p99 en microsegundos bajo carga",
+   "stack": {
+    "ambientes": [
+     {
+      "ambiente": "Backend",
+      "texto": "C++ o Rust, FIX"
+     },
+     {
+      "ambiente": "Frontend",
+      "texto": "web del simulador"
+     }
+    ]
+   },
+   "spots": [
+    "heap (sin IA)"
+   ],
+   "entrevistas": "alto",
+   "versiones": [
+    {
+     "id": "1.0",
+     "nombre": "MVP",
+     "inicio": "2029-07-05",
+     "fin": "2029-07-14",
+     "alcance": [
+      "matching por precio y tiempo"
+     ],
+     "horas": 41,
+     "derivadas": true
+    },
+    {
+     "id": "1.1",
+     "nombre": "Producto",
+     "inicio": "2029-07-15",
+     "fin": "2029-07-24",
+     "alcance": [
+      "market maker",
+      "FIX",
+      "costos de transacción"
+     ],
+     "horas": 41,
+     "derivadas": true
+    },
+    {
+     "id": "2.0",
+     "nombre": "Plataforma",
+     "inicio": "2029-07-25",
+     "fin": "2029-08-02",
+     "alcance": [
+      "simulador en formato juego"
+     ],
+     "horas": 37,
+     "derivadas": true
+    },
+    {
+     "id": "3.0",
+     "nombre": "Producción",
+     "inicio": "2029-08-03",
+     "fin": "2029-08-12",
+     "alcance": [
+      "p99 bajo carga",
+      "replay",
+      "fuzzing"
+     ],
+     "horas": 41,
+     "derivadas": true
+    }
+   ]
+  },
+  "Q5": {
+   "puesto": "Quant Trading Engineer",
+   "queHace": [
+    "de señales a órdenes en paper trading con Alpaca, con riesgo previo, kill-switch y conciliación"
+   ],
+   "problema": "órdenes duplicadas o perdidas cuando algo falla",
+   "valor": "un sistema de órdenes confiable",
+   "diferencial": [
+    "cada orden una sola vez, conciliación ante fallas, meses en vivo"
+   ],
+   "herramientas": [
+    {
+     "nombre": "tablero público",
+     "estrella": true
+    },
+    {
+     "nombre": "riesgo previo a cada orden"
+    }
+   ],
+   "capaFisica": [
+    {
+     "nombre": "Face ID para el kill-switch",
+     "estrella": true
+    }
+   ],
+   "notificaciones": {
+    "items": [
+     {
+      "nombre": "WhatsApp con órdenes y kill-switch",
+      "estrella": true
+     },
+     {
+      "nombre": "email diario"
+     }
+    ]
+   },
+   "escala": "cada orden una sola vez, conciliación ante fallas",
+   "stack": {
+    "ambientes": [
+     {
+      "ambiente": "Frontend",
+      "texto": "Expo"
+     },
+     {
+      "ambiente": "Backend",
+      "texto": ".NET y Rust"
+     },
+     {
+      "ambiente": "DB",
+      "texto": "Postgres append-only"
+     },
+     {
+      "ambiente": "Infra",
+      "texto": "Kafka"
+     }
+    ]
+   },
+   "entrevistas": "muy alto (fintech)",
+   "versiones": [
+    {
+     "id": "1.0",
+     "nombre": "MVP",
+     "inicio": "2029-09-04",
+     "fin": "2029-09-17",
+     "alcance": [
+      "señales a órdenes en paper trading"
+     ],
+     "horas": 58,
+     "derivadas": true
+    },
+    {
+     "id": "1.1",
+     "nombre": "Producto",
+     "inicio": "2029-09-18",
+     "fin": "2029-10-01",
+     "alcance": [
+      "riesgo previo",
+      "kill-switch",
+      "conciliación"
+     ],
+     "horas": 58,
+     "derivadas": true
+    },
+    {
+     "id": "2.0",
+     "nombre": "Plataforma",
+     "inicio": "2029-10-02",
+     "fin": "2029-10-15",
+     "alcance": [
+      "WhatsApp",
+      "Face ID",
+      "email diario",
+      "tablero público"
+     ],
+     "horas": 58,
+     "derivadas": true
+    },
+    {
+     "id": "3.0",
+     "nombre": "Producción",
+     "inicio": "2029-10-16",
+     "fin": "2029-10-29",
+     "alcance": [
+      "una sola ejecución por orden",
+      "conciliación ante fallas",
+      "Kafka",
+      "meses en vivo"
+     ],
+     "horas": 56,
+     "derivadas": true
+    }
+   ]
+  },
+  "Q6": {
+   "puesto": "AI Quant / Data Engineer",
+   "queHace": [
+    "ingesta de datos de mercado en tiempo real con control de calidad"
+   ],
+   "problema": "datos de mercado sucios o con huecos",
+   "valor": "datos confiables para todo el stack quant",
+   "diferencial": [
+    "SLA de calidad, replay de un día, MCP"
+   ],
+   "herramientas": [
+    {
+     "nombre": "dólar MEP y CCL en vivo",
+     "estrella": true
+    },
+    {
+     "nombre": "MCP",
+     "estrella": true
+    }
+   ],
+   "capaFisica": [
+    {
+     "nombre": "display LED (Wokwi y real)"
+    }
+   ],
+   "notificaciones": {
+    "items": [
+     {
+      "nombre": "WhatsApp \"avisame si el MEP pasa X\"",
+      "estrella": true
+     }
+    ]
+   },
+   "voz": [
+    {
+     "nombre": "consultas de cotizaciones"
+    }
+   ],
+   "escala": "ingesta masiva de ticks y replay",
+   "stack": {
+    "ambientes": [
+     {
+      "ambiente": "Backend",
+      "texto": "Python"
+     },
+     {
+      "ambiente": "DB",
+      "texto": "ClickHouse"
+     },
+     {
+      "ambiente": "IA por API",
+      "texto": "MCP"
+     }
+    ]
+   },
+   "hardware": "display LED (fase 5)",
+   "entrevistas": "muy alto",
+   "versiones": [
+    {
+     "id": "1.0",
+     "nombre": "MVP",
+     "inicio": "2029-10-30",
+     "fin": "2029-11-10",
+     "alcance": [
+      "ingesta en ClickHouse con calidad"
+     ],
+     "horas": 49,
+     "derivadas": true
+    },
+    {
+     "id": "1.1",
+     "nombre": "Producto",
+     "inicio": "2029-11-11",
+     "fin": "2029-11-21",
+     "alcance": [
+      "MEP y CCL en vivo",
+      "MCP"
+     ],
+     "horas": 45,
+     "derivadas": true
+    },
+    {
+     "id": "2.0",
+     "nombre": "Plataforma",
+     "inicio": "2029-11-22",
+     "fin": "2029-12-02",
+     "alcance": [
+      "WhatsApp",
+      "voz",
+      "LED en Wokwi"
+     ],
+     "horas": 45,
+     "derivadas": true
+    },
+    {
+     "id": "3.0",
+     "nombre": "Producción",
+     "inicio": "2029-12-03",
+     "fin": "2029-12-13",
+     "alcance": [
+      "ticks masivos",
+      "replay",
+      "SLA",
+      "LED real"
+     ],
+     "horas": 46,
+     "derivadas": true
+    }
+   ]
+  },
+  "A1": {
+   "puesto": "Flight Dynamics Engineer",
+   "queHace": [
+    "simulador de vuelo 6-DOF para cohetes amateur"
+   ],
+   "problema": "los grupos amateur vuelan sin estimar la incertidumbre",
+   "valor": "vuelos más seguros y predecibles",
+   "diferencial": [
+    "validación analítica y contra OpenRocket, un millón de corridas, hardware-in-the-loop"
+   ],
+   "herramientas": [
+    {
+     "nombre": "simulador web",
+     "estrella": true
+    },
+    {
+     "nombre": "cono de incertidumbre con Monte Carlo"
+    }
+   ],
+   "capaFisica": [
+    {
+     "nombre": "computadora de vuelo real en HIL",
+     "estrella": true
+    },
+    {
+     "nombre": "trayectoria en VR"
+    }
+   ],
+   "voz": [
+    {
+     "nombre": "eventos del vuelo narrados"
+    }
+   ],
+   "escala": "un millón de corridas en AWS Batch",
+   "stack": {
+    "ambientes": [
+     {
+      "ambiente": "Frontend",
+      "texto": "WebAssembly, WebXR"
+     },
+     {
+      "ambiente": "Backend",
+      "texto": "Rust o C++, Julia"
+     },
+     {
+      "ambiente": "ML propio",
+      "texto": "modelo sustituto"
+     },
+     {
+      "ambiente": "Cloud",
+      "texto": "AWS Batch"
+     }
+    ]
+   },
+   "hardware": "IMU y barómetro (fase 5)",
+   "entrevistas": "alto",
+   "versiones": [
+    {
+     "id": "1.0",
+     "nombre": "MVP",
+     "inicio": "2030-02-05",
+     "fin": "2030-02-19",
+     "alcance": [
+      "6-DOF validado"
+     ],
+     "horas": 62,
+     "derivadas": true
+    },
+    {
+     "id": "1.1",
+     "nombre": "Producto",
+     "inicio": "2030-02-20",
+     "fin": "2030-03-06",
+     "alcance": [
+      "simulador web contra OpenRocket"
+     ],
+     "horas": 62,
+     "derivadas": true
+    },
+    {
+     "id": "2.0",
+     "nombre": "Plataforma",
+     "inicio": "2030-03-07",
+     "fin": "2030-03-20",
+     "alcance": [
+      "Monte Carlo",
+      "VR",
+      "voz",
+      "computadora de vuelo en Wokwi"
+     ],
+     "horas": 58,
+     "derivadas": true
+    },
+    {
+     "id": "3.0",
+     "nombre": "Producción",
+     "inicio": "2030-03-21",
+     "fin": "2030-04-04",
+     "alcance": [
+      "un millón de corridas",
+      "modelo sustituto",
+      "HIL real"
+     ],
+     "horas": 63,
+     "derivadas": true
+    }
+   ]
+  },
+  "A2": {
+   "puesto": "CAE Software Engineer",
+   "queHace": [
+    "solver de elementos finitos verificado contra CalculiX"
+   ],
+   "problema": "el software estructural es caro y opaco para estudiantes",
+   "valor": "cálculo estructural gratis en el navegador",
+   "diferencial": [
+    "convergencia de malla demostrada, experimento real que coincide"
+   ],
+   "herramientas": [
+    {
+     "nombre": "calculadora para estudiantes",
+     "estrella": true
+    },
+    {
+     "nombre": "reporte de margen"
+    }
+   ],
+   "capaFisica": [
+    {
+     "nombre": "regla real medida con la cámara",
+     "estrella": true
+    }
+   ],
+   "escala": "cálculo pesado en el navegador con WebAssembly",
+   "stack": {
+    "ambientes": [
+     {
+      "ambiente": "Backend",
+      "texto": "Rust o C++, Gmsh"
+     },
+     {
+      "ambiente": "Frontend",
+      "texto": "Tauri, WebAssembly"
+     }
+    ]
+   },
+   "entrevistas": "alto",
+   "versiones": [
+    {
+     "id": "1.0",
+     "nombre": "MVP",
+     "inicio": "2030-04-17",
+     "fin": "2030-05-01",
+     "alcance": [
+      "solver 1D contra CalculiX"
+     ],
+     "horas": 62,
+     "derivadas": true
+    },
+    {
+     "id": "1.1",
+     "nombre": "Producto",
+     "inicio": "2030-05-02",
+     "fin": "2030-05-15",
+     "alcance": [
+      "2D",
+      "convergencia",
+      "margen"
+     ],
+     "horas": 58,
+     "derivadas": true
+    },
+    {
+     "id": "2.0",
+     "nombre": "Plataforma",
+     "inicio": "2030-05-16",
+     "fin": "2030-05-29",
+     "alcance": [
+      "calculadora en el navegador"
+     ],
+     "horas": 58,
+     "derivadas": true
+    },
+    {
+     "id": "3.0",
+     "nombre": "Producción",
+     "inicio": "2030-05-30",
+     "fin": "2030-06-12",
+     "alcance": [
+      "experimento real",
+      "usuarios en universidades"
+     ],
+     "horas": 57,
+     "derivadas": true
+    }
+   ]
+  },
+  "A3": {
+   "puesto": "CFD Software Engineer",
+   "queHace": [
+    "aerodinámica con paneles, vortex lattice y Euler 2D, comparada contra OpenFOAM o SU2"
+   ],
+   "problema": "diseñar un perfil de dron exige herramientas complejas",
+   "valor": "perfiles optimizados sin supercomputador",
+   "diferencial": [
+    "comparación contra OpenFOAM, modelo sustituto con optimización bayesiana"
+   ],
+   "herramientas": [
+    {
+     "nombre": "optimizador de perfiles para drones",
+     "estrella": true
+    }
+   ],
+   "capaFisica": [
+    {
+     "nombre": "flujo de aire en AR",
+     "estrella": true
+    }
+   ],
+   "escala": "corridas en lote",
+   "stack": {
+    "ambientes": [
+     {
+      "ambiente": "Backend",
+      "texto": "Rust o C++, Python"
+     },
+     {
+      "ambiente": "ML propio",
+      "texto": "modelo sustituto, optimización bayesiana"
+     }
+    ]
+   },
+   "entrevistas": "alto",
+   "versiones": [
+    {
+     "id": "1.0",
+     "nombre": "MVP",
+     "inicio": "2030-07-18",
+     "fin": "2030-07-29",
+     "alcance": [
+      "método de paneles"
+     ],
+     "horas": 50,
+     "derivadas": true
+    },
+    {
+     "id": "1.1",
+     "nombre": "Producto",
+     "inicio": "2030-07-30",
+     "fin": "2030-08-10",
+     "alcance": [
+      "vortex lattice",
+      "Euler 2D",
+      "comparación"
+     ],
+     "horas": 50,
+     "derivadas": true
+    },
+    {
+     "id": "2.0",
+     "nombre": "Plataforma",
+     "inicio": "2030-08-11",
+     "fin": "2030-08-22",
+     "alcance": [
+      "optimizador",
+      "AR"
+     ],
+     "horas": 50,
+     "derivadas": true
+    },
+    {
+     "id": "3.0",
+     "nombre": "Producción",
+     "inicio": "2030-08-23",
+     "fin": "2030-09-02",
+     "alcance": [
+      "lote",
+      "modelo sustituto"
+     ],
+     "horas": 45,
+     "derivadas": true
+    }
+   ]
+  },
+  "A4": {
+   "puesto": "GNC Software Engineer",
+   "queHace": [
+    "control de vuelo con PID, LQR y Kalman, y banco de fallas"
+   ],
+   "problema": "ajustar el PID de un dron es prueba y error",
+   "valor": "ajuste automático y modos seguros",
+   "diferencial": [
+    "RL con escudo de seguridad contra LQR",
+    "dron real"
+   ],
+   "herramientas": [
+    {
+     "nombre": "ajuste automático de PID desde los logs",
+     "estrella": true
+    }
+   ],
+   "capaFisica": [
+    {
+     "nombre": "Estación de tierra por voz",
+     "estrella": true
+    },
+    {
+     "nombre": "El celular como sensor, con Kalman en vivo"
+    },
+    {
+     "nombre": "Dron real con Pixhawk 6C Mini (≈ USD 177), dentro de la normativa ANAC"
+    }
+   ],
+   "escala": "lazos con tiempos deterministas",
+   "stack": {
+    "ambientes": [
+     {
+      "ambiente": "Frontend",
+      "texto": "Expo"
+     },
+     {
+      "ambiente": "Backend",
+      "texto": "ROS 2, PX4, C++, Python"
+     }
+    ]
+   },
+   "hardware": "Pixhawk con frame (fase 5)",
+   "entrevistas": "alto",
+   "versiones": [
+    {
+     "id": "1.0",
+     "nombre": "MVP",
+     "inicio": "2030-09-15",
+     "fin": "2030-09-29",
+     "alcance": [
+      "PID",
+      "LQR y Kalman en PX4 SITL"
+     ],
+     "horas": 63,
+     "derivadas": true
+    },
+    {
+     "id": "1.1",
+     "nombre": "Producto",
+     "inicio": "2030-09-30",
+     "fin": "2030-10-14",
+     "alcance": [
+      "banco de fallas",
+      "modos seguros",
+      "ajuste automático"
+     ],
+     "horas": 63,
+     "derivadas": true
+    },
+    {
+     "id": "2.0",
+     "nombre": "Plataforma",
+     "inicio": "2030-10-15",
+     "fin": "2030-10-29",
+     "alcance": [
+      "estación de tierra por voz",
+      "celular como sensor"
+     ],
+     "horas": 63,
+     "derivadas": true
+    },
+    {
+     "id": "3.0",
+     "nombre": "Producción",
+     "inicio": "2030-10-30",
+     "fin": "2030-11-13",
+     "alcance": [
+      "dron real",
+      "RL con escudo vs LQR"
+     ],
+     "horas": 61,
+     "derivadas": true
+    }
+   ]
+  },
+  "A5": {
+   "puesto": "Mission Analysis Engineer",
+   "queHace": [
+    "propagador con J2 y arrastre, ventanas de comunicación, screening de conjunciones"
+   ],
+   "problema": "el riesgo de colisión y los reingresos no tienen un aviso público y simple",
+   "valor": "alertas públicas y entendibles",
+   "diferencial": [
+    "catálogo completo cada día sin comparar todos contra todos"
+   ],
+   "herramientas": [
+    {
+     "nombre": "alertas de conjunción y reingresos sobre Argentina",
+     "estrella": true
+    }
+   ],
+   "capaFisica": [
+    {
+     "nombre": "basura espacial en AR",
+     "estrella": true
+    }
+   ],
+   "notificaciones": {
+    "items": [
+     {
+      "nombre": "WhatsApp y newsletter por email",
+      "estrella": true
+     }
+    ]
+   },
+   "escala": "servicio diario con usuarios suscriptos",
+   "stack": {
+    "ambientes": [
+     {
+      "ambiente": "Backend",
+      "texto": "Java con Orekit, SGP4 en Rust"
+     },
+     {
+      "ambiente": "DB",
+      "texto": "Postgres"
+     }
+    ]
+   },
+   "entrevistas": "muy alto",
+   "versiones": [
+    {
+     "id": "1.0",
+     "nombre": "MVP",
+     "inicio": "2030-12-10",
+     "fin": "2030-12-22",
+     "alcance": [
+      "propagador",
+      "ventanas de comunicación"
+     ],
+     "horas": 54,
+     "derivadas": true
+    },
+    {
+     "id": "1.1",
+     "nombre": "Producto",
+     "inicio": "2030-12-30",
+     "fin": "2031-01-12",
+     "alcance": [
+      "screening del catálogo completo"
+     ],
+     "horas": 59,
+     "derivadas": true
+    },
+    {
+     "id": "2.0",
+     "nombre": "Plataforma",
+     "inicio": "2031-01-13",
+     "fin": "2031-01-23",
+     "alcance": [
+      "WhatsApp",
+      "newsletter",
+      "AR"
+     ],
+     "horas": 46,
+     "derivadas": true
+    },
+    {
+     "id": "3.0",
+     "nombre": "Producción",
+     "inicio": "2031-01-24",
+     "fin": "2031-02-03",
+     "alcance": [
+      "servicio diario",
+      "reingresos sobre Argentina"
+     ],
+     "horas": 46,
+     "derivadas": true
+    }
+   ]
+  },
+  "A6": {
+   "puesto": "Systems Engineer",
+   "queHace": [
+    "contribuciones a PX4, Orekit o F Prime"
+   ],
+   "valor": "código tuyo aceptado en proyectos que usa la industria",
+   "stack": {
+    "nota": "el de cada proyecto",
+    "ambientes": []
+   },
+   "entrevistas": "alto",
+   "versiones": [
+    {
+     "id": "1.0",
+     "nombre": "MVP",
+     "inicio": "2031-02-04",
+     "fin": "2031-02-13",
+     "alcance": [
+      "primer PR aceptado"
+     ],
+     "horas": 41,
+     "derivadas": true
+    },
+    {
+     "id": "2.0",
+     "nombre": "Plataforma",
+     "inicio": "2031-02-14",
+     "fin": "2031-02-23",
+     "alcance": [
+      "PR de funcionalidad en un segundo proyecto"
+     ],
+     "horas": 41,
+     "derivadas": true
+    },
+    {
+     "id": "3.0",
+     "nombre": "Producción",
+     "inicio": "2031-02-24",
+     "fin": "2031-03-04",
+     "alcance": [
+      "contribución de peso"
+     ],
+     "horas": 38,
+     "derivadas": true
+    }
+   ]
+  },
+  "A7": {
+   "puesto": "Aerospace Software Engineer",
+   "queHace": [
+    "misión de un cubesat ficticio con operador asistido por IA"
+   ],
+   "problema": "operar una misión exige un equipo grande atento 24 horas",
+   "valor": "operación de misión de punta a punta",
+   "diferencial": [
+    "computadora de a bordo real, comandos firmados, caso de seguridad documentado"
+   ],
+   "herramientas": [
+    {
+     "nombre": "sala de control con video en VR",
+     "estrella": true
+    }
+   ],
+   "capaFisica": [
+    {
+     "nombre": "computadora de a bordo real en HIL con Face ID",
+     "estrella": true
+    }
+   ],
+   "notificaciones": {
+    "items": [
+     {
+      "nombre": "Slack y email"
+     }
+    ]
+   },
+   "voz": [
+    {
+     "nombre": "\"Houston\": el agente propone runbooks y vos aprobás",
+     "estrella": true
+    }
+   ],
+   "escala": "telemetría continua, comandos garantizados",
+   "stack": {
+    "ambientes": [
+     {
+      "ambiente": "Backend",
+      "texto": "F Prime o cFS, Rust embebido o Ada/SPARK"
+     },
+     {
+      "ambiente": "Herramientas",
+      "texto": "Python"
+     },
+     {
+      "ambiente": "Frontend",
+      "texto": "VR"
+     }
+    ]
+   },
+   "hardware": "placa del cubesat (fase 5)",
+   "entrevistas": "muy alto",
+   "versiones": [
+    {
+     "id": "1.0",
+     "nombre": "MVP",
+     "inicio": "2031-03-13",
+     "fin": "2031-03-28",
+     "alcance": [
+      "gemelo digital del cubesat"
+     ],
+     "horas": 66,
+     "derivadas": true
+    },
+    {
+     "id": "1.1",
+     "nombre": "Producto",
+     "inicio": "2031-03-29",
+     "fin": "2031-04-13",
+     "alcance": [
+      "sala de control en VR conectada a Antena Ops"
+     ],
+     "horas": 66,
+     "derivadas": true
+    },
+    {
+     "id": "2.0",
+     "nombre": "Plataforma",
+     "inicio": "2031-04-14",
+     "fin": "2031-04-29",
+     "alcance": [
+      "\"Houston\" por voz"
+     ],
+     "horas": 66,
+     "derivadas": true
+    },
+    {
+     "id": "3.0",
+     "nombre": "Producción",
+     "inicio": "2031-04-30",
+     "fin": "2031-05-15",
+     "alcance": [
+      "HIL real",
+      "comandos firmados",
+      "caso de seguridad"
+     ],
+     "horas": 67,
+     "derivadas": true
+    }
+   ]
+  },
+  "P0B": {
+   "puesto": "Sr Full-stack → AI Engineer (RAG multifuente y agentes)",
+   "queHace": [
+    "portfolio como mapa 3D de proyectos",
+    "después, un agente que responde sobre todo tu trabajo por texto y voz"
+   ],
+   "problema": "los reclutadores no recorren cinco repos",
+   "valor": "convierte una visita en conversación y en entrevista",
+   "diferencial": [
+    "validador de referencias y ciclos, RAG multifuente con citas y evals, MCP público, plantilla open source"
+   ],
+   "herramientas": [
+    {
+     "nombre": "modo reclutador",
+     "estrella": true
+    },
+    {
+     "nombre": "plantilla open source",
+     "estrella": true
+    },
+    {
+     "nombre": "métricas en vivo desde el CI"
+    }
+   ],
+   "capaFisica": [
+    {
+     "nombre": "CV o tarjeta en AR (AR Quick Look)",
+     "estrella": true
+    }
+   ],
+   "medir": {
+    "tipo": "impacto",
+    "items": [
+     "visitas",
+     "conversaciones",
+     "emails respondidos",
+     "entrevistas"
+    ]
+   },
+   "notificaciones": {
+    "items": [
+     {
+      "nombre": "email de seguimiento al reclutador",
+      "estrella": true
+     },
+     {
+      "nombre": "WhatsApp para vos cuando alguien lo usa"
+     }
+    ]
+   },
+   "voz": [
+    {
+     "nombre": "\"Preguntale a Ignacio\"",
+     "estrella": true
+    }
+   ],
+   "escala": "pico viral ×50 en minutos",
+   "operacion": "CDN, caché e invalidación",
+   "stack": {
+    "ambientes": [
+     {
+      "ambiente": "Frontend",
+      "texto": "Next.js, TypeScript, Three.js"
+     },
+     {
+      "ambiente": "Backend",
+      "texto": "Node + TypeScript"
+     },
+     {
+      "ambiente": "IA por API",
+      "texto": "Python, FastAPI, LangGraph sobre Claude, MCP hacia cada proyecto"
+     },
+     {
+      "ambiente": "ML propio",
+      "texto": "no aplica"
+     },
+     {
+      "ambiente": "DB",
+      "texto": "JSON en la v1; Neon con pgvector en la 2.0"
+     },
+     {
+      "ambiente": "Infra",
+      "texto": "Module Federation, `platform-kit`"
+     },
+     {
+      "ambiente": "Cloud",
+      "texto": "Render o Vercel†, SES"
+     }
+    ]
+   },
+   "entrevistas": "medio con la v1; alto desde la 2.0",
+   "versiones": [
+    {
+     "id": "2.0",
+     "nombre": "Con IA",
+     "inicio": "2027-07-06",
+     "fin": "2027-07-14",
+     "alcance": [
+      "RAG con citas y evals (READMEs, ADRs, código, `learning.md`)",
+      "modo reclutador",
+      "MCP público"
+     ],
+     "horas": 38,
+     "derivadas": true
+    },
+    {
+     "id": "2.1",
+     "nombre": "Completa",
+     "inicio": "2027-07-15",
+     "fin": "2027-07-23",
+     "alcance": [
+      "voz",
+      "CV en AR",
+      "email y WhatsApp",
+      "métricas en vivo",
+      "plantilla open source",
+      "CDN y prueba de pico viral"
+     ],
+     "horas": 37,
+     "derivadas": true
+    }
+   ]
+  }
+ },
+ "certs": {
+  "C8": {
+   "preparacion": "Anthropic Academy, 30 min por día hasta el 22 dic",
+   "requisito": "la de Claude exige la Claude Partner Network; sin acceso, GitHub Copilot"
+  },
+  "C1": {},
+  "C2": {},
+  "C3": {},
+  "C9": {},
+  "C10": {},
+  "C4": {},
+  "C5": {},
+  "C6": {},
+  "C7": {},
+  "C11": {},
+  "C12": {},
+  "C13": {}
+ },
+ "ventanas": {
+  "W1": {
+   "contenido": "probabilidad, estadística, regresión, álgebra lineal base, trigonometría"
+  },
+  "W2": {
+   "contenido": "cálculo multivariable, gradientes, optimización"
+  },
+  "W3": {
+   "contenido": "álgebra lineal de bajo rango (LoRA), probabilidad, teoría de la información"
+  },
+  "W4": {
+   "contenido": "aritmética modular, teoría de números"
+  },
+  "WQ1": {
+   "contenido": "procesos estocásticos, series de tiempo"
+  },
+  "WQ2": {
+   "contenido": "cálculo estocástico, Black-Scholes"
+  },
+  "WQ3": {
+   "contenido": "optimización de carteras"
+  },
+  "WA1": {
+   "contenido": "ecuaciones diferenciales, cuerpo rígido"
+  },
+  "WA2": {
+   "contenido": "EDP, elementos finitos"
+  },
+  "WA3": {
+   "contenido": "mecánica de fluidos"
+  },
+  "WA4": {
+   "contenido": "control y estimación"
+  },
+  "WA5": {
+   "contenido": "mecánica orbital"
+  }
+ }
+}

@@ -68,25 +68,25 @@ describe('ola 25 · submetas y bloque hecho', () => {
 });
 
 describe('ola 25 · horarios y metas del día', () => {
-  it('cambiar el horario de trabajo (hasta las 12:30) acortando los siguientes; la rutina no cambia', () => {
+  it('cambiar el horario de trabajo (hasta las 13:00) acortando los siguientes; la rutina no cambia', () => {
     render(<Hoy day={day()} />);
     fireEvent.click(within(abrir(/Trabajo actual/)).getByRole('button', { name: 'Cambiar horario' }));
     const dlg = screen.getByRole('dialog');
     fireEvent.change(within(dlg).getByLabelText('Dura (min)'), { target: { value: '180' } });
-    expect(within(dlg).getByText('Termina a las 12:30')).toBeInTheDocument();
-    // El día del modo intensivo está lleno hasta las 21: corriendo no entra, acortando sí.
+    expect(within(dlg).getByText('Termina a las 13:00')).toBeInTheDocument();
+    // El día del plan v12.1 está lleno hasta las 21: corriendo no entra, acortando sí.
     fireEvent.click(within(dlg).getByRole('button', { name: 'Guardar' }));
     expect(within(dlg).getByRole('alert').textContent).toMatch(/pasan de dormir/);
     fireEvent.click(within(dlg).getByRole('radio', { name: 'Acortar los siguientes' }));
     fireEvent.click(within(dlg).getByRole('button', { name: 'Guardar' }));
-    expect(bloque('trabajo')).toMatchObject({ start: '09:30', min: 180, editado: true });
-    expect(bloque('prog-tarde').start).toBe('12:30');
+    expect(bloque('trabajo')).toMatchObject({ start: '10:00', min: 180, editado: true });
+    expect(bloque('prog-tarde').start).toBe('13:00');
     const cierre = bloque('cierre');
     expect(Number(cierre.start.slice(0, 2)) * 60 + Number(cierre.start.slice(3)) + cierre.min).toBe(21 * 60);
     expect(bloque('sueno').start).toBe('21:00');
     // Mañana arranca con la rutina de siempre.
     startDay('completo', '04:00', '2026-11-19');
-    expect(getState().days['2026-11-19'].blocks.find((b) => b.key === 'trabajo')).toMatchObject({ start: '09:30', min: 120 });
+    expect(getState().days['2026-11-19'].blocks.find((b) => b.key === 'trabajo')).toMatchObject({ start: '10:00', min: 120 });
   });
 
   it('si no entra antes de dormir, avisa y no cambia nada', () => {

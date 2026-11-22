@@ -331,13 +331,19 @@ export interface Ajustes {
   sprintSinIA?: { dia: number; problemas?: number } | false;
   /** Ola 31 (v7): bloques que pasan a ser proyecto (las horas extra de PetrIA, hasta el trabajo nuevo). Nunca sueño, entreno ni Abi. */
   extraProyecto?: string[];
+  /** v12.1: el bloque activo del plan. Los bloques 1 y 2 toman su sentido (cert, inglés, búsqueda) y, en la ventana, son matemática. */
+  activo?: { id: string; tipo: string; nombre: string };
+  /** v12.1: martes y jueves, el post (EN + ES) y el hilo de X le sacan 30 min al tiempo de construir. */
+  postDelDia?: boolean;
+  /** v12.1: el tema del post (la tesis de paper más reciente). */
+  postTema?: string | null;
 }
 
 /** Ola 31 (v7): la preparación de la certificación 1 (Anthropic Academy, 30 min por día) va hasta el 22 dic 2026; después, esa media hora es proyecto. */
 export const ACADEMY_HASTA = '2026-12-22';
 
 /** Ola 31 · los bloques que pueden pasar a ser horas extra de proyecto (los que no son sueño, entreno, Abi, trabajo, matemática ni proyecto). */
-export const NO_CONVERTIBLES = new Set(['rutina', 'sueno', 'entreno', 'abi', 'trabajo', 'math', 'math-tarde', 'pausa']);
+export const NO_CONVERTIBLES = new Set(['rutina', 'sueno', 'entreno', 'abi', 'trabajo', 'math', 'math-tarde', 'pausa', 'recall', 'anki', 'post', 'demo', 'revision']);
 export const esConvertible = (b: Pick<RoutineBlock, 'id' | 'rama' | 'kind'>) => !NO_CONVERTIBLES.has(b.id) && b.rama !== 'programacion' && b.rama !== 'salud';
 
 /** Horario del trabajo nuevo (editable en Ajustes). De fábrica, de 10:00 a 16:00. */
@@ -393,9 +399,29 @@ export function ajustarDia(plan: PlannedRoutineBlock[], a: Ajustes): PlannedRout
       ? { ...p, block: { ...p.block, label: `Matemática pura · puerta ${a.puerta}`, short: 'matemática', rama: 'matematica', tasks: [`Tema de ${a.puerta} hasta dominarlo`, `Test de ${a.puerta} (85 % o más)`] } }
       : p));
   } else if (a.ventana) {
-    out = out.map((p) => (p.block.rama === 'programacion'
+    out = out.map((p) => (p.block.rama === 'programacion' && p.block.id !== 'prog-review'
       ? { ...p, block: { ...p.block, label: `Matemática · ventana ${a.ventana}`, short: 'matemática', rama: 'matematica', tasks: ['Repaso de tarjetas', `Capítulo de la ventana ${a.ventana}`, 'Ejercicios del capítulo'] } }
       : p));
+  }
+  // v12.1: lo que significan los bloques 1 y 2 según el bloque activo del plan.
+  if (a.activo) {
+    const n = a.activo.nombre;
+    const bloque1 = (p: PlannedRoutineBlock) => p.block.id === 'prog';
+    const bloque2 = (p: PlannedRoutineBlock) => p.block.id === 'prog-tarde' || p.block.id === 'prog-2';
+    const cambia = (p: PlannedRoutineBlock, label: string, rama: RamaOMain, tasks: string[]) => ({ ...p, block: { ...p.block, label, rama, tasks } });
+    if (a.activo.tipo === 'cert') out = out.map((p) => (bloque1(p) ? cambia(p, `Bloque 1 · simulacros · ${n}`, 'programacion', ['Simulacros y repaso del plan del día']) : bloque2(p) ? cambia(p, `Bloque 2 · ${n}`, 'programacion', ['Lo del plan de estudio de hoy']) : p));
+    else if (a.activo.tipo === 'ingles') out = out.map((p) => (bloque1(p) ? cambia(p, 'Bloque 1 · libro de inglés', 'ingles', ['Capítulo del día: estudiar, test y tesis']) : bloque2(p) ? cambia(p, 'Bloque 2 · libro + entrevistas + búsqueda', 'ingles', ['Libro', 'Entrevistas simuladas', 'Búsqueda laboral']) : p));
+    else if (a.activo.tipo === 'busqueda') out = out.map((p) => (bloque1(p) ? cambia(p, 'Bloque 1 · inglés y entrevistas', 'ingles', ['Inglés hablado', 'Entrevista simulada']) : bloque2(p) ? cambia(p, 'Bloque 2 · búsqueda laboral', 'trabajo', ['Postulaciones', 'Mensajes directos']) : p));
+  }
+  // v12.1: martes y jueves, el post le saca 30 min al bloque 2 (va justo antes del cierre).
+  if (a.postDelDia) {
+    const i = out.findIndex((p) => p.block.id === 'prog-tarde' || p.block.id === 'prog-2');
+    if (i >= 0 && out[i].min > 30) {
+      const p = out[i];
+      const fin = toMin(p.start) + p.min;
+      const post: PlannedRoutineBlock = { block: { ...p.block, id: 'post', label: 'Post del día · LinkedIn (EN + ES) + hilo de X (EN)', short: 'el post', area: 'rutina', rama: 'trabajo', tasks: a.postTema ? [`Post de LinkedIn (EN + ES) sobre la tesis de ${a.postTema}`, 'Hilo de X en inglés con la misma idea'] : ['Post de LinkedIn en inglés y español', 'Hilo de X en inglés'] }, start: toHHMM(fin - 30), min: 30 };
+      out = [...out.slice(0, i), { ...p, min: p.min - 30 }, post, ...out.slice(i + 1)];
+    }
   }
   // Ola 27: el horario del trabajo acomoda la tarde de la rutina con trabajo.
   if (a.trabajo) out = ajustarTrabajo(out, a.trabajo).plan;

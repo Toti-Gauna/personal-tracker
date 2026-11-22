@@ -13,6 +13,8 @@ import { addTask, useStore } from '../state/store';
 import { Marca } from '../ui/Marca';
 import { colorDeBloque, etiquetaDeBloque, tituloDeBloque } from '../data/etiquetas';
 import { AvisosRamas, SumarPlan } from '../ui/PlanBits';
+import { AhoraPlan } from '../ui/AhoraPlan';
+import { usePeriodos } from '../ui/usePeriodos';
 import { HojaSubmeta } from '../ui/HojaSubmeta';
 import { HojaClip } from '../ui/HojaClip';
 import { HojaHecho, HojaHorario, HojaMetaNueva } from '../ui/HojasDia';
@@ -121,6 +123,7 @@ export function Hoy({ day }: { day: DayLog }) {
       </section>
 
       <AvisosRamas date={day.date} day={day} />
+      <AhoraHoy day={day} />
 
       <ol className="metas" ref={lista}>
         <li className="regla-horas" aria-hidden="true" />
@@ -202,4 +205,10 @@ export function Hoy({ day }: { day: DayLog }) {
       {bloqueSub && <HojaSubmeta kicker={`Meta ${bloqueSub.n} · ${tituloDeBloque(bloqueSub, day.date, settings.startDate)}`} color={colorDeBloque(bloqueSub, !!day.dayType)} onAgregar={(t) => addTask(day.date, bloqueSub.key, t)} onCerrar={() => setSubDe(null)} />}
     </main>
   );
+}
+
+/** v12.1 · lo del plan para hoy: lo activo, lo que vence, la próxima fecha límite, los avisos de reserva y los hábitos. */
+function AhoraHoy({ day }: { day: DayLog }) {
+  const { arbol } = usePeriodos(day.date);
+  return <AhoraPlan hoy={day.date} arbol={arbol} day={day} />;
 }

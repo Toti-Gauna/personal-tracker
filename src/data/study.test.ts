@@ -1,6 +1,7 @@
 import { beforeEach, describe, expect, it } from 'vitest';
+import { MAZO_LLM } from './mazos';
 import { getState, register, resetState, startDay } from '../state/store';
-import { addCards, completeLearn, saveTest } from '../state/study';
+import { addCards, completeLearn, saveTesis, saveTest } from '../state/study';
 import { BUILTIN_PRESETS, DEFAULT_BLOCK_PRESETS, DEFAULT_PRESETS } from './defaults';
 import { checkAnswer, chapterExercises, testExercises } from './ejercicios';
 import {
@@ -24,7 +25,7 @@ const test = (date: string, n: number, score = 20, total = 20) =>
   saveTest(date, 'conamat', n, { score, total, errors: { ...ok, descuido: total - score }, mode: 'papel' });
 const reviews = (k: string) => getState().study.reviews.filter((r) => r.kind === k);
 
-describe('cada capítulo: día 1 estudiar, día 2 test, día 3 tesis, días 8, 22 y 61 repetir', () => {
+describe('cada capítulo: día 1 estudiar, día 2 test, día 3 tesis, días 8, 22 y 61 repetir (v12.1: uno por vez)', () => {
   beforeEach(() => {
     resetState();
     register('Toti', 'Abi', D0);
@@ -37,38 +38,36 @@ describe('cada capítulo: día 1 estudiar, día 2 test, día 3 tesis, días 8, 2
     expect(t[0]).toMatchObject({ step: 'estudiar', title: 'Cap. 1 · Números reales', paso: 'Cap. 1 · Números reales, de corrido', sub: 'Estudiar · de corrido, pomodoro 50/10' });
   });
 
-  it('día 2: cold recall de 5 min y el test del capítulo de ayer; el capítulo nuevo al final', () => {
+  it('día 2 (v12.1): cold recall de 5 min y el test del capítulo de ayer; el resto es práctica, el cap. 2 espera la tesis', () => {
     completeLearn(D0, 'conamat', 1);
     expect(reviews('cold')).toMatchObject([{ due: d(1), min: 5 }]);
     const t = plan(d(1));
     expect(t.map((x) => x.kind)).toEqual(['cold', 'test', 'descanso', 'capitulo']);
-    expect(t.map((x) => x.title)).toEqual(['Cold recall · cap. 1', 'Test completo · cap. 1', 'Descanso', 'Cap. 2 · Números enteros']);
+    expect(t.map((x) => x.title)).toEqual(['Cold recall · cap. 1', 'Test completo · cap. 1', 'Descanso', 'Práctica · cap. 1']);
+    expect(t[3]).toMatchObject({ ref: 'practica:conamat:1', paso: 'Cap. 1: ejercicios y tarjetas; el capítulo siguiente se abre con su tesis' });
     expect(t.map((x) => x.step)).toEqual(['test', 'test', 'test', 'estudiar']);
     expect(t[1]).toMatchObject({ min: 25, paso: 'Cap. 1 · 15 ejercicios, 85 % para pasar' });
   });
 
-  it('un día cualquiera: cold recall, tarjetas, test de ayer, descanso, tesis de antes de ayer y capítulo nuevo', () => {
+  it('v12.1 · estudiar → test → tesis, y recién entonces el capítulo siguiente (el mismo día de la tesis)', () => {
     completeLearn(D0, 'conamat', 1);
-    test(d(1), 1, 14, 15); // tesis del cap. 1 el día 3
-    completeLearn(d(1), 'conamat', 2);
+    test(d(1), 1, 14, 15); // aprobado: tesis del cap. 1 el día 3
     addCards(d(1), Array.from({ length: 8 }, (_, i) => ({ front: `P${i}`, back: `R${i}`, kind: 'pregunta' as const, deck: 'Matemática', frontId: 'math', source: 't' })));
-    const st = getState().study;
-    const a = st.activities[0];
-    const daily = dailyReview(st, d(2));
-    const t = planActivity(a, { study: st, date: d(2), blockMin: 120, presets: DEFAULT_PRESETS, blockPresets: DEFAULT_BLOCK_PRESETS, review: daily.today, groups: daily.groups });
-    expect(t.map((x) => x.kind)).toEqual(['cold', 'tarjetas', 'test', 'descanso', 'tesis', 'capitulo']);
-    expect(t.map((x) => x.title)).toEqual(['Cold recall · cap. 2', '8 tarjetas de Aritmética', 'Test completo · cap. 2', 'Descanso', 'Tesis · cap. 1', 'Cap. 3 · Teoría de números']);
-    // 5 + 4 + 25 + 10 + 20 = 64: quedan 56 min, entra un pomodoro de 50.
-    expect(t[t.length - 1].min).toBe(50);
-    expect(sumMin(t)).toBe(114);
-    expect(groupSteps(t).map((s) => [s.step, s.title, s.ver])).toEqual([
-      ['test', 'Cap. 2 · Números enteros, sin mirar', 5],
-      ['repetir', '8 tarjetas de Aritmética', 4],
-      ['test', 'Cap. 2 · 20 ejercicios, 85 % para pasar', 25],
-      ['tesis', 'Cap. 1 · Números reales, con tus palabras', 20],
-      ['estudiar', 'Cap. 3 · Teoría de números, de corrido', 50],
-    ]);
-    expect(unitPhases(a, st, d(2))!.map((f) => `${f.name} ${f.when}`)).toEqual(['Estudiar cap. 3', 'Test cap. 2', 'Tesis cap. 1', 'Repetir 8 → 61']);
+    const conTesis = () => {
+      const st = getState().study;
+      const daily = dailyReview(st, d(2));
+      return { st, t: planActivity(st.activities[0], { study: st, date: d(2), blockMin: 120, presets: DEFAULT_PRESETS, blockPresets: DEFAULT_BLOCK_PRESETS, review: daily.today, groups: daily.groups }) };
+    };
+    const antes = conTesis();
+    // Antes de la tesis: tarjetas, la tesis y el resto del bloque es práctica del cap. 1 (en pomodoros).
+    expect(antes.t.map((x) => [x.kind, x.title])).toEqual([['tarjetas', '8 tarjetas de Aritmética'], ['tesis', 'Tesis · cap. 1'], ['capitulo', 'Práctica · cap. 1'], ['descanso', 'Descanso'], ['capitulo', 'Práctica · cap. 1']]);
+    expect(unitPhases(antes.st.activities[0], antes.st, d(2))!.map((f) => `${f.name} ${f.when}`)).toEqual(['Estudiar —', 'Test —', 'Tesis cap. 1', 'Repetir 8 → 61']);
+    // Escrita la tesis, el cap. 2 se abre ese mismo día.
+    const item = getState().study.reviews.find((r) => r.kind === 'tesis' && r.unit === 1)!;
+    saveTesis(d(2), item.id, { text: 'Con mis palabras', mode: 'papel', practice: [] }, []);
+    const despues = conTesis();
+    expect(despues.t.find((x) => x.kind === 'capitulo')!.title).toBe('Cap. 2 · Números enteros');
+    expect(unitPhases(despues.st.activities[0], despues.st, d(2))![0].when).toBe('cap. 2');
   });
 
   it('la sesión entra en el bloque y la lista de Estudio suma lo mismo', () => {
@@ -178,7 +177,7 @@ describe('test completo', () => {
     register('Toti', 'Abi', D0);
     completeLearn(D0, 'conamat', 1);
     saveTest(D0, 'conamat', 1, { score: 13, total: 15, errors: { ...ok, concepto: 1, descuido: 1 }, mode: 'papel', wrong: [{ q: 'Calculá |3 − 7|.', a: '4', type: 'concepto' }, { q: 'Calculá |−2| − |5|.', a: '−3', type: 'descuido' }] });
-    const cards = getState().study.cards;
+    const cards = getState().study.cards.filter((c) => c.deck !== MAZO_LLM); // sin el mazo de LLM del registro
     expect(cards.map((c) => [c.front, c.back, c.dueFrom])).toEqual([['Calculá |3 − 7|.', '4', addDays(D0, 1)], ['Calculá |−2| − |5|.', '−3', addDays(D0, 1)]]);
   });
 
@@ -204,5 +203,19 @@ describe('pomodoros y tarjetas', () => {
       { front: 'Sumar con signos distintos', back: 'Se restan los valores absolutos.', kind: 'pregunta' },
       { front: 'Restar un número es sumar su ___.', back: 'opuesto', kind: 'completar' },
     ]);
+  });
+});
+
+describe('v12.1 · dónde entra el estudio en la rutina nueva', () => {
+  it('matemática en el bloque que la ventana pasa a matemática; fuera de una ventana no entra; lo demás, en su bloque', async () => {
+    const { bloqueDeEstudio } = await import('./study');
+    const conamat = { block: 'math', front: 'math' };
+    const ventana = [{ key: 'prog', rama: 'matematica' }, { key: 'prog-tarde', rama: 'matematica' }, { key: 'anki', rama: 'matematica' }];
+    const proyecto = [{ key: 'prog', rama: 'programacion' }, { key: 'anki', rama: 'matematica' }];
+    expect(bloqueDeEstudio(conamat, ventana, true)).toBe('prog');
+    expect(bloqueDeEstudio(conamat, proyecto, true)).toBeNull();
+    expect(bloqueDeEstudio(conamat, proyecto, false)).toBe('math'); // la rutina vieja, como siempre
+    expect(bloqueDeEstudio(conamat, [{ key: 'math', rama: 'matematica' }], true)).toBe('math');
+    expect(bloqueDeEstudio({ block: 'leer', front: 'lectura' }, proyecto, true)).toBe('leer');
   });
 });

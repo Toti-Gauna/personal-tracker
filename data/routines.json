@@ -552,7 +552,7 @@
    ]
   },
   "busqueda-intensiva": {
-   "label": "Lunes a viernes · modo intensivo (roadmap v7)",
+   "label": "Lunes a viernes · plan v12.1",
    "reemplaza": "weekday",
    "modo": "busqueda-intensiva",
    "wake": {
@@ -576,43 +576,25 @@
      ]
     },
     {
-     "id": "math",
-     "label": "Matemática · CONAMAT",
-     "short": "matemática",
-     "start": "04:30",
-     "end": "05:30",
-     "area": "ing",
-     "kind": "flex",
-     "focus": true,
-     "rama": "matematica",
-     "tasks": [
-      "Repaso de tarjetas",
-      "Capítulo del día",
-      "Test del capítulo"
-     ]
-    },
-    {
      "id": "prog",
-     "label": "Proyecto",
-     "short": "programación",
-     "start": "05:30",
-     "end": "08:00",
+     "label": "Bloque 1 · deep focus",
+     "short": "el bloque 1",
+     "start": "04:30",
+     "end": "08:30",
      "area": "ing",
      "kind": "flex",
      "focus": true,
      "rama": "programacion",
      "tasks": [
-      "Estudio de lo del día (20 a 30 min)",
-      "Construir con tests primero",
-      "Commit y nota para la revisión"
+      "Lo del día del bloque activo"
      ]
     },
     {
      "id": "abi",
-     "label": "Correr, ducha y Abi",
+     "label": "Abi + correr",
      "short": "Abi",
-     "start": "08:00",
-     "end": "09:30",
+     "start": "08:30",
+     "end": "10:00",
      "area": "salud",
      "kind": "fixed",
      "focus": false,
@@ -626,8 +608,8 @@
      "id": "trabajo",
      "label": "Trabajo actual",
      "short": "el trabajo",
-     "start": "09:30",
-     "end": "11:30",
+     "start": "10:00",
+     "end": "12:00",
      "area": "economia",
      "kind": "fixed",
      "focus": true,
@@ -637,92 +619,103 @@
     },
     {
      "id": "prog-tarde",
-     "label": "Proyecto",
-     "short": "programación",
-     "start": "11:30",
-     "end": "15:30",
+     "label": "Bloque 2 · deep focus",
+     "short": "el bloque 2",
+     "start": "12:00",
+     "end": "15:45",
      "area": "ing",
      "kind": "fixed",
      "focus": true,
      "rama": "programacion",
      "tasks": [
-      "Construir con tests primero",
-      "Pausa de 5 a 10 min por hora",
-      "Commit y nota para la revisión"
+      "Construir: el lote o el capítulo del día"
      ]
     },
     {
-     "id": "prog-academy",
-     "label": "Proyecto",
-     "short": "proyecto",
-     "start": "15:30",
-     "end": "16:00",
+     "id": "prog-review",
+     "label": "PR review",
+     "short": "pr review",
+     "start": "15:45",
+     "end": "16:40",
      "area": "ing",
      "kind": "fixed",
      "focus": true,
      "rama": "programacion",
      "tasks": [
-      "Seguir con el bloque de la tarde"
+      "Revisar los PRs del día"
      ]
     },
     {
      "id": "ingles",
-     "label": "Inglés",
-     "short": "inglés",
-     "start": "16:00",
-     "end": "16:30",
+     "label": "2-min English + learning.md",
+     "short": "2-min english + learning.md",
+     "start": "16:40",
+     "end": "16:55",
      "area": "ing",
      "kind": "fixed",
      "focus": true,
      "rama": "ingles",
      "tasks": [
-      "Explicar un proyecto en voz alta (inglés técnico)",
-      "Práctica de código en vivo en inglés",
-      "Preguntas de entrevista en inglés"
+      "Explicar en inglés en 2 minutos lo que hiciste",
+      "Anotar en learning.md"
      ]
     },
     {
-     "id": "ingles-hablado",
-     "label": "Inglés hablado",
-     "short": "inglés hablado",
-     "start": "16:30",
-     "end": "17:00",
+     "id": "recall",
+     "label": "Trazo recall (incl. 20 LLM concepts)",
+     "short": "trazo recall (incl. 20 llm concepts)",
+     "start": "16:55",
+     "end": "17:15",
+     "area": "rutina",
+     "kind": "fixed",
+     "focus": true,
+     "rama": "main",
+     "tasks": [
+      "Cold recall y active recall de lo que pasó la tesis",
+      "Tarjetas vencidas",
+      "20 LLM concepts (~5 min)"
+     ]
+    },
+    {
+     "id": "anki",
+     "label": "Anki",
+     "short": "anki",
+     "start": "17:15",
+     "end": "17:30",
      "area": "ing",
      "kind": "fixed",
      "focus": true,
-     "rama": "ingles",
+     "rama": "matematica",
      "tasks": [
-      "Explicar en inglés lo que construiste hoy",
-      "Grabarte y escucharte"
+      "Mazo de matemática del libro en curso"
      ]
     },
     {
      "id": "busqueda",
-     "label": "Postulaciones y mensajes",
-     "short": "la búsqueda",
-     "start": "17:00",
-     "end": "17:40",
+     "label": "Posts / applications",
+     "short": "posts / applications",
+     "start": "17:30",
+     "end": "17:45",
      "area": "rutina",
      "kind": "fixed",
      "focus": true,
      "rama": "trabajo",
      "tasks": [
-      "5 postulaciones a medida",
-      "5 mensajes directos"
+      "Postulaciones o mensajes"
      ]
     },
     {
-     "id": "publicaciones",
-     "label": "Publicaciones",
-     "short": "las publicaciones",
-     "start": "17:40",
+     "id": "leer",
+     "label": "Read tomorrow's lesson",
+     "short": "read tomorrow's lesson",
+     "start": "17:45",
      "end": "18:00",
      "area": "rutina",
      "kind": "fixed",
      "focus": true,
-     "rama": "trabajo",
+     "rama": "main",
      "tasks": [
-      "Publicación de lo que construiste (español e inglés)"
+      "Leer la lección de mañana"
      ]
     },
     {
@@ -743,7 +736,7 @@
     },
     {
      "id": "cierre",
-     "label": "Descanso final · recall en frío",
+     "label": "Descanso",
      "short": "el descanso",
      "start": "20:00",
      "end": "21:00",
@@ -775,7 +768,7 @@
    ]
   },
   "busqueda-intensiva-finde": {
-   "label": "Sábado · modo intensivo (roadmap v7)",
+   "label": "Sábado · plan v12.1",
    "reemplaza": "weekend",
    "modo": "busqueda-intensiva",
    "wake": {
@@ -799,125 +792,162 @@
      ]
     },
     {
-     "id": "math",
-     "label": "Matemática · CONAMAT",
-     "short": "matemática",
-     "start": "04:30",
-     "end": "05:30",
-     "area": "ing",
-     "kind": "flex",
-     "focus": true,
-     "rama": "matematica",
-     "tasks": [
-      "Repaso de tarjetas",
-      "Capítulo del día",
-      "Test del capítulo"
-     ]
-    },
-    {
      "id": "prog",
-     "label": "Proyecto",
-     "short": "programación",
-     "start": "05:30",
-     "end": "09:00",
+     "label": "Bloque 1 · deep focus",
+     "short": "el bloque 1",
+     "start": "04:30",
+     "end": "08:30",
      "area": "ing",
      "kind": "flex",
      "focus": true,
      "rama": "programacion",
      "tasks": [
-      "Estudio de lo del día (20 a 30 min)",
-      "Construir con tests primero",
-      "Commit y nota para la revisión"
+      "Lo del día del bloque activo"
      ]
     },
     {
-     "id": "pausa",
-     "label": "Pausa",
-     "short": "la pausa",
-     "start": "09:00",
-     "end": "09:30",
-     "area": "rutina",
+     "id": "abi",
+     "label": "Abi + correr",
+     "short": "Abi",
+     "start": "08:30",
+     "end": "10:00",
+     "area": "salud",
      "kind": "fixed",
      "focus": false,
-     "meta": false,
-     "rama": "main",
-     "tasks": []
+     "rama": "salud",
+     "tasks": [
+      "Correr y ducha",
+      "Audio de recall pasivo"
+     ]
     },
     {
      "id": "prog-2",
-     "label": "Proyecto",
-     "short": "programación",
-     "start": "09:30",
-     "end": "13:00",
+     "label": "Bloque 2 · deep focus",
+     "short": "el bloque 2",
+     "start": "10:00",
+     "end": "13:30",
      "area": "ing",
      "kind": "fixed",
      "focus": true,
      "rama": "programacion",
      "tasks": [
-      "Construir con tests primero",
-      "Pausa de 5 a 10 min por hora",
-      "Commit y nota para la revisión"
+      "Construir: el lote o el capítulo del día"
      ]
     },
     {
-     "id": "demo",
-     "label": "Demo de la semana",
-     "short": "la demo",
-     "start": "13:00",
-     "end": "14:00",
-     "area": "rutina",
+     "id": "prog-review",
+     "label": "PR review",
+     "short": "pr review",
+     "start": "13:30",
+     "end": "14:25",
+     "area": "ing",
      "kind": "fixed",
      "focus": true,
-     "rama": "trabajo",
+     "rama": "programacion",
      "tasks": [
-      "Grabar la demo de lo que salió esta semana (30 s)"
-     ]
-    },
-    {
-     "id": "simulada",
-     "label": "Entrevista simulada",
-     "short": "la entrevista simulada",
-     "start": "14:00",
-     "end": "15:00",
-     "area": "rutina",
-     "kind": "fixed",
-     "focus": true,
-     "rama": "trabajo",
-     "tasks": [
-      "Entrevista simulada completa",
-      "Anotar qué mejorar"
+      "Revisar los PRs del día"
      ]
     },
     {
      "id": "ingles",
-     "label": "Inglés",
-     "short": "inglés",
-     "start": "15:00",
-     "end": "16:00",
+     "label": "2-min English + learning.md",
+     "short": "2-min english + learning.md",
+     "start": "14:25",
+     "end": "14:40",
      "area": "ing",
      "kind": "fixed",
      "focus": true,
      "rama": "ingles",
      "tasks": [
-      "Explicar un proyecto en voz alta (inglés técnico)",
-      "Práctica de código en vivo en inglés",
-      "Preguntas de entrevista en inglés"
+      "Explicar en inglés en 2 minutos lo que hiciste",
+      "Anotar en learning.md"
+     ]
+    },
+    {
+     "id": "recall",
+     "label": "Trazo recall (incl. 20 LLM concepts)",
+     "short": "trazo recall (incl. 20 llm concepts)",
+     "start": "14:40",
+     "end": "15:00",
+     "area": "rutina",
+     "kind": "fixed",
+     "focus": true,
+     "rama": "main",
+     "tasks": [
+      "Cold recall y active recall de lo que pasó la tesis",
+      "Tarjetas vencidas",
+      "20 LLM concepts (~5 min)"
+     ]
+    },
+    {
+     "id": "anki",
+     "label": "Anki",
+     "short": "anki",
+     "start": "15:00",
+     "end": "15:15",
+     "area": "ing",
+     "kind": "fixed",
+     "focus": true,
+     "rama": "matematica",
+     "tasks": [
+      "Mazo de matemática del libro en curso"
+     ]
+    },
+    {
+     "id": "busqueda",
+     "label": "Posts / applications",
+     "short": "posts / applications",
+     "start": "15:15",
+     "end": "15:30",
+     "area": "rutina",
+     "kind": "fixed",
+     "focus": true,
+     "rama": "trabajo",
+     "tasks": [
+      "Postulaciones o mensajes"
+     ]
+    },
+    {
+     "id": "leer",
+     "label": "Read tomorrow's lesson",
+     "short": "read tomorrow's lesson",
+     "start": "15:30",
+     "end": "15:45",
+     "area": "rutina",
+     "kind": "fixed",
+     "focus": true,
+     "rama": "main",
+     "tasks": [
+      "Leer la lección de mañana"
+     ]
+    },
+    {
+     "id": "demo",
+     "label": "Weekly demo + mock interview",
+     "short": "weekly demo + mock interview",
+     "start": "15:45",
+     "end": "17:00",
+     "area": "rutina",
+     "kind": "fixed",
+     "focus": true,
+     "rama": "trabajo",
+     "tasks": [
+      "Demo de la semana (30 s)",
+      "Entrevista simulada"
      ]
     },
     {
      "id": "cierre",
-     "label": "Libre · recall en frío",
+     "label": "Libre",
      "short": "el descanso",
-     "start": "16:00",
+     "start": "17:00",
      "end": "21:00",
      "area": "rutina",
      "kind": "fixed",
      "focus": false,
      "rama": "main",
      "tasks": [
-      "Familia o amigos (sin entrenamiento)",
-      "Recall en frío (20 min): lo construido hoy",
-      "Cerrar el día en 5 min"
+      "Libre"
      ]
     },
     {
@@ -1067,7 +1097,7 @@
    ]
   },
   "busqueda-intensiva-domingo": {
-   "label": "Domingo · modo intensivo (roadmap v7)",
+   "label": "Domingo · plan v12.1",
    "reemplaza": "weekend",
    "modo": "busqueda-intensiva",
    "soloDias": [
@@ -1094,112 +1124,165 @@
      ]
     },
     {
-     "id": "math",
-     "label": "Matemática · CONAMAT",
-     "short": "matemática",
-     "start": "04:30",
-     "end": "05:30",
-     "area": "ing",
-     "kind": "flex",
-     "focus": true,
-     "rama": "matematica",
-     "tasks": [
-      "Repaso de tarjetas",
-      "Capítulo del día",
-      "Test del capítulo"
-     ]
-    },
-    {
      "id": "prog",
-     "label": "Proyecto",
-     "short": "programación",
-     "start": "05:30",
-     "end": "09:00",
+     "label": "Bloque 1 · deep focus",
+     "short": "el bloque 1",
+     "start": "04:30",
+     "end": "08:30",
      "area": "ing",
      "kind": "flex",
      "focus": true,
      "rama": "programacion",
      "tasks": [
-      "Estudio de lo del día (20 a 30 min)",
-      "Construir con tests primero",
-      "Commit y nota para la revisión"
+      "Lo del día del bloque activo"
      ]
     },
     {
-     "id": "pausa",
-     "label": "Pausa",
-     "short": "la pausa",
-     "start": "09:00",
-     "end": "09:30",
-     "area": "rutina",
+     "id": "abi",
+     "label": "Abi + correr",
+     "short": "Abi",
+     "start": "08:30",
+     "end": "10:00",
+     "area": "salud",
      "kind": "fixed",
      "focus": false,
-     "meta": false,
-     "rama": "main",
-     "tasks": []
+     "rama": "salud",
+     "tasks": [
+      "Correr y ducha",
+      "Audio de recall pasivo"
+     ]
     },
     {
      "id": "prog-2",
-     "label": "Proyecto con PRs de open source",
-     "short": "programación",
-     "start": "09:30",
-     "end": "14:00",
+     "label": "Bloque 2 · deep focus",
+     "short": "el bloque 2",
+     "start": "10:00",
+     "end": "13:30",
      "area": "ing",
      "kind": "fixed",
      "focus": true,
      "rama": "programacion",
      "tasks": [
-      "PR de open source (1 a 2 por mes)",
-      "Construir con tests primero",
-      "Commit y push"
+      "Construir: el lote o el capítulo del día"
      ]
     },
     {
-     "id": "revision",
-     "label": "Revisión semanal",
-     "short": "la revisión semanal",
-     "start": "14:00",
+     "id": "prog-review",
+     "label": "PR review",
+     "short": "pr review",
+     "start": "13:30",
+     "end": "14:25",
+     "area": "ing",
+     "kind": "fixed",
+     "focus": true,
+     "rama": "programacion",
+     "tasks": [
+      "Revisar los PRs del día"
+     ]
+    },
+    {
+     "id": "ingles",
+     "label": "2-min English + learning.md",
+     "short": "2-min english + learning.md",
+     "start": "14:25",
+     "end": "14:40",
+     "area": "ing",
+     "kind": "fixed",
+     "focus": true,
+     "rama": "ingles",
+     "tasks": [
+      "Explicar en inglés en 2 minutos lo que hiciste",
+      "Anotar en learning.md"
+     ]
+    },
+    {
+     "id": "recall",
+     "label": "Trazo recall (incl. 20 LLM concepts)",
+     "short": "trazo recall (incl. 20 llm concepts)",
+     "start": "14:40",
      "end": "15:00",
      "area": "rutina",
      "kind": "fixed",
      "focus": true,
      "rama": "main",
      "tasks": [
-      "Trazo: la semana y la que viene",
-      "learning.md, english.md y hours.md (repo privado)",
-      "El plan: diferencia contra el roadmap"
+      "Cold recall y active recall de lo que pasó la tesis",
+      "Tarjetas vencidas",
+      "20 LLM concepts (~5 min)"
      ]
     },
     {
-     "id": "ingles",
-     "label": "Inglés",
-     "short": "inglés",
+     "id": "anki",
+     "label": "Anki",
+     "short": "anki",
      "start": "15:00",
-     "end": "16:00",
+     "end": "15:15",
      "area": "ing",
      "kind": "fixed",
      "focus": true,
-     "rama": "ingles",
+     "rama": "matematica",
      "tasks": [
-      "Explicar un proyecto en voz alta (inglés técnico)",
-      "Práctica de código en vivo en inglés",
-      "Preguntas de entrevista en inglés"
+      "Mazo de matemática del libro en curso"
+     ]
+    },
+    {
+     "id": "busqueda",
+     "label": "Posts / applications",
+     "short": "posts / applications",
+     "start": "15:15",
+     "end": "15:30",
+     "area": "rutina",
+     "kind": "fixed",
+     "focus": true,
+     "rama": "trabajo",
+     "tasks": [
+      "Postulaciones o mensajes"
+     ]
+    },
+    {
+     "id": "leer",
+     "label": "Read tomorrow's lesson",
+     "short": "read tomorrow's lesson",
+     "start": "15:30",
+     "end": "15:45",
+     "area": "rutina",
+     "kind": "fixed",
+     "focus": true,
+     "rama": "main",
+     "tasks": [
+      "Leer la lección de mañana"
+     ]
+    },
+    {
+     "id": "revision",
+     "label": "Weekly review",
+     "short": "weekly review",
+     "start": "15:45",
+     "end": "17:00",
+     "area": "rutina",
+     "kind": "fixed",
+     "focus": true,
+     "rama": "main",
+     "tasks": [
+      "Horas",
+      "Comprehension debt",
+      "english.md",
+      "Reservas de exámenes",
+      "Uso de Claude"
      ]
     },
     {
      "id": "cierre",
-     "label": "Libre · recall en frío",
+     "label": "Libre",
      "short": "el descanso",
-     "start": "16:00",
+     "start": "17:00",
      "end": "21:00",
      "area": "rutina",
      "kind": "fixed",
      "focus": false,
      "rama": "main",
      "tasks": [
-      "Familia o amigos (sin entrenamiento)",
-      "Recall en frío (20 min): lo construido hoy",
-      "Cerrar el día en 5 min"
+      "Libre"
      ]
     },
     {

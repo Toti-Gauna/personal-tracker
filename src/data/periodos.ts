@@ -1,0 +1,196 @@
+/**
+ * v12.1 · las metas como períodos. Cada nodo del plan (etapa › fase › bloque › versión | lote | capítulo | paper | cert | hito) es un
+ * período con inicio y fin: la barra de tiempo dice cuánto del período ya pasó y la de trabajo cuánto está hecho (ponderado por los
+ * hijos). El estado sale de comparar las dos. Puro: las fechas son claves locales (America/Argentina/Buenos_Aires) 'YYYY-MM-DD'.
+ *
+ * Pesos (respuesta 5): versiones por días, certificaciones por horas de estudio, hitos de matemática por días, lotes por horas,
+ * semanas de inglés y de búsqueda por días. Lo que no dice nada pesa por días.
+ */
+import { addDays, daysBetween } from './time';
+
+export type NivelPeriodo = 'etapa' | 'fase' | 'bloque' | 'version' | 'lote' | 'capitulo' | 'paper' | 'cert' | 'hito';
+export type EstadoPeriodo = 'proximo' | 'en-plan' | 'adelantado' | 'atrasado' | 'vencido' | 'hecho';
+
+export interface Periodo {
+  id: string;
+  nombre: string;
+  nivel: NivelPeriodo;
+  inicio: string;
+  /** El fin planificado (en un proyecto, el estimado). El tiempo se mide contra este fin. */
+  fin: string;
+  /** Fecha límite, si es distinta del fin: recién después de ella el período está vencido. */
+  deadline?: string;
+  /** Peso entre sus hermanos; sin peso, los días del período. */
+  peso?: number;
+  /** Solo en las hojas: cuánto está hecho (0 a 1). */
+  progreso?: number;
+  horasPlan?: number;
+  horasReal?: number;
+  /** No se corre nunca (la pausa de diciembre, un examen reservado). */
+  fija?: boolean;
+  aConfirmar?: boolean;
+  hijos?: Periodo[];
+}
+
+export interface PeriodoMedido extends Omit<Periodo, 'hijos'> {
+  /** Parte del tiempo que ya pasó (0 a 1), al empezar el día de hoy. */
+  tiempo: number;
+  /** Parte del trabajo hecha (0 a 1). */
+  trabajo: number;
+  estado: EstadoPeriodo;
+  /** Posiciones (0 a 1) sobre la barra, que va del inicio a max(fin, deadline). */
+  marcas: { hoy: number; estimado?: number; deadline?: number };
+  hijos?: PeriodoMedido[];
+}
+
+/** Diferencia (en puntos, 0 a 1) entre trabajo y tiempo que todavía cuenta como "en plan". */
+export const TOLERANCIA = 0.1;
+
+const r3 = (x: number) => Math.round(x * 1000) / 1000;
+const clamp = (x: number) => Math.max(0, Math.min(1, x));
+/** Días del período, contando el primero y el último. */
+export const diasDe = (p: { inicio: string; fin: string }) => daysBetween(p.inicio, p.fin) + 1;
+
+/** Cuánto del período pasó al empezar `hoy`: 0 el primer día, 1 el día después del fin. */
+export function tiempoTranscurrido(p: { inicio: string; fin: string }, hoy: string): number {
+  if (hoy <= p.inicio) return 0;
+  if (hoy > p.fin) return 1;
+  return r3(daysBetween(p.inicio, hoy) / diasDe(p));
+}
+
+export function estadoDe(tiempo: number, trabajo: number, p: { inicio: string; fin: string; deadline?: string }, hoy: string): EstadoPeriodo {
+  if (trabajo >= 1 - 1e-9) return 'hecho';
+  if (hoy < p.inicio) return 'proximo';
+  if (hoy > (p.deadline && p.deadline > p.fin ? p.deadline : p.fin)) return 'vencido';
+  if (hoy > p.fin) return 'atrasado'; // pasó el estimado y falta trabajo, aunque la fecha límite siga en pie
+  if (trabajo > tiempo + TOLERANCIA) return 'adelantado';
+  if (trabajo < tiempo - TOLERANCIA) return 'atrasado';
+  return 'en-plan';
+}
+
+const pesoDe = (p: Periodo) => p.peso ?? diasDe(p);
+
+/** Mide un período y todos sus hijos. El trabajo de un padre es el promedio de sus hijos ponderado por peso. */
+export function medir(p: Periodo, hoy: string): PeriodoMedido {
+  const hijos = p.hijos?.map((h) => medir(h, hoy));
+  let trabajo: number;
+  if (hijos?.length) {
+    const total = p.hijos!.reduce((s, h) => s + pesoDe(h), 0);
+    trabajo = total > 0 ? hijos.reduce((s, h, i) => s + h.trabajo * pesoDe(p.hijos![i]), 0) / total : 0;
+    // Una hoja marcada como hecha arriba (p. ej. la versión publicada) manda sobre sus lotes.
+    if (p.progreso != null) trabajo = Math.max(trabajo, p.progreso);
+  } else trabajo = p.progreso ?? 0;
+  trabajo = r3(clamp(trabajo));
+  const tiempo = tiempoTranscurrido(p, hoy);
+  const fin = p.deadline && p.deadline > p.fin ? p.deadline : p.fin;
+  const largo = daysBetween(p.inicio, fin) + 1;
+  const pos = (d: string) => r3(clamp((daysBetween(p.inicio, d) + 1) / largo));
+  const suma = (k: 'horasPlan' | 'horasReal') => (p[k] != null ? p[k] : hijos?.some((h) => h[k] != null) ? r3(hijos.reduce((s, h) => s + (h[k] ?? 0), 0)) : undefined);
+  const horasPlan = suma('horasPlan');
+  const horasReal = suma('horasReal');
+  const { hijos: _h, ...resto } = p;
+  void _h;
+  return {
+    ...resto,
+    ...(horasPlan != null ? { horasPlan } : {}),
+    ...(horasReal != null ? { horasReal } : {}),
+    tiempo, trabajo,
+    estado: estadoDe(tiempo, trabajo, p, hoy),
+    marcas: {
+      hoy: r3(clamp(daysBetween(p.inicio, hoy) / largo)),
+      ...(p.deadline && p.deadline !== p.fin ? { estimado: pos(p.fin), deadline: pos(p.deadline) } : {}),
+    },
+    ...(hijos ? { hijos } : {}),
+  };
+}
+
+/** Los períodos en curso hoy, del más grande al más chico, siguiendo el primer hijo activo ("Fase 1 › PetrIA › v1.0 › lote 1.3"). */
+export function activoAhora(raices: PeriodoMedido[], hoy: string): PeriodoMedido[] {
+  const enCurso = (p: PeriodoMedido) => p.inicio <= hoy && hoy <= (p.deadline && p.deadline > p.fin ? p.deadline : p.fin) && p.estado !== 'hecho';
+  const out: PeriodoMedido[] = [];
+  let nivel = raices;
+  for (;;) {
+    // Primero lo que está dentro de su fin estimado; si nada, lo que sigue abierto hasta su deadline.
+    const x = nivel.find((p) => enCurso(p) && hoy <= p.fin) ?? nivel.find(enCurso);
+    if (!x) break;
+    out.push(x);
+    if (!x.hijos?.length) break;
+    nivel = x.hijos;
+  }
+  return out;
+}
+
+/** Recorre el árbol (pre-orden). */
+export function* recorrer<T extends { hijos?: T[] }>(ps: T[]): Generator<T> {
+  for (const p of ps) { yield p; if (p.hijos) yield* recorrer(p.hijos); }
+}
+
+/** Lo que vence hoy (fin o deadline) y no está hecho. */
+export const vencenHoy = (raices: PeriodoMedido[], hoy: string) =>
+  [...recorrer(raices)].filter((p) => p.estado !== 'hecho' && (p.fin === hoy || p.deadline === hoy) && p.inicio <= hoy);
+
+/** La próxima fecha límite después de hoy (deadline o, si no hay, fin) de lo que no está hecho, en el nivel pedido o en todos. */
+export function proximaFechaLimite(raices: PeriodoMedido[], hoy: string, niveles?: NivelPeriodo[]): { periodo: PeriodoMedido; fecha: string } | null {
+  let mejor: { periodo: PeriodoMedido; fecha: string } | null = null;
+  for (const p of recorrer(raices)) {
+    if (p.estado === 'hecho' || (niveles && !niveles.includes(p.nivel))) continue;
+    const f = p.deadline ?? p.fin;
+    if (f > hoy && (!mejor || f < mejor.fecha)) mejor = { periodo: p, fecha: f };
+  }
+  return mejor;
+}
+
+/**
+ * Cuándo terminaría un período que va atrasado si lo que falta sigue al ritmo planificado: lo que falta (1 − trabajo) por los días
+ * del período, contado desde hoy. Nunca antes del fin planificado.
+ */
+export function finProyectado(p: Pick<PeriodoMedido, 'inicio' | 'fin' | 'trabajo'>, hoy: string): string {
+  if (p.trabajo >= 1) return p.fin;
+  const faltan = Math.max(1, Math.ceil((1 - p.trabajo) * diasDe(p) - 1e-9));
+  const desde = hoy > p.inicio ? hoy : p.inicio;
+  const fin = addDays(desde, faltan - 1);
+  return fin > p.fin ? fin : p.fin;
+}
+
+export interface Tramo { id: string; nombre?: string; inicio: string; fin: string; fija?: boolean }
+export interface Corrimiento { id: string; nombre?: string; inicio: string; fin: string; nuevoInicio: string; nuevoFin: string; dias: number }
+
+/**
+ * La sugerencia de correr lo que sigue cuando un bloque se atrasa: el atrasado termina en `nuevoFin` y los siguientes de la secuencia
+ * se corren los mismos días, manteniendo sus días hábiles. Las fechas fijas (la pausa de diciembre, los exámenes reservados, los tramos
+ * con `fija`) no se mueven y no son hábiles: un bloque corrido las saltea y termina más tarde, y eso se suma a los que vienen. Solo
+ * sugiere: no cambia nada hasta que lo confirmes.
+ */
+export function sugerirCorrimiento(secuencia: Tramo[], atrasadoId: string, nuevoFin: string, fijas: { inicio: string; fin: string }[] = []): Corrimiento[] {
+  const i = secuencia.findIndex((t) => t.id === atrasadoId);
+  if (i < 0) return [];
+  const a = secuencia[i];
+  if (nuevoFin <= a.fin) return [];
+  const bloqueos = [...fijas, ...secuencia.filter((t) => t.fija)].sort((x, y) => (x.inicio < y.inicio ? -1 : 1));
+  const bloqueado = (d: string) => bloqueos.some((x) => d >= x.inicio && d <= x.fin);
+  // Los días que le faltan al atrasado tampoco caen en fechas fijas.
+  let finA = a.fin;
+  for (let c = 0, n = daysBetween(a.fin, nuevoFin); c < n; ) { finA = addDays(finA, 1); if (!bloqueado(finA)) c++; }
+  nuevoFin = finA;
+  const out: Corrimiento[] = [{ id: a.id, nombre: a.nombre, inicio: a.inicio, fin: a.fin, nuevoInicio: a.inicio, nuevoFin, dias: daysBetween(a.fin, nuevoFin) }];
+  let libre = addDays(nuevoFin, 1); // el primer día que puede usar el que sigue
+  for (const t of secuencia.slice(i + 1)) {
+    if (t.fija) continue;
+    // El largo en días hábiles: los días fijos que ya tenía adentro no se cuentan dos veces.
+    let n = 0;
+    for (let d = t.inicio; d <= t.fin; d = addDays(d, 1)) if (!bloqueado(d)) n++;
+    n = Math.max(1, n);
+    let ini = t.inicio > libre ? t.inicio : libre;
+    while (bloqueado(ini)) ini = addDays(ini, 1);
+    if (ini === t.inicio) break; // ya no lo alcanza el corrimiento, ni a los que siguen
+    let fin = ini;
+    for (let c = 1; c < n; ) { fin = addDays(fin, 1); if (!bloqueado(fin)) c++; }
+    out.push({ id: t.id, nombre: t.nombre, inicio: t.inicio, fin: t.fin, nuevoInicio: ini, nuevoFin: fin, dias: daysBetween(t.inicio, ini) });
+    libre = addDays(fin, 1);
+  }
+  return out;
+}
+
+/** Aplica los corrimientos confirmados (id → fechas nuevas) a una secuencia; lo demás queda igual. */
+export const aplicarCorrimientos = <T extends Tramo>(secuencia: T[], confirmados: Record<string, { inicio: string; fin: string }> | undefined): T[] =>
+  confirmados ? secuencia.map((t) => (confirmados[t.id] && !t.fija ? { ...t, inicio: confirmados[t.id].inicio, fin: confirmados[t.id].fin } : t)) : secuencia;

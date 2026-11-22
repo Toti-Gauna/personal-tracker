@@ -22,6 +22,10 @@ import { Calibracion } from './Calibracion';
 import { Diferencia } from './Diferencia';
 import { Revision } from './Revision';
 import { Compras } from './Compras';
+import { Periodos } from './Periodos';
+import { Linea } from './Linea';
+import { CertPagina } from './CertPagina';
+import { VentanaPagina } from './VentanaPagina';
 import '../styles/metas.css';
 
 const TABS = [['ruta', 'Ruta'], ['semana', 'Semana'], ['mes', 'Mes'], ['bimestre', 'Bim.'], ['anio', 'Año']] as const;
@@ -41,6 +45,11 @@ export function Metas({ day, tab }: { day: DayLog; tab?: string }) {
   if (tab === 'diferencia') return <Diferencia day={day} />;
   if (tab === 'revision') return <Revision day={day} />;
   if (tab === 'compras') return <Compras day={day} />;
+  // v12.1: las metas como períodos, la línea de tiempo, las certificaciones y las ventanas de matemática.
+  if (tab === 'periodos' || tab?.startsWith('periodos/')) return <Periodos key={tab} day={day} id={tab.includes('/') ? decodeURIComponent(tab.slice(tab.indexOf('/') + 1)) : undefined} />;
+  if (tab === 'linea') return <Linea day={day} />;
+  if (tab?.startsWith('cert/')) return <CertPagina key={tab} day={day} id={tab.slice(5)} />;
+  if (tab?.startsWith('ventana/')) return <VentanaPagina key={tab} day={day} id={tab.slice(8)} />;
   if (tab === 'evolucion') return <RutaEvolucion day={day} />;
   if (tab === 'sprint') return <SprintBusqueda day={day} />;
   if (tab === 'impacto') return <RutaImpacto day={day} />;

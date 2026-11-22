@@ -1,5 +1,6 @@
 import { fireEvent, render, screen, within } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
+import { setPlanSettings } from '../state/plan';
 import { getState, register, resetState, startDay } from '../state/store';
 import { completeReview, saveTest, seguirEstudiando, terminarEstudio, tramoDone, volverAEstudiar } from '../state/study';
 import { marcarTarea } from '../ui/acciones';
@@ -42,7 +43,8 @@ describe('ola 28 · el capítulo no avanza solo', () => {
     terminarEstudio(D, 'conamat', 1);
     expect(est(1)).toMatchObject({ estado: 'test', etiqueta: 'test mañana' });
     expect(getState().study.reviews.map((r) => [r.kind, r.unit, r.due])).toEqual([['cold', 1, '2026-11-19']]);
-    expect(focusUnit(act(), getState().study, '2026-11-19')!.n).toBe(2);
+    // v12.1: el cap. 2 no se abre hasta que el 1 pase por test y tesis.
+    expect(focusUnit(act(), getState().study, '2026-11-19')).toBeUndefined();
     expect(volverAEstudiar('conamat', 1)).toBe(true);
     expect(est(1).estado).toBe('estudiando');
     expect(getState().study.reviews).toHaveLength(0);
@@ -92,6 +94,8 @@ describe('ola 28 · el capítulo no avanza solo', () => {
 
 describe('ola 28 · ¿en qué estado estás?', () => {
   it('al cerrar la meta de matemática en Hoy se abre la hoja, y desde ahí se marca el capítulo', () => {
+    // v12.1 no tiene bloque diario de matemática (m1–m4 archivados): se prueba con la rutina anterior, que sí lo tiene.
+    setPlanSettings({ modo: null });
     startDay('completo', '04:00', D);
     const b = getState().days[D].blocks.find((x) => x.key === 'math')!;
     for (const t of b.tasks) marcarTarea(D, 'math', t.id);

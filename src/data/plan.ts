@@ -270,6 +270,8 @@ export interface CfgHoras extends CfgCapacidad {
   /** Factor real/estimado (calibración en P2 y P3) y bloques ya cerrados. */
   factor?: number;
   cerrados?: string[];
+  /** v12.1: corrimientos confirmados (id → fechas nuevas). */
+  corrimientos?: Record<string, { inicio: string; fin: string }>;
 }
 export let CFG_HORAS: CfgHoras = { t0: PLAN.t0, inicioTrabajo: addDays(PLAN.t0, INICIO_TRABAJO_DIAS) };
 /** Horas de programación del día con la rutina y los registros con que se armó el calendario. */
@@ -290,6 +292,7 @@ export function calendarioVivo(t0?: string, o: { factor?: number | null; cerrado
   const cfg = { ...CFG_HORAS, t0: tt, inicioTrabajo: addDays(CFG_HORAS.inicioTrabajo, dias(CFG_HORAS.t0, tt)), pausas: PAUSAS };
   return calendario(PLAN_EXT, {
     ...opcionesDe(EXTRAS_APAGADOS, PAUSAS, tt),
+    ...(CFG_HORAS.corrimientos ? { corrimientos: CFG_HORAS.corrimientos } : {}),
     horas: { capacidad: (f) => horasDelDia(f, cfg), horasSemana: HORAS_SEMANA_PLAN, ...(factor ? { factor } : {}), ...(cerrados ? { cerrados } : {}) },
   });
 }
@@ -341,9 +344,9 @@ function progAuto(desde: number, hasta: number) {
  */
 export function aplicarCalendario(apagados: readonly string[] = [], pausas = true, horas: Partial<CfgHoras> = {}) {
   const t0 = horas.t0 ?? PLAN.t0;
-  CFG_HORAS = { t0, inicioTrabajo: horas.inicioTrabajo ?? addDays(t0, INICIO_TRABAJO_DIAS), ...(horas.reales ? { reales: horas.reales } : {}), ...(horas.hoy ? { hoy: horas.hoy } : {}), ...(horas.factor ? { factor: horas.factor } : {}), ...(horas.cerrados ? { cerrados: horas.cerrados } : {}) };
+  CFG_HORAS = { t0, inicioTrabajo: horas.inicioTrabajo ?? addDays(t0, INICIO_TRABAJO_DIAS), ...(horas.reales ? { reales: horas.reales } : {}), ...(horas.hoy ? { hoy: horas.hoy } : {}), ...(horas.factor ? { factor: horas.factor } : {}), ...(horas.cerrados ? { cerrados: horas.cerrados } : {}), ...(horas.corrimientos && Object.keys(horas.corrimientos).length ? { corrimientos: horas.corrimientos } : {}) };
   PAUSAS = pausas;
-  const cal = calendario(PLAN_EXT, { ...opcionesDe(apagados, pausas, t0), horas: { capacidad: capacidadDelDia, horasSemana: HORAS_SEMANA_PLAN, ...(CFG_HORAS.factor ? { factor: CFG_HORAS.factor } : {}), ...(CFG_HORAS.cerrados ? { cerrados: CFG_HORAS.cerrados } : {}) } }).filter((b) => b.etapa <= 2);
+  const cal = calendario(PLAN_EXT, { ...opcionesDe(apagados, pausas, t0), ...(CFG_HORAS.corrimientos ? { corrimientos: CFG_HORAS.corrimientos } : {}), horas: { capacidad: capacidadDelDia, horasSemana: HORAS_SEMANA_PLAN, ...(CFG_HORAS.factor ? { factor: CFG_HORAS.factor } : {}), ...(CFG_HORAS.cerrados ? { cerrados: CFG_HORAS.cerrados } : {}) } }).filter((b) => b.etapa <= 2);
   TRAMOS = cal.map((b) => {
     const base = BASE_TRAMOS.find((t) => t.id === b.id || t.id === ALIAS[b.id]);
     const tipo = b.tipo as TipoTramo;
@@ -528,7 +531,10 @@ export const tramoMatematica = (fecha: string, t0 = T0_PLAN) => {
   const f = addDays(fecha, -dias(CFG_HORAS.t0, t0));
   const ts = PLAN.matematica.tramos;
   const dentro = (m: TramoMate) => !!m.inicio && !!m.fin && f >= m.inicio && f <= m.fin;
-  return ts.find((m) => /^W/.test(m.id) && dentro(m)) ?? ts.find((m) => /^m/.test(m.id) && dentro(m)) ?? (f < (ts[0].inicio ?? '') ? ts[0] : ts.filter((m) => /^m/.test(m.id)).pop()!);
+  // v12.1: sin tramos diarios (m1–m4 archivados), fuera de una ventana toca la próxima (o la última, después de todas).
+  const diarios = ts.filter((m) => /^m/.test(m.id));
+  return ts.find((m) => /^W/.test(m.id) && dentro(m)) ?? ts.find((m) => /^m/.test(m.id) && dentro(m))
+    ?? (f < (ts[0].inicio ?? '') ? ts[0] : diarios.length ? diarios[diarios.length - 1] : ts.find((m) => (m.inicio ?? '') > f) ?? ts[ts.length - 1]);
 };
 export const faseTrabajo = (fecha: string, t0 = T0_PLAN) => enRango(PLAN.trabajo.fases, Math.max(1, Math.min(SEMANAS, semanaDelPlan(fecha, t0))));
 export const faseIngles = (fecha: string, t0 = T0_PLAN) => enRango(PLAN.ingles.fases, Math.max(1, Math.min(SEMANAS, semanaDelPlan(fecha, t0))));
@@ -640,7 +646,7 @@ export function etapas(fecha: string, t0 = T0_PLAN): Etapa[] {
   };
   const mate: Etapa = {
     rama: 'matematica',
-    titulo: w.ahora ? `${w.ahora.id} · ${w.ahora.que}` : m.libros.join(' y '),
+    titulo: w.ahora ? `${w.ahora.id} · ${w.ahora.que}` : (m.libros ?? []).join(' y ') || m.id,
     sub: w.prox ? `${w.prox.id} (${w.prox.que.toLowerCase()}) el ${fmtCorta(inicioDe(w.prox, t0))}` : `Habilita: ${m.habilita}`,
     lado: `B${b.n} · ${PLAN.metasBimestre.matematica[b.n - 1]}`,
     avance: m.inicio && m.fin ? Math.max(0.01, Math.min(1, (dias(m.inicio, addDays(fecha, -dias(CFG_HORAS.t0, t0))) + 1) / (dias(m.inicio, m.fin) + 1))) : (s - m.desde + 1) / (m.hasta - m.desde + 1),

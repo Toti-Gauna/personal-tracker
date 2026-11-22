@@ -23,7 +23,7 @@ describe('ola 26 · pantallas de tecnologías y demanda', () => {
     expect(getState().plan.vacantes).toHaveLength(2);
     const tabla = screen.getAllByRole('table')[0];
     const filas = within(tabla).getAllByRole('row').slice(1);
-    expect(filas[0].textContent).toMatch(/LangGraph.*2.*P1.*26 dic 2026/);
+    expect(filas[0].textContent).toMatch(/LangGraph.*2.*P1.*9 dic 2026/);
     expect(within(tabla).getByText('Elixir').closest('tr')!.textContent).toMatch(/sin proyecto/);
   });
 

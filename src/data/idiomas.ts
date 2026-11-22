@@ -181,8 +181,13 @@ const dma = (d: string) => `${Number(d.slice(8))} ${MES[Number(d.slice(5, 7)) - 
  * Alertas: el examen del año desde 8 semanas antes de su fase (fecha, sede y costo sin verificar),
  * el trimestre en 7 días o menos y la tesis anual en 14 días o menos.
  */
+/** v12.1: el plan de idiomas de 6 años quedó archivado (21 nov 2026). */
+export const IDIOMAS_ARCHIVADO = !!(IDIOMAS as unknown as { archivado?: string }).archivado;
+
 export function alertasIdiomas(hoy: string, t0 = IDIOMAS.t0): AlertaIdioma[] {
   const out: AlertaIdioma[] = [];
+  // v12.1: el plan de 6 años está archivado: no avisa (el inglés vive en los bloques del plan).
+  if (IDIOMAS_ARCHIVADO) return out;
   for (const e of eventosIdiomas(t0)) {
     const dias = daysBetween(hoy, e.fecha);
     const href = `#/estudio/idiomas/${e.idioma}`;

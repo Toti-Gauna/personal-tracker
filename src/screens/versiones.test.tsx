@@ -25,7 +25,7 @@ describe('ola 30 · versiones y estándar de alto valor en la pantalla del proye
     expect(plegable.querySelector('summary')!.textContent).toMatch(/0 de 4 publicadas · 1\.0 en curso/);
     const items = plegable.querySelectorAll('.pp-vers > li');
     expect(items).toHaveLength(4);
-    expect(items[0].textContent).toMatch(/1\.0 MVP.*en curso.*Trazo 19 nov 2026 — 28 nov 2026 · roadmap 1 dic 2026 \(3 días antes\) · 74 h/);
+    expect(items[0].textContent).toMatch(/1\.0 MVP.*en curso.*Trazo 21 nov 2026 — 25 nov 2026 · roadmap 25 nov 2026 \(en fecha\) · 47 h/);
     expect(items[1].textContent).toMatch(/Herramientas: valor del pozo, declinación, lector de partes/);
     fireEvent.click(within(items[0] as HTMLElement).getByRole('checkbox', { name: 'Notas de versión de la 1.0: marcar' }));
     fireEvent.click(within(items[0] as HTMLElement).getByRole('button', { name: 'Publicada hoy' }));
@@ -37,10 +37,10 @@ describe('ola 30 · versiones y estándar de alto valor en la pantalla del proye
 
   it('VitalIA: las horas por versión se marcan como repartidas por días', () => {
     render(<Metas day={getState().days[D]} tab="proyecto/P2" />);
-    expect(abrir('Versiones').querySelectorAll('.pp-vers > li')[0].textContent).toMatch(/≈ 38 h \(repartidas por días\)/);
+    expect(abrir('Versiones').querySelectorAll('.pp-vers > li')[0].textContent).toMatch(/≈ 20 h \(repartidas por días\)/);
   });
 
-  it('el estándar de alto valor tiene los 12 puntos de la v7, con el detalle', () => {
+  it('el estándar de alto valor tiene los 12 puntos (vienen de la v7), con el detalle', () => {
     render(<Metas day={getState().days[D]} tab="proyecto/P1" />);
     const est = abrir('Estándar de alto valor');
     expect(est.querySelector('summary')!.textContent).toMatch(/0 de 12/);

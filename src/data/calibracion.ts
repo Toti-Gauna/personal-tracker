@@ -8,7 +8,7 @@
 import { HORAS_SEMANA_PLAN } from './capacidad';
 import { horasDeRama } from './metas-plan';
 import { calendarioVivo, capacidadDelDia } from './plan';
-import type { BloqueFechado } from './plan-extendido';
+import { PLAN_EXT, type BloqueFechado } from './plan-extendido';
 import type { PlanState } from './plan-state';
 import { cierreProyecto } from './puertas';
 import { addDays } from './time';
@@ -101,8 +101,8 @@ export function sugerencia(c: Calibracion, finConFactor: string | null, finSinFa
   const dias = Math.round((Date.parse(finConFactor) - Date.parse(finSinFactor)) / 864e5);
   const f = String(c.factor).replace('.', ',');
   return c.regla === 'lento'
-    ? { texto: `Vas más lento que lo estimado (factor ${f}): el plan se corre ${dias} días. No se recorta profundidad: se mueven fechas.` }
-    : { texto: `Vas más rápido que lo estimado (factor ${f}): el plan termina ${Math.abs(dias)} días antes. Las fechas se acomodan solas.` };
+    ? { texto: `Vas más lento que lo estimado (factor ${f}): el plan se correría ${dias} días. No se recorta profundidad: en Períodos ves qué bloques correr y lo confirmás.` }
+    : { texto: `Vas más rápido que lo estimado (factor ${f}): el plan terminaría ${Math.abs(dias)} días antes. Las fechas no se mueven solas: en Períodos podés adelantar lo que sigue.` };
 }
 
 /** Ola 33 · cuántos días mueve el fin del plan cada +10 % de horas en lo que falta (con lo cerrado como está). */
@@ -112,14 +112,37 @@ export function diasPorDiezPorCiento(t0?: string, cerrados: string[] = []) {
 
 export interface Escenario { id: string; nombre: string; factor: number; horas: number; fin: string; supuesto: string }
 
-/** Cierre del calendario con un factor aplicado a lo que todavía no cerró (las ventanas también se estiran: son horas). */
+/**
+ * v12.1 · el cierre del plan si lo que falta de los proyectos lleva `factor` veces sus días. Es una proyección: el calendario real
+ * tiene fechas explícitas y no se mueve solo (los corrimientos se sugieren y se confirman en Períodos). Cada proyecto sin cerrar se
+ * estira (o se acorta) en días hábiles; lo demás mantiene su largo; cada uno empieza al terminar el anterior; la pausa de diciembre y las
+ * fechas fijas no son hábiles.
+ */
 export function proyectar(factor: number, t0?: string, cerrados: string[] = []) {
-  const cal = calendarioVivo(t0, { factor, cerrados });
   const base = calendarioVivo(t0, { factor: null, cerrados: [] });
-  const fin = (c: BloqueFechado[]) => c.reduce((m, b) => (b.fin > m ? b.fin : m), c[0].fin);
-  const horas = cal.reduce((s, b) => s + (b.horas ?? 0), 0);
-  const dif = Math.round((Date.parse(fin(cal)) - Date.parse(fin(base))) / 864e5);
-  return { horas, fin: fin(cal), deltaDias: dif };
+  const fijas = [...base.filter((b) => b.pausa), ...(PLAN_EXT.capacidad?.fijas ?? [])].map((b) => ({ inicio: b.inicio, fin: b.fin }));
+  const bloqueado = (d: string) => fijas.some((x) => d >= x.inicio && d <= x.fin);
+  const seq = base.filter((b) => !b.pausa && !b.archivado && b.id !== 'P0');
+  const ultimoCerrado = Math.max(-1, ...cerrados.map((id) => seq.findIndex((b) => b.id === id)));
+  let libre: string | null = null;
+  let horas = 0;
+  let fin = seq[0]?.fin ?? '';
+  seq.forEach((b, i) => {
+    const escala = i > ultimoCerrado && b.tipo === 'proyecto' ? factor : 1;
+    horas += (b.horas ?? 0) * escala;
+    if (i <= ultimoCerrado) { libre = addDays(b.fin, 1); fin = b.fin; return; }
+    let n = 0;
+    for (let d = b.inicio; d <= b.fin; d = addDays(d, 1)) if (!bloqueado(d)) n++;
+    n = Math.max(1, Math.round(Math.max(1, n) * escala));
+    let ini: string = libre ?? b.inicio; // los bloques v12.1 van uno detrás del otro: se encadenan
+    while (bloqueado(ini)) ini = addDays(ini, 1);
+    let f = ini;
+    for (let c = 1; c < n; ) { f = addDays(f, 1); if (!bloqueado(f)) c++; }
+    libre = addDays(f, 1);
+    if (f > fin) fin = f;
+  });
+  const finBase = base.reduce((m, b) => (b.fin > m ? b.fin : m), base[0].fin);
+  return { horas: Math.round(horas * 10) / 10, fin, deltaDias: Math.round((Date.parse(fin) - Date.parse(finBase)) / 864e5) };
 }
 
 /** Los tres escenarios, calculados con el factor (0,85, 1,00 y 1,15) sobre el calendario por horas: no son supuestos escritos a mano. */

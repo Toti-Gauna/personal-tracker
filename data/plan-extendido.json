@@ -1,12 +1,21 @@
 {
  "version": 1,
+ "plan": "v12.1",
  "t0": "2026-11-16",
+ "archivado": "data/archivo/roadmap-v7/ (roadmap v7, archived 20 Nov 2026)",
+ "pausados": [
+  "handyx",
+  "clipping",
+  "eclipse"
+ ],
  "etapas": [
   {
    "n": 1,
    "nombre": "Núcleo",
-   "perfil": "Senior ML + DevSecOps + Cloud con arquitectura de sistemas distribuidos",
-   "semanasBase": 88,
+   "perfil": "Senior ML + DevSecOps + Cloud",
+   "inicio": "2026-11-21",
+   "fin": "2027-09-19",
+   "semanasBase": 47,
    "semanasExtra": 0,
    "semanasPlataforma": 0,
    "semanasArquitectura": 0
@@ -14,8 +23,10 @@
   {
    "n": 2,
    "nombre": "Ciberseguridad",
-   "perfil": "Senior con foco en seguridad",
-   "semanasBase": 24,
+   "perfil": "Security Engineer",
+   "inicio": "2027-09-20",
+   "fin": "2027-11-21",
+   "semanasBase": 10,
    "semanasExtra": 0,
    "semanasPlataforma": 0,
    "semanasArquitectura": 0
@@ -23,8 +34,10 @@
   {
    "n": 3,
    "nombre": "Quant",
-   "perfil": "Quant Trading Engineer / ML Quant",
-   "semanasBase": 56,
+   "perfil": "Quant Trading Engineer",
+   "inicio": "2027-11-22",
+   "fin": "2028-04-15",
+   "semanasBase": 23,
    "semanasExtra": 0,
    "semanasPlataforma": 0,
    "semanasArquitectura": 0
@@ -32,11 +45,255 @@
   {
    "n": 4,
    "nombre": "Aeroespacial",
-   "perfil": "Aerospace Software Engineer",
-   "semanasBase": 71,
+   "perfil": "GNC / Mission Software Engineer",
+   "inicio": "2028-04-16",
+   "fin": "2028-10-27",
+   "semanasBase": 29,
    "semanasExtra": 0,
    "semanasPlataforma": 0,
    "semanasArquitectura": 0
+  }
+ ],
+ "fases": [
+  {
+   "id": "F1",
+   "etapa": 1,
+   "nombre": "AI Full-stack Engineer",
+   "inicio": "2026-11-21",
+   "fin": "2027-01-14",
+   "salida": [
+    "PetrIA in production (4 versions)",
+    "VitalIA in production (4 versions)",
+    "4 certs passed",
+    "English Made Simple finished",
+    "30–50 applications"
+   ],
+   "mercado": [
+    "PetrIA",
+    "Claude Architect",
+    "GitHub Foundations",
+    "VitalIA",
+    "AI-103",
+    "Databricks"
+   ],
+   "roles": [
+    "AI Full-stack",
+    "AI Engineer",
+    "Applied AI"
+   ]
+  },
+  {
+   "id": "F2",
+   "etapa": 1,
+   "nombre": "ML Engineer",
+   "inicio": "2027-01-15",
+   "fin": "2027-03-17",
+   "salida": [
+    "Base math done (W1 milestones)",
+    "AWS MLA passed",
+    "AWS SAA passed",
+    "AgrIA in production",
+    "Cambridge C1 taken"
+   ],
+   "mercado": [
+    "AgrIA",
+    "AWS MLA",
+    "GitHub Actions",
+    "AWS SAA",
+    "AWS Network Lab",
+    "Prometheus",
+    "Cambridge C1"
+   ],
+   "mercadoAConfirmar": true
+  },
+  {
+   "id": "F3",
+   "etapa": 1,
+   "nombre": "Systems / Realtime",
+   "inicio": "2027-03-18",
+   "fin": "2027-04-17",
+   "salida": [
+    "Antena live",
+    "Constelación 2.1 live",
+    "AWS Developer passed",
+    "Terraform passed",
+    "15+ applications"
+   ],
+   "mercado": [
+    "Antena",
+    "Constelación 2.1",
+    "AWS Developer",
+    "Terraform"
+   ]
+  },
+  {
+   "id": "F4",
+   "etapa": 1,
+   "nombre": "DevSecOps / Platform",
+   "inicio": "2027-04-18",
+   "fin": "2027-05-29",
+   "salida": [
+    "All 16 initial certs passed"
+   ],
+   "mercado": [
+    "PetrIA Guard",
+    "Security+",
+    "GitHub Advanced Security",
+    "CKA",
+    "OpenTelemetry",
+    "AWS GenAI Pro",
+    "Claude Developer"
+   ],
+   "mercadoAConfirmar": true
+  },
+  {
+   "id": "F5",
+   "etapa": 1,
+   "nombre": "Computer Vision / MLOps",
+   "inicio": "2027-05-30",
+   "fin": "2027-07-18",
+   "salida": [
+    "W2 milestones done",
+    "AeroScan live",
+    "Multiplatform week live",
+    "AgrIA Sat live",
+    "4 papers with thesis",
+    "10+ applications"
+   ],
+   "mercado": [
+    "AeroScan",
+    "AgrIA Sat"
+   ]
+  },
+  {
+   "id": "F6",
+   "etapa": 1,
+   "nombre": "AI Security + Edge + SRE",
+   "inicio": "2027-07-19",
+   "fin": "2027-09-19",
+   "salida": [
+    "W3 milestones done (incl. mini-GPT)",
+    "AdversarIA live",
+    "AeroScan Edge live",
+    "Antena Ops live",
+    "4 papers with thesis",
+    "10+ applications"
+   ],
+   "mercado": [
+    "AdversarIA",
+    "AeroScan Edge",
+    "Antena Ops"
+   ],
+   "mercadoAConfirmar": true
+  },
+  {
+   "id": "F7",
+   "etapa": 2,
+   "nombre": "Security Engineer",
+   "inicio": "2027-09-20",
+   "fin": "2027-11-21",
+   "salida": [
+    "W4 milestones done",
+    "Bóveda live",
+    "Asedio live",
+    "Vigía live",
+    "PNPT passed"
+   ],
+   "mercado": [
+    "Bóveda",
+    "Asedio",
+    "Vigía",
+    "PNPT"
+   ],
+   "mercadoAConfirmar": true
+  },
+  {
+   "id": "F8",
+   "etapa": 3,
+   "nombre": "Quant Developer",
+   "inicio": "2027-11-22",
+   "fin": "2028-02-19",
+   "salida": [
+    "WQ1 milestones done",
+    "WQ2 milestones done",
+    "Alpha Lab live",
+    "Paper Trail live",
+    "Volta live",
+    "Matchbook live",
+    "CKS passed"
+   ],
+   "mercado": [
+    "Alpha Lab",
+    "Paper Trail",
+    "Volta",
+    "Matchbook",
+    "CKS"
+   ],
+   "mercadoAConfirmar": true
+  },
+  {
+   "id": "F9",
+   "etapa": 3,
+   "nombre": "Quant Trading Engineer",
+   "inicio": "2028-02-20",
+   "fin": "2028-04-15",
+   "salida": [
+    "WQ3 milestones done",
+    "Comando live",
+    "Ticker live",
+    "AWS Security Specialty passed"
+   ],
+   "mercado": [
+    "Comando",
+    "Ticker",
+    "AWS Security Specialty"
+   ],
+   "mercadoAConfirmar": true
+  },
+  {
+   "id": "F10",
+   "etapa": 4,
+   "nombre": "Simulation / CAE",
+   "inicio": "2028-04-16",
+   "fin": "2028-07-13",
+   "salida": [
+    "WA1 milestones done",
+    "WA2 milestones done",
+    "WA3 milestones done",
+    "Trayecta live",
+    "Malla live",
+    "Viento live"
+   ],
+   "mercado": [
+    "Trayecta",
+    "Malla",
+    "Viento"
+   ],
+   "mercadoAConfirmar": true
+  },
+  {
+   "id": "F11",
+   "etapa": 4,
+   "nombre": "GNC / Mission Software",
+   "inicio": "2028-07-14",
+   "fin": "2028-10-27",
+   "salida": [
+    "WA4 milestones done",
+    "WA5 milestones done",
+    "Piloto live",
+    "Órbita live",
+    "Upstream live",
+    "Horizonte live",
+    "AWS SA Pro passed"
+   ],
+   "mercado": [
+    "Piloto",
+    "Órbita",
+    "Upstream",
+    "Horizonte",
+    "AWS SA Pro"
+   ],
+   "mercadoAConfirmar": true
   }
  ],
  "bloques": [
@@ -44,7 +301,7 @@
    "id": "P0",
    "etapa": 1,
    "tipo": "proyecto",
-   "nombre": "Constelación",
+   "nombre": "Constelación v1",
    "base": 1,
    "extra": 0,
    "extraPlataforma": 0,
@@ -119,20 +376,50 @@
      "motivo": "Roadmap v7 (stack)"
     }
    ],
-   "dias": 3,
    "roadmap": {
     "inicio": "2026-11-16",
     "fin": "2026-11-18"
    },
-   "nota": "La v1 la arman los agentes (en curso); la 2.0 y la 2.1 van en julio de 2027",
-   "que": "Portfolio como mapa 3D de proyectos; la v1 (mapa 3D, Trazo como caso, validador, shell con Module Federation) la arman los agentes"
+   "fechas": {
+    "inicio": "2026-11-16",
+    "fin": "2026-11-18"
+   },
+   "horas": 0,
+   "nota": "La arman los agentes (en curso); tus metas de P0 siguen como las cargaste",
+   "sinAtraso": true
+  },
+  {
+   "id": "P1V0",
+   "etapa": 1,
+   "tipo": "proyecto",
+   "nombre": "PetrIA v0 (archived)",
+   "base": 1,
+   "extra": 0,
+   "extraPlataforma": 0,
+   "extraArquitectura": 0,
+   "fechas": {
+    "inicio": "2026-11-19",
+    "fin": "2026-11-20"
+   },
+   "roadmap": {
+    "inicio": "2026-11-19",
+    "fin": "2026-11-20"
+   },
+   "horas": 0,
+   "nota": "Horas del método viejo (19 y 20 nov): quedan acá y no cuentan para la PetrIA de v12.1",
+   "archivado": true,
+   "sinAtraso": true,
+   "ficha": {
+    "perfil": "to confirm"
+   },
+   "tecnologias": []
   },
   {
    "id": "P1",
    "etapa": 1,
    "tipo": "proyecto",
    "nombre": "PetrIA",
-   "base": 7,
+   "base": 3,
    "extra": 0,
    "extraPlataforma": 0,
    "extraArquitectura": 0,
@@ -333,42 +620,448 @@
      "motivo": "Roadmap v7 (stack)"
     }
    ],
-   "horas": 304,
-   "horasAntes": 122,
    "roadmap": {
-    "inicio": "2026-11-19",
-    "fin": "2027-01-05"
+    "inicio": "2026-11-21",
+    "fin": "2026-12-09"
    },
-   "nota": "Horas medidas: 1.0 74 h, 1.1 74 h, 2.0 ≈ 64 h, 3.0 92 h. El roadmap las pone a ~8 h por día",
-   "que": "Mapa mundial real con los pozos de Vaca Muerta y las zonas de mayor productividad esperada. Valor y declinación de cada pozo, y lector de partes viejos. Asistente por texto, voz, WhatsApp y teléfono que cita el dato oficial. Uso y costo medidos por empresa"
+   "fechas": {
+    "inicio": "2026-11-21",
+    "fin": "2026-12-09"
+   },
+   "fase": "F1",
+   "horas": 194.5,
+   "horasLim": 245,
+   "rol": "Full-stack AI Engineer (energy)",
+   "entrevista": "very high",
+   "papers": [
+    {
+     "id": "word2vec",
+     "nombre": "word2vec (2013)",
+     "opcional": true
+    },
+    {
+     "id": "rag",
+     "nombre": "Retrieval-Augmented Generation (2020)",
+     "opcional": true
+    }
+   ],
+   "lotes": [
+    {
+     "id": "0.0",
+     "version": "1.0",
+     "ola0": true,
+     "nombre": "Onboarding",
+     "horas": 1.5,
+     "estimado": "2026-11-21",
+     "deadline": "2026-11-21",
+     "modelo": "Opus high"
+    },
+    {
+     "id": "0.1",
+     "version": "1.0",
+     "ola0": true,
+     "nombre": "Repos, CI & Docker",
+     "horas": 3,
+     "estimado": "2026-11-21",
+     "deadline": "2026-11-21",
+     "modelo": "Sonnet medium"
+    },
+    {
+     "id": "0.2",
+     "version": "1.0",
+     "ola0": true,
+     "nombre": "Database & roles",
+     "horas": 2.5,
+     "estimado": "2026-11-21",
+     "deadline": "2026-11-21",
+     "modelo": "Opus high"
+    },
+    {
+     "id": "1.1",
+     "version": "1.0",
+     "ola0": false,
+     "nombre": "Ingest & cleaning",
+     "horas": 7,
+     "estimado": "2026-11-22",
+     "deadline": "2026-11-23",
+     "modelo": "Opus xhigh"
+    },
+    {
+     "id": "1.2",
+     "version": "1.0",
+     "ola0": false,
+     "nombre": "Messaging & concessions",
+     "horas": 3,
+     "estimado": "2026-11-22",
+     "deadline": "2026-11-23",
+     "modelo": "Sonnet high"
+    },
+    {
+     "id": "1.3",
+     "version": "1.0",
+     "ola0": false,
+     "nombre": "Features & baseline",
+     "horas": 6,
+     "estimado": "2026-11-23",
+     "deadline": "2026-11-24",
+     "modelo": "Opus xhigh"
+    },
+    {
+     "id": "1.4",
+     "version": "1.0",
+     "ola0": false,
+     "nombre": "P10/P50/P90 detector",
+     "horas": 7,
+     "estimado": "2026-11-23",
+     "deadline": "2026-11-26",
+     "modelo": "Opus xhigh"
+    },
+    {
+     "id": "1.5",
+     "version": "1.0",
+     "ola0": false,
+     "nombre": "Read API",
+     "horas": 4,
+     "estimado": "2026-11-24",
+     "deadline": "2026-11-27",
+     "modelo": "Opus high"
+    },
+    {
+     "id": "1.6",
+     "version": "1.0",
+     "ola0": false,
+     "nombre": "Map",
+     "horas": 5,
+     "estimado": "2026-11-24",
+     "deadline": "2026-11-28",
+     "modelo": "Fable xhigh"
+    },
+    {
+     "id": "1.7",
+     "version": "1.0",
+     "ola0": false,
+     "nombre": "Assistant with citations",
+     "horas": 6,
+     "estimado": "2026-11-25",
+     "deadline": "2026-11-30",
+     "modelo": "Opus xhigh"
+    },
+    {
+     "id": "1.8",
+     "version": "1.0",
+     "ola0": false,
+     "nombre": "Production 1.0 + release",
+     "horas": 2,
+     "estimado": "2026-11-25",
+     "deadline": "2026-12-01",
+     "modelo": "Sonnet high"
+    },
+    {
+     "id": "2.1",
+     "version": "1.1",
+     "ola0": false,
+     "nombre": "Well value & decline",
+     "horas": 7,
+     "estimado": "2026-11-26",
+     "deadline": "2026-12-03",
+     "modelo": "Opus high"
+    },
+    {
+     "id": "2.2",
+     "version": "1.1",
+     "ola0": false,
+     "nombre": "Daily-report reader",
+     "horas": 7,
+     "estimado": "2026-11-26",
+     "deadline": "2026-12-05",
+     "modelo": "Opus high"
+    },
+    {
+     "id": "2.3",
+     "version": "1.1",
+     "ola0": false,
+     "nombre": "Login & companies",
+     "horas": 8,
+     "estimado": "2026-11-27",
+     "deadline": "2026-12-07",
+     "modelo": "Opus xhigh"
+    },
+    {
+     "id": "2.4",
+     "version": "1.1",
+     "ola0": false,
+     "nombre": "Serious AI + feedback loop",
+     "horas": 8.5,
+     "estimado": "2026-11-28",
+     "deadline": "2026-12-08",
+     "modelo": "Opus high"
+    },
+    {
+     "id": "2.5",
+     "version": "1.1",
+     "ola0": false,
+     "nombre": "Quality",
+     "horas": 6,
+     "estimado": "2026-11-29",
+     "deadline": "2026-12-09",
+     "modelo": "Sonnet high"
+    },
+    {
+     "id": "2.6",
+     "version": "1.1",
+     "ola0": false,
+     "nombre": "Observability, evals in CI & security",
+     "horas": 8,
+     "estimado": "2026-11-29",
+     "deadline": "2026-12-11",
+     "modelo": "Opus high"
+    },
+    {
+     "id": "2.7",
+     "version": "1.1",
+     "ola0": false,
+     "nombre": "1.1 screens + release",
+     "horas": 4,
+     "estimado": "2026-11-30",
+     "deadline": "2026-12-12",
+     "modelo": "Fable high"
+    },
+    {
+     "id": "3.1",
+     "version": "2.0",
+     "ola0": false,
+     "nombre": "notification-service",
+     "horas": 8,
+     "estimado": "2026-11-30",
+     "deadline": "2026-12-14",
+     "modelo": "Opus high"
+    },
+    {
+     "id": "3.2",
+     "version": "2.0",
+     "ola0": false,
+     "nombre": "Real channels",
+     "horas": 9,
+     "estimado": "2026-12-01",
+     "deadline": "2026-12-16",
+     "modelo": "Opus high"
+    },
+    {
+     "id": "3.3",
+     "version": "2.0",
+     "ola0": false,
+     "nombre": "voice-gateway",
+     "horas": 10,
+     "estimado": "2026-12-02",
+     "deadline": "2026-12-19",
+     "modelo": "Opus xhigh"
+    },
+    {
+     "id": "3.4",
+     "version": "2.0",
+     "ola0": false,
+     "nombre": "Usage & quotas",
+     "horas": 6,
+     "estimado": "2026-12-03",
+     "deadline": "2026-12-20",
+     "modelo": "Sonnet high"
+    },
+    {
+     "id": "3.5",
+     "version": "2.0",
+     "ola0": false,
+     "nombre": "Design system + 2.0 release",
+     "horas": 7,
+     "estimado": "2026-12-04",
+     "deadline": "2026-12-22",
+     "modelo": "Fable high"
+    },
+    {
+     "id": "4.1",
+     "version": "3.0",
+     "ola0": false,
+     "nombre": "load-lab",
+     "horas": 14,
+     "estimado": "2026-12-05",
+     "deadline": "2026-12-25",
+     "modelo": "Opus high"
+    },
+    {
+     "id": "4.2",
+     "version": "3.0",
+     "ola0": false,
+     "nombre": "Operations",
+     "horas": 12,
+     "estimado": "2026-12-06",
+     "deadline": "2026-12-28",
+     "modelo": "Opus high"
+    },
+    {
+     "id": "4.3",
+     "version": "3.0",
+     "ola0": false,
+     "nombre": "Ingest on AWS",
+     "horas": 10,
+     "estimado": "2026-12-07",
+     "deadline": "2026-12-30",
+     "modelo": "Opus high"
+    },
+    {
+     "id": "4.4",
+     "version": "3.0",
+     "ola0": false,
+     "nombre": "Physical layer",
+     "horas": 14,
+     "estimado": "2026-12-08",
+     "deadline": "2027-01-03",
+     "modelo": "Fable high"
+    },
+    {
+     "id": "4.5",
+     "version": "3.0",
+     "ola0": false,
+     "nombre": "Scale report + 3.0 release",
+     "horas": 8,
+     "estimado": "2026-12-09",
+     "deadline": "2027-01-05",
+     "modelo": "Sonnet medium"
+    }
+   ]
   },
   {
-   "id": "C8",
+   "id": "CW1",
    "etapa": 1,
    "tipo": "cert",
-   "nombre": "Claude Certified Architect + GitHub Foundations",
+   "nombre": "Cert window 1",
    "base": 1,
    "extra": 0,
    "extraPlataforma": 0,
    "extraArquitectura": 0,
-   "dias": 7,
-   "roadmap": {
-    "inicio": "2027-01-06",
-    "fin": "2027-01-12"
+   "fechas": {
+    "inicio": "2026-12-10",
+    "fin": "2026-12-13"
    },
-   "numero": 1,
-   "corto": "Claude + GitHub Foundations",
-   "nota": "A confirmar acceso: la de Claude exige la Claude Partner Network; sin acceso, GitHub Copilot",
-   "cert": {
-    "verificado": false
-   }
+   "roadmap": {
+    "inicio": "2026-12-10",
+    "fin": "2026-12-13"
+   },
+   "fase": "F1",
+   "horas": 42,
+   "certs": [
+    {
+     "id": "claude-architect",
+     "nombre": "Claude Certified Architect – Foundations",
+     "horas": 30,
+     "recursos": [
+      "Official exam guide",
+      "Anthropic courses",
+      "PetrIA learning.md"
+     ],
+     "plan": [
+      {
+       "fecha": "2026-12-10",
+       "texto": "Guide + domains"
+      },
+      {
+       "fecha": "2026-12-11",
+       "texto": "Weak spots + mock"
+      },
+      {
+       "fecha": "2026-12-12",
+       "texto": "Mock 2 (AM) + exam"
+      }
+     ],
+     "examen": "2026-12-12",
+     "listo": 85,
+     "fallback": "Exam in the week of 8 Jan 2027",
+     "reserva": "2026-11-21",
+     "renovacion": {
+      "nota": "validity to verify"
+     }
+    },
+    {
+     "id": "gh-foundations",
+     "nombre": "GitHub Foundations",
+     "horas": 12,
+     "recursos": [
+      "MS Learn path",
+      "Practice assessment"
+     ],
+     "plan": [
+      {
+       "fecha": "2026-12-12",
+       "texto": "Path (PM)"
+      },
+      {
+       "fecha": "2026-12-13",
+       "texto": "Mock + exam"
+      }
+     ],
+     "examen": "2026-12-13",
+     "listo": 85,
+     "fallback": "Exam in the week of 8 Jan 2027",
+     "reserva": "2026-11-21",
+     "renovacion": {
+      "anos": 3,
+      "nota": "usual validity (to verify)"
+     }
+    }
+   ]
+  },
+  {
+   "id": "E1",
+   "etapa": 1,
+   "tipo": "ingles",
+   "nombre": "English E#1",
+   "base": 1,
+   "extra": 0,
+   "extraPlataforma": 0,
+   "extraArquitectura": 0,
+   "fechas": {
+    "inicio": "2026-12-14",
+    "fin": "2026-12-20"
+   },
+   "roadmap": {
+    "inicio": "2026-12-14",
+    "fin": "2026-12-20"
+   },
+   "fase": "F1",
+   "horas": 72,
+   "ingles": {
+    "libros": [
+     "English Made Simple"
+    ],
+    "objetivo": "English Made Simple: chapter 1 → half",
+    "reparto": {
+     "lv": {
+      "ingles": 5.5,
+      "entrevistas": 1.5,
+      "recall": 0.5,
+      "busqueda": 2.5
+     },
+     "finde": {
+      "ingles": 8,
+      "busqueda": 3
+     }
+    }
+   },
+   "mercado": [
+    "PetrIA",
+    "Claude Architect",
+    "GitHub Foundations"
+   ],
+   "roles": [
+    "AI Full-stack",
+    "AI Engineer",
+    "Applied AI"
+   ]
   },
   {
    "id": "P2",
    "etapa": 1,
    "tipo": "proyecto",
    "nombre": "VitalIA",
-   "base": 5,
+   "base": 1,
    "extra": 0,
    "extraPlataforma": 0,
    "extraArquitectura": 0,
@@ -505,57 +1198,176 @@
      "motivo": "Roadmap v7 (stack)"
     }
    ],
-   "horas": 155,
-   "horasAntes": 98,
    "roadmap": {
-    "inicio": "2027-01-13",
-    "fin": "2027-02-18"
+    "inicio": "2026-12-21",
+    "fin": "2026-12-30"
    },
-   "que": "brechas de cuidado y problemas de medicación con evidencia; traductor de sistemas viejos a FHIR; monitoreo remoto; dictado a nota"
+   "fechas": {
+    "inicio": "2026-12-21",
+    "fin": "2026-12-30"
+   },
+   "fase": "F1",
+   "horas": 100,
+   "horasLim": 125,
+   "rol": "AI Engineer, health (.NET, Azure)",
+   "entrevista": "very high"
   },
   {
-   "id": "SUM",
+   "id": "CW2",
    "etapa": 1,
-   "tipo": "sumas",
-   "nombre": "Semana multiplataforma",
+   "tipo": "cert",
+   "nombre": "Cert window 2",
    "base": 1,
    "extra": 0,
    "extraPlataforma": 0,
    "extraArquitectura": 0,
-   "que": "Lo que se sacó de P1 y P2 para no cargar dos tecnologías nuevas en un proyecto: la consola Electron (de P1) y la app de prueba de Expo (de P2), una semana cada una. La auditoría de una app generada con IA entra solo si sobra tiempo.",
-   "items": [
-    {
-     "nombre": "Consola Electron de Faro v1 (viene de P1)",
-     "desde": "P1"
-    },
-    {
-     "nombre": "App de prueba de Expo para Escudo (viene de P2)",
-     "desde": "P2"
-    },
-    {
-     "nombre": "Auditoría y refactor de una app generada con IA (solo si sobra tiempo)",
-     "opcional": true
-    }
-   ],
-   "horas": 40,
+   "fechas": {
+    "inicio": "2026-12-31",
+    "fin": "2027-01-07"
+   },
    "roadmap": {
-    "inicio": "2027-02-19",
-    "fin": "2027-02-28"
-   }
+    "inicio": "2026-12-31",
+    "fin": "2027-01-07"
+   },
+   "fase": "F1",
+   "horas": 82,
+   "certs": [
+    {
+     "id": "ai-103",
+     "nombre": "Azure AI-103 (AI App and Agent Developer Associate)",
+     "horas": 45,
+     "recursos": [
+      "MS Learn AI-103 path",
+      "Practice assessment",
+      "Azure sandbox"
+     ],
+     "plan": [
+      {
+       "fecha": "2026-12-31",
+       "texto": "Path"
+      },
+      {
+       "fecha": "2027-01-01",
+       "texto": "Path"
+      },
+      {
+       "fecha": "2027-01-02",
+       "texto": "Path"
+      },
+      {
+       "fecha": "2027-01-03",
+       "texto": "Labs"
+      },
+      {
+       "fecha": "2027-01-04",
+       "texto": "2 practice assessments"
+      },
+      {
+       "fecha": "2027-01-05",
+       "texto": "Exam"
+      }
+     ],
+     "examen": "2027-01-05",
+     "listo": 85,
+     "reserva": "2026-12-20",
+     "renovacion": {
+      "anos": 1,
+      "nota": "usual validity (to verify)"
+     }
+    },
+    {
+     "id": "databricks-genai",
+     "nombre": "Databricks Generative AI Engineer Associate",
+     "horas": 35,
+     "recursos": [
+      "Exam guide (re-check 2 weeks before)",
+      "Databricks Academy",
+      "2–3 mocks"
+     ],
+     "plan": [
+      {
+       "fecha": "2027-01-06",
+       "texto": "Guide + course"
+      },
+      {
+       "fecha": "2027-01-07",
+       "texto": "Mocks + exam"
+      }
+     ],
+     "examen": "2027-01-07",
+     "listo": 85,
+     "opcional": true,
+     "fallback": "If mocks < 85%, move to the end of Phase 3",
+     "reserva": "2026-12-20",
+     "renovacion": {
+      "anos": 2,
+      "nota": "usual validity (to verify)"
+     }
+    }
+   ]
+  },
+  {
+   "id": "E2",
+   "etapa": 1,
+   "tipo": "ingles",
+   "nombre": "English E#2",
+   "base": 1,
+   "extra": 0,
+   "extraPlataforma": 0,
+   "extraArquitectura": 0,
+   "fechas": {
+    "inicio": "2027-01-08",
+    "fin": "2027-01-14"
+   },
+   "roadmap": {
+    "inicio": "2027-01-08",
+    "fin": "2027-01-14"
+   },
+   "fase": "F1",
+   "horas": 72,
+   "ingles": {
+    "libros": [
+     "English Made Simple",
+     "English Pronunciation Course"
+    ],
+    "objetivo": "English Made Simple to the end (+ start Pronunciation)",
+    "reparto": {
+     "lv": {
+      "ingles": 5.5,
+      "entrevistas": 1.5,
+      "recall": 0.5,
+      "busqueda": 2.5
+     },
+     "finde": {
+      "ingles": 8,
+      "busqueda": 3
+     }
+    },
+    "tareas": [
+     "Book Cambridge C1 Advanced"
+    ]
+   },
+   "mercado": [
+    "PetrIA",
+    "Claude Architect",
+    "GitHub Foundations",
+    "VitalIA",
+    "AI-103",
+    "Databricks"
+   ]
   },
   {
    "id": "W1",
    "etapa": 1,
    "tipo": "ventana",
-   "nombre": "Ventana W1 · matemática",
+   "nombre": "Math W1",
    "base": 3,
    "extra": 0,
    "extraPlataforma": 0,
    "extraArquitectura": 0,
    "mate": {
     "principal": [
-     "CONAMAT Álgebra (funciones, desigualdades)",
-     "Estadística básica"
+     "Conamat \"Matemáticas simplificadas\""
     ],
     "refuerzo": [
      {
@@ -583,10 +1395,204 @@
      "Resolver triángulos y usar funciones trigonométricas básicas"
     ]
    },
-   "horas": 122,
    "roadmap": {
-    "inicio": "2027-03-01",
-    "fin": "2027-03-20"
+    "inicio": "2027-01-15",
+    "fin": "2027-02-03"
+   },
+   "fechas": {
+    "inicio": "2027-01-15",
+    "fin": "2027-02-03"
+   },
+   "fase": "F2",
+   "horas": 206,
+   "hitos": [
+    {
+     "dias": [
+      1,
+      4
+     ],
+     "inicio": "2027-01-15",
+     "fin": "2027-01-18",
+     "tema": "Arithmetic",
+     "hito": "50 mixed exercises, no errors",
+     "capitulos": {
+      "actividad": "conamat",
+      "desde": 1,
+      "hasta": 11
+     }
+    },
+    {
+     "dias": [
+      5,
+      10
+     ],
+     "inicio": "2027-01-19",
+     "fin": "2027-01-24",
+     "tema": "Algebra (equations, systems, functions, exp & log)",
+     "hito": "3×3 system and graphs by hand",
+     "capitulos": {
+      "actividad": "conamat-algebra",
+      "desde": 1,
+      "hasta": 17
+     }
+    },
+    {
+     "dias": [
+      11,
+      13
+     ],
+     "inicio": "2027-01-25",
+     "fin": "2027-01-27",
+     "tema": "Trigonometry + base analytic geometry",
+     "hito": "Line equation, sin/cos without calculator",
+     "capitulosAConfirmar": true
+    },
+    {
+     "dias": [
+      14,
+      20
+     ],
+     "inicio": "2027-01-28",
+     "fin": "2027-02-03",
+     "tema": "Probability & statistics",
+     "hito": "Regression by hand, explain a confidence interval",
+     "capitulosAConfirmar": true
+    }
+   ],
+   "libros": [
+    "Conamat \"Matemáticas simplificadas\""
+   ]
+  },
+  {
+   "id": "CW3",
+   "etapa": 1,
+   "tipo": "cert",
+   "nombre": "Cert window 3",
+   "base": 1,
+   "extra": 0,
+   "extraPlataforma": 0,
+   "extraArquitectura": 0,
+   "fechas": {
+    "inicio": "2027-02-04",
+    "fin": "2027-02-11"
+   },
+   "roadmap": {
+    "inicio": "2027-02-04",
+    "fin": "2027-02-11"
+   },
+   "fase": "F2",
+   "horas": 82,
+   "certs": [
+    {
+     "id": "aws-mla",
+     "nombre": "AWS ML Engineer Associate (MLA-C02)",
+     "horas": 65,
+     "recursos": [
+      "Skill Builder exam prep",
+      "Udemy MLA course",
+      "Tutorials Dojo"
+     ],
+     "plan": [
+      {
+       "fecha": "2027-02-04",
+       "texto": "Course"
+      },
+      {
+       "fecha": "2027-02-05",
+       "texto": "Course"
+      },
+      {
+       "fecha": "2027-02-06",
+       "texto": "Course"
+      },
+      {
+       "fecha": "2027-02-07",
+       "texto": "SageMaker labs"
+      },
+      {
+       "fecha": "2027-02-08",
+       "texto": "Mocks"
+      },
+      {
+       "fecha": "2027-02-09",
+       "texto": "Mocks (3 in total)"
+      },
+      {
+       "fecha": "2027-02-10",
+       "texto": "Exam"
+      }
+     ],
+     "examen": "2027-02-10",
+     "listo": 80,
+     "costo": "US$ 150 según la mayoría de las fuentes; una dice 300",
+     "costoVerificado": false,
+     "renovacion": {
+      "anos": 3,
+      "nota": "usual validity (to verify)"
+     }
+    },
+    {
+     "id": "gh-actions",
+     "nombre": "GitHub Actions",
+     "horas": 15,
+     "recursos": [
+      "MS Learn",
+      "My PetrIA workflows"
+     ],
+     "plan": [
+      {
+       "fecha": "2027-02-10",
+       "texto": "Path (PM)"
+      },
+      {
+       "fecha": "2027-02-11",
+       "texto": "Mock + exam"
+      }
+     ],
+     "examen": "2027-02-11",
+     "listo": 85,
+     "renovacion": {
+      "anos": 3,
+      "nota": "usual validity (to verify)"
+     }
+    }
+   ]
+  },
+  {
+   "id": "E3",
+   "etapa": 1,
+   "tipo": "ingles",
+   "nombre": "English E#3",
+   "base": 1,
+   "extra": 0,
+   "extraPlataforma": 0,
+   "extraArquitectura": 0,
+   "fechas": {
+    "inicio": "2027-02-12",
+    "fin": "2027-02-18"
+   },
+   "roadmap": {
+    "inicio": "2027-02-12",
+    "fin": "2027-02-18"
+   },
+   "fase": "F2",
+   "horas": 72,
+   "ingles": {
+    "libros": [
+     "English Pronunciation Course",
+     "Cambridge C1 Advanced (official practice book)"
+    ],
+    "objetivo": "12–15 Feb Pronunciation Course to the end · 16–18 Feb Cambridge C1 intensive",
+    "reparto": {
+     "lv": {
+      "ingles": 7.5,
+      "busqueda": 2.5
+     },
+     "finde": {
+      "ingles": 7.5,
+      "busqueda": 2.5
+     }
+    }
    }
   },
   {
@@ -594,7 +1600,7 @@
    "etapa": 1,
    "tipo": "proyecto",
    "nombre": "AgrIA",
-   "base": 6,
+   "base": 2,
    "extra": 0,
    "extraPlataforma": 0,
    "extraArquitectura": 0,
@@ -703,20 +1709,173 @@
      "motivo": "Roadmap v7 (stack)"
     }
    ],
-   "horas": 180,
-   "horasAntes": 122,
    "roadmap": {
-    "inicio": "2027-03-21",
-    "fin": "2027-05-02"
+    "inicio": "2027-02-19",
+    "fin": "2027-03-02"
    },
-   "que": "rinde por departamento con rango de confianza, margen bruto con incertidumbre, atención por WhatsApp con audio"
+   "fechas": {
+    "inicio": "2027-02-19",
+    "fin": "2027-03-02"
+   },
+   "fase": "F2",
+   "horas": 115,
+   "horasLim": 130,
+   "rol": "Applied ML Engineer (agro)",
+   "entrevista": "high"
+  },
+  {
+   "id": "CW4",
+   "etapa": 1,
+   "tipo": "cert",
+   "nombre": "Cert window 4",
+   "base": 1,
+   "extra": 0,
+   "extraPlataforma": 0,
+   "extraArquitectura": 0,
+   "fechas": {
+    "inicio": "2027-03-03",
+    "fin": "2027-03-10"
+   },
+   "roadmap": {
+    "inicio": "2027-03-03",
+    "fin": "2027-03-10"
+   },
+   "fase": "F2",
+   "horas": 82,
+   "certs": [
+    {
+     "id": "aws-saa",
+     "nombre": "AWS Solutions Architect Associate (SAA-C03)",
+     "horas": 65,
+     "recursos": [
+      "Cantrill or Maarek",
+      "Tutorials Dojo"
+     ],
+     "plan": [
+      {
+       "fecha": "2027-03-03",
+       "texto": "Course"
+      },
+      {
+       "fecha": "2027-03-04",
+       "texto": "Course"
+      },
+      {
+       "fecha": "2027-03-05",
+       "texto": "Course"
+      },
+      {
+       "fecha": "2027-03-06",
+       "texto": "AWS Network Lab (mini-project)"
+      },
+      {
+       "fecha": "2027-03-07",
+       "texto": "Mocks"
+      },
+      {
+       "fecha": "2027-03-08",
+       "texto": "Mocks (3 in total)"
+      },
+      {
+       "fecha": "2027-03-09",
+       "texto": "Exam"
+      }
+     ],
+     "examen": "2027-03-09",
+     "listo": 80,
+     "miniProyecto": {
+      "nombre": "AWS Network Lab",
+      "fecha": "2027-03-06",
+      "texto": "Terraform VPC, 2 public + 2 private subnets in 2 AZs, internet gateway, NAT (create, test and destroy the same day: it costs money), security group vs NACL with one deliberately blocked connection test, VPC gateway endpoint to S3 + bucket policy restricted to that endpoint",
+      "entregables": [
+       "Repo",
+       "README with diagram",
+       "Post"
+      ]
+     },
+     "renovacion": {
+      "anos": 3,
+      "nota": "usual validity (to verify)"
+     }
+    },
+    {
+     "id": "prometheus",
+     "nombre": "Prometheus Certified Associate",
+     "horas": 15,
+     "recursos": [
+      "Prometheus docs",
+      "KodeKloud PCA"
+     ],
+     "plan": [
+      {
+       "fecha": "2027-03-09",
+       "texto": "PromQL and alerts (PM)"
+      },
+      {
+       "fecha": "2027-03-10",
+       "texto": "Mock + exam"
+      }
+     ],
+     "examen": "2027-03-10",
+     "listo": 85,
+     "renovacion": {
+      "anos": 2,
+      "nota": "usual validity (to verify)"
+     }
+    }
+   ]
+  },
+  {
+   "id": "E4",
+   "etapa": 1,
+   "tipo": "ingles",
+   "nombre": "English E#4",
+   "base": 1,
+   "extra": 0,
+   "extraPlataforma": 0,
+   "extraArquitectura": 0,
+   "fechas": {
+    "inicio": "2027-03-11",
+    "fin": "2027-03-17"
+   },
+   "roadmap": {
+    "inicio": "2027-03-11",
+    "fin": "2027-03-17"
+   },
+   "fase": "F2",
+   "horas": 72,
+   "ingles": {
+    "libros": [
+     "Cambridge C1 Advanced (official practice book)"
+    ],
+    "objetivo": "4 full C1 mocks + recorded speaking + Cambridge C1 Advanced exam",
+    "reparto": {
+     "lv": {
+      "ingles": 7,
+      "busqueda": 3
+     },
+     "finde": {
+      "ingles": 7,
+      "busqueda": 3
+     }
+    },
+    "examen": {
+     "nombre": "Cambridge C1 Advanced",
+     "semana": [
+      "2027-03-11",
+      "2027-03-17"
+     ],
+     "nota": "If the exam date is later, take it then without moving the plan",
+     "reserva": "2027-01-14"
+    }
+   }
   },
   {
    "id": "P4",
    "etapa": 1,
    "tipo": "proyecto",
    "nombre": "Antena",
-   "base": 7,
+   "base": 2,
    "extra": 0,
    "extraPlataforma": 0,
    "extraArquitectura": 0,
@@ -773,13 +1932,10 @@
      "ambiente": "Cloud"
     }
    ],
-   "horas": 215,
-   "horasAntes": 147,
    "roadmap": {
-    "inicio": "2027-05-03",
-    "fin": "2027-06-23"
+    "inicio": "2027-03-18",
+    "fin": "2027-04-02"
    },
-   "que": "sigue satélites reales (incluidos los argentinos), decodifica telemetría, planifica pasadas, calcula enlaces",
    "historial": [
     {
      "fecha": "2026-11-20",
@@ -791,41 +1947,139 @@
      "cambio": "Las tecnologías salen del stack de la v7, por ambiente",
      "motivo": "Roadmap v7 (stack)"
     }
-   ]
+   ],
+   "fechas": {
+    "inicio": "2027-03-18",
+    "fin": "2027-04-02"
+   },
+   "fase": "F3",
+   "horas": 160,
+   "horasLim": 185,
+   "rol": "Systems / Ground Software Engineer",
+   "entrevista": "high"
   },
   {
-   "id": "C1",
+   "id": "CW5",
    "etapa": 1,
    "tipo": "cert",
-   "nombre": "AWS Solutions Architect Associate",
-   "base": 2,
+   "nombre": "Cert window 5",
+   "base": 1,
    "extra": 0,
    "extraPlataforma": 0,
    "extraArquitectura": 0,
-   "cert": {
-    "verificado": false,
-    "notas": "Confirmar precio y versión"
+   "fechas": {
+    "inicio": "2027-04-03",
+    "fin": "2027-04-08"
    },
-   "dias": 12,
    "roadmap": {
-    "inicio": "2027-06-24",
-    "fin": "2027-07-05"
+    "inicio": "2027-04-03",
+    "fin": "2027-04-08"
    },
-   "numero": 2
+   "fase": "F3",
+   "horas": 62,
+   "certs": [
+    {
+     "id": "aws-dva",
+     "nombre": "AWS Developer Associate (DVA-C03)",
+     "horas": 40,
+     "recursos": [
+      "Udemy course (skip the SAA overlap)",
+      "Tutorials Dojo"
+     ],
+     "plan": [
+      {
+       "fecha": "2027-04-03",
+       "texto": "Course"
+      },
+      {
+       "fecha": "2027-04-04",
+       "texto": "Course"
+      },
+      {
+       "fecha": "2027-04-05",
+       "texto": "Two mocks"
+      },
+      {
+       "fecha": "2027-04-06",
+       "texto": "Exam"
+      }
+     ],
+     "examen": "2027-04-06",
+     "listo": 80,
+     "renovacion": {
+      "anos": 3,
+      "nota": "usual validity (to verify)"
+     }
+    },
+    {
+     "id": "terraform",
+     "nombre": "Terraform Associate (004)",
+     "horas": 22,
+     "recursos": [
+      "HashiCorp tutorials",
+      "Course with mocks"
+     ],
+     "plan": [
+      {
+       "fecha": "2027-04-06",
+       "texto": "Practice on Antena and Network Lab Terraform (PM)"
+      },
+      {
+       "fecha": "2027-04-07",
+       "texto": "Practice"
+      },
+      {
+       "fecha": "2027-04-08",
+       "texto": "Mock + exam"
+      }
+     ],
+     "examen": "2027-04-08",
+     "listo": 85,
+     "renovacion": {
+      "anos": 2,
+      "nota": "usual validity (to verify)"
+     }
+    }
+   ]
+  },
+  {
+   "id": "J5",
+   "etapa": 1,
+   "tipo": "busqueda",
+   "nombre": "Job search E#5",
+   "base": 1,
+   "extra": 0,
+   "extraPlataforma": 0,
+   "extraArquitectura": 0,
+   "fechas": {
+    "inicio": "2027-04-09",
+    "fin": "2027-04-12"
+   },
+   "roadmap": {
+    "inicio": "2027-04-09",
+    "fin": "2027-04-12"
+   },
+   "fase": "F3",
+   "horas": 42,
+   "busqueda": {
+    "reparto": {
+     "ingles": 3,
+     "busqueda": 7
+    }
+   }
   },
   {
    "id": "P0B",
    "etapa": 1,
    "tipo": "proyecto",
-   "nombre": "Constelación 2.0 y 2.1",
-   "base": 3,
+   "nombre": "Constelación 2.0 + 2.1",
+   "base": 1,
    "extra": 0,
    "extraPlataforma": 0,
    "extraArquitectura": 0,
-   "horas": 75,
    "roadmap": {
-    "inicio": "2027-07-06",
-    "fin": "2027-07-23"
+    "inicio": "2027-04-13",
+    "fin": "2027-04-17"
    },
    "ficha": {
     "rubro": "portfolio",
@@ -925,14 +2179,23 @@
      "motivo": "Roadmap v7 (stack)"
     }
    ],
-   "que": "Constelación con IA: 2.0 del 6 al 14 jul (RAG con citas y evals, modo reclutador, MCP público) y 2.1 del 15 al 23 jul (voz, CV en AR, notificaciones, plantilla open source)"
+   "fechas": {
+    "inicio": "2027-04-13",
+    "fin": "2027-04-17"
+   },
+   "fase": "F3",
+   "horas": 50,
+   "horasLim": 60,
+   "notas": [
+    "CDN = AWS CloudFront"
+   ]
   },
   {
    "id": "P5",
    "etapa": 1,
    "tipo": "proyecto",
    "nombre": "PetrIA Guard",
-   "base": 6,
+   "base": 2,
    "extra": 0,
    "extraPlataforma": 0,
    "extraArquitectura": 0,
@@ -1058,71 +2321,361 @@
      "motivo": "Roadmap v7 (stack)"
     }
    ],
-   "horas": 170,
-   "horasAntes": 98,
    "roadmap": {
-    "inicio": "2027-07-24",
-    "fin": "2027-09-02"
+    "inicio": "2027-04-18",
+    "fin": "2027-04-30"
    },
-   "que": "gemelo digital de una batería de tanques en tiempo real; detecta ataques al SCADA por física y pérdidas en ductos; escala alarmas por todos los canales"
+   "fechas": {
+    "inicio": "2027-04-18",
+    "fin": "2027-04-30"
+   },
+   "fase": "F4",
+   "horas": 130,
+   "horasLim": 150,
+   "rol": "DevSecOps / OT Security",
+   "entrevista": "very high",
+   "notas": [
+    "3.0 adds explicit Kubernetes Ingress load balancing + a \"kill a pod\" test"
+   ]
   },
   {
-   "id": "C2",
+   "id": "CW6",
    "etapa": 1,
    "tipo": "cert",
-   "nombre": "CompTIA Security+",
-   "base": 3,
+   "nombre": "Cert window 6",
+   "base": 1,
    "extra": 0,
    "extraPlataforma": 0,
    "extraArquitectura": 0,
-   "cert": {
-    "costo": "US$ 439 (579 con reintento)",
-    "verificado": true,
-    "notas": "SY0-801 sale cerca del 17 nov 2026; SY0-701 se retira el 11 jun 2027 (inglés) y el 13 ago 2027 (español). Decisión el domingo 22 nov 2026.",
-    "decision": "2026-11-22",
-    "versiones": [
-     {
-      "id": "SY0-701-en",
-      "nombre": "SY0-701 en inglés",
-      "retiro": "2027-06-11"
-     },
-     {
-      "id": "SY0-701-es",
-      "nombre": "SY0-701 en español",
-      "retiro": "2027-08-13"
-     },
-     {
-      "id": "SY0-801",
-      "nombre": "SY0-801",
-      "sale": "2026-11-17",
-      "verificada": false
-     }
-    ],
-    "porDefecto": "SY0-801",
-    "porDefectoMotivo": "Roadmap v7: Security+ \"con la versión nueva del examen\" (el examen cae en septiembre de 2027, cuando la SY0-701 ya se retiró en inglés y en español)"
+   "fechas": {
+    "inicio": "2027-05-01",
+    "fin": "2027-05-09"
    },
-   "dias": 18,
    "roadmap": {
-    "inicio": "2027-09-03",
-    "fin": "2027-09-20"
+    "inicio": "2027-05-01",
+    "fin": "2027-05-09"
    },
-   "numero": 3,
-   "nota": "Con la versión nueva del examen",
-   "historial": []
+   "fase": "F4",
+   "horas": 94,
+   "certs": [
+    {
+     "id": "secplus",
+     "nombre": "CompTIA Security+ (current version at booking)",
+     "horas": 75,
+     "recursos": [
+      "Professor Messer",
+      "Jason Dion mocks"
+     ],
+     "plan": [
+      {
+       "fecha": "2027-05-01",
+       "texto": "Videos + notes"
+      },
+      {
+       "fecha": "2027-05-02",
+       "texto": "Videos + notes"
+      },
+      {
+       "fecha": "2027-05-03",
+       "texto": "Videos + notes"
+      },
+      {
+       "fecha": "2027-05-04",
+       "texto": "Videos + notes"
+      },
+      {
+       "fecha": "2027-05-05",
+       "texto": "Performance-based questions"
+      },
+      {
+       "fecha": "2027-05-06",
+       "texto": "Mocks"
+      },
+      {
+       "fecha": "2027-05-07",
+       "texto": "Mocks (3 in total)"
+      },
+      {
+       "fecha": "2027-05-08",
+       "texto": "Exam"
+      }
+     ],
+     "examen": "2027-05-08",
+     "listo": 85,
+     "costo": "US$ 439 (579 con reintento)",
+     "costoVerificado": true,
+     "versiones": [
+      {
+       "id": "SY0-701-en",
+       "nombre": "SY0-701 en inglés",
+       "retiro": "2027-06-11"
+      },
+      {
+       "id": "SY0-701-es",
+       "nombre": "SY0-701 en español",
+       "retiro": "2027-08-13"
+      },
+      {
+       "id": "SY0-801",
+       "nombre": "SY0-801",
+       "sale": "2026-11-17",
+       "verificada": false
+      }
+     ],
+     "renovacion": {
+      "anos": 3,
+      "nota": "usual validity (to verify)"
+     }
+    },
+    {
+     "id": "ghas",
+     "nombre": "GitHub Advanced Security",
+     "horas": 18,
+     "recursos": [
+      "MS Learn",
+      "CodeQL and secret scanning on my repos"
+     ],
+     "plan": [
+      {
+       "fecha": "2027-05-08",
+       "texto": "Path (PM)"
+      },
+      {
+       "fecha": "2027-05-09",
+       "texto": "Mock + exam"
+      }
+     ],
+     "examen": "2027-05-09",
+     "listo": 85,
+     "renovacion": {
+      "anos": 3,
+      "nota": "usual validity (to verify)"
+     }
+    }
+   ]
+  },
+  {
+   "id": "CW7",
+   "etapa": 1,
+   "tipo": "cert",
+   "nombre": "Cert window 7",
+   "base": 1,
+   "extra": 0,
+   "extraPlataforma": 0,
+   "extraArquitectura": 0,
+   "fechas": {
+    "inicio": "2027-05-10",
+    "fin": "2027-05-17"
+   },
+   "roadmap": {
+    "inicio": "2027-05-10",
+    "fin": "2027-05-17"
+   },
+   "fase": "F4",
+   "horas": 82,
+   "certs": [
+    {
+     "id": "cka",
+     "nombre": "CKA",
+     "horas": 65,
+     "recursos": [
+      "KodeKloud CKA",
+      "killer.sh"
+     ],
+     "plan": [
+      {
+       "fecha": "2027-05-10",
+       "texto": "Course + labs"
+      },
+      {
+       "fecha": "2027-05-11",
+       "texto": "Course + labs"
+      },
+      {
+       "fecha": "2027-05-12",
+       "texto": "Course + labs"
+      },
+      {
+       "fecha": "2027-05-13",
+       "texto": "Troubleshooting"
+      },
+      {
+       "fecha": "2027-05-14",
+       "texto": "killer.sh #1"
+      },
+      {
+       "fecha": "2027-05-15",
+       "texto": "Review + killer.sh #2"
+      },
+      {
+       "fecha": "2027-05-16",
+       "texto": "Exam"
+      }
+     ],
+     "examen": "2027-05-16",
+     "listo": 85,
+     "renovacion": {
+      "anos": 2,
+      "nota": "usual validity (to verify)"
+     }
+    },
+    {
+     "id": "otel",
+     "nombre": "OpenTelemetry Certified Associate",
+     "horas": 17,
+     "recursos": [
+      "OTel docs",
+      "LF intro course"
+     ],
+     "plan": [
+      {
+       "fecha": "2027-05-16",
+       "texto": "Docs (PM)"
+      },
+      {
+       "fecha": "2027-05-17",
+       "texto": "Mock + exam"
+      }
+     ],
+     "examen": "2027-05-17",
+     "listo": 85,
+     "renovacion": {
+      "anos": 2,
+      "nota": "usual validity (to verify)"
+     }
+    }
+   ]
+  },
+  {
+   "id": "CW8",
+   "etapa": 1,
+   "tipo": "cert",
+   "nombre": "Cert window 8",
+   "base": 1,
+   "extra": 0,
+   "extraPlataforma": 0,
+   "extraArquitectura": 0,
+   "fechas": {
+    "inicio": "2027-05-18",
+    "fin": "2027-05-25"
+   },
+   "roadmap": {
+    "inicio": "2027-05-18",
+    "fin": "2027-05-25"
+   },
+   "fase": "F4",
+   "horas": 82,
+   "certs": [
+    {
+     "id": "aws-genai-pro",
+     "nombre": "AWS Certified Generative AI Developer – Professional",
+     "horas": 62,
+     "recursos": [
+      "Skill Builder prep",
+      "Bedrock docs",
+      "Mocks"
+     ],
+     "plan": [
+      {
+       "fecha": "2027-05-18",
+       "texto": "Prep"
+      },
+      {
+       "fecha": "2027-05-19",
+       "texto": "Prep"
+      },
+      {
+       "fecha": "2027-05-20",
+       "texto": "Prep"
+      },
+      {
+       "fecha": "2027-05-21",
+       "texto": "Bedrock labs"
+      },
+      {
+       "fecha": "2027-05-22",
+       "texto": "Mocks"
+      },
+      {
+       "fecha": "2027-05-23",
+       "texto": "Mocks"
+      },
+      {
+       "fecha": "2027-05-24",
+       "texto": "Exam"
+      }
+     ],
+     "examen": "2027-05-24",
+     "listo": 80,
+     "renovacion": {
+      "anos": 3,
+      "nota": "usual validity (to verify)"
+     }
+    },
+    {
+     "id": "claude-dev",
+     "nombre": "Claude Certified Developer – Foundations",
+     "horas": 20,
+     "recursos": [
+      "Official guide"
+     ],
+     "plan": [
+      {
+       "fecha": "2027-05-24",
+       "texto": "Guide (PM)"
+      },
+      {
+       "fecha": "2027-05-25",
+       "texto": "Mock + exam"
+      }
+     ],
+     "examen": "2027-05-25",
+     "listo": 85,
+     "renovacion": {
+      "nota": "validity to verify"
+     }
+    }
+   ]
+  },
+  {
+   "id": "J6",
+   "etapa": 1,
+   "tipo": "busqueda",
+   "nombre": "Job search E#6",
+   "base": 1,
+   "extra": 0,
+   "extraPlataforma": 0,
+   "extraArquitectura": 0,
+   "fechas": {
+    "inicio": "2027-05-26",
+    "fin": "2027-05-29"
+   },
+   "roadmap": {
+    "inicio": "2027-05-26",
+    "fin": "2027-05-29"
+   },
+   "fase": "F4",
+   "horas": 41,
+   "busqueda": {
+    "reparto": {
+     "ingles": 3,
+     "busqueda": 7
+    }
+   }
   },
   {
    "id": "W2",
    "etapa": 1,
    "tipo": "ventana",
-   "nombre": "Ventana W2 · matemática",
+   "nombre": "Math W2",
    "base": 3,
    "extra": 0,
    "extraPlataforma": 0,
    "extraArquitectura": 0,
    "mate": {
     "principal": [
-     "CONAMAT Cálculo diferencial",
-     "Vectores y matrices básicos"
+     "Conamat \"Matemáticas simplificadas\"",
+     "Mathematics for Machine Learning (Deisenroth)"
     ],
     "refuerzo": [
      {
@@ -1158,18 +2711,91 @@
      "Explicar el gradiente como la dirección de máximo crecimiento"
     ]
    },
-   "horas": 147,
    "roadmap": {
-    "inicio": "2027-09-21",
-    "fin": "2027-10-14"
-   }
+    "inicio": "2027-05-30",
+    "fin": "2027-06-18"
+   },
+   "fechas": {
+    "inicio": "2027-05-30",
+    "fin": "2027-06-18"
+   },
+   "fase": "F5",
+   "horas": 205,
+   "papers": [
+    {
+     "id": "backprop",
+     "nombre": "Learning representations by back-propagating errors (1986)"
+    },
+    {
+     "id": "adam",
+     "nombre": "Adam (2014)"
+    }
+   ],
+   "hitos": [
+    {
+     "dias": [
+      1,
+      5
+     ],
+     "inicio": "2027-05-30",
+     "fin": "2027-06-03",
+     "tema": "Conamat Differential calculus",
+     "hito": "Differentiate compositions, optimize by hand",
+     "capitulosAConfirmar": true
+    },
+    {
+     "dias": [
+      6,
+      9
+     ],
+     "inicio": "2027-06-04",
+     "fin": "2027-06-07",
+     "tema": "Conamat Integral calculus",
+     "hito": "Areas, integral as accumulation",
+     "capitulosAConfirmar": true
+    },
+    {
+     "dias": [
+      10,
+      13
+     ],
+     "inicio": "2027-06-08",
+     "fin": "2027-06-11",
+     "tema": "MML ch. 2 (linear algebra)",
+     "hito": "Invert matrices by hand"
+    },
+    {
+     "dias": [
+      14,
+      17
+     ],
+     "inicio": "2027-06-12",
+     "fin": "2027-06-15",
+     "tema": "MML ch. 4 + ch. 10 (SVD, PCA)",
+     "hito": "PCA by hand on 5 points"
+    },
+    {
+     "dias": [
+      18,
+      20
+     ],
+     "inicio": "2027-06-16",
+     "fin": "2027-06-18",
+     "tema": "MML ch. 5 + ch. 7 (backprop, optimization)",
+     "hito": "Backprop by hand for a 2-layer net"
+    }
+   ],
+   "libros": [
+    "Conamat \"Matemáticas simplificadas\"",
+    "Mathematics for Machine Learning (Deisenroth)"
+   ]
   },
   {
    "id": "P6",
    "etapa": 1,
    "tipo": "proyecto",
    "nombre": "AeroScan",
-   "base": 7,
+   "base": 2,
    "extra": 0,
    "extraPlataforma": 0,
    "extraArquitectura": 0,
@@ -1247,13 +2873,10 @@
      "ambiente": "Cloud"
     }
    ],
-   "horas": 205,
-   "horasAntes": 147,
    "roadmap": {
-    "inicio": "2027-10-15",
-    "fin": "2027-12-02"
+    "inicio": "2027-06-19",
+    "fin": "2027-07-02"
    },
-   "que": "inspecciona superficies de aviones, genera la orden de trabajo, consulta manuales, registra daños en 3D por matrícula",
    "historial": [
     {
      "fecha": "2026-11-20",
@@ -1265,14 +2888,67 @@
      "cambio": "Las tecnologías salen del stack de la v7, por ambiente",
      "motivo": "Roadmap v7 (stack)"
     }
+   ],
+   "fechas": {
+    "inicio": "2027-06-19",
+    "fin": "2027-07-02"
+   },
+   "fase": "F5",
+   "horas": 135,
+   "horasLim": 155,
+   "rol": "ML Engineer (CV)",
+   "entrevista": "high",
+   "papers": [
+    {
+     "id": "alexnet",
+     "nombre": "AlexNet (2012)"
+    },
+    {
+     "id": "resnet",
+     "nombre": "ResNet (2015)"
+    }
    ]
+  },
+  {
+   "id": "SUM",
+   "etapa": 1,
+   "tipo": "sumas",
+   "nombre": "Multiplatform week",
+   "base": 1,
+   "extra": 0,
+   "extraPlataforma": 0,
+   "extraArquitectura": 0,
+   "items": [
+    {
+     "nombre": "Consola Electron de Faro v1 (viene de P1)",
+     "desde": "P1"
+    },
+    {
+     "nombre": "App de prueba de Expo para Escudo (viene de P2)",
+     "desde": "P2"
+    },
+    {
+     "nombre": "Auditoría y refactor de una app generada con IA (solo si sobra tiempo)",
+     "opcional": true
+    }
+   ],
+   "roadmap": {
+    "inicio": "2027-07-03",
+    "fin": "2027-07-05"
+   },
+   "fechas": {
+    "inicio": "2027-07-03",
+    "fin": "2027-07-05"
+   },
+   "fase": "F5",
+   "horas": 25
   },
   {
    "id": "P7",
    "etapa": 1,
    "tipo": "proyecto",
    "nombre": "AgrIA Sat",
-   "base": 6,
+   "base": 1,
    "extra": 0,
    "extraPlataforma": 0,
    "extraArquitectura": 0,
@@ -1336,13 +3012,10 @@
      "ambiente": "Cloud"
     }
    ],
-   "horas": 150,
-   "horasAntes": 98,
    "roadmap": {
-    "inicio": "2027-12-03",
-    "fin": "2028-01-14"
+    "inicio": "2027-07-06",
+    "fin": "2027-07-15"
    },
-   "que": "monitorea lotes con Sentinel-2, alerta estrés, genera dosis variable, estima pérdidas en USD",
    "historial": [
     {
      "fecha": "2026-11-20",
@@ -1354,42 +3027,59 @@
      "cambio": "Las tecnologías salen del stack de la v7, por ambiente",
      "motivo": "Roadmap v7 (stack)"
     }
-   ]
+   ],
+   "fechas": {
+    "inicio": "2027-07-06",
+    "fin": "2027-07-15"
+   },
+   "fase": "F5",
+   "horas": 100,
+   "horasLim": 115,
+   "rol": "ML / MLOps Engineer",
+   "entrevista": "very high"
   },
   {
-   "id": "C3",
+   "id": "JP5",
    "etapa": 1,
-   "tipo": "cert",
-   "nombre": "AWS Machine Learning Engineer Associate",
-   "base": 2,
+   "tipo": "busqueda",
+   "nombre": "Job search (short)",
+   "base": 1,
    "extra": 0,
    "extraPlataforma": 0,
    "extraArquitectura": 0,
-   "cert": {
-    "costo": "US$ 150 según la mayoría de las fuentes; una dice 300",
-    "verificado": false,
-    "notas": "Confirmar en AWS"
+   "fechas": {
+    "inicio": "2027-07-16",
+    "fin": "2027-07-18"
    },
-   "dias": 12,
    "roadmap": {
-    "inicio": "2028-01-15",
-    "fin": "2028-01-26"
+    "inicio": "2027-07-16",
+    "fin": "2027-07-18"
    },
-   "numero": 4
+   "fase": "F5",
+   "horas": 32,
+   "busqueda": {
+    "reparto": {
+     "ingles": 3,
+     "busqueda": 7
+    }
+   }
   },
   {
    "id": "W3",
    "etapa": 1,
    "tipo": "ventana",
-   "nombre": "Ventana W3 · matemática",
-   "base": 3,
+   "nombre": "Math W3",
+   "base": 2,
    "extra": 0,
    "extraPlataforma": 0,
    "extraArquitectura": 0,
    "mate": {
     "principal": [
-     "Blitzstein y Hwang · Introduction to Probability",
-     "EDOs y optimización"
+     "Blitzstein & Hwang, Introduction to Probability",
+     "Mathematics for Machine Learning",
+     "MacKay, Information Theory, Inference, and Learning Algorithms",
+     "Strang, Introduction to Linear Algebra",
+     "Karpathy, Let's build GPT"
     ],
     "refuerzo": [
      {
@@ -1425,18 +3115,82 @@
      "Plantear una optimización con restricciones y resolverla con descenso de gradiente"
     ]
    },
-   "horas": 122,
    "roadmap": {
-    "inicio": "2028-01-27",
-    "fin": "2028-02-15"
-   }
+    "inicio": "2027-07-19",
+    "fin": "2027-08-01"
+   },
+   "fechas": {
+    "inicio": "2027-07-19",
+    "fin": "2027-08-01"
+   },
+   "fase": "F6",
+   "horas": 144,
+   "hitos": [
+    {
+     "dias": [
+      1,
+      5
+     ],
+     "inicio": "2027-07-19",
+     "fin": "2027-07-23",
+     "tema": "Blitzstein & Hwang ch. 1–7",
+     "hito": "Bayes, joint distributions"
+    },
+    {
+     "dias": [
+      6,
+      7
+     ],
+     "inicio": "2027-07-24",
+     "fin": "2027-07-25",
+     "tema": "MML ch. 6",
+     "hito": "Multivariate Gaussian"
+    },
+    {
+     "dias": [
+      8,
+      10
+     ],
+     "inicio": "2027-07-26",
+     "fin": "2027-07-28",
+     "tema": "MacKay ch. 2",
+     "hito": "Entropy, KL and cross-entropy by hand"
+    },
+    {
+     "dias": [
+      11,
+      12
+     ],
+     "inicio": "2027-07-29",
+     "fin": "2027-07-30",
+     "tema": "Strang: SVD + low rank",
+     "hito": "Why LoRA works"
+    },
+    {
+     "dias": [
+      13,
+      14
+     ],
+     "inicio": "2027-07-31",
+     "fin": "2027-08-01",
+     "tema": "Transformers from the inside: mini-GPT by hand (Karpathy, \"Let's build GPT\")",
+     "hito": "Train it on a small text and explain attention with my own diagram"
+    }
+   ],
+   "libros": [
+    "Blitzstein & Hwang, Introduction to Probability",
+    "Mathematics for Machine Learning",
+    "MacKay, Information Theory, Inference, and Learning Algorithms",
+    "Strang, Introduction to Linear Algebra",
+    "Karpathy, Let's build GPT"
+   ]
   },
   {
    "id": "P8",
    "etapa": 1,
    "tipo": "proyecto",
    "nombre": "AdversarIA",
-   "base": 4,
+   "base": 1,
    "extra": 0,
    "extraPlataforma": 0,
    "extraArquitectura": 0,
@@ -1518,20 +3272,36 @@
      "motivo": "Roadmap v7 (stack)"
     }
    ],
-   "horas": 130,
-   "horasAntes": 74,
    "roadmap": {
-    "inicio": "2028-02-16",
-    "fin": "2028-03-17"
+    "inicio": "2027-08-02",
+    "fin": "2027-08-10"
    },
-   "que": "escanea agentes de chat y voz propios o autorizados, los ataca y compara defensas"
+   "fechas": {
+    "inicio": "2027-08-02",
+    "fin": "2027-08-10"
+   },
+   "fase": "F6",
+   "horas": 85,
+   "horasLim": 105,
+   "rol": "AI Security Engineer",
+   "entrevista": "very high",
+   "papers": [
+    {
+     "id": "attention",
+     "nombre": "Attention Is All You Need (2017)"
+    },
+    {
+     "id": "lora",
+     "nombre": "LoRA (2021)"
+    }
+   ]
   },
   {
    "id": "P9",
    "etapa": 1,
    "tipo": "proyecto",
    "nombre": "AeroScan Edge",
-   "base": 6,
+   "base": 2,
    "extra": 0,
    "extraPlataforma": 0,
    "extraArquitectura": 0,
@@ -1563,13 +3333,10 @@
      "ambiente": "Cloud"
     }
    ],
-   "horas": 165,
-   "horasAntes": 122,
    "roadmap": {
-    "inicio": "2028-03-18",
-    "fin": "2028-04-26"
+    "inicio": "2027-08-11",
+    "fin": "2027-08-23"
    },
-   "que": "inspección offline en el hangar, walkaround guiado por voz, sincronización",
    "historial": [
     {
      "fecha": "2026-11-20",
@@ -1581,34 +3348,32 @@
      "cambio": "Las tecnologías salen del stack de la v7, por ambiente",
      "motivo": "Roadmap v7 (stack)"
     }
-   ]
-  },
-  {
-   "id": "C9",
-   "etapa": 1,
-   "tipo": "cert",
-   "nombre": "AWS Generative AI Developer – Professional",
-   "base": 3,
-   "extra": 0,
-   "extraPlataforma": 0,
-   "extraArquitectura": 0,
-   "dias": 18,
-   "roadmap": {
-    "inicio": "2028-04-27",
-    "fin": "2028-05-14"
+   ],
+   "fechas": {
+    "inicio": "2027-08-11",
+    "fin": "2027-08-23"
    },
-   "numero": 5,
-   "corto": "AWS GenAI Pro",
-   "cert": {
-    "verificado": false
-   }
+   "fase": "F6",
+   "horas": 125,
+   "horasLim": 145,
+   "rol": "Edge AI Engineer",
+   "entrevista": "high",
+   "notas": [
+    "Sync service on DynamoDB (conditional writes for conflicts)"
+   ],
+   "papers": [
+    {
+     "id": "distillation",
+     "nombre": "Distilling the Knowledge in a Neural Network (2015)"
+    }
+   ]
   },
   {
    "id": "P10",
    "etapa": 1,
    "tipo": "proyecto",
    "nombre": "Antena Ops",
-   "base": 7,
+   "base": 2,
    "extra": 0,
    "extraPlataforma": 0,
    "extraArquitectura": 0,
@@ -1664,13 +3429,10 @@
      "ambiente": "Cloud"
     }
    ],
-   "horas": 205,
-   "horasAntes": 172,
    "roadmap": {
-    "inicio": "2028-05-15",
-    "fin": "2028-07-02"
+    "inicio": "2027-08-24",
+    "fin": "2027-09-06"
    },
-   "que": "centro de control de todos tus productos: anomalías en telemetría de la NASA, agente SRE, status page, costos en vivo, Jarvis central",
    "historial": [
     {
      "fecha": "2026-11-20",
@@ -1682,41 +3444,86 @@
      "cambio": "Las tecnologías salen del stack de la v7, por ambiente",
      "motivo": "Roadmap v7 (stack)"
     }
+   ],
+   "fechas": {
+    "inicio": "2027-08-24",
+    "fin": "2027-09-06"
+   },
+   "fase": "F6",
+   "horas": 135,
+   "horasLim": 170,
+   "rol": "Senior ML + DevSecOps + Cloud",
+   "entrevista": "very high",
+   "papers": [
+    {
+     "id": "lstm",
+     "nombre": "Long Short-Term Memory (1997)"
+    }
    ]
+  },
+  {
+   "id": "JP6",
+   "etapa": 1,
+   "tipo": "busqueda",
+   "nombre": "Job search (short)",
+   "base": 1,
+   "extra": 0,
+   "extraPlataforma": 0,
+   "extraArquitectura": 0,
+   "fechas": {
+    "inicio": "2027-09-07",
+    "fin": "2027-09-09"
+   },
+   "roadmap": {
+    "inicio": "2027-09-07",
+    "fin": "2027-09-09"
+   },
+   "fase": "F6",
+   "horas": 31,
+   "busqueda": {
+    "reparto": {
+     "ingles": 3,
+     "busqueda": 7
+    }
+   }
   },
   {
    "id": "COL",
    "etapa": 1,
    "tipo": "colchon",
-   "nombre": "Consolidación",
-   "base": 2,
+   "nombre": "Consolidation",
+   "base": 1,
    "extra": 0,
    "extraPlataforma": 0,
    "extraArquitectura": 0,
-   "dias": 12,
    "roadmap": {
-    "inicio": "2028-07-03",
-    "fin": "2028-07-14"
+    "inicio": "2027-09-10",
+    "fin": "2027-09-19"
    },
-   "que": "Cierre de la etapa 1: absorbe los atrasos de las puertas de matemática y prepara las entrevistas senior"
+   "fechas": {
+    "inicio": "2027-09-10",
+    "fin": "2027-09-19"
+   },
+   "fase": "F6"
   },
   {
    "id": "W4",
    "etapa": 2,
    "tipo": "ventana",
-   "nombre": "Ventana W4 · matemática discreta y cripto",
+   "nombre": "Math W4",
    "base": 1,
    "extra": 0,
    "extraPlataforma": 0,
    "extraArquitectura": 0,
-   "que": "Matemática discreta y criptografía",
    "libros": [
-    "Lehman, Leighton y Meyer · Mathematics for Computer Science"
+    "Silverman, A Friendly Introduction to Number Theory",
+    "Aumasson, Serious Cryptography"
    ],
    "habilita": "S1",
    "mate": {
     "principal": [
-     "Lehman, Leighton y Meyer · Mathematics for Computer Science"
+     "Silverman, A Friendly Introduction to Number Theory",
+     "Aumasson, Serious Cryptography"
     ],
     "refuerzo": [
      {
@@ -1739,25 +3546,51 @@
      "Contar combinaciones y permutaciones en problemas de seguridad"
     ]
    },
-   "horas": 49,
    "roadmap": {
-    "inicio": "2028-07-15",
-    "fin": "2028-07-22"
-   }
+    "inicio": "2027-09-20",
+    "fin": "2027-09-24"
+   },
+   "fechas": {
+    "inicio": "2027-09-20",
+    "fin": "2027-09-24"
+   },
+   "fase": "F7",
+   "horas": 50,
+   "hitos": [
+    {
+     "dias": [
+      1,
+      3
+     ],
+     "inicio": "2027-09-20",
+     "fin": "2027-09-22",
+     "tema": "Silverman: divisibility, gcd, congruences, Fermat, Euler, RSA",
+     "hito": "Toy RSA by hand"
+    },
+    {
+     "dias": [
+      4,
+      5
+     ],
+     "inicio": "2027-09-23",
+     "fin": "2027-09-24",
+     "tema": "Aumasson: randomness, block ciphers, AEAD, hashing, key exchange",
+     "hito": "Explain AES-GCM and nonce reuse"
+    }
+   ]
   },
   {
    "id": "S1",
    "etapa": 2,
    "tipo": "proyecto",
    "nombre": "Bóveda",
-   "base": 4,
+   "base": 1,
    "extra": 0,
    "extraPlataforma": 0,
    "extraArquitectura": 0,
    "dependeDe": [
     "W4"
    ],
-   "que": "secretos, cifrado de sobre, rotación, credenciales efímeras para agentes de IA",
    "perfil": "Security Engineer (cripto y secretos)",
    "ficha": {
     "rubro": "seguridad",
@@ -1823,11 +3656,9 @@
      "ambiente": "Cloud"
     }
    ],
-   "horas": 130,
-   "horasAntes": 98,
    "roadmap": {
-    "inicio": "2028-07-23",
-    "fin": "2028-08-22"
+    "inicio": "2027-09-25",
+    "fin": "2027-10-03"
    },
    "historial": [
     {
@@ -1840,39 +3671,24 @@
      "cambio": "Las tecnologías salen del stack de la v7, por ambiente",
      "motivo": "Roadmap v7 (stack)"
     }
-   ]
-  },
-  {
-   "id": "C10",
-   "etapa": 2,
-   "tipo": "cert",
-   "nombre": "Azure AI-103",
-   "base": 2,
-   "extra": 0,
-   "extraPlataforma": 0,
-   "extraArquitectura": 0,
-   "dias": 12,
-   "roadmap": {
-    "inicio": "2028-08-23",
-    "fin": "2028-09-03"
+   ],
+   "fechas": {
+    "inicio": "2027-09-25",
+    "fin": "2027-10-03"
    },
-   "numero": 6,
-   "corto": "Azure AI-103",
-   "nota": "Reemplazo de AI-102",
-   "cert": {
-    "verificado": false
-   }
+   "fase": "F7",
+   "horas": 85,
+   "horasLim": 100
   },
   {
    "id": "S2",
    "etapa": 2,
    "tipo": "proyecto",
    "nombre": "Asedio",
-   "base": 6,
+   "base": 2,
    "extra": 0,
    "extraPlataforma": 0,
    "extraArquitectura": 0,
-   "que": "modelo de amenazas y pentest de tus productos (IA e IoT incluidos), con un bot que corrige",
    "perfil": "Application Security Engineer",
    "ficha": {
     "rubro": "seguridad",
@@ -1922,11 +3738,9 @@
      "ambiente": "Cloud"
     }
    ],
-   "horas": 165,
-   "horasAntes": 122,
    "roadmap": {
-    "inicio": "2028-09-04",
-    "fin": "2028-10-13"
+    "inicio": "2027-10-04",
+    "fin": "2027-10-14"
    },
    "historial": [
     {
@@ -1939,18 +3753,24 @@
      "cambio": "Las tecnologías salen del stack de la v7, por ambiente",
      "motivo": "Roadmap v7 (stack)"
     }
-   ]
+   ],
+   "fechas": {
+    "inicio": "2027-10-04",
+    "fin": "2027-10-14"
+   },
+   "fase": "F7",
+   "horas": 105,
+   "horasLim": 130
   },
   {
    "id": "S3",
    "etapa": 2,
    "tipo": "proyecto",
    "nombre": "Vigía",
-   "base": 7,
+   "base": 2,
    "extra": 0,
    "extraPlataforma": 0,
    "extraArquitectura": 0,
-   "que": "SOC en una caja para pymes, con agente investigador y llamada al dueño",
    "perfil": "Detection & Response / Cloud Security Engineer",
    "ficha": {
     "rubro": "seguridad",
@@ -1987,11 +3807,9 @@
      "ambiente": "Infra"
     }
    ],
-   "horas": 195,
-   "horasAntes": 147,
    "roadmap": {
-    "inicio": "2028-10-14",
-    "fin": "2028-11-29"
+    "inicio": "2027-10-15",
+    "fin": "2027-10-27"
    },
    "historial": [
     {
@@ -2004,61 +3822,134 @@
      "cambio": "Las tecnologías salen del stack de la v7, por ambiente",
      "motivo": "Roadmap v7 (stack)"
     }
-   ]
+   ],
+   "fechas": {
+    "inicio": "2027-10-15",
+    "fin": "2027-10-27"
+   },
+   "fase": "F7",
+   "horas": 125,
+   "horasLim": 155
   },
   {
-   "id": "C4",
+   "id": "CW9",
    "etapa": 2,
    "tipo": "cert",
    "nombre": "PNPT",
-   "base": 3,
+   "base": 2,
    "extra": 0,
    "extraPlataforma": 0,
    "extraArquitectura": 0,
-   "corto": "PNPT",
-   "que": "Practical Network Penetration Tester (TCM Security)",
-   "cert": {
-    "costo": "US$ 499",
-    "verificado": true,
-    "notas": "12 meses de entrenamiento y 1 reintento; examen de 5 días más 2 para el informe; no vence"
+   "fechas": {
+    "inicio": "2027-10-28",
+    "fin": "2027-11-11"
    },
-   "dias": 18,
    "roadmap": {
-    "inicio": "2028-11-30",
-    "fin": "2028-12-17"
+    "inicio": "2027-10-28",
+    "fin": "2027-11-11"
    },
-   "numero": 7
+   "fase": "F7",
+   "horas": 154,
+   "certs": [
+    {
+     "id": "pnpt",
+     "nombre": "PNPT",
+     "horas": 154,
+     "recursos": [
+      "TCM courses (PEH, OSINT, External Pentest Playbook, Windows/Linux PrivEsc)",
+      "PEH AD lab"
+     ],
+     "plan": [
+      {
+       "fecha": "2027-10-28",
+       "texto": "AD/OSINT intensive + lab (through 3 Nov, lab twice)"
+      },
+      {
+       "fecha": "2027-11-04",
+       "texto": "Practical exam (through 8 Nov)"
+      },
+      {
+       "fecha": "2027-11-09",
+       "texto": "Report"
+      },
+      {
+       "fecha": "2027-11-10",
+       "texto": "Report"
+      },
+      {
+       "fecha": "2027-11-11",
+       "texto": "Debrief in English"
+      }
+     ],
+     "examen": "2027-11-11",
+     "listo": "AD lab end-to-end without guide",
+     "costo": "US$ 499",
+     "costoVerificado": true,
+     "renovacion": {
+      "nota": "no expiry (to verify)"
+     }
+    }
+   ]
+  },
+  {
+   "id": "J7",
+   "etapa": 2,
+   "tipo": "busqueda",
+   "nombre": "Job search E#7",
+   "base": 1,
+   "extra": 0,
+   "extraPlataforma": 0,
+   "extraArquitectura": 0,
+   "fechas": {
+    "inicio": "2027-11-12",
+    "fin": "2027-11-15"
+   },
+   "roadmap": {
+    "inicio": "2027-11-12",
+    "fin": "2027-11-15"
+   },
+   "fase": "F7",
+   "horas": 42,
+   "busqueda": {
+    "reparto": {
+     "ingles": 3,
+     "busqueda": 7
+    }
+   }
   },
   {
    "id": "CIE2",
    "etapa": 2,
    "tipo": "cierre",
-   "nombre": "Cierre de etapa",
+   "nombre": "Stage close",
    "base": 1,
    "extra": 0,
    "extraPlataforma": 0,
    "extraArquitectura": 0,
-   "que": "Cierre de la etapa 2 (T+18), después de la pausa del 18 al 24 dic 2028",
-   "dias": 6,
    "roadmap": {
-    "inicio": "2028-12-25",
-    "fin": "2028-12-30"
-   }
+    "inicio": "2027-11-16",
+    "fin": "2027-11-21"
+   },
+   "fechas": {
+    "inicio": "2027-11-16",
+    "fin": "2027-11-21"
+   },
+   "fase": "F7"
   },
   {
    "id": "WQ1",
    "etapa": 3,
    "tipo": "ventana",
-   "nombre": "Ventana WQ1 · estadística, series de tiempo, portafolios",
-   "base": 2,
+   "nombre": "Math WQ1",
+   "base": 1,
    "extra": 0,
    "extraPlataforma": 0,
    "extraArquitectura": 0,
    "mate": {
     "principal": [
-     "Wasserman · All of Statistics",
-     "Hyndman y Athanasopoulos · Forecasting",
-     "Tsay · Analysis of Financial Time Series"
+     "Blitzstein (Markov chains)",
+     "Hyndman, Forecasting: Principles and Practice",
+     "López de Prado, Advances in Financial ML"
     ],
     "refuerzo": [
      {
@@ -2083,18 +3974,63 @@
      "Armar una cartera de mínima varianza con dos o más activos"
     ]
    },
-   "horas": 74,
    "roadmap": {
-    "inicio": "2028-12-31",
-    "fin": "2029-01-11"
-   }
+    "inicio": "2027-11-22",
+    "fin": "2027-11-29"
+   },
+   "fechas": {
+    "inicio": "2027-11-22",
+    "fin": "2027-11-29"
+   },
+   "fase": "F8",
+   "horas": 82,
+   "hitos": [
+    {
+     "dias": [
+      1,
+      2
+     ],
+     "inicio": "2027-11-22",
+     "fin": "2027-11-23",
+     "tema": "Blitzstein: Markov chains, random walks",
+     "hito": "(to confirm)",
+     "hitoAConfirmar": true
+    },
+    {
+     "dias": [
+      3,
+      6
+     ],
+     "inicio": "2027-11-24",
+     "fin": "2027-11-27",
+     "tema": "Hyndman: decomposition, autocorrelation, ARIMA, time-series CV",
+     "hito": "(to confirm)",
+     "hitoAConfirmar": true
+    },
+    {
+     "dias": [
+      7,
+      8
+     ],
+     "inicio": "2027-11-28",
+     "fin": "2027-11-29",
+     "tema": "López de Prado: backtest overfitting, deflated Sharpe",
+     "hito": "(to confirm)",
+     "hitoAConfirmar": true
+    }
+   ],
+   "libros": [
+    "Blitzstein (Markov chains)",
+    "Hyndman, Forecasting: Principles and Practice",
+    "López de Prado, Advances in Financial ML"
+   ]
   },
   {
    "id": "Q1",
    "etapa": 3,
    "tipo": "proyecto",
    "nombre": "Alpha Lab",
-   "base": 7,
+   "base": 2,
    "extra": 0,
    "extraPlataforma": 0,
    "extraArquitectura": 0,
@@ -2146,13 +4082,10 @@
      "ambiente": "Cloud"
     }
    ],
-   "horas": 195,
-   "horasAntes": 147,
    "roadmap": {
-    "inicio": "2029-01-12",
-    "fin": "2029-02-27"
+    "inicio": "2027-11-30",
+    "fin": "2027-12-12"
    },
-   "que": "backtester de eventos con costos, deslizamiento y walk-forward",
    "historial": [
     {
      "fecha": "2026-11-20",
@@ -2164,14 +4097,21 @@
      "cambio": "Las tecnologías salen del stack de la v7, por ambiente",
      "motivo": "Roadmap v7 (stack)"
     }
-   ]
+   ],
+   "fechas": {
+    "inicio": "2027-11-30",
+    "fin": "2027-12-12"
+   },
+   "fase": "F8",
+   "horas": 125,
+   "horasLim": 145
   },
   {
    "id": "Q2",
    "etapa": 3,
    "tipo": "proyecto",
    "nombre": "Paper Trail",
-   "base": 6,
+   "base": 3,
    "extra": 0,
    "extraPlataforma": 0,
    "extraArquitectura": 0,
@@ -2205,13 +4145,10 @@
      "ambiente": "IA por API"
     }
    ],
-   "horas": 165,
-   "horasAntes": 122,
    "roadmap": {
-    "inicio": "2029-02-28",
-    "fin": "2029-04-08"
+    "inicio": "2027-12-13",
+    "fin": "2027-12-30"
    },
-   "que": "agente que lee papers de finanzas y replica sus estrategias con Alpha Lab",
    "historial": [
     {
      "fecha": "2026-11-20",
@@ -2223,58 +4160,48 @@
      "cambio": "Las tecnologías salen del stack de la v7, por ambiente",
      "motivo": "Roadmap v7 (stack)"
     }
-   ]
-  },
-  {
-   "id": "C5",
-   "etapa": 3,
-   "tipo": "cert",
-   "nombre": "CKA",
-   "base": 2,
-   "extra": 0,
-   "extraPlataforma": 0,
-   "extraArquitectura": 0,
-   "corto": "CKA",
-   "que": "Certified Kubernetes Administrator, requisito de CKS",
-   "cert": {
-    "verificado": false,
-    "notas": "Requisito de CKS"
+   ],
+   "fechas": {
+    "inicio": "2027-12-13",
+    "fin": "2027-12-30"
    },
-   "dias": 16,
-   "roadmap": {
-    "inicio": "2029-04-09",
-    "fin": "2029-04-24"
-   },
-   "numero": 8
+   "fase": "F8",
+   "horas": 105,
+   "horasLim": 130
   },
   {
    "id": "DES3",
    "etapa": 3,
    "tipo": "descanso",
-   "nombre": "Descanso",
+   "nombre": "Rest",
    "base": 1,
    "extra": 0,
    "extraPlataforma": 0,
    "extraArquitectura": 0,
-   "dias": 7,
    "roadmap": {
-    "inicio": "2029-04-25",
-    "fin": "2029-05-01"
-   }
+    "inicio": "2027-12-31",
+    "fin": "2028-01-06"
+   },
+   "fechas": {
+    "inicio": "2027-12-31",
+    "fin": "2028-01-06"
+   },
+   "fase": "F8"
   },
   {
    "id": "WQ2",
    "etapa": 3,
    "tipo": "ventana",
-   "nombre": "Ventana WQ2 · cálculo estocástico y derivados",
-   "base": 2,
+   "nombre": "Math WQ2",
+   "base": 1,
    "extra": 0,
    "extraPlataforma": 0,
    "extraArquitectura": 0,
    "mate": {
     "principal": [
-     "Shreve · Stochastic Calculus for Finance I y II",
-     "Hull"
+     "Shreve, Stochastic Calculus for Finance I",
+     "Shreve, Stochastic Calculus for Finance II (ch. 3–5)",
+     "Hull, Options, Futures, and Other Derivatives"
     ],
     "refuerzo": [
      {
@@ -2306,18 +4233,63 @@
      "Simular precios con Monte Carlo y comparar contra la fórmula cerrada"
     ]
    },
-   "horas": 98,
    "roadmap": {
-    "inicio": "2029-05-02",
-    "fin": "2029-05-17"
-   }
+    "inicio": "2028-01-07",
+    "fin": "2028-01-16"
+   },
+   "fechas": {
+    "inicio": "2028-01-07",
+    "fin": "2028-01-16"
+   },
+   "fase": "F8",
+   "horas": 104,
+   "hitos": [
+    {
+     "dias": [
+      1,
+      3
+     ],
+     "inicio": "2028-01-07",
+     "fin": "2028-01-09",
+     "tema": "Shreve I (binomial)",
+     "hito": "(to confirm)",
+     "hitoAConfirmar": true
+    },
+    {
+     "dias": [
+      4,
+      7
+     ],
+     "inicio": "2028-01-10",
+     "fin": "2028-01-13",
+     "tema": "Shreve II ch. 3–5 (Brownian motion, Itô, Black-Scholes)",
+     "hito": "(to confirm)",
+     "hitoAConfirmar": true
+    },
+    {
+     "dias": [
+      8,
+      10
+     ],
+     "inicio": "2028-01-14",
+     "fin": "2028-01-16",
+     "tema": "Hull (BS, Greeks, implied vol, Monte Carlo)",
+     "hito": "(to confirm)",
+     "hitoAConfirmar": true
+    }
+   ],
+   "libros": [
+    "Shreve, Stochastic Calculus for Finance I",
+    "Shreve, Stochastic Calculus for Finance II (ch. 3–5)",
+    "Hull, Options, Futures, and Other Derivatives"
+   ]
   },
   {
    "id": "Q3",
    "etapa": 3,
    "tipo": "proyecto",
    "nombre": "Volta",
-   "base": 7,
+   "base": 2,
    "extra": 0,
    "extraPlataforma": 0,
    "extraArquitectura": 0,
@@ -2364,13 +4336,10 @@
      "ambiente": "Backend"
     }
    ],
-   "horas": 200,
-   "horasAntes": 147,
    "roadmap": {
-    "inicio": "2029-05-18",
-    "fin": "2029-07-04"
+    "inicio": "2028-01-17",
+    "fin": "2028-01-29"
    },
-   "que": "valuación de opciones con griegas y estrés, validada contra QuantLib",
    "historial": [
     {
      "fecha": "2026-11-20",
@@ -2382,14 +4351,21 @@
      "cambio": "Las tecnologías salen del stack de la v7, por ambiente",
      "motivo": "Roadmap v7 (stack)"
     }
-   ]
+   ],
+   "fechas": {
+    "inicio": "2028-01-17",
+    "fin": "2028-01-29"
+   },
+   "fase": "F8",
+   "horas": 130,
+   "horasLim": 150
   },
   {
    "id": "Q4",
    "etapa": 3,
    "tipo": "proyecto",
    "nombre": "Matchbook",
-   "base": 6,
+   "base": 2,
    "extra": 0,
    "extraPlataforma": 0,
    "extraArquitectura": 0,
@@ -2419,13 +4395,10 @@
      "ambiente": "Backend"
     }
    ],
-   "horas": 160,
-   "horasAntes": 122,
    "roadmap": {
-    "inicio": "2029-07-05",
-    "fin": "2029-08-12"
+    "inicio": "2028-01-30",
+    "fin": "2028-02-09"
    },
-   "que": "motor de matching con libro de órdenes, market maker simulado y FIX",
    "historial": [
     {
      "fecha": "2026-11-20",
@@ -2437,44 +4410,120 @@
      "cambio": "Las tecnologías salen del stack de la v7, por ambiente",
      "motivo": "Roadmap v7 (stack)"
     }
-   ]
+   ],
+   "fechas": {
+    "inicio": "2028-01-30",
+    "fin": "2028-02-09"
+   },
+   "fase": "F8",
+   "horas": 105,
+   "horasLim": 120
   },
   {
-   "id": "C6",
+   "id": "CW10",
    "etapa": 3,
    "tipo": "cert",
    "nombre": "CKS",
-   "base": 2,
+   "base": 1,
    "extra": 0,
    "extraPlataforma": 0,
    "extraArquitectura": 0,
-   "corto": "CKS",
-   "que": "Certified Kubernetes Security Specialist",
-   "cert": {
-    "costo": "US$ 445",
-    "verificado": true,
-    "notas": "Incluye 1 reintento; exige haber aprobado CKA; vale 2 años",
-    "requiere": "C5"
+   "fechas": {
+    "inicio": "2028-02-10",
+    "fin": "2028-02-15"
    },
-   "dias": 14,
    "roadmap": {
-    "inicio": "2029-08-13",
-    "fin": "2029-08-26"
+    "inicio": "2028-02-10",
+    "fin": "2028-02-15"
    },
-   "numero": 9
+   "fase": "F8",
+   "horas": 62,
+   "certs": [
+    {
+     "id": "cks",
+     "nombre": "CKS",
+     "horas": 62,
+     "recursos": [
+      "KodeKloud CKS",
+      "killer.sh"
+     ],
+     "plan": [
+      {
+       "fecha": "2028-02-10",
+       "texto": "Course + labs"
+      },
+      {
+       "fecha": "2028-02-11",
+       "texto": "Course + labs"
+      },
+      {
+       "fecha": "2028-02-12",
+       "texto": "Course + labs"
+      },
+      {
+       "fecha": "2028-02-13",
+       "texto": "killer.sh #1"
+      },
+      {
+       "fecha": "2028-02-14",
+       "texto": "Review + killer.sh #2"
+      },
+      {
+       "fecha": "2028-02-15",
+       "texto": "Exam"
+      }
+     ],
+     "examen": "2028-02-15",
+     "listo": 85,
+     "requiere": "cka",
+     "costo": "US$ 445",
+     "costoVerificado": true,
+     "renovacion": {
+      "anos": 2,
+      "nota": "usual validity (to verify)"
+     }
+    }
+   ]
+  },
+  {
+   "id": "J8",
+   "etapa": 3,
+   "tipo": "busqueda",
+   "nombre": "Job search E#8",
+   "base": 1,
+   "extra": 0,
+   "extraPlataforma": 0,
+   "extraArquitectura": 0,
+   "fechas": {
+    "inicio": "2028-02-16",
+    "fin": "2028-02-19"
+   },
+   "roadmap": {
+    "inicio": "2028-02-16",
+    "fin": "2028-02-19"
+   },
+   "fase": "F8",
+   "horas": 41,
+   "busqueda": {
+    "reparto": {
+     "ingles": 3,
+     "busqueda": 7
+    }
+   }
   },
   {
    "id": "WQ3",
    "etapa": 3,
    "tipo": "ventana",
-   "nombre": "Ventana WQ3 · optimización convexa y ML financiero",
+   "nombre": "Math WQ3",
    "base": 1,
    "extra": 0,
    "extraPlataforma": 0,
    "extraArquitectura": 0,
    "mate": {
     "principal": [
-     "Boyd y Vandenberghe cap. 5 a 8"
+     "Boyd & Vandenberghe, Convex Optimization",
+     "Cornuéjols & Tütüncü, Optimization Methods in Finance"
     ],
     "refuerzo": [
      {
@@ -2498,18 +4547,51 @@
      "Validar un modelo de ML financiero con validación cruzada purgada"
     ]
    },
-   "horas": 49,
    "roadmap": {
-    "inicio": "2029-08-27",
-    "fin": "2029-09-03"
-   }
+    "inicio": "2028-02-20",
+    "fin": "2028-02-24"
+   },
+   "fechas": {
+    "inicio": "2028-02-20",
+    "fin": "2028-02-24"
+   },
+   "fase": "F9",
+   "horas": 51,
+   "hitos": [
+    {
+     "dias": [
+      1,
+      2
+     ],
+     "inicio": "2028-02-20",
+     "fin": "2028-02-21",
+     "tema": "Boyd & Vandenberghe: convexity, QP",
+     "hito": "(to confirm)",
+     "hitoAConfirmar": true
+    },
+    {
+     "dias": [
+      3,
+      5
+     ],
+     "inicio": "2028-02-22",
+     "fin": "2028-02-24",
+     "tema": "Cornuéjols & Tütüncü: Markowitz, efficient frontier",
+     "hito": "(to confirm)",
+     "hitoAConfirmar": true
+    }
+   ],
+   "libros": [
+    "Boyd & Vandenberghe, Convex Optimization",
+    "Cornuéjols & Tütüncü, Optimization Methods in Finance"
+   ]
   },
   {
    "id": "Q5",
    "etapa": 3,
    "tipo": "proyecto",
    "nombre": "Comando",
-   "base": 8,
+   "base": 2,
    "extra": 0,
    "extraPlataforma": 0,
    "extraArquitectura": 0,
@@ -2555,13 +4637,10 @@
      "ambiente": "Infra"
     }
    ],
-   "horas": 230,
-   "horasAntes": 172,
    "roadmap": {
-    "inicio": "2029-09-04",
-    "fin": "2029-10-29"
+    "inicio": "2028-02-25",
+    "fin": "2028-03-10"
    },
-   "que": "de señales a órdenes en paper trading con Alpaca, con riesgo previo, kill-switch y conciliación",
    "historial": [
     {
      "fecha": "2026-11-20",
@@ -2573,14 +4652,21 @@
      "cambio": "Las tecnologías salen del stack de la v7, por ambiente",
      "motivo": "Roadmap v7 (stack)"
     }
-   ]
+   ],
+   "fechas": {
+    "inicio": "2028-02-25",
+    "fin": "2028-03-10"
+   },
+   "fase": "F9",
+   "horas": 150,
+   "horasLim": 170
   },
   {
    "id": "Q6",
    "etapa": 3,
    "tipo": "proyecto",
    "nombre": "Ticker",
-   "base": 6,
+   "base": 2,
    "extra": 0,
    "extraPlataforma": 0,
    "extraArquitectura": 0,
@@ -2610,13 +4696,10 @@
      "ambiente": "IA por API"
     }
    ],
-   "horas": 185,
-   "horasAntes": 122,
    "roadmap": {
-    "inicio": "2029-10-30",
-    "fin": "2029-12-13"
+    "inicio": "2028-03-11",
+    "fin": "2028-03-22"
    },
-   "que": "ingesta de datos de mercado en tiempo real con control de calidad",
    "historial": [
     {
      "fecha": "2026-11-20",
@@ -2628,60 +4711,146 @@
      "cambio": "Las tecnologías salen del stack de la v7, por ambiente",
      "motivo": "Roadmap v7 (stack)"
     }
-   ]
+   ],
+   "fechas": {
+    "inicio": "2028-03-11",
+    "fin": "2028-03-22"
+   },
+   "fase": "F9",
+   "horas": 120,
+   "horasLim": 140
   },
   {
-   "id": "C7",
+   "id": "CW11",
    "etapa": 3,
    "tipo": "cert",
-   "nombre": "AWS Security Specialty (SCS-C03)",
-   "base": 4,
+   "nombre": "AWS Security Specialty",
+   "base": 1,
    "extra": 0,
    "extraPlataforma": 0,
    "extraArquitectura": 0,
-   "corto": "AWS SCS",
-   "que": "AWS Security Specialty (SCS-C03)",
-   "cert": {
-    "costo": "US$ 300",
-    "verificado": true,
-    "notas": "65 preguntas, 170 min, aprobación 750/1000"
+   "fechas": {
+    "inicio": "2028-03-23",
+    "fin": "2028-03-30"
    },
-   "dias": 18,
    "roadmap": {
-    "inicio": "2029-12-14",
-    "fin": "2030-01-07"
+    "inicio": "2028-03-23",
+    "fin": "2028-03-30"
    },
-   "numero": 10,
-   "nota": "La pausa del 24 al 30 dic cae adentro"
+   "fase": "F9",
+   "horas": 82,
+   "certs": [
+    {
+     "id": "aws-scs",
+     "nombre": "AWS Security Specialty",
+     "horas": 82,
+     "recursos": [
+      "Course",
+      "Tutorials Dojo"
+     ],
+     "plan": [
+      {
+       "fecha": "2028-03-23",
+       "texto": "Course"
+      },
+      {
+       "fecha": "2028-03-24",
+       "texto": "Course"
+      },
+      {
+       "fecha": "2028-03-25",
+       "texto": "Course"
+      },
+      {
+       "fecha": "2028-03-26",
+       "texto": "KMS / GuardDuty / Security Hub labs"
+      },
+      {
+       "fecha": "2028-03-27",
+       "texto": "Mocks"
+      },
+      {
+       "fecha": "2028-03-28",
+       "texto": "Mocks"
+      },
+      {
+       "fecha": "2028-03-29",
+       "texto": "Review"
+      },
+      {
+       "fecha": "2028-03-30",
+       "texto": "Exam"
+      }
+     ],
+     "examen": "2028-03-30",
+     "listo": 80,
+     "costo": "US$ 300",
+     "costoVerificado": true,
+     "renovacion": {
+      "anos": 3,
+      "nota": "usual validity (to verify)"
+     }
+    }
+   ]
+  },
+  {
+   "id": "J9",
+   "etapa": 3,
+   "tipo": "busqueda",
+   "nombre": "Job search E#9",
+   "base": 1,
+   "extra": 0,
+   "extraPlataforma": 0,
+   "extraArquitectura": 0,
+   "fechas": {
+    "inicio": "2028-03-31",
+    "fin": "2028-04-03"
+   },
+   "roadmap": {
+    "inicio": "2028-03-31",
+    "fin": "2028-04-03"
+   },
+   "fase": "F9",
+   "horas": 42,
+   "busqueda": {
+    "reparto": {
+     "ingles": 3,
+     "busqueda": 7
+    }
+   }
   },
   {
    "id": "CIE3",
    "etapa": 3,
    "tipo": "cierre",
-   "nombre": "Cierre de etapa",
+   "nombre": "Stage close",
    "base": 2,
    "extra": 0,
    "extraPlataforma": 0,
    "extraArquitectura": 0,
-   "dias": 12,
    "roadmap": {
-    "inicio": "2030-01-08",
-    "fin": "2030-01-19"
-   }
+    "inicio": "2028-04-04",
+    "fin": "2028-04-15"
+   },
+   "fechas": {
+    "inicio": "2028-04-04",
+    "fin": "2028-04-15"
+   },
+   "fase": "F9"
   },
   {
    "id": "WA1",
    "etapa": 4,
    "tipo": "ventana",
-   "nombre": "Ventana WA1 · física y EDOs",
-   "base": 2,
+   "nombre": "Math WA1",
+   "base": 1,
    "extra": 0,
    "extraPlataforma": 0,
    "extraArquitectura": 0,
    "mate": {
     "principal": [
-     "Young y Freedman · University Physics (mecánica)",
-     "Simmons · Differential Equations"
+     "Boyce & DiPrima (ODEs)",
+     "Diebel (rigid body)"
     ],
     "refuerzo": [
      {
@@ -2712,18 +4881,62 @@
      "Resolver EDOs de segundo orden (oscilador amortiguado) a mano y numéricamente"
     ]
    },
-   "horas": 98,
    "roadmap": {
-    "inicio": "2030-01-20",
-    "fin": "2030-02-04"
-   }
+    "inicio": "2028-04-16",
+    "fin": "2028-04-25"
+   },
+   "fechas": {
+    "inicio": "2028-04-16",
+    "fin": "2028-04-25"
+   },
+   "fase": "F10",
+   "horas": 103,
+   "hitos": [
+    {
+     "dias": [
+      1,
+      4
+     ],
+     "inicio": "2028-04-16",
+     "fin": "2028-04-19",
+     "tema": "ODEs 1st/2nd order",
+     "hito": "(to confirm)",
+     "hitoAConfirmar": true
+    },
+    {
+     "dias": [
+      5,
+      7
+     ],
+     "inicio": "2028-04-20",
+     "fin": "2028-04-22",
+     "tema": "Systems + numerical methods (Euler, RK4)",
+     "hito": "(to confirm)",
+     "hitoAConfirmar": true
+    },
+    {
+     "dias": [
+      8,
+      10
+     ],
+     "inicio": "2028-04-23",
+     "fin": "2028-04-25",
+     "tema": "Rigid body: Euler angles, quaternions (Diebel)",
+     "hito": "(to confirm)",
+     "hitoAConfirmar": true
+    }
+   ],
+   "libros": [
+    "Boyce & DiPrima (ODEs)",
+    "Diebel (rigid body)"
+   ]
   },
   {
    "id": "A1",
    "etapa": 4,
    "tipo": "proyecto",
    "nombre": "Trayecta",
-   "base": 8,
+   "base": 3,
    "extra": 0,
    "extraPlataforma": 0,
    "extraArquitectura": 0,
@@ -2765,13 +4978,10 @@
      "ambiente": "Cloud"
     }
    ],
-   "horas": 245,
-   "horasAntes": 172,
    "roadmap": {
-    "inicio": "2030-02-05",
-    "fin": "2030-04-04"
+    "inicio": "2028-04-26",
+    "fin": "2028-05-13"
    },
-   "que": "simulador de vuelo 6-DOF para cohetes amateur",
    "historial": [
     {
      "fecha": "2026-11-20",
@@ -2783,21 +4993,28 @@
      "cambio": "Las tecnologías salen del stack de la v7, por ambiente",
      "motivo": "Roadmap v7 (stack)"
     }
-   ]
+   ],
+   "fechas": {
+    "inicio": "2028-04-26",
+    "fin": "2028-05-13"
+   },
+   "fase": "F10",
+   "horas": 185,
+   "horasLim": 195
   },
   {
    "id": "WA2",
    "etapa": 4,
    "tipo": "ventana",
-   "nombre": "Ventana WA2 · estática, materiales, álgebra lineal numérica",
-   "base": 2,
+   "nombre": "Math WA2",
+   "base": 1,
    "extra": 0,
    "extraPlataforma": 0,
    "extraArquitectura": 0,
    "mate": {
     "principal": [
-     "Hibbeler · Statics y Dynamics",
-     "Beer y Johnston · Mechanics of Materials"
+     "PDE intro",
+     "Logan, A First Course in the Finite Element Method"
     ],
     "refuerzo": [
      {
@@ -2828,18 +5045,51 @@
      "Resolver sistemas lineales grandes con factorización LU y explicar el condicionamiento"
     ]
    },
-   "horas": 74,
    "roadmap": {
-    "inicio": "2030-04-05",
-    "fin": "2030-04-16"
-   }
+    "inicio": "2028-05-14",
+    "fin": "2028-05-21"
+   },
+   "fechas": {
+    "inicio": "2028-05-14",
+    "fin": "2028-05-21"
+   },
+   "fase": "F10",
+   "horas": 83,
+   "hitos": [
+    {
+     "dias": [
+      1,
+      2
+     ],
+     "inicio": "2028-05-14",
+     "fin": "2028-05-15",
+     "tema": "PDE intro (heat, wave, Laplace)",
+     "hito": "(to confirm)",
+     "hitoAConfirmar": true
+    },
+    {
+     "dias": [
+      3,
+      8
+     ],
+     "inicio": "2028-05-16",
+     "fin": "2028-05-21",
+     "tema": "Logan: finite elements",
+     "hito": "(to confirm)",
+     "hitoAConfirmar": true
+    }
+   ],
+   "libros": [
+    "PDE intro",
+    "Logan, A First Course in the Finite Element Method"
+   ]
   },
   {
    "id": "A2",
    "etapa": 4,
    "tipo": "proyecto",
    "nombre": "Malla",
-   "base": 8,
+   "base": 3,
    "extra": 0,
    "extraPlataforma": 0,
    "extraArquitectura": 0,
@@ -2877,13 +5127,10 @@
      "ambiente": "Frontend"
     }
    ],
-   "horas": 235,
-   "horasAntes": 172,
    "roadmap": {
-    "inicio": "2030-04-17",
-    "fin": "2030-06-12"
+    "inicio": "2028-05-22",
+    "fin": "2028-06-08"
    },
-   "que": "solver de elementos finitos verificado contra CalculiX",
    "historial": [
     {
      "fecha": "2026-11-20",
@@ -2895,57 +5142,47 @@
      "cambio": "Las tecnologías salen del stack de la v7, por ambiente",
      "motivo": "Roadmap v7 (stack)"
     }
-   ]
-  },
-  {
-   "id": "C11",
-   "etapa": 4,
-   "tipo": "cert",
-   "nombre": "GitHub Actions + GitHub Copilot",
-   "base": 2,
-   "extra": 0,
-   "extraPlataforma": 0,
-   "extraArquitectura": 0,
-   "dias": 12,
-   "roadmap": {
-    "inicio": "2030-06-13",
-    "fin": "2030-06-24"
+   ],
+   "fechas": {
+    "inicio": "2028-05-22",
+    "fin": "2028-06-08"
    },
-   "numero": 11,
-   "corto": "GitHub Actions + Copilot",
-   "cert": {
-    "verificado": false
-   }
+   "fase": "F10",
+   "horas": 175,
+   "horasLim": 185
   },
   {
    "id": "DES4",
    "etapa": 4,
    "tipo": "descanso",
-   "nombre": "Descanso",
+   "nombre": "Rest",
    "base": 1,
    "extra": 0,
    "extraPlataforma": 0,
    "extraArquitectura": 0,
-   "dias": 7,
    "roadmap": {
-    "inicio": "2030-06-25",
-    "fin": "2030-07-01"
-   }
+    "inicio": "2028-06-09",
+    "fin": "2028-06-15"
+   },
+   "fechas": {
+    "inicio": "2028-06-09",
+    "fin": "2028-06-15"
+   },
+   "fase": "F10"
   },
   {
    "id": "WA3",
    "etapa": 4,
    "tipo": "ventana",
-   "nombre": "Ventana WA3 · termodinámica, fluidos, PDEs",
-   "base": 2,
+   "nombre": "Math WA3",
+   "base": 1,
    "extra": 0,
    "extraPlataforma": 0,
    "extraArquitectura": 0,
    "mate": {
     "principal": [
-     "Çengel y Boles · Thermodynamics",
-     "White · Fluid Mechanics",
-     "Anderson · Introduction to Flight"
+     "Anderson, Fundamentals of Aerodynamics (ch. 1–5)",
+     "LeVeque, Finite Volume Methods for Hyperbolic Problems"
     ],
     "refuerzo": [
      {
@@ -2973,18 +5210,51 @@
      "Resolver la ecuación del calor en 1D con diferencias finitas"
     ]
    },
-   "horas": 98,
    "roadmap": {
-    "inicio": "2030-07-02",
-    "fin": "2030-07-17"
-   }
+    "inicio": "2028-06-16",
+    "fin": "2028-06-25"
+   },
+   "fechas": {
+    "inicio": "2028-06-16",
+    "fin": "2028-06-25"
+   },
+   "fase": "F10",
+   "horas": 104,
+   "hitos": [
+    {
+     "dias": [
+      1,
+      6
+     ],
+     "inicio": "2028-06-16",
+     "fin": "2028-06-21",
+     "tema": "Anderson ch. 1–5",
+     "hito": "(to confirm)",
+     "hitoAConfirmar": true
+    },
+    {
+     "dias": [
+      7,
+      10
+     ],
+     "inicio": "2028-06-22",
+     "fin": "2028-06-25",
+     "tema": "LeVeque (intro, Euler equations)",
+     "hito": "(to confirm)",
+     "hitoAConfirmar": true
+    }
+   ],
+   "libros": [
+    "Anderson, Fundamentals of Aerodynamics (ch. 1–5)",
+    "LeVeque, Finite Volume Methods for Hyperbolic Problems"
+   ]
   },
   {
    "id": "A3",
    "etapa": 4,
    "tipo": "proyecto",
    "nombre": "Viento",
-   "base": 7,
+   "base": 2,
    "extra": 0,
    "extraPlataforma": 0,
    "extraArquitectura": 0,
@@ -3014,13 +5284,10 @@
      "ambiente": "Backend"
     }
    ],
-   "horas": 195,
-   "horasAntes": 147,
    "roadmap": {
-    "inicio": "2030-07-18",
-    "fin": "2030-09-02"
+    "inicio": "2028-06-26",
+    "fin": "2028-07-10"
    },
-   "que": "aerodinámica con paneles, vortex lattice y Euler 2D, comparada contra OpenFOAM o SU2",
    "historial": [
     {
      "fecha": "2026-11-20",
@@ -3032,21 +5299,54 @@
      "cambio": "Las tecnologías salen del stack de la v7, por ambiente",
      "motivo": "Roadmap v7 (stack)"
     }
-   ]
+   ],
+   "fechas": {
+    "inicio": "2028-06-26",
+    "fin": "2028-07-10"
+   },
+   "fase": "F10",
+   "horas": 145,
+   "horasLim": 150
+  },
+  {
+   "id": "JP10",
+   "etapa": 4,
+   "tipo": "busqueda",
+   "nombre": "Job search (short)",
+   "base": 1,
+   "extra": 0,
+   "extraPlataforma": 0,
+   "extraArquitectura": 0,
+   "fechas": {
+    "inicio": "2028-07-11",
+    "fin": "2028-07-13"
+   },
+   "roadmap": {
+    "inicio": "2028-07-11",
+    "fin": "2028-07-13"
+   },
+   "fase": "F10",
+   "horas": 30,
+   "busqueda": {
+    "reparto": {
+     "ingles": 3,
+     "busqueda": 7
+    }
+   }
   },
   {
    "id": "WA4",
    "etapa": 4,
    "tipo": "ventana",
-   "nombre": "Ventana WA4 · control y estimación",
-   "base": 2,
+   "nombre": "Math WA4",
+   "base": 1,
    "extra": 0,
    "extraPlataforma": 0,
    "extraArquitectura": 0,
    "mate": {
     "principal": [
-     "Nise · Control Systems Engineering",
-     "Simon · Optimal State Estimation"
+     "Åström & Murray, Feedback Systems",
+     "Labbe, Kalman and Bayesian Filters in Python"
     ],
     "refuerzo": [
      {
@@ -3073,18 +5373,51 @@
      "Implementar un filtro de Kalman para estimar posición y velocidad"
     ]
    },
-   "horas": 74,
    "roadmap": {
-    "inicio": "2030-09-03",
-    "fin": "2030-09-14"
-   }
+    "inicio": "2028-07-14",
+    "fin": "2028-07-21"
+   },
+   "fechas": {
+    "inicio": "2028-07-14",
+    "fin": "2028-07-21"
+   },
+   "fase": "F11",
+   "horas": 82,
+   "hitos": [
+    {
+     "dias": [
+      1,
+      5
+     ],
+     "inicio": "2028-07-14",
+     "fin": "2028-07-18",
+     "tema": "Åström & Murray (PID, state feedback, LQR)",
+     "hito": "(to confirm)",
+     "hitoAConfirmar": true
+    },
+    {
+     "dias": [
+      6,
+      8
+     ],
+     "inicio": "2028-07-19",
+     "fin": "2028-07-21",
+     "tema": "Labbe: Kalman filters",
+     "hito": "(to confirm)",
+     "hitoAConfirmar": true
+    }
+   ],
+   "libros": [
+    "Åström & Murray, Feedback Systems",
+    "Labbe, Kalman and Bayesian Filters in Python"
+   ]
   },
   {
    "id": "A4",
    "etapa": 4,
    "tipo": "proyecto",
    "nombre": "Piloto",
-   "base": 9,
+   "base": 3,
    "extra": 0,
    "extraPlataforma": 0,
    "extraArquitectura": 0,
@@ -3122,13 +5455,10 @@
      "ambiente": "Backend"
     }
    ],
-   "horas": 250,
-   "horasAntes": 172,
    "roadmap": {
-    "inicio": "2030-09-15",
-    "fin": "2030-11-13"
+    "inicio": "2028-07-22",
+    "fin": "2028-08-09"
    },
-   "que": "control de vuelo con PID, LQR y Kalman, y banco de fallas",
    "historial": [
     {
      "fecha": "2026-11-20",
@@ -3140,41 +5470,113 @@
      "cambio": "Las tecnologías salen del stack de la v7, por ambiente",
      "motivo": "Roadmap v7 (stack)"
     }
-   ]
+   ],
+   "fechas": {
+    "inicio": "2028-07-22",
+    "fin": "2028-08-09"
+   },
+   "fase": "F11",
+   "horas": 190,
+   "horasLim": 200
   },
   {
-   "id": "C12",
+   "id": "CW12",
    "etapa": 4,
    "tipo": "cert",
-   "nombre": "AWS Solutions Architect Professional",
-   "base": 3,
+   "nombre": "AWS SA Professional",
+   "base": 2,
    "extra": 0,
    "extraPlataforma": 0,
    "extraArquitectura": 0,
-   "dias": 18,
-   "roadmap": {
-    "inicio": "2030-11-14",
-    "fin": "2030-12-01"
+   "fechas": {
+    "inicio": "2028-08-10",
+    "fin": "2028-08-21"
    },
-   "numero": 12,
-   "corto": "AWS SA Pro",
-   "cert": {
-    "verificado": false
+   "roadmap": {
+    "inicio": "2028-08-10",
+    "fin": "2028-08-21"
+   },
+   "fase": "F11",
+   "horas": 124,
+   "certs": [
+    {
+     "id": "aws-sap",
+     "nombre": "AWS Solutions Architect Professional",
+     "horas": 124,
+     "recursos": [
+      "Course",
+      "Tutorials Dojo"
+     ],
+     "plan": [
+      {
+       "fecha": "2028-08-10",
+       "texto": "Course (through 15 Aug)"
+      },
+      {
+       "fecha": "2028-08-16",
+       "texto": "Multi-account and network scenarios"
+      },
+      {
+       "fecha": "2028-08-17",
+       "texto": "Scenarios"
+      },
+      {
+       "fecha": "2028-08-18",
+       "texto": "Four timed mocks (through 20 Aug)"
+      },
+      {
+       "fecha": "2028-08-21",
+       "texto": "Exam"
+      }
+     ],
+     "examen": "2028-08-21",
+     "listo": 80,
+     "renovacion": {
+      "anos": 3,
+      "nota": "usual validity (to verify)"
+     }
+    }
+   ]
+  },
+  {
+   "id": "J10",
+   "etapa": 4,
+   "tipo": "busqueda",
+   "nombre": "Job search E#10",
+   "base": 1,
+   "extra": 0,
+   "extraPlataforma": 0,
+   "extraArquitectura": 0,
+   "fechas": {
+    "inicio": "2028-08-22",
+    "fin": "2028-08-25"
+   },
+   "roadmap": {
+    "inicio": "2028-08-22",
+    "fin": "2028-08-25"
+   },
+   "fase": "F11",
+   "horas": 40,
+   "busqueda": {
+    "reparto": {
+     "ingles": 3,
+     "busqueda": 7
+    }
    }
   },
   {
    "id": "WA5",
    "etapa": 4,
    "tipo": "ventana",
-   "nombre": "Ventana WA5 · mecánica orbital y propulsión",
+   "nombre": "Math WA5",
    "base": 1,
    "extra": 0,
    "extraPlataforma": 0,
    "extraArquitectura": 0,
    "mate": {
     "principal": [
-     "Curtis · Orbital Mechanics for Engineering Students",
-     "Sutton · Rocket Propulsion Elements (por capítulos)"
+     "Curtis, Orbital Mechanics for Engineering Students",
+     "Vallado (SGP4 reference)"
     ],
     "refuerzo": [
      {
@@ -3202,18 +5604,51 @@
      "Aplicar la ecuación del cohete de Tsiolkovsky a una misión simple"
     ]
    },
-   "horas": 49,
    "roadmap": {
-    "inicio": "2030-12-02",
-    "fin": "2030-12-09"
-   }
+    "inicio": "2028-08-26",
+    "fin": "2028-08-30"
+   },
+   "fechas": {
+    "inicio": "2028-08-26",
+    "fin": "2028-08-30"
+   },
+   "fase": "F11",
+   "horas": 52,
+   "hitos": [
+    {
+     "dias": [
+      1,
+      3
+     ],
+     "inicio": "2028-08-26",
+     "fin": "2028-08-28",
+     "tema": "Curtis: two-body, orbital elements",
+     "hito": "(to confirm)",
+     "hitoAConfirmar": true
+    },
+    {
+     "dias": [
+      4,
+      5
+     ],
+     "inicio": "2028-08-29",
+     "fin": "2028-08-30",
+     "tema": "Perturbations J2, maneuvers (Vallado as SGP4 reference)",
+     "hito": "(to confirm)",
+     "hitoAConfirmar": true
+    }
+   ],
+   "libros": [
+    "Curtis, Orbital Mechanics for Engineering Students",
+    "Vallado (SGP4 reference)"
+   ]
   },
   {
    "id": "A5",
    "etapa": 4,
    "tipo": "proyecto",
    "nombre": "Órbita",
-   "base": 8,
+   "base": 2,
    "extra": 0,
    "extraPlataforma": 0,
    "extraArquitectura": 0,
@@ -3250,13 +5685,10 @@
      "ambiente": "DB"
     }
    ],
-   "horas": 205,
-   "horasAntes": 147,
    "roadmap": {
-    "inicio": "2030-12-10",
-    "fin": "2031-02-03"
+    "inicio": "2028-08-31",
+    "fin": "2028-09-15"
    },
-   "que": "propagador con J2 y arrastre, ventanas de comunicación, screening de conjunciones",
    "historial": [
     {
      "fecha": "2026-11-20",
@@ -3268,14 +5700,21 @@
      "cambio": "Las tecnologías salen del stack de la v7, por ambiente",
      "motivo": "Roadmap v7 (stack)"
     }
-   ]
+   ],
+   "fechas": {
+    "inicio": "2028-08-31",
+    "fin": "2028-09-15"
+   },
+   "fase": "F11",
+   "horas": 155,
+   "horasLim": 165
   },
   {
    "id": "A6",
    "etapa": 4,
    "tipo": "proyecto",
    "nombre": "Upstream",
-   "base": 4,
+   "base": 1,
    "extra": 0,
    "extraPlataforma": 0,
    "extraArquitectura": 0,
@@ -3292,47 +5731,31 @@
     "perfil": "Systems Engineer"
    },
    "tecnologias": [],
-   "horas": 120,
-   "horasAntes": 98,
    "roadmap": {
-    "inicio": "2031-02-04",
-    "fin": "2031-03-04"
+    "inicio": "2028-09-16",
+    "fin": "2028-09-25"
    },
-   "que": "contribuciones a PX4, Orekit o F Prime",
    "historial": [
     {
      "fecha": "2026-11-20",
      "cambio": "Pasa a llamarse Upstream (antes Cohete); horas: antes 98 h, ahora ≈ 120 h",
      "motivo": "Roadmap v7"
     }
-   ]
-  },
-  {
-   "id": "C13",
-   "etapa": 4,
-   "tipo": "cert",
-   "nombre": "GitHub Advanced Security",
-   "base": 1,
-   "extra": 0,
-   "extraPlataforma": 0,
-   "extraArquitectura": 0,
-   "dias": 8,
-   "roadmap": {
-    "inicio": "2031-03-05",
-    "fin": "2031-03-12"
+   ],
+   "fechas": {
+    "inicio": "2028-09-16",
+    "fin": "2028-09-25"
    },
-   "numero": 13,
-   "corto": "GitHub Advanced Security",
-   "cert": {
-    "verificado": false
-   }
+   "fase": "F11",
+   "horas": 100,
+   "horasLim": 105
   },
   {
    "id": "A7",
    "etapa": 4,
    "tipo": "proyecto",
    "nombre": "Horizonte",
-   "base": 9,
+   "base": 3,
    "extra": 0,
    "extraPlataforma": 0,
    "extraArquitectura": 0,
@@ -3370,13 +5793,10 @@
      "ambiente": "Frontend"
     }
    ],
-   "horas": 265,
-   "horasAntes": 196,
    "roadmap": {
-    "inicio": "2031-03-13",
-    "fin": "2031-05-15"
+    "inicio": "2028-09-26",
+    "fin": "2028-10-15"
    },
-   "que": "misión de un cubesat ficticio con operador asistido por IA",
    "historial": [
     {
      "fecha": "2026-11-20",
@@ -3388,24 +5808,33 @@
      "cambio": "Las tecnologías salen del stack de la v7, por ambiente",
      "motivo": "Roadmap v7 (stack)"
     }
-   ]
+   ],
+   "fechas": {
+    "inicio": "2028-09-26",
+    "fin": "2028-10-15"
+   },
+   "fase": "F11",
+   "horas": 200,
+   "horasLim": 230
   },
   {
    "id": "CIE4",
    "etapa": 4,
    "tipo": "cierre",
-   "nombre": "Cierre y renovaciones",
+   "nombre": "Close & renewals",
    "base": 2,
    "extra": 0,
    "extraPlataforma": 0,
    "extraArquitectura": 0,
-   "dias": 12,
    "roadmap": {
-    "inicio": "2031-05-16",
-    "fin": "2031-05-27"
+    "inicio": "2028-10-16",
+    "fin": "2028-10-27"
    },
-   "numero": 14,
-   "que": "Cierre del plan y renovación de las certificaciones que vencen (Certificación 14)"
+   "fechas": {
+    "inicio": "2028-10-16",
+    "fin": "2028-10-27"
+   },
+   "fase": "F11"
   }
  ],
  "matematica": {
@@ -3426,204 +5855,31 @@
     "duro"
    ]
   },
-  "diarios": {
-   "m1": {
-    "nombre": "T+0 a T+2 · diario",
-    "principal": [
-     "CONAMAT Aritmética",
-     "CONAMAT Álgebra"
-    ],
-    "refuerzo": [
-     {
-      "titulo": "Baldor",
-      "rol": "banco"
-     },
-     {
-      "titulo": "The Humongous Book of Basic Math and Pre-Algebra Problems",
-      "rol": "banco"
-     },
-     {
-      "titulo": "Lang · Basic Mathematics",
-      "rol": "duro"
-     }
-    ],
-    "habilita": [
-     "todo lo demás"
-    ],
-    "perfil": "Aritmético",
-    "fase": "M1",
-    "horas": 126,
-    "finRoadmap": "2027-02-11"
-   },
-   "m2": {
-    "nombre": "T+3 a T+6 · diario",
-    "principal": [
-     "CONAMAT Geometría y trigonometría",
-     "CONAMAT Geometría analítica"
-    ],
-    "refuerzo": [
-     {
-      "titulo": "Gelfand · Trigonometry",
-      "rol": "intuicion"
-     },
-     {
-      "titulo": "Stewart · Precalculus",
-      "rol": "banco"
-     },
-     {
-      "titulo": "Sullivan · Precalculus",
-      "rol": "banco"
-     }
-    ],
-    "habilita": [
-     "P4",
-     "P9"
-    ],
-    "perfil": "Precalculista",
-    "fase": "M2",
-    "horas": 196,
-    "finRoadmap": "2027-06-09"
-   },
-   "m3": {
-    "nombre": "T+7 a T+8 · diario",
-    "principal": [
-     "CONAMAT Cálculo integral",
-     "Strang · Introduction to Linear Algebra"
-    ],
-    "refuerzo": [
-     {
-      "titulo": "MIT 18.06",
-      "rol": "curso"
-     },
-     {
-      "titulo": "Stewart (integrales)",
-      "rol": "banco"
-     }
-    ],
-    "habilita": [
-     "P7"
-    ],
-    "perfil": "Calculista y lineal",
-    "fase": "M3",
-    "horas": 112,
-    "finRoadmap": "2027-08-04"
-   },
-   "m4": {
-    "nombre": "T+9 a T+18 · diario",
-    "principal": [
-     "Deisenroth · Mathematics for Machine Learning",
-     "Cálculo multivariable"
-    ],
-    "refuerzo": [
-     {
-      "titulo": "Schey · Div, Grad, Curl",
-      "rol": "intuicion"
-     },
-     {
-      "titulo": "Stewart",
-      "rol": "banco"
-     },
-     {
-      "titulo": "MIT 18.02SC",
-      "rol": "curso"
-     },
-     {
-      "titulo": "Wasserman · All of Statistics",
-      "rol": "duro"
-     }
-    ],
-    "habilita": [
-     "perfil senior en ML",
-     "base de la etapa 3"
-    ],
-    "perfil": "Matemático para ML",
-    "fase": "M4",
-    "horas": 504,
-    "finRoadmap": "2028-06-02"
-   }
-  }
+  "diarios": {}
  },
  "perfilesHito": [
   {
    "despues": "COL",
    "perfil": "Senior ML + DevSecOps + Cloud",
-   "nota": "Cierre de etapa 1, con las certificaciones 1 a 5"
+   "nota": "Close of stage 1"
   },
   {
    "despues": "CIE2",
-   "perfil": "Senior con foco en seguridad",
-   "nota": "Cierre de T+18, con las certificaciones 6 y 7"
-  },
-  {
-   "despues": "Q4",
-   "perfil": "Trading Systems Engineer",
-   "nota": "Cierre de Q4"
+   "perfil": "Security Engineer",
+   "nota": "Close of stage 2"
   },
   {
    "despues": "CIE3",
-   "perfil": "Quant Trading Engineer / ML Quant",
-   "nota": "Cierre de etapa 3, con CKA, CKS y AWS Security Specialty"
-  },
-  {
-   "despues": "A5",
-   "perfil": "Mission Analysis y GNC",
-   "nota": "Cierre de A5"
+   "perfil": "Quant Trading Engineer",
+   "nota": "Close of stage 3"
   },
   {
    "despues": "CIE4",
-   "perfil": "Aerospace Software Engineer",
-   "nota": "Cierre de etapa 4, con las certificaciones 11 a 13 y las renovaciones"
+   "perfil": "GNC / Mission Software Engineer",
+   "nota": "Close of stage 4"
   }
  ],
- "decisiones": [
-  {
-   "id": "secplus",
-   "texto": "Security+ SY0-801 o SY0-701: resuelta por el roadmap v7 (la versión nueva, SY0-801)",
-   "fecha": "2026-11-22",
-   "resuelta": "2026-11-20"
-  },
-  {
-   "id": "precios",
-   "texto": "Precios sin verificar: AWS SAA, CKA y AWS MLA; OSCP+ solo con un fragmento"
-  },
-  {
-   "id": "reemplazos",
-   "texto": "Confirmar los reemplazos propuestos: P8 (red teaming), P9 (inferencia en CPU), Q2 (réplica de papers), Q6 (datos de mercado) y A6 (open source)"
-  },
-  {
-   "id": "mercado",
-   "texto": "Revisión de mercado: seguir o achicar quant y aeroespacial",
-   "fecha": "2028-04-01"
-  },
-  {
-   "id": "legal",
-   "texto": "Marco legal e impositivo de trading desde Argentina antes de capital real"
-  },
-  {
-   "id": "canvas",
-   "texto": "Alinear las páginas del canvas visual de Trazo con este calendario"
-  },
-  {
-   "id": "titulo",
-   "texto": "Si una carrera universitaria entra o no al plan: hoy no, camino autodidacta"
-  },
-  {
-   "id": "plataformas",
-   "texto": "Confirmar la capa de plataformas (mobile, escritorio, VR y AR) y si se aligera la etapa 1"
-  },
-  {
-   "id": "arquitectura",
-   "texto": "Confirmar microservicios y microfrontends como entregables de P1, P5, P10, S1 y Q5"
-  },
-  {
-   "id": "dispositivo",
-   "texto": "Qué dispositivo de VR y AR vas a usar para probar"
-  },
-  {
-   "id": "demanda",
-   "texto": "Verificar la demanda de mercado de las tecnologías nuevas (y de microservicios, microfrontends, mobile, VR y AR) contra ofertas reales"
-  }
- ],
+ "decisiones": [],
  "descartadas": [
   {
    "nombre": "Django",
@@ -3646,7 +5902,6 @@
    "fecha": "2026-11-18"
   }
  ],
- "horasPorSemana": 24.5,
  "backlog": [
   {
    "nombre": "portfolio-mcp",
@@ -3670,14 +5925,196 @@
   }
  ],
  "capacidad": {
-  "antesTrabajo": 8,
-  "ventanaSemana": 43,
+  "lv": 10,
+  "finde": 11,
   "pausasDiciembre": [
-   2027,
-   2028,
-   2029,
-   2030
+   2027
   ],
-  "inicioTrabajoDias": 49
- }
+  "inicioTrabajoDias": null,
+  "fijas": [
+   {
+    "inicio": "2027-12-20",
+    "fin": "2027-12-26",
+    "nombre": "Pause"
+   }
+  ]
+ },
+ "habitos": [
+  {
+   "id": "recall",
+   "nombre": "Trazo recall (incl. 20 LLM concepts)",
+   "cuando": "diario",
+   "hora": "16:55"
+  },
+  {
+   "id": "anki",
+   "nombre": "Anki",
+   "cuando": "diario",
+   "hora": "17:15"
+  },
+  {
+   "id": "post",
+   "nombre": "LinkedIn post (EN + ES) + X thread (EN)",
+   "cuando": [
+    2,
+    4
+   ],
+   "hora": "17:30"
+  },
+  {
+   "id": "demo",
+   "nombre": "Weekly demo + mock interview",
+   "cuando": [
+    6
+   ],
+   "hora": "15:45"
+  },
+  {
+   "id": "revision",
+   "nombre": "Weekly review (hours, comprehension debt, english.md, exam bookings, Claude usage)",
+   "cuando": [
+    7
+   ],
+   "hora": "15:45"
+  }
+ ],
+ "recordatorios": [
+  {
+   "id": "reserva-claude-gh",
+   "texto": "Book Claude Architect + GitHub Foundations exams",
+   "fecha": "2026-11-21",
+   "certs": [
+    "claude-architect",
+    "gh-foundations"
+   ]
+  },
+  {
+   "id": "reserva-ai103-databricks",
+   "texto": "Book Azure AI-103 + Databricks GenAI exams",
+   "fecha": "2026-12-20",
+   "certs": [
+    "ai-103",
+    "databricks-genai"
+   ]
+  },
+  {
+   "id": "reserva-cambridge",
+   "texto": "Book Cambridge C1 Advanced (week of 11–17 Mar 2027)",
+   "fecha": "2027-01-14"
+  },
+  {
+   "id": "reserva-cw3",
+   "texto": "Book AWS MLA + GitHub Actions exams",
+   "fecha": "2026-12-21",
+   "certs": [
+    "aws-mla",
+    "gh-actions"
+   ],
+   "regla": "preceding project starts (VitalIA)"
+  },
+  {
+   "id": "reserva-cw4",
+   "texto": "Book AWS SAA + Prometheus exams",
+   "fecha": "2027-02-19",
+   "certs": [
+    "aws-saa",
+    "prometheus"
+   ],
+   "regla": "preceding project starts (AgrIA)"
+  },
+  {
+   "id": "reserva-cw5",
+   "texto": "Book AWS Developer + Terraform exams",
+   "fecha": "2027-03-18",
+   "certs": [
+    "aws-dva",
+    "terraform"
+   ],
+   "regla": "preceding project starts (Antena)"
+  },
+  {
+   "id": "reserva-cw678",
+   "texto": "Book Security+, GHAS, CKA, OpenTelemetry, AWS GenAI Pro and Claude Developer exams",
+   "fecha": "2027-04-18",
+   "certs": [
+    "secplus",
+    "ghas",
+    "cka",
+    "otel",
+    "aws-genai-pro",
+    "claude-dev"
+   ],
+   "regla": "preceding project starts (PetrIA Guard)"
+  },
+  {
+   "id": "reserva-pnpt",
+   "texto": "Book the PNPT exam",
+   "fecha": "2027-10-15",
+   "certs": [
+    "pnpt"
+   ],
+   "regla": "preceding project starts (Vigía)"
+  },
+  {
+   "id": "reserva-cks",
+   "texto": "Book the CKS exam (requires an active CKA)",
+   "fecha": "2028-01-30",
+   "certs": [
+    "cks"
+   ],
+   "regla": "preceding project starts (Matchbook)"
+  },
+  {
+   "id": "reserva-scs",
+   "texto": "Book the AWS Security Specialty exam",
+   "fecha": "2028-03-11",
+   "certs": [
+    "aws-scs"
+   ],
+   "regla": "preceding project starts (Ticker)"
+  },
+  {
+   "id": "reserva-sap",
+   "texto": "Book the AWS SA Professional exam",
+   "fecha": "2028-07-22",
+   "certs": [
+    "aws-sap"
+   ],
+   "regla": "preceding project starts (Piloto)"
+  }
+ ],
+ "mazoLLM": [
+  "tokenization",
+  "next-token prediction",
+  "pretraining",
+  "scaling laws",
+  "positional encoding",
+  "multi-head attention",
+  "context window",
+  "KV cache",
+  "temperature",
+  "top-p sampling",
+  "hallucination",
+  "fine-tuning",
+  "RLHF",
+  "LoRA",
+  "quantization",
+  "distillation",
+  "mixture of experts",
+  "chain of thought",
+  "RAG",
+  "tool calling"
+ ],
+ "papersSueltos": [
+  {
+   "id": "gans",
+   "nombre": "GANs (2014)",
+   "opcional": true
+  },
+  {
+   "id": "ddpm",
+   "nombre": "DDPM diffusion (2020)",
+   "opcional": true
+  }
+ ]
 }

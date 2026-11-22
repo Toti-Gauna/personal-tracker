@@ -1,0 +1,972 @@
+{
+ "t0": "2026-11-16",
+ "semanas": 77,
+ "semanasPorBimestre": 9,
+ "ramas": [
+  {
+   "id": "programacion",
+   "nombre": "Programación",
+   "color": "ing",
+   "contiene": "Proyectos del roadmap v7 y 13 certificaciones (IA, cloud, seguridad, Kubernetes y GitHub)"
+  },
+  {
+   "id": "matematica",
+   "nombre": "Matemática",
+   "color": "economia",
+   "contiene": "CONAMAT y libros universitarios, ventanas W1–W3"
+  },
+  {
+   "id": "trabajo",
+   "nombre": "Trabajo",
+   "color": "rutina",
+   "contiene": "Búsqueda laboral, trabajo nuevo, salto senior"
+  },
+  {
+   "id": "ingles",
+   "nombre": "Idiomas",
+   "color": "idi",
+   "contiene": "Un idioma por año: inglés (año 1, Cambridge C1) y francés (año 2), con sus libros"
+  },
+  {
+   "id": "handyx",
+   "nombre": "Handyx",
+   "color": "handyx",
+   "contiene": "Año de prueba con 4 cortes"
+  },
+  {
+   "id": "salud",
+   "nombre": "Salud",
+   "color": "salud",
+   "contiene": "Fuerza, cardio, nutrición, sueño, mente"
+  }
+ ],
+ "hitos": [
+  {
+   "id": "T+0",
+   "semana": 1,
+   "titulo": "Arranca el plan",
+   "texto": "Arranca el plan: seis ramas salen de main"
+  },
+  {
+   "id": "T+2",
+   "semana": 9,
+   "titulo": "Remoto de USD 3.000 a 5.000",
+   "texto": "Trabajo remoto de USD 3.000 a 5.000"
+  },
+  {
+   "id": "T+12",
+   "semana": 53,
+   "titulo": "Decisión de Handyx",
+   "texto": "Decisión de Handyx con números"
+  },
+  {
+   "id": "T+18",
+   "semana": 78,
+   "fin": true,
+   "titulo": "Senior, inglés C1 y francés en marcha",
+   "texto": "Todo vuelve a main: senior ML + DevSecOps + cloud"
+  }
+ ],
+ "programacion": {
+  "tramos": [
+   {
+    "id": "P0",
+    "desde": 1,
+    "hasta": 2,
+    "tipo": "proyecto",
+    "nombre": "Constelación",
+    "que": "Portfolio como mapa 3D de proyectos; la v1 (mapa 3D, Trazo como caso, validador, shell con Module Federation) la arman los agentes",
+    "perfil": "Sr Full-stack → AI Engineer (RAG multifuente y agentes)",
+    "meta": 2,
+    "tope": 3
+   },
+   {
+    "id": "P1",
+    "desde": 3,
+    "hasta": 5,
+    "tipo": "proyecto",
+    "nombre": "PetrIA",
+    "industria": "petróleo",
+    "producto": "petria",
+    "que": "Mapa mundial real con los pozos de Vaca Muerta y las zonas de mayor productividad esperada. Valor y declinación de cada pozo, y lector de partes viejos. Asistente por texto, voz, WhatsApp y teléfono que cita el dato oficial. Uso y costo medidos por empresa",
+    "perfil": "Full-stack AI Engineer (energía)",
+    "meta": 3,
+    "tope": 4
+   },
+   {
+    "id": "P2",
+    "desde": 6,
+    "hasta": 8,
+    "tipo": "proyecto",
+    "nombre": "VitalIA",
+    "industria": "medicina",
+    "que": "brechas de cuidado y problemas de medicación con evidencia; traductor de sistemas viejos a FHIR; monitoreo remoto; dictado a nota",
+    "perfil": "AI Engineer en salud (.NET, Azure, seguridad)",
+    "meta": 3,
+    "tope": 4
+   },
+   {
+    "id": "W1",
+    "desde": 9,
+    "hasta": 10,
+    "tipo": "ventana",
+    "nombre": "Ventana de matemática",
+    "que": "Álgebra y estadística básica",
+    "meta": 2
+   },
+   {
+    "id": "P3",
+    "desde": 11,
+    "hasta": 13,
+    "tipo": "proyecto",
+    "nombre": "AgrIA",
+    "industria": "agro",
+    "producto": "agria",
+    "que": "rinde por departamento con rango de confianza, margen bruto con incertidumbre, atención por WhatsApp con audio",
+    "perfil": "Applied ML Engineer (agro)",
+    "meta": 3,
+    "tope": 4
+   },
+   {
+    "id": "C1",
+    "desde": 14,
+    "hasta": 15,
+    "tipo": "cert",
+    "nombre": "AWS Solutions Architect – Associate",
+    "corto": "AWS SAA",
+    "que": "2 semanas de estudio y laboratorios, 1 de simulacros y examen",
+    "perfil": "Cloud certificado",
+    "meta": 2
+   },
+   {
+    "id": "P4",
+    "desde": 16,
+    "hasta": 19,
+    "tipo": "proyecto",
+    "nombre": "Antena",
+    "industria": "espacio",
+    "producto": "antena",
+    "que": "sigue satélites reales (incluidos los argentinos), decodifica telemetría, planifica pasadas, calcula enlaces",
+    "perfil": "Systems / Ground Software Engineer",
+    "meta": 4,
+    "tope": 5
+   },
+   {
+    "id": "P5",
+    "desde": 20,
+    "hasta": 21,
+    "tipo": "proyecto",
+    "nombre": "PetrIA Guard",
+    "industria": "petróleo",
+    "producto": "petria",
+    "que": "gemelo digital de una batería de tanques en tiempo real; detecta ataques al SCADA por física y pérdidas en ductos; escala alarmas por todos los canales",
+    "perfil": "DevSecOps / OT Security Engineer",
+    "meta": 2,
+    "tope": 3
+   },
+   {
+    "id": "C2",
+    "desde": 22,
+    "hasta": 24,
+    "tipo": "cert",
+    "nombre": "CompTIA Security+",
+    "corto": "Security+",
+    "que": "3 semanas de estudio, 1 de simulacros y examen",
+    "perfil": "Seguridad certificada",
+    "meta": 3
+   },
+   {
+    "id": "W2",
+    "desde": 25,
+    "hasta": 27,
+    "tipo": "ventana",
+    "nombre": "Ventana de matemática",
+    "que": "Cálculo diferencial, vectores y matrices",
+    "meta": 3
+   },
+   {
+    "id": "P6",
+    "desde": 28,
+    "hasta": 31,
+    "tipo": "proyecto",
+    "nombre": "AeroScan",
+    "industria": "aeroespacial",
+    "producto": "aeroscan",
+    "que": "inspecciona superficies de aviones, genera la orden de trabajo, consulta manuales, registra daños en 3D por matrícula",
+    "perfil": "ML Engineer (computer vision)",
+    "meta": 4,
+    "tope": 5
+   },
+   {
+    "id": "P7",
+    "desde": 32,
+    "hasta": 33,
+    "tipo": "proyecto",
+    "nombre": "AgrIA Sat",
+    "industria": "agro",
+    "producto": "agria",
+    "que": "monitorea lotes con Sentinel-2, alerta estrés, genera dosis variable, estima pérdidas en USD",
+    "perfil": "ML / MLOps Engineer",
+    "meta": 2,
+    "tope": 3
+   },
+   {
+    "id": "C3",
+    "desde": 34,
+    "hasta": 35,
+    "tipo": "cert",
+    "nombre": "AWS Machine Learning Engineer – Associate",
+    "corto": "AWS ML Engineer",
+    "que": "2 semanas de estudio y laboratorios, 1 de simulacros y examen",
+    "perfil": "ML en cloud certificado",
+    "meta": 2
+   },
+   {
+    "id": "W3",
+    "desde": 36,
+    "hasta": 37,
+    "tipo": "ventana",
+    "nombre": "Ventana de matemática",
+    "que": "Probabilidad y optimización",
+    "meta": 2
+   },
+   {
+    "id": "P8",
+    "desde": 38,
+    "hasta": 39,
+    "tipo": "proyecto",
+    "nombre": "AdversarIA",
+    "industria": "nuclear",
+    "que": "escanea agentes de chat y voz propios o autorizados, los ataca y compara defensas",
+    "perfil": "AI Security Engineer",
+    "meta": 2,
+    "tope": 3
+   },
+   {
+    "id": "P9",
+    "desde": 40,
+    "hasta": 42,
+    "tipo": "proyecto",
+    "nombre": "AeroScan Edge",
+    "industria": "aeroespacial",
+    "producto": "aeroscan",
+    "que": "inspección offline en el hangar, walkaround guiado por voz, sincronización",
+    "perfil": "Edge AI Engineer",
+    "meta": 3,
+    "tope": 4
+   },
+   {
+    "id": "P10",
+    "desde": 43,
+    "hasta": 46,
+    "tipo": "proyecto",
+    "nombre": "Antena Ops",
+    "industria": "espacio",
+    "producto": "antena",
+    "que": "centro de control de todos tus productos: anomalías en telemetría de la NASA, agente SRE, status page, costos en vivo, Jarvis central",
+    "perfil": "Senior ML + DevSecOps + Cloud",
+    "meta": 4,
+    "tope": 5
+   },
+   {
+    "id": "colchon",
+    "desde": 47,
+    "hasta": 52,
+    "tipo": "colchon",
+    "nombre": "Consolidación",
+    "que": "Cierre de la etapa 1: absorbe los atrasos de las puertas de matemática y prepara las entrevistas senior",
+    "meta": 6
+   }
+  ],
+  "pares": [
+   [
+    "P1",
+    "P5"
+   ],
+   [
+    "P3",
+    "P7"
+   ],
+   [
+    "P4",
+    "P10"
+   ],
+   [
+    "P6",
+    "P9"
+   ]
+  ],
+  "estandar": [
+   {
+    "id": "produccion",
+    "nombre": "En producción",
+    "texto": "En producción, con demo pública (URL y video de 30 s)"
+   },
+   {
+    "id": "datos",
+    "nombre": "Datos reales",
+    "texto": "Datos reales; lo simulado, marcado y explicado"
+   },
+   {
+    "id": "metricas",
+    "nombre": "Métricas en el README",
+    "texto": "Métricas en el README: calidad, p95, costo y confiabilidad"
+   },
+   {
+    "id": "diseno",
+    "nombre": "Diseño de 1 página",
+    "texto": "Documento de diseño de 1 página en inglés antes de codear"
+   },
+   {
+    "id": "seguridad",
+    "nombre": "Seguridad base",
+    "texto": "Seguridad base: modelo de amenazas, permisos mínimos, secretos fuera del repo"
+   },
+   {
+    "id": "llm",
+    "nombre": "Las 8 capas del LLM",
+    "texto": "Si usa LLM, las 8 capas: prompt, RAG, herramientas/MCP, accesos, guardrails, caché, router, observabilidad con evals"
+   },
+   {
+    "id": "escala",
+    "nombre": "Paquete de escala",
+    "texto": "Paquete de escala: load-lab y Scale report"
+   },
+   {
+    "id": "operacion",
+    "nombre": "Paquete de operación",
+    "texto": "Paquete de operación",
+    "detalle": [
+     "OpenTelemetry y Grafana",
+     "SLO y presupuesto de errores",
+     "Feature flags",
+     "Migraciones expand/contract",
+     "Estrategia de deploy",
+     "Backup con simulacro",
+     "Degradación controlada",
+     "Rate limiting",
+     "Runbooks y postmortem"
+    ]
+   },
+   {
+    "id": "frontend",
+    "nombre": "Frontend 10/10",
+    "texto": "Frontend 10/10",
+    "detalle": [
+     "Sistema de diseño con Storybook",
+     "Carga procedural",
+     "Core Web Vitals",
+     "WCAG AA con axe en el CI",
+     "Playwright",
+     "Español e inglés",
+     "UX para IA: streaming, citas, feedback e incertidumbre visible"
+    ]
+   },
+   {
+    "id": "spots",
+    "nombre": "Algorithm spots",
+    "texto": "Algorithm spots plantados"
+   },
+   {
+    "id": "entrevista",
+    "nombre": "Material de entrevista",
+    "texto": "Material de entrevista: artículo, explicación en 2 minutos y 3 preguntas de diseño de sistemas"
+   },
+   {
+    "id": "opensource",
+    "nombre": "Open source",
+    "texto": "Open source: 1–2 PRs por mes"
+   }
+  ],
+  "presupuesto": {
+   "nucleo": 55,
+   "producto": 30,
+   "lanzamiento": 15
+  },
+  "laboratorios": "2 a 3 h por semana en TryHackMe o Hack The Box; un registro mensual. AZ-500 queda como certificación opcional.",
+  "creditos": {
+   "total": 100,
+   "P0": 10,
+   "P1": 30,
+   "P2": 20,
+   "reserva": 40
+  },
+  "semanasOriginal": 78,
+  "tecnica": {
+   "sesionesPorSemana": 3,
+   "ejercicios": [
+    6,
+    8
+   ],
+   "defensaMin": 45,
+   "paginasDiseno": 2
+  },
+  "puertas": {
+   "W1": "P3",
+   "W2": "P6",
+   "W3": "P8"
+  }
+ },
+ "matematica": {
+  "tramos": [
+   {
+    "id": "m1",
+    "desde": 1,
+    "hasta": 9,
+    "desdeT": "T+0",
+    "hastaT": "T+2",
+    "libros": [
+     "CONAMAT · Aritmética",
+     "CONAMAT · Álgebra"
+    ],
+    "habilita": "Todo lo demás"
+   },
+   {
+    "id": "W1",
+    "desde": 10,
+    "hasta": 11,
+    "libros": [
+     "CONAMAT · Álgebra",
+     "Estadística básica"
+    ],
+    "habilita": "P3"
+   },
+   {
+    "id": "m2",
+    "desde": 12,
+    "hasta": 25,
+    "desdeT": "T+3",
+    "hastaT": "T+6",
+    "libros": [
+     "CONAMAT · Geometría y trigonometría",
+     "CONAMAT · Geometría analítica"
+    ],
+    "habilita": "P9"
+   },
+   {
+    "id": "W2",
+    "desde": 26,
+    "hasta": 28,
+    "libros": [
+     "CONAMAT · Cálculo diferencial",
+     "Vectores y matrices"
+    ],
+    "habilita": "P6"
+   },
+   {
+    "id": "m3",
+    "desde": 29,
+    "hasta": 36,
+    "desdeT": "T+7",
+    "hastaT": "T+8",
+    "libros": [
+     "CONAMAT · Cálculo integral",
+     "Strang"
+    ],
+    "habilita": "P7 y P8"
+   },
+   {
+    "id": "W3",
+    "desde": 37,
+    "hasta": 38,
+    "libros": [
+     "Probabilidad",
+     "Optimización"
+    ],
+    "habilita": "P8"
+   },
+   {
+    "id": "m4",
+    "desde": 39,
+    "hasta": 78,
+    "desdeT": "T+9",
+    "hastaT": "T+18",
+    "libros": [
+     "Mathematics for ML",
+     "Multivariable"
+    ],
+    "habilita": "Perfil senior"
+   }
+  ],
+  "corte": 85
+ },
+ "trabajo": {
+  "fases": [
+   {
+    "id": "busqueda",
+    "desde": 1,
+    "hasta": 8,
+    "nombre": "Búsqueda intensa",
+    "texto": "1 h 30 por día: 5 postulaciones, 5 mensajes directos, 3 posts por semana y 10 min de registro. Una entrevista simulada por semana."
+   },
+   {
+    "id": "trabajo-nuevo",
+    "desde": 9,
+    "hasta": 78,
+    "nombre": "Trabajo nuevo",
+    "texto": "Búsqueda 2 h por semana."
+   }
+  ],
+  "embudo": {
+   "semanas": 8,
+   "postulaciones": 250,
+   "mensajes": 250,
+   "entrevistas": [
+    12,
+    18
+   ],
+   "ofertas": [
+    1,
+    2
+   ]
+  },
+  "porDia": {
+   "postulaciones": 5,
+   "mensajes": 5
+  },
+  "postsPorSemana": 3
+ },
+ "ingles": {
+  "fases": [],
+  "respuestas": [
+   "Tell me about yourself",
+   "A project you are proud of",
+   "Explain RAG to a non-technical person",
+   "Why remote, why this company",
+   "A conflict with a teammate",
+   "Your biggest weakness",
+   "Design a RAG API that scales",
+   "A time you failed",
+   "Salary expectations",
+   "Questions for the interviewer"
+  ],
+  "minutosDiarios": 45,
+  "nota": "Las fases salen de data/idiomas.json (roadmap maestro v3, ola 21): src/data/idiomas.ts las pasa a semanas del plan."
+ },
+ "handyx": {
+  "cortes": [
+   {
+    "id": "lanzar",
+    "nombre": "Lanzar",
+    "hasta": 13,
+    "texto": "Producto desplegado, primeras operaciones y prestadores."
+   },
+   {
+    "id": "operar",
+    "nombre": "Operar y delegar",
+    "hasta": 26,
+    "texto": "Operaciones repetibles; agentes y amigos con tareas definidas."
+   },
+   {
+    "id": "rentabilidad",
+    "nombre": "Rentabilidad",
+    "hasta": 39,
+    "texto": "Margen por operación, costo por cliente y retención."
+   },
+   {
+    "id": "decidir",
+    "nombre": "Decidir",
+    "hasta": 52,
+    "texto": "Escalar, seguir igual o pausar, con los tres cortes sobre la mesa."
+   }
+  ],
+  "horasPorDia": 3,
+  "horasPorSemana": 21,
+  "metricas": [
+   "operaciones",
+   "prestadores activos",
+   "clientes que vuelven",
+   "ingresos",
+   "margen",
+   "horas"
+  ]
+ },
+ "salud": {
+  "componentes": [
+   {
+    "id": "fuerza",
+    "nombre": "Fuerza",
+    "texto": "Ciclos con récords."
+   },
+   {
+    "id": "cardio",
+    "nombre": "Cardio",
+    "texto": "Un objetivo de carrera por etapa."
+   },
+   {
+    "id": "nutricion",
+    "nombre": "Nutrición",
+    "texto": "Calorías y proteína."
+   },
+   {
+    "id": "sueno",
+    "nombre": "Sueño",
+    "texto": "21:00 a 04:00."
+   },
+   {
+    "id": "mente",
+    "nombre": "Mente",
+    "texto": "Desconexión 20:00–21:00 y revisión del domingo."
+   },
+   {
+    "id": "control",
+    "nombre": "Control",
+    "texto": "Chequeo anual y medidas mensuales."
+   }
+  ]
+ },
+ "metasBimestre": {
+  "programacion": [
+   "P0, Faro v1 y Escudo",
+   "W1, Surco v1, AWS SAA y Estación v1 empieza",
+   "Estación v1, Faro v2, Security+ y W2 empieza",
+   "W2, Lupa v1, Surco v2 y AWS ML",
+   "W3, Núcleo, Lupa v2 y Estación v2 empieza",
+   "Estación v2 y colchón",
+   "Margen: entrevistas senior",
+   "Margen: entrevistas senior",
+   "Salto senior"
+  ],
+  "matematica": [
+   "Aritmética 1–11",
+   "Álgebra 1–12",
+   "Álgebra 13–17, Geo y trig 1–10",
+   "Geo y trig 11–17, Analítica 1–7",
+   "Analítica 8–13, Cálculo dif. 1–5",
+   "Cálculo integral 1–6, Strang 1–3",
+   "Strang y Blitzstein (W3)",
+   "Mathematics for ML",
+   "MML y multivariable"
+  ],
+  "trabajo": [
+   "Remoto USD 3.000–5.000 (T+2)",
+   "Desempeño y primeros logros",
+   "Logros documentados",
+   "Revisión salarial",
+   "Postular a AI/ML Engineer",
+   "Postular a AI/ML Engineer",
+   "Entrevistas para el salto",
+   "Entrevistas para el salto",
+   "Rol senior"
+  ],
+  "ingles": [
+   "Modo entrevista",
+   "Bloque diario y diagnóstico C1",
+   "Use of English",
+   "Writing",
+   "Listening",
+   "Speaking",
+   "Simulacros mensuales",
+   "Simulacros mensuales",
+   "Examen C1"
+  ],
+  "handyx": [
+   "Lanzar",
+   "Corte 1 (14 feb), operar y delegar",
+   "Corte 2 (16 may)",
+   "Rentabilidad",
+   "Corte 3 (15 ago)",
+   "Decisión (15 nov)",
+   "Según la decisión",
+   "Según la decisión",
+   "Según la decisión"
+  ],
+  "salud": [
+   "Rutina estable y registro",
+   "Primer ciclo de fuerza",
+   "Ciclo medido",
+   "Objetivo de carrera",
+   "Nuevo ciclo",
+   "Chequeo médico y medidas",
+   "Nuevo ciclo",
+   "Objetivo de carrera",
+   "Meta física cumplida"
+  ]
+ },
+ "nombresBimestre": [
+  "El despegue",
+  "Surco v1 y AWS SAA",
+  "Estación v1 y Faro v2",
+  "Lupa v1 y Surco v2",
+  "Núcleo y Lupa v2",
+  "Estación v2 y colchón",
+  "Margen y C1",
+  "Margen y entrevistas senior",
+  "Salto senior y C1"
+ ],
+ "metasAnio": {
+  "anio1": [
+   {
+    "rama": "trabajo",
+    "texto": "Remoto y postular a AI/ML Engineer"
+   },
+   {
+    "rama": "programacion",
+    "texto": "PetrIA, VitalIA, AgrIA, Antena, PetrIA Guard y AeroScan; certificaciones 1 a 3 (Claude + GitHub Foundations, AWS SAA y Security+)"
+   },
+   {
+    "rama": "matematica",
+    "texto": "CONAMAT completo (69 caps.) y Strang 1–3"
+   },
+   {
+    "rama": "ingles",
+    "texto": "Cambridge C1 Advanced aprobado y tres libros con su tesis"
+   },
+   {
+    "rama": "handyx",
+    "texto": "Decidir con números, 100 usuarios y 56 especialistas"
+   },
+   {
+    "rama": "salud",
+    "texto": "Llegar a 95 kg entrenando 6 días"
+   },
+   {
+    "area": "eclipse",
+    "texto": "USD 3.000 por mes en ventas"
+   }
+  ],
+  "tramoFinal": [
+   {
+    "rama": "trabajo",
+    "texto": "Senior ML + DevSecOps + cloud"
+   },
+   {
+    "rama": "programacion",
+    "texto": "Margen: lo que sumó la revisión de mercado y entrevistas senior"
+   },
+   {
+    "rama": "ingles",
+    "texto": "Francés: rumbo al DELF B1"
+   }
+  ]
+ },
+ "semana": {
+  "busqueda": [
+   {
+    "rama": "trabajo",
+    "id": "postulaciones",
+    "texto": "Postulaciones",
+    "meta": 35,
+    "unidad": ""
+   },
+   {
+    "rama": "trabajo",
+    "id": "mensajes",
+    "texto": "Mensajes directos",
+    "meta": 35,
+    "unidad": ""
+   },
+   {
+    "rama": "trabajo",
+    "id": "posts",
+    "texto": "Posts",
+    "meta": 3,
+    "unidad": ""
+   },
+   {
+    "rama": "trabajo",
+    "id": "simulada",
+    "texto": "Entrevista simulada",
+    "meta": 1,
+    "unidad": ""
+   },
+   {
+    "rama": "matematica",
+    "id": "horas-mate",
+    "texto": "Horas de matemática",
+    "meta": 14,
+    "unidad": "h"
+   },
+   {
+    "rama": "programacion",
+    "id": "horas-prog",
+    "texto": "Horas de programación",
+    "meta": 25,
+    "unidad": "h"
+   },
+   {
+    "rama": "programacion",
+    "id": "labs",
+    "texto": "Laboratorios de seguridad",
+    "meta": 3,
+    "unidad": "h"
+   },
+   {
+    "rama": "trabajo",
+    "id": "respuestas",
+    "texto": "Respuestas ensayadas",
+    "meta": 10,
+    "unidad": ""
+   },
+   {
+    "rama": "handyx",
+    "id": "horas-handyx",
+    "texto": "Horas de Handyx",
+    "meta": 21,
+    "unidad": "h"
+   },
+   {
+    "rama": "salud",
+    "id": "entrenos",
+    "texto": "Entrenamientos",
+    "meta": 6,
+    "unidad": ""
+   }
+  ],
+  "conTrabajo": [
+   {
+    "rama": "ingles",
+    "id": "horas-ingles",
+    "texto": "Horas de idiomas",
+    "meta": 6.5,
+    "unidad": "h"
+   },
+   {
+    "rama": "programacion",
+    "id": "horas-prog",
+    "texto": "Horas de programación",
+    "meta": 29,
+    "unidad": "h"
+   },
+   {
+    "rama": "matematica",
+    "id": "horas-mate",
+    "texto": "Horas de matemática",
+    "meta": 14,
+    "unidad": "h"
+   },
+   {
+    "rama": "salud",
+    "id": "entrenos",
+    "texto": "Entrenamientos",
+    "meta": 5,
+    "unidad": ""
+   },
+   {
+    "rama": "trabajo",
+    "id": "posts",
+    "texto": "Publicaciones",
+    "meta": 2,
+    "unidad": ""
+   },
+   {
+    "rama": "trabajo",
+    "id": "simulada",
+    "texto": "Entrevista simulada",
+    "meta": 1,
+    "unidad": ""
+   }
+  ]
+ },
+ "chequeosMensuales": [
+  {
+   "rama": "programacion",
+   "texto": "Registro de laboratorios de seguridad"
+  },
+  {
+   "rama": "salud",
+   "texto": "Medidas del mes"
+  },
+  {
+   "rama": "ingles",
+   "texto": "Simulacro de Cambridge C1 (sobre 180)",
+   "desdeSemana": 20,
+   "hastaSemana": 46
+  }
+ ],
+ "etapaActual": {
+  "mes": {
+   "desde": 1,
+   "hasta": 4,
+   "titulo": "Mes 1 · 16 nov a 13 dic",
+   "metas": [
+    {
+     "rama": "programacion",
+     "texto": "P0 v1 con los agentes y PetrIA 1.0 y 1.1 desplegadas (MVP y producto)"
+    },
+    {
+     "rama": "matematica",
+     "texto": "Primeros capítulos de Aritmética con su test aprobado y el circuito foto → JSON → Trazo funcionando"
+    },
+    {
+     "rama": "trabajo",
+     "texto": "120 postulaciones, 120 mensajes directos, 10 posts y 3 entrevistas simuladas"
+    },
+    {
+     "rama": "ingles",
+     "texto": "Measure What Matters: unidades con micro-tesis, tarjetas y la tesis final"
+    },
+    {
+     "rama": "handyx",
+     "texto": "Umbrales de la decisión del año escritos y el producto desplegado"
+    },
+    {
+     "rama": "salud",
+     "texto": "Entrenamiento 5 de 7 días, con peso, calorías y sueño registrados"
+    }
+   ]
+  },
+  "semana": {
+   "semana": 1,
+   "titulo": "Semana 1 · 16 a 22 nov",
+   "metas": [
+    {
+     "rama": "trabajo",
+     "dias": [
+      1
+     ],
+     "texto": "Lunes: diagnóstico (técnico, diseño de sistemas e inglés) y CV en inglés"
+    },
+    {
+     "rama": "trabajo",
+     "dias": [
+      2
+     ],
+     "texto": "Martes: LinkedIn, lista de 100 empresas, cuentas en portales y plantillas de mensaje"
+    },
+    {
+     "rama": "trabajo",
+     "dias": [
+      3,
+      4,
+      5,
+      6,
+      7
+     ],
+     "texto": "Miércoles a domingo: 5 postulaciones y 5 mensajes por día"
+    },
+    {
+     "rama": "programacion",
+     "dias": [
+      3,
+      4,
+      5,
+      6,
+      7
+     ],
+     "texto": "PetrIA 1.0 desde el jueves 19: ingesta y detector P10/P50/P90"
+    },
+    {
+     "rama": "matematica",
+     "dias": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+     ],
+     "texto": "Todos los días: matemática 2 h (Aritmética cap. 1) y cierre del día en Trazo"
+    }
+   ]
+  },
+  "checklistDiario": [
+   "Cold recall y repasos",
+   "Bloques de matemática y programación",
+   "5 postulaciones y 5 mensajes",
+   "3 h de Handyx con una tarea cerrada",
+   "Entrenamiento, calorías y sueño registrados"
+  ]
+ }
+}

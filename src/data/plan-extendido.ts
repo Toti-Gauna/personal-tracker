@@ -9,8 +9,8 @@
 import raw from '../../data/plan-extendido.json';
 import { addDays, parseDate } from './time';
 
-export type TipoBloque = 'proyecto' | 'ventana' | 'cert' | 'descanso' | 'colchon' | 'cierre' | 'sumas';
-export const TIPOS_BLOQUE: TipoBloque[] = ['proyecto', 'ventana', 'cert', 'descanso', 'colchon', 'cierre', 'sumas'];
+export type TipoBloque = 'proyecto' | 'ventana' | 'cert' | 'descanso' | 'colchon' | 'cierre' | 'sumas' | 'ingles' | 'busqueda';
+export const TIPOS_BLOQUE: TipoBloque[] = ['proyecto', 'ventana', 'cert', 'descanso', 'colchon', 'cierre', 'sumas', 'ingles', 'busqueda'];
 
 export interface BloqueExt {
   id: string;
@@ -61,7 +61,60 @@ export interface BloqueExt {
   numero?: number;
   /** v7: nota visible del bloque ("a confirmar acceso", "la arman los agentes"). */
   nota?: string;
+  // ——— v12.1 (21 Nov 2026) ———
+  /** Fechas explícitas del plan: el bloque va exactamente ahí (el motor no las corre por horas). */
+  fechas?: { inicio: string; fin: string };
+  /** Fase a la que pertenece (F1 a F11). */
+  fase?: string;
+  /** Horas si el límite semanal de Claude pega seguido. */
+  horasLim?: number;
+  rol?: string;
+  /** Peso en entrevistas ("very high", "high"). */
+  entrevista?: string;
+  notas?: string[];
+  papers?: PaperV12[];
+  /** Ventana de matemática: hitos por rango de días; el bloque no cierra con hitos sin tildar. */
+  hitos?: HitoMate[];
+  ingles?: { libros: string[]; objetivo: string; reparto: { lv: Record<string, number>; finde: Record<string, number> }; tareas?: string[]; examen?: { nombre: string; semana: [string, string]; nota?: string; reserva?: string } };
+  busqueda?: { reparto: Record<string, number> };
+  /** Con qué sale al mercado (búsqueda) y los roles. */
+  mercado?: string[];
+  roles?: string[];
+  /** Bloque archivado (PetrIA v0): guarda horas viejas, no cuenta para el plan. */
+  archivado?: boolean;
+  /** Sin estado "atrasado" (P0 v1: la arman los agentes). */
+  sinAtraso?: boolean;
+  /** Ventana de certificaciones: una o más, cada una con su plan por día. */
+  certs?: CertV12[];
+  /** PetrIA: los lotes (batches) con horas, fecha estimada y deadline. */
+  lotes?: LoteV12[];
 }
+
+export interface PaperV12 { id: string; nombre: string; opcional?: boolean }
+export interface HitoMate { dias: [number, number]; inicio: string; fin: string; tema: string; hito: string; capitulos?: { actividad: string; desde: number; hasta: number }; capitulosAConfirmar?: boolean; hitoAConfirmar?: boolean }
+export interface CertV12 {
+  id: string;
+  nombre: string;
+  horas: number;
+  recursos: string[];
+  plan: { fecha: string; texto: string }[];
+  examen: string;
+  /** Mocks para estar listo (%), o el criterio en texto. */
+  listo?: number | string;
+  fallback?: string;
+  opcional?: boolean;
+  requiere?: string;
+  reserva?: string;
+  costo?: string;
+  costoVerificado?: boolean;
+  versiones?: VersionExamen[];
+  renovacion?: { anos?: number; nota: string };
+  miniProyecto?: { nombre: string; fecha: string; texto: string; entregables: string[] };
+}
+export interface LoteV12 { id: string; version: string; ola0?: boolean; nombre: string; horas: number; estimado: string; deadline: string; modelo: string }
+export interface FaseV12 { id: string; etapa: number; nombre: string; inicio: string; fin: string; salida: string[]; mercado: string[]; mercadoAConfirmar?: boolean; roles?: string[] }
+export interface HabitoV12 { id: string; nombre: string; cuando: 'diario' | number[]; hora: string }
+export interface RecordatorioV12 { id: string; texto: string; fecha: string; certs?: string[]; regla?: string }
 
 /** Ficha de un proyecto: lo que lo hace distinto y cómo se prueba. */
 export interface Ficha {
@@ -159,6 +212,9 @@ export interface EtapaExt {
   semanasExtra: number;
   semanasPlataforma: number;
   semanasArquitectura: number;
+  /** v12.1: fechas explícitas de la etapa. */
+  inicio?: string;
+  fin?: string;
 }
 
 export interface PlanExtendido {
@@ -186,6 +242,17 @@ export interface PlanExtendido {
   backlog?: { nombre: string; motivo: string; fecha: string }[];
   /** v7 (ola 29): la capacidad del plan. */
   capacidad?: CapacidadPlan;
+  /** v12.1: fases (rol, fechas, criterio de salida, con qué sale al mercado). */
+  fases?: FaseV12[];
+  habitos?: HabitoV12[];
+  recordatorios?: RecordatorioV12[];
+  /** Mazo "20 LLM concepts" (arranca bloqueado). */
+  mazoLLM?: string[];
+  papersSueltos?: PaperV12[];
+  plan?: string;
+  archivado?: string;
+  /** v12.1: ramas y áreas en pausa (fuera de Hoy y de Metas, con sus datos guardados). */
+  pausados?: string[];
 }
 
 /** v7 · capacidad de programación que no sale de la rutina. */
@@ -196,8 +263,13 @@ export interface CapacidadPlan {
   ventanaSemana?: number;
   /** Años con pausa de diciembre (la semana cuyo lunes cae del 18 al 24). Sin lista, todos los años. */
   pausasDiciembre?: number[];
-  /** Días desde T0 hasta el trabajo nuevo, si no lo cargaste (49: lunes 4 ene 2027). */
-  inicioTrabajoDias?: number;
+  /** Días desde T0 hasta el trabajo nuevo, si no lo cargaste (49: lunes 4 ene 2027). null: sin trabajo nuevo (v12.1). */
+  inicioTrabajoDias?: number | null;
+  /** v12.1: horas por día de lunes a viernes y el fin de semana (10 y 11). */
+  lv?: number;
+  finde?: number;
+  /** v12.1: fechas que nunca se mueven (la pausa del 20 al 26 dic 2027). */
+  fijas?: { inicio: string; fin: string; nombre: string }[];
 }
 
 // ——— validación ———
@@ -268,7 +340,8 @@ export function validar(doc: unknown): string[] {
         else if (j <= pos.get(b.id)!) err.push(`${b.id}: habilita ${h}, que va antes`);
       }
     }
-    if (b.tipo === 'cert' && !b.cert) err.push(`${b.id}: certificación sin datos (costo y verificación)`);
+    if (b.tipo === 'cert' && !b.cert && !b.certs?.length) err.push(`${b.id}: certificación sin datos (costo y verificación)`);
+    if (b.fechas && !(FECHA.test(b.fechas.inicio) && FECHA.test(b.fechas.fin) && b.fechas.fin >= b.fechas.inicio)) err.push(`${b.id}: fechas inválidas`);
     if (b.cert?.requiere && !pos.has(b.cert.requiere)) err.push(`${b.id}: requiere una certificación que no existe (${b.cert.requiere})`);
   }
   validarTecnologias(bloques, pos, d?.descartadas ?? [], err);
@@ -387,6 +460,8 @@ export interface Opciones {
   pausas?: boolean;
   /** Semanas de atraso por bloque (puerta de matemática sin aprobar, proyecto que se pasó). */
   atrasos?: Record<string, number>;
+  /** v12.1: fechas confirmadas que reemplazan a las del bloque (corrimientos por atraso). */
+  corrimientos?: Record<string, { inicio: string; fin: string }>;
 }
 
 export interface BloqueFechado extends BloqueExt {
@@ -544,8 +619,9 @@ export function calendarioHoras(plan: PlanExtendido = PLAN_EXT, o: Opciones = {}
       out.push({ ...b, ...extras, semanas: 0, desde: semanaDe(cursor), hasta: semanaDe(cursor) - 1, inicio: dia(cursor), fin: dia(cursor - 1), pausasDentro: [], horas: 0, diaIni: cursor, diaFin: cursor - 1 });
       return;
     }
-    // La pausa que cae justo antes del bloque va entre los dos.
-    while (enPausa(cursor)) {
+    // La pausa que cae justo antes del bloque va entre los dos (no con fechas explícitas: ya la tienen adentro).
+    const fechas = o.corrimientos?.[b.id] ?? b.fechas;
+    while (!fechas && enPausa(cursor)) {
       const p = pausa(cursor, b.etapa);
       out.push(p);
       cursor = p.diaFin! + 1;
@@ -553,6 +629,17 @@ export function calendarioHoras(plan: PlanExtendido = PLAN_EXT, o: Opciones = {}
     const ini = cursor;
     const pausasDentro: number[] = [];
     const marcarPausa = (d: number) => { const w = semanaDe(lunesN(d)); if (!pausasDentro.includes(w)) pausasDentro.push(w); };
+    // v12.1: fechas explícitas. El bloque va exactamente ahí; una pausa adentro lo parte (sin moverlo).
+    if (fechas) {
+      const fi = Math.round((parseDate(fechas.inicio).getTime() - parseDate(t0).getTime()) / 864e5);
+      const ff = Math.round((parseDate(fechas.fin).getTime() - parseDate(t0).getTime()) / 864e5);
+      for (let d = fi; d <= ff; d++) if (enPausa(d)) marcarPausa(d);
+      cursor = ff + 1;
+      const sem = Math.max(1, Math.round((ff - fi + 1 - pausasDentro.length * 7) / 7));
+      out.push({ ...b, ...extras, semanas: sem, desde: semanaDe(fi), hasta: semanaDe(ff), inicio: dia(fi), fin: dia(ff), pausasDentro, horas: b.horas ?? 0, diaIni: fi, diaFin: ff });
+      for (const w of pausasDentro) out.push(pausa((w - 1) * 7, b.etapa));
+      return;
+    }
     let d = ini;
     let horas: number;
     if (diasFijos != null) {

@@ -3,8 +3,10 @@
  * editar); mes y semana se generan desde el plan para cualquier fecha y el usuario los confirma,
  * los cambia o los borra. Nada se carga 18 meses antes: todo se calcula al abrir el período.
  */
-import { HORAS_ANTES_TRABAJO, horasPorSemana } from './capacidad';
-import { IDIOMAS, calendarioIdiomas } from './idiomas';
+import { HORAS_ANTES_TRABAJO, HORAS_FINDE, HORAS_LV, horasPorSemana } from './capacidad';
+import { PLAN_EXT } from './plan-extendido';
+import { ajustarDia, domingoDe, planRoutine, type DayType } from './routines';
+import { IDIOMAS, IDIOMAS_ARCHIVADO, calendarioIdiomas } from './idiomas';
 import { clippingActivo } from './clipping-activo';
 import { mesClipEn, mesDe as mesClipDe, planEntre } from './clipping';
 import { clipsEntre, usdEntre } from './clipping-metricas';
@@ -168,7 +170,9 @@ export const SEMANA_INTENSIVA: (Omit<MetaGenerada, 'id' | 'origen'> & { clave: s
   // v7: PetrIA a ~8 h por día (56 por semana); la rutina intensiva da 53 y las 3 que faltan salen de un bloque a definir (ola 31).
   HORAS_ANTES_TRABAJO != null
     ? { rama: 'programacion', texto: 'Horas de programación', meta: Math.round(HORAS_ANTES_TRABAJO * 7), unidad: 'h', clave: 'horas-prog', nota: `${String(HORAS_ANTES_TRABAJO).replace('.', ',')} h por día (roadmap v7); la rutina da ${horasPorSemana('busqueda-intensiva')}; el resto sale de los bloques que elijas en Ajustes` }
-    : { rama: 'programacion', texto: 'Horas de programación', meta: 53, unidad: 'h', clave: 'horas-prog' },
+    : HORAS_LV != null && HORAS_FINDE != null
+      ? { rama: 'programacion', texto: 'Horas de estudio y proyecto', meta: HORAS_LV * 5 + HORAS_FINDE * 2, unidad: 'h', clave: 'horas-prog', nota: `${HORAS_LV} h de lunes a viernes y ${HORAS_FINDE} el fin de semana (plan v12.1)` }
+      : { rama: 'programacion', texto: 'Horas de programación', meta: 53, unidad: 'h', clave: 'horas-prog' },
   { rama: 'matematica', texto: 'Horas de matemática', meta: 7, unidad: 'h', clave: 'horas-mate' },
   { rama: 'ingles', texto: 'Horas de idiomas', meta: 7, unidad: 'h', clave: 'horas-ingles' },
   // Ola 18/21: la entrevista se practica en el bloque de búsqueda laboral.
@@ -182,9 +186,43 @@ const CLIPPING_SEMANA: typeof SEMANA_INTENSIVA = [
   { area: 'eclipse', texto: 'Clips publicados', meta: 35, clave: 'clips' },
 ];
 
-/** Saca las metas de ramas o áreas en pausa (Handyx; las ventas de Eclipse). */
+/** v12.1 (respuesta 7): Handyx, el clipping y Eclipse están en pausa: no salen en Metas (sus datos quedan). */
+export const PAUSADOS = new Set(PLAN_EXT.pausados ?? []);
+// El clipping vuelve si le asignás un bloque (lo mismo que antes); Handyx y Eclipse, no.
+const pausadoV12 = (m: MetaGenerada) => {
+  if (/clip/.test(m.clave ?? '')) return PAUSADOS.has('clipping') && !clippingActivo();
+  return (!!m.rama && PAUSADOS.has(m.rama)) || (!!m.area && PAUSADOS.has(m.area));
+};
+
+/** Saca las metas de ramas o áreas en pausa (Handyx; las ventas de Eclipse; en v12.1, lo pausado del plan). */
 export const sinPausa = (ms: MetaGenerada[], fecha: string, pausa?: Pick<PlanState, 'pausas'>) =>
-  pausa ? ms.filter((m) => !(m.rama && enPausa(pausa, m.rama, fecha)) && !(m.clave === 'ventas' && enPausa(pausa, 'ventas', fecha))) : ms;
+  (pausa ? ms.filter((m) => !(m.rama && enPausa(pausa, m.rama, fecha)) && !(m.clave === 'ventas' && enPausa(pausa, 'ventas', fecha))) : ms).filter((m) => !pausadoV12(m));
+
+/**
+ * v12.1 · las horas por rama que da la rutina un día: el día de la semana (10 h de lunes a viernes, 11 el fin de semana) con los
+ * bloques 1 y 2 tomados por el bloque activo del plan (matemática en una ventana, inglés en una semana E, búsqueda en una J).
+ */
+export function horasRutinaDia(fecha: string, t0 = T0_PLAN): Partial<Record<RamaOMain, number>> {
+  const iso = ((parseDate(fecha).getDay() + 6) % 7) + 1;
+  const t: DayType = iso <= 5 ? 'busqueda-intensiva' : iso === 6 ? 'busqueda-intensiva-finde' : domingoDe('busqueda-intensiva-finde');
+  const act = tramoActivo(fecha, t0);
+  const dia = ajustarDia(planRoutine(t, 'completo'), {
+    ...(act.tipo === 'ventana' ? { ventana: act.id } : { activo: { id: act.id, tipo: act.tipo, nombre: act.nombre } }),
+    ...(iso === 2 || iso === 4 ? { postDelDia: true } : {}),
+  });
+  const out: Partial<Record<RamaOMain, number>> = {};
+  for (const p of dia) if (p.block.rama) out[p.block.rama] = (out[p.block.rama] ?? 0) + p.min / 60;
+  return out;
+}
+/** Las horas por rama entre dos fechas (inclusive), redondeadas a media hora. */
+export function horasRutinaEntre(desde: string, hasta: string, t0 = T0_PLAN): Partial<Record<RamaOMain, number>> {
+  const out: Partial<Record<RamaOMain, number>> = {};
+  for (let d = desde; d <= hasta; d = addDays(d, 1)) for (const [r, h] of Object.entries(horasRutinaDia(d, t0))) out[r as RamaOMain] = (out[r as RamaOMain] ?? 0) + h;
+  for (const r of Object.keys(out) as RamaOMain[]) out[r] = Math.round(out[r]! * 2) / 2;
+  return out;
+}
+const CLAVE_RAMA: Record<string, RamaOMain> = { 'horas-prog': 'programacion', 'horas-mate': 'matematica', 'horas-ingles': 'ingles', 'horas-busqueda': 'trabajo' };
+const V12 = HORAS_LV != null && HORAS_FINDE != null && HORAS_ANTES_TRABAJO == null;
 
 /** Ola 23: los clips de la semana según el mes del Roadmap Clipper (clips por día × 7). */
 function clipsDeLaSemana(fecha: string) {
@@ -199,7 +237,18 @@ export function metasSemanaGeneradas(fecha: string, t0 = T0_PLAN, op: OpcionesPl
   const base: MetaGenerada[] = op.intensiva
     ? [...SEMANA_INTENSIVA, ...(clippingActivo() ? CLIPPING_SEMANA : [])].map((x) => ({ ...x, id: `s-${x.clave}`, origen: 'plan' as const, ...(x.clave === 'clips' ? clipsDeLaSemana(fecha) : {}) }))
     : metasSemanaPlan(fecha, t0).map((x) => ({ id: `s-${x.id}`, rama: x.rama, texto: x.texto, meta: x.meta, unidad: x.unidad || undefined, clave: x.id, origen: 'plan' }));
-  const out = sinPausa(base, fecha, op.pausa);
+  let out = sinPausa(base, fecha, op.pausa);
+  if (op.intensiva && V12) {
+    // v12.1: las horas de la semana son las que da la rutina con el bloque activo de cada día (no números fijos).
+    const l = lunes(fecha);
+    const h = horasRutinaEntre(l, addDays(l, 6), t0);
+    out = out.flatMap((m) => {
+      const r = m.clave ? CLAVE_RAMA[m.clave] : undefined;
+      if (!r) return [m];
+      const meta = h[r] ?? 0;
+      return meta > 0 ? [{ ...m, meta, nota: 'lo que da la rutina esta semana, con el bloque activo de cada día', ...(m.clave === 'horas-prog' ? { texto: 'Horas de programación' } : {}) }] : [];
+    });
+  }
   const t = tramoActivo(fecha, t0);
   if (t.tipo === 'proyecto' && t.id !== 'P0') {
     out.push({ id: 's-casillas', rama: 'programacion', texto: 'Puntos del estándar', meta: PLAN.programacion.estandar.length, clave: `casillas:${t.id}`, origen: 'plan' });
@@ -289,7 +338,7 @@ export function metasMesGeneradas(fecha: string, t0 = T0_PLAN, study?: StudyStat
     const semanal = (id: string) => metasSemanaPlan(a, t0).find((x) => x.id === id)?.meta ?? 0;
     if (!cierran.length) {
       const t = tramoActivo(a, t0);
-      if (t.tipo !== 'descanso') push({ id: 'm-horas-prog', rama: 'programacion', texto: `Horas de programación · ${t.tipo === 'cert' ? t.corto ?? t.nombre : t.tipo === 'proyecto' ? nombreTramo(t, false) : t.nombre}`, meta: Math.round(semanal('horas-prog') * semanas), unidad: 'h', clave: 'horas-prog' });
+      if (t.tipo !== 'descanso') push({ id: 'm-horas-prog', rama: 'programacion', texto: `Horas de programación · ${t.tipo === 'cert' ? t.corto ?? t.nombre : t.tipo === 'proyecto' ? nombreTramo(t, false) : t.nombre}`, meta: V12 ? horasRutinaEntre(a, b, t0).programacion ?? 0 : Math.round(semanal('horas-prog') * semanas), unidad: 'h', clave: 'horas-prog' });
     }
     // Matemática: la ventana W o los capítulos del mes (uno cada 5 días).
     const w = TRAMOS.find((t) => t.tipo === 'ventana' && inicioDe(t, t0) <= b && finDe(t, t0) >= a);
@@ -312,8 +361,12 @@ export function metasMesGeneradas(fecha: string, t0 = T0_PLAN, study?: StudyStat
       push({ id: 'm-sim', rama: 'trabajo', texto: 'Entrevistas simuladas', meta: Math.max(1, Math.round(diasBusqueda / 7)), clave: 'simulada' });
     }
     // Idiomas (ola 21): las 11,5 h por semana del roadmap y el hito de la fase que cierra en el mes.
-    push({ id: 'm-ing', rama: 'ingles', texto: 'Horas de idiomas', meta: Math.round(((IDIOMAS.horasSemana * dias) / 7) * 10) / 10, unidad: 'h', clave: 'horas-ingles', nota: `${String(IDIOMAS.horasSemana).replace('.', ',')} h por semana` });
-    for (const f of calendarioIdiomas(t0)) if (f.fin >= a && f.fin <= b) push({ id: `m-idioma-${f.clave}`, rama: 'ingles', texto: `${f.nombre}: ${f.hito.charAt(0).toLowerCase()}${f.hito.slice(1)}` });
+    if (IDIOMAS_ARCHIVADO) {
+      // v12.1: el plan de 6 años está archivado; las horas de inglés son las de la rutina del mes (más las semanas E).
+      const hi = horasRutinaEntre(a, b, t0).ingles ?? 0;
+      if (hi > 0) push({ id: 'm-ing', rama: 'ingles', texto: 'Horas de inglés', meta: hi, unidad: 'h', clave: 'horas-ingles', nota: 'lo que da la rutina este mes' });
+    } else push({ id: 'm-ing', rama: 'ingles', texto: 'Horas de idiomas', meta: Math.round(((IDIOMAS.horasSemana * dias) / 7) * 10) / 10, unidad: 'h', clave: 'horas-ingles', nota: `${String(IDIOMAS.horasSemana).replace('.', ',')} h por semana` });
+    if (!IDIOMAS_ARCHIVADO) for (const f of calendarioIdiomas(t0)) if (f.fin >= a && f.fin <= b) push({ id: `m-idioma-${f.clave}`, rama: 'ingles', texto: `${f.nombre}: ${f.hito.charAt(0).toLowerCase()}${f.hito.slice(1)}` });
     // Handyx: el corte que cae en el mes y las horas.
     for (const c of PLAN.handyx.cortes) { const f = finSemana(c.hasta, t0); if (f >= a && f <= b) push({ id: `m-corte-${c.id}`, rama: 'handyx', texto: `Corte ${c.nombre.toLowerCase()} el ${fechaCorta(f)}: ${c.texto}` }); }
     if (corteHandyx(a, t0) && semanal('horas-handyx') > 0) push({ id: 'm-hx', rama: 'handyx', texto: 'Horas de Handyx', meta: Math.round(semanal('horas-handyx') * semanas), unidad: 'h', clave: 'horas-handyx' });
