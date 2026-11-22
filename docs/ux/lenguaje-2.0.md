@@ -354,3 +354,53 @@ by branches (`#/metas/mapa`) stays as it was, linked from the hub ("El mapa por 
   map itself is one labelled group for screen readers; the list is the accessible way in.
 
 Budgets: Línea 9 words of prose above the fold, Mapa 21; 1.2 and 2.2 screens tall.
+
+## 17. Block pages and De fondo (`src/v2/proyecto/`, batch 2.4)
+
+The block pages and everything that runs in the background moved into one lazy chunk (`proyecto/Rutas.tsx`, loaded when the
+route needs it). The registry's `cubreMetas(param)` says which `#/metas/…` paths are 2.0: `proyecto/<id>`, `cert/<id>`,
+`ventana/<id>`, `pista/<tipo>`, `fondo`, `fondo/<id>`, `iman/<id>` and `open-source`. **`proyecto/P0` stays 1.0** (those are
+your own goals; they are not touched until 3.3), and so does the bare `proyecto` ("En curso").
+
+**Cover** (`Portada`, `portada-datos.ts`): a generated SVG drawing per block. It is always the same for the same id and
+different between blocks: four motifs (orbits, mesh, waves, isobands) picked by the id's hash; certifications get the mesh,
+math windows the isobands, English and job search the waves. Drawn with the area color; the strokes draw themselves in
+one by one on entering (static with reduced motion).
+
+**A block** (`#/metas/proyecto/<id>`, `ProyectoV2`): back goes to the period ("Período"). Cover with the kicker ("Proyecto 1
+de 27 · petróleo"), the status pill and the dates; the first sentence of what it is; three numbers (done, versions,
+closes). Then three tabs:
+- *Resumen*: **versions as a step-by-step** (1.0 MVP → 3.0 Producción: a node per version, yellow line up to where you got;
+  tap one for its sheet: Trazo's dates against the roadmap's, hours, scope, notes/video/README, publish; the launch version
+  asks for the Imán), the block's own **goals** (add, tick, sub-goals, edit, delete with confirm, JSON), and **Para cerrar**: one
+  row per thing you load, each with its progress on the right and its own sheet (standard of 12 layers, evidence gate,
+  architecture, technical interview, agentic portfolio, real time against 55/30/15, reviews, exam, hours and dates with the extra
+  weeks as switches). Same data and functions as 1.0; the page went from 811 words to 60 above the fold.
+- *Ficha*: what the plan says, in three groups (what it is, how it is built, what it tells the market).
+- *Stack*: profile, environments, technologies with their mark (new / reused / moved), history, tools.
+A certification block lists its exams with a countdown; a math window shows its milestones, exit level and the gate.
+
+**Certification** (`#/metas/cert/<id>`): the cover carries the **countdown** ("19 días", with "Reservado" if you booked it);
+the exam date appears once (before it was three times). "Estás listo cuando": a ring against the score that certification asks
+for (the best of your last two mocks), the mocks as chips, a field to load one. "Fecha del examen": the date field and
+"Reservé para esa fecha" (a booked date is fixed: nothing moves it), undo. Then the result with renewal, and the prep (the
+day-by-day plan, resources, mini project) in sheets. Titles are short ("Claude Certified Architect"); the full name goes below.
+
+**Math window** (`#/metas/ventana/<id>`): milestones to tick with their day range; what you have to be able to do (with the
+book chapters) lives below; the window closes only with every milestone ticked ("Faltan 2 hitos" on the button).
+
+**De fondo** (`#/metas/fondo`): what runs now (current secondary app and showcase), the two tracks as numbers, the Imán of what
+is about to launch (as small rings), open source and clipping (still 1.0).
+- *Pista secundaria*: one card per app with its own cover, status, dates and Imán. "Ver a futuro" is a sheet.
+- *Pista comercial*: five states as chips with counts; the slots in that state, four at a time ("Ver los 23").
+- *Item* (`fondo/<id>`): cover with the Imán ring as a link; the app's versions as steps (primary-focus review and publish in
+  the sheet); a showcase's state, security checklist (a sheet) and leads; repo, demo and launch version. Fields save on leaving the field
+  (and when the sheet closes with the field still focused), so a comma-separated list is not split while you type.
+- **Imán** (`iman/<id>`): **8-segment ring** that lights up with each point (animated in), and the 8 points as rows; each opens
+  its sheet with what to load. Same gate as 1.0: the launch is not marked published without the 8.
+- **Open source** (`open-source`): one **package card** per tool (name, package and registry, latest published version, downloads);
+  the sheet has the versions with their extraction checklist, publishing, link, downloads and Thursday's post.
+
+Budgets (words above the fold, 60 max; height in screens, 4 max): block 60 (2.1 screens), certification block 50, window
+block 58, certification 40, window 57, De fondo 58, secondary track 39, commercial track 53, item 51, showcase 58, Imán 57,
+open source 44 (3.98 screens: 22 package cards, the closest to the limit).
