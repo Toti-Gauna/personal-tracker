@@ -61,6 +61,11 @@ export const PANTALLAS_V2: RegistroV2 = {
   'entreno-resumen': { nombre: 'Resumen de entreno', parte: true, Componente: lazy(() => import('./entreno/ResumenV2')) },
   'entreno-peso': { nombre: 'Peso', parte: true, Componente: lazy(() => import('./entreno/PesoV2')) },
   'entreno-motor': { nombre: 'Motor de entreno', parte: true, Componente: lazy(() => import('./entreno/MotorV2')) },
+  // Perfil, Avance y el cierre (3.2). La presentación es parte de Avance; el sello nuevo, de Perfil; el cierre, de Hoy.
+  perfil: { nombre: 'Perfil', Componente: lazy(() => import('./perfil/PerfilV2')) },
+  avance: { nombre: 'Avance', Componente: lazy(() => import('./perfil/AvanceV2')) },
+  cierre: { nombre: 'Cierre del día', parte: true, Componente: lazy(() => import('./perfil/CierreV2')) },
+  logro: { nombre: 'Sello nuevo', parte: true, Componente: lazy(() => import('./perfil/LogroV2')) },
   ajustes: { nombre: 'Ajustes', Componente: lazy(() => import('./pantallas/AjustesV2')) },
   v2: { nombre: 'Taller 2.0', taller: true, Componente: lazy(() => import('./pantallas/Taller')) },
 };

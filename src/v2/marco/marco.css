@@ -99,8 +99,6 @@ html[data-ui='v2'] { --bar-h: 78px; }
 /* ——— Lo que la 2.0 corrige desde afuera en pantallas que todavía son 1.0 ——— */
 /* Perfil: el ícono de Ajustes parecía el sol del tema. En la 2.0 lo reemplaza el botón con engranaje y nombre de la marca. */
 html[data-ui='v2'] .btn-engranaje { display: none; }
-#v2-marca-accion { display: contents; }
-#v2-marca-accion .k-boton { font-family: var(--font-text); }
 /* La navegación de la 1.0 no se muestra con la 2.0 (la reemplaza .b2). */
 html[data-ui='v2'] .app > .barra, html[data-ui='v2'] .app > .lateral { display: none; }
 

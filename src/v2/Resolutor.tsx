@@ -14,7 +14,6 @@ import './v2.css';
 export function MarcaV1({ error }: { error?: boolean }) {
   return (
     <div className="v2-marca-fila">
-      <span id="v2-marca-accion" />
       <span className="v2-marca" title={error ? 'La pantalla 2.0 falló: te mostramos la 1.0' : 'Esta pantalla todavía es la 1.0'}>{error ? '1.0 · falló la 2.0' : '1.0'}</span>
     </div>
   );

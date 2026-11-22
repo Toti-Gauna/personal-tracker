@@ -3,16 +3,13 @@
  * las transiciones, el tema que sigue al teléfono y el pesaje como aviso (no como hoja que te persigue). App lo carga
  * recién cuando la 2.0 está prendida: la 1.0 no descarga nada de esto.
  */
-import { useEffect, useState } from 'react';
-import { createPortal } from 'react-dom';
+import { useEffect } from 'react';
 import type { Pantalla, Seccion } from '../../lib/routes';
 import { marcarPesoPreguntado } from '../../state/train';
 import { ponerPuenteAvisos } from '../../ui/avisos';
 import { Checkins, cerrarHojas, useHojaAbierta } from '../../ui/checkins';
-import { Icono } from '../iconos';
 import CapasV2, { aviso } from '../kit/capas';
 import { navegar } from '../movimiento/movimiento';
-import { PANTALLAS_V2 } from '../registro';
 import { BarraV2 } from './BarraV2';
 import { useTemaV2 } from './tema';
 import '../tokens.css';
@@ -32,15 +29,7 @@ function CheckinsV2() {
   return a?.tipo === 'peso' ? null : <Checkins />;
 }
 
-/** En las pantallas que todavía son 1.0, lo que la 2.0 corrige desde afuera: en Perfil, Ajustes con engranaje y nombre. */
-function AccionDeMarca({ pantalla }: { pantalla: Pantalla }) {
-  // La ranura la pone la marca "1.0" de la pantalla; se busca después de que esa pantalla se montó.
-  const [ranura, setRanura] = useState<HTMLElement | null>(null);
-  useEffect(() => { setRanura(document.getElementById('v2-marca-accion')); }, [pantalla]);
-  if (!ranura || !ranura.isConnected || pantalla !== 'perfil' || PANTALLAS_V2.perfil) return null;
-  return createPortal(<a className="k-boton secundario chico" href="#/ajustes" data-v2-nav=""><Icono nombre="ajustes" lado={18} /><span>Ajustes</span></a>, ranura);
-}
-
+/** `pantalla` ya no se usa acá (Perfil 2.0 trae su propio acceso a Ajustes); se deja en la firma porque App lo pasa. */
 interface Props { activa: Seccion | 'avance'; pantalla: Pantalla; pendientes: number; conBarra: boolean; conCheckins: boolean }
 
 /** Los avisos que disparan las acciones de la 1.0 (una meta cumplida, un horario cambiado) salen con el estilo de la 2.0. */
@@ -55,13 +44,12 @@ function usePuenteAvisos() {
   }, []);
 }
 
-export default function GlobalV2({ activa, pantalla, pendientes, conBarra, conCheckins }: Props) {
+export default function GlobalV2({ activa, pendientes, conBarra, conCheckins }: Props) {
   useTemaV2();
   usePuenteAvisos();
   return (
     <>
       {conBarra && <BarraV2 activa={activa} pendientes={pendientes} />}
-      {conBarra && <AccionDeMarca pantalla={pantalla} />}
       <CapasV2 />
       {conCheckins && <CheckinsV2 />}
     </>

@@ -137,14 +137,10 @@ describe('2.0 · lo global', () => {
     expect(document.documentElement.dataset.theme).toBe('dark');
   });
 
-  it('en Perfil (todavía 1.0) aparece Ajustes con engranaje y nombre; en otras pantallas, no', () => {
-    const { unmount } = global('perfil');
-    const a = screen.getByRole('link', { name: 'Ajustes' });
-    expect(a).toHaveAttribute('href', '#/ajustes');
-    expect(a.querySelector('svg[data-icono="ajustes"]')).toBeInTheDocument();
-    unmount();
-    global('hoy');
+  it('ya no agrega nada sobre la marca 1.0: Perfil es 2.0 y trae su propio acceso a Ajustes', () => {
+    global('perfil');
     expect(screen.queryByRole('link', { name: 'Ajustes' })).toBeNull();
+    expect(document.getElementById('v2-marca-accion')).toBeNull();
   });
 
   it('el pesaje no persigue: en vez de la hoja, un aviso con "Cargar", y no vuelve a preguntar hoy', () => {
