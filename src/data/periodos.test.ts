@@ -133,14 +133,14 @@ describe('v12.1 · el plan como períodos', () => {
     expect(proximaFechaLimite(a, '2026-11-23', ['version'])).toMatchObject({ periodo: { id: 'P1:v1.0' }, fecha: '2026-12-01' });
   });
 
-  it('PetrIA: estimado al fin del bloque, fecha límite de la 3.0; publicar la 1.0 suma por días', () => {
+  it('PetrIA: estimado al fin del bloque, fecha límite de la 3.0; publicar la 1.0 suma por sus horas (v12.2)', () => {
     const a = arbolPlan(cal, { plan });
     const p1 = [...recorrer(a)].find((p) => p.id === 'P1')!;
     expect(p1).toMatchObject({ inicio: '2026-11-21', fin: '2026-12-09', deadline: '2027-01-05', horasPlan: 193.5 });
     expect(p1.hijos!.map((v) => v.id)).toEqual(['P1:v1.0', 'P1:v1.1', 'P1:v2.0', 'P1:v3.0']);
     const pub = arbolPlan(cal, { plan: { hitos: {}, versiones: { P1: { '1.0': { publicada: '2026-11-25' } } } } });
     const m = medir([...recorrer(pub)].find((p) => p.id === 'P1')!, '2026-11-26');
-    const dias = p1.hijos!.map((v) => (new Date(`${v.fin}T12:00`).getTime() - new Date(`${v.inicio}T12:00`).getTime()) / 864e5 + 1);
-    expect(m.trabajo).toBeCloseTo(dias[0] / dias.reduce((s, d) => s + d, 0), 3);
+    // v12.2: por horas planificadas: 47 de 193,5.
+    expect(m.trabajo).toBeCloseTo(47 / 193.5, 3);
   });
 });

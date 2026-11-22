@@ -15,7 +15,7 @@ const pct = (x: number) => `${Math.round(x * 100)} %`;
 /** Para CSS: sin espacio ("40%"). */
 const css = (x: number) => `${Math.round(x * 1000) / 10}%`;
 
-export const ESTADO: Record<EstadoPeriodo, string> = { proximo: 'próximo', 'en-plan': 'en plan', adelantado: 'adelantado', atrasado: 'atrasado', vencido: 'vencido', hecho: 'hecho' };
+export const ESTADO: Record<EstadoPeriodo, string> = { proximo: 'próximo', 'en-plan': 'en plan', adelantado: 'adelantado', atrasado: 'atrasado', vencido: 'vencido', hecho: 'hecho', pausado: 'en pausa' };
 export const NIVEL: Record<NivelPeriodo, string> = { etapa: 'Etapa', fase: 'Fase', bloque: 'Bloque', version: 'Versión', lote: 'Lote', capitulo: 'Capítulo', paper: 'Paper', cert: 'Certificación', hito: 'Hito' };
 export const hrefPeriodo = (id: string) => `#/metas/periodos/${encodeURIComponent(id)}`;
 

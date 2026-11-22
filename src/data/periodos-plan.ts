@@ -5,6 +5,7 @@
  * sus metas son las de siempre (formato viejo) y se leen aparte.
  */
 import { fichaV7 } from './proyectos-v7';
+import { detalleDe } from './v12-2';
 import type { BloqueExt } from './plan-extendido';
 import { PLAN_EXT } from './plan-extendido';
 import type { Periodo } from './periodos';
@@ -17,6 +18,8 @@ export const claveHito = {
   mate: (bloque: string, i: number) => `v12:${bloque}:hito:${i + 1}`,
   bloque: (bloque: string) => `v12:${bloque}`,
   version: (bloque: string, version: string) => `v12:${bloque}:v${version}`,
+  /** v12.2: un entregable de una versión (la línea de la versión, partida). */
+  entregable: (item: string, version: string, i: number) => `v12:${item}:v${version}:e${i + 1}`,
 };
 
 type Fechado = BloqueExt & { inicio: string; fin: string; pausa?: boolean };
@@ -37,11 +40,16 @@ function versiones(b: Fechado, ctx: Ctx): Periodo[] {
       previo = l.estimado;
       return { id: `${b.id}:lote:${l.id}`, nombre: `Lote ${l.id} · ${l.nombre}`, nivel: 'lote' as const, inicio: ini, fin: l.estimado, ...(l.deadline !== l.estimado ? { deadline: l.deadline } : {}), peso: l.horas, horasPlan: l.horas, progreso: hecho(ctx, claveHito.lote(b.id, l.id)) };
     });
+    // v12.2: la línea de la versión es su checklist de entregables; sin lotes, el trabajo es lo tildado.
+    const entregables = detalleDe(b.id)?.versiones.find((x) => x.id === v.id)?.entregables ?? [];
+    const checklist = entregables.map((texto, i) => ({ clave: claveHito.entregable(b.id, v.id, i), texto, hecho: !!ctx.plan.hitos?.[claveHito.entregable(b.id, v.id, i)]?.hecho }));
+    const tildados = checklist.length ? checklist.filter((c) => c.hecho).length / checklist.length : 0;
     return {
       id: `${b.id}:v${v.id}`, nombre: `v${v.id} ${v.nombre}`, nivel: 'version' as const, inicio: v.inicio!, fin: v.fin!,
       ...(dl && dl !== v.fin ? { deadline: dl } : {}),
       ...(v.horas != null ? { horasPlan: v.horas } : {}),
-      ...(publicada ? { progreso: 1 } : hijos.length ? {} : { progreso: 0 }),
+      ...(publicada ? { progreso: 1 } : hijos.length ? {} : { progreso: tildados }),
+      ...(checklist.length ? { checklist } : {}),
       ...(hijos.length ? { hijos } : {}),
     };
   });
@@ -96,3 +104,20 @@ export function accionDe(id: string): AccionPeriodo | null {
 
 /** El bloque al que pertenece un período (para sugerir correr lo que sigue). */
 export const bloqueDe = (id: string) => id.split(':')[0];
+
+/** v12.2 · los tipos de bloque que absorben atrasos: consolidación, cierres de etapa, descansos y el cierre final. */
+export const ABSORBEN = new Set(['colchon', 'cierre', 'descanso']);
+
+/**
+ * La secuencia para sugerir corrimientos: los bloques del plan en orden (sin P0, P1V0 ni la pausa fija), con los absorbedores
+ * marcados y las certificaciones con un examen reservado como fijas.
+ */
+export function secuenciaPlan(cal: Fechado[], reservas: { inicio: string; fin: string }[] = []) {
+  return cal
+    .filter((b) => !b.pausa && !b.archivado && b.id !== 'P0')
+    .map((b) => ({
+      id: b.id, nombre: b.nombre, inicio: b.inicio, fin: b.fin,
+      ...(ABSORBEN.has(b.tipo) ? { absorbe: true } : {}),
+      ...(b.tipo === 'cert' && reservas.some((r) => r.inicio >= b.inicio && r.inicio <= b.fin) ? { fija: true } : {}),
+    }));
+}

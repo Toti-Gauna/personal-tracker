@@ -88,3 +88,5 @@ a.pd-tit .pd-nombre::after { content: ' →'; color: var(--sub); font-weight: 40
 .ru-campos { display: grid; gap: 10px; margin: 0; padding: 0; list-style: none; }
 .ru-campos li { padding-bottom: 10px; border-bottom: 1px solid var(--linea); }
 .ru-campo { display: grid; gap: 4px; margin-bottom: 10px; }
+.pd-estado.pausado { color: var(--sub); border-style: dashed; }
+.pd-card.pausado { opacity: 0.75; }
