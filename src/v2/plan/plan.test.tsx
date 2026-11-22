@@ -86,7 +86,7 @@ describe('Plan 2.0 · qué cubre', () => {
   it('el centro, los períodos, el análisis, la línea y el mapa son 2.0; lo demás de Metas sigue en 1.0 con su marca', () => {
     const cubre = PANTALLAS_V2.metas!.cubre!;
     for (const h of ['#/metas', '#/metas/periodos', '#/metas/periodos/P1', '#/metas/analisis', '#/metas/linea', '#/metas/constelacion']) expect(cubre(leerRuta(h)), h).toBe(true);
-    for (const h of ['#/metas/semana', '#/metas/mapa', '#/metas/clipping', '#/metas/proyecto/P1', '#/metas/ruta']) expect(cubre(leerRuta(h)), h).toBe(false);
+    for (const h of ['#/metas/semana', '#/metas/mapa', '#/metas/clipping', '#/metas/proyecto/P0', '#/metas/proyecto', '#/metas/ruta', '#/metas/roadmap']) expect(cubre(leerRuta(h)), h).toBe(false);
     render(<PantallaV2 interfaz="v2" ruta={leerRuta('#/metas/semana')} day={getState().days[HOY]} today={HOY} v1={<p>semana 1.0</p>} />);
     expect(screen.getByText('semana 1.0')).toBeInTheDocument();
     expect(screen.getByText('1.0', { selector: '.v2-marca' })).toBeInTheDocument();

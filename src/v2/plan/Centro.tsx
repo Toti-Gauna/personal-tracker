@@ -94,7 +94,7 @@ export function Centro({ hoy }: { hoy: string }) {
           {fondo.com && <FilaPeriodo p={fondo.com} hoy={hoy} href={`#/metas/fondo/${fondo.com.id}`} />}
         </div>
         <div className="capa-1 s-lista">
-          <Fila icono="fondo" titulo="Las pistas de fondo" nota="Apps secundarias y showcases" href="#/metas/pista/secundaria" />
+          <Fila icono="fondo" titulo="Todo lo de fondo" nota="Pistas, Imán y open source" href="#/metas/fondo" />
           <Fila icono="paquete" titulo="Open source" nota="Alawys y las herramientas" href="#/metas/open-source" />
         </div>
       </Grupo>
