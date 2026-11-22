@@ -141,7 +141,7 @@ const medir = () => {
   return {
     marco: !!document.querySelector('.m-marco'),
     // La presentación ocupa toda la pantalla y no usa el marco: es 2.0, pero sin título ni pliegue que medir.
-    completa: !!document.querySelector('main.wr'),
+    completa: !!document.querySelector('main.wr, main.v2-completa'),
     taller: !!document.querySelector('main.lenguaje'),
     titulo,
     intro,

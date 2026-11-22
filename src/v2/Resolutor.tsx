@@ -7,7 +7,8 @@ import type { Interfaz } from '../lib/interfaz';
 import type { Ruta } from '../lib/routes';
 import type { DayLog } from '../data/types';
 import { toast } from '../ui/avisos';
-import { PANTALLAS_V2, type RegistroV2 } from './registro';
+import { EXTRAS_V2, type ExtrasV2 } from './extras';
+import { PANTALLAS_V2, type EntradaV2, type RegistroV2 } from './registro';
 import './v2.css';
 
 /** La marca de las pantallas que todavía son 1.0 dentro de la 2.0. */
@@ -39,12 +40,21 @@ interface Props {
   /** La pantalla 1.0 de esta ruta. */
   v1: ReactNode;
   registro?: RegistroV2;
+  /** Las entradas que se suman a las de `registro` (por defecto, las de las familias de la 3.3). */
+  extras?: ExtrasV2;
 }
 
-export function PantallaV2({ interfaz, ruta, day, today, v1, registro = PANTALLAS_V2 }: Props) {
+/** La entrada que cubre esta ruta: la principal de la pantalla o, si no la cubre, la primera extra que sí. */
+export function entradaDe(ruta: Ruta, registro: RegistroV2, extras: ExtrasV2): EntradaV2 | undefined {
+  const principal = registro[ruta.pantalla];
+  if (principal && (!principal.cubre || principal.cubre(ruta))) return principal;
+  return extras[ruta.pantalla]?.find((e) => !e.cubre || e.cubre(ruta));
+}
+
+export function PantallaV2({ interfaz, ruta, day, today, v1, registro = PANTALLAS_V2, extras = EXTRAS_V2 }: Props) {
   if (interfaz !== 'v2') return <>{v1}</>;
-  const entrada = registro[ruta.pantalla];
-  if (!entrada || (entrada.cubre && !entrada.cubre(ruta))) return <><MarcaV1 />{v1}</>;
+  const entrada = entradaDe(ruta, registro, extras);
+  if (!entrada) return <><MarcaV1 />{v1}</>;
   const { Componente } = entrada;
   return (
     <LimiteV2 key={`${ruta.pantalla}/${ruta.param ?? ''}`} fallback={<><MarcaV1 error />{v1}</>}>

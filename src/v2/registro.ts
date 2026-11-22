@@ -27,6 +27,9 @@ export interface EntradaV2 {
 
 export type RegistroV2 = Partial<Record<Pantalla, EntradaV2>>;
 
+/** Una entrada de las que se suman a una pantalla que ya tiene la suya (la 3.3 reparte el resto de las rutas por familias). */
+export interface EntradaExtra { pantalla: Pantalla; entrada: EntradaV2 }
+
 /** Las pantallas llegan de a una; las de `taller` no cuentan como pantallas convertidas. */
 /** Qué rutas de #/estudio/… son 2.0: el centro, Matemática y cada uno de sus libros. */
 export function cubreEstudio(param?: string): boolean {
