@@ -444,3 +444,67 @@ pomodoro, sheet and score ring, speech bubble and pen, spaced dots on a curve), 
 Budgets (words above the fold, 60 max; height in screens, 4 max): hub 49 (2.5 screens), Matemática 55, book 47, Repasar 42,
 Puntos débiles 55, cards 29, Cómo funciona 51 (2.0 screens). The analysis page is a known pending item (1.0 charts).
 
+
+## 19. Entreno (`src/v2/entreno/`, batch 3.1)
+
+2.0 screens: the hub `#/entreno`, the session player `#/entreno-sesion`, the summary `#/entreno-resumen/<id>`, weight
+`#/entreno-peso` and the engine `#/entreno-motor`. Still 1.0 with its mark until 3.3: `#/entreno-semana` (what goes each day) and
+`#/entreno-rutina/<id>` (edit a routine). Every screen writes through the same store actions as 1.0, so sessions, sets, records,
+weights and runs are the same data in both interfaces.
+
+**Muscle model** (`musculos.ts`): 15 regions (chest, shoulders, biceps, triceps, forearms, abs, obliques, traps, lats, lower back,
+glutes, quads, hamstrings, adductors, calves). `musculosDe(exercise)` gives one primary muscle (weight 1) and the ones that help
+(0.5): the plan's `grupo` decides the primary, the `musculos` text refines it (Espalda → lats or traps; the woodchopper → obliques)
+and names the helpers; an exercise without a group (a routine you wrote) is read from its name. Pulls are matched before chest, so
+"Jalón al pecho" is back. A test walks every exercise of the factory routines and fails if one has no primary muscle or names a
+region the figure cannot draw.
+
+**Body figure** (`Cuerpo.tsx`, `cuerpo-datos.ts`): one custom SVG, front and back, drawn as half a body and mirrored. Each region
+is a path whose fill is `color-mix(lit color, --p)`: `--p` is how lit it is (0–100 %). Two tones only: **green (the area color) =
+planned**, **yellow (the stroke) = done**. Muscles light up in a stagger when the figure appears; `pulso` makes the current
+exercise's primary muscle breathe. The figure is `role="img"` with a sentence ("Push A trabaja pecho, hombros y tríceps") and is
+never the only way to read or tap the data: the muscle list next to it says the same and is what keyboard and screen reader use.
+Class names are prefixed (`cu-`, `en-`): the 1.0 global `.plan` class leaked a border onto the first version.
+
+**Hub**: the hero is today's routine with the figure lit by what it trains (primary full, helpers half), the partner chip and one
+button (start / go back to the session / see the summary when done); the full step list is a sheet. Then the week strip, and
+**Volumen de la semana**: the figure as a heat map of sets done against sets planned per muscle (four steps; the session in progress
+counts), with the top five muscles as "9 de 15" bars (the rest behind "Ver los N") and a sheet per muscle listing the exercises that
+feed it. Runs reuse the `Barras` chart (its CSS moved to `estudio/barras.css` so both areas share it); deleting a run can be undone.
+
+**Session player** (`SesionV2.tsx`): one exercise at a time. Header: elapsed time against the block as a thin bar; the exercises as
+a scrolling tab strip (number → check when done). The exercise card: a small figure showing the side where the primary muscle is,
+pulsing; name, sets, rest and tempo in one line; "Cómo se hace" in a sheet. **Sets are bars**: height = reps (scaled between the
+lowest and highest value so one rep of difference is visible), dashed line = today's target, filled yellow = done, yellow outline
+pulsing = the one you are on, "+1" when you beat the target. **Rest is a ring** that empties, with +15 s and Saltar; with a partner
+there is one ring each, or one shared. Kilos and reps are the kit steppers (typeable), RIR is five chips, and the main button says
+which set it logs and why it is disabled. Warm-up is a checklist sheet (shown on top until you start lifting, then under "Más").
+Discarding asks first. When the block's time is up a sheet offers finish, +10 min or no limit; closing the sheet counts as +10 min.
+The end-of-rest notice goes through the 1.0 `toast` bridge so it keeps its sound.
+
+**Summary**: the figure in yellow with what you actually trained (only exercises with logged sets), three numbers, records, what was
+left for next time, the next targets (the ones that change first) and the note, which saves when you leave the field.
+
+**Weight** (`PesoV2.tsx`, `Curva.tsx`): last weigh-in as the big number with the change since the previous one, then a smooth curve
+(monotone cubic: it never overshoots between two points) on a real time axis, soft area fill, last point = yellow "you are here".
+The goal is a dashed line; if it is far from the data it does not squash the curve: it sits on the edge with an arrow. Three numbers
+(change, kg to goal, weeks at this pace). Today's weigh-in is a stepper + button (replacing today's can be undone); measures, goal
+and the list of weigh-ins are sheets, and every delete has Undo.
+
+**Engine** (`MotorV2.tsx`): the 461 words of 1.0 became one graphic: five sessions of bars (reps per set) under a dashed "tope"
+line, and above them the weight as a line that takes a step up exactly after the session where all three bars reach the top. Under
+it, the three numbers that matter (+1 rep each session, +1 to 5 kg at the top, −10 % if it stalls); the seven full rules, with
+1.0's wording, are one sheet away. Next session's targets are per person (switch) and come from the same `nextFor` as 1.0.
+
+**Two small system changes.** A registry entry can be `parte: true` (a screen that lives inside another area: session, summary,
+weight and engine are all "Entreno"), so the sentence in Ajustes that lists what is already 2.0 names areas, not every page. And
+the revision no longer counts text that sits off to the side in a horizontal scroller (the exercise tabs): it is not being read.
+The revision also seeds a little training history (a past session, three weigh-ins) and, only for the session player, a session in
+progress with a partner, so those screens are measured with content.
+
+Budgets (words above the fold, 60 max; height in screens, 4 max): hub 25 (2.95 screens), session player 57 measured in its heaviest
+case (two people, a set done, a rest running; 2.2 screens), summary 43 (1.65), weight 45 (1.29), engine 53 (1.82).
+
+Demo: `docs/demo/ux-2.0/entreno-centro.png` (today's routine on the figure), `entreno-volumen.png` (weekly heat),
+`entreno-sesion.png` and `entreno-sesion-dos.png` (player, alone and with a partner), `entreno-resumen.png`, `entreno-peso.png`
+(light), `entreno-motor.png`, `entreno-claro.png` and `entreno-escritorio.png`.

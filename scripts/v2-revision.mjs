@@ -62,6 +62,10 @@ const PANTALLAS = [
   { id: 'tarjetas', hash: '#/tarjetas' },
   { id: 'como', hash: '#/como' },
   { id: 'entreno', hash: '#/entreno' },
+  { id: 'entreno-sesion', hash: '#/entreno-sesion/pull-a', antes: 'EN_CURSO' },
+  { id: 'entreno-resumen', hash: '#/entreno-resumen/rev-pull' },
+  { id: 'entreno-peso', hash: '#/entreno-peso' },
+  { id: 'entreno-motor', hash: '#/entreno-motor' },
   { id: 'perfil', hash: '#/perfil' },
   { id: 'ajustes', hash: '#/ajustes' },
   { id: 'ajustes-bimestres', hash: '#/ajustes/bimestres' },
@@ -75,7 +79,30 @@ const PANTALLAS = [
 const SEMBRAR = () => {
   const s = JSON.parse(localStorage.getItem('trazo.v1'));
   s.settings.interfaz = 'v2';
+  // Entreno con algo de historia: un Pull A de la semana pasada (para el resumen y el motor) y tres pesajes (para la curva).
+  const r = s.train.routines.find((x) => x.id === 'pull-a');
+  const sets = r.exercises.flatMap((e) => Array.from({ length: e.sets }, (_, k) => ({ ex: e.id, who: 'me', i: k + 1, kg: 20, reps: e.repMin + (k === 0 ? 1 : 0) })));
+  s.train.sessions.push({ id: 'rev-pull', date: '2026-11-16', routineId: r.id, routineName: r.name, minutes: 84, athletes: ['me'], sets, skipped: [], deload: false, note: '', records: [] });
+  s.train.weights.push({ date: '2026-11-08', kg: 82.1 }, { date: '2026-11-15', kg: 82.4 }, { date: '2026-11-22', kg: 82.8 });
+  s.train.pesoPreguntado.push('2026-11-23');
   localStorage.setItem('trazo.v1', JSON.stringify(s));
+};
+
+/** Estados que solo valen para una pantalla: se siembran antes de medirla y después se vuelve a lo anterior. */
+const ANTES = {
+  /** Un entreno en curso de a dos, con una serie hecha y un descanso corriendo: la sesión en su caso más cargado. */
+  EN_CURSO: () => {
+    const s = JSON.parse(localStorage.getItem('trazo.v1'));
+    const r = s.train.routines.find((x) => x.id === 'pull-a');
+    const e = r.exercises[0];
+    const ahora = Date.parse('2026-11-23T09:30:00-03:00');
+    s.train.active = {
+      routineId: r.id, date: '2026-11-23', startedAt: ahora - 14 * 60000, athletes: ['me', 'partner'], order: r.exercises.map((x) => x.id), idx: 0,
+      sets: [{ ex: e.id, who: 'me', i: 1, kg: 10, reps: e.repMin }], draft: { me: { kg: 10, reps: e.repMin }, partner: { kg: 5, reps: e.repMin } }, who: 'partner',
+      warmDone: [], restMode: 'each', rest: { me: { endsAt: ahora + 80000, total: e.rest * 1000 } }, limitMin: 120, noLimit: false, deload: false,
+    };
+    localStorage.setItem('trazo.v1', JSON.stringify(s));
+  },
 };
 
 /** Mide una pantalla ya renderizada: palabras del título, la intro y lo visible antes de desplazar, y el alto. */
@@ -95,6 +122,8 @@ const medir = () => {
     if (!el || !n.textContent.trim() || el.closest('.b2, .c-avisos, .h-velo, .v2-oculto, .m-titulo-chico, [data-grafico], script, style')) continue;
     const r = el.getBoundingClientRect();
     if (r.height === 0 || getComputedStyle(el).visibility === 'hidden') continue;
+    // Lo que quedó a un costado en una tira que se desliza (las pestañas de ejercicios) no se está leyendo.
+    if (r.left >= window.innerWidth || r.right <= 0) continue;
     if (r.top >= 0 && r.top < 844 - 78) pliegue += palabras(n.textContent);
   }
   return {
@@ -130,6 +159,8 @@ for (const tema of ['light', 'dark']) {
   const dir = join(OUT, tema);
   mkdirSync(dir, { recursive: true });
   for (const p of PANTALLAS) {
+    const previo = p.antes ? await page.evaluate(() => localStorage.getItem('trazo.v1')) : null;
+    if (p.antes) await page.evaluate(ANTES[p.antes]);
     await page.goto(BASE + p.hash);
     await page.reload();
     // La carga de la 2.0 (.sp2) tapa la pantalla unos 1,2 s: se espera a que termine antes de medir.
@@ -139,6 +170,8 @@ for (const tema of ['light', 'dark']) {
     const m = await page.evaluate(medir);
     await page.screenshot({ path: join(dir, `${p.id}.png`), fullPage: true });
     filas.push({ tema, pantalla: p.id, ...m, errores: errores.splice(0) });
+    // Se recarga enseguida: la app en memoria todavía tiene el estado sembrado y lo volvería a escribir al primer cambio.
+    if (previo) { await page.evaluate((v) => localStorage.setItem('trazo.v1', v), previo); await page.reload(); }
   }
   await ctx.close();
 }
