@@ -1,0 +1,9 @@
+/* Barras chicas con una meta punteada (la semana de estudio, el pronóstico de repaso, las corridas). */
+.es-barras { position: relative; display: grid; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); gap: var(--sp-2); align-items: end; margin: 0; }
+.es-meta { position: absolute; left: 0; right: 0; height: 0; border-top: 1px dashed var(--texto-3); pointer-events: none; }
+.es-barra { display: grid; justify-items: center; gap: 4px; }
+.es-barra-valor { font-size: var(--t-11); color: var(--texto-2); }
+.es-barra-col { display: flex; align-items: flex-end; width: 100%; height: var(--alto); }
+.es-barra-col > span { width: 100%; min-height: 3px; border-radius: 4px 4px 2px 2px; background: color-mix(in oklab, var(--texto) 34%, transparent); transition: height var(--dur-3) var(--curva-salida); }
+.es-barra.hoy .es-barra-col > span { background: var(--trazo); }
+.es-barra.hoy .es-barra-et { color: var(--texto); }

@@ -78,7 +78,7 @@ export default function AjustesV2({ ruta }: PropsV2) {
 
   const activa = interfazActiva(settings.interfaz);
   const forzada = forzadaPorUrl();
-  const listas = Object.values(PANTALLAS_V2).filter((e) => !e!.taller).map((e) => e!.nombre);
+  const listas = Object.values(PANTALLAS_V2).filter((e) => !e!.taller && !e!.parte).map((e) => e!.nombre);
   const alarmas = (settings.alarms ?? DEFAULT_ALARMS).filter((a) => a.on).length;
   const cfg = planSettings(settings);
   const instalar = async () => {

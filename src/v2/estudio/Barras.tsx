@@ -3,6 +3,7 @@
  * en tinta. Cada barra lleva su rótulo y todo el gráfico se lee entero para el lector de pantalla.
  */
 import type { CSSProperties } from 'react';
+import './barras.css';
 
 export interface Barra { etiqueta: string; valor: number; hoy?: boolean; texto?: string }
 

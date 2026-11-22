@@ -18,6 +18,8 @@ export interface EntradaV2 {
   nombre: string;
   /** De taller: muestra el sistema, no reemplaza a ninguna pantalla de la 1.0. */
   taller?: boolean;
+  /** Es una pantalla de adentro de otra (la sesión es parte de Entreno): en Ajustes no se nombra aparte. */
+  parte?: boolean;
   /** Qué parte de la ruta cubre (por su `param`); lo demás sigue en 1.0. Sin esto, la ruta entera. */
   cubre?: (ruta: Ruta) => boolean;
   Componente: ComponentType<PropsV2>;
@@ -53,6 +55,12 @@ export const PANTALLAS_V2: RegistroV2 = {
   flojo: { nombre: 'Puntos débiles', Componente: lazy(() => import('./estudio/Pantallas').then((m) => ({ default: m.Flojo }))), cubre: (r) => !r.param || r.param === 'recall' || r.param === 'analisis' },
   tarjetas: { nombre: 'Tarjetas', Componente: lazy(() => import('./estudio/Pantallas').then((m) => ({ default: m.Tarjetas }))) },
   como: { nombre: 'Cómo funciona', Componente: lazy(() => import('./estudio/Pantallas').then((m) => ({ default: m.Como }))) },
+  // Entreno (3.1): el centro con la figura del cuerpo y sus pantallas de adentro. Cambiar la semana y editar una rutina siguen en la 1.0.
+  entreno: { nombre: 'Entreno', Componente: lazy(() => import('./entreno/EntrenoV2')) },
+  'entreno-sesion': { nombre: 'Sesión de entreno', parte: true, Componente: lazy(() => import('./entreno/SesionV2')) },
+  'entreno-resumen': { nombre: 'Resumen de entreno', parte: true, Componente: lazy(() => import('./entreno/ResumenV2')) },
+  'entreno-peso': { nombre: 'Peso', parte: true, Componente: lazy(() => import('./entreno/PesoV2')) },
+  'entreno-motor': { nombre: 'Motor de entreno', parte: true, Componente: lazy(() => import('./entreno/MotorV2')) },
   ajustes: { nombre: 'Ajustes', Componente: lazy(() => import('./pantallas/AjustesV2')) },
   v2: { nombre: 'Taller 2.0', taller: true, Componente: lazy(() => import('./pantallas/Taller')) },
 };
