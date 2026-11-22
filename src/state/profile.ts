@@ -94,6 +94,10 @@ export function setAlarms(alarms: Alarm[]) {
   updateSettings((s) => ({ ...s, alarms }));
 }
 
+export function setInterfaz(interfaz: 'v1' | 'v2') {
+  updateSettings((s) => ({ ...s, interfaz }));
+}
+
 export function markBackup(date: string) {
   updateSettings((s) => ({ ...s, lastBackup: date }));
 }

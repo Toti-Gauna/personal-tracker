@@ -5,14 +5,16 @@ import { BIMESTRES, PLAN, SEMANAS, T0_PLAN, TRAMOS, fechaCorta, fechaHito } from
 import { RAMA_COLOR, RAMAS } from '../data/ramas';
 import { DEFAULT_ALARMS } from '../data/sounds';
 import type { Area } from '../data/types';
+import { INTERFACES, forzadaPorUrl, interfazActiva, type Interfaz } from '../lib/interfaz';
 import { applyTheme, getThemePref, type ThemePref } from '../lib/theme';
+import { PANTALLAS_V2 } from '../v2/registro';
 import { planSettings, useStore } from '../state/store';
 import { activarIntensiva, desactivarIntensiva, setExtraBloque, setInicioPlan, setPausaFinDeAnio, setPlanSettings, setTodosExtra } from '../state/plan';
 import { PLAN_EXT } from '../data/plan-extendido';
 import { ANIOS_PAUSA } from '../data/capacidad';
 import { dateKey } from '../data/time';
 import { renameBimester } from '../state/goals';
-import { setAreaName } from '../state/profile';
+import { setAreaName, setInterfaz } from '../state/profile';
 import { toast } from '../ui/avisos';
 import { Plegable } from '../ui/Plegable';
 import { BloquesPendientes, FilaExtraPetria, FilasTrabajo } from './AjustesTrabajo';
@@ -63,6 +65,8 @@ export function Ajustes() {
         {TEMAS.map(([id, n]) => <button key={id} role="radio" aria-checked={tema === id} onClick={() => { setTema(id); applyTheme(id); }}>{n}</button>)}
       </div>
 
+      <InterfazAjuste />
+
       <Plegable id="aj:bimestres" titulo="Nombres de los bimestres" resumen={`${Object.values(names).filter((x) => x?.trim()).length} propios`}>
       <ol className="bim-lista">
         {Array.from({ length: BIMESTRES }, (_, i) => ({ n: i + 1, name: PLAN.nombresBimestre[i] ?? `B${i + 1}` })).map((b) => {
@@ -112,6 +116,26 @@ export function Ajustes() {
         <li><button onClick={instalar}><span><b>Instalar Trazo</b><small>{instalada ? 'Ya la estás usando como app' : 'Agregar a la pantalla de inicio'}</small></span><span aria-hidden="true">→</span></button></li>
       </ul>
     </main>
+  );
+}
+
+/** UX 2.0 · el cambio de interfaz: los mismos datos, dos pieles. La 1.0 sigue hasta que la 2.0 esté lista. */
+function InterfazAjuste() {
+  const guardada = useStore((s) => s.settings?.interfaz);
+  const activa = interfazActiva(guardada);
+  const forzada = forzadaPorUrl();
+  const listas = Object.values(PANTALLAS_V2).map((e) => e!.nombre);
+  return (
+    <section aria-label="Interfaz">
+      <div className="etiqueta aj-t">Interfaz</div>
+      <div className="segmentado" role="radiogroup" aria-label="Interfaz">
+        {INTERFACES.map(([id, n]) => <button key={id} role="radio" aria-checked={activa === id} onClick={() => setInterfaz(id as Interfaz)}>{n}</button>)}
+      </div>
+      <p className="sub nota-izq">
+        {forzada ? `La dirección fuerza la ${forzada === 'v1' ? '1.0' : '2.0'} (?ui=${forzada === 'v1' ? 1 : 2}). Sacá ?ui de la dirección para usar lo que elegiste. ` : ''}
+        Mismos datos en las dos: cambiar no borra nada. {listas.length ? `Ya en 2.0: ${listas.join(', ')}.` : 'Todavía no hay pantallas 2.0: el resto se ve como siempre.'}
+      </p>
+    </section>
   );
 }
 

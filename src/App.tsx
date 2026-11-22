@@ -4,7 +4,9 @@ import { SideNav } from './components/SideNav';
 import { FocoMini } from './components/FocoMini';
 import { Splash } from './components/Splash';
 import { dateKey } from './data/time';
+import { interfazActiva } from './lib/interfaz';
 import { useRuta } from './lib/routes';
+import { PantallaV2 } from './v2/Resolutor';
 import { DiaJson } from './screens/DiaJson';
 import { Despertar } from './screens/Despertar';
 import { ElegirFoco } from './screens/ElegirFoco';
@@ -131,6 +133,14 @@ export function App() {
       case 'sonidos': contenido = <Sonidos today={today} />; break;
     }
   }
+
+  // UX 2.0: con la 2.0 prendida, cada ruta usa su pantalla nueva si ya existe (y si no, la 1.0 con una marca).
+  const interfaz = interfazActiva(settings?.interfaz);
+  useEffect(() => {
+    document.documentElement.dataset.ui = interfaz;
+    return () => { delete document.documentElement.dataset.ui; };
+  }, [interfaz]);
+  if (conBarra && day) contenido = <PantallaV2 interfaz={interfaz} ruta={ruta} day={day} today={today} v1={contenido} />;
 
   const presentacion = ruta.pantalla === 'avance' && ruta.param === 'presentacion';
   const sinMini = ruta.pantalla === 'foco' || ruta.pantalla === 'sesion' || presentacion;
