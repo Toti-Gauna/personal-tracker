@@ -19,7 +19,8 @@ import { Casilla } from '../ui/Casilla';
 import { PeriodoTarjeta, fp, hrefPeriodo } from '../ui/PeriodoTarjeta';
 import { usePeriodos } from '../ui/usePeriodos';
 import { medir } from '../data/periodos';
-import { periodosComerciales, periodosSecundarias } from '../data/fondo';
+import { fondoEn, periodosComerciales, periodosSecundarias } from '../data/fondo';
+import { marcarHito } from '../state/plan';
 import { V122 } from '../data/v12-2';
 import { DetalleProyecto } from '../ui/DetalleProyecto';
 import { Plegable } from '../ui/Plegable';
@@ -58,7 +59,7 @@ export function Periodos({ day, id }: { day: DayLog; id?: string }) {
           <nav className="mono sub" aria-label="Dónde estás">{ruta.map((x, i) => <span key={x.id}>{i ? ' › ' : ''}{i < ruta.length - 1 ? <a href={hrefPeriodo(x.id)}>{x.nombre}</a> : x.nombre}</span>)}</nav>
           <header><h1 className="titulo">{p.nombre}</h1></header>
           <PeriodoTarjeta p={p} hoy={hoy} enlace={false} />
-          {p.nivel === 'fase' && <Fase id={p.id} />}
+          {p.nivel === 'fase' && <Fase id={p.id} hoy={hoy} />}
           {p.nivel === 'bloque' && <Enlaces id={p.id} />}
           {p.nivel === 'bloque' && V122.detalle[p.id] && (
             <>
@@ -155,6 +156,7 @@ function Semana({ hoy, arbol }: { hoy: string; arbol: PeriodoMedido[] }) {
                 {t.nombre}
                 {vence.length > 0 && <small>Vence: {vence.map((p) => p.nombre).join(' · ')}</small>}
                 <small>{HABITOS.filter((h) => tocaHabito(h, d)).map((h) => h.nombre.split(' (')[0]).join(' · ')}</small>
+                <small>{(() => { const f = fondoEn(d); return f.pausa ? `Fondo en pausa (${f.pausa.nombre})` : `Fondo: ${[...f.secundaria.map((x) => `${x.app.nombre} v${x.version}`), ...(f.comercial ? [`#${f.comercial.n} ${f.comercial.marca ?? 'a definir'}`] : [])].join(' · ') || '—'}`; })()}</small>
               </span>
             </li>
           );
@@ -164,13 +166,14 @@ function Semana({ hoy, arbol }: { hoy: string; arbol: PeriodoMedido[] }) {
   );
 }
 
-function Fase({ id }: { id: string }) {
+function Fase({ id, hoy }: { id: string; hoy: string }) {
   const f = PLAN_EXT.fases?.find((x) => x.id === id);
+  const hitos = useStore((s) => s.plan.hitos);
   if (!f) return null;
   return (
     <section className="pd-fase" aria-label="La fase">
-      <span className="etiqueta">Para cerrarla</span>
-      <ul>{f.salida.map((s) => <li key={s}>{s}</li>)}</ul>
+      <span className="etiqueta">Para cerrarla · {f.salida.filter((_, i) => hitos[`v12:${id}:salida:${i + 1}`]?.hecho).length} de {f.salida.length}</span>
+      <ul className="pd-check">{f.salida.map((s, i) => { const k = `v12:${id}:salida:${i + 1}`; const ok = !!hitos[k]?.hecho; return <li key={s}><Casilla checked={ok} label={`${s}: hecho`} onChange={() => marcarHito(k, ok ? null : hoy)} /><span>{s}</span></li>; })}</ul>
       <span className="etiqueta">Salís al mercado con{f.mercadoAConfirmar ? ' · a confirmar' : ''}</span>
       <p className="sub">{f.mercado.join(' · ')}</p>
       {f.roles?.length ? <><span className="etiqueta">Roles</span><p className="sub">{f.roles.join(' · ')}</p></> : null}

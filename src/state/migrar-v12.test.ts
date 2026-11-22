@@ -40,3 +40,17 @@ describe('v12.1 · migración aditiva', () => {
     expect(migrarPlanV12(p).hitos[claveHito.cert('secplus')]).toEqual({ hecho: '2027-05-08' });
   });
 });
+
+describe('v12.2 · migración', () => {
+  it('los papers pasan del bloque "leer" al Block 1; el resto de lo guardado no cambia; lo nuevo de v12.2 arranca vacío', () => {
+    resetState();
+    register('Toti', 'Abi', '2026-11-16');
+    const viejo = JSON.parse(JSON.stringify(getState()));
+    viejo.study.activities = viejo.study.activities.map((a: { id: string }) => (a.id === PAPERS_ID ? { ...a, block: 'leer' } : a));
+    const m = migrate(viejo);
+    expect(m.study.activities.find((a) => a.id === PAPERS_ID)!.block).toBe('prog');
+    expect(m.plan.fondo).toBeUndefined();
+    expect(m.plan.posts).toBeUndefined();
+    expect(migrate(JSON.parse(JSON.stringify(m))).study.activities).toEqual(m.study.activities);
+  });
+});

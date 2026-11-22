@@ -56,7 +56,10 @@ describe('v12.1 · metas como períodos', () => {
     expect(screen.getByRole('article', { name: /^Lote 0\.0 · Onboarding: hecho/ })).toBeInTheDocument();
     unmount();
     render(<Metas day={getState().days[D]} tab="periodos/F1" />);
-    expect(screen.getByText('Para cerrarla').nextElementSibling!.textContent).toMatch(/PetrIA in production \(4 versions\)/);
+    // v12.2: la salida es un checklist.
+    expect(screen.getByText(/^Para cerrarla · 0 de 5$/).nextElementSibling!.textContent).toMatch(/PetrIA in production \(4 versions\)/);
+    fireEvent.click(screen.getByRole('checkbox', { name: 'PetrIA in production (4 versions): hecho' }));
+    expect(screen.getByText(/^Para cerrarla · 1 de 5$/)).toBeInTheDocument();
     expect(screen.getByText(/Salís al mercado con/).nextElementSibling!.textContent).toMatch(/PetrIA · Claude Architect/);
   });
 
