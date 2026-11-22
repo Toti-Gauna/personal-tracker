@@ -77,7 +77,7 @@ add({ id: 'P0', fase: null, tipo: 'proyecto', nombre: 'Constelación v1', inicio
 add({ id: 'P1V0', fase: null, tipo: 'proyecto', nombre: 'PetrIA v0 (archived)', inicio: '2026-11-19', fin: '2026-11-20', horas: 0, archivado: true, nota: 'Horas del método viejo (19 y 20 nov): quedan acá y no cuentan para la PetrIA de v12.1', sinAtraso: true });
 
 // PHASE 1
-add({ id: 'P1', fase: 'F1', tipo: 'proyecto', nombre: 'PetrIA', inicio: '2026-11-21', fin: '2026-12-09', horas: 194.5, horasLim: 245, rol: 'Full-stack AI Engineer (energy)', entrevista: 'very high',
+add({ id: 'P1', fase: 'F1', tipo: 'proyecto', nombre: 'PetrIA', inicio: '2026-11-21', fin: '2026-12-09', horas: 193.5, horasLim: 245, rol: 'Full-stack AI Engineer (energy)', entrevista: 'very high',
   versiones: [v('1.0', '2026-11-21', '2026-11-25', { deadline: '2026-12-01' }), v('1.1', '2026-11-26', '2026-11-30', { deadline: '2026-12-12' }), v('2.0', '2026-12-01', '2026-12-04', { deadline: '2026-12-22' }), v('3.0', '2026-12-05', '2026-12-09', { deadline: '2027-01-05' })],
   papers: [{ id: 'word2vec', nombre: 'word2vec (2013)', opcional: true }, { id: 'rag', nombre: 'Retrieval-Augmented Generation (2020)', opcional: true }] });
 add({ id: 'CW1', fase: 'F1', tipo: 'cert', nombre: 'Cert window 1', inicio: '2026-12-10', fin: '2026-12-13', horas: 42, certs: [
@@ -385,4 +385,4 @@ for (const b of B.filter((x) => x.versiones && x.id !== 'P1')) {
 proyectos.P0 = { ...PV7.proyectos.P0, versiones: PV7.proyectos.P0.versiones.filter((x) => x.id === '1.0') };
 writeFileSync(join(RAIZ, 'data/proyectos-v7.json'), JSON.stringify({ ...PV7, plan: 'v12.1', proyectos }, null, 1) + '\n');
 const sumaLotes = LOTES.reduce((s, l) => s + l.horas, 0);
-console.log(`${bloques.length} blocks · ${FASES.length} phases · ${bloques.flatMap((b) => b.certs ?? []).length} certs · PetrIA batches ${sumaLotes} h (plan says 194.5 h)`);
+console.log(`${bloques.length} blocks · ${FASES.length} phases · ${bloques.flatMap((b) => b.certs ?? []).length} certs · PetrIA batches ${sumaLotes} h (plan says 193.5 h)`);

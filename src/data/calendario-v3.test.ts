@@ -38,11 +38,11 @@ describe('v12.1 · calendario con fechas explícitas y capacidad 10/11 h', () =>
     expect(horasDelDia('2026-11-29', viejo)).toBeCloseTo(8.42, 2);
   });
 
-  it('cada bloque cae en su fecha del plan: P0 del 16 al 18 nov, PetrIA v0 (archivada) 19–20 nov, PetrIA 194,5 h del 21 nov al 9 dic', () => {
+  it('cada bloque cae en su fecha del plan: P0 del 16 al 18 nov, PetrIA v0 (archivada) 19–20 nov, PetrIA 193,5 h del 21 nov al 9 dic', () => {
     const c = cal(SIN_TRABAJO);
     expect(c.find((b) => b.id === 'P0')).toMatchObject({ inicio: '2026-11-16', fin: '2026-11-18', horas: 0 });
     expect(c.find((b) => b.id === 'P1V0')).toMatchObject({ inicio: '2026-11-19', fin: '2026-11-20', horas: 0 });
-    expect(c.find((b) => b.id === 'P1')).toMatchObject({ inicio: '2026-11-21', fin: '2026-12-09', horas: 194.5, roadmap: { fin: '2026-12-09' } });
+    expect(c.find((b) => b.id === 'P1')).toMatchObject({ inicio: '2026-11-21', fin: '2026-12-09', horas: 193.5, roadmap: { fin: '2026-12-09' } });
     // Con fechas explícitas, Trazo y el plan coinciden día por día.
     for (const b of c.filter((x) => x.roadmap)) expect(b.fin, b.id).toBe(b.roadmap!.fin);
     // El plan termina con el cierre de la etapa 4, el 27 oct 2028.

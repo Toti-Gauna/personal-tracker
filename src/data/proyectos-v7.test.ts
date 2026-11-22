@@ -9,8 +9,8 @@ const bloque = (id: string) => cal.find((b) => b.id === id)!;
 
 describe('ola 30 · los proyectos del roadmap v7 por dentro', () => {
   it('cada proyecto del plan tiene su ficha v7 con puesto y versiones; el JSON valida (salvo la diferencia de PetrIA, avisada)', () => {
-    // v12.1: los lotes de PetrIA suman 193,5 h y el plan dice 194,5 h; se avisa, no se corrige. PetrIA v0 (archivada) no lleva ficha.
-    expect(validarV7(PROY_V7, PLAN_EXT.bloques)).toEqual(['P1: las versiones suman 193.5 h y el bloque tiene 194.5']);
+    // v12.2: PetrIA son 193,5 h, lo mismo que suman sus lotes; el JSON valida sin avisos. PetrIA v0 (archivada) no lleva ficha.
+    expect(validarV7(PROY_V7, PLAN_EXT.bloques)).toEqual([]);
     const ids = PLAN_EXT.bloques.filter((b) => b.tipo === 'proyecto' && !b.archivado).map((b) => b.id);
     expect(ids).toHaveLength(28);
     for (const id of ids) expect(fichaV7(id)?.puesto, id).toBeTruthy();
@@ -60,7 +60,7 @@ describe('ola 30 · los proyectos del roadmap v7 por dentro', () => {
     const e = validarV7(d, PLAN_EXT.bloques).join('\n');
     expect(e).toMatch(/P1 1.1: se solapa con la versión anterior/);
     expect(e).toMatch(/P2 3.0: cae fuera de las fechas del bloque/);
-    expect(e).toMatch(/P1: las versiones suman 191.5 h y el bloque tiene 194.5/);
+    expect(e).toMatch(/P1: las versiones suman 191.5 h y el bloque tiene 193.5/);
     delete (d.proyectos as Record<string, unknown>).P3;
     expect(validarV7(d, PLAN_EXT.bloques)).toContain('P3: sin ficha v7');
   });

@@ -39,7 +39,7 @@ describe('v12.1 · metas como períodos', () => {
     const p1 = screen.getByRole('article', { name: /^PetrIA:/ });
     expect(p1.textContent).toMatch(/Bloque · 21 nov – 9 dic · límite 5 ene 2027/);
     expect(p1.textContent).toMatch(/estimado 9 dic.*límite 5 ene 2027/);
-    expect(p1.textContent).toMatch(/plan 194,5 h · real 0 h/);
+    expect(p1.textContent).toMatch(/plan 193,5 h · real 0 h/);
     expect(screen.getByRole('link', { name: 'La ficha de PetrIA' })).toBeInTheDocument();
     expect(screen.getAllByRole('article').slice(1).map((a) => a.getAttribute('aria-label')!.split(':')[0])).toEqual(['v1.0 MVP', 'v1.1 Producto', 'v2.0 Plataforma', 'v3.0 Producción']);
   });

@@ -1,0 +1,2643 @@
+{
+ "version": 1,
+ "plan": "v12.2",
+ "fuente": "docs/prompts/plan-v12.2.md",
+ "detalle": {
+  "P1": {
+   "horas": 193.5,
+   "horasLim": 245,
+   "versiones": [
+    {
+     "id": "1.0",
+     "inicio": "2026-11-21",
+     "fin": "2026-11-25",
+     "deadline": "2026-12-01",
+     "linea": "ingesta, detector P10/P50/P90 con validación espacial, mapa con pozos, mapa de calor y concesiones, asistente con citas y abstención, 20 evals, deploy y README",
+     "entregables": [
+      "ingesta",
+      "detector P10/P50/P90 con validación espacial",
+      "mapa con pozos",
+      "mapa de calor y concesiones",
+      "asistente con citas y abstención",
+      "20 evals",
+      "deploy y README"
+     ]
+    },
+    {
+     "id": "1.1",
+     "inicio": "2026-11-26",
+     "fin": "2026-11-30",
+     "deadline": "2026-12-12",
+     "linea": "Herramientas: valor del pozo, declinación y lector de partes; IA: 40–60 evals, tope de costo, router y caché; Plataforma: Keycloak y multiempresa; Calidad y frontend: Pact, Playwright, accesibilidad, Lighthouse, ES/EN; Operación y seguridad: OpenTelemetry + k6, MCP, modelo de amenazas",
+     "entregables": [
+      "Herramientas: valor del pozo, declinación y lector de partes",
+      "IA: 40–60 evals, tope de costo, router y caché",
+      "Plataforma: Keycloak y multiempresa",
+      "Calidad y frontend: Pact, Playwright, accesibilidad, Lighthouse, ES/EN",
+      "Operación y seguridad: OpenTelemetry + k6, MCP, modelo de amenazas"
+     ]
+    },
+    {
+     "id": "2.0",
+     "inicio": "2026-12-01",
+     "fin": "2026-12-04",
+     "deadline": "2026-12-22",
+     "linea": "notification-service, voice-gateway, medición de uso y cuotas, sistema de diseño con Storybook",
+     "entregables": [
+      "notification-service",
+      "voice-gateway",
+      "medición de uso y cuotas",
+      "sistema de diseño con Storybook"
+     ]
+    },
+    {
+     "id": "3.0",
+     "inicio": "2026-12-05",
+     "fin": "2026-12-09",
+     "deadline": "2027-01-05",
+     "linea": "Escala y operación: load-lab completo, caos, simulacro de backups, feature flags, Scale report; Nube: ingesta en AWS; Capa física: AR Quick Look, celular escáner, boca de pozo en Wokwi y GPS",
+     "entregables": [
+      "Escala y operación: load-lab completo, caos, simulacro de backups, feature flags, Scale report",
+      "Nube: ingesta en AWS",
+      "Capa física: AR Quick Look, celular escáner, boca de pozo en Wokwi y GPS"
+     ]
+    }
+   ],
+   "puesto": "Full-stack AI Engineer (energía)",
+   "descripcion": "Mapa mundial real con los pozos de Vaca Muerta y las zonas de mayor productividad esperada; Valor y declinación de cada pozo, y lector de partes viejos; Asistente por texto, voz, WhatsApp y teléfono que cita el dato oficial; Uso y costo medidos por empresa",
+   "problema": "partes cargados a mano, valuación en Excel, ingeniero de campo sin manos libres",
+   "valor": "dónde perforar, cuánto vale cada pozo y papel convertido en datos",
+   "diferencial": "P10/P50/P90 en todo, validación espacial y abstención; 8 capas; Costo por consulta y por empresa, con cuotas; Scale report y notificaciones con respaldo",
+   "herramientas": "Sweet spots; Valor del pozo: ingresos USD/ARS, regalías, costos, valor presente, repago y precio de equilibrio; Declinación con Arps (P10/P50/P90); Lector de partes: de PDF, Excel o foto a datos validados; Extras: alertas, más cuencas, cumplimiento, yacimiento 3D",
+   "capaFisica": "Pozo en tu mesa (AR Quick Look); El celular como escáner de partes; Boca de pozo en Wokwi por MQTT (la placa real, después); GPS \"pozos cerca de mí\"",
+   "ahorro": "minutos por parte, errores de tipeo y horas de Excel por pozo",
+   "voz": "\"PetrIA, mostrame los mejores pozos de Loma Campana\"",
+   "escala": "500 usuarios, 20 empresas, 1 M de filas, p95 < 300 ms. Los 100 M de filas, con la PC",
+   "stack": "Front: Next.js, TypeScript, MapLibre GL, Three.js, sistema de diseño, carga procedural y USDZ · Back: Java + Spring Boot: OIDC, multiempresa, JPA, Flyway, OpenAPI, medición de uso y cuotas; Node + NestJS: notificaciones y voz · IA por API: Python, FastAPI y LangGraph sobre Claude, con: pgvector, caché semántica y router; Salida estructurada y batch; MCP, evals y trazas con costo; ElevenLabs y Twilio · ML propio: LightGBM con cuantiles, validación por bloques espaciales, H3 y Arps · DB: Postgres + PostGIS + pgvector (Neon) · Infra: 6 servicios, gateway, RabbitMQ, Pact, idempotencia, MQTT, GitHub Actions, Render y `platform-kit` · Cloud: AWS (S3, SQS, Lambda, SES)",
+   "cambios": "Lote 0.1 (3 h): Dockerfile por servicio + docker-compose con Postgres/PostGIS y RabbitMQ; Lote 2.4 (8.5 h): feedback 👎 → clasificás falla de retrieval, modelo o tool → nuevo caso de eval; Lote 2.6 (8 h): evals en CI en cada PR (falla si baja el score) y trazas por paso",
+   "pesoEntrevistas": "muy alto"
+  },
+  "P2": {
+   "horas": 100,
+   "horasLim": 125,
+   "versiones": [
+    {
+     "id": "1.0",
+     "inicio": "2026-12-21",
+     "fin": "2026-12-22",
+     "linea": "FHIR con Synthea, motor con 8–10 reglas, explicación con citas, panel con línea de tiempo, deploy en Azure",
+     "entregables": [
+      "FHIR con Synthea",
+      "motor con 8–10 reglas",
+      "explicación con citas",
+      "panel con línea de tiempo",
+      "deploy en Azure"
+     ]
+    },
+    {
+     "id": "1.1",
+     "inicio": "2026-12-23",
+     "fin": "2026-12-25",
+     "linea": "conciliación, HL7 a FHIR, evals, feedback médico, auditoría, SMART on FHIR, desidentificador en Rust, frontend",
+     "entregables": [
+      "conciliación",
+      "HL7 a FHIR",
+      "evals",
+      "feedback médico",
+      "auditoría",
+      "SMART on FHIR",
+      "desidentificador en Rust",
+      "frontend"
+     ]
+    },
+    {
+     "id": "2.0",
+     "inicio": "2026-12-26",
+     "fin": "2026-12-28",
+     "linea": "avisos por WhatsApp y email, llamada, escriba por voz, monitoreo en Wokwi, escáner de cajas",
+     "entregables": [
+      "avisos por WhatsApp y email",
+      "llamada",
+      "escriba por voz",
+      "monitoreo en Wokwi",
+      "escáner de cajas"
+     ]
+    },
+    {
+     "id": "3.0",
+     "inicio": "2026-12-29",
+     "fin": "2026-12-30",
+     "linea": "100 mil pacientes, 1 M de mensajes, blue-green, retención, oxímetro real, Scale report",
+     "entregables": [
+      "100 mil pacientes",
+      "1 M de mensajes",
+      "blue-green",
+      "retención",
+      "oxímetro real",
+      "Scale report"
+     ]
+    }
+   ],
+   "puesto": "AI Engineer en salud (.NET, Azure, seguridad)",
+   "descripcion": "brechas de cuidado y problemas de medicación con evidencia; traductor de sistemas viejos a FHIR; monitoreo remoto; dictado a nota",
+   "problema": "controles y medicación que se pierden, conciliación manual, sistemas que no se hablan y médicos escribiendo",
+   "valor": "previene complicaciones y moderniza sistemas hospitalarios",
+   "diferencial": "Regla, fuente y evidencia en cada alerta; Cero alertas inventadas; Precisión medida con feedback médico; Registro de quién accedió a cada paciente; Privacidad por diseño",
+   "herramientas": "Brechas de cuidado; Conciliación de medicación; HL7 v2 o CSV a FHIR; Extras: SBAR, tablero de población, CQL, banco de ataques",
+   "capaFisica": "Monitoreo remoto: oxímetro real, y glucómetro y tensiómetro en Wokwi; Escáner de cajas; AR de interacciones",
+   "ahorro": "minutos de conciliación, horas de migración, brechas cerradas y minutos de notas",
+   "voz": "escriba clínico; \"¿qué tiene pendiente la cama 12?\"",
+   "escala": "100 mil pacientes de Synthea; 1 M de mensajes HL7",
+   "stack": "Front: Next.js + TypeScript, portal seguro · Back: C#, ASP.NET Core, Firely SDK, EF Core, YARP; desidentificador en Rust compilado a WebAssembly · IA por API: Python con Azure OpenAI o Claude; explica, nunca decide · ML propio: no aplica · DB: SQL Server y FHIR · Infra: SMART on FHIR, MQTT, `platform-kit` · Cloud: Azure Health Data Services, Azure OpenAI, Entra ID",
+   "pesoEntrevistas": "muy alto"
+  },
+  "P3": {
+   "horas": 115,
+   "horasLim": 130,
+   "versiones": [
+    {
+     "id": "1.0",
+     "inicio": "2027-02-19",
+     "fin": "2027-02-21",
+     "linea": "ingesta, modelo de rinde con predicción conforme, mapa por departamento, deploy",
+     "entregables": [
+      "ingesta",
+      "modelo de rinde con predicción conforme",
+      "mapa por departamento",
+      "deploy"
+     ]
+    },
+    {
+     "id": "1.1",
+     "inicio": "2027-02-22",
+     "fin": "2027-02-24",
+     "linea": "margen P10–P90, simulador, riesgo climático, backoffice, MLflow y Dagster, frontend",
+     "entregables": [
+      "margen P10–P90",
+      "simulador",
+      "riesgo climático",
+      "backoffice",
+      "MLflow y Dagster",
+      "frontend"
+     ]
+    },
+    {
+     "id": "2.0",
+     "inicio": "2027-02-25",
+     "fin": "2027-02-27",
+     "linea": "WhatsApp con audio, email, línea telefónica, foto de cobertura, GPS, AR",
+     "entregables": [
+      "WhatsApp con audio",
+      "email",
+      "línea telefónica",
+      "foto de cobertura",
+      "GPS",
+      "AR"
+     ]
+    },
+    {
+     "id": "3.0",
+     "inicio": "2027-02-28",
+     "fin": "2027-03-02",
+     "linea": "recálculo masivo, backfills, estación y humedad de suelo reales, Scale report",
+     "entregables": [
+      "recálculo masivo",
+      "backfills",
+      "estación y humedad de suelo reales",
+      "Scale report"
+     ]
+    }
+   ],
+   "puesto": "Applied ML Engineer (agro)",
+   "descripcion": "rinde por departamento con rango de confianza, margen bruto con incertidumbre y atención por WhatsApp con audio",
+   "problema": "el productor decide sin ver el riesgo y no usa planillas",
+   "valor": "decisiones con la plata y el riesgo a la vista",
+   "diferencial": "predicción conforme con cobertura medida, datos reales de Estimaciones Agrícolas y batch con conciliación",
+   "herramientas": "Rinde por departamento; Margen P10–P90 en USD y ARS; Asistente por WhatsApp; Extras: riesgo climático (Open-Meteo) y simulador de fecha de siembra",
+   "capaFisica": "Cobertura del cultivo con una foto; Estación meteorológica y humedad de suelo (Wokwi y real); GPS del lote y AR",
+   "ahorro": "diferencia de margen con la fecha recomendada y horas de cálculo",
+   "voz": "\"AgrIA, ¿qué pasa si siembro 15 días después?\"",
+   "escala": "recálculo idempotente de todos los departamentos y campañas",
+   "stack": "Front: Three.js, backoffice en Rails, Expo · Back: Rails como monolito modular; GraphQL opcional · IA por API: asistente con herramientas sobre Claude · ML propio: scikit-learn, gradient boosting, predicción conforme, MLflow, Dagster · DB: Postgres y BigQuery · Infra: batch con cola, k3s, Helm, MQTT · Cloud: GCP (BigQuery, Vertex AI)",
+   "pesoEntrevistas": "alto"
+  },
+  "P4": {
+   "horas": 160,
+   "horasLim": 185,
+   "versiones": [
+    {
+     "id": "1.0",
+     "inicio": "2027-03-18",
+     "fin": "2027-03-21",
+     "linea": "SGP4, satélites argentinos, planificador de pasadas",
+     "entregables": [
+      "SGP4",
+      "satélites argentinos",
+      "planificador de pasadas"
+     ]
+    },
+    {
+     "id": "1.1",
+     "inicio": "2027-03-22",
+     "fin": "2027-03-25",
+     "linea": "decodificador CCSDS en WebAssembly con benchmark, calculadora de enlace, copiloto, frontend",
+     "entregables": [
+      "decodificador CCSDS en WebAssembly con benchmark",
+      "calculadora de enlace",
+      "copiloto",
+      "frontend"
+     ]
+    },
+    {
+     "id": "2.0",
+     "inicio": "2027-03-26",
+     "fin": "2027-03-29",
+     "linea": "AR, alertas por WhatsApp, voz, rotor en Wokwi",
+     "entregables": [
+      "AR",
+      "alertas por WhatsApp",
+      "voz",
+      "rotor en Wokwi"
+     ]
+    },
+    {
+     "id": "3.0",
+     "inicio": "2027-03-30",
+     "fin": "2027-04-02",
+     "linea": "estación real en SatNOGS, rotor real, 10 mil websockets, backpressure, Scale report",
+     "entregables": [
+      "estación real en SatNOGS",
+      "rotor real",
+      "10 mil websockets",
+      "backpressure",
+      "Scale report"
+     ]
+    }
+   ],
+   "puesto": "Systems / Ground Software Engineer",
+   "descripcion": "sigue satélites reales (incluidos los argentinos), decodifica telemetría, planifica pasadas y calcula enlaces",
+   "problema": "operar una estación terrena exige atención manual en cada pasada",
+   "valor": "sistemas en tiempo real con datos reales",
+   "diferencial": "decodificador en Rust compilado a WebAssembly con benchmark, estación real en SatNOGS y p99 medido",
+   "herramientas": "\"Seguí a los satélites argentinos\"; Decodificador en el navegador; Calculadora de enlace; Extras: copiloto y observaciones en SatNOGS",
+   "capaFisica": "\"Apuntá al cielo\" (AR con cámara, ViroReact); Estación real con SDR, Raspberry Pi y rotor con ESP32; Señal IQ sintética",
+   "ahorro": "horas de operación manual automatizadas",
+   "voz": "\"Antena, apuntá al próximo satélite\"",
+   "escala": "10 mil websockets y miles de mensajes por segundo",
+   "stack": "Front: Three.js, Expo con ViroReact · Back: Rust (SGP4, CCSDS), websockets · IA por API: copiloto con la telemetría como evidencia · ML propio: no aplica · DB: series de tiempo (a definir) · Infra: MQTT con mTLS, OTA · Cloud: AWS IoT, comparado con AWS Ground Station",
+   "pesoEntrevistas": "alto"
+  },
+  "P0B": {
+   "notaAlcance": "CDN = AWS CloudFront",
+   "horas": 50,
+   "horasLim": 60,
+   "versiones": [
+    {
+     "id": "1.0",
+     "base": true,
+     "linea": "mapa 3D, Trazo como caso, validador, shell con Module Federation",
+     "entregables": [
+      "mapa 3D",
+      "Trazo como caso",
+      "validador",
+      "shell con Module Federation"
+     ]
+    },
+    {
+     "id": "2.0",
+     "inicio": "2027-04-13",
+     "fin": "2027-04-14",
+     "linea": "RAG con citas y evals sobre READMEs, ADRs, código y `learning.md`; modo reclutador; MCP público",
+     "entregables": [
+      "RAG con citas y evals sobre READMEs, ADRs, código y `learning.md`",
+      "modo reclutador",
+      "MCP público"
+     ]
+    },
+    {
+     "id": "2.1",
+     "inicio": "2027-04-15",
+     "fin": "2027-04-17",
+     "linea": "voz, CV en AR, email y WhatsApp, métricas en vivo, plantilla open source, CDN, prueba de pico viral",
+     "entregables": [
+      "voz",
+      "CV en AR",
+      "email y WhatsApp",
+      "métricas en vivo",
+      "plantilla open source",
+      "CDN",
+      "prueba de pico viral"
+     ]
+    }
+   ],
+   "puesto": "Sr Full-stack → AI Engineer (RAG multifuente y agentes)",
+   "descripcion": "portfolio como mapa 3D de proyectos. Después se vuelve un agente que responde sobre todo tu trabajo por texto y voz",
+   "problema": "los reclutadores no recorren cinco repos",
+   "valor": "convierte una visita en conversación y en entrevista",
+   "diferencial": "validador de referencias y ciclos, RAG multifuente con citas y evals, MCP público y plantilla open source",
+   "herramientas": "modo reclutador; plantilla open source; métricas en vivo desde el CI; las 16 certificaciones con sus insignias",
+   "capaFisica": "CV o tarjeta en AR (AR Quick Look)",
+   "impacto": "visitas, conversaciones, emails respondidos, entrevistas",
+   "voz": "\"Preguntale a Ignacio\"",
+   "escala": "pico viral ×50 en minutos",
+   "stack": "Front: Next.js, TypeScript, Three.js · Back: Node + TypeScript · IA por API: Python, FastAPI, LangGraph sobre Claude, MCP hacia cada proyecto · ML propio: no aplica · DB: JSON en la v1; Neon con pgvector en la 2.0 · Infra: Module Federation, `platform-kit` · Cloud: Render o Vercel, SES",
+   "pesoEntrevistas": "medio con la v1; alto desde la 2.0"
+  },
+  "P5": {
+   "notaAlcance": "3.0 adds explicit Kubernetes Ingress load balancing + \"kill a pod\" test",
+   "horas": 130,
+   "horasLim": 150,
+   "versiones": [
+    {
+     "id": "1.0",
+     "inicio": "2027-04-18",
+     "fin": "2027-04-20",
+     "linea": "gemelo con SCADA simulado por Modbus, niveles en vivo, tiempo del x% al y%",
+     "entregables": [
+      "gemelo con SCADA simulado por Modbus",
+      "niveles en vivo",
+      "tiempo del x% al y%"
+     ]
+    },
+    {
+     "id": "1.1",
+     "inicio": "2027-04-21",
+     "fin": "2027-04-23",
+     "linea": "detector de ataques, pérdidas en ductos, reglas ATT&CK, despacho, frontend",
+     "entregables": [
+      "detector de ataques",
+      "pérdidas en ductos",
+      "reglas ATT&CK",
+      "despacho",
+      "frontend"
+     ]
+    },
+    {
+     "id": "2.0",
+     "inicio": "2027-04-24",
+     "fin": "2027-04-27",
+     "linea": "WhatsApp con botones, llamada, email, copiloto, AR, NFC",
+     "entregables": [
+      "WhatsApp con botones",
+      "llamada",
+      "email",
+      "copiloto",
+      "AR",
+      "NFC"
+     ]
+    },
+    {
+     "id": "3.0",
+     "inicio": "2027-04-28",
+     "fin": "2027-04-30",
+     "linea": "tanque real por RS485, 10 mil lecturas por segundo, tormenta de alarmas, Kubernetes endurecido, Scale report",
+     "entregables": [
+      "tanque real por RS485",
+      "10 mil lecturas por segundo",
+      "tormenta de alarmas",
+      "Kubernetes endurecido",
+      "Scale report"
+     ]
+    }
+   ],
+   "puesto": "DevSecOps / OT Security Engineer",
+   "descripcion": "gemelo digital de una batería de tanques en tiempo real. Detecta ataques al SCADA por física y pérdidas en ductos, y escala alarmas por todos los canales",
+   "problema": "rebalses, rondas manuales, pérdidas sin detectar y alarmas sin atender",
+   "valor": "operación y seguridad industrial juntas",
+   "diferencial": "balance de masa, tanque real con agua y reglas de MITRE ATT&CK for ICS probadas con su ataque",
+   "herramientas": "Gemelo de tanques: niveles, tiempo del x% al y%, rebalse y despacho; Detector de ataques; Balance de masa; Extras: copiloto y yacimiento 3D",
+   "capaFisica": "Tanque en la pared (AR); Tanque real con sensor, bomba, relé, ESP32 y Modbus por RS485; Ronda con NFC",
+   "ahorro": "rebalses evitados, horas de ronda, m³ perdidos × precio del crudo",
+   "voz": "\"¿Cuánto falta para que el tanque 3 llegue al 90%?\"",
+   "escala": "10 mil lecturas por segundo y tormenta de alarmas",
+   "stack": "Front: Next.js, Three.js, Expo con AR y NFC · Back: Go, Modbus, OPC UA · IA por API: copiloto con aprobación humana · ML propio: anomalías por balance de masa · DB: DuckDB, Parquet, series de tiempo · Infra: Kubernetes endurecido, GitOps, firmas, mTLS, Falco, SBOM, OPA · Cloud: AWS IoT Core, IoT SiteWise, Kinesis, GuardDuty",
+   "pesoEntrevistas": "muy alto"
+  },
+  "P6": {
+   "horas": 135,
+   "horasLim": 155,
+   "versiones": [
+    {
+     "id": "1.0",
+     "inicio": "2027-06-19",
+     "fin": "2027-06-22",
+     "linea": "datos sintéticos, modelo PyTorch, inspección por foto, caída sintético→real",
+     "entregables": [
+      "datos sintéticos",
+      "modelo PyTorch",
+      "inspección por foto",
+      "caída sintético→real"
+     ]
+    },
+    {
+     "id": "1.1",
+     "inicio": "2027-06-23",
+     "fin": "2027-06-25",
+     "linea": "orden de trabajo, RAG de manuales, cascada con Claude visión, aprendizaje activo, autograd, frontend",
+     "entregables": [
+      "orden de trabajo",
+      "RAG de manuales",
+      "cascada con Claude visión",
+      "aprendizaje activo",
+      "autograd",
+      "frontend"
+     ]
+    },
+    {
+     "id": "2.0",
+     "inicio": "2027-06-26",
+     "fin": "2027-06-28",
+     "linea": "daños en 3D, AR, dron simulado, dictado, email con PDF, WhatsApp",
+     "entregables": [
+      "daños en 3D",
+      "AR",
+      "dron simulado",
+      "dictado",
+      "email con PDF",
+      "WhatsApp"
+     ]
+    },
+    {
+     "id": "3.0",
+     "inicio": "2027-06-29",
+     "fin": "2027-07-02",
+     "linea": "GPU con autoescalado, batching, escalado a cero, costo por imagen, Scale report",
+     "entregables": [
+      "GPU con autoescalado",
+      "batching",
+      "escalado a cero",
+      "costo por imagen",
+      "Scale report"
+     ]
+    }
+   ],
+   "puesto": "ML Engineer (computer vision)",
+   "descripcion": "inspecciona superficies de aviones, genera la orden de trabajo, consulta manuales y registra los daños en 3D por matrícula",
+   "problema": "inspecciones en papel, manos ocupadas y horas buscando en manuales",
+   "valor": "digitaliza el mantenimiento",
+   "diferencial": "cascada de modelos, aprendizaje activo, caída de sintético a real medida y autograd a mano",
+   "herramientas": "de la inspección a la orden de trabajo; manuales públicos de la FAA; libro de daños en 3D",
+   "capaFisica": "dron simulado en 3D; daños en AR con el celular; LiDAR si el celular lo tiene",
+   "ahorro": "minutos por inspección, búsqueda en manuales, errores de transcripción",
+   "voz": "el inspector dicta mientras revisa",
+   "escala": "cola de imágenes con autoescalado en GPU; costo por imagen",
+   "stack": "Front: Three.js, Tauri, Expo con AR · Back: Python con inferencia con batching y SLO · IA por API: Claude con visión para casos dudosos; RAG de manuales · ML propio: PyTorch, Blender, aprendizaje activo · DB: Postgres, dataset versionado · Cloud: AWS SageMaker, SES",
+   "pesoEntrevistas": "alto"
+  },
+  "SUM": {
+   "horas": 25,
+   "versiones": [],
+   "descripcion": "Consola de campo de PetrIA en Electron, offline; app Expo de VitalIA con push; AR offline del pozo",
+   "publicacion": "TestFlight o prueba interna de Google Play"
+  },
+  "P7": {
+   "horas": 100,
+   "horasLim": 115,
+   "versiones": [
+    {
+     "id": "1.0",
+     "inicio": "2027-07-06",
+     "fin": "2027-07-07",
+     "linea": "Sentinel-2, índices, mapa de estrés",
+     "entregables": [
+      "Sentinel-2",
+      "índices",
+      "mapa de estrés"
+     ]
+    },
+    {
+     "id": "1.1",
+     "inicio": "2027-07-08",
+     "fin": "2027-07-10",
+     "linea": "dosis variable, pérdida en USD, PCA y SVD, frontend",
+     "entregables": [
+      "dosis variable",
+      "pérdida en USD",
+      "PCA y SVD",
+      "frontend"
+     ]
+    },
+    {
+     "id": "2.0",
+     "inicio": "2027-07-11",
+     "fin": "2027-07-13",
+     "linea": "WhatsApp con imagen, email con la prescripción, llamada, recorrida offline, fertilizadora en Wokwi",
+     "entregables": [
+      "WhatsApp con imagen",
+      "email con la prescripción",
+      "llamada",
+      "recorrida offline",
+      "fertilizadora en Wokwi"
+     ]
+    },
+    {
+     "id": "3.0",
+     "inicio": "2027-07-14",
+     "fin": "2027-07-15",
+     "linea": "puertas de calidad, sombra y canary, rollback, drift, reentrenamiento con aprobación",
+     "entregables": [
+      "puertas de calidad",
+      "sombra y canary",
+      "rollback",
+      "drift",
+      "reentrenamiento con aprobación"
+     ]
+    }
+   ],
+   "puesto": "ML / MLOps Engineer",
+   "descripcion": "monitorea lotes con Sentinel-2, alerta estrés, genera la dosis variable y estima la pérdida en USD",
+   "problema": "fertilizante parejo en lotes que no son parejos",
+   "valor": "plata ahorrada en fertilizante",
+   "diferencial": "puertas de calidad en el CI, canary con rollback, drift inyectado vs detectado y reentrenamiento con aprobación",
+   "herramientas": "mapa de estrés; dosis variable (shapefile o ISOXML); pérdida en USD",
+   "capaFisica": "fertilizadora con ESP32 guiada por GPS; recorrida a campo offline; AR de zonas",
+   "ahorro": "kg de fertilizante ahorrados × precio",
+   "escala": "despliegue en sombra con tráfico duplicado",
+   "stack": "Front: Next.js, Expo · Back: Python con serving en Kubernetes · IA por API: resúmenes para el productor · ML propio: drift, PCA, SVD, reentrenamiento · DB: PostGIS, STAC · Cloud: GCP (Vertex AI, Earth Engine)",
+   "pesoEntrevistas": "muy alto"
+  },
+  "P8": {
+   "horas": 85,
+   "horasLim": 105,
+   "versiones": [
+    {
+     "id": "1.0",
+     "inicio": "2027-08-02",
+     "fin": "2027-08-03",
+     "linea": "ataques contra PetrIA y VitalIA, informe con OWASP LLM Top 10",
+     "entregables": [
+      "ataques contra PetrIA y VitalIA",
+      "informe con OWASP LLM Top 10"
+     ]
+    },
+    {
+     "id": "1.1",
+     "inicio": "2027-08-04",
+     "fin": "2027-08-05",
+     "linea": "\"Escaneá tu chatbot\", GitHub Action y comparativa",
+     "entregables": [
+      "\"Escaneá tu chatbot\"",
+      "GitHub Action y comparativa"
+     ]
+    },
+    {
+     "id": "2.0",
+     "inicio": "2027-08-06",
+     "fin": "2027-08-08",
+     "linea": "voz, cartel y audio, email, WhatsApp",
+     "entregables": [
+      "voz",
+      "cartel y audio",
+      "email",
+      "WhatsApp"
+     ]
+    },
+    {
+     "id": "3.0",
+     "inicio": "2027-08-09",
+     "fin": "2027-08-10",
+     "linea": "guardián con LoRA y adaptadores por cliente, colas justas, protección contra abuso, Scale report",
+     "entregables": [
+      "guardián con LoRA y adaptadores por cliente",
+      "colas justas",
+      "protección contra abuso",
+      "Scale report"
+     ]
+    }
+   ],
+   "puesto": "AI Security Engineer",
+   "descripcion": "escanea agentes de chat y voz propios o autorizados, los ataca y compara defensas",
+   "problema": "agentes lanzados sin probar su seguridad",
+   "valor": "seguridad para IA",
+   "diferencial": "OWASP LLM Top 10, GitHub Action open source, defensa propia con LoRA y comparativa entre nubes",
+   "herramientas": "\"Escaneá tu chatbot\": nota de la A a la F, con verificación de propiedad; GitHub Action; Comparativa de guardrails: AWS, Azure y el propio",
+   "capaFisica": "prompt injection con un cartel frente a la cámara; inyección por audio",
+   "ahorro": "horas de pentest manual y costo de un incidente evitado (hipótesis)",
+   "voz": "ataques por voz contra tus agentes telefónicos, y la defensa",
+   "escala": "muchos escaneos a la vez sin que un cliente tape a otro",
+   "stack": "Front: Next.js · Back: Python, garak, PyRIT · IA por API: Claude, Bedrock Guardrails, Azure AI Content Safety · ML propio: guardián con LoRA sobre vLLM · Cloud: AWS y Azure",
+   "pesoEntrevistas": "muy alto"
+  },
+  "P9": {
+   "notaAlcance": "sync service on DynamoDB (conditional writes for conflicts)",
+   "horas": 125,
+   "horasLim": 145,
+   "versiones": [
+    {
+     "id": "1.0",
+     "inicio": "2027-08-11",
+     "fin": "2027-08-13",
+     "linea": "modelo cuantizado con ONNX, app offline",
+     "entregables": [
+      "modelo cuantizado con ONNX",
+      "app offline"
+     ]
+    },
+    {
+     "id": "1.1",
+     "inicio": "2027-08-14",
+     "fin": "2027-08-16",
+     "linea": "walkaround guiado, modelo chico, presupuesto de latencia, frontend",
+     "entregables": [
+      "walkaround guiado",
+      "modelo chico",
+      "presupuesto de latencia",
+      "frontend"
+     ]
+    },
+    {
+     "id": "2.0",
+     "inicio": "2027-08-17",
+     "fin": "2027-08-20",
+     "linea": "AR, voz offline, sincronización con AeroScan",
+     "entregables": [
+      "AR",
+      "voz offline",
+      "sincronización con AeroScan"
+     ]
+    },
+    {
+     "id": "3.0",
+     "inicio": "2027-08-21",
+     "fin": "2027-08-23",
+     "linea": "OTA firmada, 1.000 dispositivos, ESP32-CAM vs celular, batería y latencia medidas",
+     "entregables": [
+      "OTA firmada",
+      "1.000 dispositivos",
+      "ESP32-CAM vs celular",
+      "batería y latencia medidas"
+     ]
+    }
+   ],
+   "puesto": "Edge AI Engineer",
+   "descripcion": "inspección offline en el hangar, walkaround guiado por voz y sincronización",
+   "problema": "sin señal ni manos libres en el hangar",
+   "valor": "inspección donde la nube no llega",
+   "diferencial": "medición en un teléfono real y modelos firmados distribuidos por OTA",
+   "herramientas": "app offline; walkaround guiado; sincronización",
+   "capaFisica": "walkaround en AR; ESP32-CAM real vs celular",
+   "ahorro": "minutos por walkaround",
+   "voz": "comandos offline",
+   "escala": "1.000 dispositivos sincronizando con conflictos",
+   "stack": "Front: Expo con ONNX Runtime Mobile · Back: servicio de sincronización · ML propio: cuantización y modelo de lenguaje chico en el dispositivo · DB: SQLite · Cloud: AWS IoT Greengrass",
+   "pesoEntrevistas": "alto"
+  },
+  "P10": {
+   "horas": 135,
+   "horasLim": 170,
+   "versiones": [
+    {
+     "id": "1.0",
+     "inicio": "2027-08-24",
+     "fin": "2027-08-27",
+     "linea": "autoencoders sobre telemetría de la NASA, triage explicado",
+     "entregables": [
+      "autoencoders sobre telemetría de la NASA",
+      "triage explicado"
+     ]
+    },
+    {
+     "id": "1.1",
+     "inicio": "2027-08-28",
+     "fin": "2027-08-30",
+     "linea": "centro de control, status page, Kafka, saga y outbox",
+     "entregables": [
+      "centro de control",
+      "status page",
+      "Kafka",
+      "saga y outbox"
+     ]
+    },
+    {
+     "id": "2.0",
+     "inicio": "2027-08-31",
+     "fin": "2027-09-02",
+     "linea": "agente SRE, Jarvis con Face ID, Slack, WhatsApp, llamada por SLO, postmortem por email",
+     "entregables": [
+      "agente SRE",
+      "Jarvis con Face ID",
+      "Slack",
+      "WhatsApp",
+      "llamada por SLO",
+      "postmortem por email"
+     ]
+    },
+    {
+     "id": "3.0",
+     "inicio": "2027-09-03",
+     "fin": "2027-09-06",
+     "linea": "chaos, caída de una nube con failover, flota de 1.000 dispositivos, FinOps y plan de capacidad",
+     "entregables": [
+      "chaos",
+      "caída de una nube con failover",
+      "flota de 1.000 dispositivos",
+      "FinOps y plan de capacidad"
+     ]
+    }
+   ],
+   "puesto": "Senior ML + DevSecOps + Cloud",
+   "descripcion": "el centro de control de todos tus productos: anomalías en telemetría de la NASA, agente SRE, status page, costos en vivo y Jarvis central",
+   "problema": "caídas detectadas tarde y costos de nube sin control",
+   "valor": "confiabilidad y costos en un solo lugar",
+   "diferencial": "SLO públicos, chaos engineering, flota de 1.000 dispositivos y Face ID",
+   "herramientas": "centro de control; status page; FinOps",
+   "capaFisica": "flota simulada; aprobación con Face ID; mapa 3D",
+   "ahorro": "ahorro en la factura de nube; tiempo de recuperación × costo de una caída (hipótesis)",
+   "voz": "Jarvis central con Face ID",
+   "escala": "caos en todos los productos y caída de una nube",
+   "stack": "Front: microfrontends sobre Constelación · Back: Java y Go · IA por API: agente SRE con runbooks · ML propio: autoencoders · Infra: Kafka, saga y outbox, mTLS, OpenTelemetry, Prometheus, Pact y chaos · Cloud: AWS (EKS, MSK) y Azure",
+   "pesoEntrevistas": "muy alto"
+  },
+  "S1": {
+   "horas": 85,
+   "horasLim": 100,
+   "versiones": [
+    {
+     "id": "1.0",
+     "inicio": "2027-09-25",
+     "fin": "2027-09-26",
+     "linea": "Vault y cifrado de sobre",
+     "entregables": [
+      "Vault y cifrado de sobre"
+     ]
+    },
+    {
+     "id": "1.1",
+     "inicio": "2027-09-27",
+     "fin": "2027-09-28",
+     "linea": "rotación automática y credenciales efímeras",
+     "entregables": [
+      "rotación automática y credenciales efímeras"
+     ]
+    },
+    {
+     "id": "2.0",
+     "inicio": "2027-09-29",
+     "fin": "2027-10-01",
+     "linea": "GitHub App, aprobación por WhatsApp, celular como llave, llave física, SoftHSM",
+     "entregables": [
+      "GitHub App",
+      "aprobación por WhatsApp",
+      "celular como llave",
+      "llave física",
+      "SoftHSM"
+     ]
+    },
+    {
+     "id": "3.0",
+     "inicio": "2027-10-02",
+     "fin": "2027-10-03",
+     "linea": "rotación masiva sin cortes, SPIFFE, mTLS, comparativa",
+     "entregables": [
+      "rotación masiva sin cortes",
+      "SPIFFE",
+      "mTLS",
+      "comparativa"
+     ]
+    }
+   ],
+   "puesto": "Security Engineer (identidad y secretos)",
+   "descripcion": "secretos, cifrado de sobre, rotación y credenciales efímeras para agentes de IA",
+   "problema": "rotar credenciales a mano es lento y riesgoso",
+   "valor": "menos secretos filtrados y rotación sin cortes",
+   "diferencial": "primitivas propias comparadas contra una librería auditada, aplicadas a tus productos",
+   "herramientas": "credenciales efímeras por agente y por herramienta; GitHub App \"¿Filtraste tu API key?\"; comparativa AWS vs Azure",
+   "capaFisica": "el celular como llave (passkeys); llave física; SoftHSM",
+   "escala": "rotar miles de secretos sin cortar el servicio",
+   "stack": "Front: Tauri · Back: Rust, Go · DB: Postgres · Infra: Vault, SPIFFE, mTLS, cosign, Terraform · Cloud: AWS KMS y Secrets Manager, Azure Key Vault",
+   "pesoEntrevistas": "muy alto"
+  },
+  "S2": {
+   "horas": 105,
+   "horasLim": 130,
+   "versiones": [
+    {
+     "id": "1.0",
+     "inicio": "2027-10-04",
+     "fin": "2027-10-06",
+     "linea": "STRIDE y pentest de PetrIA, informe CVSS",
+     "entregables": [
+      "STRIDE y pentest de PetrIA",
+      "informe CVSS"
+     ]
+    },
+    {
+     "id": "1.1",
+     "inicio": "2027-10-07",
+     "fin": "2027-10-09",
+     "linea": "pentest de IA y del ESP32, reprueba en el CI",
+     "entregables": [
+      "pentest de IA y del ESP32",
+      "reprueba en el CI"
+     ]
+    },
+    {
+     "id": "2.0",
+     "inicio": "2027-10-10",
+     "fin": "2027-10-11",
+     "linea": "bot de PR, agente asistente, email semanal, Slack",
+     "entregables": [
+      "bot de PR",
+      "agente asistente",
+      "email semanal",
+      "Slack"
+     ]
+    },
+    {
+     "id": "3.0",
+     "inicio": "2027-10-12",
+     "fin": "2027-10-14",
+     "linea": "muchos repos sin frenar el CI, caza de CVE",
+     "entregables": [
+      "muchos repos sin frenar el CI",
+      "caza de CVE"
+     ]
+    }
+   ],
+   "puesto": "AppSec / Offensive Security Engineer",
+   "descripcion": "modelo de amenazas y pentest de tus productos (IA e IoT incluidos), con un bot que corrige",
+   "problema": "los hallazgos quedan en un PDF y nadie los arregla",
+   "valor": "cada hallazgo termina en un PR y una prueba",
+   "diferencial": "hallazgos que se vuelven a probar en el CI; CVE propio con divulgación responsable",
+   "herramientas": "bot que abre el PR con la corrección; caza de CVE; agente asistente de pentest",
+   "capaFisica": "pentest al ESP32 vulnerable",
+   "escala": "escaneo de muchos repos sin frenar el CI",
+   "stack": "Back: Python · Cloud: AWS Inspector, Security Hub",
+   "pesoEntrevistas": "muy alto"
+  },
+  "S3": {
+   "horas": 125,
+   "horasLim": 155,
+   "versiones": [
+    {
+     "id": "1.0",
+     "inicio": "2027-10-15",
+     "fin": "2027-10-17",
+     "linea": "OpenSearch, osquery y reglas Sigma sobre el colector de PetrIA Guard",
+     "entregables": [
+      "OpenSearch",
+      "osquery y reglas Sigma sobre el colector de PetrIA Guard"
+     ]
+    },
+    {
+     "id": "1.1",
+     "inicio": "2027-10-18",
+     "fin": "2027-10-20",
+     "linea": "agente investigador evaluado, purple team, tiempos medidos",
+     "entregables": [
+      "agente investigador evaluado",
+      "purple team",
+      "tiempos medidos"
+     ]
+    },
+    {
+     "id": "2.0",
+     "inicio": "2027-10-21",
+     "fin": "2027-10-24",
+     "linea": "SOC con un comando, llamada, WhatsApp, email, RFID en Wokwi",
+     "entregables": [
+      "SOC con un comando",
+      "llamada",
+      "WhatsApp",
+      "email",
+      "RFID en Wokwi"
+     ]
+    },
+    {
+     "id": "3.0",
+     "inicio": "2027-10-25",
+     "fin": "2027-10-27",
+     "linea": "millones de eventos, costo de retención, RFID real, comparativa",
+     "entregables": [
+      "millones de eventos",
+      "costo de retención",
+      "RFID real",
+      "comparativa"
+     ]
+    }
+   ],
+   "puesto": "Detection & Response / Cloud Security Engineer",
+   "descripcion": "SOC en una caja para pymes, con agente investigador y llamada al dueño",
+   "problema": "una pyme no puede pagar un SOC tercerizado",
+   "valor": "detección y respuesta al alcance de una pyme",
+   "diferencial": "agente evaluado contra incidentes etiquetados; tiempos de detección y respuesta medidos",
+   "herramientas": "SOC con un comando; agente investigador; purple team",
+   "capaFisica": "lector RFID real cruzado con inicios de sesión",
+   "ahorro": "costo de un SOC tercerizado vs tu caja",
+   "escala": "millones de eventos por día con costo de retención controlado",
+   "stack": "Front: Expo · Back: Python, Sigma, ATT&CK · DB: OpenSearch · Infra: osquery, OpenTelemetry · Cloud: comparativa con Sentinel y Security Lake",
+   "pesoEntrevistas": "muy alto"
+  },
+  "Q1": {
+   "horas": 125,
+   "horasLim": 145,
+   "versiones": [
+    {
+     "id": "1.0",
+     "inicio": "2027-11-30",
+     "fin": "2027-12-02",
+     "linea": "backtester en Rust con costos y deslizamiento",
+     "entregables": [
+      "backtester en Rust con costos y deslizamiento"
+     ]
+    },
+    {
+     "id": "1.1",
+     "inicio": "2027-12-03",
+     "fin": "2027-12-05",
+     "linea": "walk-forward, registro con hash, Sharpe deflactado, benchmark",
+     "entregables": [
+      "walk-forward",
+      "registro con hash",
+      "Sharpe deflactado",
+      "benchmark"
+     ]
+    },
+    {
+     "id": "2.0",
+     "inicio": "2027-12-06",
+     "fin": "2027-12-09",
+     "linea": "\"¿Tu estrategia es suerte?\" y asistente",
+     "entregables": [
+      "\"¿Tu estrategia es suerte?\" y asistente"
+     ]
+    },
+    {
+     "id": "3.0",
+     "inicio": "2027-12-10",
+     "fin": "2027-12-12",
+     "linea": "backtests en paralelo e informes por email",
+     "entregables": [
+      "backtests en paralelo e informes por email"
+     ]
+    }
+   ],
+   "puesto": "Quant Developer",
+   "descripcion": "backtester de eventos con costos, deslizamiento y walk-forward",
+   "problema": "la mayoría de las estrategias \"ganadoras\" son sobreajuste",
+   "valor": "separa la suerte de la señal",
+   "diferencial": "Sharpe deflactado, registro con hash y benchmark Rust vs Python",
+   "herramientas": "\"¿Tu estrategia es suerte?\"; asistente con freno al sobreajuste",
+   "voz": "consultas sobre resultados",
+   "escala": "miles de backtests en paralelo",
+   "stack": "Front: Tauri · Back: Rust con PyO3 · IA por API: Claude · DB: Parquet, DuckDB · Cloud: AWS",
+   "pesoEntrevistas": "alto"
+  },
+  "Q2": {
+   "horas": 105,
+   "horasLim": 130,
+   "versiones": [
+    {
+     "id": "1.0",
+     "inicio": "2027-12-13",
+     "fin": "2027-12-15",
+     "linea": "un paper replicado",
+     "entregables": [
+      "un paper replicado"
+     ]
+    },
+    {
+     "id": "1.1",
+     "inicio": "2027-12-16",
+     "fin": "2027-12-18",
+     "linea": "agente que extrae la estrategia y 3 papers replicados",
+     "entregables": [
+      "agente que extrae la estrategia y 3 papers replicados"
+     ]
+    },
+    {
+     "id": "2.0",
+     "inicio": "2027-12-19",
+     "fin": "2027-12-27",
+     "partida": true,
+     "linea": "página pública, newsletter y WhatsApp",
+     "entregables": [
+      "página pública",
+      "newsletter y WhatsApp"
+     ]
+    },
+    {
+     "id": "3.0",
+     "inicio": "2027-12-28",
+     "fin": "2027-12-30",
+     "linea": "lotes en paralelo y porcentaje replicado",
+     "entregables": [
+      "lotes en paralelo y porcentaje replicado"
+     ]
+    }
+   ],
+   "puesto": "Junior Quant Researcher",
+   "descripcion": "agente que lee papers de finanzas y replica sus estrategias con Alpha Lab",
+   "problema": "muchos papers no se replican",
+   "valor": "saber si un paper funciona antes de invertir tiempo en él",
+   "diferencial": "porcentaje de replicación medido y publicado",
+   "herramientas": "página \"¿Funciona este paper?\"",
+   "escala": "lotes de papers en paralelo",
+   "stack": "Back: Python, Quarto · IA por API: RAG sobre PDF con Claude",
+   "pesoEntrevistas": "alto"
+  },
+  "Q3": {
+   "horas": 130,
+   "horasLim": 150,
+   "versiones": [
+    {
+     "id": "1.0",
+     "inicio": "2028-01-17",
+     "fin": "2028-01-19",
+     "linea": "Black-Scholes, binomial y Monte Carlo contra QuantLib",
+     "entregables": [
+      "Black-Scholes",
+      "binomial y Monte Carlo contra QuantLib"
+     ]
+    },
+    {
+     "id": "1.1",
+     "inicio": "2028-01-20",
+     "fin": "2028-01-22",
+     "linea": "griegas, estrés y calculadora argentina",
+     "entregables": [
+      "griegas",
+      "estrés y calculadora argentina"
+     ]
+    },
+    {
+     "id": "2.0",
+     "inicio": "2028-01-23",
+     "fin": "2028-01-26",
+     "linea": "superficie en AR, email matinal y podcast",
+     "entregables": [
+      "superficie en AR",
+      "email matinal y podcast"
+     ]
+    },
+    {
+     "id": "3.0",
+     "inicio": "2028-01-27",
+     "fin": "2028-01-29",
+     "linea": "API con SLO y benchmark",
+     "entregables": [
+      "API con SLO y benchmark"
+     ]
+    }
+   ],
+   "puesto": "Quant Developer (valuación y riesgo)",
+   "descripcion": "valuación de opciones con griegas y estrés, validada contra QuantLib",
+   "problema": "no hay herramientas simples para opciones argentinas como GGAL",
+   "valor": "riesgo visible por posición y por cartera",
+   "diferencial": "validación contra QuantLib y API con SLO",
+   "herramientas": "calculadora de opciones argentinas con griegas; estrés por cartera",
+   "capaFisica": "superficie de volatilidad en AR",
+   "voz": "podcast de riesgo",
+   "escala": "API con SLO y benchmark",
+   "stack": "Front: Next.js, Three.js · Back: C++ o Rust, con Python",
+   "pesoEntrevistas": "alto"
+  },
+  "Q4": {
+   "horas": 105,
+   "horasLim": 120,
+   "versiones": [
+    {
+     "id": "1.0",
+     "inicio": "2028-01-30",
+     "fin": "2028-02-01",
+     "linea": "matching por precio y tiempo",
+     "entregables": [
+      "matching por precio y tiempo"
+     ]
+    },
+    {
+     "id": "1.1",
+     "inicio": "2028-02-02",
+     "fin": "2028-02-04",
+     "linea": "market maker, FIX y costos de transacción",
+     "entregables": [
+      "market maker",
+      "FIX y costos de transacción"
+     ]
+    },
+    {
+     "id": "2.0",
+     "inicio": "2028-02-05",
+     "fin": "2028-02-06",
+     "linea": "simulador en formato juego",
+     "entregables": [
+      "simulador en formato juego"
+     ]
+    },
+    {
+     "id": "3.0",
+     "inicio": "2028-02-07",
+     "fin": "2028-02-09",
+     "linea": "p99 bajo carga, replay y fuzzing",
+     "entregables": [
+      "p99 bajo carga",
+      "replay y fuzzing"
+     ]
+    }
+   ],
+   "puesto": "Trading Systems Engineer",
+   "descripcion": "motor de matching con libro de órdenes, market maker simulado y FIX",
+   "problema": "entender la microestructura del mercado sin acceso a un exchange",
+   "valor": "latencia y corrección probadas",
+   "diferencial": "p99 en microsegundos, replay determinístico y fuzzing",
+   "herramientas": "simulador educativo del libro, en formato juego",
+   "escala": "p99 en microsegundos bajo carga",
+   "stack": "Front: web del simulador · Back: C++ o Rust, FIX",
+   "pesoEntrevistas": "alto"
+  },
+  "Q5": {
+   "horas": 150,
+   "horasLim": 170,
+   "versiones": [
+    {
+     "id": "1.0",
+     "inicio": "2028-02-25",
+     "fin": "2028-02-28",
+     "linea": "de señales a órdenes en paper trading",
+     "entregables": [
+      "de señales a órdenes en paper trading"
+     ]
+    },
+    {
+     "id": "1.1",
+     "inicio": "2028-02-29",
+     "fin": "2028-03-03",
+     "linea": "riesgo previo, kill-switch y conciliación",
+     "entregables": [
+      "riesgo previo",
+      "kill-switch y conciliación"
+     ]
+    },
+    {
+     "id": "2.0",
+     "inicio": "2028-03-04",
+     "fin": "2028-03-06",
+     "linea": "WhatsApp, Face ID, email diario y tablero público",
+     "entregables": [
+      "WhatsApp",
+      "Face ID",
+      "email diario y tablero público"
+     ]
+    },
+    {
+     "id": "3.0",
+     "inicio": "2028-03-07",
+     "fin": "2028-03-10",
+     "linea": "una sola ejecución por orden, conciliación ante fallas, Kafka y meses en vivo",
+     "entregables": [
+      "una sola ejecución por orden",
+      "conciliación ante fallas",
+      "Kafka y meses en vivo"
+     ]
+    }
+   ],
+   "puesto": "Quant Trading Engineer",
+   "descripcion": "de señales a órdenes en paper trading con Alpaca, con riesgo previo, kill-switch y conciliación",
+   "problema": "órdenes duplicadas o perdidas cuando algo falla",
+   "valor": "un sistema de órdenes confiable",
+   "diferencial": "cada orden se ejecuta una sola vez, la conciliación aguanta fallas y lleva meses en vivo",
+   "herramientas": "tablero público; riesgo previo a cada orden",
+   "capaFisica": "Face ID para el kill-switch",
+   "escala": "cada orden una sola vez y conciliación ante fallas",
+   "stack": "Front: Expo · Back: .NET y Rust · DB: Postgres append-only · Infra: Kafka",
+   "pesoEntrevistas": "muy alto (fintech)"
+  },
+  "Q6": {
+   "horas": 120,
+   "horasLim": 140,
+   "versiones": [
+    {
+     "id": "1.0",
+     "inicio": "2028-03-11",
+     "fin": "2028-03-13",
+     "linea": "ingesta en ClickHouse con control de calidad",
+     "entregables": [
+      "ingesta en ClickHouse con control de calidad"
+     ]
+    },
+    {
+     "id": "1.1",
+     "inicio": "2028-03-14",
+     "fin": "2028-03-16",
+     "linea": "MEP y CCL en vivo, y MCP",
+     "entregables": [
+      "MEP y CCL en vivo",
+      "y MCP"
+     ]
+    },
+    {
+     "id": "2.0",
+     "inicio": "2028-03-17",
+     "fin": "2028-03-19",
+     "linea": "WhatsApp, voz y LED en Wokwi",
+     "entregables": [
+      "WhatsApp",
+      "voz y LED en Wokwi"
+     ]
+    },
+    {
+     "id": "3.0",
+     "inicio": "2028-03-20",
+     "fin": "2028-03-22",
+     "linea": "ticks masivos, replay, SLA y LED real",
+     "entregables": [
+      "ticks masivos",
+      "replay",
+      "SLA y LED real"
+     ]
+    }
+   ],
+   "puesto": "AI Quant / Data Engineer",
+   "descripcion": "ingesta de datos de mercado en tiempo real con control de calidad",
+   "problema": "datos de mercado sucios o con huecos",
+   "valor": "datos confiables para todo el stack quant",
+   "diferencial": "SLA de calidad, replay de un día y MCP",
+   "herramientas": "dólar MEP y CCL en vivo; MCP",
+   "capaFisica": "display LED (Wokwi y real)",
+   "voz": "consultas de cotizaciones",
+   "escala": "ingesta masiva de ticks y replay",
+   "stack": "Back: Python · IA por API: MCP · DB: ClickHouse",
+   "pesoEntrevistas": "muy alto"
+  },
+  "A1": {
+   "horas": 185,
+   "horasLim": 195,
+   "versiones": [
+    {
+     "id": "1.0",
+     "inicio": "2028-04-26",
+     "fin": "2028-04-29",
+     "linea": "6-DOF validado",
+     "entregables": [
+      "6-DOF validado"
+     ]
+    },
+    {
+     "id": "1.1",
+     "inicio": "2028-04-30",
+     "fin": "2028-05-04",
+     "linea": "simulador web contra OpenRocket",
+     "entregables": [
+      "simulador web contra OpenRocket"
+     ]
+    },
+    {
+     "id": "2.0",
+     "inicio": "2028-05-05",
+     "fin": "2028-05-09",
+     "linea": "Monte Carlo, VR, voz y computadora de vuelo en Wokwi",
+     "entregables": [
+      "Monte Carlo",
+      "VR",
+      "voz y computadora de vuelo en Wokwi"
+     ]
+    },
+    {
+     "id": "3.0",
+     "inicio": "2028-05-10",
+     "fin": "2028-05-13",
+     "linea": "un millón de corridas, modelo sustituto y HIL real",
+     "entregables": [
+      "un millón de corridas",
+      "modelo sustituto y HIL real"
+     ]
+    }
+   ],
+   "puesto": "Flight Dynamics Engineer",
+   "descripcion": "simulador de vuelo 6-DOF para cohetes amateur",
+   "problema": "los grupos amateur vuelan sin estimar la incertidumbre",
+   "valor": "vuelos más seguros y predecibles",
+   "diferencial": "validación analítica y contra OpenRocket, un millón de corridas y hardware-in-the-loop",
+   "herramientas": "simulador web; cono de incertidumbre con Monte Carlo",
+   "capaFisica": "computadora de vuelo real en HIL; trayectoria en VR",
+   "voz": "eventos del vuelo narrados",
+   "escala": "un millón de corridas en AWS Batch",
+   "stack": "Front: WebAssembly, WebXR · Back: Rust o C++, Julia · ML propio: modelo sustituto · Cloud: AWS Batch",
+   "pesoEntrevistas": "alto"
+  },
+  "A2": {
+   "horas": 175,
+   "horasLim": 185,
+   "versiones": [
+    {
+     "id": "1.0",
+     "inicio": "2028-05-22",
+     "fin": "2028-05-25",
+     "linea": "solver 1D contra CalculiX",
+     "entregables": [
+      "solver 1D contra CalculiX"
+     ]
+    },
+    {
+     "id": "1.1",
+     "inicio": "2028-05-26",
+     "fin": "2028-05-30",
+     "linea": "2D, convergencia y margen",
+     "entregables": [
+      "2D",
+      "convergencia y margen"
+     ]
+    },
+    {
+     "id": "2.0",
+     "inicio": "2028-05-31",
+     "fin": "2028-06-04",
+     "linea": "calculadora en el navegador",
+     "entregables": [
+      "calculadora en el navegador"
+     ]
+    },
+    {
+     "id": "3.0",
+     "inicio": "2028-06-05",
+     "fin": "2028-06-08",
+     "linea": "experimento real y usuarios en universidades",
+     "entregables": [
+      "experimento real y usuarios en universidades"
+     ]
+    }
+   ],
+   "puesto": "CAE Software Engineer",
+   "descripcion": "solver de elementos finitos verificado contra CalculiX",
+   "problema": "el software estructural es caro y opaco para estudiantes",
+   "valor": "cálculo estructural gratis en el navegador",
+   "diferencial": "convergencia de malla demostrada y un experimento real que coincide",
+   "herramientas": "calculadora para estudiantes; reporte de margen",
+   "capaFisica": "regla real medida con la cámara",
+   "escala": "cálculo pesado en el navegador con WebAssembly",
+   "stack": "Front: Tauri, WebAssembly · Back: Rust o C++, Gmsh",
+   "pesoEntrevistas": "alto"
+  },
+  "A3": {
+   "horas": 145,
+   "horasLim": 150,
+   "versiones": [
+    {
+     "id": "1.0",
+     "inicio": "2028-06-26",
+     "fin": "2028-06-29",
+     "linea": "método de paneles",
+     "entregables": [
+      "método de paneles"
+     ]
+    },
+    {
+     "id": "1.1",
+     "inicio": "2028-06-30",
+     "fin": "2028-07-03",
+     "linea": "vortex lattice, Euler 2D y comparación",
+     "entregables": [
+      "vortex lattice",
+      "Euler 2D y comparación"
+     ]
+    },
+    {
+     "id": "2.0",
+     "inicio": "2028-07-04",
+     "fin": "2028-07-06",
+     "linea": "optimizador y AR",
+     "entregables": [
+      "optimizador y AR"
+     ]
+    },
+    {
+     "id": "3.0",
+     "inicio": "2028-07-07",
+     "fin": "2028-07-10",
+     "linea": "lote y modelo sustituto",
+     "entregables": [
+      "lote y modelo sustituto"
+     ]
+    }
+   ],
+   "puesto": "CFD Software Engineer",
+   "descripcion": "aerodinámica con paneles, vortex lattice y Euler 2D, comparada contra OpenFOAM o SU2",
+   "problema": "diseñar un perfil de dron exige herramientas complejas",
+   "valor": "perfiles optimizados sin supercomputador",
+   "diferencial": "comparación contra OpenFOAM y modelo sustituto con optimización bayesiana",
+   "herramientas": "optimizador de perfiles para drones",
+   "capaFisica": "flujo de aire en AR",
+   "escala": "corridas en lote",
+   "stack": "Back: Rust o C++, Python · ML propio: modelo sustituto, optimización bayesiana",
+   "pesoEntrevistas": "alto"
+  },
+  "A4": {
+   "horas": 190,
+   "horasLim": 200,
+   "versiones": [
+    {
+     "id": "1.0",
+     "inicio": "2028-07-22",
+     "fin": "2028-07-26",
+     "linea": "PID, LQR y Kalman en PX4 SITL",
+     "entregables": [
+      "PID",
+      "LQR y Kalman en PX4 SITL"
+     ]
+    },
+    {
+     "id": "1.1",
+     "inicio": "2028-07-27",
+     "fin": "2028-07-31",
+     "linea": "banco de fallas, modos seguros y ajuste automático",
+     "entregables": [
+      "banco de fallas",
+      "modos seguros y ajuste automático"
+     ]
+    },
+    {
+     "id": "2.0",
+     "inicio": "2028-08-01",
+     "fin": "2028-08-04",
+     "linea": "estación de tierra por voz y el celular como sensor",
+     "entregables": [
+      "estación de tierra por voz y el celular como sensor"
+     ]
+    },
+    {
+     "id": "3.0",
+     "inicio": "2028-08-05",
+     "fin": "2028-08-09",
+     "linea": "dron real y RL con escudo vs LQR",
+     "entregables": [
+      "dron real y RL con escudo vs LQR"
+     ]
+    }
+   ],
+   "puesto": "GNC Software Engineer",
+   "descripcion": "control de vuelo con PID, LQR y Kalman, más un banco de fallas",
+   "problema": "ajustar el PID de un dron es prueba y error",
+   "valor": "ajuste automático y modos seguros",
+   "diferencial": "RL con escudo de seguridad contra LQR y un dron real",
+   "herramientas": "ajuste automático de PID desde los logs",
+   "capaFisica": "Estación de tierra por voz; El celular como sensor, con Kalman en vivo; Dron real con Pixhawk 6C Mini (≈ USD 177), dentro de la normativa ANAC",
+   "escala": "lazos con tiempos deterministas",
+   "stack": "Front: Expo · Back: ROS 2, PX4, C++, Python",
+   "pesoEntrevistas": "alto"
+  },
+  "A5": {
+   "horas": 155,
+   "horasLim": 165,
+   "versiones": [
+    {
+     "id": "1.0",
+     "inicio": "2028-08-31",
+     "fin": "2028-09-03",
+     "linea": "propagador y ventanas de comunicación",
+     "entregables": [
+      "propagador y ventanas de comunicación"
+     ]
+    },
+    {
+     "id": "1.1",
+     "inicio": "2028-09-04",
+     "fin": "2028-09-07",
+     "linea": "screening del catálogo completo",
+     "entregables": [
+      "screening del catálogo completo"
+     ]
+    },
+    {
+     "id": "2.0",
+     "inicio": "2028-09-08",
+     "fin": "2028-09-11",
+     "linea": "WhatsApp, newsletter y AR",
+     "entregables": [
+      "WhatsApp",
+      "newsletter y AR"
+     ]
+    },
+    {
+     "id": "3.0",
+     "inicio": "2028-09-12",
+     "fin": "2028-09-15",
+     "linea": "servicio diario y reingresos sobre Argentina",
+     "entregables": [
+      "servicio diario y reingresos sobre Argentina"
+     ]
+    }
+   ],
+   "puesto": "Mission Analysis Engineer",
+   "descripcion": "propagador con J2 y arrastre, ventanas de comunicación y screening de conjunciones",
+   "problema": "el riesgo de colisión y los reingresos no tienen un aviso público y simple",
+   "valor": "alertas públicas y entendibles",
+   "diferencial": "el catálogo completo cada día, sin comparar todos contra todos",
+   "herramientas": "alertas de conjunción y reingresos sobre Argentina",
+   "capaFisica": "basura espacial en AR",
+   "escala": "servicio diario con usuarios suscriptos",
+   "stack": "Back: Java con Orekit, SGP4 en Rust · DB: Postgres",
+   "pesoEntrevistas": "muy alto"
+  },
+  "A6": {
+   "horas": 100,
+   "horasLim": 105,
+   "versiones": [
+    {
+     "id": "1.0",
+     "inicio": "2028-09-16",
+     "fin": "2028-09-18",
+     "linea": "primer PR aceptado",
+     "entregables": [
+      "primer PR aceptado"
+     ]
+    },
+    {
+     "id": "2.0",
+     "inicio": "2028-09-19",
+     "fin": "2028-09-22",
+     "linea": "PR de funcionalidad en un segundo proyecto",
+     "entregables": [
+      "PR de funcionalidad en un segundo proyecto"
+     ]
+    },
+    {
+     "id": "3.0",
+     "inicio": "2028-09-23",
+     "fin": "2028-09-25",
+     "linea": "contribución de peso",
+     "entregables": [
+      "contribución de peso"
+     ]
+    }
+   ],
+   "puesto": "Systems Engineer",
+   "descripcion": "contribuciones a PX4, Orekit o F Prime",
+   "valor": "código tuyo aceptado en proyectos que usa la industria",
+   "stack": "Stack: el de cada proyecto",
+   "pesoEntrevistas": "alto"
+  },
+  "A7": {
+   "horas": 200,
+   "horasLim": 230,
+   "versiones": [
+    {
+     "id": "1.0",
+     "inicio": "2028-09-26",
+     "fin": "2028-09-30",
+     "linea": "gemelo digital del cubesat",
+     "entregables": [
+      "gemelo digital del cubesat"
+     ]
+    },
+    {
+     "id": "1.1",
+     "inicio": "2028-10-01",
+     "fin": "2028-10-05",
+     "linea": "sala de control en VR conectada a Antena Ops",
+     "entregables": [
+      "sala de control en VR conectada a Antena Ops"
+     ]
+    },
+    {
+     "id": "2.0",
+     "inicio": "2028-10-06",
+     "fin": "2028-10-10",
+     "linea": "\"Houston\" por voz",
+     "entregables": [
+      "\"Houston\" por voz"
+     ]
+    },
+    {
+     "id": "3.0",
+     "inicio": "2028-10-11",
+     "fin": "2028-10-15",
+     "linea": "HIL real, comandos firmados y caso de seguridad",
+     "entregables": [
+      "HIL real",
+      "comandos firmados y caso de seguridad"
+     ]
+    }
+   ],
+   "puesto": "Aerospace Software Engineer",
+   "descripcion": "misión de un cubesat ficticio con operador asistido por IA",
+   "problema": "operar una misión exige un equipo grande atento las 24 horas",
+   "valor": "operación de misión de punta a punta",
+   "diferencial": "computadora de a bordo real, comandos firmados y caso de seguridad documentado",
+   "herramientas": "sala de control con video en VR",
+   "capaFisica": "computadora de a bordo real en HIL, con Face ID",
+   "voz": "\"Houston\": el agente propone runbooks y vos aprobás",
+   "escala": "telemetría continua y comandos garantizados",
+   "stack": "Front: VR · Back: F Prime o cFS, Rust embebido o Ada/SPARK",
+   "pesoEntrevistas": "muy alto"
+  }
+ },
+ "fondo": {
+  "P1": {
+   "secundaria": [
+    {
+     "app": "HandyX",
+     "version": "1.0"
+    }
+   ],
+   "comercial": null
+  },
+  "CW1": {
+   "secundaria": [
+    {
+     "app": "HandyX",
+     "version": "1.0"
+    }
+   ],
+   "comercial": 1
+  },
+  "E1": {
+   "secundaria": [
+    {
+     "app": "HandyX",
+     "version": "1.0"
+    },
+    {
+     "app": "HandyX",
+     "version": "2.0"
+    }
+   ],
+   "comercial": 1
+  },
+  "P2": {
+   "secundaria": [
+    {
+     "app": "HandyX",
+     "version": "2.0"
+    }
+   ],
+   "comercial": null
+  },
+  "CW2": {
+   "secundaria": [
+    {
+     "app": "HandyX",
+     "version": "2.0"
+    }
+   ],
+   "comercial": 2
+  },
+  "E2": {
+   "secundaria": [
+    {
+     "app": "HandyX",
+     "version": "2.0"
+    },
+    {
+     "app": "HandyX",
+     "version": "3.0"
+    }
+   ],
+   "comercial": 2
+  },
+  "W1": {
+   "secundaria": [
+    {
+     "app": "HandyX",
+     "version": "3.0"
+    }
+   ],
+   "comercial": 3
+  },
+  "CW3": {
+   "secundaria": [
+    {
+     "app": "JulIA",
+     "version": "1.0"
+    }
+   ],
+   "comercial": 4
+  },
+  "E3": {
+   "secundaria": [
+    {
+     "app": "JulIA",
+     "version": "1.0"
+    }
+   ],
+   "comercial": 4
+  },
+  "P3": {
+   "secundaria": [
+    {
+     "app": "JulIA",
+     "version": "1.0"
+    },
+    {
+     "app": "JulIA",
+     "version": "2.0"
+    }
+   ],
+   "comercial": null
+  },
+  "CW4": {
+   "secundaria": [
+    {
+     "app": "JulIA",
+     "version": "2.0"
+    }
+   ],
+   "comercial": 5
+  },
+  "E4": {
+   "secundaria": [
+    {
+     "app": "JulIA",
+     "version": "2.0"
+    }
+   ],
+   "comercial": 5
+  },
+  "P4": {
+   "secundaria": [
+    {
+     "app": "JulIA",
+     "version": "2.0"
+    },
+    {
+     "app": "JulIA",
+     "version": "3.0"
+    }
+   ],
+   "comercial": null
+  },
+  "CW5": {
+   "secundaria": [
+    {
+     "app": "JulIA",
+     "version": "3.0"
+    }
+   ],
+   "comercial": 6
+  },
+  "J5": {
+   "secundaria": [
+    {
+     "app": "JulIA",
+     "version": "3.0"
+    }
+   ],
+   "comercial": 6
+  },
+  "P0B": {
+   "secundaria": [
+    {
+     "app": "JulIA",
+     "version": "3.0"
+    },
+    {
+     "app": "Clip Studio",
+     "version": "1.0"
+    }
+   ],
+   "comercial": null
+  },
+  "P5": {
+   "secundaria": [
+    {
+     "app": "Clip Studio",
+     "version": "1.0"
+    }
+   ],
+   "comercial": null
+  },
+  "CW6": {
+   "secundaria": [
+    {
+     "app": "Clip Studio",
+     "version": "1.0"
+    },
+    {
+     "app": "Clip Studio",
+     "version": "2.0"
+    }
+   ],
+   "comercial": 7
+  },
+  "CW7": {
+   "secundaria": [
+    {
+     "app": "Clip Studio",
+     "version": "2.0"
+    }
+   ],
+   "comercial": 8
+  },
+  "CW8": {
+   "secundaria": [
+    {
+     "app": "Clip Studio",
+     "version": "2.0"
+    }
+   ],
+   "comercial": 9
+  },
+  "J6": {
+   "secundaria": [
+    {
+     "app": "Clip Studio",
+     "version": "2.0"
+    },
+    {
+     "app": "Clip Studio",
+     "version": "3.0"
+    }
+   ],
+   "comercial": 9
+  },
+  "W2": {
+   "secundaria": [
+    {
+     "app": "Clip Studio",
+     "version": "3.0"
+    }
+   ],
+   "comercial": 10
+  },
+  "P6": {
+   "secundaria": [
+    {
+     "app": "Roofy",
+     "version": "1.0"
+    }
+   ],
+   "comercial": null
+  },
+  "SUM": {
+   "secundaria": [
+    {
+     "app": "Roofy",
+     "version": "1.0"
+    }
+   ],
+   "comercial": null
+  },
+  "P7": {
+   "secundaria": [
+    {
+     "app": "Roofy",
+     "version": "1.0"
+    }
+   ],
+   "comercial": null
+  },
+  "JP5": {
+   "secundaria": [
+    {
+     "app": "Roofy",
+     "version": "2.0"
+    }
+   ],
+   "comercial": 11
+  },
+  "W3": {
+   "secundaria": [
+    {
+     "app": "Roofy",
+     "version": "2.0"
+    }
+   ],
+   "comercial": 11
+  },
+  "P8": {
+   "secundaria": [
+    {
+     "app": "Roofy",
+     "version": "2.0"
+    }
+   ],
+   "comercial": null
+  },
+  "P9": {
+   "secundaria": [
+    {
+     "app": "Roofy",
+     "version": "3.0"
+    }
+   ],
+   "comercial": null
+  },
+  "P10": {
+   "secundaria": [
+    {
+     "app": "Roofy",
+     "version": "3.0"
+    }
+   ],
+   "comercial": null
+  },
+  "JP6": {
+   "secundaria": "libre",
+   "comercial": 12
+  },
+  "COL": {
+   "secundaria": "libre",
+   "comercial": 12
+  },
+  "W4": {
+   "secundaria": "libre",
+   "comercial": 13
+  },
+  "S1": {
+   "secundaria": "libre",
+   "comercial": null
+  },
+  "S2": {
+   "secundaria": "libre",
+   "comercial": null
+  },
+  "S3": {
+   "secundaria": "libre",
+   "comercial": null
+  },
+  "CW9": {
+   "pausa": "PNPT"
+  },
+  "J7": {
+   "secundaria": "libre",
+   "comercial": 14
+  },
+  "CIE2": {
+   "secundaria": "libre",
+   "comercial": 14
+  },
+  "WQ1": {
+   "secundaria": "libre",
+   "comercial": 15
+  },
+  "Q1": {
+   "secundaria": "libre",
+   "comercial": null
+  },
+  "Q2": {
+   "secundaria": "libre",
+   "comercial": null
+  },
+  "WQ2": {
+   "secundaria": "libre",
+   "comercial": 16
+  },
+  "Q3": {
+   "secundaria": "libre",
+   "comercial": null
+  },
+  "Q4": {
+   "secundaria": "libre",
+   "comercial": null
+  },
+  "CW10": {
+   "secundaria": "libre",
+   "comercial": 17
+  },
+  "J8": {
+   "secundaria": "libre",
+   "comercial": 17
+  },
+  "WQ3": {
+   "secundaria": "libre",
+   "comercial": 17
+  },
+  "Q5": {
+   "secundaria": "libre",
+   "comercial": null
+  },
+  "Q6": {
+   "secundaria": "libre",
+   "comercial": null
+  },
+  "CW11": {
+   "secundaria": "libre",
+   "comercial": 18
+  },
+  "J9": {
+   "secundaria": "libre",
+   "comercial": 18
+  },
+  "CIE3": {
+   "secundaria": "libre",
+   "comercial": 18
+  },
+  "WA1": {
+   "secundaria": "libre",
+   "comercial": 19
+  },
+  "A1": {
+   "secundaria": "libre",
+   "comercial": null
+  },
+  "WA2": {
+   "secundaria": "libre",
+   "comercial": 20
+  },
+  "A2": {
+   "secundaria": "libre",
+   "comercial": null
+  },
+  "WA3": {
+   "secundaria": "libre",
+   "comercial": 21
+  },
+  "A3": {
+   "secundaria": "libre",
+   "comercial": null
+  },
+  "JP10": {
+   "secundaria": "libre",
+   "comercial": 22
+  },
+  "WA4": {
+   "secundaria": "libre",
+   "comercial": 22
+  },
+  "A4": {
+   "secundaria": "libre",
+   "comercial": null
+  },
+  "CW12": {
+   "secundaria": "libre",
+   "comercial": 23
+  },
+  "J10": {
+   "secundaria": "libre",
+   "comercial": 23
+  },
+  "WA5": {
+   "secundaria": "libre",
+   "comercial": 23
+  },
+  "A5": {
+   "secundaria": "libre",
+   "comercial": null
+  },
+  "A6": {
+   "secundaria": "libre",
+   "comercial": null
+  },
+  "A7": {
+   "secundaria": "libre",
+   "comercial": null
+  },
+  "CIE4": {
+   "secundaria": "libre",
+   "comercial": null
+  }
+ },
+ "secundarias": [
+  {
+   "id": "handyx",
+   "nombre": "HandyX",
+   "inicio": "2026-11-26",
+   "fin": "2027-02-03",
+   "versiones": [
+    {
+     "id": "1.0",
+     "inicio": "2026-11-26",
+     "fin": "2026-12-17",
+     "linea": "web + app, pro onboarding, request, chat, Mercado Pago escrow (sandbox).",
+     "entregables": [
+      "web + app",
+      "pro onboarding",
+      "request",
+      "chat",
+      "Mercado Pago escrow (sandbox)"
+     ],
+     "revisionForeground": [
+      "dinero"
+     ]
+    },
+    {
+     "id": "2.0",
+     "inicio": "2026-12-18",
+     "fin": "2027-01-12",
+     "linea": "Claude vision diagnosis + quote, voice agent (ElevenLabs + Twilio), scheduling tools.",
+     "entregables": [
+      "Claude vision diagnosis + quote",
+      "voice agent (ElevenLabs + Twilio)",
+      "scheduling tools"
+     ]
+    },
+    {
+     "id": "3.0",
+     "inicio": "2027-01-13",
+     "fin": "2027-02-03",
+     "linea": "LightGBM learning-to-rank, .NET payments service, USDC payouts on testnet, security hardening.",
+     "entregables": [
+      "LightGBM learning-to-rank",
+      ".NET payments service",
+      "USDC payouts on testnet",
+      "security hardening"
+     ],
+     "revisionForeground": [
+      "dinero",
+      "seguridad",
+      "smart contracts"
+     ]
+    }
+   ],
+   "descripcion": "on-demand marketplace for trades: request by photo or voice, AI quote, match with the professional, protected payment.",
+   "valor": "sellable as an on-demand app.",
+   "diferencial": "photo diagnosis, voice agent that says it's AI, own ranking, escrow.",
+   "rol": "AI Full-stack / Mobile + Backend for marketplaces",
+   "peso": "very high",
+   "empresas": [
+    "Uber",
+    "PedidosYa",
+    "Rappi"
+   ],
+   "stack": {
+    "dev": "Turborepo, Docker compose (Postgres + Redis), Mercado Pago sandbox, Twilio test mode.",
+    "staging": "Neon branch, NestJS on Render, Expo internal build.",
+    "prod": "Next.js (Vercel), Expo, NestJS + Drizzle + BullMQ, .NET payments service on Azure, Neon."
+   }
+  },
+  {
+   "id": "julia",
+   "nombre": "JulIA",
+   "inicio": "2027-02-04",
+   "fin": "2027-04-17",
+   "versiones": [
+    {
+     "id": "1.0",
+     "inicio": "2027-02-04",
+     "fin": "2027-02-28",
+     "linea": "courses, Remotion video lessons, Claude tutor over course content.",
+     "entregables": [
+      "courses",
+      "Remotion video lessons",
+      "Claude tutor over course content"
+     ]
+    },
+    {
+     "id": "2.0",
+     "inicio": "2027-03-01",
+     "fin": "2027-03-25",
+     "linea": "3D trade simulations (R3F), BKT, FSRS reviews.",
+     "entregables": [
+      "3D trade simulations (R3F)",
+      "BKT",
+      "FSRS reviews"
+     ],
+     "revisionForeground": [
+      "datos personales"
+     ]
+    },
+    {
+     "id": "3.0",
+     "inicio": "2027-03-26",
+     "fin": "2027-04-17",
+     "linea": "neural vs BKT with a measured metric, EAS certificates, B2B panel.",
+     "entregables": [
+      "neural vs BKT with a measured metric",
+      "EAS certificates",
+      "B2B panel"
+     ],
+     "revisionForeground": [
+      "smart contracts"
+     ]
+    }
+   ],
+   "descripcion": "platform to learn trades with courses, 3D simulations and an AI tutor.",
+   "valor": "SaaS for academies and trade companies.",
+   "diferencial": "own knowledge tracing (BKT vs neural), FSRS review, verifiable certificates.",
+   "rol": "AI Engineer / EdTech Full-stack",
+   "peso": "high",
+   "empresas": [
+    "Udemy",
+    "Platzi",
+    "Coursera"
+   ],
+   "stack": {
+    "dev": "Docker compose, local Remotion, testnet.",
+    "staging": "Neon branch, FastAPI + NestJS on Render.",
+    "prod": "Next.js + React Three Fiber, NestJS + FastAPI, Remotion, AWS S3 + CloudFront, EAS certificates on testnet."
+   }
+  },
+  {
+   "id": "clip-studio",
+   "nombre": "Clip Studio",
+   "inicio": "2027-04-13",
+   "fin": "2027-06-18",
+   "versiones": [
+    {
+     "id": "1.0",
+     "inicio": "2027-04-13",
+     "fin": "2027-05-05",
+     "linea": "ingest, Whisper, highlights by transcript and audio, vertical cuts with FFmpeg.",
+     "entregables": [
+      "ingest",
+      "Whisper",
+      "highlights by transcript and audio",
+      "vertical cuts with FFmpeg"
+     ]
+    },
+    {
+     "id": "2.0",
+     "inicio": "2027-05-06",
+     "fin": "2027-05-27",
+     "linea": "auto-reframe, animated captions (Remotion, reused from JulIA), Claude hooks and titles, chat peaks.",
+     "entregables": [
+      "auto-reframe",
+      "animated captions (Remotion",
+      "reused from JulIA)",
+      "Claude hooks and titles",
+      "chat peaks"
+     ]
+    },
+    {
+     "id": "3.0",
+     "inicio": "2027-05-28",
+     "fin": "2027-06-18",
+     "linea": "retention model (reuses HandyX ranking), trends by niche, scheduling via official APIs.",
+     "entregables": [
+      "retention model (reuses HandyX ranking)",
+      "trends by niche",
+      "scheduling via official APIs"
+     ]
+    }
+   ],
+   "descripcion": "long video → vertical clips ready to publish.",
+   "valor": "my own tool for clipping + product for creators.",
+   "diferencial": "highlights from transcript + audio peaks + chat peaks, own retention model.",
+   "rol": "AI Engineer / Media + ML",
+   "peso": "high",
+   "empresas": [
+    "Opus Clip",
+    "Descript",
+    "CapCut",
+    "YouTube",
+    "Kick",
+    "Twitch"
+   ],
+   "stack": {
+    "dev": "local FFmpeg + Whisper, Docker compose.",
+    "staging": "on-demand GPU, test S3 bucket.",
+    "prod": "NestJS, GPU workers, FFmpeg, Whisper, Remotion, S3 + CloudFront, official publishing APIs."
+   }
+  },
+  {
+   "id": "roofy",
+   "nombre": "Roofy",
+   "inicio": "2027-06-19",
+   "fin": "2027-09-06",
+   "versiones": [
+    {
+     "id": "1.0",
+     "inicio": "2027-06-19",
+     "fin": "2027-07-15",
+     "linea": "listings + 3D tour.",
+     "entregables": [
+      "listings + 3D tour"
+     ]
+    },
+    {
+     "id": "2.0",
+     "inicio": "2027-07-16",
+     "fin": "2027-08-10",
+     "linea": "WebXR AR + visit-booking agent (base for the Airbnb v2 showcase).",
+     "entregables": [
+      "WebXR AR + visit-booking agent (base for the Airbnb v2 showcase)"
+     ],
+     "revisionForeground": [
+      "datos personales"
+     ]
+    },
+    {
+     "id": "3.0",
+     "inicio": "2027-08-11",
+     "fin": "2027-09-06",
+     "linea": "plans for agencies, metrics panel, security hardening.",
+     "entregables": [
+      "plans for agencies",
+      "metrics panel",
+      "security hardening"
+     ],
+     "revisionForeground": [
+      "dinero",
+      "seguridad"
+     ]
+    }
+   ],
+   "descripcion": "3D and AR property tours with an agent that books visits.",
+   "valor": "SaaS with plans for real-estate agencies, starting in Mar del Plata.",
+   "diferencial": "walk the property before going, book without calling.",
+   "rol": "Full-stack 3D / PropTech",
+   "peso": "high",
+   "empresas": [
+    "Zonaprop",
+    "Roomix"
+   ],
+   "stack": {
+    "dev": "Docker compose, test 3D models.",
+    "staging": "Neon branch, Render.",
+    "prod": "Next.js + Three.js/R3F, WebXR, NestJS, Claude agent with calendar tools."
+   }
+  }
+ ],
+ "comerciales": [
+  {
+   "n": 1,
+   "id": "com-1",
+   "inicio": "2026-12-10",
+   "fin": "2026-12-20",
+   "ventana": "Cert V1 + English E#1",
+   "marca": "Aquasol and water parks",
+   "queSeHace": "New premium web, 3D park, live lines and weather (simulated), demo tickets, AR",
+   "wow": "Fly over the park",
+   "reusa": "PetrIA Three.js"
+  },
+  {
+   "n": 2,
+   "id": "com-2",
+   "inicio": "2026-12-31",
+   "fin": "2027-01-14",
+   "ventana": "Cert V2 + English E#2",
+   "marca": "Cinemacenter",
+   "queSeHace": "Listings, 3D seat picker, Claude recommender",
+   "wow": "See the screen from your seat",
+   "reusa": "PetrIA agent"
+  },
+  {
+   "n": 3,
+   "id": "com-3",
+   "inicio": "2027-01-15",
+   "fin": "2027-02-03",
+   "ventana": "Math W1",
+   "marca": "miboletería",
+   "queSeHace": "Ticketing with 3D stadium map, virtual queue, alerts",
+   "wow": "Queue survives a simulated spike (no real LLM)",
+   "reusa": "HandyX BullMQ"
+  },
+  {
+   "n": 4,
+   "id": "com-4",
+   "inicio": "2027-02-04",
+   "fin": "2027-02-18",
+   "ventana": "Cert V3 + English E#3",
+   "marca": "McDonald's",
+   "queSeHace": "Voice ordering, 3D menu, Lucero-style games",
+   "wow": "Build the combo by talking",
+   "reusa": "HandyX voice"
+  },
+  {
+   "n": 5,
+   "id": "com-5",
+   "inicio": "2027-03-03",
+   "fin": "2027-03-17",
+   "ventana": "Cert V4 + English E#4",
+   "marca": "Supermarkets",
+   "queSeHace": "Smart list with Claude, recipes from what you have, comparator with simulated prices",
+   "wow": "Fridge photo → list",
+   "reusa": "HandyX vision"
+  },
+  {
+   "n": 6,
+   "id": "com-6",
+   "inicio": "2027-04-03",
+   "fin": "2027-04-12",
+   "ventana": "Cert V5 + Job search E#5",
+   "marca": "SportClub and gyms",
+   "queSeHace": "Member app, class booking, AI routine coach, occupancy per branch (simulated)",
+   "wow": "See which branch is empty now",
+   "reusa": "Antena realtime"
+  },
+  {
+   "n": 7,
+   "id": "com-7",
+   "inicio": "2027-05-01",
+   "fin": "2027-05-09",
+   "ventana": "Cert V6",
+   "marca": "Car dealerships",
+   "queSeHace": "3D configurator, test-drive agent, financing simulator",
+   "wow": "Spin the car and change its color",
+   "reusa": "JulIA R3F"
+  },
+  {
+   "n": 8,
+   "id": "com-8",
+   "inicio": "2027-05-10",
+   "fin": "2027-05-17",
+   "ventana": "Cert V7",
+   "marca": "Balnearios",
+   "queSeHace": "Tent booking on a 3D beach map, weather and tides, season payment",
+   "wow": "Pick your tent on the map",
+   "reusa": "Aquasol map"
+  },
+  {
+   "n": 9,
+   "id": "com-9",
+   "inicio": "2027-05-18",
+   "fin": "2027-05-29",
+   "ventana": "Cert V8 + Job search E#6",
+   "marca": "Theaters / season",
+   "queSeHace": "Season listings, 3D seats, play-recommending agent",
+   "wow": "Walk the room before buying",
+   "reusa": "Cinemacenter seats"
+  },
+  {
+   "n": 10,
+   "id": "com-10",
+   "inicio": "2027-05-30",
+   "fin": "2027-06-18",
+   "ventana": "Math W2",
+   "marca": "Pharmacies",
+   "queSeHace": "Stock per branch (simulated), reminders, assistant that never diagnoses and refers",
+   "wow": "Find the medicine at the nearest branch",
+   "reusa": "VitalIA rules"
+  },
+  {
+   "n": 11,
+   "id": "com-11",
+   "inicio": "2027-07-16",
+   "fin": "2027-08-01",
+   "ventana": "Job search + Math W3",
+   "marca": "Airbnb v2",
+   "queSeHace": "Stays with 3D/AR tour, booking agent",
+   "wow": "Stand in the living room before booking",
+   "reusa": "Roofy v2 AR"
+  },
+  {
+   "n": 12,
+   "id": "com-12",
+   "inicio": "2027-09-07",
+   "fin": "2027-09-19",
+   "ventana": "Job search + Consolidation",
+   "marca": "Football clubs",
+   "queSeHace": "Member app, digital card, 3D stadium, clips, no real crests",
+   "wow": "Sunday's goal already cut vertical",
+   "reusa": "Clip Studio"
+  },
+  {
+   "n": 13,
+   "id": "com-13",
+   "inicio": "2027-09-20",
+   "fin": "2027-09-24",
+   "ventana": "Math W4",
+   "marca": "Hotels and tourism",
+   "queSeHace": "Landing, 3D tour, multilingual AI concierge",
+   "wow": "Ask the hotel in your language",
+   "reusa": "Airbnb v2"
+  },
+  {
+   "n": 14,
+   "id": "com-14",
+   "inicio": "2027-11-12",
+   "fin": "2027-11-21",
+   "ventana": "Job search E#7 + stage close",
+   "marca": "Restaurants and breweries",
+   "queSeHace": "3D menu, QR + voice ordering, booking agent",
+   "wow": "Order the pint by talking",
+   "reusa": "McDonald's voice"
+  },
+  {
+   "n": 15,
+   "id": "com-15",
+   "inicio": "2027-11-22",
+   "fin": "2027-11-29",
+   "ventana": "Math WQ1",
+   "marca": null,
+   "queSeHace": null,
+   "wow": null,
+   "reusa": null
+  },
+  {
+   "n": 16,
+   "id": "com-16",
+   "inicio": "2028-01-07",
+   "fin": "2028-01-16",
+   "ventana": "Math WQ2",
+   "marca": null,
+   "queSeHace": null,
+   "wow": null,
+   "reusa": null
+  },
+  {
+   "n": 17,
+   "id": "com-17",
+   "inicio": "2028-02-10",
+   "fin": "2028-02-24",
+   "ventana": "CKS + Job search E#8 + Math WQ3",
+   "marca": null,
+   "queSeHace": null,
+   "wow": null,
+   "reusa": null
+  },
+  {
+   "n": 18,
+   "id": "com-18",
+   "inicio": "2028-03-23",
+   "fin": "2028-04-15",
+   "ventana": "AWS Security + Job search E#9 + stage close",
+   "marca": null,
+   "queSeHace": null,
+   "wow": null,
+   "reusa": null
+  },
+  {
+   "n": 19,
+   "id": "com-19",
+   "inicio": "2028-04-16",
+   "fin": "2028-04-25",
+   "ventana": "Math WA1",
+   "marca": null,
+   "queSeHace": null,
+   "wow": null,
+   "reusa": null
+  },
+  {
+   "n": 20,
+   "id": "com-20",
+   "inicio": "2028-05-14",
+   "fin": "2028-05-21",
+   "ventana": "Math WA2",
+   "marca": null,
+   "queSeHace": null,
+   "wow": null,
+   "reusa": null
+  },
+  {
+   "n": 21,
+   "id": "com-21",
+   "inicio": "2028-06-16",
+   "fin": "2028-06-25",
+   "ventana": "Math WA3",
+   "marca": null,
+   "queSeHace": null,
+   "wow": null,
+   "reusa": null
+  },
+  {
+   "n": 22,
+   "id": "com-22",
+   "inicio": "2028-07-11",
+   "fin": "2028-07-21",
+   "ventana": "Job search + Math WA4",
+   "marca": null,
+   "queSeHace": null,
+   "wow": null,
+   "reusa": null
+  },
+  {
+   "n": 23,
+   "id": "com-23",
+   "inicio": "2028-08-10",
+   "fin": "2028-08-30",
+   "ventana": "SA Pro + Job search E#10 + Math WA5",
+   "marca": null,
+   "queSeHace": null,
+   "wow": null,
+   "reusa": null
+  }
+ ],
+ "recordatorios": [
+  {
+   "id": "v122-2026-11-26",
+   "fecha": "2026-11-26",
+   "texto": "Start HandyX v1.0 in the background (separate repo)."
+  },
+  {
+   "id": "v122-2026-12-03",
+   "fecha": "2026-12-03",
+   "texto": "Prepare the Aquasol brief for slot #1 (starts 10 Dec)."
+  },
+  {
+   "id": "v122-2027-02-01",
+   "fecha": "2027-02-01",
+   "texto": "Secondary handover: HandyX → JulIA. Check HandyX reached v3.0 or log what's left."
+  },
+  {
+   "id": "v122-2027-04-10",
+   "fecha": "2027-04-10",
+   "texto": "Secondary handover: JulIA → Clip Studio. Check JulIA reached v3.0 or log what's left."
+  },
+  {
+   "id": "v122-2027-06-15",
+   "fecha": "2027-06-15",
+   "texto": "Secondary handover: Clip Studio → Roofy. Check Clip Studio reached v3.0 or log what's left."
+  },
+  {
+   "id": "v122-2027-08-29",
+   "fecha": "2027-08-29",
+   "texto": "Pick the next secondary from \"Ver a futuro\"."
+  }
+ ],
+ "backlog": [
+  {
+   "nombre": "Agentes para pymes",
+   "destacado": true
+  },
+  {
+   "nombre": "Finanzas personales Argentina",
+   "destacado": true
+  },
+  {
+   "nombre": "Copiloto de búsqueda laboral",
+   "destacado": true
+  },
+  {
+   "nombre": "Trazo Pro",
+   "destacado": false
+  },
+  {
+   "nombre": "Consorcios/expensas",
+   "destacado": false
+  },
+  {
+   "nombre": "Coach de entrenamiento.",
+   "destacado": false
+  }
+ ]
+}

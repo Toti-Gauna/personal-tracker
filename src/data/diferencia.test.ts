@@ -16,7 +16,7 @@ describe('diferencia contra el plan v12.1 (fechas explícitas)', () => {
     // Los 73 bloques de v12.1; las pausas que inserta el motor no tienen fila.
     expect(filas).toHaveLength(73);
     expect(filas.some((x) => x.id.startsWith('PAUSA'))).toBe(false);
-    expect(filas.find((x) => x.id === 'P1')).toMatchObject({ horas: 194.5, inicio: '2026-11-21', fin: '2026-12-09', roadmap: { inicio: '2026-11-21', fin: '2026-12-09' }, deltaInicio: 0, deltaFin: 0 });
+    expect(filas.find((x) => x.id === 'P1')).toMatchObject({ horas: 193.5, inicio: '2026-11-21', fin: '2026-12-09', roadmap: { inicio: '2026-11-21', fin: '2026-12-09' }, deltaInicio: 0, deltaFin: 0 });
     // Con fechas explícitas el motor las respeta: ninguna fila se corre.
     expect(filas.filter((x) => x.deltaInicio !== 0 || x.deltaFin !== 0)).toEqual([]);
     expect(filas.find((x) => x.id === 'P1V0')!.nota).toMatch(/no cuentan para la PetrIA de v12.1/);
@@ -24,7 +24,7 @@ describe('diferencia contra el plan v12.1 (fechas explícitas)', () => {
 
   it('el resumen: el plan termina el 27 oct 2028, en fecha; nada se adelanta ni se atrasa', () => {
     const r = resumenDiferencia(diferenciaRoadmap(calendarioVivo()))!;
-    expect(r).toMatchObject({ fin: '2028-10-27', finRoadmap: '2028-10-27', delta: 0, horas: 6479.5, masAntes: null, masDespues: null });
+    expect(r).toMatchObject({ fin: '2028-10-27', finRoadmap: '2028-10-27', delta: 0, horas: 6478.5, masAntes: null, masDespues: null });
     expect(resumenDiferencia([])).toBeNull();
   });
 

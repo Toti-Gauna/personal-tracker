@@ -136,7 +136,7 @@ describe('v12.1 · el plan como períodos', () => {
   it('PetrIA: estimado al fin del bloque, fecha límite de la 3.0; publicar la 1.0 suma por días', () => {
     const a = arbolPlan(cal, { plan });
     const p1 = [...recorrer(a)].find((p) => p.id === 'P1')!;
-    expect(p1).toMatchObject({ inicio: '2026-11-21', fin: '2026-12-09', deadline: '2027-01-05', horasPlan: 194.5 });
+    expect(p1).toMatchObject({ inicio: '2026-11-21', fin: '2026-12-09', deadline: '2027-01-05', horasPlan: 193.5 });
     expect(p1.hijos!.map((v) => v.id)).toEqual(['P1:v1.0', 'P1:v1.1', 'P1:v2.0', 'P1:v3.0']);
     const pub = arbolPlan(cal, { plan: { hitos: {}, versiones: { P1: { '1.0': { publicada: '2026-11-25' } } } } });
     const m = medir([...recorrer(pub)].find((p) => p.id === 'P1')!, '2026-11-26');
