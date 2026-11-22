@@ -23,7 +23,8 @@ import { SesionEntreno } from './screens/SesionEntreno';
 import { NuevaMeta } from './screens/NuevaMeta';
 import { Ajustes } from './screens/Ajustes';
 import { Avance } from './screens/Avance';
-import { AjustesCompanera, AjustesDatos, AjustesRutinas } from './screens/AjustesExtra';
+import { AjustesCompanera, AjustesDatos } from './screens/AjustesExtra';
+import { Rutinas } from './screens/Rutinas';
 import { Cierre } from './screens/Cierre';
 import { Logro } from './screens/Logro';
 import { Perfil } from './screens/Perfil';
@@ -124,7 +125,7 @@ export function App() {
       case 'cierre': contenido = <Cierre day={day} />; break;
       case 'logro': contenido = <Logro id={ruta.param} />; break;
       case 'ajustes': contenido = <Ajustes />; break;
-      case 'ajustes-rutinas': contenido = <AjustesRutinas />; break;
+      case 'ajustes-rutinas': contenido = <Rutinas key={ruta.param ?? ''} day={day} param={ruta.param} />; break;
       case 'ajustes-companera': contenido = <AjustesCompanera />; break;
       case 'ajustes-datos': contenido = <AjustesDatos today={today} />; break;
       case 'sonidos': contenido = <Sonidos today={today} />; break;
