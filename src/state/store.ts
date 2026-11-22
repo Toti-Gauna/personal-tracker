@@ -2,7 +2,7 @@ import { puertaBloqueando } from '../data/puertas';
 import { planPropio, setRutinasPropias } from '../data/rutinas-propias';
 import { rutinaParaFecha } from '../data/motor-rutinas';
 import { migrarPlanV12, migrarStudyV12 } from './migrar-v12';
-import { temaDelPost } from '../data/papers';
+import { papersDelDia, temaDelPost, tesisDePaper } from '../data/papers';
 import { T0_PLAN } from '../data/plan';
 import { INICIO_TRABAJO_DIAS } from '../data/capacidad';
 import { sprintActivo } from '../data/algoritmos';
@@ -292,9 +292,14 @@ export function startDay(routine: RoutineId, wake: string, date = dateKey()) {
       const day: DayLog = { date, wake, routine, dayType, rutinaPropia: propia.nombre, blocks: buildBlocks(planPropio(propia.bloques), carry), notes: [], focus: [] };
       return { ...s, days: { ...s.days, [date]: day }, carry: restCarry };
     }
+    // v12.2: la tesis de un paper va en el slot de learning.md del cierre (y es el borrador del post).
+    const tesisPaper = tesisDePaper(s.study, date);
+    const papersHoy = papersDelDia(date);
     const blocks = buildBlocks(planDay(date, routine, wake, dayType, { ventana, entrevista, puerta, prepara, ...(cfg.horarioTrabajo ? { trabajo: cfg.horarioTrabajo } : {}), ...(cfg.bloquesPendientes ? { pendientes: cfg.bloquesPendientes } : {}), ...v7, ...v12 }), carry)
       .map((b) => (refs[b.key] && !(ventana && b.key.startsWith('prog')) ? { ...b, ...refs[b.key] } : b))
       .map((b) => (b.rama === 'programacion' && delProyecto.length ? { ...b, tasks: [...delProyecto.map((t) => ({ id: newId(), t: `${proyecto} · ${t}`, done: false })), ...b.tasks] } : b))
+      .map((b) => (b.key === 'prog' && papersHoy.length ? { ...b, tasks: [...papersHoy.map((p) => ({ id: newId(), t: `Paper: ${p.nombre} (estudiar y test)`, done: false })), ...b.tasks] } : b))
+      .map((b) => (b.key === 'ingles' && tesisPaper ? { ...b, tasks: [...b.tasks, { id: newId(), t: `Tesis del paper: ${tesisPaper} (borrador del post del martes o jueves)`, done: false }] } : b))
       .map((b) => (b.key === 'cierre' && estirar ? { ...b, tasks: b.tasks.map((x) => (x.t === 'Estirar' ? { ...x, t: `Estirar: ${estirar}` } : x)) } : b))
       // Ola 27: el domingo, el cierre suma la revisión semanal de 30 min y la mini-tesis de una página.
       // (el domingo del modo intensivo v7 ya tiene su bloque de revisión semanal).

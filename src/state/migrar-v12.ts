@@ -32,7 +32,9 @@ export function migrarPlanV12(plan: PlanState): PlanState {
 }
 
 export function migrarStudyV12(st: StudyState, hoy: string): StudyState {
-  const activities = st.activities.some((a) => a.id === PAPERS_ID) ? st.activities : [...st.activities, actividadPapers()];
+  // v12.2: los papers van en el Block 1 (estaban en "leer"); si faltan, se suman.
+  const conPapers = st.activities.some((a) => a.id === PAPERS_ID) ? st.activities : [...st.activities, actividadPapers()];
+  const activities = conPapers.some((a) => a.id === PAPERS_ID && a.block === 'leer') ? conPapers.map((a) => (a.id === PAPERS_ID ? { ...a, block: 'prog' } : a)) : conPapers;
   const cards = conMazoLLM(st.cards, hoy);
   return activities === st.activities && cards.length === st.cards.length ? st : { ...st, activities, cards };
 }
