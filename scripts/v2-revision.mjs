@@ -39,6 +39,8 @@ const PANTALLAS = [
   { id: 'plan-version', hash: '#/metas/periodos/P1%3Av1.0' },
   { id: 'plan-fase', hash: '#/metas/periodos/F1' },
   { id: 'plan-analisis', hash: '#/metas/analisis' },
+  { id: 'plan-linea', hash: '#/metas/linea' },
+  { id: 'plan-mapa', hash: '#/metas/constelacion' },
   { id: 'entreno', hash: '#/entreno' },
   { id: 'perfil', hash: '#/perfil' },
   { id: 'ajustes', hash: '#/ajustes' },
@@ -68,8 +70,9 @@ const medir = () => {
   while (w.nextNode()) {
     const n = w.currentNode;
     const el = n.parentElement;
-    // No cuenta lo que no se ve: la navegación, lo que flota, el texto solo para lector de pantalla y el título chico (oculto arriba).
-    if (!el || !n.textContent.trim() || el.closest('.b2, .c-avisos, .h-velo, .v2-oculto, .m-titulo-chico, script, style')) continue;
+    // No cuenta lo que no se ve (la navegación, lo que flota, el texto solo para lector de pantalla, el título chico oculto arriba)
+    // ni lo que está dentro de un gráfico (data-grafico): los nombres de las barras y los meses del eje son datos, no prosa.
+    if (!el || !n.textContent.trim() || el.closest('.b2, .c-avisos, .h-velo, .v2-oculto, .m-titulo-chico, [data-grafico], script, style')) continue;
     const r = el.getBoundingClientRect();
     if (r.height === 0 || getComputedStyle(el).visibility === 'hidden') continue;
     if (r.top >= 0 && r.top < 844 - 78) pliegue += palabras(n.textContent);

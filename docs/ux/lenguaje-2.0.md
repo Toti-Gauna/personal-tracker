@@ -247,6 +247,8 @@ metadata); one floating action per screen at most; the breadcrumb is a compact p
   2.0 frame (`.m-marco`): title ≤ 3 words, intro ≤ 12, ≤ 60 words above the fold, ≤ 4 screens tall, no sideways
   overflow, no page errors. The taller specimen pages are measured but not gated. Known pending items are listed with
   their reason and don't fail the run.
+  Text inside a chart (`data-grafico`: the timeline, the map) is not counted: bar names and axis months are data
+  labels, not prose.
 - **Dev warnings**: `Marco` logs in development when a title or intro goes over budget.
 - **Gallery**: `#/v2/kit`, `#/v2/piezas` and `#/v2/movimiento` are the component gallery; the revision covers all three.
 
@@ -299,7 +301,7 @@ from it (and stay 1.0 until their batch). The registry now takes `cubre(ruta)`: 
 with a zoom (Semana day by day with what is due; Mes = versions and exams; Bimestre = blocks; Año = phases; 6 shown,
 "Ver N más"), the 4 stages, background (current secondary app and showcase, tracks, open source), your own goals
 (P0 and week/month/bimester/year), and the rest of the plan (Análisis, whole roadmap, branches, stages and paperwork).
-Lenses: Ahora (here) · Línea · Mapa (those two are 1.0 until 2.3).
+Lenses: Ahora (here) · Línea · Mapa (section 16).
 
 **A period** (`#/metas/periodos/<id>`): back to the parent by its short name ("Fase 1"), the path above it, the hero,
 then by level: version deliverables to tick, "Marcar publicada" (the launch version sends you to complete the Imán
@@ -313,3 +315,42 @@ Engineer" → "AI Full-stack Engineer", with "Fase 1" in the kicker).
 Compras (still 1.0).
 
 Budgets: hub 53 words above the fold (1.0 Períodos: 191), PetrIA 59, a version 58, a phase 60, Análisis 55.
+
+## 16. Línea and Mapa (`src/v2/plan/`, batch 2.3)
+
+The three lenses of the plan share one tab row (`Lentes` in `Compartido.tsx`): **Ahora** (the hub), **Línea**
+(`#/metas/linea`) and **Mapa** (`#/metas/constelacion`). In both new views, tapping a block opens the same sheet
+(`HojaPeriodo`): the goal card as hero and "Abrir" to enter (background items open their background page). 1.0's map
+by branches (`#/metas/mapa`) stays as it was, linked from the hub ("El mapa por ramas").
+
+**Línea** (`LineaV2.tsx`, data in `linea-datos.ts`): the whole plan on a time axis.
+- Top: stages and phases as spans with sticky labels. Below, one lane per block type (Proyectos, Certificaciones,
+  Matemática, Inglés y búsqueda, Cierres y descansos) plus the two background tracks; lane names stay in view while
+  you scroll sideways.
+- A bar fills with the work done, turns yellow when finished, gets an outline while it runs and a red underline when
+  overdue. Hatched bands are fixed pauses. The glowing yellow line is today.
+- Zoom: Todo · Año · Trimestre · Mes, pinch with two fingers, or Ctrl + wheel (from the whole plan down to two weeks).
+  The day under your fingers stays put; the buttons zoom around today when it is on screen. "Hoy" scrolls back to it.
+- It opens on a quarter with today a quarter in from the left. Below: hours done of planned for the blocks already started.
+
+**Mapa** (`Constelacion.tsx`): the plan as a spiral of stars, the timeline rolled up.
+- Layout (`constelacion-datos.ts`, pure and tested): one turn per phase, all starting at twelve o'clock; one star per
+  block on its stretch of the turn. Half of each turn is spread by dates and half evenly, so short blocks do not pile up.
+  Star size = planned hours, color = area. The spiral opens outward and rises slightly, which gives depth when it turns.
+- Reading it: the stretch already lived is drawn stronger; a finished block turns yellow; the running block has a thin
+  ring and its name; an overdue one, a red ring. Today is a yellow target with a pulse and the label "hoy" (a target, so
+  it is not mistaken for a finished star). Phase labels (F1…F11) sit where each turn starts; the blocks of the current
+  phase show their names when you are close. Labels never overlap: the more important one stays.
+- 3D (`constelacion-escena.ts`, three.js): loaded only on this screen, as its own chunk (about 136 KB gzipped). The flat
+  SVG map shows at once; the scene fades in over the same framing and flies to today. Drag sideways to turn (the page
+  still scrolls up and down), pinch or Ctrl + wheel to zoom, arrows and +/− on the keyboard, mouse drag also tilts. "Hoy"
+  and "Todo" fly to each view. It turns very slowly on its own, pauses off screen and in background tabs, and draws at
+  30 fps when idle.
+- Dark draws light (halos add up); light draws ink on paper (solid discs, finished ones outlined). It repaints when the
+  theme or the plan changes, without moving the camera.
+- Without WebGL (or if the context is lost) the flat map stays, and its stars are tappable. With reduced motion the
+  scene opens already on today and stays still until you touch it.
+- Below the map: a color legend, three numbers (blocks done, phase, arrival) and the 11 phases as rows to enter. The
+  map itself is one labelled group for screen readers; the list is the accessible way in.
+
+Budgets: Línea 9 words of prose above the fold, Mapa 21; 1.2 and 2.2 screens tall.
