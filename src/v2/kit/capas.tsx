@@ -1,11 +1,13 @@
 /**
  * Trazo 2.0 · lo que flota sobre cualquier pantalla (tanda 1.5): los avisos (toasts) y la confirmación. Se piden desde
- * cualquier lado con `aviso()` y `confirmar()`; `CapasV2` los muestra (App la monta solo en la 2.0).
+ * cualquier lado con `aviso()` y `confirmar()`; `CapasV2` los muestra e instala las transiciones (App la monta solo en la 2.0).
  */
 import { useEffect, useRef, useState, useSyncExternalStore } from 'react';
 import { Icono, type NombreIcono } from '../iconos';
+import { instalarNavegacion } from '../movimiento/movimiento';
 import './superficies.css';
 import './kit.css';
+import '../movimiento/movimiento.css';
 
 export type TonoAviso = 'info' | 'hecho' | 'atencion' | 'error';
 
@@ -102,7 +104,9 @@ function Confirmar({ p }: { p: PedidoConfirmar }) {
   );
 }
 
+/** Lo global de la 2.0: avisos, confirmación y la navegación con transiciones. App la monta solo con la 2.0 prendida. */
 export default function CapasV2() {
+  useEffect(() => instalarNavegacion(), []);
   const xs = useSyncExternalStore(suscribir, () => avisos);
   const p = useSyncExternalStore(suscribir, () => pedido);
   return (

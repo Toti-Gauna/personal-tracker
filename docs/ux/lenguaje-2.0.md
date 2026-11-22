@@ -84,13 +84,27 @@ hues, so nothing may rely on color alone; the test checks that no two colors sit
 - **Touch**: every tappable thing is at least `--toque` 44 px tall.
 - **Height**: a screen fits in 4 phone screens.
 
-## 5. Motion (tokens here; the system is batch 1.6)
+## 5. Motion (`src/v2/movimiento/`, demo at `#/v2/movimiento`)
 
 - Durations: `--dur-1` 120 ms (press), `--dur-2` 200 ms (state), `--dur-3` 320 ms (enter, the stroke), `--dur-4` 520 ms (screen, hero).
 - Curves: `--curva-salida` (things arriving), `--curva-ida-vuelta` (things moving), `--curva-resorte` (celebration only).
 - Signature: the stroke wipes in from the left (`.trazo-marca.entra`).
 - Reduced motion: movement becomes a 150 ms fade; nothing loops.
 - Motion must explain something: where a screen came from, what just changed, what you just finished.
+- The spring (`CURVA.resorte`) is a real spring (stiffness 170, damping 18) sampled as CSS `linear()`: 4.7 % overshoot.
+
+**Screen transitions.** Every internal link inside a 2.0 screen navigates through `navegar()` (installed globally by
+`CapasV2`), using the View Transitions API with a Web Animations fallback. Direction comes from the route shape
+(`inferirTransicion`): deeper = slides in from the right, back = from the left, siblings and sections = fade. A link can
+force one with `data-transicion` (`zoom-in` / `zoom-out` / `fundido`…) or opt out with `data-sin-transicion`. The bottom
+bar keeps its own `view-transition-name`, so it never moves. Browser back still animates (hashchange fallback).
+
+**Shared-element zoom.** Give the card and the destination hero the same `viewTransitionName`
+(`nombreTransicion(id)`): the card grows into the hero and shrinks back on return.
+
+**Pieces.** `<Numero>` counts up from the previous value (screen readers get only the final value); `<Escalonado>` /
+`escalonar()` brings children in 40 ms apart (capped at 8); `festejar(el)` fires stroke-yellow shards and a spring pulse
+(used by `Casilla` when ticked; reduced motion = pulse only); `haptico()` gives a short vibration where supported.
 
 ## 6. Icons and illustrations (`src/v2/iconos.tsx`)
 

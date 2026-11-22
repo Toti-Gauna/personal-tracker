@@ -75,7 +75,8 @@ export function App() {
   const day = useStore((s) => s.days[today]);
   const hayFoco = useStore((s) => !!s.focus);
   useFocusRunner();
-  const entrada = useEntrada(`${ruta.pantalla}/${ruta.param ?? ''}`, !cargando);
+  // En la 2.0 las pantallas entran con su propio sistema de movimiento (src/v2/movimiento).
+  const entrada = useEntrada(`${ruta.pantalla}/${ruta.param ?? ''}`, !cargando && settings?.interfaz !== 'v2');
   useSealSync(today, !!settings && !!day);
   // La ruta: las metas de hoy con su etiqueta y la propuesta de la semana guardada.
   useEffect(() => { if (settings && day) { ensureDayRefs(today); ensureWeek(today); } }, [settings, !!day, today]); // eslint-disable-line react-hooks/exhaustive-deps

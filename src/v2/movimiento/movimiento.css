@@ -1,0 +1,42 @@
+/* Trazo 2.0 · movimiento (tanda 1.6): las transiciones entre pantallas y el festejo. Solo en la 2.0. */
+
+/* ——— Transiciones de pantalla (View Transitions) ——— */
+@media (prefers-reduced-motion: no-preference) {
+  html[data-ui='v2']::view-transition-group(root) { animation-duration: var(--dur-3); }
+  html[data-ui='v2'][data-transicion='adelante']::view-transition-old(root) { animation: 260ms var(--curva-salida) both mv-sale-izq; }
+  html[data-ui='v2'][data-transicion='adelante']::view-transition-new(root) { animation: var(--dur-3) var(--curva-salida) both mv-entra-der; }
+  html[data-ui='v2'][data-transicion='atras']::view-transition-old(root) { animation: 260ms var(--curva-salida) both mv-sale-der; }
+  html[data-ui='v2'][data-transicion='atras']::view-transition-new(root) { animation: var(--dur-3) var(--curva-salida) both mv-entra-izq; }
+  html[data-ui='v2'][data-transicion='zoom-in']::view-transition-old(root) { animation: 260ms var(--curva-salida) both mv-se-achica; }
+  html[data-ui='v2'][data-transicion='zoom-in']::view-transition-new(root) { animation: var(--dur-3) var(--curva-salida) both mv-crece; }
+  html[data-ui='v2'][data-transicion='zoom-out']::view-transition-old(root) { animation: 260ms var(--curva-salida) both mv-se-va-grande; }
+  html[data-ui='v2'][data-transicion='zoom-out']::view-transition-new(root) { animation: var(--dur-3) var(--curva-salida) both mv-vuelve; }
+  html[data-ui='v2'][data-transicion='fundido']::view-transition-old(root) { animation: 160ms ease both mv-apaga; }
+  html[data-ui='v2'][data-transicion='fundido']::view-transition-new(root) { animation: 240ms var(--curva-salida) 60ms both mv-prende; }
+  /* El elemento compartido (tarjeta → héroe) viaja con el resorte. */
+  html[data-ui='v2']::view-transition-group(*) { animation-timing-function: var(--curva-salida); animation-duration: var(--dur-4); }
+  /* La barra de abajo no se mueve entre pantallas. */
+  html[data-ui='v2'] .barra { view-transition-name: barra; }
+  html[data-ui='v2'] .lateral { view-transition-name: lateral; }
+}
+@media (prefers-reduced-motion: reduce) {
+  html[data-ui='v2']::view-transition-old(root), html[data-ui='v2']::view-transition-new(root) { animation-duration: 150ms; }
+  html[data-ui='v2']::view-transition-group(*) { animation-duration: 150ms; }
+}
+@keyframes mv-sale-izq { to { opacity: 0; transform: translateX(-24px); } }
+@keyframes mv-entra-der { from { opacity: 0; transform: translateX(32px); } }
+@keyframes mv-sale-der { to { opacity: 0; transform: translateX(24px); } }
+@keyframes mv-entra-izq { from { opacity: 0; transform: translateX(-32px); } }
+@keyframes mv-se-achica { to { opacity: 0; transform: scale(0.96); } }
+@keyframes mv-crece { from { opacity: 0; transform: scale(1.03); } }
+@keyframes mv-se-va-grande { to { opacity: 0; transform: scale(1.03); } }
+@keyframes mv-vuelve { from { opacity: 0; transform: scale(0.97); } }
+@keyframes mv-apaga { to { opacity: 0; } }
+@keyframes mv-prende { from { opacity: 0; transform: translateY(6px); } }
+
+/* ——— Festejo: astillas del trazo ——— */
+.mv-festejo { position: fixed; z-index: var(--z-aviso, 60); width: 0; height: 0; pointer-events: none; }
+.mv-festejo i { position: absolute; left: -5px; top: -2px; width: 10px; height: 4px; background: var(--trazo, #f1e34c); clip-path: polygon(2px 0, 100% 0, calc(100% - 2px) 100%, 0 100%); }
+
+/* ——— Números ——— */
+.mv-numero { font-variant-numeric: tabular-nums; }

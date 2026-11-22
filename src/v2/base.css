@@ -40,3 +40,6 @@
 .icono { flex: none; display: block; }
 .ilustracion { display: block; color: var(--texto-3); }
 .ilustracion .il-trazo { fill: var(--trazo); stroke: none; opacity: 0.92; }
+
+/* Solo para el lector de pantalla. */
+.v2-oculto { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }

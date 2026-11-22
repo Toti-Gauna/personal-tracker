@@ -4,6 +4,7 @@
  */
 import { useEffect, useId, useRef, useState, type ReactNode } from 'react';
 import { Icono, type NombreIcono } from '../iconos';
+import { festejar } from '../movimiento/movimiento';
 import './kit.css';
 
 const cx = (...xs: (string | false | null | undefined)[]) => xs.filter(Boolean).join(' ');
@@ -65,14 +66,17 @@ interface CasillaProps {
   /** El color del área: solo un punto al lado, nunca el relleno. */
   area?: string;
   deshabilitada?: boolean;
+  /** El festejo al marcar (astillas del trazo). Apagalo en listas largas que se marcan de a muchas. */
+  festejo?: boolean;
 }
 
-/** Hecho = el trazo amarillo. La tilde se dibuja al marcar. */
-export function Casilla({ marcada, onCambio, etiqueta, nota, area, deshabilitada }: CasillaProps) {
+/** Hecho = el trazo amarillo. La tilde se dibuja al marcar, y al marcar festeja. */
+export function Casilla({ marcada, onCambio, etiqueta, nota, area, deshabilitada, festejo = true }: CasillaProps) {
+  const caja = useRef<HTMLSpanElement>(null);
   return (
     <button type="button" role="checkbox" aria-checked={marcada} aria-disabled={deshabilitada || undefined} className={cx('k-casilla', marcada && 'marcada')}
-      onClick={() => !deshabilitada && onCambio(!marcada)} style={area ? { ['--area' as string]: area } : undefined}>
-      <span className="k-caja" aria-hidden="true">
+      onClick={() => { if (deshabilitada) return; if (!marcada && festejo) festejar(caja.current); onCambio(!marcada); }} style={area ? { ['--area' as string]: area } : undefined}>
+      <span className="k-caja" aria-hidden="true" ref={caja}>
         <svg viewBox="0 0 24 24"><path d="M5.5 12.5l4.2 4.2L18.5 7.5" /></svg>
       </span>
       <span className="k-texto">
