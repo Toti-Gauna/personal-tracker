@@ -2,7 +2,9 @@ import { render, screen, within } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 import { PRESUPUESTO, contarPalabras } from '../reglas';
 import { PANTALLAS_V2 } from '../registro';
-import Lenguaje from './Lenguaje';
+import { leerRuta } from '../../lib/routes';
+import Taller from './Taller';
+const Lenguaje = () => <Taller ruta={leerRuta('#/v2')} day={undefined as never} today="2026-11-23" />;
 
 describe('2.0 · la página del lenguaje', () => {
   it('cumple sus propias reglas: título e intro dentro del presupuesto', () => {
@@ -21,6 +23,6 @@ describe('2.0 · la página del lenguaje', () => {
   });
 
   it('está registrada como pantalla de taller: no cuenta como pantalla convertida', () => {
-    expect(PANTALLAS_V2.v2).toMatchObject({ nombre: 'Lenguaje 2.0', taller: true });
+    expect(PANTALLAS_V2.v2).toMatchObject({ nombre: 'Taller 2.0', taller: true });
   });
 });

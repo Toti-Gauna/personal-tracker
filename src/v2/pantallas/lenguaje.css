@@ -88,3 +88,15 @@
 .lenguaje .mu-vacios { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--sp-2); }
 .lenguaje .mu-vacios > div { display: grid; justify-items: center; gap: var(--sp-2); padding: var(--sp-4) var(--sp-2); text-align: center; }
 .lenguaje .mu-vacios svg { width: 100%; height: auto; max-width: 120px; }
+
+/* Taller: pestañas y la galería de controles */
+.lenguaje .kt-pestanas { display: flex; gap: var(--sp-1); margin-bottom: var(--sp-2); border-bottom: 1px solid var(--raya); }
+.lenguaje .kt-pestanas a { position: relative; padding: var(--sp-3) var(--sp-3); color: var(--texto-2); text-decoration: none; font: 550 var(--t-15)/1 var(--font-text); }
+.lenguaje .kt-pestanas a[aria-current='page'] { color: var(--texto); }
+.lenguaje .kt-pestanas a[aria-current='page']::after { content: ''; position: absolute; left: var(--sp-2); right: var(--sp-2); bottom: -2px; height: 4px; background: var(--trazo); clip-path: var(--bisel); }
+.lenguaje .kt-pila { display: grid; gap: var(--sp-3); justify-items: start; padding: var(--sp-4); }
+.lenguaje .kt-fila { display: flex; flex-wrap: wrap; align-items: center; gap: var(--sp-2); }
+.lenguaje .kt-lista { padding: 0 var(--sp-4); }
+.lenguaje .kt-lista > * + * { border-top: 1px solid var(--raya); }
+.lenguaje .kt-dos { display: grid; grid-template-columns: 1fr 1fr; gap: var(--sp-3); }
+.lenguaje .kt-pila-llana { display: grid; gap: var(--sp-3); }

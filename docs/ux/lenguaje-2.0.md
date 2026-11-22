@@ -161,3 +161,18 @@ metadata); one floating action per screen at most; the breadcrumb is a compact p
 | The stroke for here/done | The stroke as decoration |
 | ⓘ for explanations | Manuals under the title |
 | Buttons that look like buttons | Underlined words inside sentences as actions |
+
+## 10. Controls (`src/v2/kit/controles.tsx`, gallery at `#/v2/kit`)
+
+| Control | Notes |
+|---|---|
+| `Boton` | primario (one per screen) · secundario · fantasma · peligro; `tamano="s"`; `soloIcono` + `etiqueta`; `cargando`; `deshabilitado="motivo"` shows the reason under it and keeps the button focusable (`aria-disabled`) |
+| `Casilla` | whole-row checkbox; done fills with the stroke yellow and draws the tick; area is a dot, never the fill |
+| `Interruptor` | whole-row switch, for settings only (not for "done") |
+| `Segmentado` | radio group with a sliding indicator; arrow keys move |
+| `Chip` | toggle (`aria-pressed`); active = solid text color with a tick |
+| `Contador` | − value +, editable, comma decimals, min/max, `inicial` when empty |
+| `CampoTexto` | label above, note or error below (error replaces the note), optional icon and counter |
+| `CampoHora` | always 24 h: hour and minute boxes, typing jumps to minutes, arrows wrap the day |
+| `CampoFecha` | "23 nov 2026"; month grid Monday-first; today ringed, chosen gets the stroke; min/max |
+| `Selector` | opens a list from the bottom (the real sheet arrives in 1.5); Escape or the veil closes |

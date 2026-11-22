@@ -1,5 +1,5 @@
 /**
- * Trazo 2.0 · #/v2: el lenguaje visual en vivo (tanda 1.2). Muestra las capas, el texto, las áreas, los estados, los 8 roles
+ * Trazo 2.0 · #/v2: el lenguaje visual en vivo (tanda 1.2), dentro del Taller. Muestra las capas, el texto, las áreas, los estados, los 8 roles
  * de tipografía, la forma, el movimiento y las reglas de escritura con los tokens reales, en el tema que esté puesto.
  * Los componentes de verdad llegan en las tandas 1.4 y 1.5; acá solo hay muestras.
  */
@@ -67,14 +67,7 @@ export default function Lenguaje() {
   const t = useTokens(['--capa-1', '--texto', '--texto-2', '--texto-3']);
   const [vuelta, setVuelta] = useState(0);
   return (
-    <main className="v2 v2-pantalla lenguaje">
-      <nav className="mu-volver"><a href="#/ajustes">Ajustes</a></nav>
-      <header className="mu-encabezado">
-        <p className="t-rotulo">Trazo 2.0 · lenguaje</p>
-        <h1 className="t-titulo">Instrumento</h1>
-        <p className="t-cuerpo-l mu-intro">Las reglas visuales de la 2.0, en vivo.</p>
-      </header>
-
+    <>
       <div className="capa-heroe mu-heroe" key={`h${vuelta}`}>
         <svg className="mu-logo" viewBox="80 130 360 250" aria-hidden="true">
           <g fill="currentColor"><polygon points="168,158 202,158 186,354 152,354" /><polygon points="220,150 254,150 238,362 204,362" /><polygon points="272,152 306,152 290,358 256,358" /><polygon points="324,148 358,148 342,350 308,350" /></g>
@@ -172,6 +165,6 @@ export default function Lenguaje() {
           {GLOSARIO.slice(0, 6).map((g) => <li key={g.antes}><span className="t-nota t-dato">{g.antes}</span><span className="t-cuerpo">{g.ahora}</span></li>)}
         </ul>
       </Seccion>
-    </main>
+    </>
   );
 }
