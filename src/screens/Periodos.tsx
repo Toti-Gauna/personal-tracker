@@ -6,8 +6,8 @@
 import { useMemo, useState } from 'react';
 import { fijasDeReservas } from '../data/certs-v12';
 import { HABITOS, tocaHabito } from '../data/habitos';
-import { finProyectado, recorrer, sugerirCorrimiento, type PeriodoMedido } from '../data/periodos';
-import { bloqueDe } from '../data/periodos-plan';
+import { corrimientoDeFondo, finProyectado, recorrer, sugerirCorrimiento, type PeriodoMedido } from '../data/periodos';
+import { bloqueDe, secuenciaPlan } from '../data/periodos-plan';
 import { PLAN_EXT } from '../data/plan-extendido';
 import { tramoActivo } from '../data/plan';
 import { RAMA_COLOR } from '../data/ramas';
@@ -18,6 +18,12 @@ import { AhoraPlan } from '../ui/AhoraPlan';
 import { Casilla } from '../ui/Casilla';
 import { PeriodoTarjeta, fp, hrefPeriodo } from '../ui/PeriodoTarjeta';
 import { usePeriodos } from '../ui/usePeriodos';
+import { medir } from '../data/periodos';
+import { periodosComerciales, periodosSecundarias } from '../data/fondo';
+import { V122 } from '../data/v12-2';
+import { DetalleProyecto } from '../ui/DetalleProyecto';
+import { Plegable } from '../ui/Plegable';
+import { useStore } from '../state/store';
 import '../styles/plan.css';
 import '../styles/etapas.css';
 import '../styles/periodos.css';
@@ -54,6 +60,12 @@ export function Periodos({ day, id }: { day: DayLog; id?: string }) {
           <PeriodoTarjeta p={p} hoy={hoy} enlace={false} />
           {p.nivel === 'fase' && <Fase id={p.id} />}
           {p.nivel === 'bloque' && <Enlaces id={p.id} />}
+          {p.nivel === 'bloque' && V122.detalle[p.id] && (
+            <>
+              <a className="fila-link" href={`#/metas/fondo/${p.id}`}>Repo, lanzamiento e Imán <span aria-hidden="true">→</span></a>
+              <Plegable id={`detalle:${p.id}`} titulo="Detalle del proyecto" resumen={V122.detalle[p.id].puesto ?? ''}><DetalleProyecto id={p.id} /></Plegable>
+            </>
+          )}
           {p.nivel === 'bloque' && (p.estado === 'atrasado' || p.estado === 'vencido') && <Sugerencia p={p} hoy={hoy} cal={cal} plan={plan} />}
           {p.nivel === 'bloque' && plan.corrimientos?.[p.id] && (
             <p className="sub">Corrido a {fp(plan.corrimientos[p.id].inicio)} – {fp(plan.corrimientos[p.id].fin)} (lo confirmaste el {fp(plan.corrimientos[p.id].confirmado)}). <button className="subrayado" onClick={() => deshacerCorrimiento([p.id])}>Volver a las fechas del plan</button></p>
@@ -70,8 +82,15 @@ export function Periodos({ day, id }: { day: DayLog; id?: string }) {
   );
 }
 
+const PISTAS = [['todas', 'Todas'], ['principal', 'Principal'], ['secundaria', 'Secundaria'], ['comercial', 'Comercial']] as const;
+
 function Raiz({ hoy, arbol, day }: { hoy: string; arbol: PeriodoMedido[]; day: DayLog }) {
   const actual = arbol.find((e) => e.inicio <= hoy && hoy <= e.fin) ?? arbol[0];
+  const plan = useStore((s) => s.plan);
+  const [pista, setPista] = useState<(typeof PISTAS)[number][0]>('todas');
+  const fondo = useMemo(() => ({ sec: periodosSecundarias(plan).map((p) => medir(p, hoy)), com: periodosComerciales(plan).map((p) => medir(p, hoy)) }), [plan, hoy]);
+  // Los comerciales: el que corre, los próximos 3 y los ya pasados sin publicar.
+  const comVisibles = fondo.com.filter((c) => (c.inicio <= hoy && hoy <= c.fin) || (c.fin < hoy && c.estado !== 'hecho') || c.inicio > hoy).slice(0, pista === 'comercial' ? 23 : 4);
   return (
     <>
       <header>
@@ -80,6 +99,25 @@ function Raiz({ hoy, arbol, day }: { hoy: string; arbol: PeriodoMedido[]; day: D
       </header>
       <AhoraPlan hoy={hoy} arbol={arbol} day={day} />
       <a className="fila-link" href="#/metas/proyecto/P0">P0 · Constelación v1: tus metas de siempre <span aria-hidden="true">→</span></a>
+      <a className="fila-link" href="#/metas/roadmap">El plan entero, con lo de fondo <span aria-hidden="true">→</span></a>
+      <div className="pd-chips" role="radiogroup" aria-label="Pista">
+        {PISTAS.map(([k, n]) => <button key={k} role="radio" aria-checked={pista === k} className="chip" onClick={() => setPista(k)}>{n}</button>)}
+      </div>
+      {(pista === 'todas' || pista === 'secundaria') && (
+        <section aria-label="Pista secundaria">
+          <span className="etiqueta">Secundaria · de fondo</span>
+          <ul className="pd-lista">{fondo.sec.map((p) => <li key={p.id}><PeriodoTarjeta p={p} hoy={hoy} enlace={false} compacta /><a className="fila-link" href={`#/metas/fondo/${p.id}`}>{p.nombre} <span aria-hidden="true">→</span></a></li>)}</ul>
+          <a className="fila-link" href="#/metas/pista/secundaria">La pista secundaria <span aria-hidden="true">→</span></a>
+        </section>
+      )}
+      {(pista === 'todas' || pista === 'comercial') && (
+        <section aria-label="Pista comercial">
+          <span className="etiqueta">Comercial · de fondo</span>
+          <ul className="pd-lista">{comVisibles.map((p) => <li key={p.id}><PeriodoTarjeta p={p} hoy={hoy} enlace={false} compacta /><a className="fila-link" href={`#/metas/fondo/${p.id}`}>{p.nombre} <span aria-hidden="true">→</span></a></li>)}</ul>
+          <a className="fila-link" href="#/metas/pista/comercial">El pipeline de los 23 slots <span aria-hidden="true">→</span></a>
+        </section>
+      )}
+      {(pista === 'todas' || pista === 'principal') && <>
       <span className="etiqueta">Las 4 etapas</span>
       <ul className="pd-lista">
         {arbol.map((e) => (
@@ -93,6 +131,7 @@ function Raiz({ hoy, arbol, day }: { hoy: string; arbol: PeriodoMedido[]; day: D
           </li>
         ))}
       </ul>
+      </>}
       <Semana hoy={hoy} arbol={arbol} />
     </>
   );
@@ -153,10 +192,14 @@ function Enlaces({ id }: { id: string }) {
 
 /** Correr lo que sigue: la sugerencia con fechas nuevas; elegís qué y lo confirmás. Las fechas fijas no se mueven. */
 function Sugerencia({ p, hoy, cal, plan }: { p: PeriodoMedido; hoy: string; cal: ReturnType<typeof usePeriodos>['cal']; plan: ReturnType<typeof usePeriodos>['plan'] }) {
-  const sug = useMemo(() => {
+  const { sug, fondo } = useMemo(() => {
     const reservas = fijasDeReservas(plan);
-    const seq = cal.filter((b) => !b.pausa && !b.archivado && b.id !== 'P0').map((b) => ({ id: b.id, nombre: b.nombre, inicio: b.inicio, fin: b.fin, fija: b.tipo === 'cert' && reservas.some((r) => r.inicio >= b.inicio && r.inicio <= b.fin) }));
-    return sugerirCorrimiento(seq, bloqueDe(p.id), finProyectado(p, hoy), [...(PLAN_EXT.capacidad?.fijas ?? []), ...reservas]);
+    // v12.2: la secuencia con los absorbedores (consolidación, cierres, descansos) y las certs con examen reservado como fijas.
+    const seq = secuenciaPlan(cal, reservas);
+    const s = sugerirCorrimiento(seq, bloqueDe(p.id), finProyectado(p, hoy), [...(PLAN_EXT.capacidad?.fijas ?? []), ...reservas]);
+    // Lo de fondo dentro de las ventanas corridas se corre con ellas.
+    const items = [...V122.comerciales.map((c) => ({ id: c.id, nombre: `#${c.n} ${c.marca ?? 'a definir'}`, inicio: c.inicio, fin: c.fin })), ...V122.secundarias.flatMap((a) => a.versiones.map((v) => ({ id: `${a.id}:v${v.id}`, nombre: `${a.nombre} v${v.id}`, inicio: v.inicio, fin: v.fin })))];
+    return { sug: s, fondo: corrimientoDeFondo(items, seq, s) };
   }, [cal, plan, p, hoy]);
   const [fuera, setFuera] = useState<string[]>([]);
   const [todos, setTodos] = useState(false);
@@ -177,7 +220,8 @@ function Sugerencia({ p, hoy, cal, plan }: { p: PeriodoMedido; hoy: string; cal:
         ))}
       </ul>
       {sug.length > vistos.length && <button className="subrayado" onClick={() => setTodos(true)}>Ver los {sug.length - vistos.length} siguientes</button>}
-      <button className="btn-borde" disabled={!elegidos.length} onClick={() => confirmarCorrimiento(elegidos, hoy)}>Confirmar {elegidos.length} {elegidos.length === 1 ? 'cambio' : 'cambios'}</button>
+      {fondo.length > 0 && <p className="sub">De fondo se corre con su ventana: {fondo.map((c) => `${c.nombre} → ${fp(c.nuevoInicio)} – ${fp(c.nuevoFin)}`).join(' · ')}.</p>}
+      <button className="btn-borde" disabled={!elegidos.length} onClick={() => confirmarCorrimiento([...elegidos, ...fondo], hoy)}>Confirmar {elegidos.length} {elegidos.length === 1 ? 'cambio' : 'cambios'}</button>
     </section>
   );
 }

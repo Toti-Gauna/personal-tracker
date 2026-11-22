@@ -35,9 +35,13 @@ export interface EstadoItem {
 
 export interface EntradaRevision { id: string; fecha: string; inicio?: string; min: number; item: string; tipo: 'walkthrough' | 'diseño' | 'comercial' | 'otro'; nota?: string }
 
-type Plan = Pick<PlanState, 'hitos'> & { fondo?: Record<string, EstadoItem> };
+type Plan = Pick<PlanState, 'hitos'> & { fondo?: Record<string, EstadoItem>; corrimientos?: PlanState['corrimientos'] };
+/** Las fechas de un período de fondo con el corrimiento confirmado, si lo hay. */
+const fechas = (plan: Plan, id: string, x: { inicio: string; fin: string }) => (plan.corrimientos?.[id] ? { inicio: plan.corrimientos[id].inicio, fin: plan.corrimientos[id].fin } : { inicio: x.inicio, fin: x.fin });
 
 const pausas = PAUSAS_FONDO.map(({ inicio, fin }) => ({ inicio, fin }));
+/** Las pausas de un ítem: las fijas y, si lo pausaste a mano, desde ese día. */
+const pausasDe = (plan: Plan, id: string) => (plan.fondo?.[id]?.pausado ? [...pausas, { inicio: plan.fondo[id].pausado!, fin: '9999-12-31' }] : pausas);
 
 /** El lanzamiento por defecto: la v3.0 (o la última) en proyectos y apps; la única en los comerciales. */
 export const lanzamientoDe = (versiones: { id: string }[], elegido?: string) => elegido ?? (versiones.some((v) => v.id === '3.0') ? '3.0' : versiones[versiones.length - 1]?.id ?? '1.0');
@@ -45,12 +49,12 @@ export const lanzamientoDe = (versiones: { id: string }[], elegido?: string) => 
 /** Las apps secundarias como períodos, con sus versiones y sus entregables. */
 export function periodosSecundarias(plan: Plan): Periodo[] {
   return V122.secundarias.map((s) => ({
-    id: s.id, nombre: s.nombre, nivel: 'bloque', inicio: s.inicio, fin: s.fin, track: 'secundaria', pausas,
+    id: s.id, nombre: s.nombre, nivel: 'bloque', inicio: s.inicio, fin: s.fin, track: 'secundaria', pausas: pausasDe(plan, s.id),
     hijos: s.versiones.map((v) => {
       const checklist = v.entregables.map((texto, i) => ({ clave: claveHito.entregable(s.id, v.id, i), texto, hecho: !!plan.hitos?.[claveHito.entregable(s.id, v.id, i)]?.hecho }));
       const publicada = plan.fondo?.[s.id]?.versiones?.[v.id]?.publicada;
       return {
-        id: `${s.id}:v${v.id}`, nombre: `${s.nombre} v${v.id}`, nivel: 'version' as const, inicio: v.inicio, fin: v.fin, track: 'secundaria' as const, pausas, checklist,
+        id: `${s.id}:v${v.id}`, nombre: `${s.nombre} v${v.id}`, nivel: 'version' as const, ...fechas(plan, `${s.id}:v${v.id}`, v), track: 'secundaria' as const, pausas: pausasDe(plan, s.id), checklist,
         progreso: publicada ? 1 : checklist.filter((c) => c.hecho).length / Math.max(1, checklist.length),
       };
     }),
@@ -67,7 +71,7 @@ export function periodosComerciales(plan: Plan): Periodo[] {
     const e = plan.fondo?.[c.id];
     const marca = c.marca ?? e?.marca ?? null;
     return {
-      id: c.id, nombre: `#${c.n} · ${marca ?? 'A definir'}`, nivel: 'bloque' as const, inicio: c.inicio, fin: c.fin, track: 'comercial' as const, pausas,
+      id: c.id, nombre: `#${c.n} · ${marca ?? 'A definir'}`, nivel: 'bloque' as const, ...fechas(plan, c.id, c), track: 'comercial' as const, pausas: pausasDe(plan, c.id),
       progreso: AVANCE_ESTADO[e?.estado ?? 'planned'],
       ...(entregablesComercial(c).length ? { checklist: entregablesComercial(c).map((texto, i) => ({ clave: claveHito.entregable(c.id, '1.0', i), texto, hecho: !!plan.hitos?.[claveHito.entregable(c.id, '1.0', i)]?.hecho })) } : {}),
     };

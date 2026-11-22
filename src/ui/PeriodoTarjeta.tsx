@@ -6,6 +6,10 @@ import type { EstadoPeriodo, NivelPeriodo, PeriodoMedido } from '../data/periodo
 import { accionDe } from '../data/periodos-plan';
 import { marcarHito, publicarVersion } from '../state/plan';
 import { Casilla } from './Casilla';
+import { lanzamientoDe } from '../data/fondo';
+import { puedePublicar } from '../data/iman';
+import { fichaV7 } from '../data/proyectos-v7';
+import { useStore } from '../state/store';
 import '../styles/periodos.css';
 
 const MES = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'];
@@ -20,10 +24,16 @@ export const NIVEL: Record<NivelPeriodo, string> = { etapa: 'Etapa', fase: 'Fase
 export const hrefPeriodo = (id: string) => `#/metas/periodos/${encodeURIComponent(id)}`;
 
 export function PeriodoTarjeta({ p, hoy, enlace = true, compacta = false }: { p: PeriodoMedido; hoy: string; enlace?: boolean; compacta?: boolean }) {
-  const accion = !p.hijos?.length ? accionDe(p.id) : p.nivel === 'version' ? accionDe(p.id) : null;
+  const accion = p.track && p.track !== 'principal' ? null : !p.hijos?.length ? accionDe(p.id) : p.nivel === 'version' ? accionDe(p.id) : null;
   const hecho = p.estado === 'hecho';
+  const plan = useStore((s) => s.plan);
+  // v12.2: el lanzamiento no se marca publicado sin el Imán completo (las versiones de antes, sí).
+  const gate = accion?.tipo === 'version' && !hecho
+    ? puedePublicar({ version: accion.version, lanzamiento: lanzamientoDe(fichaV7(accion.proyecto)?.versiones ?? [], plan.fondo?.[accion.proyecto]?.lanzamiento), iman: plan.iman?.[accion.proyecto] })
+    : null;
   const tildar = () => {
     if (!accion) return;
+    if (accion.tipo === 'version' && gate && !gate.ok) { location.hash = `#/metas/iman/${accion.proyecto}`; return; }
     if (accion.tipo === 'version') publicarVersion(accion.proyecto, accion.version, hecho ? null : hoy);
     else marcarHito(accion.clave, hecho ? null : hoy);
   };
@@ -54,6 +64,14 @@ export function PeriodoTarjeta({ p, hoy, enlace = true, compacta = false }: { p:
           <span className="pd-ley mono"><span>hoy</span><span>▲ estimado {fp(p.fin)}</span><span>■ límite {fp(p.deadline!)}</span></span>
         </div>
       )}
+      {gate && !gate.ok && !compacta ? <p className="sub">Lanzamiento: se publica con el Imán completo (faltan {gate.faltan.length}) · <a href={`#/metas/iman/${accion!.tipo === 'version' ? accion!.proyecto : ''}`}>Imán</a></p> : null}
+      {p.checklist?.length && !compacta ? (
+        <ul className="pd-check" aria-label={`Entregables de ${p.nombre}`}>
+          {p.checklist.map((c) => (
+            <li key={c.clave}><Casilla checked={c.hecho} label={`${c.texto}: hecho`} onChange={() => marcarHito(c.clave, c.hecho ? null : hoy)} /><span className={c.hecho ? 'sub' : ''}>{c.texto}</span></li>
+          ))}
+        </ul>
+      ) : null}
       {(p.horasPlan != null || p.horasReal != null) && !compacta && (
         <p className="pd-horas mono">plan {n1(p.horasPlan ?? 0)} h{p.horasReal != null ? ` · real ${n1(p.horasReal)} h` : ''}</p>
       )}

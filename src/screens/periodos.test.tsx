@@ -25,8 +25,13 @@ describe('v12.1 · metas como períodos', () => {
     expect(ahora.textContent).toMatch(/Vence hoy: Lote 1\.1 · Ingest & cleaning · Lote 1\.2/);
     expect(ahora.textContent).toMatch(/Próxima fecha límite: v1\.0 MVP · 1 dic \(en 8 días\)/);
     expect(screen.getByRole('link', { name: /P0 · Constelación v1: tus metas de siempre/ })).toHaveAttribute('href', '#/metas/proyecto/P0');
+    // v12.2: "Todas" muestra las tres pistas; con "Principal", solo las 4 etapas y las 6 fases de la etapa 1.
+    expect(within(screen.getByRole('region', { name: 'Pista secundaria' })).getAllByRole('article')).toHaveLength(4);
+    expect(within(screen.getByRole('region', { name: 'Pista comercial' })).getAllByRole('article').length).toBeGreaterThan(0);
+    fireEvent.click(screen.getByRole('radio', { name: 'Principal' }));
+    expect(screen.queryByRole('region', { name: 'Pista secundaria' })).toBeNull();
     const tarjetas = screen.getAllByRole('article').map((a) => a.getAttribute('aria-label')!.split(':')[0]);
-    expect(tarjetas).toHaveLength(4 + 6); // las 4 etapas y las 6 fases de la etapa 1
+    expect(tarjetas).toHaveLength(4 + 6);
     expect(tarjetas.slice(0, 3)).toEqual(['Etapa 1 · Núcleo', 'Fase 1 · AI Full-stack Engineer', 'Fase 2 · ML Engineer']);
     expect(screen.getByRole('article', { name: /^Etapa 1 · Núcleo: en plan, tiempo 1 %, trabajo/ })).toBeInTheDocument();
     const sem = screen.getByText('Esta semana').closest('section')!;
@@ -107,9 +112,12 @@ describe('v12.1 · certificación, ventana, línea de tiempo y Hoy', () => {
     expect(screen.getByText(/Ventana cerrada el/)).toBeInTheDocument();
   });
 
-  it('Línea de tiempo: 11 fases, cada bloque con su enlace, hoy marcado', () => {
+  it('Línea de tiempo: tres pistas (11 fases, secundaria y comercial), cada bloque con su enlace, hoy marcado', () => {
     const { container } = render(<Metas day={dia()} tab="linea" />);
-    expect(container.querySelectorAll('.gantt-fila')).toHaveLength(11);
+    // v12.2: las 11 fases y las dos pistas de fondo (secundaria y comercial) en el mismo eje.
+    expect(container.querySelectorAll('.gantt-fila')).toHaveLength(13);
+    expect(container.querySelectorAll('.gantt-fila.fondo .gantt-b.secundaria')).toHaveLength(12);
+    expect(container.querySelectorAll('.gantt-fila.fondo .gantt-b.comercial')).toHaveLength(23);
     expect(container.querySelector('.gantt-hoy')).not.toBeNull();
     expect(container.querySelector('a.gantt-b[href="#/metas/periodos/P1"]')!.getAttribute('title')).toMatch(/P1 · PetrIA · 21 nov – 9 dic/);
     expect(container.querySelectorAll('.gantt-pausa').length).toBeGreaterThan(0);

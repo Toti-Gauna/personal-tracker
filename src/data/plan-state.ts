@@ -132,6 +132,18 @@ export interface PlanState {
   /** Ola 34: tus rutinas del día (generadas, adaptadas o copiadas de una plantilla) y a qué días se aplican. */
   rutinasPropias?: import('./motor-rutinas').RutinaPropia[];
   asignacionesRutina?: import('./motor-rutinas').AsignacionRutina[];
+  /** v12.2: estado de cada ítem de las tres pistas (secundarias, comerciales y, para el Imán y el lanzamiento, los principales). */
+  fondo?: Record<string, import('./fondo').EstadoItem>;
+  /** v12.2: tiempo de revisión de lo de fondo (aparte de las 72 h de foco). */
+  revisionFondo?: import('./fondo').EntradaRevision[];
+  /** v12.2: el Imán de cada ítem que se publica y el checklist de seguridad de los comerciales. */
+  iman?: Record<string, import('./iman').Iman>;
+  seguridadShowcase?: Record<string, boolean[]>;
+  /** v12.2: las publicaciones (LinkedIn y X), unidas a un ítem y a un paso de la serie del Imán. */
+  posts?: import('./iman').Post[];
+  /** v12.2: el uso semanal de Claude que cargás en la revisión del domingo (lunes → %) y el umbral para sugerir pausas. */
+  usoClaude?: Record<string, number>;
+  umbralClaude?: number;
   /** v12.1: puntajes de los simulacros por certificación (id del examen → fecha y %). */
   mocks?: Record<string, { fecha: string; pct: number }[]>;
   /** v12.1: exámenes reservados (id → fecha del examen y cuándo reservaste). Una fecha reservada es fija: nada la corre. */

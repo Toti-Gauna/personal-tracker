@@ -6,6 +6,8 @@ import { capacidadDelDia } from '../data/plan';
 import { textoDelta } from '../data/diferencia';
 import { daysBetween } from '../data/time';
 import { RAMA_COLOR } from '../data/ramas';
+import { lanzamientoDe } from '../data/fondo';
+import { puedePublicar } from '../data/iman';
 import { marcarCertVerificada, publicarVersion, setExtraBloque, setVersionCert, tildarSalida, toggleArquitectura, toggleEntregableVersion, toggleEvidencia, type TipoExtra } from '../state/plan';
 import { alertaVerificar, alertaVersion, avanceSalida, calendarioCompleto, salidaDe } from '../data/plan-vistas';
 import { useStore } from '../state/store';
@@ -293,7 +295,13 @@ export function VersionesProyecto({ id, date, t0 }: { id: string; date: string; 
               </div>
               {r.publicada
                 ? <button className="subrayado" onClick={() => publicarVersion(id, v.id, null)}>Deshacer publicada</button>
-                : <button className="btn-borde" onClick={() => publicarVersion(id, v.id, date)}>Publicada hoy</button>}
+                : (() => {
+                  // v12.2: el lanzamiento (v3.0 de fábrica) no se publica sin el Imán completo.
+                  const g = puedePublicar({ version: v.id, lanzamiento: lanzamientoDe(vs, plan.fondo?.[id]?.lanzamiento), iman: plan.iman?.[id] });
+                  return g.ok
+                    ? <button className="btn-borde" onClick={() => publicarVersion(id, v.id, date)}>Publicada hoy</button>
+                    : <span className="sub">Es el lanzamiento: falta el Imán ({g.faltan.length}) · <a href={`#/metas/iman/${id}`}>completar</a></span>;
+                })()}
             </li>
           );
         })}
