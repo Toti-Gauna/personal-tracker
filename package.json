@@ -12,7 +12,8 @@
     "icons": "node scripts/make-icons.mjs",
     "roadmap:md": "node scripts/roadmap-md.mjs",
     "roadmap:check": "node scripts/roadmap-md.mjs --check",
-    "pantallas": "node scripts/medir-pantallas.mjs"
+    "pantallas": "node scripts/medir-pantallas.mjs",
+    "v2:revision": "node scripts/v2-revision.mjs"
   },
   "dependencies": {
     "@fontsource-variable/archivo": "^5.3.0",

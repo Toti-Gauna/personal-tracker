@@ -36,7 +36,7 @@
 
 /* ——— Festejo: astillas del trazo ——— */
 .mv-festejo { position: fixed; z-index: var(--z-aviso, 60); width: 0; height: 0; pointer-events: none; }
-.mv-festejo i { position: absolute; left: -5px; top: -2px; width: 10px; height: 4px; background: var(--trazo, #f1e34c); clip-path: polygon(2px 0, 100% 0, calc(100% - 2px) 100%, 0 100%); }
+.mv-festejo i { position: absolute; left: -5px; top: -2px; width: 10px; height: 4px; background: var(--trazo, var(--economia)); clip-path: polygon(2px 0, 100% 0, calc(100% - 2px) 100%, 0 100%); }
 
 /* ——— Números ——— */
 .mv-numero { font-variant-numeric: tabular-nums; }

@@ -93,7 +93,7 @@ Each wave = one PR with before/after screenshots (both modes), small commits, te
 | 1.5 | ✅ **Feedback & surfaces**: Toast (stacked, undo, swipe away, success/warning/error), bottom sheet (drag, snap points), confirm dialog, ⓘ InfoSheet, tooltip, skeleton loaders per layout, empty state, Ring, PaceTrack, progress bar, StatusPill, Stat (always labelled), Card/Surface, list row | Opus 5.5 | high |
 | 1.6 | ✅ **Motion system**: duration/easing tokens, screen transitions (View Transitions + GSAP fallback), zoom between plan levels, staggered fades, count-up numbers, press feedback, completion burst, toast/sheet springs, skeleton shimmer, reduced motion | Opus 5.5 | high |
 | 1.7 | ✅ **2.0 shell**: glass bottom bar with sliding indicator, large title that collapses on scroll, breadcrumb, ⓘ entry, Ajustes 2.0 (gear + labelled row), theme follows the phone, new splash + onboarding, weight check as a Today card (no sheet chasing you), desktop 2-column layout | Fable 5.2 | high |
-| 1.8 | **QA harness**: capture script for both modes + contact sheets, word-budget script, ~4-screen height budget, token lint (no raw hex/px in v2), component gallery page `#/v2/kit` | Haiku 5.5 | medium |
+| 1.8 | ✅ **QA harness**: capture script for both modes + contact sheets, word-budget script, ~4-screen height budget, token lint (no raw hex/px in v2), component gallery page `#/v2/kit` | Haiku 5.5 | medium |
 
 Demo: flip to 2.0 in Ajustes → new shell, Ajustes, splash and the component gallery; other screens show their 1.0 version with the "1.0" chip.
 

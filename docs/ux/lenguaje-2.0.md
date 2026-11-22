@@ -235,3 +235,20 @@ metadata); one floating action per screen at most; the breadcrumb is a compact p
 - **What 2.0 fixes from outside on screens that are still 1.0**: on Perfil the sun-like settings icon is hidden and
   a labelled **Ajustes** button with the gear sits next to the "1.0" mark; the weight check is a toast with "Cargar"
   (asked once, never a sheet that follows you); toasts jump to the top while a sheet is open.
+
+## 13. Checks (batch 1.8)
+
+- **Token lint** (`src/v2/calidad.test.ts`, runs in `npm test`): no raw colors outside `tokens.css`; no font size
+  outside the scale (`--t-*`, or `--t-campo` for fields, which stay at 16 px so iOS does not zoom); no bare element
+  selectors that would reach the 1.0 screens. Every 2.0 stylesheet must scope to `html[data-ui='v2']`, `.v2`, or a
+  2.0 class.
+- **Revision** (`npm run v2:revision`, needs the app served and Playwright): renders every 2.0 screen in light and
+  dark at 390 × 844, saves the captures under `revision-v2/` (git-ignored), and writes `informe.md`. It gates the
+  2.0 frame (`.m-marco`): title ≤ 3 words, intro ≤ 12, ≤ 60 words above the fold, ≤ 4 screens tall, no sideways
+  overflow, no page errors. The taller specimen pages are measured but not gated. Known pending items are listed with
+  their reason and don't fail the run.
+- **Dev warnings**: `Marco` logs in development when a title or intro goes over budget.
+- **Gallery**: `#/v2/kit`, `#/v2/piezas` and `#/v2/movimiento` are the component gallery; the revision covers all three.
+
+Current result: no failures in the 2.0 frame. Pending: the plan page (`#/ajustes/plan`) still shows 1.0's controls (163
+words above the fold), rebuilt in batch 3.3.

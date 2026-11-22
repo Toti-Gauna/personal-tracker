@@ -90,6 +90,8 @@ html[data-ui='v2'] {
   --t-24: 24px;
   --t-32: 32px;
   --t-44: 44px;
+  /* Los campos de texto van a 16 px: menos y iOS hace zoom al enfocarlos. */
+  --t-campo: 16px;
 
   /* Espacio: de a 4. */
   --sp-1: 4px;
