@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { Suspense, lazy, useCallback, useEffect, useState } from 'react';
 import { BottomBar } from './components/BottomBar';
 import { SideNav } from './components/SideNav';
 import { FocoMini } from './components/FocoMini';
@@ -63,6 +63,8 @@ import { useSealSync } from './ui/useSealSync';
 import { ensureDayRefs, ensureWeek } from './state/ruta';
 import { useNow } from './ui/useNow';
 import { useEntrada } from './ui/useEntrada';
+
+const CapasV2 = lazy(() => import('./v2/kit/capas'));
 
 export function App() {
   const ruta = useRuta();
@@ -155,6 +157,7 @@ export function App() {
       {conBarra && !presentacion && <SideNav activa={ruta.seccion} pendientes={pendientes} />}
       {conBarra && !presentacion && <BottomBar activa={activaBarra} pendientes={pendientes} />}
       <Avisos />
+      {settings && interfaz === 'v2' && <Suspense fallback={null}><CapasV2 /></Suspense>}
       {settings && <Checkins />}
       {settings && <EstadoEstudio />}
       {cargando && <Splash onFin={fin} />}

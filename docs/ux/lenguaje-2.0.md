@@ -176,3 +176,24 @@ metadata); one floating action per screen at most; the breadcrumb is a compact p
 | `CampoHora` | always 24 h: hour and minute boxes, typing jumps to minutes, arrows wrap the day |
 | `CampoFecha` | "23 nov 2026"; month grid Monday-first; today ringed, chosen gets the stroke; min/max |
 | `Selector` | opens a list from the bottom (the real sheet arrives in 1.5); Escape or the veil closes |
+
+## 11. Feedback and surfaces (`src/v2/kit/`, gallery at `#/v2/piezas`)
+
+| Piece | Notes |
+|---|---|
+| `aviso()` | toast from anywhere; stacks up to 3 above the bottom bar; 4 s (6 s with `deshacer`); pauses on hover/press; swipe sideways to dismiss; tones info · hecho (stroke) · atencion · error (`role="alert"`) |
+| `confirmar()` | promise-based alert dialog; with `peligro` the focus starts on Cancelar and the action is solid red; Escape or the veil = no |
+| `Hoja` | bottom sheet in a portal; drag the handle down to close (120 px or a flick), up to expand; Escape; focus trapped and restored; page scroll locked |
+| `Info` / `Termino` | the ⓘ button that opens a sheet with the explanation; `Termino` pulls it from the glossary |
+| `Pista` | tooltip on hover/focus, long-press on touch |
+| `Tarjeta` | layer 1/2, or `heroe` with the area halo; with `href` the whole card is a link |
+| `Fila` | whole-row link or button with icon or area dot, value, chevron only when it goes somewhere |
+| `Dato` | number + unit + label, always; change shown with an arrow, never green/red |
+| `Estado` | status pill from `ESTADOS` (icon + word + tone shape) |
+| `Anillo` | progress ring that draws in; full = the stroke yellow |
+| `Ritmo` | replaces 1.0's two hairline bars: work as the bar, elapsed time as a dashed ghost marker, plus one sentence |
+| `Barra` | thin progress bar (`role="progressbar"`) |
+| `Esqueleto`, `EsqueletoTarjeta`, `EsqueletoLista`, `ConCarga` | shimmer placeholders while loading, then a fade-in; container is `aria-busy` |
+| `Vacio` | illustration + title + note + one action |
+
+`CapasV2` (toasts + confirm host) is lazy-loaded by App only when 2.0 is on.

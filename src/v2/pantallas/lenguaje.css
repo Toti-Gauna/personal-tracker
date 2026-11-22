@@ -100,3 +100,16 @@
 .lenguaje .kt-lista > * + * { border-top: 1px solid var(--raya); }
 .lenguaje .kt-dos { display: grid; grid-template-columns: 1fr 1fr; gap: var(--sp-3); }
 .lenguaje .kt-pila-llana { display: grid; gap: var(--sp-3); }
+
+/* Piezas */
+.lenguaje .pz-heroe { display: flex; align-items: center; gap: var(--sp-4); }
+.lenguaje .pz-heroe-texto { display: grid; gap: var(--sp-1); justify-items: start; min-width: 0; }
+.lenguaje .capa-heroe .s-ritmo { margin-top: var(--sp-5); }
+.lenguaje .pz-botones { display: flex; gap: var(--sp-2); margin-top: var(--sp-4); }
+.lenguaje .pz-datos { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--sp-3); padding: var(--sp-4); }
+.lenguaje .pz-barras { display: grid; gap: var(--sp-3); padding: var(--sp-4); }
+.lenguaje .pz-barras > div { display: grid; gap: 6px; }
+.lenguaje .pz-fila { display: flex; flex-wrap: wrap; align-items: center; gap: var(--sp-2); }
+.lenguaje .pz-pila { display: grid; gap: var(--sp-3); }
+.lenguaje .pz-info { display: inline-flex; align-items: center; gap: 2px; margin-left: var(--sp-2); }
+.lenguaje .pz-chip-dato { display: inline-flex; align-items: center; gap: 6px; height: 32px; padding: 0 var(--sp-3); border-radius: var(--r-pildora); background: var(--capa-2); box-shadow: var(--brillo); }
