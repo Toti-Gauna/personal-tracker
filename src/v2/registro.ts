@@ -28,8 +28,9 @@ export type RegistroV2 = Partial<Record<Pantalla, EntradaV2>>;
 /** Las pantallas llegan de a una; las de `taller` no cuentan como pantallas convertidas. */
 export const PANTALLAS_V2: RegistroV2 = {
   hoy: { nombre: 'Hoy', Componente: lazy(() => import('./hoy/HoyV2')) },
-  // El Plan: el centro (#/metas y #/metas/periodos), la bajada por niveles y el análisis. Lo demás de Metas sigue en 1.0.
-  metas: { nombre: 'Plan', Componente: lazy(() => import('./plan/PlanV2')), cubre: (r) => !r.param || r.param === 'periodos' || r.param.startsWith('periodos/') || r.param === 'analisis' },
+  // El Plan: el centro (#/metas y #/metas/periodos), la bajada por niveles, el análisis, la línea de tiempo y la constelación.
+  // Lo demás de Metas sigue en 1.0.
+  metas: { nombre: 'Plan', Componente: lazy(() => import('./plan/PlanV2')), cubre: (r) => !r.param || r.param === 'periodos' || r.param.startsWith('periodos/') || r.param === 'analisis' || r.param === 'linea' || r.param === 'constelacion' },
   ajustes: { nombre: 'Ajustes', Componente: lazy(() => import('./pantallas/AjustesV2')) },
   v2: { nombre: 'Taller 2.0', taller: true, Componente: lazy(() => import('./pantallas/Taller')) },
 };

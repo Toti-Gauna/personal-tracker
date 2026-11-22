@@ -15,6 +15,7 @@ import { Boton, Segmentado } from '../kit/controles';
 import { Fila, Vacio } from '../kit/superficies';
 import { Grupo, Marco } from '../marco/Marco';
 import { Escalonado } from '../movimiento/componentes';
+import { Lentes } from './Compartido';
 import { HORIZONTES, enHorizonte, fecha, heroeDe, semana, type Horizonte } from './datos';
 import { FilaPeriodo, HeroePeriodo, usarNombres } from './TarjetaPeriodo';
 
@@ -49,13 +50,8 @@ export function Centro({ hoy }: { hoy: string }) {
   const visibles = todos ? lista : lista.slice(0, TOPE);
 
   return (
-    <Marco className="pl" titulo="Plan" rotulo={sem >= 1 && sem <= SEMANAS ? `Semana ${sem} de ${SEMANAS}` : undefined} info={INFO}
-      acciones={<Boton soloIcono variante="fantasma" icono="linea" etiqueta="Línea de tiempo" href="#/metas/linea" />}>
-      <nav className="pl-lentes" aria-label="Cómo ver el plan">
-        <a href="#/metas" aria-current="page" data-transicion="fundido"><Icono nombre="plan" lado={18} />Ahora</a>
-        <a href="#/metas/linea" data-transicion="fundido"><Icono nombre="linea" lado={18} />Línea</a>
-        <a href="#/metas/mapa" data-transicion="fundido"><Icono nombre="mapa" lado={18} />Mapa</a>
-      </nav>
+    <Marco className="pl" titulo="Plan" rotulo={sem >= 1 && sem <= SEMANAS ? `Semana ${sem} de ${SEMANAS}` : undefined} info={INFO}>
+      <Lentes actual="ahora" />
 
       {heroe ? <HeroePeriodo p={heroe} hoy={hoy} vt={vt(heroe.id)} href={hrefPeriodo(heroe.id)} conDatos={false} />
         : <Vacio ilustracion="plan" titulo="Sin período activo hoy" texto="El plan arranca más adelante o ya terminó." />}
@@ -118,6 +114,7 @@ export function Centro({ hoy }: { hoy: string }) {
           <Fila icono="grafico" titulo="Análisis" nota="Calibración, diferencia, impacto y revisión" href="#/metas/analisis" />
           <Fila icono="mapa" titulo="El plan entero" nota={`Con lo de fondo · hasta el ${fecha(arbol[arbol.length - 1]?.fin ?? hoy, hoy)}`} href="#/metas/roadmap" />
           <Fila icono="ritmo" titulo="La ruta por ramas" nota="Las seis ramas y lo que viene" href="#/metas/ruta" />
+          <Fila icono="enlace" titulo="El mapa por ramas" nota="Qué depende de qué" href="#/metas/mapa" />
           <Fila icono="hardware" titulo="Etapas, trámites y compras" href="#/metas/etapas" />
         </div>
       </Grupo>

@@ -70,3 +70,87 @@ a.tp-fila-link:active { background: var(--capa-2); }
 @media (min-width: 1100px) {
   .m-marco.pl { max-width: 880px; }
 }
+
+/* ——— La línea de tiempo ——— */
+.ln-controles { display: flex; align-items: center; gap: var(--sp-2); margin-bottom: var(--sp-3); }
+.ln-controles .k-segmentado { flex: 1; }
+.ln-caja { overflow-x: auto; overflow-y: hidden; padding: 0; overscroll-behavior-x: contain; scrollbar-width: thin; -webkit-overflow-scrolling: touch; touch-action: pan-x pan-y; }
+.ln-caja:focus-visible { outline: 2px solid var(--trazo-texto); outline-offset: 2px; }
+.ln-lienzo { padding-bottom: var(--sp-3); }
+.ln-dentro { position: relative; margin: 0 20px; }
+.ln-fondo { position: absolute; inset: 0; pointer-events: none; }
+.ln-grilla { position: absolute; top: 26px; bottom: 0; width: 1px; background: var(--raya); }
+.ln-grilla.fuerte { background: var(--raya-fuerte); }
+.ln-pausa { position: absolute; top: 26px; bottom: 0; background: repeating-linear-gradient(135deg, var(--raya-fuerte) 0 2px, transparent 2px 7px); }
+.ln-pista .ln-pausa { top: 0; border-radius: 4px; }
+/* Hoy: la raya de la marca, con un halo. */
+.ln-hoy { position: absolute; top: 22px; bottom: 0; width: 2px; margin-left: -1px; background: var(--trazo); box-shadow: 0 0 14px 2px color-mix(in oklab, var(--trazo) 55%, transparent); z-index: 3; }
+.ln-eje { position: relative; height: 26px; }
+.ln-eje span { position: absolute; top: 7px; padding-left: 5px; font: 500 var(--t-11)/1 var(--font-mono); letter-spacing: 0.04em; text-transform: uppercase; color: var(--texto-2); white-space: nowrap; }
+.ln-eje span.fuerte { color: var(--texto); }
+.ln-eje b { position: absolute; top: 3px; z-index: 4; transform: translateX(-50%); padding: 3px 7px; font: 700 var(--t-11)/1 var(--font-mono); letter-spacing: 0.04em; text-transform: uppercase; }
+/* Etapas y fases: tramos con el nombre que se queda a la vista mientras el tramo esté en pantalla. */
+.ln-tramos { position: relative; height: 28px; margin-top: 4px; }
+.ln-tramo { position: absolute; top: 0; height: 24px; display: flex; align-items: center; overflow: clip; border-radius: 6px; background: var(--capa-2); box-shadow: inset 0 0 0 1px var(--raya); color: var(--texto); text-align: left; transition: background-color var(--dur-2); }
+.ln-tramos.fases .ln-tramo { background: transparent; box-shadow: inset 0 0 0 1px var(--raya-fuerte); color: var(--texto-2); }
+.ln-tramo span { position: sticky; left: 0; padding: 0 8px; font: 600 var(--t-11)/1 var(--font-mono); letter-spacing: 0.04em; text-transform: uppercase; white-space: nowrap; }
+.ln-tramo:active { background: var(--capa-3); }
+.ln-tramo.hecho { background: var(--trazo); color: var(--sobre-trazo); box-shadow: none; }
+/* Carriles: el nombre arriba, pegado al borde; las barras abajo. */
+.ln-carril { margin-top: var(--sp-2); }
+.ln-carril-nombre { position: sticky; left: 12px; display: inline-flex; align-items: center; gap: 6px; height: 18px; padding: 0; font: 500 var(--t-11)/1 var(--font-mono); letter-spacing: 0.06em; text-transform: uppercase; color: var(--texto-2); white-space: nowrap; }
+.ln-pista { position: relative; height: 32px; }
+.ln-barra { position: absolute; top: 0; height: 32px; display: flex; align-items: center; overflow: hidden; border-radius: 6px; background: color-mix(in oklab, var(--area) 26%, var(--capa-2)); color: var(--texto); text-align: left; transition: filter var(--dur-1), transform var(--dur-1) var(--curva-salida); }
+.ln-barra i { position: absolute; inset: 0 auto 0 0; background: color-mix(in oklab, var(--area) 58%, var(--capa-2)); }
+.ln-barra span { position: relative; padding: 0 7px; font: 600 var(--t-11)/1 var(--font-text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ln-barra:active { filter: brightness(1.2); transform: scaleY(0.94); }
+.ln-barra.ahora { box-shadow: inset 0 0 0 1.75px var(--texto); z-index: 2; }
+.ln-barra.hecho i { background: var(--trazo); }
+.ln-barra.hecho { color: var(--sobre-trazo); }
+.ln-barra.vencido { box-shadow: inset 0 -3px 0 var(--e-critico); }
+.ln-pista-texto { margin-top: var(--sp-2); }
+.ln .hy-contadores li { min-height: 60px; }
+@media (min-width: 1100px) {
+  .m-marco.pl.ln { max-width: 1120px; }
+}
+
+/* ——— El mapa: la constelación del plan (tanda 2.3) ——— */
+.cs-escena { position: relative; height: clamp(340px, 62svh, 620px); margin: calc(var(--sp-3) * -1) calc(var(--margen) * -1) 0; background: radial-gradient(60% 55% at 50% 46%, color-mix(in oklab, var(--a-ing) 9%, var(--capa-0)), var(--capa-0) 78%); -webkit-mask-image: linear-gradient(to bottom, transparent, black 7%, black 90%, transparent); mask-image: linear-gradient(to bottom, transparent, black 7%, black 90%, transparent); }
+.cs-gestos { position: absolute; inset: 0; overflow: hidden; touch-action: pan-y; user-select: none; -webkit-user-select: none; -webkit-tap-highlight-color: transparent; outline: none; }
+.cs-gestos:focus-visible { box-shadow: inset 0 0 0 2px var(--trazo-texto); }
+.cs-plano, .cs-lienzo { position: absolute; inset: 0; width: 100%; height: 100%; display: block; transition: opacity var(--dur-4) var(--curva-salida); }
+.cs-lienzo { opacity: 0; }
+.cs-escena.en-3d .cs-lienzo { opacity: 1; }
+.cs-escena.en-3d .cs-plano { opacity: 0; pointer-events: none; }
+
+.cs-cinta path { fill: none; stroke: var(--area); stroke-width: 0.05; stroke-linecap: butt; opacity: 0.4; }
+.cs-cinta path.pasado { stroke-width: 0.1; opacity: 1; }
+.cs-fase { fill: var(--texto-3); font-family: var(--font-mono); font-weight: 500; }
+.cs-sol { fill: var(--texto); opacity: 0.85; }
+.cs-estrella { fill: var(--area); opacity: 0.72; cursor: pointer; }
+.cs-estrella.curso { opacity: 0.9; }
+.cs-estrella.ahora { opacity: 1; stroke: var(--area); stroke-width: 0.04; paint-order: stroke; stroke-opacity: 0.5; }
+.cs-estrella.hecho { fill: var(--trazo); opacity: 1; stroke: var(--trazo-texto); stroke-width: 0.025; }
+.cs-estrella.vencido { stroke: var(--e-critico); stroke-width: 0.05; }
+.cs-hoy circle { fill: var(--trazo); stroke: var(--trazo-texto); stroke-width: 0.02; }
+.cs-hoy .onda { fill: none; stroke: var(--trazo); stroke-width: 0.04; transform-box: fill-box; transform-origin: center; animation: cs-onda 2.2s var(--curva-salida) infinite; }
+@keyframes cs-onda { from { transform: scale(0.35); opacity: 0.9; } to { transform: scale(1.5); opacity: 0; } }
+
+.cs-rotulos { position: absolute; inset: 0; overflow: hidden; pointer-events: none; }
+.cs-rotulo { position: absolute; left: 0; top: 0; white-space: nowrap; opacity: 0; transition: opacity var(--dur-2) var(--curva-salida); font: 500 var(--t-11)/1.2 var(--font-text); color: var(--texto-2); will-change: transform; }
+.cs-rotulo.ver { opacity: 1; }
+.cs-rotulo.fase { font-family: var(--font-mono); color: var(--texto-3); letter-spacing: 0.04em; }
+.cs-rotulo.ahora, .cs-rotulo.sobre { padding: 4px 8px; border-radius: var(--r-pildora); background: color-mix(in oklab, var(--capa-2) 82%, transparent); border: 1px solid var(--raya-fuerte); color: var(--texto); font-size: var(--t-13); font-weight: 600; -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); }
+.cs-rotulo.sobre { font-weight: 500; }
+.cs-rotulo.hoy { font: 600 var(--t-11)/1 var(--font-mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--trazo-texto); }
+
+.cs-vistas { position: absolute; right: var(--margen); bottom: var(--sp-6); display: flex; gap: var(--sp-2); }
+.cs-leyenda { display: flex; flex-wrap: wrap; gap: var(--sp-1) var(--sp-4); justify-content: center; margin: 0 0 var(--sp-5); padding: 0; list-style: none; font: 400 var(--t-13)/1.3 var(--font-text); color: var(--texto-2); }
+.cs-leyenda li { display: inline-flex; align-items: center; gap: 6px; }
+.cs-leyenda .area-punto { border-radius: 50%; }
+.cs-datos { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--sp-3); margin-bottom: var(--sp-6); }
+@media (prefers-reduced-motion: reduce) { .cs-hoy .onda { animation: none; opacity: 0.5; } .cs-plano, .cs-lienzo { transition: none; } }
+@media (min-width: 900px) {
+  .cs-escena { margin-inline: 0; -webkit-mask-image: linear-gradient(to bottom, transparent, black 7%, black 90%, transparent), linear-gradient(to right, transparent, black 7%, black 93%, transparent); mask-image: linear-gradient(to bottom, transparent, black 7%, black 90%, transparent), linear-gradient(to right, transparent, black 7%, black 93%, transparent); -webkit-mask-composite: source-in; mask-composite: intersect; }
+  .cs-vistas { right: var(--sp-7); }
+}
