@@ -91,7 +91,9 @@ function Raiz({ hoy, arbol, day }: { hoy: string; arbol: PeriodoMedido[]; day: D
   const [pista, setPista] = useState<(typeof PISTAS)[number][0]>('todas');
   const fondo = useMemo(() => ({ sec: periodosSecundarias(plan).map((p) => medir(p, hoy)), com: periodosComerciales(plan).map((p) => medir(p, hoy)) }), [plan, hoy]);
   // Los comerciales: el que corre, los próximos 3 y los ya pasados sin publicar.
-  const comVisibles = fondo.com.filter((c) => (c.inicio <= hoy && hoy <= c.fin) || (c.fin < hoy && c.estado !== 'hecho') || c.inicio > hoy).slice(0, pista === 'comercial' ? 23 : 4);
+  const comVisibles = pista === 'comercial' ? fondo.com : fondo.com.filter((c) => c.fin >= hoy).slice(0, 1);
+  // En "Todas", solo la app que corre ahora (o la próxima); en "Secundaria", las 4.
+  const secVisibles = pista === 'secundaria' ? fondo.sec : fondo.sec.filter((a) => a.fin >= hoy).slice(0, 1);
   return (
     <>
       <header>
@@ -106,16 +108,14 @@ function Raiz({ hoy, arbol, day }: { hoy: string; arbol: PeriodoMedido[]; day: D
       </div>
       {(pista === 'todas' || pista === 'secundaria') && (
         <section aria-label="Pista secundaria">
-          <span className="etiqueta">Secundaria · de fondo</span>
-          <ul className="pd-lista">{fondo.sec.map((p) => <li key={p.id}><PeriodoTarjeta p={p} hoy={hoy} enlace={false} compacta /><a className="fila-link" href={`#/metas/fondo/${p.id}`}>{p.nombre} <span aria-hidden="true">→</span></a></li>)}</ul>
-          <a className="fila-link" href="#/metas/pista/secundaria">La pista secundaria <span aria-hidden="true">→</span></a>
+          <a className="etiqueta" href="#/metas/pista/secundaria">Secundaria · de fondo →</a>
+          <ul className="pd-lista">{secVisibles.map((p) => <li key={p.id}><a href={`#/metas/fondo/${p.id}`} className="pd-enlace"><PeriodoTarjeta p={p} hoy={hoy} enlace={false} compacta /></a></li>)}</ul>
         </section>
       )}
       {(pista === 'todas' || pista === 'comercial') && (
         <section aria-label="Pista comercial">
-          <span className="etiqueta">Comercial · de fondo</span>
-          <ul className="pd-lista">{comVisibles.map((p) => <li key={p.id}><PeriodoTarjeta p={p} hoy={hoy} enlace={false} compacta /><a className="fila-link" href={`#/metas/fondo/${p.id}`}>{p.nombre} <span aria-hidden="true">→</span></a></li>)}</ul>
-          <a className="fila-link" href="#/metas/pista/comercial">El pipeline de los 23 slots <span aria-hidden="true">→</span></a>
+          <a className="etiqueta" href="#/metas/pista/comercial">Comercial · de fondo · el pipeline de los 23 →</a>
+          <ul className="pd-lista">{comVisibles.map((p) => <li key={p.id}><a href={`#/metas/fondo/${p.id}`} className="pd-enlace"><PeriodoTarjeta p={p} hoy={hoy} enlace={false} compacta /></a></li>)}</ul>
         </section>
       )}
       {(pista === 'todas' || pista === 'principal') && <>
@@ -124,11 +124,18 @@ function Raiz({ hoy, arbol, day }: { hoy: string; arbol: PeriodoMedido[]; day: D
         {arbol.map((e) => (
           <li key={e.id}>
             <PeriodoTarjeta p={e} hoy={hoy} />
-            {e === actual && (
-              <ul className="pd-lista" style={{ marginTop: 8, paddingLeft: 12 }}>
-                {e.hijos!.map((f) => <li key={f.id}><PeriodoTarjeta p={f} hoy={hoy} compacta /></li>)}
-              </ul>
-            )}
+            {e === actual && (() => {
+              // La fase en curso a la vista; las demás, plegadas.
+              const fa = e.hijos!.find((f) => f.inicio <= hoy && hoy <= f.fin) ?? e.hijos![0];
+              return (
+                <ul className="pd-lista" style={{ marginTop: 8, paddingLeft: 12 }}>
+                  <li><PeriodoTarjeta p={fa} hoy={hoy} compacta /></li>
+                  <li><Plegable id={`periodos:fases:${e.id}`} titulo={`Las ${e.hijos!.length} fases de la etapa`} resumen={`${e.hijos!.filter((f) => f.estado === 'hecho').length} hechas`}>
+                    <ul className="pd-lista">{e.hijos!.filter((f) => f !== fa).map((f) => <li key={f.id}><PeriodoTarjeta p={f} hoy={hoy} compacta /></li>)}</ul>
+                  </Plegable></li>
+                </ul>
+              );
+            })()}
           </li>
         ))}
       </ul>
@@ -156,7 +163,7 @@ function Semana({ hoy, arbol }: { hoy: string; arbol: PeriodoMedido[] }) {
                 {t.nombre}
                 {vence.length > 0 && <small>Vence: {vence.map((p) => p.nombre).join(' · ')}</small>}
                 <small>{HABITOS.filter((h) => tocaHabito(h, d)).map((h) => h.nombre.split(' (')[0]).join(' · ')}</small>
-                <small>{(() => { const f = fondoEn(d); return f.pausa ? `Fondo en pausa (${f.pausa.nombre})` : `Fondo: ${[...f.secundaria.map((x) => `${x.app.nombre} v${x.version}`), ...(f.comercial ? [`#${f.comercial.n} ${f.comercial.marca ?? 'a definir'}`] : [])].join(' · ') || '—'}`; })()}</small>
+                {(() => { const f = fondoEn(d); const xs = [...f.secundaria.map((x) => `${x.app.nombre} v${x.version}`), ...(f.comercial ? [`#${f.comercial.n} ${f.comercial.marca ?? 'a definir'}`] : [])]; return f.pausa ? <small>Fondo en pausa ({f.pausa.nombre})</small> : xs.length ? <small>Fondo: {xs.join(' · ')}</small> : null; })()}
               </span>
             </li>
           );

@@ -26,12 +26,18 @@ describe('v12.1 · metas como períodos', () => {
     expect(ahora.textContent).toMatch(/Próxima fecha límite: v1\.0 MVP · 1 dic \(en 8 días\)/);
     expect(screen.getByRole('link', { name: /P0 · Constelación v1: tus metas de siempre/ })).toHaveAttribute('href', '#/metas/proyecto/P0');
     // v12.2: "Todas" muestra las tres pistas; con "Principal", solo las 4 etapas y las 6 fases de la etapa 1.
+    // En "Todas", lo que corre de fondo: la app secundaria y el próximo showcase; con el filtro, cada pista entera.
+    expect(within(screen.getByRole('region', { name: 'Pista secundaria' })).getAllByRole('article')).toHaveLength(1);
+    fireEvent.click(screen.getByRole('radio', { name: 'Secundaria' }));
     expect(within(screen.getByRole('region', { name: 'Pista secundaria' })).getAllByRole('article')).toHaveLength(4);
+    fireEvent.click(screen.getByRole('radio', { name: 'Comercial' }));
+    expect(within(screen.getByRole('region', { name: 'Pista comercial' })).getAllByRole('article')).toHaveLength(23);
+    fireEvent.click(screen.getByRole('radio', { name: 'Todas' }));
     expect(within(screen.getByRole('region', { name: 'Pista comercial' })).getAllByRole('article').length).toBeGreaterThan(0);
     fireEvent.click(screen.getByRole('radio', { name: 'Principal' }));
     expect(screen.queryByRole('region', { name: 'Pista secundaria' })).toBeNull();
     const tarjetas = screen.getAllByRole('article').map((a) => a.getAttribute('aria-label')!.split(':')[0]);
-    expect(tarjetas).toHaveLength(4 + 6);
+    expect(tarjetas).toHaveLength(4 + 6); // la fase en curso a la vista y las otras 5 plegadas (están en el DOM)
     expect(tarjetas.slice(0, 3)).toEqual(['Etapa 1 · Núcleo', 'Fase 1 · AI Full-stack Engineer', 'Fase 2 · ML Engineer']);
     expect(screen.getByRole('article', { name: /^Etapa 1 · Núcleo: en plan, tiempo 1 %, trabajo/ })).toBeInTheDocument();
     const sem = screen.getByText('Esta semana').closest('section')!;

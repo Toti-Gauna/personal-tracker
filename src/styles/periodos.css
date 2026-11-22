@@ -107,3 +107,5 @@ a.pd-tit .pd-nombre::after { content: ' →'; color: var(--sub); font-weight: 40
 .gantt-b.comercial { background: var(--eclipse); }
 .gantt-b.pausado { opacity: 0.4; }
 .gantt-fila.fondo { border-bottom: 1px dashed var(--linea); }
+a.pd-enlace { color: inherit; text-decoration: none; display: block; }
+a.etiqueta { text-decoration: none; }
