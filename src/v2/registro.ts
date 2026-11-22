@@ -18,6 +18,8 @@ export interface EntradaV2 {
   nombre: string;
   /** De taller: muestra el sistema, no reemplaza a ninguna pantalla de la 1.0. */
   taller?: boolean;
+  /** Qué parte de la ruta cubre (por su `param`); lo demás sigue en 1.0. Sin esto, la ruta entera. */
+  cubre?: (ruta: Ruta) => boolean;
   Componente: ComponentType<PropsV2>;
 }
 
@@ -26,6 +28,8 @@ export type RegistroV2 = Partial<Record<Pantalla, EntradaV2>>;
 /** Las pantallas llegan de a una; las de `taller` no cuentan como pantallas convertidas. */
 export const PANTALLAS_V2: RegistroV2 = {
   hoy: { nombre: 'Hoy', Componente: lazy(() => import('./hoy/HoyV2')) },
+  // El Plan: el centro (#/metas y #/metas/periodos), la bajada por niveles y el análisis. Lo demás de Metas sigue en 1.0.
+  metas: { nombre: 'Plan', Componente: lazy(() => import('./plan/PlanV2')), cubre: (r) => !r.param || r.param === 'periodos' || r.param.startsWith('periodos/') || r.param === 'analisis' },
   ajustes: { nombre: 'Ajustes', Componente: lazy(() => import('./pantallas/AjustesV2')) },
   v2: { nombre: 'Taller 2.0', taller: true, Componente: lazy(() => import('./pantallas/Taller')) },
 };

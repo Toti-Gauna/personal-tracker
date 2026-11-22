@@ -98,13 +98,13 @@ export function Anillo({ valor, tamano = 120, grosor = 10, etiqueta, sub, area, 
 
 // ——— Ritmo: tiempo contra trabajo ———
 
-interface RitmoProps { tiempo: number; trabajo: number; nombre: string; frase?: string; area?: string }
+interface RitmoProps { tiempo: number; trabajo: number; nombre: string; frase?: string; area?: string; /** `tiempo`: solo la marca del tiempo (cuando un anillo al lado ya dice el trabajo). */ pie?: 'completo' | 'tiempo' }
 
 /**
  * La barra de ritmo: el trabajo hecho es la barra; el tiempo transcurrido es la marca fantasma de "dónde deberías estar".
  * Reemplaza las dos barras finas de la 1.0. La frase la escribe la pantalla ("Vas 2 días atrás").
  */
-export function Ritmo({ tiempo, trabajo, nombre, frase, area }: RitmoProps) {
+export function Ritmo({ tiempo, trabajo, nombre, frase, area, pie = 'completo' }: RitmoProps) {
   const t = Math.max(0, Math.min(1, tiempo));
   const w = Math.max(0, Math.min(1, trabajo));
   const atras = w + 0.1 < t;
@@ -115,7 +115,7 @@ export function Ritmo({ tiempo, trabajo, nombre, frase, area }: RitmoProps) {
         <span className="s-ritmo-fantasma" style={{ left: `${t * 100}%` }} />
       </div>
       <div className="s-ritmo-pie">
-        <span><b className="t-dato">{pct(w)}</b> hecho</span>
+        {pie === 'completo' && <span><b className="t-dato">{pct(w)}</b> hecho</span>}
         <span className="s-ritmo-tiempo"><i aria-hidden="true" /><span className="t-dato">{pct(t)}</span> del tiempo</span>
       </div>
       {frase && <p className="t-nota s-ritmo-frase">{frase}</p>}

@@ -50,7 +50,7 @@
 .s-ritmo-fantasma::before { content: ''; position: absolute; top: -5px; left: -6px; border: 5px solid transparent; border-top-color: var(--texto); border-bottom: 0; }
 .s-ritmo-pie { display: flex; justify-content: space-between; gap: var(--sp-3); font: 400 var(--t-13)/1.3 var(--font-text); color: var(--texto-2); }
 .s-ritmo-pie b { color: var(--texto); font-weight: 600; }
-.s-ritmo-tiempo { display: inline-flex; align-items: center; gap: 6px; }
+.s-ritmo-tiempo { display: inline-flex; align-items: center; gap: 6px; margin-left: auto; }
 .s-ritmo-tiempo i { width: 0; height: 12px; border-left: 2px dashed var(--texto-2); }
 .s-ritmo.atras .s-ritmo-frase { color: var(--texto); font-weight: 550; }
 

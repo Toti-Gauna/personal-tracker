@@ -20,7 +20,8 @@ interface Props {
   rotulo?: ReactNode;
   /** Hasta 12 palabras, o nada. */
   intro?: string;
-  volver?: { href: string; nombre: string };
+  /** A dónde vuelve. `transicion`: cómo (por defecto, deslizando hacia atrás; en el Plan, achicándose). */
+  volver?: { href: string; nombre: string; transicion?: 'atras' | 'zoom-out' };
   /** El camino hasta acá, de afuera hacia adentro. Reemplaza a `rotulo`. */
   migas?: Miga[];
   /** Arriba a la derecha: solo acciones (botones), nunca datos. */
@@ -49,7 +50,7 @@ export function Marco({ titulo, rotulo, intro, volver, migas, acciones, info, ch
   return (
     <main className={`v2 v2-pantalla m-marco ${className ?? ''}`}>
       <div className={`m-barra${compacta ? ' compacta' : ''}`}>
-        {volver ? <a className="m-volver" href={volver.href} data-transicion="atras"><Icono nombre="atras" lado={20} /><span>{volver.nombre}</span></a>
+        {volver ? <a className="m-volver" href={volver.href} data-transicion={volver.transicion ?? 'atras'}><Icono nombre="atras" lado={20} /><span>{volver.nombre}</span></a>
           : enBarra ? <p className="t-rotulo m-rotulo-barra">{rotulo}</p> : <span />}
         <span className="m-titulo-chico" aria-hidden="true">{titulo}</span>
         <div className="m-acciones">{acciones}</div>
@@ -57,7 +58,7 @@ export function Marco({ titulo, rotulo, intro, volver, migas, acciones, info, ch
       <header className="m-cabeza">
         {migas?.length ? (
           <nav className="m-migas" aria-label="Camino">
-            {migas.map((m, i) => <span key={m.nombre + i}>{m.href ? <a href={m.href} data-transicion="atras">{m.nombre}</a> : <span aria-current="page">{m.nombre}</span>}{i < migas.length - 1 && <Icono nombre="siguiente" lado={12} />}</span>)}
+            {migas.map((m, i) => <span key={m.nombre + i}>{m.href ? <a href={m.href} data-transicion={volver?.transicion ?? 'atras'}>{m.nombre}</a> : <span aria-current="page">{m.nombre}</span>}{i < migas.length - 1 && <Icono nombre="siguiente" lado={12} />}</span>)}
           </nav>
         ) : rotulo && !enBarra && <p className="t-rotulo">{rotulo}</p>}
         <h1 className="t-titulo" ref={h1}>{titulo}{info && <Info titulo={titulo}>{info}</Info>}</h1>

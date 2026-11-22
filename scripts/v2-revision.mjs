@@ -34,7 +34,11 @@ const PENDIENTES = {
 const PANTALLAS = [
   { id: 'hoy', hash: '#/hoy' },
   { id: 'estudio', hash: '#/estudio' },
-  { id: 'metas', hash: '#/metas' },
+  { id: 'plan', hash: '#/metas' },
+  { id: 'plan-petria', hash: '#/metas/periodos/P1' },
+  { id: 'plan-version', hash: '#/metas/periodos/P1%3Av1.0' },
+  { id: 'plan-fase', hash: '#/metas/periodos/F1' },
+  { id: 'plan-analisis', hash: '#/metas/analisis' },
   { id: 'entreno', hash: '#/entreno' },
   { id: 'perfil', hash: '#/perfil' },
   { id: 'ajustes', hash: '#/ajustes' },

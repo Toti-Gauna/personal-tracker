@@ -278,3 +278,38 @@ shown as 2.0 toasts through a small bridge (`ponerPuenteAvisos`).
 
 Still 1.0 inside this screen: the clip-logging sheet and the chapter-state dialog (rebuilt with their own screens), and
 the destinations of the links (focus, Cierre, Pomodoros, JSON, Importar).
+
+## 15. Plan 2.0 (`src/v2/plan/`, batch 2.2)
+
+"Metas" is **Plan** in 2.0. The hub replaces 1.0's Ruta and Períodos as the entry; the other plan screens stay reachable
+from it (and stay 1.0 until their batch). The registry now takes `cubre(ruta)`: Plan covers `#/metas`,
+`#/metas/periodos`, `#/metas/periodos/<id>` and `#/metas/analisis`; every other `#/metas/…` shows its 1.0 screen with the mark.
+
+**The goal card** (`TarjetaPeriodo.tsx`) is one piece for every period, stage to batch:
+- *Hero*: kicker with the level and dates ("Fase 1 · 21 nov – 14 ene 2027"), status pill, a ring of the work done, the
+  deadline and hours when they say something new, the pace bar (work as the bar, elapsed time as the tick) and one calm
+  sentence: "Vas en plan: termina el 9 dic.", "Vas 2 días atrás: termina el 11 dic.", "Empieza el 10 dic (en 17 días).",
+  "Pasó el estimado (20 nov). El límite es el 5 ene 2027.", "Venció el 20 nov.".
+- *Row*: a small ring (or a round check when it is marked by hand: batches, milestones, versions), name, compact dates
+  ("21 – 25 nov"), a thin pace bar, and the status only when it is news (not "Próximo" or "En plan").
+- Area color comes from the block type (projects and certs blue, math gold, English pink, job search red; background
+  tracks violet and orange; stages and phases in ink).
+
+**Hub** (`#/metas`): the running block as hero (tap: it grows into its page), what is running inside it, "Lo que viene"
+with a zoom (Semana day by day with what is due; Mes = versions and exams; Bimestre = blocks; Año = phases; 6 shown,
+"Ver N más"), the 4 stages, background (current secondary app and showcase, tracks, open source), your own goals
+(P0 and week/month/bimester/year), and the rest of the plan (Análisis, whole roadmap, branches, stages and paperwork).
+Lenses: Ahora (here) · Línea · Mapa (those two are 1.0 until 2.3).
+
+**A period** (`#/metas/periodos/<id>`): back to the parent by its short name ("Fase 1"), the path above it, the hero,
+then by level: version deliverables to tick, "Marcar publicada" (the launch version sends you to complete the Imán
+first), phase exit checklist, market and roles; children as rows that zoom in; a block's extras (card, math window,
+certs, repo/launch/Imán, open-source tools, project detail in a sheet). A late block offers **Correr lo que sigue**: a
+sheet with the proposed dates (fixed dates do not move, background shifts with its window), confirm, and undo from the
+toast or from the block ("Volver a las fechas del plan"). Titles drop the level prefix ("Fase 1 · AI Full-stack
+Engineer" → "AI Full-stack Engineer", with "Fase 1" in the kicker).
+
+**Análisis** (`#/metas/analisis`): Calibración, Diferencia, Impacto, Evolución, Revisión semanal, Búsqueda, Sprint,
+Compras (still 1.0).
+
+Budgets: hub 53 words above the fold (1.0 Períodos: 191), PetrIA 59, a version 58, a phase 60, Análisis 55.

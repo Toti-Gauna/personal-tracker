@@ -1,0 +1,72 @@
+/* Trazo 2.0 · Plan (tanda 2.2): el centro, la tarjeta de un período y su pantalla. */
+
+/* ——— Las lentes: ahora, línea y mapa ——— */
+.pl-lentes { display: flex; gap: var(--sp-1); margin: calc(var(--sp-2) * -1) 0 var(--sp-5); border-bottom: 1px solid var(--raya); }
+.pl-lentes a { position: relative; display: inline-flex; align-items: center; gap: 6px; min-height: var(--toque); padding: 0 var(--sp-3); color: var(--texto-2); text-decoration: none; font: 550 var(--t-15)/1 var(--font-text); }
+.pl-lentes a[aria-current='page'] { color: var(--texto); }
+.pl-lentes a[aria-current='page']::after { content: ''; position: absolute; left: var(--sp-2); right: var(--sp-2); bottom: -2px; height: 4px; background: var(--trazo); clip-path: var(--bisel); }
+
+/* ——— El héroe de un período ——— */
+.tp-heroe { display: grid; gap: var(--sp-3); }
+.tp-heroe-tarjeta.s-tarjeta { display: grid; gap: var(--sp-4); padding: var(--sp-4) var(--sp-4) var(--sp-5); }
+.tp-cabeza { display: flex; align-items: center; justify-content: space-between; gap: var(--sp-3); }
+.tp-cabeza .t-rotulo { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.tp-centro { display: flex; align-items: center; gap: var(--sp-4); }
+.tp-centro-texto { display: grid; gap: var(--sp-3); min-width: 0; }
+.tp-centro-texto .t-seccion { overflow-wrap: anywhere; }
+.tp-datos { display: grid; grid-template-columns: repeat(auto-fill, minmax(84px, 1fr)); gap: var(--sp-2) var(--sp-3); margin: 0; }
+.tp-datos div { display: grid; gap: 2px; }
+.tp-datos dd { margin: 0; font-size: var(--t-15); color: var(--texto); }
+.pl-accion { display: grid; gap: var(--sp-2); }
+
+/* ——— La fila de un período ——— */
+.pl-lista { padding: 0 var(--sp-2) 0 var(--sp-4); }
+.tp-fila { display: flex; align-items: center; gap: var(--sp-3); min-height: 68px; }
+.tp-fila + .tp-fila { border-top: 1px solid var(--raya); }
+.tp-fila-link { flex: 1; display: flex; align-items: center; gap: var(--sp-2); min-width: 0; padding: var(--sp-2) 0; color: var(--texto); text-decoration: none; border-radius: var(--r-s); }
+a.tp-fila-link:active { background: var(--capa-2); }
+.tp-fila-texto { flex: 1; display: grid; gap: 4px; min-width: 0; }
+.tp-fila-texto b { font: 500 var(--t-17)/1.25 var(--font-text); overflow-wrap: anywhere; }
+.tp-fila-texto small { display: flex; flex-wrap: wrap; align-items: center; gap: 4px var(--sp-3); font: 400 var(--t-13)/1.3 var(--font-text); color: var(--texto-2); }
+.tp-fila.hecho .tp-fila-texto b { color: var(--texto-2); }
+.tp-anillo { flex: none; display: grid; }
+.tp-anillo-n { font-size: var(--t-11); font-weight: 600; }
+.tp-estado { display: inline-flex; align-items: center; gap: 4px; color: var(--texto-2); }
+.tp-estado.atencion { color: var(--texto); font-weight: 600; }
+.tp-estado.critico { color: var(--e-critico); font-weight: 600; }
+.tp-estado.hecho { color: var(--trazo-texto); font-weight: 600; }
+.tp-mini { position: relative; display: block; height: 4px; margin-top: 2px; border-radius: var(--r-pildora); background: var(--raya-fuerte); }
+.tp-mini-hecho { position: absolute; inset: 0 auto 0 0; border-radius: inherit; background: var(--area, var(--texto)); }
+.tp-mini.completo .tp-mini-hecho { background: var(--trazo); }
+.tp-mini-tiempo { position: absolute; top: -3px; bottom: -3px; width: 2px; margin-left: -1px; border-radius: 1px; background: var(--texto); }
+.tp-casilla { flex: none; display: grid; place-items: center; width: 40px; height: 40px; border-radius: 50%; background: var(--capa-2); color: var(--texto-3); box-shadow: inset 0 0 0 1.75px var(--raya-fuerte); transition: background-color var(--dur-2), color var(--dur-2), transform var(--dur-1) var(--curva-salida); }
+.tp-casilla:active { transform: scale(0.9); }
+.tp-casilla.hecha { background: var(--trazo); color: var(--sobre-trazo); box-shadow: none; }
+.tp-casilla svg { stroke-width: 2.4; }
+
+/* ——— La semana día por día ——— */
+.pl-semana { list-style: none; margin: 0; padding: 0 var(--sp-4); }
+.pl-semana li { display: grid; grid-template-columns: 44px 1fr; align-items: center; gap: var(--sp-3); min-height: 56px; padding: var(--sp-2) 0; }
+.pl-semana li + li { border-top: 1px solid var(--raya); }
+.pl-semana li.pasado { opacity: 0.55; }
+.pl-semana-dia { display: grid; justify-items: center; gap: 2px; }
+.pl-semana-dia b { font-size: var(--t-17); padding: 0 4px; }
+.pl-semana-texto { display: grid; gap: 4px; min-width: 0; }
+.pl-semana-texto a { color: var(--texto); text-decoration: none; font: 500 var(--t-15)/1.3 var(--font-text); }
+.pl-semana-texto small { display: flex; align-items: center; gap: 6px; font: 400 var(--t-13)/1.3 var(--font-text); color: var(--texto-2); }
+
+/* ——— La pantalla de un período ——— */
+.pl-chips { display: flex; flex-wrap: wrap; gap: var(--sp-2); }
+.pl-check { padding: 0 var(--sp-4); }
+.pl-check > * + * { border-top: 1px solid var(--raya); }
+.pl-corrido.s-tarjeta { display: grid; gap: var(--sp-2); justify-items: start; margin-top: var(--sp-3); }
+.pl-sug-fila { margin-top: var(--sp-3); }
+.pl-sug-lista { padding: 0 var(--sp-4); }
+.pl-sug-lista > * + * { border-top: 1px solid var(--raya); }
+.pl-sug-lista .k-etiqueta { font-size: var(--t-15); }
+.pl-detalle-v1 { font-family: var(--font-text); }
+.pl .m-grupo:first-of-type { margin-top: var(--sp-7); }
+
+@media (min-width: 1100px) {
+  .m-marco.pl { max-width: 880px; }
+}

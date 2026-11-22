@@ -45,7 +45,7 @@ interface Props {
 export function PantallaV2({ interfaz, ruta, day, today, v1, registro = PANTALLAS_V2 }: Props) {
   if (interfaz !== 'v2') return <>{v1}</>;
   const entrada = registro[ruta.pantalla];
-  if (!entrada) return <><MarcaV1 />{v1}</>;
+  if (!entrada || (entrada.cubre && !entrada.cubre(ruta))) return <><MarcaV1 />{v1}</>;
   const { Componente } = entrada;
   return (
     <LimiteV2 key={`${ruta.pantalla}/${ruta.param ?? ''}`} fallback={<><MarcaV1 error />{v1}</>}>
