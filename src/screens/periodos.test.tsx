@@ -25,8 +25,19 @@ describe('v12.1 · metas como períodos', () => {
     expect(ahora.textContent).toMatch(/Vence hoy: Lote 1\.1 · Ingest & cleaning · Lote 1\.2/);
     expect(ahora.textContent).toMatch(/Próxima fecha límite: v1\.0 MVP · 1 dic \(en 8 días\)/);
     expect(screen.getByRole('link', { name: /P0 · Constelación v1: tus metas de siempre/ })).toHaveAttribute('href', '#/metas/proyecto/P0');
+    // v12.2: "Todas" muestra las tres pistas; con "Principal", solo las 4 etapas y las 6 fases de la etapa 1.
+    // En "Todas", lo que corre de fondo: la app secundaria y el próximo showcase; con el filtro, cada pista entera.
+    expect(within(screen.getByRole('region', { name: 'Pista secundaria' })).getAllByRole('article')).toHaveLength(1);
+    fireEvent.click(screen.getByRole('radio', { name: 'Secundaria' }));
+    expect(within(screen.getByRole('region', { name: 'Pista secundaria' })).getAllByRole('article')).toHaveLength(4);
+    fireEvent.click(screen.getByRole('radio', { name: 'Comercial' }));
+    expect(within(screen.getByRole('region', { name: 'Pista comercial' })).getAllByRole('article')).toHaveLength(23);
+    fireEvent.click(screen.getByRole('radio', { name: 'Todas' }));
+    expect(within(screen.getByRole('region', { name: 'Pista comercial' })).getAllByRole('article').length).toBeGreaterThan(0);
+    fireEvent.click(screen.getByRole('radio', { name: 'Principal' }));
+    expect(screen.queryByRole('region', { name: 'Pista secundaria' })).toBeNull();
     const tarjetas = screen.getAllByRole('article').map((a) => a.getAttribute('aria-label')!.split(':')[0]);
-    expect(tarjetas).toHaveLength(4 + 6); // las 4 etapas y las 6 fases de la etapa 1
+    expect(tarjetas).toHaveLength(4 + 6); // la fase en curso a la vista y las otras 5 plegadas (están en el DOM)
     expect(tarjetas.slice(0, 3)).toEqual(['Etapa 1 · Núcleo', 'Fase 1 · AI Full-stack Engineer', 'Fase 2 · ML Engineer']);
     expect(screen.getByRole('article', { name: /^Etapa 1 · Núcleo: en plan, tiempo 1 %, trabajo/ })).toBeInTheDocument();
     const sem = screen.getByText('Esta semana').closest('section')!;
@@ -39,7 +50,7 @@ describe('v12.1 · metas como períodos', () => {
     const p1 = screen.getByRole('article', { name: /^PetrIA:/ });
     expect(p1.textContent).toMatch(/Bloque · 21 nov – 9 dic · límite 5 ene 2027/);
     expect(p1.textContent).toMatch(/estimado 9 dic.*límite 5 ene 2027/);
-    expect(p1.textContent).toMatch(/plan 194,5 h · real 0 h/);
+    expect(p1.textContent).toMatch(/plan 193,5 h · real 0 h/);
     expect(screen.getByRole('link', { name: 'La ficha de PetrIA' })).toBeInTheDocument();
     expect(screen.getAllByRole('article').slice(1).map((a) => a.getAttribute('aria-label')!.split(':')[0])).toEqual(['v1.0 MVP', 'v1.1 Producto', 'v2.0 Plataforma', 'v3.0 Producción']);
   });
@@ -51,7 +62,10 @@ describe('v12.1 · metas como períodos', () => {
     expect(screen.getByRole('article', { name: /^Lote 0\.0 · Onboarding: hecho/ })).toBeInTheDocument();
     unmount();
     render(<Metas day={getState().days[D]} tab="periodos/F1" />);
-    expect(screen.getByText('Para cerrarla').nextElementSibling!.textContent).toMatch(/PetrIA in production \(4 versions\)/);
+    // v12.2: la salida es un checklist.
+    expect(screen.getByText(/^Para cerrarla · 0 de 5$/).nextElementSibling!.textContent).toMatch(/PetrIA in production \(4 versions\)/);
+    fireEvent.click(screen.getByRole('checkbox', { name: 'PetrIA in production (4 versions): hecho' }));
+    expect(screen.getByText(/^Para cerrarla · 1 de 5$/)).toBeInTheDocument();
     expect(screen.getByText(/Salís al mercado con/).nextElementSibling!.textContent).toMatch(/PetrIA · Claude Architect/);
   });
 
@@ -107,9 +121,12 @@ describe('v12.1 · certificación, ventana, línea de tiempo y Hoy', () => {
     expect(screen.getByText(/Ventana cerrada el/)).toBeInTheDocument();
   });
 
-  it('Línea de tiempo: 11 fases, cada bloque con su enlace, hoy marcado', () => {
+  it('Línea de tiempo: tres pistas (11 fases, secundaria y comercial), cada bloque con su enlace, hoy marcado', () => {
     const { container } = render(<Metas day={dia()} tab="linea" />);
-    expect(container.querySelectorAll('.gantt-fila')).toHaveLength(11);
+    // v12.2: las 11 fases y las dos pistas de fondo (secundaria y comercial) en el mismo eje.
+    expect(container.querySelectorAll('.gantt-fila')).toHaveLength(13);
+    expect(container.querySelectorAll('.gantt-fila.fondo .gantt-b.secundaria')).toHaveLength(12);
+    expect(container.querySelectorAll('.gantt-fila.fondo .gantt-b.comercial')).toHaveLength(23);
     expect(container.querySelector('.gantt-hoy')).not.toBeNull();
     expect(container.querySelector('a.gantt-b[href="#/metas/periodos/P1"]')!.getAttribute('title')).toMatch(/P1 · PetrIA · 21 nov – 9 dic/);
     expect(container.querySelectorAll('.gantt-pausa').length).toBeGreaterThan(0);

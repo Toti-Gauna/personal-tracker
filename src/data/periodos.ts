@@ -9,7 +9,7 @@
 import { addDays, daysBetween } from './time';
 
 export type NivelPeriodo = 'etapa' | 'fase' | 'bloque' | 'version' | 'lote' | 'capitulo' | 'paper' | 'cert' | 'hito';
-export type EstadoPeriodo = 'proximo' | 'en-plan' | 'adelantado' | 'atrasado' | 'vencido' | 'hecho';
+export type EstadoPeriodo = 'proximo' | 'en-plan' | 'adelantado' | 'atrasado' | 'vencido' | 'hecho' | 'pausado';
 
 export interface Periodo {
   id: string;
@@ -29,6 +29,12 @@ export interface Periodo {
   /** No se corre nunca (la pausa de diciembre, un examen reservado). */
   fija?: boolean;
   aConfirmar?: boolean;
+  /** v12.2: la pista (principal, secundaria, comercial). Sin valor, principal. */
+  track?: 'principal' | 'secundaria' | 'comercial';
+  /** v12.2: pausas fijas de lo de fondo (PNPT y 20–26 dic 2027): en ellas se ve en pausa, no atrasado. */
+  pausas?: { inicio: string; fin: string }[];
+  /** v12.2: los entregables de una versión (la línea de la versión, partida), con la clave de `plan.hitos` que los tilda. */
+  checklist?: { clave: string; texto: string; hecho: boolean }[];
   hijos?: Periodo[];
 }
 
@@ -58,9 +64,11 @@ export function tiempoTranscurrido(p: { inicio: string; fin: string }, hoy: stri
   return r3(daysBetween(p.inicio, hoy) / diasDe(p));
 }
 
-export function estadoDe(tiempo: number, trabajo: number, p: { inicio: string; fin: string; deadline?: string }, hoy: string): EstadoPeriodo {
+export function estadoDe(tiempo: number, trabajo: number, p: { inicio: string; fin: string; deadline?: string; pausas?: { inicio: string; fin: string }[] }, hoy: string): EstadoPeriodo {
   if (trabajo >= 1 - 1e-9) return 'hecho';
   if (hoy < p.inicio) return 'proximo';
+  // v12.2: lo de fondo en una pausa fija se ve en pausa, no atrasado ni vencido.
+  if (p.pausas?.some((x) => x.inicio <= hoy && hoy <= x.fin)) return 'pausado';
   if (hoy > (p.deadline && p.deadline > p.fin ? p.deadline : p.fin)) return 'vencido';
   if (hoy > p.fin) return 'atrasado'; // pasó el estimado y falta trabajo, aunque la fecha límite siga en pie
   if (trabajo > tiempo + TOLERANCIA) return 'adelantado';
@@ -68,15 +76,23 @@ export function estadoDe(tiempo: number, trabajo: number, p: { inicio: string; f
   return 'en-plan';
 }
 
-const pesoDe = (p: Periodo) => p.peso ?? diasDe(p);
+/**
+ * v12.2 · el peso de cada hijo: el que trae (lotes y certs, por horas); si no, las horas planificadas cuando todos los hermanos
+ * las tienen; si no, los días.
+ */
+const pesos = (hs: Periodo[]) => {
+  const porHoras = hs.every((h) => h.peso != null || (h.horasPlan ?? 0) > 0);
+  return hs.map((h) => h.peso ?? (porHoras ? h.horasPlan! : diasDe(h)));
+};
 
 /** Mide un período y todos sus hijos. El trabajo de un padre es el promedio de sus hijos ponderado por peso. */
 export function medir(p: Periodo, hoy: string): PeriodoMedido {
   const hijos = p.hijos?.map((h) => medir(h, hoy));
   let trabajo: number;
   if (hijos?.length) {
-    const total = p.hijos!.reduce((s, h) => s + pesoDe(h), 0);
-    trabajo = total > 0 ? hijos.reduce((s, h, i) => s + h.trabajo * pesoDe(p.hijos![i]), 0) / total : 0;
+    const ws = pesos(p.hijos!);
+    const total = ws.reduce((s, w) => s + w, 0);
+    trabajo = total > 0 ? hijos.reduce((s, h, i) => s + h.trabajo * ws[i], 0) / total : 0;
     // Una hoja marcada como hecha arriba (p. ej. la versión publicada) manda sobre sus lotes.
     if (p.progreso != null) trabajo = Math.max(trabajo, p.progreso);
   } else trabajo = p.progreso ?? 0;
@@ -152,14 +168,23 @@ export function finProyectado(p: Pick<PeriodoMedido, 'inicio' | 'fin' | 'trabajo
   return fin > p.fin ? fin : p.fin;
 }
 
-export interface Tramo { id: string; nombre?: string; inicio: string; fin: string; fija?: boolean }
-export interface Corrimiento { id: string; nombre?: string; inicio: string; fin: string; nuevoInicio: string; nuevoFin: string; dias: number }
+export interface Tramo {
+  id: string; nombre?: string; inicio: string; fin: string; fija?: boolean;
+  /** v12.2: absorbe atrasos (consolidación, cierre de etapa, descanso, cierre final): se achica en vez de correr lo que sigue. */
+  absorbe?: boolean;
+}
+
+/** v12.2 · un absorbedor no baja de 3 días hábiles. */
+export const MIN_ABSORBEDOR = 3;
+export interface Corrimiento { id: string; nombre?: string; inicio: string; fin: string; nuevoInicio: string; nuevoFin: string; dias: number; /** v12.2: se achicó para absorber el atraso. */ absorbe?: boolean }
 
 /**
  * La sugerencia de correr lo que sigue cuando un bloque se atrasa: el atrasado termina en `nuevoFin` y los siguientes de la secuencia
  * se corren los mismos días, manteniendo sus días hábiles. Las fechas fijas (la pausa de diciembre, los exámenes reservados, los tramos
- * con `fija`) no se mueven y no son hábiles: un bloque corrido las saltea y termina más tarde, y eso se suma a los que vienen. Solo
- * sugiere: no cambia nada hasta que lo confirmes.
+ * con `fija`) no se mueven y no son hábiles: un bloque corrido las saltea y termina más tarde, y eso se suma a los que vienen.
+ * v12.2: el corrimiento se frena en el próximo absorbedor (consolidación, cierre de etapa, descanso, cierre final), que se achica y
+ * conserva su fin; si quedaría con menos de 3 días, queda en 3 y el atraso sigue hasta el próximo absorbedor. Solo sugiere: no cambia
+ * nada hasta que lo confirmes.
  */
 export function sugerirCorrimiento(secuencia: Tramo[], atrasadoId: string, nuevoFin: string, fijas: { inicio: string; fin: string }[] = []): Corrimiento[] {
   const i = secuencia.findIndex((t) => t.id === atrasadoId);
@@ -183,9 +208,19 @@ export function sugerirCorrimiento(secuencia: Tramo[], atrasadoId: string, nuevo
     let ini = t.inicio > libre ? t.inicio : libre;
     while (bloqueado(ini)) ini = addDays(ini, 1);
     if (ini === t.inicio) break; // ya no lo alcanza el corrimiento, ni a los que siguen
+    if (t.absorbe) {
+      // Se achica: empieza más tarde y conserva su fin, si le quedan al menos 3 días hábiles.
+      let quedan = 0;
+      for (let d = ini; d <= t.fin; d = addDays(d, 1)) if (!bloqueado(d)) quedan++;
+      if (quedan >= MIN_ABSORBEDOR) {
+        out.push({ id: t.id, nombre: t.nombre, inicio: t.inicio, fin: t.fin, nuevoInicio: ini, nuevoFin: t.fin, dias: daysBetween(t.inicio, ini), absorbe: true });
+        return out;
+      }
+      n = MIN_ABSORBEDOR; // queda en 3 días y lo que sobra sigue hasta el próximo absorbedor
+    }
     let fin = ini;
     for (let c = 1; c < n; ) { fin = addDays(fin, 1); if (!bloqueado(fin)) c++; }
-    out.push({ id: t.id, nombre: t.nombre, inicio: t.inicio, fin: t.fin, nuevoInicio: ini, nuevoFin: fin, dias: daysBetween(t.inicio, ini) });
+    out.push({ id: t.id, nombre: t.nombre, inicio: t.inicio, fin: t.fin, nuevoInicio: ini, nuevoFin: fin, dias: daysBetween(t.inicio, ini), ...(t.absorbe ? { absorbe: true } : {}) });
     libre = addDays(fin, 1);
   }
   return out;
@@ -194,3 +229,25 @@ export function sugerirCorrimiento(secuencia: Tramo[], atrasadoId: string, nuevo
 /** Aplica los corrimientos confirmados (id → fechas nuevas) a una secuencia; lo demás queda igual. */
 export const aplicarCorrimientos = <T extends Tramo>(secuencia: T[], confirmados: Record<string, { inicio: string; fin: string }> | undefined): T[] =>
   confirmados ? secuencia.map((t) => (confirmados[t.id] && !t.fija ? { ...t, inicio: confirmados[t.id].inicio, fin: confirmados[t.id].fin } : t)) : secuencia;
+
+/**
+ * v12.2 · a dónde va una fecha si se confirman esos corrimientos: dentro de un bloque corrido, a la misma distancia de su nuevo
+ * inicio (sin pasarse de su nuevo fin); fuera de ellos, queda igual. Sirve para correr lo de fondo con su ventana.
+ */
+export function moverFecha(d: string, secuencia: Tramo[], cs: Corrimiento[]): string {
+  const t = secuencia.find((x) => x.inicio <= d && d <= x.fin);
+  const c = t && cs.find((x) => x.id === t.id);
+  if (!t || !c) return d;
+  const nueva = addDays(c.nuevoInicio, daysBetween(t.inicio, d));
+  return nueva > c.nuevoFin ? c.nuevoFin : nueva;
+}
+
+/** v12.2 · los períodos de fondo (secundarias y comerciales) que se corren con sus ventanas: sugerencia, como el resto. */
+export function corrimientoDeFondo<T extends { id: string; nombre?: string; inicio: string; fin: string }>(fondo: T[], secuencia: Tramo[], cs: Corrimiento[]): Corrimiento[] {
+  return fondo.flatMap((f) => {
+    const ni = moverFecha(f.inicio, secuencia, cs);
+    let nf = moverFecha(f.fin, secuencia, cs);
+    if (nf < ni) nf = ni;
+    return ni === f.inicio && nf === f.fin ? [] : [{ id: f.id, nombre: f.nombre, inicio: f.inicio, fin: f.fin, nuevoInicio: ni, nuevoFin: nf, dias: daysBetween(f.inicio, ni) }];
+  });
+}

@@ -31,7 +31,7 @@ describe('ola 24 · pantallas del plan (v12.1)', () => {
     expect(within(ficha).getByText(/Sweet spots/).closest('li')).toHaveClass('estrella');
     expect(within(ficha).getByText(/Extras: alertas, más cuencas, cumplimiento, yacimiento 3D/)).toBeInTheDocument();
     const h = abrir('Horas y fechas');
-    expect(within(h).getByText(/194[.,]5 h · 21 nov 2026 — 9 dic 2026/)).toBeInTheDocument();
+    expect(within(h).getByText(/193[.,]5 h · 21 nov 2026 — 9 dic 2026/)).toBeInTheDocument();
     expect(within(h).getByText(/El roadmap estima 21 nov 2026 — 9 dic 2026: Trazo lo termina en fecha/)).toBeInTheDocument();
     expect(within(h).getByText(/no se recorta profundidad/)).toBeInTheDocument();
     // Sin semanas extra no hay switches.
@@ -68,7 +68,7 @@ describe('ola 24 · pantallas del plan (v12.1)', () => {
     // 2026 no tiene pausa; la de 2027 (20 al 26 dic, fecha fija).
     expect(screen.getAllByText(/pausa de fin de año · 20 dic 2027 · 1 sem/).length).toBeGreaterThan(0);
     expect(screen.queryByText(/pausa de fin de año · 21 dic 2026/)).toBeNull();
-    expect(screen.getAllByText(/proyecto · 21 nov 2026 · 194[.,]5 h/).length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/proyecto · 21 nov 2026 · 193[.,]5 h/).length).toBeGreaterThan(0);
   });
 
   it('Ajustes: la pausa se prende y apaga; T+18 no se corre (la pausa cae después); no hay switches de plataforma ni arquitectura', () => {

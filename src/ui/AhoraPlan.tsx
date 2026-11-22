@@ -4,6 +4,8 @@
  */
 import { recordatoriosActivos } from '../data/certs-v12';
 import { alertasCompras } from '../data/compras';
+import { ESTADO_COMERCIAL_TXT, fondoEn, metaRevisionSemana, recordatoriosFondo, revisionSemana } from '../data/fondo';
+import { addDays } from '../data/time';
 import { estadoHabitos } from '../data/habitos';
 import { activoAhora, proximaFechaLimite, vencenHoy, type PeriodoMedido } from '../data/periodos';
 import { daysBetween } from '../data/time';
@@ -24,6 +26,12 @@ export function AhoraPlan({ hoy, arbol, day, conHabitos = true }: { hoy: string;
   const avisos = recordatoriosActivos(plan, hoy);
   // v12.1: hardware y trámites, 30 días antes de cada fecha límite (los trámites, desde ya).
   const compras = alertasCompras(plan, hoy);
+  // v12.2: lo de fondo (no usa horas de foco): la app secundaria y el slot comercial activos, y la revisión de la semana.
+  const fondo = fondoEn(hoy);
+  const lunes = addDays(hoy, -((new Date(`${hoy}T12:00:00`).getDay() + 6) % 7));
+  const rev = revisionSemana(plan.revisionFondo, lunes);
+  const meta = metaRevisionSemana(lunes);
+  const avisosFondo = recordatoriosFondo(plan, hoy);
   const habitos = conHabitos ? estadoHabitos(day ? { ...days, [day.date]: day } : days, hoy) : [];
   return (
     <section className="pd-ahora" aria-label="Lo del plan para hoy">
@@ -39,6 +47,18 @@ export function AhoraPlan({ hoy, arbol, day, conHabitos = true }: { hoy: string;
         </small>
       ))}
       {compras.map((c) => <small key={c.id}><b>Hardware:</b> {c.titulo} · <a href={c.href}>ver</a></small>)}
+      <div className="pd-fondo" aria-label="De fondo">
+        {fondo.pausa ? <small><b>De fondo:</b> en pausa ({fondo.pausa.nombre})</small> : (
+          <small>
+            <b>De fondo:</b>{' '}
+            {fondo.secundaria.length ? fondo.secundaria.map((x, i) => <span key={x.app.id + x.version}>{i ? ' + ' : ''}<a href={`#/metas/fondo/${x.app.id}`}>{x.app.nombre} v{x.version}</a></span>) : 'sin app secundaria'}
+            {' · '}
+            {fondo.comercial ? <a href={`#/metas/fondo/${fondo.comercial.id}`}>#{fondo.comercial.n} {fondo.comercial.marca ?? plan.fondo?.[fondo.comercial.id]?.marca ?? 'a definir'} ({ESTADO_COMERCIAL_TXT[plan.fondo?.[fondo.comercial.id]?.estado ?? 'planned']})</a> : 'sin showcase'}
+            {' · '}revisión {Math.round((rev.min / 60) * 10) / 10} / {meta.walkthroughMin / 60} h esta semana
+          </small>
+        )}
+        {avisosFondo.map((a) => <small key={a.id}><b>Fondo:</b> {a.texto}{a.href ? <> · <a href={a.href}>ver</a></> : null} · <button className="subrayado" onClick={() => marcarHito(`v12:recordatorio:${a.id}`, hoy)}>listo</button></small>)}
+      </div>
       {habitos.length > 0 && (
         <ul className="pd-habitos" aria-label="Hábitos">
           {habitos.map((h) => (

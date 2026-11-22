@@ -48,7 +48,7 @@ describe('el calendario del plan (v12.1: fechas explícitas, 10 h entre semana y
     // Las horas de cada bloque son las de la v12.1; los de días fijos sin horas (P0, P1V0, COL, CIE2) dan 0.
     for (const t of TRAMOS) expect(t.horas).toBe(PLAN_EXT.bloques.find((b) => b.id === t.id)!.horas ?? 0);
     const sum = (e: number) => TRAMOS.filter((t) => t.etapa === e && !t.pausa).reduce((a, t) => a + (t.horas ?? 0), 0);
-    expect([sum(1), sum(2)]).toEqual([2951.5, 561]);
+    expect([sum(1), sum(2)]).toEqual([2954.5, 561]);
   });
 
   it('las fechas coinciden con el calendario del plan extendido (fechas explícitas de la v12.1)', () => {
@@ -58,12 +58,12 @@ describe('el calendario del plan (v12.1: fechas explícitas, 10 h entre semana y
     // P0 queda como estaba (16–18 nov); las horas del 19–20 nov van a PetrIA v0 (archivado) y no cuentan.
     expect(TRAMOS.find((t) => t.id === 'P0')).toMatchObject({ inicio: '2026-11-16', fin: '2026-11-18' });
     expect(TRAMOS.find((t) => t.id === 'P1V0')).toMatchObject({ nombre: 'PetrIA v0 (archived)', horas: 0, inicio: '2026-11-19', fin: '2026-11-20' });
-    expect(TRAMOS.find((t) => t.id === 'P1')).toMatchObject({ nombre: 'PetrIA', industria: 'petróleo', extra: 0, extraPosible: 0, horas: 194.5, inicio: '2026-11-21', fin: '2026-12-09' });
+    expect(TRAMOS.find((t) => t.id === 'P1')).toMatchObject({ nombre: 'PetrIA', industria: 'petróleo', extra: 0, extraPosible: 0, horas: 193.5, inicio: '2026-11-21', fin: '2026-12-09' });
     expect(TRAMOS.find((t) => t.id === 'P1')!.version).toBeUndefined();
     expect(TRAMOS.find((t) => t.id === 'CW1')).toMatchObject({ tipo: 'cert', nombre: 'Cert window 1', horas: 42, inicio: '2026-12-10', fin: '2026-12-13' });
     expect(TRAMOS.find((t) => t.id === 'E1')).toMatchObject({ tipo: 'ingles', horas: 72, inicio: '2026-12-14', fin: '2026-12-20' });
     expect(TRAMOS.find((t) => t.id === 'J5')).toMatchObject({ tipo: 'busqueda', inicio: '2027-04-09', fin: '2027-04-12' });
-    expect(TRAMOS.find((t) => t.id === 'P2')).toMatchObject({ nombre: 'VitalIA', horas: 100, inicio: '2026-12-21', fin: '2026-12-30' });
+    expect(TRAMOS.find((t) => t.id === 'P2')).toMatchObject({ nombre: 'VitalIA', horas: 104, inicio: '2026-12-21', fin: '2026-12-30' });
     expect(TRAMOS.find((t) => t.id === 'SUM')).toMatchObject({ tipo: 'sumas', nombre: 'Multiplatform week', horas: 25 });
     expect(TRAMOS.find((t) => t.id === 'P0B')).toMatchObject({ tipo: 'proyecto', nombre: 'Constelación 2.0 + 2.1', horas: 50 });
     expect(TRAMOS.find((t) => t.id === 'CIE2')).toMatchObject({ tipo: 'cierre', etapa: 2 });
@@ -75,7 +75,7 @@ describe('el calendario del plan (v12.1: fechas explícitas, 10 h entre semana y
     const fin = () => TRAMOS.find((t) => t.id === 'CIE2')!.fin!;
     try {
       aplicarCalendario(['P1']);
-      expect(TRAMOS.find((t) => t.id === 'P1')).toMatchObject({ extra: 0, extraPosible: 0, horas: 194.5 });
+      expect(TRAMOS.find((t) => t.id === 'P1')).toMatchObject({ extra: 0, extraPosible: 0, horas: 193.5 });
       expect(SEMANAS).toBe(53);
       aplicarCalendario([], false);
       expect(TRAMOS.some((t) => t.pausa)).toBe(false);
@@ -127,7 +127,7 @@ describe('qué toca en cada fecha', () => {
     expect(corteHandyx('2026-11-16')).toMatchObject({ id: 'lanzar', semana: 1, semanas: 13 });
   });
 
-  it('PetrIA del 21 nov al 9 dic (3 semanas, 194,5 h); el 10 dic arranca la Cert window 1 y el 14 dic English E#1', () => {
+  it('PetrIA del 21 nov al 9 dic (3 semanas, 193,5 h); el 10 dic arranca la Cert window 1 y el 14 dic English E#1', () => {
     expect(caso('2026-12-09')).toEqual({ semana: 4, bim: 'B1 · semana 4 de 9', tramo: 'P1 3/3' });
     expect(nombreTramo(tramoActivo('2026-12-09'))).toBe('PetrIA · petróleo');
     expect(etapas('2026-12-09')[0]).toMatchObject({ titulo: 'P1 · PetrIA · petróleo' });

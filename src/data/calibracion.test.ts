@@ -55,7 +55,7 @@ describe('ola 33 · calibración con PetrIA 1.0 y 1.1 (las horas de los demás l
   });
   it('proyectar y escenarios (v12.1): una proyección en días hábiles sobre el plan fechado; el calendario no se mueve', () => {
     const base = proyectar(1);
-    expect(base).toMatchObject({ deltaDias: 0, fin: '2028-10-27', horas: 6479.5 });
+    expect(base).toMatchObject({ deltaDias: 0, fin: '2028-10-27', horas: 6482.5 }); // v12.2: PetrIA 193,5 h y VitalIA 104 h
     const lento = proyectar(1.15);
     expect(lento.horas).toBeGreaterThan(base.horas);
     expect(lento.fin > base.fin).toBe(true);

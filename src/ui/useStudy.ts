@@ -5,6 +5,7 @@ import { activitiesFor, bloqueDeEstudio, dailyReview, groupSteps, planActivity, 
 import type { Activity, ReviewItem, Tramo } from '../data/study-types';
 import type { DayLog } from '../data/types';
 import { useStore } from '../state/store';
+import { PAPERS_ID, papersDelDia } from '../data/papers';
 
 export interface Contenido {
   id: string;
@@ -47,6 +48,8 @@ export function useStudyPlan(day: DayLog) {
     }
     const v12 = !!day.dayType?.startsWith('busqueda-intensiva');
     for (const a0 of activitiesFor(study, date)) {
+      // v12.2: los papers solo el primer día de su bloque, en el Block 1.
+      if (a0.id === PAPERS_ID && !papersDelDia(date).length) continue;
       const key = bloqueDeEstudio(a0, day.blocks, v12);
       if (!key) continue; // v12.1: matemática fuera de una ventana (queda el repaso del día)
       const a = key === a0.block ? a0 : { ...a0, block: key };

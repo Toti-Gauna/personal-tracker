@@ -88,3 +88,24 @@ a.pd-tit .pd-nombre::after { content: ' →'; color: var(--sub); font-weight: 40
 .ru-campos { display: grid; gap: 10px; margin: 0; padding: 0; list-style: none; }
 .ru-campos li { padding-bottom: 10px; border-bottom: 1px solid var(--linea); }
 .ru-campo { display: grid; gap: 4px; margin-bottom: 10px; }
+.pd-estado.pausado { color: var(--sub); border-style: dashed; }
+.pd-card.pausado { opacity: 0.75; }
+.pd-check { margin: 0; padding: 0; list-style: none; display: grid; gap: 6px; }
+.pd-check li { display: flex; gap: 8px; align-items: flex-start; font-size: 13px; }
+.pd-check li span { overflow-wrap: anywhere; }
+.pd-chips { display: flex; gap: 6px; flex-wrap: wrap; }
+.pd-fondo { display: grid; gap: 4px; border-top: 1px dashed var(--linea); padding-top: 6px; }
+.pd-pipe { display: grid; gap: 10px; }
+.pd-pipe h3 { margin: 0; font-size: 13px; font-family: var(--font-mono); color: var(--sub); text-transform: uppercase; }
+.rm-bloque { padding: 8px 0 8px 10px; border-left: 3px solid var(--linea); display: grid; gap: 2px; }
+.rm-bloque.proyecto { border-left-color: var(--ing); }
+.rm-bloque.cert { border-left-color: var(--economia); }
+.rm-bloque.ventana { border-left-color: var(--idi); }
+.rm-bloque.ingles, .rm-bloque.busqueda { border-left-color: var(--salud); }
+.rm-bloque small { color: var(--sub); overflow-wrap: anywhere; }
+.gantt-b.secundaria { background: var(--handyx); }
+.gantt-b.comercial { background: var(--eclipse); }
+.gantt-b.pausado { opacity: 0.4; }
+.gantt-fila.fondo { border-bottom: 1px dashed var(--linea); }
+a.pd-enlace { color: inherit; text-decoration: none; display: block; }
+a.etiqueta { text-decoration: none; }

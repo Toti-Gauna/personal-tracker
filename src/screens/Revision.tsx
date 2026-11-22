@@ -15,6 +15,7 @@ import { marcarRevisionHecha, notaRevision, sumarContador, tildarRevision } from
 import { inicioTrabajo, intensivaEn, useStore } from '../state/store';
 import { Casilla } from '../ui/Casilla';
 import { Plegable } from '../ui/Plegable';
+import { RevisionFondo } from '../ui/RevisionFondo';
 import '../styles/plan.css';
 import '../styles/etapas.css';
 import '../styles/revision.css';
@@ -75,6 +76,8 @@ export function Revision({ day }: { day: DayLog }) {
         </dl>
         <p className="sub">Las horas salen del foco de cada bloque; hours.md (en el repo privado) es la copia que queda fuera de Trazo.</p>
       </section>
+
+      <RevisionFondo hoy={hoy} lunes={lunes} />
 
       {dif && <a className="fila-link" href="#/metas/diferencia">El plan termina el {fc(dif.fin)} {dif.fin.slice(0, 4)}: {textoDelta(dif.delta)} que el roadmap <span aria-hidden="true">→</span></a>}
 

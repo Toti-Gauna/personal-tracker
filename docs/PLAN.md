@@ -1397,6 +1397,58 @@ Las rutinas del día ya no son solo las del archivo: en Ajustes → Rutinas del 
 - Las metas de horas de la semana y del mes salen de la rutina tuya los días que rige.
 - Datos: `plan.rutinasPropias` y `plan.asignacionesRutina` (aditivo). Motor puro en `src/data/motor-rutinas.ts`.
 
+## 6 octodecies. Plan v12.2: el roadmap completo y tres pistas
+
+Fuente: `docs/prompts/plan-v12.2.md` (el prompt y las respuestas del 22 nov). `scripts/plan-v12-2.mjs` lo lee y genera
+`data/v12-2.json`, validando contra el plan cargado: las fechas, las horas y las versiones de v12.2 coinciden con v12.1 salvo
+PetrIA (193,5 h, lím 245). Nada de v12.1 se archiva: v12.2 lo extiende.
+
+**Detalle de cada proyecto**: Puesto, Descripción, Problema, Valor, Diferencial, Herramientas, Capa física, Ahorro/Impacto a medir,
+Voz, Escala, Stack, Papers, Peso en entrevistas y notas de alcance, en castellano tal cual. La línea de cada versión es su checklist
+de entregables (se tilda en la tarjeta de la versión; sin lotes, el trabajo de la versión es lo tildado).
+
+**Tres pistas** (`track`): principal (lo de v12.1, usa las horas de foco), secundaria (4 apps de fondo, una por vez, con relevo:
+HandyX, JulIA, Clip Studio, Roofy) y comercial (23 showcases, uno por ventana que no es proyecto principal; 9 a definir).
+- Lo de fondo no usa horas de foco ni suma a las 72 h: su tiempo se anota aparte (revisión del domingo).
+- Pausas fijas de lo de fondo: PNPT (28 oct – 11 nov 2027) y 20–26 dic 2027; se ven "en pausa", no atrasadas.
+- Revisión en primer plano en las versiones que tocan plata, datos personales, seguridad o smart contracts: sin ella no se publican.
+- Tiempo comercial anotado en un bloque de foco: avisa (de simulacros en una cert window).
+- Uso de Claude (lo cargás el domingo) en o sobre el umbral (85 %, editable): sugiere pausar primero lo comercial y después lo
+  secundario. Nunca pausa solo.
+- Recordatorios: los de v12.2, el brief 7 días antes de cada slot y "elegí la marca" 14 días antes de los que faltan definir.
+
+**🧲 Imán**: 8 puntos en el lanzamiento público (v3.0 de fábrica, editable; la única en los comerciales). Sin los 8 (de la serie
+de posts alcanzan teaser, build y launch) el lanzamiento no se marca publicado; las versiones de antes, sí. Los comerciales piden
+además el checklist de seguridad. Los posts se cargan con su paso de la serie y quedan unidos al ítem.
+
+**Períodos**: el trabajo se pondera por horas planificadas (días si no hay horas). Atrasos: la sugerencia de correr lo que sigue se
+frena en el próximo absorbedor (consolidación → cierres de etapa → descansos → cierre final), que se achica sin bajar de 3 días;
+si no alcanza, sigue al próximo. Los exámenes reservados y la pausa del 20–26 dic 2027 no se mueven; lo de fondo dentro de una
+ventana achicada se corre con ella. Todo con confirmación.
+
+**Papers**: en el Block 1 del primer día de su bloque (estudiar → test); la tesis, en el slot de learning.md del cierre, y es el
+borrador del post del martes o jueves.
+
+**Pantallas**: filtro de pista en Períodos; la línea "De fondo" en Hoy; la línea de tiempo con tres pistas; las páginas de cada
+pista (secuencia de apps y pipeline de los 23 slots con leads), de cada ítem (repo, demo, lanzamiento, versiones, seguridad,
+leads) y del Imán; el plan entero en una página (`#/metas/roadmap`); la salida de cada fase como checklist; la revisión del
+domingo con Claude, pausas, revisión de fondo, próxima secundaria y marcas a definir.
+
+**Datos** (aditivos en `plan`): `fondo`, `revisionFondo`, `iman`, `seguridadShowcase`, `posts`, `usoClaude`, `umbralClaude`.
+Migración: los papers pasan del bloque "leer" al Block 1.
+
+**Adenda §14 · Alawys y las herramientas open source** (22 nov 2026)
+- Una herramienta es un ítem principal (tipo herramienta) con versiones que nacen en un ítem de origen (proyecto, app secundaria o
+  slot comercial) y toman sus fechas: un día, el bloque o el cierre. No tiene bloque propio ni horas aparte.
+- Alawys (create-alawys · @alawys/*, MIT): v0.1 el 21 dic y v1.0 (lanzamiento, con Imán) el 30 dic, dentro de VitalIA (104 h);
+  v1.x: el "0.1 · Arranque" de cada proyecto principal desde VitalIA tiene la casilla "Preset agregado a Alawys"; v2.0 en
+  Constelación.
+- Tipos: propia (producto público desde el día uno), extraída (no se publica hasta cargar el segundo ítem que la necesita) e interna
+  (el escrow de HandyX: nunca se publica). Como máximo una herramienta nueva por ítem (sumar a una existente no cuenta). Checklist de
+  extracción: tests · README · ejemplo · semver · publicada con provenance. Imán solo en Alawys v1.0 y mcp-ar v2 (Ticker).
+- Página Open source (`#/metas/open-source`): las publicadas primero (paquete, versión, origen, descargas a mano, link), cada una con
+  su post del jueves; la regla y la herramienta de cada proyecto en su página.
+
 ---
 
 ## 7. Registro de cambios
@@ -1598,3 +1650,16 @@ Las rutinas del día ya no son solo las del archivo: en Ajustes → Rutinas del 
 - Generar rutinas desde restricciones (despertar, dormir, fijos y horas por cosa), con vista previa y lo que no entra.
 - Adaptarlas a un día, a días de la semana o a unas fechas; Adaptar hoy sin perder lo hecho.
 - Plantillas de v12.1 y archivadas; las rutinas propias se usan tal cual y alimentan las metas de horas.
+
+**2026-11-22 · plan v12.2 · roadmap completo y tres pistas**
+
+- Detalle de cada proyecto (en castellano, tal cual), versiones con su checklist de entregables y PetrIA en 193,5 h.
+- Pistas secundaria (4 apps) y comercial (23 slots) de fondo, con pausas fijas, revisión aparte de las 72 h, revisión en primer plano y sugerencias por el uso de Claude.
+- Imán de 8 puntos en el lanzamiento, checklist de seguridad de los showcases y posts unidos a la serie.
+- Atrasos que frenan en los absorbedores (mínimo 3 días); trabajo ponderado por horas; papers en el Block 1.
+- Hoy con lo de fondo, línea de tiempo con tres pistas, páginas de pistas, ítems e Imán, y el plan entero en una página.
+
+**2026-11-22 · v12.2 · adenda Alawys**
+
+- Herramientas open source: Alawys versionada en todo el plan y 21 más (propias, extraídas con "la necesita" y una interna), con fechas del origen.
+- VitalIA en 104 h; "0.1 · Arranque" con el preset de Alawys en cada proyecto desde VitalIA; página Open source.
