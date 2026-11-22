@@ -28,6 +28,7 @@ const PRESUPUESTO = { titulo: 3, intro: 12, pliegue: 60, pantallas: 4 };
  */
 const PENDIENTES = {
   'ajustes-plan': 'los controles del plan T+18 son de la 1.0; se rehacen en 3.3',
+  'puntos-analisis': 'los gráficos del análisis (mapa, cómo fallás, recall, calibración) son de la 1.0; se rehacen en 3.3',
 };
 
 /** Las pantallas de la 2.0 que medimos. `taller` marca lo que es documentación del sistema. */
@@ -53,6 +54,13 @@ const PANTALLAS = [
   { id: 'fondo-showcase', hash: '#/metas/fondo/com-1' },
   { id: 'iman', hash: '#/metas/iman/handyx' },
   { id: 'open-source', hash: '#/metas/open-source' },
+  { id: 'estudio-mate', hash: '#/estudio/mate' },
+  { id: 'estudio-libro', hash: '#/estudio/mate/libro/conamat' },
+  { id: 'repasar', hash: '#/repaso' },
+  { id: 'puntos-debiles', hash: '#/flojo' },
+  { id: 'puntos-analisis', hash: '#/flojo/analisis' },
+  { id: 'tarjetas', hash: '#/tarjetas' },
+  { id: 'como', hash: '#/como' },
   { id: 'entreno', hash: '#/entreno' },
   { id: 'perfil', hash: '#/perfil' },
   { id: 'ajustes', hash: '#/ajustes' },

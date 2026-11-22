@@ -404,3 +404,43 @@ is about to launch (as small rings), open source and clipping (still 1.0).
 Budgets (words above the fold, 60 max; height in screens, 4 max): block 60 (2.1 screens), certification block 50, window
 block 58, certification 40, window 57, De fondo 58, secondary track 39, commercial track 53, item 51, showcase 58, Imán 57,
 open source 44 (3.98 screens: 22 package cards, the closest to the limit).
+
+## 18. Estudio (`src/v2/estudio/`, batch 2.5)
+
+Which `#/estudio…` routes are 2.0 (`cubreEstudio`): the hub, `mate` and each book `mate/libro/<id>`. Plus the whole
+`#/repaso`, `#/tarjetas` and `#/como`, and `#/flojo` (root, `recall` and `analisis`). Still 1.0 with its mark: the chapter
+(`mate/libro/<id>/<n>`), each stretch (`mate/<id>`), Idiomas, Programación, the old roadmap pages (`ruta/…`), the tests,
+the thesis, the focus session, the plan of the bimester, add-to-today and the engine settings.
+
+**Subway map** (`lineas.ts`, `Metro.tsx`): the three paths (Matemática, Idiomas, Programación) are lines with one station per
+stretch, year or project. The travelled part and finished stations are the yellow stroke; the current station is bigger and
+pulses; the next ones are rings in the area's color. If no station is running today, the next one is "you are here" (it is where you
+will start). The same line stands up (`MetroVertical`) on Matemática, cut by stages, each station a link to its stretch.
+
+**Hub** (`#/estudio`): the ring of today's steps with "Falta 50 min" and one button to enter focus (or go back to the session);
+the lines, each with "where you are → who you will be"; today's steps by content with the same check behavior as 1.0 (a chapter
+is not marked studied without its micro-thesis; cards, thesis, cold recall and tests navigate); the week (bars against the daily
+goal); the review (forecast of the next 7 days against the cap, and the 3 weakest topics); and the links. 121 words above the
+fold in 1.0, 49 now.
+
+**Book** (`Matematica.tsx`): tabs between books (Aritmética | Álgebra, they fit and do not overlap), three numbers, where you are,
+and a **chapter heat map**: one square per chapter, yellow = closed, ring = studying, mid tone = in test / re-test / thesis, reddish =
+weak, empty = pending. Tap one for its sheet and "Abrir el capítulo". Test of the book, history (sheet) and reset (confirm + undo).
+
+**Repasar** (`Repasar.tsx`): one place with two tabs, Hoy and Puntos débiles. Hoy: a ring of the minutes against the cap, the
+button to start, cards by front, "Releer" and "Repetir" (how many of 5 came out right, as 6 big buttons), what does not touch today,
+and the 7-day forecast. Puntos débiles: three numbers, the weakest topics with their strength bar, what fails and how long it takes
+to fix, the prioritize switch and today's reinforcement, leech cards. The map / how you fail / weekly recall / calibration live
+in `#/flojo/analisis` as the 1.0 charts inside the 2.0 frame (so nothing is lost) until 3.3.
+
+**Cards that flip** (`Tarjetas.tsx`): a real 3D flip (a face with the question and your answer, the other with the answer and what
+you missed highlighted). Same queue, modes (write, say, think), spaced-repetition engine and grades as 1.0; each grade button says when
+the card comes back. With reduced motion it is a cross-fade. Haptics on flip and grade.
+
+**Cómo funciona** (`Como.tsx`): the four steps (study, test, thesis, repeat) as a line, each with a drawn illustration (book and
+pomodoro, sheet and score ring, speech bubble and pen, spaced dots on a curve), one sentence and its rules in a sheet; "a day" and
+"a chapter in two months" are sheets too. The numbers come from the engine's catalog.
+
+Budgets (words above the fold, 60 max; height in screens, 4 max): hub 49 (2.5 screens), Matemática 55, book 47, Repasar 42,
+Puntos débiles 55, cards 29, Cómo funciona 51 (2.0 screens). The analysis page is a known pending item (1.0 charts).
+
