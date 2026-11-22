@@ -212,26 +212,26 @@ metadata); one floating action per screen at most; the breadcrumb is a compact p
 
 `CapasV2` (toasts + confirm host) is lazy-loaded by App only when 2.0 is on.
 
-## 12. The frame ()
+## 12. The frame (`src/v2/marco/`)
 
-- **** — one lazy chunk App mounts only with 2.0 on: navigation, toasts + confirm, screen transitions,
+- **`GlobalV2`**: one lazy chunk App mounts only with 2.0 on: navigation, toasts + confirm, screen transitions,
   theme, check-ins. 1.0 downloads none of it.
-- **** — phone: a floating glass bar; the yellow stroke slides (spring) to the active section. Tablet
+- **`BarraV2`**: on the phone, a floating glass bar; the yellow stroke slides (spring) to the active section. Tablet
   (720+): a rail. Desktop (1100+): a sidebar with names and Avance. Labels: Hoy · Estudio · Plan · Entreno · Perfil
-  ("Metas" is called **Plan** in 2.0; the route is still ).
-- **** — the frame of every 2.0 screen: back link with the parent's name, actions top-right (buttons only),
-  kicker or breadcrumb (), the large title that collapses into the sticky top bar on scroll, the ⓘ (),
-  an optional intro (≤ 12 words). In development it warns when a title or intro goes over budget.  is a
+  ("Metas" is called **Plan** in 2.0; the route is still `#/metas`).
+- **`Marco`**: the frame of every 2.0 screen: back link with the parent's name, actions top-right (buttons only),
+  kicker or breadcrumb (`migas`), the large title that collapses into the sticky top bar on scroll, the ⓘ (`info`),
+  an optional intro (12 words at most). In development it warns when a title or intro goes over budget. `Grupo` is a
   labelled section inside it.
-- **Theme** — 2.0 keeps its own preference (), default **Sistema** (follows the phone). 1.0 always
+- **Theme**: 2.0 keeps its own preference (`trazo.theme.v2`), default **Sistema** (follows the phone). 1.0 always
   writes "dark" on launch, so its key can't tell a choice from a default; a 1.0 choice of Claro/Sistema carries over.
   Switching back to 1.0 restores 1.0's theme untouched.
-- **Splash** () — tallies drop, the stroke crosses, and a progress line moves, so it never looks frozen.
-- **Buen día** () — three big options + "Otra hora" + one button; the morning preview lives in a sheet.
+- **Splash** (`SplashV2`): tallies drop, the stroke crosses, and a progress line moves, so it never looks frozen.
+- **Buen día** (`DespertarV2`): three big options + "Otra hora" + one button; the morning preview lives in a sheet.
   Shows "día 1" on the first day (glossary), not "día 00". The first-run registration stays 1.0 until 2.0 is the
   default (there are no settings yet where 2.0 could be chosen).
-- **Ajustes 2.0** — groups of rows; renaming (areas, bimesters) happens in a sheet;  and
-   are sub-pages (the plan one still hosts 1.0's controls inside the new frame).
+- **Ajustes 2.0**: groups of rows; renaming (areas, bimesters) happens in a sheet; `#/ajustes/bimestres` and
+  `#/ajustes/plan` are sub-pages (the plan one still hosts 1.0's controls inside the new frame).
 - **What 2.0 fixes from outside on screens that are still 1.0**: on Perfil the sun-like settings icon is hidden and
   a labelled **Ajustes** button with the gear sits next to the "1.0" mark; the weight check is a toast with "Cargar"
   (asked once, never a sheet that follows you); toasts jump to the top while a sheet is open.
