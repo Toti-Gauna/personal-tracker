@@ -21,6 +21,7 @@ import type { PropsV2 } from '../registro';
 import { areaV2, fch } from './datos';
 import '../proyecto/proyecto.css';
 import './temas.css';
+import { cuantos } from '../reglas';
 
 const QUE: Record<ReviewItem['kind'], string> = { cold: 'Cold recall', tesis: 'Tesis', releer: 'Releer lo que falló', retest: 'Re-test', ejercicios: 'Repaso con ejercicios', examen: 'Examen corto' };
 
@@ -108,12 +109,12 @@ export default function CapituloV2({ day, id, n }: { day: PropsV2['day']; id: st
       <Grupo titulo="Detalle">
       <div className="capa-1 s-lista">
         {c.repasos.length > 0 && (
-          <FilaHoja icono="repaso" titulo="Repasos agendados" valor={`${pendientes} pendientes`}>
+          <FilaHoja icono="repaso" titulo="Repasos agendados" valor={cuantos(pendientes, 'pendiente', 'pendientes')}>
             <ol className="capa-1 pt-revs">{c.repasos.map((r) => <li key={r.id}><span className="t-rotulo">{fch(r.due)}</span><span className="t-cuerpo">{QUE[r.kind]}</span><span className="t-nota">{r.doneOn ? `Hecho el ${fch(r.doneOn)}` : cuando(r.due, hoy)}</span></li>)}</ol>
           </FilaHoja>
         )}
         {puntos.length > 0 && (
-          <FilaHoja icono="meta" titulo="Puntos clave del cold recall" valor={`${puntos.length} puntos`} tituloHoja="Puntos clave">
+          <FilaHoja icono="meta" titulo="Puntos clave del cold recall" valor={cuantos(puntos.length, 'punto', 'puntos')} tituloHoja="Puntos clave">
             <ul className="capa-1 tm-tarjetas">{puntos.map((p) => { const [t, d] = p.split('::').map((x) => x.trim()); return <li key={p}><b className="t-cuerpo">{t}</b>{d && <span className="t-nota">{d}</span>}</li>; })}</ul>
           </FilaHoja>
         )}

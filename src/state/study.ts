@@ -104,6 +104,16 @@ export function saveTest(date: string, activityId: string, n: number, data: { sc
   return { approved, flojo };
 }
 
+/**
+ * Las tarjetas nuevas que todavía no existen para ese capítulo (mismo frente de la tarjeta). Guardar dos veces la misma tesis o el
+ * mismo cold recall no duplica tarjetas, y las que ya estaban conservan su historial de repaso.
+ */
+function sinRepetir<T extends { front: string }>(nuevas: T[], existentes: Card[], activityId: string, unit?: number): T[] {
+  const clave = (t: string) => t.trim().toLowerCase();
+  const ya = new Set(existentes.filter((c) => c.activityId === activityId && c.unit === unit).map((c) => clave(c.front)));
+  return nuevas.filter((c) => { const k = clave(c.front); if (ya.has(k)) return false; ya.add(k); return true; });
+}
+
 /** Guarda la tesis (se abre desde el repaso del día en que vence) y sus tarjetas. */
 export function saveTesis(date: string, itemId: string, t: Omit<Tesis, 'itemId' | 'savedOn' | 'activityId' | 'unit'>, cards: CardDraft[]) {
   const item = getState().study.reviews.find((r) => r.id === itemId);
@@ -113,7 +123,7 @@ export function saveTesis(date: string, itemId: string, t: Omit<Tesis, 'itemId' 
   updateStudy((st) => ({
     ...st,
     tesis: [...st.tesis.filter((x) => x.itemId !== itemId), { ...t, itemId, activityId: item.activityId, unit: item.unit, savedOn: date }],
-    cards: [...st.cards, ...cards.map((c) => ({ ...c, id: `c${newId()}`, deck, frontId: a?.front, activityId: item.activityId, unit: item.unit, source: item.label.replace(/^Tesis · /, ''), createdOn: date }))],
+    cards: [...st.cards, ...sinRepetir(cards, st.cards, item.activityId, item.unit).map((c) => ({ ...c, id: `c${newId()}`, deck, frontId: a?.front, activityId: item.activityId, unit: item.unit, source: item.label.replace(/^Tesis · /, ''), createdOn: date }))],
   }));
   completeReview(date, itemId);
 }
@@ -242,7 +252,9 @@ export function saveColdRecall(date: string, itemId: string, points: string[], r
     };
   });
   // Con menos del 70 %, releer esas partes del capítulo mañana (además del test de hoy).
-  const releer: ReviewItem[] = score < st.rules.rereadBelow
+  // Uno solo por capítulo: rehacer el cold recall no agrega otro "Releer" si ya hay uno pendiente.
+  const yaReleer = st.reviews.some((r) => r.kind === 'releer' && !r.doneOn && r.activityId === item.activityId && r.unit === item.unit);
+  const releer: ReviewItem[] = score < st.rules.rereadBelow && !yaReleer
     ? [{ id: `r${newId()}`, activityId: item.activityId, unit: item.unit, kind: 'releer', due: tomorrow, min: RELEER_MIN, label: `Releer · ${what}` }]
     : [];
   const attempt: Attempt = {
@@ -254,7 +266,7 @@ export function saveColdRecall(date: string, itemId: string, points: string[], r
     attempts: [...s.attempts.filter((x) => !(x.kind === 'cold' && x.date === date && x.tema === attempt.tema)), attempt],
     points: item.unit != null ? { ...s.points, [`${item.activityId}:${item.unit}`]: points } : s.points,
     reviews: [...s.reviews.map((r) => (r.id === itemId ? { ...r, doneOn: date, score } : r)), ...releer],
-    cards: [...s.cards, ...cards],
+    cards: [...s.cards, ...sinRepetir(cards, s.cards, item.activityId, item.unit)],
   }));
   markStep(date, `rev:${itemId}`);
   return score;

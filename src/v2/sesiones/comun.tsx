@@ -2,7 +2,7 @@
  * Trazo 2.0 · piezas que comparten las pantallas de estudio de a una cosa por vez (sesión, test, cold recall y tesis): la
  * cáscara a pantalla completa con su salida, su ⓘ y el botón principal abajo, y el color del área de un frente.
  */
-import type { CSSProperties, ReactNode } from 'react';
+import { useEffect, type CSSProperties, type ReactNode } from 'react';
 import { AREAS } from '../../data/defaults';
 import type { StudyState } from '../../data/study-types';
 import { colorV2 } from '../hoy/datos';
@@ -37,10 +37,22 @@ interface InmersivaProps {
 }
 
 /**
+ * Una pantalla de pantalla completa tapa la barra de navegación y la tarjeta del foco: mientras está, se sacan (no solo se tapan),
+ * así no se llega a ellas con Tab ni las lee el lector de pantalla.
+ */
+export function useInmersiva() {
+  useEffect(() => {
+    document.documentElement.dataset.inmersiva = '1';
+    return () => { delete document.documentElement.dataset.inmersiva; };
+  }, []);
+}
+
+/**
  * Una pantalla de foco: sin barra de navegación, con su propia salida (la ×), su ⓘ y, abajo, la acción principal al alcance
  * del pulgar. Un solo hilo de lectura, angosto, aun en pantallas grandes.
  */
 export function Inmersiva({ titulo, area, salir, info, progreso, pie, children, className }: InmersivaProps) {
+  useInmersiva();
   return (
     <main className={`v2 v2-completa se-completa ${className ?? ''}`} style={area ? ({ ['--area' as string]: area } as CSSProperties) : undefined}>
       <header className="se-cima">

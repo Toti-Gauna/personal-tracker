@@ -19,6 +19,7 @@ import type { PropsV2 } from '../registro';
 import { areaV2, lista, tramosDeTema } from './datos';
 import '../proyecto/proyecto.css';
 import './temas.css';
+import { cuantos } from '../reglas';
 
 const dias = (a: string, b: string) => Math.round((parseDate(b).getTime() - parseDate(a).getTime()) / 864e5);
 const NUM = ['ninguna idea', 'una idea', 'dos ideas', 'tres ideas', 'cuatro ideas', 'cinco ideas', 'seis ideas'];
@@ -91,7 +92,7 @@ export default function TemaV2({ ruta, day }: PropsV2) {
   const tesis = st.reviews.find((r) => r.activityId === t.activity?.id && r.unit === t.unit && r.kind === 'tesis');
   if (tesis?.doneOn) {
     const nT = st.cards.filter((c) => c.activityId === t.activity?.id && c.unit === t.unit && c.source.startsWith(t.nombre)).length;
-    eventos.push({ dia: diaDe(tesis.doneOn), t: 'Tesis', sub: nT ? `${nT} tarjetas.` : 'Escrita con tus palabras.', val: 'hecha' });
+    eventos.push({ dia: diaDe(tesis.doneOn), t: 'Tesis', sub: nT ? `${cuantos(nT, 'tarjeta', 'tarjetas')}.` : 'Escrita con tus palabras.', val: 'hecha' });
   }
   for (const a of st.attempts.filter((a) => a.tema === id && a.kind === 'ejercicio')) eventos.push({ dia: diaDe(a.date), t: 'Ejercicios', sub: a.de && a.de[0] < a.de[1] ? `Fallaste ${a.de[1] - a.de[0]} de ${a.de[1]}.` : 'Todos bien.', val: a.de ? `${a.de[0]}/${a.de[1]} · ${Math.round(a.ok * 100)} %` : `${Math.round(a.ok * 100)} %` });
   if (cartas.length) {

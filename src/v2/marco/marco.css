@@ -167,3 +167,6 @@
 .in-pasos { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--sp-3); }
 .in-pasos li { display: grid; grid-template-columns: 32px 1fr; gap: var(--sp-3); align-items: baseline; }
 .in-pasos .t-dato { color: var(--texto-2); }
+
+/* Una pantalla completa (la sesión, el test, el foco) tapa la barra y la tarjeta del foco: se sacan, no solo se tapan (useInmersiva). */
+html[data-ui='v2'][data-inmersiva] .b2, html[data-ui='v2'][data-inmersiva] .mf { display: none; }

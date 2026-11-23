@@ -3,7 +3,7 @@
  * pregunta y tu respuesta, la otra con la respuesta y lo que te faltó resaltado) y se califica con cuándo vuelve a aparecer.
  * Misma cola, mismo motor de repaso y mismas calificaciones que la 1.0.
  */
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { compareAnswer } from '../../data/compare';
 import { AREAS } from '../../data/defaults';
 import { DAY, fmtInterval, newSrs, preview, type Grade } from '../../data/fsrs';
@@ -74,9 +74,17 @@ export function TarjetasV2({ day, param }: { day: PropsV2['day']; param?: string
   const front = card ? study.fronts.find((f) => f.id === cardFront(card, study.fronts)) : undefined;
   const area = front ? colorV2(AREAS[front.color].css) : 'var(--a-ing)';
 
+  // Dar vuelta y calificar sacan de la pantalla el botón que tenía el foco: el foco va a la cara que quedó a la vista (la respuesta,
+  // o la tarjeta siguiente), y el lector de pantalla la lee. Solo después de tocar algo: al entrar, el foco no se mueve solo.
+  const frente = useRef<HTMLDivElement>(null);
+  const dorso = useRef<HTMLDivElement>(null);
+  const toco = useRef(false);
+  useEffect(() => { if (toco.current) (vuelta ? dorso : frente).current?.focus({ preventScroll: true }); }, [vuelta, card?.id]);
+
   const cambiarModo = (m: Modo) => { setModo(m); try { localStorage.setItem('trazo.modoTarjetas', m); } catch { /* sin storage */ } };
   const calificar = (g: Grade) => {
     if (!card) return;
+    toco.current = true;
     gradeCard(day.date, card.id, g);
     haptico(g === 1 ? 'leve' : 'exito');
     setCola((q) => (g === 1 ? [...q.slice(1), q[0]] : q.slice(1)));
@@ -114,14 +122,14 @@ export function TarjetasV2({ day, param }: { day: PropsV2['day']; param?: string
 
       <div key={card.id} className={`es-escena${vuelta ? ' vuelta' : ''}${reducido() ? ' plana' : ''}`} style={{ ['--area' as string]: area }}>
         <article className="es-carta">
-          <div className="es-cara frente" aria-hidden={vuelta || undefined} inert={vuelta || undefined}>
+          <div ref={frente} tabIndex={-1} className="es-cara frente" aria-hidden={vuelta || undefined} inert={vuelta || undefined}>
             <div className="es-carta-cab t-rotulo"><span>{cabeza}</span><span>{estado}</span></div>
             <h2 className="es-pregunta">{card.front}</h2>
             {modo === 'escribir' && <CampoTexto etiqueta="Tu respuesta, antes de ver" valor={resp} onCambio={setResp} multilinea />}
             {modo === 'decir' && <p className="t-nota">Decilo en voz alta, completo, antes de dar vuelta.</p>}
             {modo === 'pensar' && <p className="t-nota">Pensá la respuesta entera antes de dar vuelta.</p>}
           </div>
-          <div className="es-cara dorso" aria-hidden={!vuelta || undefined} inert={!vuelta || undefined}>
+          <div ref={dorso} tabIndex={-1} className="es-cara dorso" aria-hidden={!vuelta || undefined} inert={!vuelta || undefined}>
             <div className="es-carta-cab t-rotulo"><span>Respuesta</span><span>{estado}</span></div>
             <h2 className="es-pregunta chica">{card.front}</h2>
             {editando != null ? (
@@ -143,7 +151,7 @@ export function TarjetasV2({ day, param }: { day: PropsV2['day']; param?: string
       </div>
 
       {!vuelta ? (
-        <Boton variante="primario" icono="repaso" ancho onClick={() => { setVuelta(true); haptico('leve'); }}>Dar vuelta</Boton>
+        <Boton variante="primario" icono="repaso" ancho onClick={() => { toco.current = true; setVuelta(true); haptico('leve'); }}>Dar vuelta</Boton>
       ) : (
         <>
           <div className="es-calif" role="group" aria-label="Calificación">

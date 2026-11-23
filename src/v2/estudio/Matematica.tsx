@@ -230,7 +230,7 @@ function Reiniciar({ a, tarjetas }: { a: Activity; tarjetas: number }) {
   const [borrar, setBorrar] = useState(false);
   const nombre = actShort(a);
   const reiniciar = async () => {
-    if (!(await confirmar({ titulo: `¿Reiniciar ${nombre}?`, texto: `Se borran los capítulos estudiados, los tests, las tesis, los repasos agendados y los minutos de este libro${borrar ? `, y las ${tarjetas} tarjetas` : ''}. Se puede deshacer.`, accion: 'Reiniciar', peligro: true }))) return;
+    if (!(await confirmar({ titulo: `¿Reiniciar ${nombre}?`, texto: `Se borran los capítulos estudiados, los tests, las tesis, los repasos agendados y los minutos de este libro${borrar ? (tarjetas === 1 ? ', y su tarjeta' : `, y las ${tarjetas} tarjetas`) : ''}. Se puede deshacer.`, accion: 'Reiniciar', peligro: true }))) return;
     const foto = reiniciarLibro(a.id, { borrarTarjetas: borrar });
     if (!foto) return;
     aviso({ titulo: `${nombre}, desde cero`, sub: `Volvés al ${a.unitLabel?.toLowerCase() ?? 'cap.'} 1${borrar ? '' : '; las tarjetas quedaron'}`, tono: 'info', deshacer: () => restaurarLibro(foto) });

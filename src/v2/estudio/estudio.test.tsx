@@ -216,10 +216,10 @@ describe('Puntos débiles', () => {
     const mapa = within(await screen.findByRole('table', { name: 'Fortaleza por capítulo' }));
     const filas = mapa.getAllByRole('row');
     expect(filas).toHaveLength(3); // el encabezado y dos capítulos
-    expect(filas[1].getAttribute('href')).toBe('#/flojo/conamat%3A1');
-    expect(within(filas[1]).getByRole('cell', { name: 'cold recall: 90 %, fuerte' })).toHaveClass('es-celda-bien');
+    expect(within(filas[1]).getByRole('link', { name: /^01 /}).getAttribute('href')).toBe('#/flojo/conamat%3A1');
+    expect(within(filas[1]).getByRole('cell', { name: 'cold recall: 90 %, fuerte' })).toHaveClass('es-mc-bien');
     expect(within(filas[1]).getByRole('cell', { name: 'ejercicio del día 8: 4/5' })).toBeTruthy();
-    expect(within(filas[2]).getByRole('cell', { name: /^cold recall: (50|60) %, flojo$/ })).toHaveClass('es-celda-mal');
+    expect(within(filas[2]).getByRole('cell', { name: /^cold recall: (50|60) %, flojo$/ })).toHaveClass('es-mc-mal');
     expect(within(filas[2]).getByRole('cell', { name: 'test: 50 %, flojo' })).toBeTruthy();
     expect(within(filas[2]).getByRole('cell', { name: 'ejercicio del día 8: sin datos' })).toBeTruthy();
 

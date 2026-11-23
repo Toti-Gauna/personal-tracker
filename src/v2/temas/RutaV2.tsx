@@ -210,8 +210,10 @@ function FaseV2({ r, f, hoy }: { r: RoadmapEstudio; f: Fase; hoy: string }) {
     aviso({ titulo: `Fase ${f.id} cerrada`, sub: `Ahora sos ${f.perfil}${next ? `. Sigue ${next.id}: ${next.nombre}` : ''}`, tono: 'hecho' });
   };
   const reabrir = () => {
+    // "Cerrar de nuevo" la deja cerrada en su fecha de antes, no hoy.
+    const fecha = e.cerrada ?? hoy;
     reabrirFase(r.id);
-    aviso({ titulo: `Fase ${f.id} reabierta`, tono: 'info', accion: { etiqueta: 'Cerrar de nuevo', run: () => { cerrarFase(r.id, f.id, hoy); } } });
+    aviso({ titulo: `Fase ${f.id} reabierta`, tono: 'info', accion: { etiqueta: 'Cerrar de nuevo', run: () => { cerrarFase(r.id, f.id, fecha); } } });
   };
   const rolesExtra = porRol(f).filter(([rol]) => rol !== 'nucleo');
   const rotulo = e.estado === 'cerrada' ? `Cerrada ${fch(e.cerrada!)}` : `${e.estado === 'actual' ? 'Estás acá' : 'Todavía no'} · ${meses(f)}`;

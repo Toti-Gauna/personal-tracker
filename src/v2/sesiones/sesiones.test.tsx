@@ -3,6 +3,7 @@ import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { testExercises } from '../../data/ejercicios';
 import { leerRuta } from '../../lib/routes';
 import { getState, register, resetState, startDay } from '../../state/store';
+import { saveTesis } from '../../state/study';
 import { limpiarCapas } from '../kit/capas';
 import GlobalV2 from '../marco/Global';
 import { entradaDe } from '../Resolutor';
@@ -216,6 +217,10 @@ describe('Tesis 2.0', () => {
     expect(t.text).toMatch(/Sumar con signos distintos/);
     expect(estudio().cards.filter((c) => c.activityId === 'conamat' && c.unit === 1)).toHaveLength(1);
     expect(estudio().reviews.find((r) => r.id === 'r-tesis1')!.doneOn).toBe(HOY);
+    // Guardarla otra vez (volver a abrirla desde la sesión) no duplica la tarjeta.
+    const c0 = estudio().cards.find((c) => c.activityId === 'conamat' && c.unit === 1)!;
+    act(() => saveTesis(HOY, 'r-tesis1', { text: t.text, mode: 'app', practice: t.practice }, [{ front: ` ${c0.front.toUpperCase()} `, back: c0.back, kind: c0.kind }]));
+    expect(estudio().cards.filter((c) => c.activityId === 'conamat' && c.unit === 1)).toHaveLength(1);
   });
 
   it('sin texto no se puede guardar, y dice por qué', () => {

@@ -21,6 +21,7 @@ import { Hoja } from '../kit/hoja';
 import { Fila, Vacio } from '../kit/superficies';
 import { Marco } from '../marco/Marco';
 import type { PropsV2 } from '../registro';
+import { useInmersiva } from '../sesiones/comun';
 import { Tramos } from './piezas';
 import '../hoy/hoy.css';
 import './ajustes.css';
@@ -76,6 +77,8 @@ export default function FocoV2({ day }: PropsV2) {
   };
 
   return (
+    <>
+    <Inmersivo />
     <main className={`v2 v2-completa ax-foco${pausado ? ' ax-foco-pausa' : ''}`} style={{ ['--area' as string]: colorTramo }} aria-label="Foco">
       <header className="ax-foco-barra">
         <Boton variante="fantasma" icono="atras" href="#/hoy">Hoy</Boton>
@@ -123,5 +126,12 @@ export default function FocoV2({ day }: PropsV2) {
         <CampoTexto etiqueta="Nota para una tarjeta" valor={nota} onCambio={setNota} multilinea />
       </Hoja>
     </main>
+    </>
   );
+}
+
+/** Mientras corre el foco, la barra y la tarjeta del foco se sacan (no solo se tapan). */
+function Inmersivo() {
+  useInmersiva();
+  return null;
 }

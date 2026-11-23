@@ -121,7 +121,7 @@ export default function MotorEstudioV2({ ruta, day }: PropsV2) {
         </div>
       </Grupo>
 
-      <Grupo titulo={`Tus ${cards.length} tarjetas`}>
+      <Grupo titulo={cards.length === 1 ? 'Tu tarjeta' : `Tus ${cards.length} tarjetas`}>
         <div className="capa-1 se-estado">
           <Dato valor={total == null ? '—' : `${total} %`} etiqueta="Retención de los últimos 30 días" />
           {cards.length > 0 && (

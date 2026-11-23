@@ -30,9 +30,9 @@ const MINIMO = 40;
 
 /** Una celda del mapa: el número, y la banda como forma (no solo color). */
 function Celda({ v, texto, que }: { v: number | null | undefined; texto?: string; que: string }) {
-  if (v == null) return <span role="cell" className="es-celda es-celda-vacia" aria-label={`${que}: sin datos`}>–</span>;
+  if (v == null) return <span role="cell" className="es-mc es-mc-vacia" aria-label={`${que}: sin datos`}>–</span>;
   const b = banda(v);
-  return <span role="cell" className={`es-celda es-celda-${b}`} aria-label={`${que}: ${texto ?? `${v} %`}${b === 'mal' ? ', flojo' : b === 'bien' ? ', fuerte' : ''}`}>{texto ?? v}</span>;
+  return <span role="cell" className={`es-mc es-mc-${b}`} aria-label={`${que}: ${texto ?? `${v} %`}${b === 'mal' ? ', flojo' : b === 'bien' ? ', fuerte' : ''}`}>{texto ?? v}</span>;
 }
 
 export function AnalisisFlojo({ day }: { day: PropsV2['day'] }) {
@@ -62,15 +62,16 @@ export function AnalisisFlojo({ day }: { day: PropsV2['day'] }) {
                   {['Recall', 'Tarj.', 'Test', 'Día 8'].map((c) => <span key={c} role="columnheader" className="t-rotulo">{c}</span>)}
                 </div>
                 {filas.map((f) => (
-                  <a role="row" key={f.n} className="es-mapa-fila" href={`#/flojo/${encodeURIComponent(`${a!.id}:${f.n}`)}`}>
-                    <span role="rowheader" className="t-nota"><b className="t-dato">{String(f.n).padStart(2, '0')}</b> {f.titulo}</span>
+                  <div role="row" key={f.n} className="es-mapa-fila">
+                    {/* El enlace va adentro de la celda del nombre (un rol de fila no se anuncia como enlace); su área cubre la fila entera. */}
+                    <span role="rowheader" className="t-nota"><a className="es-mapa-enlace" href={`#/flojo/${encodeURIComponent(`${a!.id}:${f.n}`)}`}><b className="t-dato">{String(f.n).padStart(2, '0')}</b> {f.titulo}</a></span>
                     <Celda que="cold recall" v={f.cold} />
                     <Celda que="tarjetas" v={f.tarjetas} />
                     <Celda que="test" v={f.test} />
                     <Celda que="ejercicio del día 8" v={f.d8 ? Math.round((f.d8[0] / f.d8[1]) * 100) : null} texto={f.d8 ? `${f.d8[0]}/${f.d8[1]}` : undefined} />
-                  </a>
+                  </div>
                 ))}
-                <p className="es-mapa-leyenda" aria-hidden="true"><i className="es-celda es-celda-mal" />menos de {FLOJO}<i className="es-celda es-celda-medio" />{FLOJO} a {BIEN - 1}<i className="es-celda es-celda-bien" />{BIEN} o más</p>
+                <p className="es-mapa-leyenda" aria-hidden="true"><i className="es-mc es-mc-mal" />menos de {FLOJO}<i className="es-mc es-mc-medio" />{FLOJO} a {BIEN - 1}<i className="es-mc es-mc-bien" />{BIEN} o más</p>
               </div>
             )}
           </Grupo>
