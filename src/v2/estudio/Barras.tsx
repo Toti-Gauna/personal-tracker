@@ -12,8 +12,8 @@ export function Barras({ barras, meta, nombre, alto = 96 }: { barras: Barra[]; m
   return (
     <figure className="es-barras" style={{ ['--alto' as string]: `${alto}px` } as CSSProperties} role="img" aria-label={nombre} data-grafico>
       {meta != null && meta > 0 && <i className="es-meta" style={{ bottom: `calc(var(--alto) * ${Math.round((meta / max) * 1000) / 1000} + 22px)` }} aria-hidden="true" />}
-      {barras.map((b) => (
-        <span key={b.etiqueta} className={`es-barra${b.hoy ? ' hoy' : ''}`}>
+      {barras.map((b, i) => (
+        <span key={`${i}${b.etiqueta}`} className={`es-barra${b.hoy ? ' hoy' : ''}`}>
           <span className="es-barra-valor t-dato">{b.texto ?? (b.valor ? String(b.valor) : '—')}</span>
           <span className="es-barra-col"><span style={{ height: `${(b.valor / max) * 100}%` }} /></span>
           <span className="es-barra-et t-rotulo">{b.etiqueta}</span>

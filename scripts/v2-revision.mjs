@@ -26,10 +26,7 @@ const PRESUPUESTO = { titulo: 3, intro: 12, pliegue: 60, pantallas: 4 };
  * Pendientes conocidos: pantallas del marco 2.0 que todavía muestran controles de la 1.0 y se rehacen en una tanda
  * posterior. Siguen apareciendo en el informe con su motivo, pero no rompen la revisión.
  */
-const PENDIENTES = {
-  'ajustes-plan': 'los controles del plan T+18 son de la 1.0; se rehacen en 3.3',
-  'puntos-analisis': 'los gráficos del análisis (mapa, cómo fallás, recall, calibración) son de la 1.0; se rehacen en 3.3',
-};
+const PENDIENTES = {};
 
 /** Las pantallas de la 2.0 que medimos. `taller` marca lo que es documentación del sistema. */
 const PANTALLAS = [
@@ -74,6 +71,76 @@ const PANTALLAS = [
   { id: 'ajustes', hash: '#/ajustes' },
   { id: 'ajustes-bimestres', hash: '#/ajustes/bimestres' },
   { id: 'ajustes-plan', hash: '#/ajustes/plan' },
+  // Tanda 3.3: el resto de las pantallas, por familia.
+  { id: 'ajustes-rutinas', hash: '#/ajustes-rutinas' },
+  { id: 'ajustes-rutina-nueva', hash: '#/ajustes-rutinas/nueva' },
+  { id: 'ajustes-rutina-hoy', hash: '#/ajustes-rutinas/hoy' },
+  { id: 'ajustes-companera', hash: '#/ajustes-companera' },
+  { id: 'ajustes-datos', hash: '#/ajustes-datos' },
+  { id: 'sonidos', hash: '#/sonidos' },
+  { id: 'entreno-semana', hash: '#/entreno-semana' },
+  { id: 'entreno-rutina', hash: '#/entreno-rutina/push-a' },
+  { id: 'entreno-rutina-nueva', hash: '#/entreno-rutina/nueva' },
+  { id: 'elegir-foco', hash: '#/elegir/prog' },
+  { id: 'foco', hash: '#/foco' },
+  { id: 'pomodoros', hash: '#/pomodoros' },
+  { id: 'json', hash: '#/json' },
+  { id: 'importar', hash: '#/importar' },
+  { id: 'sesion', hash: '#/sesion/make-it-stick' },
+  { id: 'test', hash: '#/test/conamat/1' },
+  { id: 'test-final', hash: '#/test/conamat/final' },
+  { id: 'unidades', hash: '#/unidades' },
+  { id: 'actividad', hash: '#/actividad' },
+  { id: 'tarjeta-nueva', hash: '#/tarjeta-nueva' },
+  { id: 'motor', hash: '#/motor' },
+  { id: 'motor-importar', hash: '#/motor/importar' },
+  { id: 'idiomas', hash: '#/estudio/idiomas' },
+  { id: 'idiomas-ingles', hash: '#/estudio/idiomas/ingles' },
+  { id: 'idiomas-biblioteca', hash: '#/estudio/idiomas/biblioteca' },
+  { id: 'prog', hash: '#/estudio/prog' },
+  { id: 'prog-bloque', hash: '#/estudio/prog/P1' },
+  { id: 'prog-demanda', hash: '#/estudio/prog/demanda' },
+  { id: 'prog-algoritmos', hash: '#/estudio/prog/algoritmos' },
+  { id: 'libro', hash: '#/estudio/libro/mwm' },
+  { id: 'ruta-estudio', hash: '#/estudio/ruta' },
+  { id: 'ruta-mate', hash: '#/estudio/ruta/matematica' },
+  { id: 'ruta-fase', hash: '#/estudio/ruta/matematica/M1' },
+  { id: 'mate-tramo', hash: '#/estudio/mate/W1' },
+  { id: 'mate-capitulo', hash: '#/estudio/mate/libro/conamat/1' },
+  { id: 'flojo-examenes', hash: '#/flojo/examenes' },
+  { id: 'flojo-simulacro', hash: '#/flojo/simulacro' },
+  { id: 'flojo-tema', hash: '#/flojo/conamat%3A1' },
+  { id: 'metas-ruta', hash: '#/metas/ruta' },
+  { id: 'metas-semana', hash: '#/metas/semana' },
+  { id: 'metas-mes', hash: '#/metas/mes' },
+  { id: 'metas-bimestre', hash: '#/metas/bimestre' },
+  { id: 'metas-anio', hash: '#/metas/anio' },
+  { id: 'meta-nueva', hash: '#/meta-nueva/semana' },
+  { id: 'metas-mapa', hash: '#/metas/mapa' },
+  { id: 'metas-etapas', hash: '#/metas/etapas' },
+  { id: 'metas-evolucion', hash: '#/metas/evolucion' },
+  { id: 'metas-roadmap', hash: '#/metas/roadmap' },
+  { id: 'trabajo', hash: '#/metas/trabajo' },
+  { id: 'ingles', hash: '#/metas/ingles' },
+  { id: 'handyx', hash: '#/metas/handyx' },
+  { id: 'sprint', hash: '#/metas/sprint' },
+  { id: 'impacto', hash: '#/metas/impacto' },
+  { id: 'calibracion', hash: '#/metas/calibracion' },
+  { id: 'diferencia', hash: '#/metas/diferencia' },
+  { id: 'revision', hash: '#/metas/revision' },
+  { id: 'compras', hash: '#/metas/compras' },
+  { id: 'proyecto-curso', hash: '#/metas/proyecto' },
+  { id: 'proyecto-p0', hash: '#/metas/proyecto/P0' },
+  { id: 'clipping', hash: '#/metas/clipping' },
+  { id: 'clipping-registro', hash: '#/metas/clipping/registro' },
+  { id: 'clipping-campanas', hash: '#/metas/clipping/campanas' },
+  { id: 'clipping-cuentas', hash: '#/metas/clipping/cuentas' },
+  { id: 'clipping-retainers', hash: '#/metas/clipping/retainers' },
+  { id: 'clipping-metricas', hash: '#/metas/clipping/metricas' },
+  { id: 'clipping-plan', hash: '#/metas/clipping/plan' },
+  { id: 'clipping-nichos', hash: '#/metas/clipping/nichos' },
+  { id: 'clipping-riesgos', hash: '#/metas/clipping/riesgos' },
+  { id: 'clipping-semana1', hash: '#/metas/clipping/semana1' },
   { id: 'taller-lenguaje', hash: '#/v2' },
   { id: 'taller-controles', hash: '#/v2/kit' },
   { id: 'taller-piezas', hash: '#/v2/piezas' },
@@ -140,6 +207,7 @@ const medir = () => {
   }
   return {
     marco: !!document.querySelector('.m-marco'),
+    marca1: !!document.querySelector('.v2-marca'),
     // La presentación ocupa toda la pantalla y no usa el marco: es 2.0, pero sin título ni pliegue que medir.
     completa: !!document.querySelector('main.wr, main.v2-completa'),
     taller: !!document.querySelector('main.lenguaje'),
@@ -208,6 +276,8 @@ for (const f of filas.filter(gate)) {
   }
 }
 for (const f of filas) if (f.desbordeLateral) fallos.push(`${f.tema} ${f.pantalla}: se desborda a los lados`);
+// Desde la 3.3 no queda ninguna pantalla en 1.0 dentro de la 2.0: si aparece la marca, es una ruta que se perdió.
+for (const f of filas) if (f.marca1) fallos.push(`${f.tema} ${f.pantalla}: todavía muestra la pantalla 1.0`);
 for (const f of filas) for (const e of f.errores) fallos.push(`${f.tema} ${f.pantalla}: error de página: ${e}`);
 
 const tabla = [

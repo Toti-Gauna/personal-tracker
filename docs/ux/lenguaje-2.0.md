@@ -231,7 +231,7 @@ metadata); one floating action per screen at most; the breadcrumb is a compact p
   Shows "día 1" on the first day (glossary), not "día 00". The first-run registration stays 1.0 until 2.0 is the
   default (there are no settings yet where 2.0 could be chosen).
 - **Ajustes 2.0**: groups of rows; renaming (areas, bimesters) happens in a sheet; `#/ajustes/bimestres` and
-  `#/ajustes/plan` are sub-pages (the plan one still hosts 1.0's controls inside the new frame).
+  `#/ajustes/plan` are sub-pages (the plan one was rebuilt in batch 3.3, see §21).
 - **What 2.0 fixes from outside on screens that are still 1.0**: on Perfil the sun-like settings icon is hidden and
   a labelled **Ajustes** button with the gear sits next to the "1.0" mark; the weight check is a toast with "Cargar"
   (asked once, never a sheet that follows you); toasts jump to the top while a sheet is open.
@@ -252,8 +252,8 @@ metadata); one floating action per screen at most; the breadcrumb is a compact p
 - **Dev warnings**: `Marco` logs in development when a title or intro goes over budget.
 - **Gallery**: `#/v2/kit`, `#/v2/piezas` and `#/v2/movimiento` are the component gallery; the revision covers all three.
 
-Current result: no failures in the 2.0 frame. Pending: the plan page (`#/ajustes/plan`) still shows 1.0's controls (163
-words above the fold), rebuilt in batch 3.3.
+Current result: no failures and no pending items. Since batch 3.3 the revision also fails if any route still shows the 1.0
+screen (the "1.0" mark) inside 2.0.
 
 ## 14. Hoy 2.0 (`src/v2/hoy/`, batch 2.1)
 
@@ -571,3 +571,57 @@ new seal 23 (1). 1.0's Cierre had 848 words on one page.
 Demo: `docs/demo/ux-2.0/perfil-centro.png`, `perfil-sellos.png`, `perfil-claro.png`, `avance.png`, `avance-escritorio.png`,
 `presentacion.png` (the eight slides), `presentacion-mejora.png`, `presentacion-cuerpo.png`, `cierre-1.png`, `cierre-2.png`,
 `cierre-3.png` and `sello-nuevo.png`.
+
+## 21. The sweep: every remaining screen (batch 3.3)
+
+After this batch **no route shows a 1.0 screen inside 2.0**. The only 1.0 screen left is the very first sign-up (`Instalar`), which
+runs before there are settings where 2.0 could be chosen. The revision fails if the "1.0" mark appears anywhere.
+
+**How a screen gets several 2.0 entries.** `registro.ts` keeps one main entry per screen (the hubs of batches 2.x–3.2).
+`extras.ts` adds more: each family declares its own in `src/v2/<familia>/entradas.ts` as `{ pantalla, entrada }`, where the entry's
+`cubre(ruta)` says exactly which sub-routes it takes. `entradaDe()` in the resolver tries the main entry first and, if it does not
+cover the route, the first extra that does; anything uncovered still falls back to 1.0 with its mark. One lazy chunk per screen.
+Immersive screens that do not use the frame carry `main.v2.v2-completa` and bring their own exit.
+
+**The seven families** (each with its own directory, CSS prefix, tests and entries; all write through the 1.0 store actions):
+
+| Family | Routes | What changed in how it reads |
+|---|---|---|
+| `ajustes/` (`ax-`) | ajustes/plan, ajustes-rutinas (+ nueva, hoy, id), ajustes-companera, ajustes-datos, sonidos, entreno-semana, entreno-rutina, elegir, foco, pomodoros, json, importar | Plan T+18 is rows with their value and sheets for the long parts (157 → 55 words). Routines use the 24 h time field. Focus is a full-screen ring with pause and stop. Restore asks with the confirm dialog; an invalid file touches nothing. |
+| `sesiones/` (`se-`) | sesion, test (+ final), tesis, recall, unidades, actividad, tarjeta-nueva, motor (+ importar) | Session, test, cold recall and thesis are focus screens: one thing at a time, exit ×, the main button at the bottom. Cold recall is three steps (write, mark, result). |
+| `programa/` (`pg-`) | estudio/idiomas…, estudio/prog… (+ demanda, algoritmos), estudio/libro/<id> | The current phase in view, the rest in sheets. The book uses the same unit heat map as Matemática. Demand table became rows. |
+| `temas/` (`tm-`) | estudio/ruta…, estudio/mate/<tramo>, the chapter (mate/libro/<id>/<n>), flojo/examenes, flojo/simulacro, flojo/<tema> | Phase criteria are checkboxes with one "Cerrar" button. The error chart became a number grid (it relied on color alone). The mock exam has print rules. |
+| `metas/` (`mt-`) | metas/ruta, semana, mes, bimestre (+ n), anio, mapa, etapas, evolucion, roadmap, meta-nueva | No global "Editar metas" switch: tap a goal to open its sheet (target, subgoals, rewrite, delete with undo). The radar became one bar per axis. |
+| `trabajo/` (`tr-`) | metas/trabajo, ingles, handyx, sprint, impacto, calibracion, diferencia, revision, compras, proyecto, proyecto/P0 | P0 keeps its goals and data untouched; only its presentation changed. Checklists and long reviews moved into sheets. |
+| `clipping/` (`cl-`) | metas/clipping and its nine sections | Hub with the month's income as a ring against the goal and one "Registrar clips". The registry has its own sheet. Same export and import format. |
+
+**Behavior that differs from 1.0 on purpose** (each can be reverted):
+- Stopping a focus session or a study session midway, and discarding things with no undo, **ask first**. Everything that can be
+  undone deletes at once and offers Undo (routines, pomodoros, alarms, activities, clipping rows, goals…).
+- Clipping money fields read "1.234,5", "1,09" and "1.09" correctly. 1.0 stripped every dot, so "12.50" became 1250.
+- In Algoritmos the interview question of a topic not yet planted is saved together with "Lo planté hoy", not on leaving the field.
+- Re-tests list every pending one, not only the first. A chapter-less activity no longer says "0 de 313 capítulos".
+- Back from the analysis-type screens (calibración, diferencia, impacto, evolución, revisión…) goes to Plan · Análisis, their parent
+  in the structure table (§8), not to the hub.
+
+**Fixes to shared code found by the sweep**: the time field lost a digit when typed with focus ("16" → "01"); the dashed goal line
+of `Barras` ignored its position and its bars were keyed by label (repeated month letters); `Barras` is now marked as a chart.
+
+## 22. Empty states, illustrations and copy (batch 3.4)
+
+**Illustrations** (`ILUSTRACIONES` in `iconos.tsx`, all on the workshop page): 19, one per subject, so an empty state shows *what* is
+missing: plan, datos, repaso, entreno, descanso, peso, correr, sello, historial, buscar, estudio, metas, avisos, listo, trabajo,
+clip, foco, escribir, importar. Rules, checked by a test: 120 × 96, thin line in the secondary text color, dotted for what is not
+there yet, and exactly one yellow stroke, always the same shape and size.
+
+**Empty states**: `Vacio` always carries an action (rule 6). New `compacto` variant: the drawing small on one side, title, one line
+and the action on the other, for an empty state inside a card or next to others. Day 0 was walked screen by screen: Avance offers to
+register a run, load a weight and close the day; Perfil's empty history offers to close today; a rest or free day in Entreno has its
+drawing and "Cambiar la semana"; "not found" pages use the magnifier and a way back; the weak-points analysis is one invitation
+instead of four empty charts. A screen with nothing due says so once ("Estás al día"), not twice.
+
+**Copy**: `cuantos(n, uno, varios)` in `reglas.ts` is the one way to write a count, so nothing reads "1 días", "1 tarjetas" or
+"1 series". The weak-points analysis (`estudio/Analisis.tsx`) was the last page hosting 1.0 charts: now a strength map where the
+band is a shape (weak = inverted cell, strong = the yellow stroke) and every cell has its number, error types as bars with their
+advice, weekly recall as lines against the cap, and calibration as two bars per front.
+
