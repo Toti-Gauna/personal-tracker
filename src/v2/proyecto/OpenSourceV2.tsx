@@ -10,7 +10,7 @@ import { V122, type Herramienta } from '../../data/v12-2';
 import { agregarPost, publicarVersionFondo, setItem } from '../../state/fondo';
 import { marcarHito } from '../../state/plan';
 import { useStore } from '../../state/store';
-import { fp } from '../../ui/PeriodoTarjeta';
+import { fp } from '../../ui/periodos';
 import { Icono } from '../iconos';
 import { Boton, Selector } from '../kit/controles';
 import { Hoja } from '../kit/hoja';

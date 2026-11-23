@@ -13,7 +13,7 @@ import { capacidadDelDia } from '../../data/plan';
 import { versionesFechadas, type VersionFechada } from '../../data/proyectos-v7';
 import { publicarVersion, toggleEntregableVersion } from '../../state/plan';
 import { useStore } from '../../state/store';
-import { fp } from '../../ui/PeriodoTarjeta';
+import { fp } from '../../ui/periodos';
 import { Icono, type NombreIcono } from '../iconos';
 import { Boton } from '../kit/controles';
 import { Hoja } from '../kit/hoja';

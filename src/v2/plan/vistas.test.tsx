@@ -16,7 +16,7 @@ import PlanV2 from './PlanV2';
 
 const HOY = '2026-11-23'; // lunes; PetrIA (P1) corre del 21 nov al 9 dic
 const Pantalla = ({ hash, hoy = HOY }: { hash: string; hoy?: string }) => (
-  <><PlanV2 ruta={leerRuta(hash)} day={getState().days[HOY]} today={hoy} /><GlobalV2 activa="metas" pantalla="metas" pendientes={0} conBarra={false} conCheckins={false} /></>
+  <><PlanV2 ruta={leerRuta(hash)} day={getState().days[HOY]} today={hoy} /><GlobalV2 activa="metas" pendientes={0} conBarra={false} conMini={false} /></>
 );
 const abrir = (hash: string, hoy?: string) => render(<Pantalla hash={hash} hoy={hoy} />);
 const arbol = (hoy = HOY) => renderHook(() => usePeriodos(hoy)).result.current.arbol;

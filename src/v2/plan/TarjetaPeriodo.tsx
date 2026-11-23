@@ -12,7 +12,7 @@ import { PLAN_EXT } from '../../data/plan-extendido';
 import { fichaV7 } from '../../data/proyectos-v7';
 import { marcarHito, publicarVersion } from '../../state/plan';
 import { useStore } from '../../state/store';
-import { hrefPeriodo } from '../../ui/PeriodoTarjeta';
+import { hrefPeriodo } from '../../ui/periodos';
 import { Icono } from '../iconos';
 import { aviso } from '../kit/capas';
 import { Boton } from '../kit/controles';

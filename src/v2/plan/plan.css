@@ -64,7 +64,6 @@ a.tp-fila-link:active { background: var(--capa-2); }
 .pl-sug-lista { padding: 0 var(--sp-4); }
 .pl-sug-lista > * + * { border-top: 1px solid var(--raya); }
 .pl-sug-lista .k-etiqueta { font-size: var(--t-15); }
-.pl-detalle-v1 { font-family: var(--font-text); }
 .pl .m-grupo:first-of-type { margin-top: var(--sp-7); }
 
 @media (min-width: 1100px) {

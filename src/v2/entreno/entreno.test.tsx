@@ -24,7 +24,7 @@ const HOY = '2026-11-25';
 const train = () => getState().train;
 const activa = () => train().active!;
 const rutina = (id: string) => train().routines.find((r) => r.id === id)!;
-const global = <GlobalV2 activa="entreno" pantalla="entreno" pendientes={0} conBarra={false} conCheckins={false} />;
+const global = <GlobalV2 activa="entreno" pendientes={0} conBarra={false} conMini={false} />;
 const props = (hash: string) => ({ ruta: leerRuta(hash), day: getState().days[HOY], today: HOY });
 const dialogo = () => { const d = screen.getAllByRole('dialog'); return d[d.length - 1]; };
 const escribir = (grupo: string, valor: string) => { const i = within(screen.getByRole('group', { name: grupo })).getByRole('textbox'); fireEvent.change(i, { target: { value: valor } }); fireEvent.blur(i); };

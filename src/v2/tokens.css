@@ -1,6 +1,6 @@
 /*
  * Trazo 2.0 · tokens del lenguaje "Instrumento" (docs/ux/lenguaje-2.0.md).
- * Todo cuelga de html[data-ui="v2"]: la 1.0 no ve nada de esto, y sus nombres (--papel, --tinta, --ing…) no se pisan.
+ * Todo cuelga de html[data-ui="v2"] (index.html lo pone de entrada: es la única interfaz).
  * Los colores van en hex para poder medirles el contraste en el test (src/v2/tokens.test.ts); al lado, su OKLCH.
  */
 
@@ -137,6 +137,40 @@ html[data-ui='v2'] {
   --halo: radial-gradient(120% 90% at 0% 0%, color-mix(in oklab, var(--area, var(--trazo)) 16%, transparent), transparent 62%);
   /* Grano fino, para que las superficies grandes no se vean de plástico. */
   --grano: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.5 0 0 0 0 0.5 0 0 0 0 0.5 0 0 0 0.9 0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* ——— Letras, alturas y los nombres de color que traen los datos ——— */
+html[data-ui='v2'] {
+  --font-title: 'Archivo Variable', system-ui, sans-serif;
+  --font-text: 'Geist Variable', system-ui, sans-serif;
+  --font-mono: 'Geist Mono Variable', ui-monospace, monospace;
+
+  /* La barra flota: el aire de abajo de cada pantalla crece para que nada quede tapado. */
+  --bar-h: 78px;
+  --safe-b: env(safe-area-inset-bottom, 0px);
+  /* El ancho de la navegación al costado: nada en el teléfono, un riel en tablet, la barra con nombres en escritorio. */
+  --lat-w: 0px;
+
+  /* Los datos nombran las áreas con los nombres de la 1.0 (AREAS[x].css = 'var(--ing)', RAMA_COLOR…): apuntan a los de acá. */
+  --ing: var(--a-ing);
+  --handyx: var(--a-handyx);
+  --eclipse: var(--a-eclipse);
+  --salud: var(--a-salud);
+  --rutina: var(--a-rutina);
+  --economia: var(--a-economia);
+  --idi: var(--a-idi);
+  --tinta: var(--texto);
+  --sub: var(--texto-3);
+  --papel: var(--capa-0);
+  --linea: var(--raya-fuerte);
+}
+
+@media (min-width: 720px) {
+  html[data-ui='v2'] { --lat-w: 96px; }
+}
+
+@media (min-width: 1100px) {
+  html[data-ui='v2'] { --lat-w: 272px; }
 }
 
 @media (max-width: 359px) {

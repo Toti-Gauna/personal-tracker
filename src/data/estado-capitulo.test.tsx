@@ -4,7 +4,9 @@ import { setPlanSettings } from '../state/plan';
 import { getState, register, resetState, startDay } from '../state/store';
 import { completeReview, saveTest, seguirEstudiando, terminarEstudio, tramoDone, volverAEstudiar } from '../state/study';
 import { marcarTarea } from '../ui/acciones';
-import { EstadoEstudio, abrirEstadoEstudio, cerrarEstadoEstudio, estadoEstudioAbierto } from '../ui/EstadoEstudio';
+import { abrirEstadoEstudio, cerrarEstadoEstudio, estadoEstudioAbierto } from '../ui/estado-estudio';
+import EstadoEstudio from '../v2/estudio/EstadoEstudioV2';
+import { limpiarCapas } from '../v2/kit/capas';
 import { finSesion, sesionVencida } from '../ui/estudio-acciones';
 import { capitulosEnJuego, estadoCapitulo, historial, resumenLibro } from './estado-capitulo';
 import { focusUnit } from './study';
@@ -15,7 +17,7 @@ const est = (n: number, d = D) => estadoCapitulo(getState().study, act(), n, d);
 const sinErrores = { concepto: 0, tecnica: 0, descuido: 0, enunciado: 0 };
 
 beforeEach(() => { localStorage.clear(); resetState(); register('Toti', 'Abi', '2026-11-16'); });
-afterEach(() => cerrarEstadoEstudio());
+afterEach(() => { cerrarEstadoEstudio(); limpiarCapas(); });
 
 describe('ola 28 · el capítulo no avanza solo', () => {
   it('terminar el tiempo de estudiar no da el capítulo por estudiado (antes pasaba al cap. 2 solo)', () => {

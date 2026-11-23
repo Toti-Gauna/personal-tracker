@@ -7,7 +7,8 @@ import { BIMS, laneById, laneOfItem } from '../data/ruta';
 import { ir } from '../lib/routes';
 import { play } from './sound';
 import { abrirCorrida } from './checkins';
-import { abrirEstadoEstudio, hayQuePreguntar } from './EstadoEstudio';
+import { abrirEstadoEstudio } from './estado-estudio';
+import { hayQuePreguntar } from './estudio-acciones';
 import type { Block } from '../data/types';
 
 /** Ola 28: al cerrar la meta de matemática, en qué estado quedó el capítulo (no avanza solo). */

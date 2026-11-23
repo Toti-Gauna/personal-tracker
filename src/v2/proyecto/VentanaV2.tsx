@@ -6,7 +6,7 @@ import { claveHito } from '../../data/periodos-plan';
 import { PLAN_EXT } from '../../data/plan-extendido';
 import { marcarHito } from '../../state/plan';
 import { useStore } from '../../state/store';
-import { fp } from '../../ui/PeriodoTarjeta';
+import { fp } from '../../ui/periodos';
 import { Boton } from '../kit/controles';
 import { Estado, Vacio } from '../kit/superficies';
 import { Grupo, Marco } from '../marco/Marco';

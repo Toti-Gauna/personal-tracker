@@ -538,3 +538,21 @@ export function pendienteEncaja(b: BloquePendiente, file: RoutinesFile = ROUTINE
   }
   return null;
 }
+
+/** El paso de la hora "otra" en el Buen día: de 10 en 10 minutos. */
+export const PASO_DESPERTAR = 10;
+
+/**
+ * Qué rutina propone el Buen día según la hora a la que abrís Trazo: la completa o la corta si llegás a tiempo, la de las 08:00
+ * desde las 07:30 (salvo un día libre) y, si no, "otra" a la hora redondeada, dentro del rango del día.
+ */
+export function defaultChoice(now: number, t: DayType): { r: RoutineId; otra: number } {
+  const { min, max } = wakeRange(t);
+  const w = wakeDe(t);
+  const otra = toMin(w.completo) + 40;
+  if (now <= toMin(w.completo) + 30) return { r: 'completo', otra };
+  if (now <= toMin(w.corto) + 30) return { r: 'corto', otra };
+  if (t !== 'libre' && now >= toMin(TARDE.wake) - 30) return { r: 'tarde', otra };
+  const rounded = Math.floor(now / PASO_DESPERTAR) * PASO_DESPERTAR;
+  return { r: 'otra', otra: Math.min(max, Math.max(min, rounded)) };
+}

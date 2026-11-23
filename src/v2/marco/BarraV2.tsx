@@ -2,7 +2,7 @@
  * Trazo 2.0 · la navegación: en el teléfono, una barra de vidrio que flota con el trazo deslizándose a la sección activa;
  * en tablet, un riel; en escritorio, una barra lateral con nombre. Es el mismo componente: el CSS decide.
  */
-import { FocoSide } from '../../components/FocoMini';
+import { FocoLateral } from './MiniFoco';
 import type { Seccion } from '../../lib/routes';
 import { Icono, type NombreIcono } from '../iconos';
 import './marco.css';
@@ -42,7 +42,7 @@ export function BarraV2({ activa, pendientes = 0 }: Props) {
           );
         })}
       </ul>
-      <div className="b2-foco"><FocoSide /></div>
+      <div className="b2-foco"><FocoLateral /></div>
     </nav>
   );
 }

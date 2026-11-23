@@ -24,7 +24,7 @@ import type { PropsV2 } from '../registro';
 // Lunes 23 nov 2026: el mes 1 del roadmap (16 nov a 15 dic), fase 1.
 const HOY = '2026-11-23';
 const clip = () => getState().clipping;
-const global = <GlobalV2 activa="metas" pantalla="metas" pendientes={0} conBarra={false} conCheckins={false} />;
+const global = <GlobalV2 activa="metas" pendientes={0} conBarra={false} conMini={false} />;
 const props = (hash: string, fecha = HOY): PropsV2 => ({ ruta: leerRuta(hash), day: { ...getState().days[HOY], date: fecha }, today: fecha });
 const abrir = (C: ComponentType<PropsV2>, hash: string, fecha = HOY) => render(<><C {...props(hash, fecha)} />{global}</>);
 const dialogo = () => { const d = screen.getAllByRole('dialog'); return d[d.length - 1]; };

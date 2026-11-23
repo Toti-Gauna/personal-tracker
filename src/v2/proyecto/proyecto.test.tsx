@@ -17,7 +17,7 @@ import Rutas from './Rutas';
 
 const HOY = '2026-11-23';
 const plan = () => getState().plan;
-const abrir = (param: string, hoy = HOY) => render(<><Rutas param={param} hoy={hoy} /><GlobalV2 activa="metas" pantalla="metas" pendientes={0} conBarra={false} conCheckins={false} /></>);
+const abrir = (param: string, hoy = HOY) => render(<><Rutas param={param} hoy={hoy} /><GlobalV2 activa="metas" pendientes={0} conBarra={false} conMini={false} /></>);
 const fila = (nombre: RegExp | string) => screen.getByRole('button', { name: nombre });
 /** La hoja de arriba (una que se está cerrando todavía puede estar en pantalla). */
 const dialogo = () => { const d = screen.getAllByRole('dialog'); return d[d.length - 1]; };

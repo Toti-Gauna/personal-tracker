@@ -4,7 +4,7 @@
  */
 import { useRef } from 'react';
 import type { PeriodoMedido } from '../../data/periodos';
-import { hrefPeriodo } from '../../ui/PeriodoTarjeta';
+import { hrefPeriodo } from '../../ui/periodos';
 import { Icono } from '../iconos';
 import { Boton } from '../kit/controles';
 import { Hoja } from '../kit/hoja';

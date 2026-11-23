@@ -6,7 +6,7 @@ import { useState } from 'react';
 import { PLAN_EXT } from '../../data/plan-extendido';
 import { useStore } from '../../state/store';
 import { V122 } from '../../data/v12-2';
-import { fp } from '../../ui/PeriodoTarjeta';
+import { fp } from '../../ui/periodos';
 import { Hoja } from '../kit/hoja';
 import { Fila } from '../kit/superficies';
 import { Marco } from '../marco/Marco';

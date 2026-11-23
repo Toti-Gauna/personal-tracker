@@ -8,7 +8,7 @@ import { PantallaV2, entradaDe } from './Resolutor';
 const A = () => <p>principal</p>;
 const B = () => <p>extra b</p>;
 const C = () => <p>extra c</p>;
-const props = { day: { date: '2026-11-23' } as never, today: '2026-11-23', v1: <p>pantalla 1.0</p> };
+const props = { day: { date: '2026-11-23' } as never, today: '2026-11-23' };
 
 describe('2.0 · varias entradas por pantalla', () => {
   const registro: RegistroV2 = { metas: { nombre: 'Plan', Componente: A, cubre: (r) => !r.param } };
@@ -17,19 +17,18 @@ describe('2.0 · varias entradas por pantalla', () => {
     { nombre: 'C', Componente: C, cubre: (r) => !!r.param?.startsWith('sem') },
   ] };
 
-  it('gana la principal si cubre la ruta; si no, la primera extra que sí; si ninguna, la 1.0 con su marca', () => {
+  it('gana la principal si cubre la ruta; si no, la primera extra que sí; si ninguna, "No encontré esa pantalla"', () => {
     expect(entradaDe(leerRuta('#/metas'), registro, extras)?.nombre).toBe('Plan');
     expect(entradaDe(leerRuta('#/metas/semana'), registro, extras)?.nombre).toBe('B'); // B va antes que C, y las dos la cubren
     expect(entradaDe(leerRuta('#/metas/semestre'), registro, extras)?.nombre).toBe('C');
     expect(entradaDe(leerRuta('#/metas/otra'), registro, extras)).toBeUndefined();
     expect(entradaDe(leerRuta('#/estudio'), registro, extras)).toBeUndefined();
 
-    const { unmount } = render(<PantallaV2 interfaz="v2" {...props} ruta={leerRuta('#/metas/semana')} registro={registro} extras={extras} />);
+    const { unmount } = render(<PantallaV2 {...props} ruta={leerRuta('#/metas/semana')} registro={registro} extras={extras} />);
     expect(screen.getByText('extra b')).toBeInTheDocument();
     unmount();
-    render(<PantallaV2 interfaz="v2" {...props} ruta={leerRuta('#/metas/otra')} registro={registro} extras={extras} />);
-    expect(screen.getByText('pantalla 1.0')).toBeInTheDocument();
-    expect(screen.getByText('1.0', { selector: '.v2-marca' })).toBeInTheDocument();
+    render(<PantallaV2 {...props} ruta={leerRuta('#/metas/otra')} registro={registro} extras={extras} />);
+    expect(screen.getByText('No encontré esa pantalla')).toBeInTheDocument();
   });
 
   it('una pantalla sin entrada principal puede vivir solo de sus extras', () => {
@@ -37,7 +36,7 @@ describe('2.0 · varias entradas por pantalla', () => {
   });
 });
 
-describe('2.0 · no queda ninguna ruta en 1.0', () => {
+describe('toda ruta de la app tiene su pantalla', () => {
   // Todas las rutas de la app (las mismas que arma App.tsx), con un ejemplo de cada forma de parámetro.
   const RUTAS = [
     '#/hoy', '#/elegir/prog', '#/foco', '#/pomodoros', '#/json', '#/importar', '#/cierre',

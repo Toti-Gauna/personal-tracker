@@ -152,7 +152,7 @@ export interface Settings {
   areaNames?: Partial<Record<Area, string>>;
   /** Último respaldo descargado (fecha). */
   lastBackup?: string;
-  /** UX 2.0 · qué interfaz se usa. Sin valor: la 1.0. Los datos son los mismos en las dos. */
+  /** Qué interfaz se usaba cuando había dos (1.0 y 2.0). Desde que la 2.0 es la única, no se lee; queda en los datos viejos. */
   interfaz?: 'v1' | 'v2';
   /** Plan T+18: rutina activa, día libre, T+2 y umbrales de Handyx. */
   plan?: Partial<import('./plan-state').PlanSettings>;

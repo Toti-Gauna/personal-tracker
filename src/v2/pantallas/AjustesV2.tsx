@@ -8,11 +8,10 @@ import { BIMESTRES, PLAN } from '../../data/plan';
 import { DAY_TYPES } from '../../data/routines';
 import { DEFAULT_ALARMS } from '../../data/sounds';
 import type { Area } from '../../data/types';
-import { INTERFACES, forzadaPorUrl, interfazActiva, type Interfaz } from '../../lib/interfaz';
-import type { ThemePref } from '../../lib/theme';
-import { pedirInstalacion } from '../../screens/Ajustes';
+import type { ThemePref } from '../marco/tema';
+import { pedirInstalacion } from '../../lib/instalar';
 import { renameBimester } from '../../state/goals';
-import { setAreaName, setInterfaz } from '../../state/profile';
+import { setAreaName } from '../../state/profile';
 import { planSettings, useStore } from '../../state/store';
 import { Icono } from '../iconos';
 import { aviso } from '../kit/capas';
@@ -21,7 +20,8 @@ import { Hoja } from '../kit/hoja';
 import { Fila } from '../kit/superficies';
 import { Grupo, Marco } from '../marco/Marco';
 import { aplicarTemaV2, temaV2 } from '../marco/tema';
-import { PANTALLAS_V2, type PropsV2 } from '../registro';
+import { Cargando } from '../Resolutor';
+import type { PropsV2 } from '../registro';
 
 const TEMAS: [ThemePref, string][] = [['system', 'Sistema'], ['dark', 'Oscuro'], ['light', 'Claro']];
 const NOMBRE_TEMA: Record<ThemePref, string> = { system: 'sigue al teléfono', dark: 'oscuro', light: 'claro' };
@@ -68,10 +68,8 @@ export default function AjustesV2({ ruta, day, today }: PropsV2) {
   const [instalada, setInstalada] = useState(false);
   useEffect(() => { setInstalada(window.matchMedia?.('(display-mode: standalone)').matches ?? false); }, []);
   if (ruta.param === 'bimestres') return <Bimestres />;
-  if (ruta.param === 'plan') return <Suspense fallback={<main className="pantalla v2-carga" aria-busy="true" aria-label="Cargando" />}><PlanAjustes ruta={ruta} day={day} today={today} /></Suspense>;
+  if (ruta.param === 'plan') return <Suspense fallback={<Cargando />}><PlanAjustes ruta={ruta} day={day} today={today} /></Suspense>;
 
-  const activa = interfazActiva(settings.interfaz);
-  const forzada = forzadaPorUrl();
   const alarmas = (settings.alarms ?? DEFAULT_ALARMS).filter((a) => a.on).length;
   const cfg = planSettings(settings);
   const instalar = async () => {
@@ -83,12 +81,7 @@ export default function AjustesV2({ ruta, day, today }: PropsV2) {
     <Marco titulo="Ajustes" volver={{ href: '#/perfil', nombre: 'Perfil' }}>
       <Grupo titulo="Apariencia">
         <Segmentado etiqueta="Tema" valor={tema} opciones={TEMAS} onCambio={(t) => { setTema(t); aplicarTemaV2(t); }} />
-        <Segmentado etiqueta="Interfaz" valor={activa} opciones={INTERFACES.map(([id, n]) => [id, n.replace(' · en construcción', ' · nueva').replace(' · actual', ' · clásica')] as [Interfaz, string])} onCambio={setInterfaz} />
-        <p className="t-nota">
-          {forzada ? `La dirección fuerza la ${forzada === 'v1' ? '1.0' : '2.0'}: sacá ?ui para usar lo que elegiste. ` : ''}
-          Mismos datos en las dos: podés ir y volver cuando quieras. La 2.0 ya cubre todas las pantallas.
-        </p>
-        <div className="capa-1 s-lista"><Fila icono="trazo" titulo="Taller 2.0" nota="Lenguaje, controles, piezas y movimiento" href="#/v2" /></div>
+        <div className="capa-1 s-lista"><Fila icono="trazo" titulo="Taller de diseño" nota="Lenguaje, controles, piezas y movimiento" href="#/v2" /></div>
       </Grupo>
 
       <Grupo titulo="Áreas">

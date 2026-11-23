@@ -1,0 +1,34 @@
+/*
+ * Trazo · la raíz: la caja, el cuerpo de la página, los campos y el lugar de la barra lateral. Antes lo ponía la 1.0 y la 2.0 lo
+ * usaba de prestado; desde que la 2.0 es la única interfaz, vive acá. Las reglas de elementos van con :where() para pesar lo mismo
+ * que un selector de elemento: cualquier clase las pisa.
+ */
+:where(html[data-ui='v2']) *, :where(html[data-ui='v2']) *::before, :where(html[data-ui='v2']) *::after { box-sizing: border-box; }
+:where(html[data-ui='v2']), :where(html[data-ui='v2']) body, :where(html[data-ui='v2']) #root { height: 100%; }
+:where(html[data-ui='v2']) body {
+  margin: 0;
+  background-color: var(--capa-0);
+  background-image: radial-gradient(var(--punto) 1px, transparent 1px);
+  background-size: 22px 22px;
+  color: var(--texto);
+  font-family: var(--font-text);
+  font-size: 1rem;
+  line-height: 1.4;
+  -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: transparent;
+  overflow-x: hidden;
+}
+/* iOS hace zoom al enfocar un campo de menos de 16 px. */
+:where(html[data-ui='v2']) :where(input, textarea, select) { font-size: var(--t-campo); }
+:where(html[data-ui='v2']) button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; }
+:where(html[data-ui='v2']) :focus-visible { outline: 2px solid var(--trazo-texto); outline-offset: 2px; }
+:where(html[data-ui='v2']) code { font-family: var(--font-mono); font-size: 0.9em; }
+
+/* La app: una columna que ocupa todo el alto; a la derecha de la barra lateral en tablet y escritorio. */
+.app { min-height: 100%; display: flex; flex-direction: column; padding-left: var(--lat-w); }
+.app.presentacion { padding-left: 0; }
+.envoltura { flex: 1; display: flex; flex-direction: column; min-width: 0; }
+
+@media (prefers-reduced-motion: reduce) {
+  :where(html[data-ui='v2']) * { scroll-behavior: auto !important; }
+}

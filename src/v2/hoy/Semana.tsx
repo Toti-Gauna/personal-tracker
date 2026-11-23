@@ -2,7 +2,7 @@
  * Trazo 2.0 · los contadores de la semana (postulaciones, respuestas ensayadas, operaciones, clips, entrenos): cada uno con
  * su avance contra la meta y un "+1" con nombre. Son los mismos contadores de la 1.0.
  */
-import { useItemsSemana } from '../../ui/PlanBits';
+import { useItemsSemana } from '../../ui/plan-bits';
 import { RAMA_COLOR } from '../../data/ramas';
 import { Boton } from '../kit/controles';
 import { Barra } from '../kit/superficies';

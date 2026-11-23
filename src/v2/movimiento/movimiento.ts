@@ -3,6 +3,7 @@
  * qué cambió, qué terminaste. Todo usa los tokens de tokens.css y la Web Animations API (sin dependencias); con movimiento
  * reducido, todo pasa a un fundido de 150 ms o a nada.
  */
+import { vibrar } from '../../ui/sound';
 
 /** Los mismos tokens que tokens.css, para el JS. */
 export const DUR = { toque: 120, estado: 200, entrada: 320, pantalla: 520 } as const;
@@ -136,7 +137,7 @@ export function instalarNavegacion(raiz: Document | HTMLElement = document): () 
 
 /** Una vibración corta en el teléfono, si se puede. `exito`: dos toques. */
 export function haptico(tipo: 'leve' | 'exito' = 'leve') {
-  try { navigator.vibrate?.(tipo === 'exito' ? [12, 40, 18] : 8); } catch { /* sin vibración */ }
+  vibrar(tipo === 'exito' ? [12, 40, 18] : 8);
 }
 
 /**

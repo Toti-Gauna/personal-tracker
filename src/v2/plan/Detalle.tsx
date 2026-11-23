@@ -13,8 +13,8 @@ import { sugerirCorrimiento } from '../../data/periodos';
 import { V122 } from '../../data/v12-2';
 import { confirmarCorrimiento, deshacerCorrimiento, marcarHito } from '../../state/plan';
 import { useStore } from '../../state/store';
-import { DetalleProyecto } from '../../ui/DetalleProyecto';
-import { hrefPeriodo } from '../../ui/PeriodoTarjeta';
+import { DetalleProyectoV2 } from '../proyecto/DetalleProyectoV2';
+import { hrefPeriodo } from '../../ui/periodos';
 import { usePeriodos } from '../../ui/usePeriodos';
 import { aviso } from '../kit/capas';
 import { Boton, Casilla } from '../kit/controles';
@@ -155,7 +155,7 @@ function DelBloque({ id }: { id: string }) {
         {tools.length > 0 && <Fila icono="paquete" titulo="Open source" nota={tools.map(({ h, v }) => `${h.nombre} ${v.id}`).join(' · ')} href="#/metas/open-source" />}
         {d && <Fila icono="info" titulo="Detalle del proyecto" nota={d.puesto} onClick={() => setDetalle(true)} />}
       </div>
-      {d && <Hoja abierta={detalle} onCerrar={() => setDetalle(false)} titulo={b.nombre} alto="completa"><div className="pl-detalle-v1"><DetalleProyecto id={id} /></div></Hoja>}
+      {d && <Hoja abierta={detalle} onCerrar={() => setDetalle(false)} titulo={b.nombre} alto="completa"><DetalleProyectoV2 id={id} /></Hoja>}
     </Grupo>
   );
 }

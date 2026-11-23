@@ -15,7 +15,7 @@ import { weekday } from '../../data/study';
 import { addDays, fmtDur } from '../../data/time';
 import { fmtKg, pace, runWeek, weightAt } from '../../data/train';
 import { useStore } from '../../state/store';
-import { barras, type Periodo } from '../../ui/WeekChart';
+import { barras, type Periodo } from '../../ui/barras-estudio';
 import { Curva } from '../entreno/Curva';
 import { Barras } from '../estudio/Barras';
 import { colorV2 } from '../hoy/datos';

@@ -12,7 +12,7 @@ import { alertaVerificar, alertaVersion } from '../../data/plan-vistas';
 import { daysBetween } from '../../data/time';
 import { guardarExamen, marcarCapa, marcarCertVerificada, setExtraBloque, setTecnica, setVersionCert, sumarRevision, sumarTiempo, toggleAgentico, toggleArquitectura, toggleEvidencia, type TipoExtra } from '../../state/plan';
 import { useStore } from '../../state/store';
-import { fp } from '../../ui/PeriodoTarjeta';
+import { fp } from '../../ui/periodos';
 import { Boton, CampoTexto, Contador, Interruptor, Segmentado, Selector } from '../kit/controles';
 import { Barra } from '../kit/superficies';
 import { FilaHoja, Lista, hechasDe } from './piezas';

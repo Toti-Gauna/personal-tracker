@@ -16,7 +16,7 @@ import type { Activity } from '../../data/study-types';
 import { ir } from '../../lib/routes';
 import { reiniciarLibro, restaurarLibro } from '../../state/study';
 import { useStore } from '../../state/store';
-import { abrirEstadoEstudio } from '../../ui/EstadoEstudio';
+import { abrirEstadoEstudio } from '../../ui/estado-estudio';
 import { colorV2 } from '../hoy/datos';
 import { aviso, confirmar } from '../kit/capas';
 import { Boton, Interruptor, Segmentado } from '../kit/controles';

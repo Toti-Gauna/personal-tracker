@@ -23,6 +23,6 @@ describe('2.0 · la página del lenguaje', () => {
   });
 
   it('está registrada como pantalla de taller: no cuenta como pantalla convertida', () => {
-    expect(PANTALLAS_V2.v2).toMatchObject({ nombre: 'Taller 2.0', taller: true });
+    expect(PANTALLAS_V2.v2).toMatchObject({ nombre: 'Taller de diseño', taller: true });
   });
 });

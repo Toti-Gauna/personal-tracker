@@ -1,6 +1,6 @@
 /**
  * Trazo 2.0 · lo que flota sobre cualquier pantalla (tanda 1.5): los avisos (toasts) y la confirmación. Se piden desde
- * cualquier lado con `aviso()` y `confirmar()`; `CapasV2` los muestra e instala las transiciones (App la monta solo en la 2.0).
+ * cualquier lado con `aviso()`, `confirmar()` y `elegir()`; `CapasV2` los muestra e instala las transiciones.
  */
 import { useEffect, useRef, useState, useSyncExternalStore } from 'react';
 import { Icono, type NombreIcono } from '../iconos';
@@ -21,7 +21,15 @@ export interface AvisoV2 {
   duracion: number;
 }
 
-interface PedidoConfirmar { titulo: string; texto?: string; accion: string; cancelar?: string; peligro?: boolean; responder: (si: boolean) => void }
+interface PedidoConfirmar {
+  titulo: string; texto?: string; accion: string; cancelar?: string; peligro?: boolean;
+  /** Una línea chica arriba del título ("Fin del bloque"). */
+  rotulo?: string;
+  /** Hay que elegir: tocar afuera o Escape no cierra (cerrar sin elegir correría una de las dos sin querer). */
+  obligatorio?: boolean;
+  /** `null`: otro pedido lo reemplazó o se limpiaron las capas, sin que nadie eligiera. */
+  responder: (si: boolean | null) => void;
+}
 
 let avisos: AvisoV2[] = [];
 let pedido: PedidoConfirmar | null = null;
@@ -41,13 +49,26 @@ export function aviso(a: { titulo: string; sub?: string; tono?: TonoAviso; accio
 
 export function quitarAviso(id: number) { avisos = avisos.filter((x) => x.id !== id); emitir(); }
 
+function pedir(o: Omit<PedidoConfirmar, 'responder'>): Promise<boolean | null> {
+  return new Promise((r) => { pedido?.responder(null); pedido = { ...o, responder: (si) => { pedido = null; emitir(); r(si); } }; emitir(); });
+}
+
 /** Pregunta antes de algo que no se deshace. Resuelve `true` si confirma. */
-export function confirmar(o: Omit<PedidoConfirmar, 'responder'>): Promise<boolean> {
-  return new Promise((r) => { pedido?.responder(false); pedido = { ...o, responder: (si) => { pedido = null; emitir(); r(si); } }; emitir(); });
+export function confirmar(o: Omit<PedidoConfirmar, 'responder' | 'obligatorio'>): Promise<boolean> {
+  return pedir(o).then((si) => si === true);
+}
+
+/**
+ * Un freno con dos caminos (el fin de un bloque: "Volver a Hoy" o "Seguir 10 min más"). No se cierra tocando afuera: hay que
+ * elegir. Resuelve `null` si otro pedido lo reemplaza antes.
+ */
+export function elegir(o: { rotulo?: string; titulo: string; texto?: string; primaria: string; secundaria: string }): Promise<'primaria' | 'secundaria' | null> {
+  return pedir({ rotulo: o.rotulo, titulo: o.titulo, texto: o.texto, accion: o.primaria, cancelar: o.secundaria, obligatorio: true })
+    .then((si) => (si == null ? null : si ? 'primaria' : 'secundaria'));
 }
 
 /** Para los tests: vacía todo. */
-export function limpiarCapas() { avisos = []; pedido?.responder(false); pedido = null; emitir(); }
+export function limpiarCapas() { avisos = []; pedido?.responder(null); pedido = null; emitir(); }
 
 const ICONO: Record<TonoAviso, NombreIcono> = { info: 'info', hecho: 'tilde', atencion: 'atencion', error: 'alerta' };
 
@@ -86,13 +107,14 @@ function Confirmar({ p }: { p: PedidoConfirmar }) {
     return () => previo?.focus?.();
   }, [p]);
   return (
-    <div className="h-velo centro" onClick={() => p.responder(false)}>
+    <div className="h-velo centro" onClick={() => { if (!p.obligatorio) p.responder(false); }}>
       <div className="c-dialogo capa-3" role="alertdialog" aria-modal="true" aria-labelledby="c-dialogo-t" aria-describedby={p.texto ? 'c-dialogo-d' : undefined}
         onClick={(e) => e.stopPropagation()}
         onKeyDown={(e) => {
-          if (e.key === 'Escape') p.responder(false);
+          if (e.key === 'Escape' && !p.obligatorio) p.responder(false);
           if (e.key === 'Tab') { e.preventDefault(); (document.activeElement === no.current ? si : no).current?.focus(); }
         }}>
+        {p.rotulo && <p className="t-rotulo">{p.rotulo}</p>}
         <h2 id="c-dialogo-t" className="t-encabezado">{p.titulo}</h2>
         {p.texto && <p id="c-dialogo-d" className="t-cuerpo">{p.texto}</p>}
         <div className="c-dialogo-botones">
@@ -104,7 +126,7 @@ function Confirmar({ p }: { p: PedidoConfirmar }) {
   );
 }
 
-/** Lo global de la 2.0: avisos, confirmación y la navegación con transiciones. App la monta solo con la 2.0 prendida. */
+/** Lo global: avisos, confirmación y la navegación con transiciones. */
 export default function CapasV2() {
   useEffect(() => instalarNavegacion(), []);
   const xs = useSyncExternalStore(suscribir, () => avisos);

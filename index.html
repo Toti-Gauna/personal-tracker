@@ -1,18 +1,23 @@
 <!doctype html>
-<html lang="es" data-theme="dark">
+<html lang="es" data-ui="v2" data-theme="dark">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <title>Trazo</title>
     <meta name="description" content="Tu día, marcado a mano." />
-    <meta name="theme-color" content="#0E0F10" />
+    <meta name="theme-color" content="#0c0d0e" />
     <link rel="icon" type="image/svg+xml" href="./trazo.svg" />
     <link rel="apple-touch-icon" href="./apple-touch-icon.png" />
     <script>
+      // El tema antes del primer cuadro (la misma lectura que src/v2/marco/tema.ts).
       try {
-        var t = localStorage.getItem('trazo.theme');
-        if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t;
-        else if (t === 'system' && window.matchMedia('(prefers-color-scheme: light)').matches) document.documentElement.dataset.theme = 'light';
+        var t = localStorage.getItem('trazo.theme.v2');
+        if (t !== 'dark' && t !== 'light' && t !== 'system') {
+          var v = localStorage.getItem('trazo.theme');
+          t = v === 'light' || v === 'system' ? v : 'system';
+        }
+        if (t === 'system') t = window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+        document.documentElement.dataset.theme = t;
       } catch (e) {}
     </script>
   </head>

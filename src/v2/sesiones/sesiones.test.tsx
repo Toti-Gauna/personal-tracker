@@ -22,7 +22,7 @@ import UnidadesV2 from './UnidadesV2';
 const HOY = '2026-11-23';
 const estudio = () => getState().study;
 const dia = () => getState().days[HOY];
-const global = <GlobalV2 activa="estudio" pantalla="estudio" pendientes={0} conBarra={false} conCheckins={false} />;
+const global = <GlobalV2 activa="estudio" pendientes={0} conBarra={false} conMini={false} />;
 const props = (hash: string) => ({ ruta: leerRuta(hash), day: dia(), today: HOY });
 const dialogo = () => { const d = screen.getAllByRole('dialog'); return d[d.length - 1]; };
 const mas = (grupo: string, paso = 1) => fireEvent.click(within(screen.getByRole('group', { name: grupo })).getByRole('button', { name: `Sumar ${paso}` }));

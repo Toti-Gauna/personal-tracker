@@ -2,11 +2,10 @@ import { act, fireEvent, render, screen, within } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { leerRuta } from '../../lib/routes';
 import { getState, register, resetState, startDay } from '../../state/store';
-import { abrirPeso, hojaAbierta } from '../../ui/checkins';
+import { abrirCorrida, abrirPeso, hojaAbierta } from '../../ui/checkins';
 import { limpiarCapas } from '../kit/capas';
 import AjustesV2 from '../pantallas/AjustesV2';
 import DespertarV2 from '../pantallas/DespertarV2';
-import { MarcaV1 } from '../Resolutor';
 import { PANTALLAS_V2 } from '../registro';
 import { BarraV2 } from './BarraV2';
 import GlobalV2 from './Global';
@@ -63,7 +62,7 @@ describe('2.0 · el marco de pantalla', () => {
 describe('2.0 · Ajustes', () => {
   const ajustes = (hash = '#/ajustes') => render(<AjustesV2 ruta={leerRuta(hash)} day={getState().days[HOY]} today={HOY} />);
 
-  it('está registrada: con la 2.0 prendida, Ajustes es la pantalla nueva', () => {
+  it('está registrada', () => {
     expect(PANTALLAS_V2.ajustes).toMatchObject({ nombre: 'Ajustes' });
     expect(PANTALLAS_V2.ajustes!.taller).toBeFalsy();
   });
@@ -74,19 +73,14 @@ describe('2.0 · Ajustes', () => {
     fireEvent.click(screen.getByRole('radio', { name: 'Claro' }));
     expect(temaV2()).toBe('light');
     expect(document.documentElement.dataset.theme).toBe('light');
-    // La 1.0 no se entera: su preferencia queda como estaba.
-    expect(localStorage.getItem('trazo.theme')).not.toBe('light');
+    // Se guarda en su clave; la de la 1.0 queda como estaba.
+    expect(localStorage.getItem('trazo.theme.v2')).toBe('light');
   });
 
-  it('volver a la 1.0 está a un toque, y no toca nada más', () => {
-    act(() => { getState(); });
+  it('ya no hay cambio de interfaz: la 2.0 es la única', () => {
     ajustes();
-    const dias = getState().days;
-    fireEvent.click(screen.getByRole('radio', { name: '2.0 · nueva' }));
-    expect(getState().settings!.interfaz).toBe('v2');
-    fireEvent.click(screen.getByRole('radio', { name: '1.0 · clásica' }));
-    expect(getState().settings!.interfaz).toBe('v1');
-    expect(getState().days).toBe(dias);
+    expect(screen.queryByRole('radiogroup', { name: 'Interfaz' })).toBeNull();
+    expect(screen.queryByText(/1\.0/)).toBeNull();
   });
 
   it('las áreas son filas con lápiz: se renombran en una hoja y vacío vuelve al nombre de fábrica', () => {
@@ -117,16 +111,14 @@ describe('2.0 · Ajustes', () => {
 });
 
 describe('2.0 · lo global', () => {
-  const global = (pantalla: 'hoy' | 'perfil' | 'entreno' = 'hoy') => render(<><MarcaV1 /><GlobalV2 activa={pantalla === 'hoy' ? 'hoy' : pantalla} pantalla={pantalla} pendientes={0} conBarra conCheckins /></>);
+  const global = (activa: 'hoy' | 'perfil' | 'entreno' = 'hoy') => render(<GlobalV2 activa={activa} pendientes={0} conBarra conMini />);
 
-  it('sigue al teléfono aunque la 1.0 haya grabado "oscuro" al abrir; al salir de la 2.0, vuelve el tema de la 1.0', () => {
-    localStorage.setItem('trazo.theme', 'dark'); // lo que la 1.0 graba sola
+  it('sigue al teléfono aunque la 1.0 haya grabado "oscuro" al abrir (lo grababa siempre), y lo sigue si cambia', () => {
+    localStorage.setItem('trazo.theme', 'dark'); // lo que la 1.0 grababa sola
     sistema(true);
-    const { unmount } = global();
+    global();
     expect(temaV2()).toBe('system');
     expect(document.documentElement.dataset.theme).toBe('light');
-    unmount();
-    expect(document.documentElement.dataset.theme).toBe('dark');
     expect(localStorage.getItem('trazo.theme')).toBe('dark');
   });
 
@@ -139,10 +131,17 @@ describe('2.0 · lo global', () => {
     expect(document.documentElement.dataset.theme).toBe('dark');
   });
 
-  it('ya no agrega nada sobre la marca 1.0: Perfil es 2.0 y trae su propio acceso a Ajustes', () => {
-    global('perfil');
-    expect(screen.queryByRole('link', { name: 'Ajustes' })).toBeNull();
-    expect(document.getElementById('v2-marca-accion')).toBeNull();
+  it('la corrida se carga en su hoja: tiempo, distancia con el ritmo, tipo y sensación', () => {
+    global('entreno');
+    act(() => abrirCorrida(HOY));
+    const hoja = screen.getByRole('dialog', { name: '¿Cuánto corriste?' });
+    fireEvent.change(within(hoja).getByRole('textbox', { name: 'Distancia · km, opcional' }), { target: { value: '5' } });
+    expect(within(hoja).getByText('Ritmo 6:00 /km')).toBeInTheDocument();
+    fireEvent.click(within(hoja).getByRole('radio', { name: 'Fondo' }));
+    fireEvent.click(within(hoja).getByRole('button', { name: 'Guardar corrida' }));
+    expect(getState().train.runs.find((r) => r.date === HOY)).toMatchObject({ min: 30, km: 5, kind: 'fondo', feel: 3 });
+    expect(hojaAbierta()).toBeNull();
+    expect(screen.getByRole('status')).toHaveTextContent('Corrida guardada · 30 min · 5 km');
   });
 
   it('el pesaje no persigue: en vez de la hoja, un aviso con "Cargar", y no vuelve a preguntar hoy', () => {

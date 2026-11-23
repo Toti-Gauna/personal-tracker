@@ -21,7 +21,7 @@ function reloj(hhmm: string) {
   vi.setSystemTime(new Date(`${HOY}T${hhmm}:00`));
 }
 /** Hoy con lo global de la 2.0 (avisos y el puente de los avisos de la 1.0), como en la app. */
-const Pantalla = () => <><HoyV2 ruta={leerRuta('#/hoy')} day={dia()} today={HOY} /><GlobalV2 activa="hoy" pantalla="hoy" pendientes={0} conBarra={false} conCheckins={false} /></>;
+const Pantalla = () => <><HoyV2 ruta={leerRuta('#/hoy')} day={dia()} today={HOY} /><GlobalV2 activa="hoy" pendientes={0} conBarra={false} conMini={false} /></>;
 /** Renderiza Hoy y lo vuelve a dibujar con el día del store después de cada acción. */
 function hoy(hhmm = '09:30') {
   reloj(hhmm);

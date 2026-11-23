@@ -198,3 +198,12 @@
 .es-recall-leyenda b { color: var(--texto); font-weight: 500; }
 @keyframes es-dibuja { from { stroke-dashoffset: 1; } }
 @media (prefers-reduced-motion: reduce) { .es-recall-linea { animation: none; } }
+
+/* ——— La hoja "¿En qué estado estás?" ——— */
+.es-estado { display: grid; gap: var(--sp-4); }
+.es-estado-libro { display: grid; gap: var(--sp-2); }
+.es-estado-cab { display: flex; align-items: center; justify-content: space-between; gap: var(--sp-3); }
+.es-estado-cab h3 { margin: 0; }
+.es-estado-cap { display: grid; gap: var(--sp-3); padding: var(--sp-4); }
+.es-estado-nombre { display: grid; gap: var(--sp-1); margin: 0; }
+.es-estado-botones { display: flex; flex-wrap: wrap; gap: var(--sp-2); }

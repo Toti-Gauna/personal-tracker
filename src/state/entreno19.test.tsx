@@ -3,9 +3,6 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { planRoutine } from '../data/routines';
 import { emptyTrain } from '../data/train-catalog';
 import type { Routine, TrainState } from '../data/train-types';
-import { Entreno } from '../screens/Entreno';
-import { EntrenoSemana } from '../screens/EntrenoSemana';
-import { SesionEntreno } from '../screens/SesionEntreno';
 import { getState, migrate, register, resetState, startDay } from './store';
 import { finishTraining, goToExercise, logSet, nudge, setRir, startTraining, tildarCalentamiento, undoLastSet } from './train';
 
@@ -131,88 +128,6 @@ describe('ola 19 · sábado y domingo son libres, también a las 08:00', () => {
     const sem = planRoutine('busqueda-intensiva', 'tarde');
     expect(sem.find((x) => x.block.id === 'entreno')).toMatchObject({ start: '18:00', min: 120 });
     expect(sem.find((x) => x.block.id === 'cierre')).toMatchObject({ start: '20:00', min: 60 });
-  });
-});
-
-describe('ola 19 · pantallas', () => {
-  const D = '2026-11-17';
-  beforeEach(() => {
-    vi.useFakeTimers({ toFake: ['Date'] });
-    vi.setSystemTime(new Date(2026, 10, 17, 18, 0));
-    resetState();
-    register('Toti', 'Abi', '2026-11-16');
-    startDay('completo', '04:00', D);
-    getState().train.pesoPreguntado.push(D);
-  });
-  afterEach(() => vi.useRealTimers());
-
-  it('Entreno: hoy toca Legs A con calentamiento, RIR y cuánto dura; la semana muestra Pull, Legs, Push, Upper, Lower y dos libres', () => {
-    render(<Entreno day={day(D)} />);
-    expect(screen.getByText(/Hoy toca Legs A/)).toBeInTheDocument();
-    expect(screen.getByText('Enfoque: cuádriceps')).toBeInTheDocument();
-    expect(screen.getByRole('heading', { name: /Legs A/ })).toBeInTheDocument();
-    expect(screen.getByText(/Calentamiento · caminadora inclinada \+ movilidad dinámica de pierna/)).toBeInTheDocument();
-    expect(screen.getByText('3 × 8-12 · RIR 2-1-0 · 3 min')).toBeInTheDocument();
-    expect(screen.getByText(/Los estiramientos van de 21:00 a 22:00, con cuádriceps, aductores, glúteos y gemelos/)).toBeInTheDocument();
-    expect(screen.queryByText(/pasa de las 2 h|Esta rutina lleva/)).toBeNull();
-    const semana = screen.getByRole('list', { name: 'Semana de entreno' });
-    expect(within(semana).getAllByRole('listitem').map((x) => x.querySelector('b')!.textContent)).toEqual(['Pull A', 'Legs A', 'Push A', 'Upper', 'Lower', '—', '—']);
-  });
-
-  it('Entreno: una rutina que pasa de las 2 h avisa antes de empezar', () => {
-    const legs = t().routines.find((r) => r.id === 'legs-a')!;
-    legs.exercises = Array.from({ length: 12 }, (_, i) => ({ ...legs.exercises[0], id: `z${i}`, sets: 4 }));
-    render(<Entreno day={day(D)} />);
-    expect(screen.getByRole('status')).toHaveTextContent(/lleva unos 3 h|lleva unos 2 h/);
-    expect(screen.getByRole('status')).toHaveTextContent('el bloque es de 2 h');
-  });
-
-  it('Semana: cada día se elige una vez (con A y B) y el sábado y el domingo son libres', () => {
-    render(<EntrenoSemana day={day(D)} />);
-    expect(screen.getByText('Pull A')).toBeInTheDocument();
-    // El lunes ya pasó sin entrenar ("No se hizo"): quedan Legs y Push con su aviso de A y B.
-    expect(screen.getAllByText(/A y B se alternan por semana/)).toHaveLength(2);
-    expect(screen.getByText('No se hizo')).toBeInTheDocument();
-    expect(screen.getAllByText('Libre')).toHaveLength(2);
-    fireEvent.click(screen.getAllByRole('button', { name: 'Cambiar' })[0]);
-    const op = screen.getByRole('radiogroup', { name: /Qué entrenás el lunes/ });
-    expect(within(op).getAllByRole('radio').map((x) => x.textContent)).toEqual(['Push A/B', 'Pull A/B', 'Legs A/B', 'Upper', 'Lower', 'Full body', 'Descanso activo', 'Libre']);
-  });
-
-  it('Sesión: calentamiento que se tilda, "Cómo se hace", RIR objetivo por serie y el RIR que te quedó', () => {
-    startTraining('legs-a', D, false);
-    render(<SesionEntreno />);
-    const warm = screen.getByText(/Calentamiento · 10 min/).closest('details')!;
-    expect(warm).toHaveTextContent('0/2');
-    act(() => { fireEvent.click(within(warm).getByRole('checkbox', { name: 'Caminadora inclinada' })); });
-    expect(warm).toHaveTextContent('1/2');
-    expect(t().active!.warmDone).toEqual(['caminadora']);
-    // El ejercicio: tempo y RIR objetivo.
-    expect(screen.getByText('Tempo 3-1-2 · RIR 2-1-0')).toBeInTheDocument();
-    expect(screen.getByText(/obj 8 · RIR 2/)).toBeInTheDocument();
-    // "Cómo se hace" abre la ficha.
-    fireEvent.click(screen.getByRole('button', { name: 'Cómo se hace' }));
-    const ficha = screen.getByRole('dialog');
-    expect(ficha).toHaveTextContent('Espalda apoyada — talones firmes — profundidad máxima');
-    expect(ficha).toHaveTextContent('Cuádriceps completo');
-    fireEvent.click(within(ficha).getByRole('button', { name: 'Listo' }));
-    // RIR opcional.
-    nudgeKg();
-    fireEvent.click(screen.getByRole('button', { name: 'RIR 1' }));
-    expect(t().active!.draft.me!.rir).toBe(1);
-    act(() => { fireEvent.click(screen.getByRole('button', { name: /Serie de Toti hecha/ })); });
-    expect(t().active!.sets[0].rir).toBe(1);
-    expect(screen.getByText(/te quedó 1/)).toBeInTheDocument();
-  });
-
-  it('Sesión: una dominada o un dead hang se marca sin kilos', () => {
-    startTraining('pull-b', D, false);
-    goToExercise(t().active!.order.indexOf('dead-hang'));
-    render(<SesionEntreno />);
-    expect(screen.getByText(/Segundos · objetivo 30/)).toBeInTheDocument();
-    expect(screen.queryByText(/Elegí con cuánto peso/)).toBeNull();
-    expect(screen.getByText(/Sin peso extra/)).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /Serie de Toti hecha/ })).toBeEnabled();
   });
 });
 

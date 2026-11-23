@@ -10,7 +10,7 @@ import { bloqueConFechas } from '../../data/plan-vistas';
 import { avanceBloque } from '../../data/metas-bloque';
 import { EVIDENCIAS } from '../../data/plan-state';
 import { useStore } from '../../state/store';
-import { fp } from '../../ui/PeriodoTarjeta';
+import { fp } from '../../ui/periodos';
 import { Boton, Segmentado } from '../kit/controles';
 import { Dato, Estado, Fila } from '../kit/superficies';
 import { Grupo, Marco } from '../marco/Marco';

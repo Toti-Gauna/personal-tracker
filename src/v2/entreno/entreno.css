@@ -175,3 +175,8 @@ html[data-ui='v2'][data-theme='light'] .cu.cu-hecho .cu-m.on { stroke: color-mix
 /* El primer grupo de una pantalla no lleva margen (va pegado al título); acá viene después del gráfico. */
 .en .en-detalle + .m-grupo { margin-top: var(--sp-7); }
 @media (prefers-reduced-motion: reduce) { .en-curva-area, .en-curva-linea, .en-curva-halo, .en-motor-sube, .en-motor-peso, .en-motor-barra { animation: none; } }
+
+/* ——— La hoja de la corrida ——— */
+.en-corrida { display: grid; gap: var(--sp-4); }
+.en-corrida-campo { display: grid; gap: var(--sp-2); }
+.en-corrida-acciones { display: grid; gap: var(--sp-2); }

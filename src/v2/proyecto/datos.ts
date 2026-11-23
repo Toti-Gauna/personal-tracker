@@ -6,7 +6,7 @@ import { PLAN_EXT, bloqueExtPorId, type BloqueFechado } from '../../data/plan-ex
 import { PROY_V7, fichaV7, type ItemV7 } from '../../data/proyectos-v7';
 import { EVIDENCIAS, type ProyectoEstado } from '../../data/plan-state';
 import { TRAMOS, type Tramo } from '../../data/plan';
-import { fp } from '../../ui/PeriodoTarjeta';
+import { fp } from '../../ui/periodos';
 
 export interface FilaFicha { etiqueta: string; texto?: string; lista?: { t: string; estrella?: boolean }[]; nota?: string }
 export interface GrupoFicha { grupo: string; filas: FilaFicha[] }

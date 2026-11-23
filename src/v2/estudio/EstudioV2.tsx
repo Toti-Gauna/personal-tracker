@@ -13,7 +13,7 @@ import { ir } from '../../lib/routes';
 import { useStore } from '../../state/store';
 import { startStudy } from '../../ui/estudio-acciones';
 import { useStudyPlan } from '../../ui/useStudy';
-import { barras as barrasDe } from '../../ui/WeekChart';
+import { barras as barrasDe } from '../../ui/barras-estudio';
 import { colorV2 } from '../hoy/datos';
 import { Boton, Casilla, Chip } from '../kit/controles';
 import { Anillo, Dato, Fila, Tarjeta } from '../kit/superficies';

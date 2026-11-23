@@ -28,7 +28,7 @@ const props = (hash: string, today = HOY) => ({ ruta: leerRuta(hash), day: getSt
 // Un día con una app secundaria y un showcase corriendo de fondo (el 23 nov todavía no hay).
 const CON_FONDO = '2026-12-15';
 const LUNES_FONDO = lunesDeFecha(CON_FONDO);
-const global = <GlobalV2 activa="metas" pantalla="metas" pendientes={0} conBarra={false} conCheckins={false} />;
+const global = <GlobalV2 activa="metas" pendientes={0} conBarra={false} conMini={false} />;
 const dialogo = () => { const d = screen.getAllByRole('dialog'); return d[d.length - 1]; };
 const fila = (nombre: RegExp | string) => screen.getByRole('button', { name: nombre });
 const escribir = (etiqueta: string | RegExp, v: string, salir = false) => {

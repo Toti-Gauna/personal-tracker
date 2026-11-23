@@ -8,7 +8,7 @@ import { fondoEn, periodosComerciales, periodosSecundarias } from '../../data/fo
 import { activoAhora, medir } from '../../data/periodos';
 import { SEMANAS, semanaDelPlan } from '../../data/plan';
 import { useStore } from '../../state/store';
-import { hrefPeriodo } from '../../ui/PeriodoTarjeta';
+import { hrefPeriodo } from '../../ui/periodos';
 import { usePeriodos } from '../../ui/usePeriodos';
 import { Icono } from '../iconos';
 import { Boton, Segmentado } from '../kit/controles';

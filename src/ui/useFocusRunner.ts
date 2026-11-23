@@ -7,8 +7,8 @@ import { fmtDur, nowMin, toHHMM } from '../data/time';
 import { ir } from '../lib/routes';
 import { carryPending, getState, logFocus, setFocus } from '../state/store';
 import { showModal, toast } from './avisos';
-import { avisoTramo, finSesion, onTramosEnded, sesionVencida } from './estudio-acciones';
-import { abrirEstadoEstudio, hayQuePreguntar } from './EstadoEstudio';
+import { avisoTramo, finSesion, hayQuePreguntar, onTramosEnded, sesionVencida } from './estudio-acciones';
+import { abrirEstadoEstudio } from './estado-estudio';
 
 /** Ola 28: más de esto pasado el fin de un tramo, la sesión se considera abandonada (no se cobra sola). */
 export const VENCIDA_MS = 10 * 60000;

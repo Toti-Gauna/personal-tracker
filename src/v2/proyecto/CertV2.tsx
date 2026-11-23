@@ -8,7 +8,7 @@ import { certV12, estadoCert } from '../../data/certs-v12';
 import { claveHito } from '../../data/periodos-plan';
 import { cargarMock, marcarHito, reservarExamen } from '../../state/plan';
 import { useStore } from '../../state/store';
-import { fp } from '../../ui/PeriodoTarjeta';
+import { fp } from '../../ui/periodos';
 import { Icono } from '../iconos';
 import { tituloCorto } from './datos';
 import { Boton, CampoFecha, CampoTexto, Casilla } from '../kit/controles';

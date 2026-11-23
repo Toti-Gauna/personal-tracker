@@ -13,8 +13,8 @@ import { fichaV7 } from '../../data/proyectos-v7';
 import { V122, comercial, secundaria, type VersionSecundaria } from '../../data/v12-2';
 import { agregarLead, estadoLead, marcarForeground, marcarSeguridad, publicarVersionFondo, setItem } from '../../state/fondo';
 import { useStore } from '../../state/store';
-import { DetalleProyecto } from '../../ui/DetalleProyecto';
-import { fp } from '../../ui/PeriodoTarjeta';
+import { DetalleProyectoV2 } from './DetalleProyectoV2';
+import { fp } from '../../ui/periodos';
 import { Icono } from '../iconos';
 import { Boton, CampoTexto, Casilla, Chip, Selector } from '../kit/controles';
 import { Hoja } from '../kit/hoja';
@@ -102,7 +102,7 @@ export function FondoItemV2({ id, hoy }: { id: string; hoy: string }) {
               {([['Fechas', `${fp(com.inicio)} – ${fp(com.fin)} · ${com.ventana}`], ['Momento wow', com.wow], ['Reusa', com.reusa]] as [string, string | null][]).filter(([, v]) => v).map(([k, v]) => <div key={k} className="pt-ficha-fila"><dt className="t-rotulo">{k}</dt><dd><p className="t-cuerpo">{v}</p></dd></div>)}
             </dl>
           </FilaHoja>}
-          {principal && V122.detalle[id] && <FilaHoja icono="documento" titulo="Detalle del proyecto" tituloHoja={principal.nombre}><div className="pl-detalle-v1"><DetalleProyecto id={id} /></div></FilaHoja>}
+          {principal && V122.detalle[id] && <FilaHoja icono="documento" titulo="Detalle del proyecto" tituloHoja={principal.nombre}><DetalleProyectoV2 id={id} /></FilaHoja>}
           {tools.map(({ h, v }) => <Fila key={h.id + v.id} icono="paquete" titulo={`${h.nombre} ${v.id}`} nota={v.linea} href="#/metas/open-source" />)}
         </div>
       </Grupo>

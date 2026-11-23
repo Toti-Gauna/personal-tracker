@@ -9,7 +9,7 @@ import { PLAN_EXT } from '../../data/plan-extendido';
 import { comercial, secundaria } from '../../data/v12-2';
 import { agregarPost, setIman } from '../../state/fondo';
 import { useStore } from '../../state/store';
-import { fp } from '../../ui/PeriodoTarjeta';
+import { fp } from '../../ui/periodos';
 import { Boton, CampoTexto, Casilla } from '../kit/controles';
 import { Vacio } from '../kit/superficies';
 import { Grupo, Marco } from '../marco/Marco';

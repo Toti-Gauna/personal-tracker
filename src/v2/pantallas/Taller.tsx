@@ -14,9 +14,9 @@ export default function Taller({ ruta, today }: PropsV2) {
   const kit = pag === 'kit';
   if (sub) return <main className="v2 v2-pantalla lenguaje"><Movimiento sub={sub} /></main>;
   return (
-    <Marco className="lenguaje" rotulo="Trazo 2.0 · taller" volver={{ href: '#/ajustes', nombre: 'Ajustes' }}
+    <Marco className="lenguaje" rotulo="Trazo · taller" volver={{ href: '#/ajustes', nombre: 'Ajustes' }}
       titulo={{ kit: 'Controles', piezas: 'Piezas', movimiento: 'Movimiento', lenguaje: 'Instrumento' }[pag]}
-      intro={{ kit: 'Cada control de la 2.0, vivo.', piezas: 'Avisos, hojas, avance y carga, vivos.', movimiento: 'El movimiento explica de dónde venís.', lenguaje: 'Las reglas visuales de la 2.0, en vivo.' }[pag]}>
+      intro={{ kit: 'Cada control, vivo.', piezas: 'Avisos, hojas, avance y carga, vivos.', movimiento: 'El movimiento explica de dónde venís.', lenguaje: 'Las reglas visuales de la 2.0, en vivo.' }[pag]}>
       <nav className="kt-pestanas" aria-label="Taller">
         <a href="#/v2" data-transicion="fundido" aria-current={pag === 'lenguaje' ? 'page' : undefined}>Lenguaje</a>
         <a href="#/v2/kit" data-transicion="fundido" aria-current={kit ? 'page' : undefined}>Controles</a>

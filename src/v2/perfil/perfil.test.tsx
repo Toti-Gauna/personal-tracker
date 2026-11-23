@@ -21,7 +21,7 @@ import { CONTORNO, FORMA_DE_GRUPO } from './formas';
 
 const HOY = '2026-11-23';
 const dia = () => getState().days[HOY];
-const global = <GlobalV2 activa="perfil" pantalla="perfil" pendientes={0} conBarra={false} conCheckins={false} />;
+const global = <GlobalV2 activa="perfil" pendientes={0} conBarra={false} conMini={false} />;
 const props = (hash: string) => ({ ruta: leerRuta(hash), day: dia(), today: HOY });
 const dialogo = () => { const d = screen.getAllByRole('dialog'); return d[d.length - 1]; };
 

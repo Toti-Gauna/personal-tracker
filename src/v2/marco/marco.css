@@ -1,8 +1,5 @@
 /* Trazo 2.0 · el marco (tanda 1.7): navegación, cabecera de pantalla, carga y lo que la 2.0 corrige desde afuera. */
 
-/* La barra flota: el aire de abajo de cada pantalla crece para que nada quede tapado. */
-html[data-ui='v2'] { --bar-h: 78px; }
-
 /* ——— Navegación: barra de vidrio (teléfono) ——— */
 .b2 { position: fixed; z-index: var(--z-barra); left: 12px; right: 12px; bottom: calc(env(safe-area-inset-bottom, 0px) + 10px); max-width: 520px; margin: 0 auto; border-radius: 26px;
   background: color-mix(in oklab, var(--capa-2) 78%, transparent); -webkit-backdrop-filter: blur(20px) saturate(1.5); backdrop-filter: blur(20px) saturate(1.5);
@@ -96,12 +93,6 @@ html[data-ui='v2'] { --bar-h: 78px; }
   .sp2-linea i { animation-duration: 280ms; }
 }
 
-/* ——— Lo que la 2.0 corrige desde afuera en pantallas que todavía son 1.0 ——— */
-/* Perfil: el ícono de Ajustes parecía el sol del tema. En la 2.0 lo reemplaza el botón con engranaje y nombre de la marca. */
-html[data-ui='v2'] .btn-engranaje { display: none; }
-/* La navegación de la 1.0 no se muestra con la 2.0 (la reemplaza .b2). */
-html[data-ui='v2'] .app > .barra, html[data-ui='v2'] .app > .lateral { display: none; }
-
 /* ——— Buen día ——— */
 .bd { min-height: 100dvh; display: flex; flex-direction: column; padding-bottom: 0; }
 .bd-cabeza { display: grid; gap: var(--sp-2); padding-top: var(--sp-6); margin-bottom: var(--sp-5); }
@@ -127,6 +118,52 @@ html[data-ui='v2'] .app > .barra, html[data-ui='v2'] .app > .lateral { display: 
 .bd-manana li:first-child { border-top: 0; }
 .bd-manana .t-dato { color: var(--texto-2); font-size: var(--t-13); }
 
-/* Ajustes 2.0 */
+/* Ajustes */
 .aj2-tema { margin-top: var(--sp-6); }
-.m-marco .v2-marca { font: 500 var(--t-11)/1 var(--font-mono); letter-spacing: 0.08em; padding: 3px 6px; border: 1px solid var(--raya-fuerte); border-radius: 999px; color: var(--texto-2); }
+
+/* ——— El foco que corre: una tarjeta sobre la barra (teléfono) o al pie de la barra lateral ——— */
+.mf { position: fixed; z-index: calc(var(--z-barra) - 1); left: 12px; right: 12px; bottom: calc(var(--bar-h) + var(--safe-b) + 10px); max-width: 520px; margin: 0 auto; display: flex; align-items: stretch; overflow: hidden;
+  border-radius: var(--r-m); box-shadow: var(--brillo), inset 0 0 0 1px var(--raya-fuerte), var(--sombra-2); }
+.mf::before { content: ''; flex: none; width: 4px; background: var(--area); }
+.mf-ir { flex: 1; min-width: 0; display: flex; align-items: center; gap: var(--sp-3); padding: var(--sp-3) var(--sp-3) var(--sp-3) var(--sp-4); text-align: left; color: var(--texto); }
+.mf-texto { min-width: 0; flex: 1; display: grid; gap: 1px; }
+.mf .mf-estado { display: flex; align-items: center; gap: 6px; color: var(--area); }
+.mf-estado i { width: 7px; height: 7px; border-radius: 50%; background: currentColor; animation: mf-late 1.6s ease-in-out infinite; }
+.mf.en-pausa .mf-estado { color: var(--texto-2); }
+.mf.en-pausa .mf-estado i { animation: none; }
+.mf-nombre { font: 600 var(--t-15)/1.25 var(--font-text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.mf-detalle { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.mf-tiempo { flex: none; font-size: var(--t-24); line-height: 1; letter-spacing: -0.02em; }
+.mf-pausa { flex: none; width: 56px; display: grid; place-items: center; color: var(--texto); box-shadow: inset 1px 0 0 var(--raya); }
+.mf-pausa:active { background: var(--capa-2); }
+.mf-barra { position: absolute; left: 4px; right: 0; bottom: 0; height: 3px; background: var(--raya); }
+.mf-barra span { display: block; height: 100%; background: var(--area); }
+@keyframes mf-late { 50% { opacity: 0.25; } }
+/* Con la tarjeta del foco a la vista, el contenido termina antes y nunca queda tapado. */
+.app.con-mini .v2-pantalla { padding-bottom: calc(var(--bar-h) + var(--safe-b) + var(--sp-8) + 96px); }
+.mf-lateral { position: relative; display: grid; gap: 2px; padding: var(--sp-2) var(--sp-1); border-radius: var(--r-m); box-shadow: inset 0 0 0 1px var(--raya); color: var(--texto); text-decoration: none; text-align: center; overflow: hidden; }
+.mf-lateral b, .mf-lateral small { display: none; }
+.mf-lateral-tiempo { font-size: var(--t-15); }
+.mf-lateral i { position: absolute; left: 0; bottom: 0; height: 2px; background: var(--area); }
+@media (min-width: 720px) {
+  .mf { display: none; }
+  .app.con-mini .v2-pantalla { padding-bottom: var(--sp-8); }
+}
+@media (min-width: 1100px) {
+  .mf-lateral { text-align: left; padding: var(--sp-3) var(--sp-4); gap: 4px; }
+  .mf-lateral b, .mf-lateral small { display: block; }
+  .mf-lateral b { font: 600 var(--t-15)/1.25 var(--font-text); }
+  .mf-lateral-tiempo { font-size: var(--t-32); }
+}
+@media (prefers-reduced-motion: reduce) { .mf-estado i { animation: none; } }
+
+/* ——— La primera vez ——— */
+.in { min-height: 100dvh; display: flex; flex-direction: column; justify-content: center; gap: var(--sp-7); padding-bottom: calc(var(--sp-8) + env(safe-area-inset-bottom, 0px)); }
+.in-cabeza { display: grid; gap: var(--sp-3); justify-items: start; }
+.in-cabeza .icono { color: var(--texto); }
+.in-sub { color: var(--texto-2); }
+.in-form { display: grid; gap: var(--sp-4); }
+.in-instalar { display: flex; justify-content: center; }
+.in-pasos { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--sp-3); }
+.in-pasos li { display: grid; grid-template-columns: 32px 1fr; gap: var(--sp-3); align-items: baseline; }
+.in-pasos .t-dato { color: var(--texto-2); }

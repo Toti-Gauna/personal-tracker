@@ -16,7 +16,7 @@ import { Metro } from './Metro';
 const HOY = '2026-11-23';
 const estudio = () => getState().study;
 const dia = () => getState().days[HOY];
-const global = <GlobalV2 activa="estudio" pantalla="estudio" pendientes={0} conBarra={false} conCheckins={false} />;
+const global = <GlobalV2 activa="estudio" pendientes={0} conBarra={false} conMini={false} />;
 const pantalla = (hash: string) => { const ruta = leerRuta(hash); return { ruta, day: dia(), today: HOY }; };
 const abrir = (hash: string) => render(<><EstudioV2 {...pantalla(hash)} />{global}</>);
 const dialogo = () => { const d = screen.getAllByRole('dialog'); return d[d.length - 1]; };

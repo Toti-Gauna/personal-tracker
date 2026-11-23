@@ -28,7 +28,7 @@ import { devolverPeriodo, instantanea, rangoCorto, titular } from './datos';
 
 const HOY = '2026-11-23'; // lunes: la semana 1 del plan (PetrIA corre del 21 nov al 9 dic)
 const LUNES = lunesDe(HOY);
-const global = <GlobalV2 activa="metas" pantalla="metas" pendientes={0} conBarra={false} conCheckins={false} />;
+const global = <GlobalV2 activa="metas" pendientes={0} conBarra={false} conMini={false} />;
 const props = (hash: string): PropsV2 => ({ ruta: leerRuta(hash), day: getState().days[HOY], today: HOY });
 const dialogo = () => { const d = screen.getAllByRole('dialog'); return d[d.length - 1]; };
 const abrir = (Pantalla: ComponentType<PropsV2>, hash: string) => render(<>{<Pantalla {...props(hash)} />}{global}</>);

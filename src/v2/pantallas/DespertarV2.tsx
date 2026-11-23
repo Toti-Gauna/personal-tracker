@@ -5,10 +5,9 @@
 import { useMemo, useState } from 'react';
 import { dayNumber } from '../../data/derive';
 import { tituloDeBloque } from '../../data/etiquetas';
-import { DAY_ROUTINES, TARDE, isMeta, planRoutine, routineFor, wakeDe, wakeRange } from '../../data/routines';
+import { DAY_ROUTINES, TARDE, defaultChoice, isMeta, planRoutine, routineFor, wakeDe, wakeRange } from '../../data/routines';
 import { fmtDur, fmtFecha, nowMin, toHHMM } from '../../data/time';
 import type { RoutineId } from '../../data/types';
-import { defaultChoice } from '../../screens/Despertar';
 import { inicioTrabajo, planSettings, startDay, useStore } from '../../state/store';
 import { Icono } from '../iconos';
 import { Boton } from '../kit/controles';

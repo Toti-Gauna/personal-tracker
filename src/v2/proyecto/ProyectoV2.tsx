@@ -14,7 +14,7 @@ import { PLAN_EXT } from '../../data/plan-extendido';
 import { V122 } from '../../data/v12-2';
 import { tildarSalida } from '../../state/plan';
 import { useStore } from '../../state/store';
-import { hrefPeriodo, fp } from '../../ui/PeriodoTarjeta';
+import { hrefPeriodo, fp } from '../../ui/periodos';
 import { usePeriodos } from '../../ui/usePeriodos';
 import { Boton, Segmentado } from '../kit/controles';
 import { Dato, Estado, Fila, Tarjeta, Vacio } from '../kit/superficies';

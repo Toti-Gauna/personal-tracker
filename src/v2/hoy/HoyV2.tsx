@@ -10,7 +10,7 @@ import { fmtPct, mejoraDia } from '../../data/mejora';
 import { addDays, fmtFecha, nowMin } from '../../data/time';
 import type { Block } from '../../data/types';
 import { useStore } from '../../state/store';
-import { HojaClip } from '../../ui/HojaClip';
+import { HojaFila } from '../clipping/HojaFila';
 import { useNow } from '../../ui/useNow';
 import { Icono } from '../iconos';
 import { Boton } from '../kit/controles';
@@ -43,6 +43,9 @@ export default function HoyV2({ day }: PropsV2) {
   const [abierta, setAbierta] = useState<string | null>(null);
   const [hoja, setHoja] = useState<'meta' | 'avisos' | 'mas' | null>(null);
   const [clips, setClips] = useState(false);
+  // Una clave nueva en cada apertura: el formulario de los clips empieza de cero.
+  const [claveClips, setClaveClips] = useState(0);
+  const abrirClips = () => { setClaveClips((k) => k + 1); setClips(true); };
 
   const t0 = settings.startDate;
   const titulo = (b: Block) => sinPuntoSuelto(tituloDeBloque(b, day.date, t0));
@@ -90,7 +93,7 @@ export default function HoyV2({ day }: PropsV2) {
         <div className="hy-col-c">
           <PlanHoy p={p} bimestre={`${bim.name} · semana ${bim.week} de ${bim.weeks}`} />
           <Habitos day={day} onAbrir={setAbierta} />
-          <Semana date={day.date} onClips={() => setClips(true)} />
+          <Semana date={day.date} onClips={abrirClips} />
           <a className={`capa-1 s-tocable hy-cierre${day.closed ? ' cerrado' : ''}`} href="#/cierre">
             <span className="s-fila-icono"><Icono nombre="luna" lado={20} /></span>
             <span className="s-fila-texto"><b>{day.closed ? 'Día cerrado' : 'Cerrar el día'}</b><small>{day.closed ? `${day.closed.at} · +${day.closed.xp} XP` : 'Mejora, pendientes y el JSON'}</small></span>
@@ -99,7 +102,7 @@ export default function HoyV2({ day }: PropsV2) {
         </div>
       </div>
 
-      <HojaBloque day={day} clave={abierta} now={now} titulo={titulo} etiqueta={etiqueta} color={color} destino={destino} onCerrar={() => setAbierta(null)} onClips={() => setClips(true)} />
+      <HojaBloque day={day} clave={abierta} now={now} titulo={titulo} etiqueta={etiqueta} color={color} destino={destino} onCerrar={() => setAbierta(null)} onClips={abrirClips} />
       <HojaMeta date={day.date} abierta={hoja === 'meta'} onCerrar={() => setHoja(null)} />
       <HojaAvisos avisos={p.avisos} abierta={hoja === 'avisos'} onCerrar={() => setHoja(null)} />
       <Hoja abierta={hoja === 'mas'} onCerrar={() => setHoja(null)} titulo="Hoy">
@@ -111,7 +114,7 @@ export default function HoyV2({ day }: PropsV2) {
           <Fila icono="importar" titulo="Importar" nota="Lo que te devuelve Claude" href="#/importar" />
         </div>
       </Hoja>
-      {clips && <HojaClip date={day.date} onCerrar={() => setClips(false)} />}
+      <HojaFila abierta={clips} onCerrar={() => setClips(false)} hoy={day.date} clave={claveClips} />
     </Marco>
   );
 }
