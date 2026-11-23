@@ -1,6 +1,6 @@
 /**
- * Trazo 2.0 · el sello: una pieza acuñada con la silueta de su grupo (moneda, hexágono, escudo o rosetón), canto biselado, cara con
- * el color de su área, la marca grabada y un brillo que la cruza. Bloqueado es la silueta vacía, con un anillo que se llena a
+ * Trazo 2.0 · el sello: una pieza acuñada con la silueta de su grupo (moneda, hexágono, escudo o rosetón). El canto es metal del color
+ * de su área; la cara, esmalte profundo de ese mismo color con rayos grabados; la marca, metal claro en relieve; y un brillo que la cruza. Bloqueado es la silueta vacía, con un anillo que se llena a
  * medida que te acercás. La versión grande (`SelloInclinable`) sigue al dedo o al mouse como una pieza que se inclina en la mano.
  * Es un dibujo: el nombre lo dice quien lo usa.
  */
@@ -25,6 +25,14 @@ export interface PropsSello {
   className?: string;
 }
 
+const r2 = (n: number) => Math.round(n * 100) / 100;
+/** Los rayos grabados en el esmalte: veinte cuñas que salen del centro, una sí y una no. */
+const RAYOS = Array.from({ length: 20 }, (_, k) => {
+  const a = ((k * 18 - 90) * Math.PI) / 180;
+  const b = ((k * 18 - 81) * Math.PI) / 180;
+  return `M40 40L${r2(40 + 48 * Math.cos(a))} ${r2(40 + 48 * Math.sin(a))}L${r2(40 + 48 * Math.cos(b))} ${r2(40 + 48 * Math.sin(b))}Z`;
+}).join('');
+
 export function SelloV2({ marca, color, grupo = 'constancia', ganado, lado = 72, nombre, i = 0, progreso, className }: PropsSello) {
   const id = useId();
   const forma: Forma = FORMA_DE_GRUPO[grupo];
@@ -40,22 +48,31 @@ export function SelloV2({ marca, color, grupo = 'constancia', ganado, lado = 72,
       {ganado ? (
         <>
           <defs>
-            <linearGradient id={`${id}r`} x1="0.1" y1="0" x2="0.9" y2="1"><stop offset="0" className="sl-r0" /><stop offset="0.5" className="sl-r1" /><stop offset="1" className="sl-r2" /></linearGradient>
-            <radialGradient id={`${id}m`} cx="32%" cy="24%" r="85%"><stop offset="0" className="sl-g0" /><stop offset="0.5" className="sl-g1" /><stop offset="1" className="sl-g2" /></radialGradient>
+            {/* El canto: metal con bandas de luz y sombra, como se ve una pieza acuñada. */}
+            <linearGradient id={`${id}r`} x1="0.08" y1="0" x2="0.92" y2="1"><stop offset="0" className="sl-m0" /><stop offset="0.28" className="sl-m1" /><stop offset="0.5" className="sl-m2" /><stop offset="0.66" className="sl-m0" /><stop offset="1" className="sl-m2" /></linearGradient>
+            {/* La cara: esmalte profundo del color del área, más claro arriba. */}
+            <linearGradient id={`${id}e`} x1="0" y1="0" x2="0" y2="1"><stop offset="0" className="sl-e0" /><stop offset="1" className="sl-e1" /></linearGradient>
+            <radialGradient id={`${id}v`} cx="50%" cy="40%" r="58%"><stop offset="0" className="sl-v0" /><stop offset="1" className="sl-v1" /></radialGradient>
+            {/* La marca: metal claro, en relieve. */}
+            <linearGradient id={`${id}t`} x1="0" y1="0" x2="0" y2="1"><stop offset="0" className="sl-t0" /><stop offset="0.6" className="sl-t1" /><stop offset="1" className="sl-t2" /></linearGradient>
             <linearGradient id={`${id}b`} x1="0" y1="0" x2="1" y2="0"><stop offset="0" stopColor="white" stopOpacity="0" /><stop offset="0.5" stopColor="white" stopOpacity="0.9" /><stop offset="1" stopColor="white" stopOpacity="0" /></linearGradient>
-            <linearGradient id={`${id}h`} x1="0" y1="0" x2="0.6" y2="1"><stop offset="0" stopColor="white" stopOpacity="0.5" /><stop offset="1" stopColor="white" stopOpacity="0" /></linearGradient>
+            <linearGradient id={`${id}h`} x1="0" y1="0" x2="0.6" y2="1"><stop offset="0" stopColor="white" stopOpacity="0.42" /><stop offset="1" stopColor="white" stopOpacity="0" /></linearGradient>
             <clipPath id={`${id}c`}><path d={contorno} /></clipPath>
           </defs>
           <path className="sl-canto" d={contorno} fill={`url(#${id}r)`} />
           {forma === 'moneda' && <circle className="sl-estrias" cx="40" cy="40" r="35.4" />}
           <g transform={cara}>
-            <path className="sl-cara" d={contorno} fill={`url(#${id}m)`} />
-            <path className="sl-aro" d={contorno} transform="translate(40 40) scale(0.88) translate(-40 -40)" />
+            <path className="sl-cara" d={contorno} fill={`url(#${id}e)`} />
+            <g clipPath={`url(#${id}c)`}>
+              <path className="sl-rayos" d={RAYOS} />
+              <circle cx="40" cy="40" r="44" fill={`url(#${id}v)`} />
+            </g>
+            <path className="sl-aro" d={contorno} transform="translate(40 40) scale(0.9) translate(-40 -40)" />
           </g>
-          <text className="sl-marca sl-marca-luz" x="40.7" y="42" textAnchor="middle" dominantBaseline="central" fontSize={largo}>{marca}</text>
-          <text className="sl-marca" x="40" y="41" textAnchor="middle" dominantBaseline="central" fontSize={largo}>{marca}</text>
+          <text className="sl-marca sl-marca-sombra" x="40.6" y="42.3" textAnchor="middle" dominantBaseline="central" fontSize={largo}>{marca}</text>
+          <text className="sl-marca" x="40" y="41" textAnchor="middle" dominantBaseline="central" fontSize={largo} style={{ fill: `url(#${id}t)` }}>{marca}</text>
           <g clipPath={`url(#${id}c)`}>
-            <ellipse className="sl-reflejo" cx="29" cy="21" rx="22" ry="11" transform="rotate(-28 29 21)" fill={`url(#${id}h)`} />
+            <ellipse className="sl-reflejo" cx="27" cy="19" rx="24" ry="10" transform="rotate(-28 27 19)" fill={`url(#${id}h)`} />
             <rect className="sl-brillo" x="-34" y="-10" width="26" height="100" fill={`url(#${id}b)`} />
           </g>
         </>

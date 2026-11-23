@@ -517,12 +517,14 @@ screen and the new-seal screen are `parte: true` in the registry (they belong to
 untouched. The word stays **Sellos** (it is what the history text and the 24 definitions say); what changes is how they look.
 
 **The seal** (`Sello.tsx`, `formas.ts`): a minted piece with the **silhouette of its group**, so the wall reads before the names do:
-Constancia = coin (milled edge), Cuerpo = hexagon (a weight plate), Estudio = shield, Trabajo = rosette (a wax stamp). Layers: bevelled
-rim (light top-left, dark bottom-right), a face with the area color as a radial gradient, a dotted inner ring, the mark engraved
-(a light copy offset under a dark one), a soft gloss and a **sheen** that crosses it once on appearing (staggered across a row) and
-again on hover or focus. **Locked** is the empty silhouette with a **progress ring drawn along its outline** (the seal's own
+Constancia = coin (milled edge), Cuerpo = hexagon (a weight plate), Estudio = shield, Trabajo = rosette (a wax stamp). Material:
+a **metal rim** in the area color (bands of light and shadow), a **deep enamel face** of that same color (dark, lighter on top,
+with a sunburst of engraved rays and a soft glow in the middle), a hairline inner ring, and the **mark in bright metal, embossed**
+(a dark copy offset under it). The first version filled the face with a pastel radial gradient and read as a plastic button;
+the color now lives in the rim, the glow and the mark, not in a flat fill. A soft gloss and a **sheen** cross it once on appearing
+(staggered across a row) and again on hover or focus. **Locked** is the empty silhouette with a **progress ring drawn along its outline** (the seal's own
 `progress()` rule: 18 of 30 days = 60 % of the ring), so the wall tells you how close each one is; seals with no measurable rule
-(manual or one-off) show no ring. In the light theme the metal is deeper and the mark darker so the contrast holds. It is a drawing:
+(manual or one-off) show no ring. In the light theme the enamel is the area color itself (those are dark there), the rim is lighter and the mark almost white. It is a drawing:
 the name is given by whoever uses it; the wall buttons say "100 días: bloqueado, 36 %".
 **Big seal** (`SelloInclinable`): follows the mouse, or a sideways drag, tilting up to 17° in 3D with the sheen moving with the light;
 it settles back on release. Off with reduced motion. Used in the detail sheet and in the new-seal screen.

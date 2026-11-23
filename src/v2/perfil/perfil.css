@@ -1,27 +1,32 @@
 /* ——— Perfil, Avance, Cierre y la presentación (tanda 3.2) ——— */
 
-/* El sello: una pieza acuñada con la silueta de su grupo y el color de su área. */
-.sl { --sl-tinta: color-mix(in oklab, var(--sl-c) 24%, black); --sl-luz: color-mix(in oklab, var(--sl-c) 48%, white); --sl-sombra: color-mix(in oklab, var(--sl-c) 56%, black); --sl-canto-claro: color-mix(in oklab, var(--sl-c) 30%, white); --sl-canto-oscuro: color-mix(in oklab, var(--sl-c) 40%, black); display: block; flex: none; overflow: visible; filter: drop-shadow(0 2px 3px color-mix(in oklab, black 38%, transparent)); }
-html[data-ui='v2'][data-theme='light'] .sl { --sl-tinta: color-mix(in oklab, var(--sl-c) 12%, black); --sl-luz: color-mix(in oklab, var(--sl-c) 52%, white); --sl-sombra: color-mix(in oklab, var(--sl-c) 70%, black); filter: drop-shadow(0 2px 3px color-mix(in oklab, black 22%, transparent)); }
+/* El sello: una pieza acuñada con la silueta de su grupo. Canto de metal, cara de esmalte profundo y marca de metal claro. */
+.sl { --sl-metal-luz: color-mix(in oklab, var(--sl-c) 42%, white); --sl-metal: var(--sl-c); --sl-metal-sombra: color-mix(in oklab, var(--sl-c) 46%, black); --sl-esmalte-0: color-mix(in oklab, var(--sl-c) 40%, black); --sl-esmalte-1: color-mix(in oklab, var(--sl-c) 15%, black); --sl-marca-0: color-mix(in oklab, var(--sl-c) 14%, white); --sl-marca-1: color-mix(in oklab, var(--sl-c) 58%, white); --sl-marca-2: var(--sl-c); display: block; flex: none; overflow: visible; filter: drop-shadow(0 2px 3px color-mix(in oklab, black 42%, transparent)); }
+/* En claro los colores de área son oscuros: el esmalte es ese color, el metal va más claro y la marca casi blanca. */
+html[data-ui='v2'][data-theme='light'] .sl { --sl-metal-luz: color-mix(in oklab, var(--sl-c) 22%, white); --sl-metal: color-mix(in oklab, var(--sl-c) 62%, white); --sl-metal-sombra: color-mix(in oklab, var(--sl-c) 86%, black); --sl-esmalte-0: color-mix(in oklab, var(--sl-c) 88%, white); --sl-esmalte-1: color-mix(in oklab, var(--sl-c) 60%, black); --sl-marca-0: white; --sl-marca-1: color-mix(in oklab, var(--sl-c) 10%, white); --sl-marca-2: color-mix(in oklab, var(--sl-c) 30%, white); filter: drop-shadow(0 2px 3px color-mix(in oklab, black 24%, transparent)); }
 .sl-bloqueado { filter: none; }
-.sl-r0 { stop-color: var(--sl-canto-claro); }
-.sl-r1 { stop-color: color-mix(in oklab, var(--sl-c) 70%, var(--sl-canto-oscuro)); }
-.sl-r2 { stop-color: var(--sl-canto-oscuro); }
-.sl-g0 { stop-color: var(--sl-luz); }
-.sl-g1 { stop-color: var(--sl-c); }
-.sl-g2 { stop-color: var(--sl-sombra); }
-.sl-canto { stroke: var(--sl-canto-oscuro); stroke-width: 0.8; stroke-linejoin: round; }
-.sl-estrias { fill: none; stroke: var(--sl-canto-oscuro); stroke-width: 2.4; stroke-dasharray: 1 1.55; opacity: 0.55; }
-.sl-cara { stroke: color-mix(in oklab, var(--sl-canto-oscuro) 80%, transparent); stroke-width: 1; stroke-linejoin: round; }
-.sl-aro { fill: none; stroke: var(--sl-tinta); stroke-width: 1.1; stroke-dasharray: 1.4 3; stroke-linecap: round; opacity: 0.5; }
+.sl-m0 { stop-color: var(--sl-metal-luz); }
+.sl-m1 { stop-color: var(--sl-metal); }
+.sl-m2 { stop-color: var(--sl-metal-sombra); }
+.sl-e0 { stop-color: var(--sl-esmalte-0); }
+.sl-e1 { stop-color: var(--sl-esmalte-1); }
+.sl-v0 { stop-color: var(--sl-metal); stop-opacity: 0.34; }
+.sl-v1 { stop-color: var(--sl-metal); stop-opacity: 0; }
+.sl-t0 { stop-color: var(--sl-marca-0); }
+.sl-t1 { stop-color: var(--sl-marca-1); }
+.sl-t2 { stop-color: var(--sl-marca-2); }
+.sl-canto { stroke: color-mix(in oklab, var(--sl-metal-sombra) 70%, black); stroke-width: 0.7; stroke-linejoin: round; }
+.sl-estrias { fill: none; stroke: color-mix(in oklab, var(--sl-metal-sombra) 80%, black); stroke-width: 2.4; stroke-dasharray: 0.9 1.6; opacity: 0.5; }
+.sl-cara { stroke: color-mix(in oklab, var(--sl-esmalte-1) 70%, black); stroke-width: 1.4; stroke-linejoin: round; }
+.sl-rayos { fill: var(--sl-metal); opacity: 0.1; }
+.sl-aro { fill: none; stroke: var(--sl-metal-luz); stroke-width: 0.7; stroke-linejoin: round; opacity: 0.5; }
 .sl-marca { font-family: var(--font-title); font-weight: 900; font-stretch: 110%; letter-spacing: -0.02em; fill: var(--texto-3); }
-.sl-ganado .sl-marca { fill: var(--sl-tinta); }
-.sl-ganado .sl-marca-luz { fill: color-mix(in oklab, var(--sl-luz) 80%, white); opacity: 0.7; }
+.sl-ganado .sl-marca-sombra { fill: black; opacity: 0.55; }
 .sl-hueco { fill: color-mix(in oklab, var(--texto) 4%, transparent); stroke: var(--raya-fuerte); stroke-width: 1.6; stroke-dasharray: 3 4; stroke-linejoin: round; }
 .sl-pista { fill: none; stroke: var(--raya-fuerte); stroke-width: 3.4; stroke-linejoin: round; opacity: 0.5; }
 .sl-avance { fill: none; stroke: var(--sl-c); stroke-width: 3.6; stroke-linecap: round; stroke-linejoin: round; animation: sl-traza 900ms var(--curva-salida) calc(240ms + var(--i, 0) * 60ms) backwards; }
 .sl-bloqueado .sl-marca { opacity: 0.8; }
-.sl-reflejo { opacity: 0.55; }
+.sl-reflejo { opacity: 0.5; }
 .sl-brillo { opacity: 0.55; transform-origin: 40px 40px; transform: rotate(20deg) translateX(0); animation: sl-brilla 1100ms var(--curva-salida) calc(360ms + var(--i, 0) * 90ms) both; }
 .sl-grande .sl-brillo { animation: sl-brilla-lento 3.6s ease-in-out 700ms infinite both; }
 .sl-cae { animation: sl-cae 640ms var(--curva-ida-vuelta) both; transform-origin: center; }
