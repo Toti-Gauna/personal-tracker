@@ -607,6 +607,17 @@ Immersive screens that do not use the frame carry `main.v2.v2-completa` and brin
 **Fixes to shared code found by the sweep**: the time field lost a digit when typed with focus ("16" → "01"); the dashed goal line
 of `Barras` ignored its position and its bars were keyed by label (repeated month letters); `Barras` is now marked as a chart.
 
+**Measured** (`npm run v2:revision`, 114 screens × 2 themes): no failures. Every screen of the frame is inside the budget (title ≤ 3
+words, ≤ 60 words above the fold, ≤ 4 screens tall), none overflows sideways, none throws, and none shows the "1.0" mark. The tallest
+is the mock exam (3.7 screens, a printable sheet); the densest sit at 59–60 words (job search, impact, the book and roadmap pages).
+`SOLO=id,id npm run v2:revision` re-checks single screens. `extras.test.tsx` walks ~120 routes of the app and asserts each one
+resolves to a 2.0 screen.
+
+Demo: `docs/demo/ux-2.0/barrido-ajustes.png` (plan and routine, day routines, focus, pomodoros, backup, sounds, training week, focus
+picker), `barrido-estudio.png` (study session, re-test, languages, programming, a book, the math roadmap, a chapter, the mock exam),
+`barrido-metas.png` (week, month, two-month period, year, branch map, the 4 stages, evolution, the whole plan) and
+`barrido-trabajo.png` (job search, English, Handyx on stand-by, the 14-day sprint, impact, weekly review, clipping and its metrics).
+
 ## 22. Empty states, illustrations and copy (batch 3.4)
 
 **Illustrations** (`ILUSTRACIONES` in `iconos.tsx`, all on the workshop page): 19, one per subject, so an empty state shows *what* is
@@ -624,4 +635,10 @@ instead of four empty charts. A screen with nothing due says so once ("Estás al
 "1 series". The weak-points analysis (`estudio/Analisis.tsx`) was the last page hosting 1.0 charts: now a strength map where the
 band is a shape (weak = inverted cell, strong = the yellow stroke) and every cell has its number, error types as bars with their
 advice, weekly recall as lines against the cap, and calibration as two bars per front.
+
+**Budget**: the final pass over all 114 screens left one over (clipping metrics, 62 words: an empty note sitting on the fold). It now
+reads 55 empty and 53 with data. Checked with seeded data too, not only day 0, since a filled screen says more than an empty one.
+
+Demo: `docs/demo/ux-2.0/ilustraciones.png` (the 19, dark and light), `vacios-dia-0.png` (day 0 of Avance, Perfil, Repasar, the
+analysis, Peso, the clipping registry, Tarjetas and Metas) and `puntos-analisis.png` (the weak-points analysis with data, both themes).
 
