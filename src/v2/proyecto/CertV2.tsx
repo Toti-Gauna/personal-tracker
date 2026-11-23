@@ -18,6 +18,7 @@ import { Numero } from '../movimiento/componentes';
 import { FilaHoja } from './piezas';
 import { Portada } from './Portada';
 import './proyecto.css';
+import { cuantos } from '../reglas';
 
 const INFO = (
   <>
@@ -35,7 +36,7 @@ export function CertV2({ id, hoy }: { id: string; hoy: string }) {
   if (!c) {
     return (
       <Marco titulo="Certificación" volver={{ href: '#/metas', nombre: 'Plan' }}>
-        <Vacio ilustracion="plan" titulo="No hay una certificación con ese nombre" accion={<Boton variante="primario" href="#/metas">Ir al plan</Boton>} />
+        <Vacio ilustracion="buscar" titulo="No hay una certificación con ese nombre" accion={<Boton variante="primario" href="#/metas">Ir al plan</Boton>} />
       </Marco>
     );
   }
@@ -74,7 +75,7 @@ export function CertV2({ id, hoy }: { id: string; hoy: string }) {
             <>
               <Anillo valor={avance} tamano={92} grosor={8} etiqueta={e.ultimo != null ? `${e.ultimo}` : '—'} sub="%" area="var(--a-ing)" nombre={e.ultimo != null ? `Mejor de los últimos dos simulacros: ${e.ultimo} %` : 'Sin simulacros'} />
               <div className="pt-listo-texto">
-                <p className="t-cuerpo-l">{e.ultimo == null ? 'Todavía sin simulacros.' : e.listo ? 'Llegaste al puntaje.' : `Faltan ${(e.meta as number) - e.ultimo} puntos.`}</p>
+                <p className="t-cuerpo-l">{e.ultimo == null ? 'Todavía sin simulacros.' : e.listo ? 'Llegaste al puntaje.' : (e.meta as number) - e.ultimo === 1 ? 'Falta 1 punto.' : `Faltan ${(e.meta as number) - e.ultimo} puntos.`}</p>
                 <p className="t-nota">La meta es {e.meta as number} % sostenido en dos simulacros.</p>
               </div>
             </>
@@ -109,7 +110,7 @@ export function CertV2({ id, hoy }: { id: string; hoy: string }) {
 
       <Grupo titulo="Preparación" extremo={<span className="t-rotulo">{c.horas} h</span>}>
         <div className="capa-1 s-lista">
-          <FilaHoja icono="calendario" titulo="El plan día por día" valor={`${c.plan.length} pasos`}>
+          <FilaHoja icono="calendario" titulo="El plan día por día" valor={cuantos(c.plan.length, 'paso', 'pasos')}>
             <ol className="capa-1 pt-revs">{c.plan.map((x) => <li key={x.fecha + x.texto} className={x.fecha === hoy ? 'hoy' : undefined}><span className="t-rotulo">{fp(x.fecha)}{x.fecha === hoy ? ' · hoy' : ''}</span><span className="t-cuerpo">{x.texto}</span></li>)}</ol>
           </FilaHoja>
           <FilaHoja icono="documento" titulo="Recursos" valor={`${c.recursos.length}`}>

@@ -95,7 +95,7 @@ export function TarjetasV2({ day, param }: { day: PropsV2['day']; param?: string
     return (
       <Marco className="es" titulo="Tarjetas" volver={{ href: volver, nombre: filtro ? 'Libro' : 'Repaso' }}>
         {segmentos}
-        <Vacio ilustracion="repaso" titulo={total ? (filtro ? 'Las repasaste todas' : 'Tarjetas de hoy, listas') : filtro ? 'No hay tarjetas acá' : 'No hay tarjetas para hoy'}
+        <Vacio ilustracion={total ? 'listo' : 'repaso'} titulo={total ? (filtro ? 'Las repasaste todas' : 'Tarjetas de hoy, listas') : filtro ? 'No hay tarjetas acá' : 'No hay tarjetas para hoy'}
           texto={total ? `Repasaste ${total} ${total === 1 ? 'tarjeta' : 'tarjetas'}. El motor ya las reprogramó.` : 'Se crean solas con el cold recall, la tesis y los errores de los tests.'}
           accion={<><Boton variante="primario" href={volver}>{filtro ? 'Volver' : 'Volver al repaso'}</Boton><Boton variante="secundario" icono="mas" href="#/tarjeta-nueva">Nueva tarjeta</Boton></>} />
       </Marco>

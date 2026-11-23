@@ -11,7 +11,7 @@ export function Barras({ barras, meta, nombre, alto = 96 }: { barras: Barra[]; m
   const max = Math.max(1, meta ?? 0, ...barras.map((b) => b.valor));
   return (
     <figure className="es-barras" style={{ ['--alto' as string]: `${alto}px` } as CSSProperties} role="img" aria-label={nombre}>
-      {meta != null && meta > 0 && <i className="es-meta" style={{ bottom: `calc(${(meta / max) * 100}% * var(--alto) / 100 + 22px)` }} aria-hidden="true" />}
+      {meta != null && meta > 0 && <i className="es-meta" style={{ bottom: `calc(var(--alto) * ${Math.round((meta / max) * 1000) / 1000} + 22px)` }} aria-hidden="true" />}
       {barras.map((b) => (
         <span key={b.etiqueta} className={`es-barra${b.hoy ? ' hoy' : ''}`}>
           <span className="es-barra-valor t-dato">{b.texto ?? (b.valor ? String(b.valor) : '—')}</span>

@@ -26,6 +26,7 @@ import { Cuerpo, enPalabras } from './Cuerpo';
 import { VISTA, musculosDe, type Carga } from './musculos';
 import '../proyecto/proyecto.css';
 import './entreno.css';
+import { cuantos } from '../reglas';
 
 const SALUD = 'var(--a-salud)';
 const seg = (ms: number) => Math.max(0, Math.ceil(ms / 1000));
@@ -185,7 +186,7 @@ export default function SesionV2() {
   if (!a || !r || !target) {
     return (
       <Marco className="en" titulo="Sesión" volver={{ href: '#/entreno', nombre: 'Entreno' }}>
-        <Vacio ilustracion="plan" titulo="No hay un entreno en curso" texto="Se empieza desde Entreno, con la rutina de hoy." accion={<Boton variante="primario" href="#/entreno">Ir a Entreno</Boton>} />
+        <Vacio ilustracion="entreno" titulo="No hay un entreno en curso" texto="Se empieza desde Entreno, con la rutina de hoy." accion={<Boton variante="primario" href="#/entreno">Ir a Entreno</Boton>} />
       </Marco>
     );
   }
@@ -261,7 +262,7 @@ export default function SesionV2() {
           <div className="en-ej-texto">
             <span className="t-rotulo">Ejercicio {a.idx + 1} de {a.order.length}</span>
             <h2 className="t-seccion">{e.name}</h2>
-            <p className="t-dato en-ej-meta">{[`${n} series`, `descanso ${restLabel(e.rest)}`, e.tempo ? `tempo ${e.tempo}` : ''].filter(Boolean).join(' · ')}</p>
+            <p className="t-dato en-ej-meta">{[cuantos(n, 'serie', 'series'), `descanso ${restLabel(e.rest)}`, e.tempo ? `tempo ${e.tempo}` : ''].filter(Boolean).join(' · ')}</p>
             <Boton tamano="s" variante="fantasma" icono="info" onClick={() => { setFichaDe(e); setFichaAbierta(true); }}>Cómo se hace</Boton>
           </div>
         </div>

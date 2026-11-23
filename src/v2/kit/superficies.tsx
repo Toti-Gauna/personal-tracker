@@ -166,14 +166,27 @@ export function ConCarga({ cargando, esqueleto, children, nombre }: { cargando: 
 
 // ——— Vacío ———
 
-/** Estado vacío: qué es esto + una acción. Nunca solo "Todavía no hay…" (regla 6). */
-export function Vacio({ ilustracion, titulo, texto, accion }: { ilustracion: NombreIlustracion; titulo: string; texto?: string; accion?: ReactNode }) {
+/**
+ * Estado vacío: qué es esto + una acción. Nunca solo "Todavía no hay…" (regla 6). `compacto`: en una sola fila (el dibujo chico a la
+ * izquierda), para un vacío dentro de una tarjeta o al lado de otros.
+ */
+export function Vacio({ ilustracion, titulo, texto, accion, compacto }: { ilustracion: NombreIlustracion; titulo: string; texto?: string; accion?: ReactNode; compacto?: boolean }) {
   return (
-    <div className="s-vacio">
+    <div className={cx('s-vacio', compacto && 'compacto')}>
       <Ilustracion nombre={ilustracion} />
-      <b className="t-encabezado">{titulo}</b>
-      {texto && <p className="t-nota">{texto}</p>}
-      {accion}
+      {compacto ? (
+        <div className="s-vacio-texto">
+          <b className="t-encabezado">{titulo}</b>
+          {texto && <p className="t-nota">{texto}</p>}
+          {accion}
+        </div>
+      ) : (
+        <>
+          <b className="t-encabezado">{titulo}</b>
+          {texto && <p className="t-nota">{texto}</p>}
+          {accion}
+        </>
+      )}
     </div>
   );
 }

@@ -20,7 +20,7 @@ import { Curva } from '../entreno/Curva';
 import { Barras } from '../estudio/Barras';
 import { colorV2 } from '../hoy/datos';
 import { Boton, Segmentado } from '../kit/controles';
-import { Barra, Dato } from '../kit/superficies';
+import { Barra, Dato, Vacio } from '../kit/superficies';
 import { Grupo, Marco } from '../marco/Marco';
 import type { PropsV2 } from '../registro';
 import { Mes } from './Calor';
@@ -112,7 +112,7 @@ function Vista({ day }: PropsV2) {
               const v = valueOf(g, date, ctx);
               return <Meta key={g.id} nombre={g.title} color={colorV2(AREAS[g.area].css)} valor={v} meta={g.target} texto={g.unit === 'kg' ? `${fmtKg(v)} kg` : g.unit === 'USD' ? `USD ${v}` : `${String(v).replace('.', ',')} de ${g.target}`} />;
             })}
-            {anio.length === 0 && !(clipMes >= 1 && clipMes <= 12) && <li className="t-nota">Las metas del año se cargan en Plan.</li>}
+            {anio.length === 0 && !(clipMes >= 1 && clipMes <= 12) && <li><Vacio compacto ilustracion="metas" titulo="Sin metas del año" texto="Se cargan en el Plan, en Año." accion={<Boton tamano="s" variante="secundario" icono="plan" href="#/metas/anio">Ir al Plan</Boton>} /></li>}
           </ul>
         </Grupo>
 
@@ -130,18 +130,18 @@ function Vista({ day }: PropsV2) {
         <Grupo titulo="Corridas" extremo={<span className="t-rotulo">{s.train.runs.length ? `${runWeek(s.train.runs, date).min} min esta semana` : 'Sin registros'}</span>}>
           {corridas.length ? (
             <div className="capa-1 pf-caja"><Barras alto={72} barras={corridas.map((x) => ({ etiqueta: dm(x.date).split(' ')[0], valor: x.min, hoy: x.date === date, texto: `${x.min}’` }))} nombre={`Minutos de las últimas ${corridas.length} corridas: ${corridas.map((x) => `${dm(x.date)} ${x.min}`).join(', ')}.`} /></div>
-          ) : <p className="t-nota">Las corridas se registran en Entreno.</p>}
+          ) : <div className="capa-1"><Vacio compacto ilustracion="correr" titulo="Todavía no corriste" texto="Cada corrida suma una barra acá." accion={<Boton tamano="s" variante="secundario" icono="entreno" href="#/entreno">Registrar en Entreno</Boton>} /></div>}
         </Grupo>
 
         <Grupo titulo="Peso" extremo={<span className="t-rotulo">Meta {fmtKg(s.train.goalKg)} kg</span>}>
           {ws.length ? (
             <div className="capa-1 pf-caja"><Curva puntos={ws.map((w) => ({ fecha: w.date, valor: w.kg, rotulo: dm(w.date) }))} meta={s.train.goalKg} fmt={fmtKg} nombre={`Curva de peso: ${ws.map((w) => `${dm(w.date)} ${fmtKg(w.kg)} kg`).join(', ')}. Meta: ${fmtKg(s.train.goalKg)} kg.`} /></div>
-          ) : <p className="t-nota">Los pesajes se cargan en Entreno, en Peso.</p>}
+          ) : <div className="capa-1"><Vacio compacto ilustracion="peso" titulo="Sin pesajes" texto="Con dos ya se dibuja la curva." accion={<Boton tamano="s" variante="secundario" icono="peso" href="#/entreno-peso">Cargar el de hoy</Boton>} /></div>}
         </Grupo>
       </div>
 
       <Grupo titulo="Sellos" extremo={<a className="pt-enlace t-nota" href="#/perfil">{ganados.length} de {SEALS.length}</a>}>
-        {ganados.length === 0 ? <p className="t-nota">Todavía no ganaste sellos. El primero llega al cerrar tu primer día.</p> : (
+        {ganados.length === 0 ? <div className="capa-1"><Vacio compacto ilustracion="sello" titulo="Todavía sin sellos" texto="El primero llega al cerrar tu primer día." accion={<Boton tamano="s" variante="secundario" icono="luna" href="#/cierre">Cerrar el día</Boton>} /></div> : (
           <ul className="pf-fila-sellos">
             {ganados.map((d, i) => <li key={d.id}><SelloDe def={d} ganado lado={56} nombre={d.name} i={i} /></li>)}
           </ul>

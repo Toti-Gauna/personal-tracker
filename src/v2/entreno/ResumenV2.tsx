@@ -26,7 +26,7 @@ export default function ResumenV2({ ruta }: PropsV2) {
   if (!s) {
     return (
       <Marco className="en" titulo="Resumen" volver={{ href: '#/entreno', nombre: 'Entreno' }}>
-        <Vacio ilustracion="datos" titulo="No encontré ese entreno" texto="Los resúmenes se abren al terminar una sesión." accion={<Boton variante="primario" href="#/entreno">Ir a Entreno</Boton>} />
+        <Vacio ilustracion="buscar" titulo="No encontré ese entreno" texto="Los resúmenes se abren al terminar una sesión." accion={<Boton variante="primario" href="#/entreno">Ir a Entreno</Boton>} />
       </Marco>
     );
   }

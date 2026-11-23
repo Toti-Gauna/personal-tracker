@@ -131,4 +131,14 @@ describe('2.0 · tarjeta, fila, carga, vacío y pista', () => {
     fireEvent.focus(screen.getByRole('button', { name: '1/52' }));
     expect(t).toHaveClass('ver');
   });
+
+  it('el vacío compacto va en una fila: el dibujo a un lado y el título, el texto y la acción juntos al otro', () => {
+    const { container } = render(<Vacio compacto ilustracion="peso" titulo="Sin pesajes" texto="Con dos ya se dibuja la curva." accion={<button>Cargar</button>} />);
+    const caja = container.querySelector('.s-vacio')!;
+    expect(caja).toHaveClass('compacto');
+    expect(caja.children).toHaveLength(2); // el dibujo y el bloque de texto
+    const texto = container.querySelector('.s-vacio-texto')!;
+    expect(texto.textContent).toBe('Sin pesajesCon dos ya se dibuja la curva.Cargar');
+    expect(caja.querySelector('svg.ilustracion')).toBeInTheDocument();
+  });
 });

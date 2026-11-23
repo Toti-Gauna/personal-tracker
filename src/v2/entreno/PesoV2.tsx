@@ -109,7 +109,7 @@ export default function PesoV2({ day }: PropsV2) {
           </div>
         </Tarjeta>
       ) : (
-        <Vacio ilustracion="datos" titulo="Todavía no hay pesajes" texto="Pesate en ayunas y cargalo acá: la curva y el ritmo salen solos." />
+        <Vacio ilustracion="peso" titulo="Todavía no hay pesajes" texto="Pesate en ayunas y cargalo acá abajo: la curva y el ritmo salen solos." />
       )}
 
       <Grupo titulo={deHoy ? 'Corregir el de hoy' : 'Pesaje de hoy'} extremo={<span className="t-rotulo">En ayunas</span>}>

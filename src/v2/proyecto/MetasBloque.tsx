@@ -12,6 +12,7 @@ import { Boton, Casilla, CampoTexto } from '../kit/controles';
 import { Hoja } from '../kit/hoja';
 import { Fila } from '../kit/superficies';
 import { Grupo } from '../marco/Marco';
+import { cuantos } from '../reglas';
 
 export function MetasDelBloque({ bloque, hoy, titulo = 'Metas del bloque' }: { bloque: string; hoy: string; titulo?: string }) {
   const metas = useStore((s) => s.plan.metasBloque?.[bloque]) ?? [];
@@ -23,7 +24,7 @@ export function MetasDelBloque({ bloque, hoy, titulo = 'Metas del bloque' }: { b
     const json = exportarBloque(bloque, metas);
     try {
       await navigator.clipboard.writeText(json);
-      aviso({ titulo: 'JSON copiado', sub: `${metas.length} metas de ${bloque}`, tono: 'hecho' });
+      aviso({ titulo: 'JSON copiado', sub: `${cuantos(metas.length, 'meta', 'metas')} de ${bloque}`, tono: 'hecho' });
     } catch {
       const a = document.createElement('a');
       a.href = URL.createObjectURL(new Blob([json], { type: 'application/json' }));

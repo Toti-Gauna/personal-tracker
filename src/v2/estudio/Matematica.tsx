@@ -29,6 +29,7 @@ import { MetroVertical } from './Metro';
 import type { Estacion } from './lineas';
 import '../proyecto/proyecto.css';
 import './estudio.css';
+import { cuantos } from '../reglas';
 
 const MES = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'];
 const fch = (d: string) => `${Number(d.slice(8))} ${MES[Number(d.slice(5, 7)) - 1]}`;
@@ -113,7 +114,7 @@ const INFO_LIBRO = (
 function resumenCap(x: InfoCap) {
   const p: string[] = [];
   if (x.tests.length) p.push(`${x.tests.length} ${x.tests.length === 1 ? 'test' : 'tests'} · mejor ${x.mejor} %`);
-  if (x.tarjetas) p.push(`${x.tarjetas} tarjetas`);
+  if (x.tarjetas) p.push(cuantos(x.tarjetas, 'tarjeta', 'tarjetas'));
   return p.join(' · ') || (x.estado === 'pendiente' ? 'todavía no' : 'sin tests todavía');
 }
 
@@ -237,7 +238,7 @@ function Reiniciar({ a, tarjetas }: { a: Activity; tarjetas: number }) {
   return (
     <FilaHoja icono="deshacer" titulo="Reiniciar desde cero" tituloHoja={`Reiniciar ${nombre}`}>
       <p className="t-cuerpo pt-pie">Vuelve al {a.unitLabel?.toLowerCase() ?? 'cap.'} 1 sin nada estudiado: se borran los capítulos marcados, los tests, las tesis, los repasos agendados, el examen del libro, los minutos y el historial de este libro.</p>
-      {tarjetas > 0 && <div className="capa-1 pt-check"><Interruptor prendido={borrar} etiqueta={`Borrar también las ${tarjetas} tarjetas`} onCambio={setBorrar} /></div>}
+      {tarjetas > 0 && <div className="capa-1 pt-check"><Interruptor prendido={borrar} etiqueta={tarjetas === 1 ? 'Borrar también su tarjeta' : `Borrar también las ${tarjetas} tarjetas`} onCambio={setBorrar} /></div>}
       <div className="pt-campo-hoja"><Boton variante="peligro" icono="borrar" onClick={reiniciar}>Reiniciar {nombre}</Boton></div>
     </FilaHoja>
   );

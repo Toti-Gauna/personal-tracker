@@ -21,6 +21,9 @@ export const PRESUPUESTO = {
 
 export const contarPalabras = (texto: string) => texto.trim().split(/\s+/).filter(Boolean).length;
 
+/** "1 día", "3 días": el número con su palabra, en singular cuando es uno (regla 4: ningún "1 días"). */
+export const cuantos = (n: number, uno: string, varios: string) => `${String(n).replace('.', ',')} ${n === 1 ? uno : varios}`;
+
 /**
  * El tono de un estado decide su forma: `neutro` es una píldora de contorno, `atencion` una píldora llena del color del texto
  * (sin tinte) y `critico` la única que usa el rojo. `hecho` lleva el trazo de la marca.

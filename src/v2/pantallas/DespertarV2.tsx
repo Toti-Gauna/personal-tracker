@@ -19,6 +19,7 @@ import '../base.css';
 import '../kit/kit.css';
 import '../kit/superficies.css';
 import '../marco/marco.css';
+import { cuantos } from '../reglas';
 
 const PASO = 10;
 const MODOS = [['completo', 'Día completo'], ['corto', 'Día corto'], ['tarde', 'Día tarde']] as const;
@@ -76,7 +77,7 @@ export default function DespertarV2({ date }: { date: string }) {
       </div>
 
       <div className="capa-1 s-lista bd-resumen">
-        <Fila icono="calendario" titulo={eleccion === 'tarde' ? 'Así queda tu día' : 'Así queda tu mañana'} nota={`${DAY_ROUTINES[tipo].label} · ${metas} metas`} onClick={() => setVerManana(true)} />
+        <Fila icono="calendario" titulo={eleccion === 'tarde' ? 'Así queda tu día' : 'Así queda tu mañana'} nota={`${DAY_ROUTINES[tipo].label} · ${cuantos(metas, 'meta', 'metas')}`} onClick={() => setVerManana(true)} />
       </div>
 
       <div className="bd-pie">

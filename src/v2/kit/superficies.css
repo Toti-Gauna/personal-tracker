@@ -77,6 +77,11 @@
 .s-vacio .ilustracion { margin-bottom: var(--sp-2); }
 .s-vacio .t-nota { max-width: 30ch; }
 .s-vacio .k-boton { margin-top: var(--sp-2); }
+.s-vacio.compacto { grid-template-columns: auto minmax(0, 1fr); align-items: center; justify-items: start; gap: var(--sp-4); padding: var(--sp-4); text-align: left; }
+.s-vacio.compacto .ilustracion { width: 80px; height: 64px; margin: 0; }
+.s-vacio-texto { display: grid; justify-items: start; gap: var(--sp-1); min-width: 0; }
+.s-vacio-texto .t-nota { margin: 0; max-width: none; }
+.s-vacio.compacto .k-boton { margin-top: var(--sp-2); }
 
 /* ——— Pista ——— */
 .s-pista { position: relative; display: inline-flex; }

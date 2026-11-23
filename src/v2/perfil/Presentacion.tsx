@@ -31,6 +31,7 @@ import '../kit/kit.css';
 import '../kit/superficies.css';
 import '../entreno/entreno.css';
 import './perfil.css';
+import { cuantos } from '../reglas';
 
 /** Cuánto dura cada lámina cuando avanza sola. */
 export const SEGUNDOS = 7;
@@ -74,7 +75,7 @@ export default function Presentacion({ day }: { day: DayLog }) {
           <p className="t-rotulo wr-sobre">Constancia</p>
           <p className="wr-numero"><Numero valor={r.dias} /> <span className="wr-chico">{r.dias === 1 ? 'día' : 'días'}</span></p>
           <h2 className="wr-frase">Mejor racha: {r.mejorRacha}.</h2>
-          <div className="wr-pieza"><Calor mapa={mapa} nombre={`El año, día por día: ${mapa.cargados} días cargados.`} /></div>
+          <div className="wr-pieza"><Calor mapa={mapa} nombre={`El año, día por día: ${cuantos(mapa.cargados, 'día cargado', 'días cargados')}.`} /></div>
         </>
       ) },
       { id: 'mejora', nombre: 'Mejora', area: 'var(--a-economia)', contenido: (

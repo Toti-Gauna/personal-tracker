@@ -96,7 +96,7 @@ export function PlanHoy({ p, bimestre }: { p: PlanHoyDatos; bimestre?: string })
 export function HojaAvisos({ avisos, abierta, onCerrar }: { avisos: AvisoHoy[]; abierta: boolean; onCerrar: () => void }) {
   return (
     <Hoja abierta={abierta} onCerrar={onCerrar} titulo="Avisos">
-      {avisos.length === 0 && <Vacio ilustracion="repaso" titulo="Sin avisos" texto="Cuando el plan necesite algo de vos, aparece acá." />}
+      {avisos.length === 0 && <Vacio ilustracion="avisos" titulo="Sin avisos" texto="Cuando el plan necesite algo de vos, aparece acá." />}
       {avisos.map((a) => (
         <article key={a.id} className="capa-2 hy-aviso">
           <b className="t-cuerpo-l">{a.titulo}</b>

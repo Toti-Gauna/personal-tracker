@@ -54,7 +54,7 @@ export function Centro({ hoy }: { hoy: string }) {
       <Lentes actual="ahora" />
 
       {heroe ? <HeroePeriodo p={heroe} hoy={hoy} vt={vt(heroe.id)} href={hrefPeriodo(heroe.id)} conDatos={false} />
-        : <Vacio ilustracion="plan" titulo="Sin período activo hoy" texto="El plan arranca más adelante o ya terminó." />}
+        : <Vacio ilustracion="plan" titulo="Sin período activo hoy" texto="El plan arranca más adelante o ya terminó." accion={<Boton variante="secundario" icono="linea" href="#/metas/linea">Ver la línea de tiempo</Boton>} />}
 
       {adentro.length > 0 && (
         <Grupo titulo={`Adentro de ${heroe!.nombre}`}>
@@ -81,7 +81,7 @@ export function Centro({ hoy }: { hoy: string }) {
             <Escalonado className="capa-1 pl-lista" clave={horizonte}>{visibles.map((p) => <FilaPeriodo key={p.id} p={p} hoy={hoy} vt={vt(p.id)} href={hrefPeriodo(p.id)} />)}</Escalonado>
             {lista.length > visibles.length && <Boton tamano="s" variante="fantasma" icono="abajo" onClick={() => setTodos(true)}>Ver {lista.length - visibles.length} más</Boton>}
           </>
-        ) : <Vacio ilustracion="plan" titulo="Nada en este horizonte" />}
+        ) : <Vacio ilustracion="metas" titulo="Nada en este horizonte" texto="Probá con otro horizonte, o mirá el plan entero." accion={<Boton variante="secundario" icono="linea" href="#/metas/linea">Ver la línea de tiempo</Boton>} />}
       </Grupo>
 
       <Grupo titulo="Las 4 etapas">

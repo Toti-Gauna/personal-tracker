@@ -27,6 +27,9 @@ html[data-ui='v2'][data-theme='light'] .cu.cu-hecho .cu-m.on { stroke: color-mix
 .en-hoy .cu { margin: var(--sp-2) 0; }
 .en-hoy-acciones { display: grid; gap: var(--sp-3); justify-items: start; }
 .en-hoy-acciones .k-boton { justify-self: stretch; }
+.en-hoy-libre { display: flex; align-items: center; gap: var(--sp-4); }
+.en-hoy-libre .ilustracion { flex: none; width: 96px; height: 77px; }
+.en-hoy-libre > div { display: grid; gap: var(--sp-2); min-width: 0; }
 .en-detalle { margin-top: var(--sp-3); }
 
 .en-semana { list-style: none; display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: var(--sp-1); margin: var(--sp-5) 0 0; padding: 0; }

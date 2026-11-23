@@ -12,7 +12,7 @@ import { claimSeal, unclaimSeal } from '../../state/profile';
 import { aviso } from '../kit/capas';
 import { Boton } from '../kit/controles';
 import { Hoja } from '../kit/hoja';
-import { Anillo, Barra, Dato, Fila, Tarjeta } from '../kit/superficies';
+import { Anillo, Barra, Dato, Fila, Tarjeta, Vacio } from '../kit/superficies';
 import { Grupo, Marco } from '../marco/Marco';
 import { FilaHoja } from '../proyecto/piezas';
 import type { PropsV2 } from '../registro';
@@ -143,7 +143,7 @@ export default function PerfilV2({ day }: PropsV2) {
         <div className="capa-1 s-lista">
           <Fila icono="grafico" titulo="Avance" nota="Todo el progreso en una vista" href="#/avance" />
           <FilaHoja icono="calendario" titulo="Historial" nota="Día por día, con sus sellos" valor={String(hist.length)}>
-            {hist.length === 0 ? <p className="t-nota">Todavía no hay días cerrados. Se cierran desde Hoy.</p> : (
+            {hist.length === 0 ? <Vacio ilustracion="historial" titulo="Todavía no cerraste ningún día" texto="Cada día que cerrás queda acá, con los sellos que ganó." accion={<Boton variante="primario" icono="luna" href="#/cierre">Cerrar el día de hoy</Boton>} /> : (
               <ul className="capa-1 pt-revs">
                 {hist.map((h) => <li key={h.date}><span className="t-rotulo">{fmtFecha(h.date)}</span><span className="t-cuerpo">{h.text}</span></li>)}
               </ul>

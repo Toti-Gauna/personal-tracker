@@ -279,7 +279,8 @@ describe('Perfil 2.0 · la pantalla', () => {
     expect(within(screen.getByRole('region', { name: 'Próximos hitos' })).getByRole('button', { name: /^Madrugador: / })).toBeTruthy();
     expect(within(screen.getByRole('region', { name: 'El año' })).getByText('1 día · promedio 0 %')).toBeTruthy();
     fireEvent.click(screen.getByRole('button', { name: /^Historial/ }));
-    expect(within(dialogo()).getByText(/Todavía no hay días cerrados/)).toBeTruthy();
+    expect(within(dialogo()).getByText('Todavía no cerraste ningún día')).toBeTruthy();
+    expect(within(dialogo()).getByRole('link', { name: 'Cerrar el día de hoy' }).getAttribute('href')).toBe('#/cierre');
   });
 });
 
@@ -304,6 +305,14 @@ describe('Avance 2.0', () => {
     expect(within(screen.getByRole('region', { name: 'Frentes de estudio' })).getAllByRole('progressbar').length).toBeGreaterThan(1);
     expect(within(screen.getByRole('region', { name: 'Peso' })).getByRole('img', { name: /^Curva de peso: 15 nov 82 kg, 23 nov 82,8 kg/ })).toBeTruthy();
     expect(within(screen.getByRole('region', { name: 'Sellos' })).getByRole('img', { name: 'Hombre nuevo' })).toBeTruthy();
+  });
+
+  it('el primer día, lo que falta invita a empezar: correr, pesarse y cerrar el día para el primer sello', () => {
+    abrir();
+    expect(within(screen.getByRole('region', { name: 'Corridas' })).getByRole('link', { name: 'Registrar en Entreno' }).getAttribute('href')).toBe('#/entreno');
+    expect(within(screen.getByRole('region', { name: 'Peso' })).getByRole('link', { name: 'Cargar el de hoy' }).getAttribute('href')).toBe('#/entreno-peso');
+    expect(within(screen.getByRole('region', { name: 'Sellos' })).getByRole('link', { name: 'Cerrar el día' }).getAttribute('href')).toBe('#/cierre');
+    expect(screen.queryByText(/se registran en|se cargan en Entreno/)).toBeNull(); // ya no quedan notas sueltas
   });
 
   it('"Presentar" lleva a la presentación, y vuelve a Perfil', () => {

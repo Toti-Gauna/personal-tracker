@@ -29,6 +29,7 @@ import type { PropsV2 } from '../registro';
 import { ultimosDias } from './datos';
 import '../proyecto/proyecto.css';
 import './perfil.css';
+import { cuantos } from '../reglas';
 
 const PASOS = ['Hoy', 'Mañana', 'Cerrar'] as const;
 const DIAS = ['D', 'L', 'M', 'X', 'J', 'V', 'S'];
@@ -199,7 +200,7 @@ export default function CierreV2({ day }: PropsV2) {
           </div>
           <div className="capa-2 s-lista">
             {clipMes >= 1 && clipMes <= 12 && (
-              <Fila icono="dinero" titulo="Clipping" nota={`${totales(clipping.registro.filter((f) => f.fecha === day.date)).clips} clips hoy`} valor={`USD ${Math.round(ingresoMes(clipping, clipMes)).toLocaleString('es-AR')} de ${mesClipEn(day.date).meta.toLocaleString('es-AR')}`} href="#/metas/clipping" />
+              <Fila icono="dinero" titulo="Clipping" nota={`${cuantos(totales(clipping.registro.filter((f) => f.fecha === day.date)).clips, 'clip', 'clips')} hoy`} valor={`USD ${Math.round(ingresoMes(clipping, clipMes)).toLocaleString('es-AR')} de ${mesClipEn(day.date).meta.toLocaleString('es-AR')}`} href="#/metas/clipping" />
             )}
             <FilaHoja icono="json" titulo="JSON del día" valor={`${(new Blob([json]).size / 1024).toFixed(1).replace('.', ',')} KB`} tituloHoja={`${day.date}.json`}
               pie={<Boton variante="secundario" ancho icono="copiar" onClick={() => void copiar(json, 'JSON copiado')}>Copiar</Boton>}>

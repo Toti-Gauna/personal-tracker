@@ -36,7 +36,7 @@ export function BarraV2({ activa, pendientes = 0 }: Props) {
               <a href={`#/${d.id}`} data-transicion="fundido" aria-current={actual ? 'page' : undefined} className={esActiva ? 'activa' : undefined}>
                 <span className="b2-icono"><Icono nombre={d.icono} /></span>
                 <span className="b2-txt">{d.nombre}</span>
-                {d.id === 'estudio' && pendientes > 0 && !esActiva && <span className="b2-contador" aria-label={`${pendientes} tarjetas pendientes`}>{pendientes > 99 ? '99+' : pendientes}</span>}
+                {d.id === 'estudio' && pendientes > 0 && !esActiva && <span className="b2-contador" aria-label={pendientes === 1 ? '1 tarjeta pendiente' : `${pendientes} tarjetas pendientes`}>{pendientes > 99 ? '99+' : pendientes}</span>}
               </a>
             </li>
           );

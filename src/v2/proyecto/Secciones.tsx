@@ -16,6 +16,7 @@ import { fp } from '../../ui/PeriodoTarjeta';
 import { Boton, CampoTexto, Contador, Interruptor, Segmentado, Selector } from '../kit/controles';
 import { Barra } from '../kit/superficies';
 import { FilaHoja, Lista, hechasDe } from './piezas';
+import { cuantos } from '../reglas';
 
 const useProyecto = (id: string) => useStore((s) => s.plan.proyectos[id]) ?? proyectoVacio();
 
@@ -192,7 +193,7 @@ export function HorasFechas({ b }: { b: BloqueFechado }) {
     ['arquitectura', 'Arquitectura', b.extraArquitectura, b.arquitecturaAplicada, b.ficha?.arquitectura],
   ] : [];
   const posibles = filas.filter(([, , p]) => p > 0);
-  const horas = b.horas ? `${String(b.horas).replace('.', ',')} h` : `${b.dias ?? largo} días`;
+  const horas = b.horas ? `${String(b.horas).replace('.', ',')} h` : cuantos(b.dias ?? largo, 'día', 'días');
   return (
     <FilaHoja icono="calendario" titulo="Horas y fechas" valor={horas} tituloHoja={`Horas y fechas de ${b.nombre}`}>
       <p className="t-cuerpo pt-pie">{fp(b.inicio)} – {fp(b.fin)}{b.horasAntes ? ` · antes ${b.horasAntes} h` : ''}{b.pausasDentro.length ? ' · con la pausa de fin de año adentro' : ''}.</p>

@@ -37,7 +37,7 @@ export default function LogroV2({ ruta }: PropsV2) {
   if (!def) {
     return (
       <Marco className="pf" titulo="Sello" volver={{ href: '#/perfil', nombre: 'Perfil' }}>
-        <Vacio ilustracion="datos" titulo="No encontré ese sello" texto="Todos tus sellos están en Perfil." accion={<Boton variante="primario" href="#/perfil">Ir a Perfil</Boton>} />
+        <Vacio ilustracion="buscar" titulo="No encontré ese sello" texto="Todos tus sellos están en Perfil." accion={<Boton variante="primario" href="#/perfil">Ir a Perfil</Boton>} />
       </Marco>
     );
   }

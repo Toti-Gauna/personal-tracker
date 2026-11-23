@@ -45,7 +45,7 @@ export function Detalle({ id, hoy }: { id: string; hoy: string }) {
   if (!p) {
     return (
       <Marco titulo="Plan" volver={{ href: '#/metas', nombre: 'Plan' }}>
-        <Vacio ilustracion="plan" titulo="No hay un período con ese nombre" texto="Puede que el plan haya cambiado." accion={<Boton variante="primario" href="#/metas">Ir al plan</Boton>} />
+        <Vacio ilustracion="buscar" titulo="No hay un período con ese nombre" texto="Puede que el plan haya cambiado." accion={<Boton variante="primario" href="#/metas">Ir al plan</Boton>} />
       </Marco>
     );
   }

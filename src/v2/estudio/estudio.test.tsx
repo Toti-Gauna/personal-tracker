@@ -175,7 +175,8 @@ describe('Puntos débiles', () => {
     render(<>{<Flojo {...pantalla('#/flojo')} />}{global}</>);
     expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent('Puntos débiles');
     expect(screen.getByText('Temas flojos')).toBeTruthy();
-    expect(screen.getByText('Todavía no hay temas flojos')).toBeTruthy();
+    expect(screen.getByText('Sin temas flojos todavía')).toBeTruthy();
+    expect(screen.getByRole('link', { name: 'Estudiar' }).getAttribute('href')).toBe('#/estudio'); // el vacío siempre trae una acción
     expect(screen.getByRole('link', { name: 'Todo', current: 'page' })).toBeTruthy();
     expect(screen.getByRole('link', { name: 'Exámenes' }).getAttribute('href')).toBe('#/flojo/examenes');
   });

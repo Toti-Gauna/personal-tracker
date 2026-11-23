@@ -138,7 +138,7 @@ export function FilaPeriodo({ p, hoy, vt, href }: Props) {
   const marca = a.accion ? (
     <button type="button" role="checkbox" aria-checked={a.hecho} className={`tp-casilla${a.hecho ? ' hecha' : ''}`}
       aria-label={`${p.nombre}: ${a.hecho ? (a.accion.tipo === 'version' ? 'publicada' : 'hecho') : a.etiqueta.toLowerCase()}`}
-      onClick={(e) => { if (!a.tildar(e.currentTarget)) aviso({ titulo: 'Falta el Imán', sub: `Para publicar el lanzamiento faltan ${a.gate!.faltan.length} puntos.`, tono: 'atencion', accion: { etiqueta: 'Ver', run: () => { location.hash = a.iman!; } } }); }}>
+      onClick={(e) => { if (!a.tildar(e.currentTarget)) aviso({ titulo: 'Falta el Imán', sub: a.gate!.faltan.length === 1 ? 'Para publicar el lanzamiento falta 1 punto.' : `Para publicar el lanzamiento faltan ${a.gate!.faltan.length} puntos.`, tono: 'atencion', accion: { etiqueta: 'Ver', run: () => { location.hash = a.iman!; } } }); }}>
       <Icono nombre="tilde" lado={16} />
     </button>
   ) : <span className="tp-anillo"><Anillo nombre={`${p.nombre}: trabajo hecho`} valor={p.trabajo} tamano={40} grosor={5} area={area} etiqueta={<span className="tp-anillo-n">{Math.round(p.trabajo * 100)}</span>} /></span>;

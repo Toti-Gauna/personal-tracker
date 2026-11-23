@@ -53,7 +53,7 @@ export function ProyectoV2({ id, hoy }: { id?: string; hoy: string }) {
   if (!t && !b) {
     return (
       <Marco titulo="Bloque" volver={{ href: '#/metas', nombre: 'Plan' }}>
-        <Vacio ilustracion="plan" titulo="No hay un bloque con ese nombre" texto="Puede que el plan haya cambiado." accion={<Boton variante="primario" href="#/metas">Ir al plan</Boton>} />
+        <Vacio ilustracion="buscar" titulo="No hay un bloque con ese nombre" texto="Puede que el plan haya cambiado." accion={<Boton variante="primario" href="#/metas">Ir al plan</Boton>} />
       </Marco>
     );
   }

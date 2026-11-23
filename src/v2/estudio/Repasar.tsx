@@ -23,6 +23,7 @@ import type { PropsV2 } from '../registro';
 import { Barras } from './Barras';
 import '../proyecto/proyecto.css';
 import './estudio.css';
+import { cuantos } from '../reglas';
 
 const DIA = ['D', 'L', 'M', 'X', 'J', 'V', 'S'];
 
@@ -78,7 +79,7 @@ export function RepasoV2({ day, hoy }: { day: PropsV2['day']; hoy: string }) {
       {daily.groups.length > 0 && (
         <Grupo titulo="Tarjetas" extremo={<span className="t-rotulo">{cardsN} · {cardsMin} min</span>}>
           <div className="capa-1 s-lista">
-            {daily.groups.map((g) => <Fila key={g.frontId} area={colorOf(g.frontId)} titulo={g.name} nota={g.pending.length === g.cards.length ? `${g.cards.length} tarjetas` : g.pending.length ? `${g.pending.length} de ${g.cards.length} tarjetas` : `${g.cards.length} hechas`} valor={`${g.min} min`} href={`#/tarjetas/${g.frontId}`} />)}
+            {daily.groups.map((g) => <Fila key={g.frontId} area={colorOf(g.frontId)} titulo={g.name} nota={g.pending.length === g.cards.length ? cuantos(g.cards.length, 'tarjeta', 'tarjetas') : g.pending.length ? `${g.pending.length} de ${cuantos(g.cards.length, 'tarjeta', 'tarjetas')}` : cuantos(g.cards.length, 'hecha', 'hechas')} valor={`${g.min} min`} href={`#/tarjetas/${g.frontId}`} />)}
           </div>
         </Grupo>
       )}
@@ -123,12 +124,12 @@ export function RepasoV2({ day, hoy }: { day: PropsV2['day']; hoy: string }) {
         <Grupo titulo="Hoy no toca">
           <div className="capa-1 s-lista">
             {daily.skipped.map((r) => <Fila key={r.id} titulo={r.label} nota={`No entró en el tope de ${cap} min`} valor="mañana" />)}
-            {daily.skippedCards > 0 && <Fila titulo={`${daily.skippedCards} tarjetas`} nota="Las menos olvidadas esperan" valor="mañana" />}
+            {daily.skippedCards > 0 && <Fila titulo={cuantos(daily.skippedCards, 'tarjeta', 'tarjetas')} nota={daily.skippedCards === 1 ? 'La menos olvidada espera' : 'Las menos olvidadas esperan'} valor="mañana" />}
             {!ejercicios.length && <Fila titulo="Repetir" nota="Ningún capítulo cumple el día 8, 22 o 61" valor={proxEj ? `${corto(proxEj)} · ${fmtFecha(proxEj.due).split(' ')[0].toLowerCase()}` : '—'} />}
           </div>
         </Grupo>
       )}
-      {daily.min === 0 && daily.groups.length === 0 && <Vacio ilustracion="repaso" titulo="Hoy no hay repaso" texto="Cuando algo venza, va a aparecer acá." />}
+      {daily.min === 0 && daily.groups.length === 0 && <Vacio ilustracion="listo" titulo="Estás al día" texto="Cuando algo venza, aparece acá." accion={<Boton variante="secundario" icono="estudio" href="#/estudio">Estudiar algo nuevo</Boton>} />}
     </Marco>
   );
 }
@@ -184,9 +185,9 @@ export function FlojoV2({ day, hoy, filtro }: { day: PropsV2['day']; hoy: string
         <Dato valor={sang.length} etiqueta={sang.length === 1 ? 'Sanguijuela' : 'Sanguijuelas'} />
       </div>
 
-      <Grupo titulo="Lo más flojo" extremo={<span className="t-rotulo">Fuerza 0 a 100</span>}>
+      <Grupo titulo="Lo más flojo" extremo={r.length ? <span className="t-rotulo">Fuerza 0 a 100</span> : undefined}>
         {r.length === 0
-          ? <Vacio ilustracion="datos" titulo="Todavía no hay temas flojos" />
+          ? <div className="capa-1"><Vacio compacto ilustracion="datos" titulo="Sin temas flojos todavía" texto="Salen de tus tests y repasos." accion={<Boton tamano="s" variante="secundario" icono="estudio" href="#/estudio">Estudiar</Boton>} /></div>
           : (
             <ol className="capa-1 es-rank">
               {r.map((t) => {
@@ -218,7 +219,7 @@ export function FlojoV2({ day, hoy, filtro }: { day: PropsV2['day']; hoy: string
       {sang.length > 0 && (
         <Grupo titulo="Tarjetas sanguijuela" extremo={<span className="t-rotulo">{sang.length}</span>}>
           <div className="capa-1 s-lista">
-            {sang.slice(0, 5).map((x) => <Fila key={x.card.id} titulo={x.card.front} nota={`Fallaste ${x.fallos} veces`} />)}
+            {sang.slice(0, 5).map((x) => <Fila key={x.card.id} titulo={x.card.front} nota={`Fallaste ${cuantos(x.fallos, 'vez', 'veces')}`} />)}
           </div>
           <p className="t-nota es-pie">Reescribilas al repasarlas: en la tarjeta, "Editar".</p>
         </Grupo>

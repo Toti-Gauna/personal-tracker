@@ -14,6 +14,7 @@ import { addRun, deleteRun, startTraining } from '../../state/train';
 import { abrirCorrida, abrirPeso } from '../../ui/checkins';
 import { Barras } from '../estudio/Barras';
 import { aviso } from '../kit/capas';
+import { Ilustracion } from '../iconos';
 import { Boton, Chip } from '../kit/controles';
 import { Hoja } from '../kit/hoja';
 import { Barra, Dato, Estado, Fila, Tarjeta } from '../kit/superficies';
@@ -25,6 +26,7 @@ import { ejerciciosDe, fmtSeries, nombreCorto, semanaDe, volumenSemana } from '.
 import { MUSCULOS, NOMBRE, calor, luzDeRutina, type Musculo } from './musculos';
 import '../proyecto/proyecto.css';
 import './entreno.css';
+import { cuantos } from '../reglas';
 
 const INFO = (
   <>
@@ -80,7 +82,7 @@ export default function EntrenoV2({ day }: PropsV2) {
             <h2 className="t-titulo en-hoy-titulo">{r.name}</h2>
             {r.slot && r.desc && <p className="t-nota en-hoy-enfoque">{r.desc}</p>}
             <Cuerpo luz={luzDeRutina(r)} tono={sesionHoy && !enCurso ? 'hecho' : 'plan'} nombre={`${r.name} trabaja ${enPalabras(luzDeRutina(r))}.`} alto={216} />
-            <p className="t-dato en-hoy-dato">{fmtH(totalMin(r))} · {r.exercises.length} ejercicios</p>
+            <p className="t-dato en-hoy-dato">{fmtH(totalMin(r))} · {cuantos(r.exercises.length, 'ejercicio', 'ejercicios')}</p>
             {pasaDelLimite(r) && <p className="t-nota" role="status">Lleva unos {fmtH(trainingMin(r))} y el bloque es de {fmtH(RULES.limiteMin)}: algo va a quedar para la próxima.</p>}
             {sesionHoy && !enCurso ? (
               <Boton variante="secundario" icono="siguiente" ancho href={`#/entreno-resumen/${sesionHoy.id}`}>Ver el resumen</Boton>
@@ -94,8 +96,14 @@ export default function EntrenoV2({ day }: PropsV2) {
         ) : (
           <>
             <span className="t-rotulo">Hoy</span>
-            <h2 className="t-titulo en-hoy-titulo">{hoy.rest ? 'Descanso activo' : hoy.libre ? 'Día libre' : 'Sin entreno'}</h2>
-            <p className="t-cuerpo">{hoy.rest ? 'Caminar 45 minutos. Hoy no se levanta.' : hoy.libre ? 'Hoy no hay entreno.' : 'No hay entreno planeado para hoy.'}</p>
+            <div className="en-hoy-libre">
+              <Ilustracion nombre={hoy.rest ? 'descanso' : 'entreno'} />
+              <div>
+                <h2 className="t-titulo en-hoy-titulo">{hoy.rest ? 'Descanso activo' : hoy.libre ? 'Día libre' : 'Sin entreno'}</h2>
+                <p className="t-cuerpo">{hoy.rest ? 'Caminar 45 minutos. Hoy no se levanta.' : hoy.libre ? 'Hoy no toca entrenar.' : 'No hay entreno planeado para hoy.'}</p>
+              </div>
+            </div>
+            {!hoy.rest && <Boton variante="secundario" icono="calendario" href="#/entreno-semana">Cambiar la semana</Boton>}
           </>
         )}
       </Tarjeta>
@@ -200,7 +208,7 @@ function HojaMusculo({ m, hecho, plan, rutinas, onCerrar }: { m: Musculo | null;
         <Barra valor={x.hecho} max={Math.max(x.plan, x.hecho, 1)} nombre={`${NOMBRE[x.m]}: series hechas de las planeadas`} area="var(--trazo)" />
         {ejercicios.length > 0 ? (
           <ul className="capa-1 pt-revs">
-            {ejercicios.map((e) => <li key={e.id}><span className="t-rotulo">{e.rutina} · {e.principal ? 'principal' : 'acompaña'}</span><span className="t-cuerpo">{e.nombre}</span><span className="t-dato">{fmtSeries(e.series)} series</span></li>)}
+            {ejercicios.map((e) => <li key={e.id}><span className="t-rotulo">{e.rutina} · {e.principal ? 'principal' : 'acompaña'}</span><span className="t-cuerpo">{e.nombre}</span><span className="t-dato">{cuantos(e.series, 'serie', 'series')}</span></li>)}
           </ul>
         ) : <p className="t-nota">Esta semana no hay ejercicios planeados para este músculo.</p>}
         <p className="t-nota">Cada serie cuenta 1 en el músculo principal del ejercicio y media en los que acompañan.</p>
