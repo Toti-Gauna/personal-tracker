@@ -7,7 +7,7 @@ import { T0_PLAN } from '../../data/plan';
 import { PLAN_EXT } from '../../data/plan-extendido';
 import { alertas, hoySos, lineaEtapas } from '../../data/plan-vistas';
 import { inicioTrabajo, useStore } from '../../state/store';
-import type { NombreIcono } from '../iconos';
+import { Icono, type NombreIcono } from '../iconos';
 import { Boton } from '../kit/controles';
 import { Hoja } from '../kit/hoja';
 import { Fila, Tarjeta } from '../kit/superficies';
@@ -70,7 +70,7 @@ export default function EtapasV2({ day }: PropsV2) {
                 </a>
               ))}
             </div>
-            <p className="t-cuerpo"><span className="t-nota">Al cerrarla: </span>{e.perfil}</p>
+            <p className="t-cuerpo mt-perfil"><Icono nombre="siguiente" lado={14} titulo="Al cerrarla sos" />{e.perfil}</p>
             <FilaHoja icono="linea" titulo={`Los ${e.bloques.length} bloques`} tituloHoja={`Etapa ${e.n} · ${e.nombre}`}>
               <div className="capa-1 s-lista">
                 {e.bloques.map((b) => (

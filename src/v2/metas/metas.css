@@ -267,3 +267,5 @@ html[data-ui='v2'][data-theme='light'] .mt-heat { --ca-c: color-mix(in oklab, va
 .mt-bloque-det .mt-detalle-lista { gap: var(--sp-2); }
 .mt-lista-plana > .s-fila + .s-fila { border-top: 1px solid var(--raya); }
 .mt-plegable-intro { margin: 0; padding: var(--sp-3) 0 var(--sp-1); }
+.mt-perfil { display: flex; align-items: center; gap: 6px; }
+.mt-perfil .icono { flex: none; color: var(--texto-3); }

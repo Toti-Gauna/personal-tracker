@@ -48,7 +48,7 @@ function Vista({ day, elegido }: { day: PropsV2['day']; elegido?: number }) {
   const sHoy = semanaDelPlan(date, t0);
   const hito = PLAN.hitos.find((h) => h.id !== 'T+0' && h.semana >= b.desde && h.semana <= b.hasta);
   const quedan = Math.round((parseDate(b.fin).getTime() - parseDate(date).getTime()) / 864e5);
-  const estado = date < b.inicio ? `empieza el ${dm(b.inicio)}` : date > b.fin ? `cerró el ${dm(b.fin)}` : `quedan ${quedan} ${quedan === 1 ? 'día' : 'días'}`;
+  const estado = date < b.inicio ? `empieza el ${dm(b.inicio)}` : date > b.fin ? `cerró el ${dm(b.fin)}` : `${quedan} ${quedan === 1 ? 'día' : 'días'}`;
   const personales = ctx.goals.filter((g) => appliesTo(g, 'bim', date));
   const original = PLAN.nombresBimestre[n - 1] || `B${n}`;
   const fila = useRef<HTMLDivElement>(null);
@@ -80,7 +80,7 @@ function Vista({ day, elegido }: { day: PropsV2['day']; elegido?: number }) {
         </figure>
       </Tarjeta>
 
-      <Grupo titulo="Las ramas del bimestre">
+      <Grupo titulo="Ramas">
         <div className="capa-1 mt-lista">
           {filas.map((f) => <FilaFija key={f.rama} rama={f.rama} clave={f.clave} titulo={f.titulo} sub={f.sub} lado={f.lado} avance={f.avance} de="bimestre" />)}
         </div>

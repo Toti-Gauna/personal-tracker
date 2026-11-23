@@ -98,19 +98,19 @@ export default function MetricasV2({ day, today }: PropsV2) {
         </Tarjeta>
       </Grupo>
 
-      <Grupo titulo="Camino a USD 10k" extremo={d.proy ? <span className="t-rotulo">Ritmo {Math.round(d.proy.ritmo * 100)} % del plan</span> : undefined}>
+      <Grupo titulo="Camino a 10k" extremo={d.proy ? <span className="t-rotulo">Ritmo {Math.round(d.proy.ritmo * 100)} % del plan</span> : undefined}>
         <Tarjeta capa={1} className="cl-camino">
           <div className="cl-anillo" data-grafico><Anillo valor={mes12 / CLIP.metaFinal} tamano={104} etiqueta={d.proy ? `${(mes12 / 1000).toFixed(1).replace('.', ',')}k` : '—'} sub="mes 12" area={AREA} nombre="Proyección del mes 12 contra USD 10.000" /></div>
           <div className="cl-camino-texto">
             {d.proy
               ? <p className="t-cuerpo">Con tu ritmo real, el mes 12 cierra en <b className="t-dato">{usd(mes12)}</b>{d.proy.falta ? <>: faltan <b className="t-dato">{usd(d.proy.falta)}</b> para USD 10k.</> : ', arriba de USD 10k.'}</p>
               : <p className="t-cuerpo">Con el primer cobro aparece tu proyección.</p>}
-            <p className="t-nota">Cruza USD 10k: base, mes {mesCruce('base') ?? 'no llega'}; optimista, mes {mesCruce('optimista') ?? 'no llega'}; conservador, {mesCruce('conservador') ? `mes ${mesCruce('conservador')}` : 'no llega'}.</p>
+            <p className="t-nota">Base, mes {mesCruce('base') ?? 'no llega'} · optimista, mes {mesCruce('optimista') ?? 'no llega'} · conservador, {mesCruce('conservador') ? `mes ${mesCruce('conservador')}` : 'no llega'}.</p>
           </div>
         </Tarjeta>
       </Grupo>
 
-      <Grupo titulo="Pago real por 1.000 views" extremo={<span className="t-rotulo">Pisos {usd2(CLIP.umbrales.pagoFase2)} y {usd2(CLIP.umbrales.pagoMes6)}</span>}>
+      <Grupo titulo="Pago por 1.000 views" extremo={<span className="t-rotulo">Pisos {usd2(CLIP.umbrales.pagoFase2)} y {usd2(CLIP.umbrales.pagoMes6)}</span>}>
         <Tarjeta capa={1} className="cl-grafico">
           {d.camp.length ? (
             <>

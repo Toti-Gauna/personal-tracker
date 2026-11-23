@@ -351,7 +351,7 @@ describe('Algoritmos 2.0', () => {
   it('el sprint sin IA: arrancar, contar problemas y terminar (con confirmación)', async () => {
     abrir();
     expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent('Algoritmos');
-    fireEvent.click(screen.getByRole('button', { name: 'Arrancar el sprint hoy' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Arrancar hoy' }));
     expect(screen.getByText('Día 1 de 14')).toBeTruthy();
     fireEvent.click(screen.getByRole('button', { name: 'Sumar 1' }));
     fireEvent.click(screen.getByRole('button', { name: 'Sumar 1' }));
@@ -361,7 +361,7 @@ describe('Algoritmos 2.0', () => {
     expect(getState().plan.problemasSinIA).toEqual({ [HOY]: 1 });
     fireEvent.click(screen.getByRole('button', { name: 'Terminar el sprint' }));
     fireEvent.click(await screen.findByRole('button', { name: 'Terminar' }));
-    await screen.findByRole('button', { name: 'Arrancar el sprint hoy' });
+    await screen.findByRole('button', { name: 'Arrancar hoy' });
     expect(getState().plan.sprintsSinIA ?? []).toHaveLength(0);
   });
 

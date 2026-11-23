@@ -72,7 +72,6 @@ export default function AjustesV2({ ruta, day, today }: PropsV2) {
 
   const activa = interfazActiva(settings.interfaz);
   const forzada = forzadaPorUrl();
-  const listas = Object.values(PANTALLAS_V2).filter((e) => !e!.taller && !e!.parte).map((e) => e!.nombre);
   const alarmas = (settings.alarms ?? DEFAULT_ALARMS).filter((a) => a.on).length;
   const cfg = planSettings(settings);
   const instalar = async () => {
@@ -87,7 +86,7 @@ export default function AjustesV2({ ruta, day, today }: PropsV2) {
         <Segmentado etiqueta="Interfaz" valor={activa} opciones={INTERFACES.map(([id, n]) => [id, n.replace(' · en construcción', ' · nueva').replace(' · actual', ' · clásica')] as [Interfaz, string])} onCambio={setInterfaz} />
         <p className="t-nota">
           {forzada ? `La dirección fuerza la ${forzada === 'v1' ? '1.0' : '2.0'}: sacá ?ui para usar lo que elegiste. ` : ''}
-          Mismos datos en las dos. {listas.length ? `Ya en 2.0: ${listas.join(', ')}.` : ''} Lo demás se ve en 1.0, con su marca.
+          Mismos datos en las dos: podés ir y volver cuando quieras. La 2.0 ya cubre todas las pantallas.
         </p>
         <div className="capa-1 s-lista"><Fila icono="trazo" titulo="Taller 2.0" nota="Lenguaje, controles, piezas y movimiento" href="#/v2" /></div>
       </Grupo>

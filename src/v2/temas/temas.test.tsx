@@ -119,7 +119,7 @@ describe('Roadmap de estudio', () => {
 
   it('una fase que todavía no toca muestra sus criterios pero no deja tildarlos', () => {
     render(<>{<RutaV2 {...props('#/estudio/ruta/matematica/M2')} />}{global}</>);
-    expect(screen.getByText('Se habilita cuando cerrás las fases anteriores.')).toBeTruthy();
+    expect(screen.getByText('Se habilita al cerrar las fases anteriores.')).toBeTruthy();
     const casillas = screen.getAllByRole('checkbox');
     expect(casillas.every((c) => c.getAttribute('aria-disabled') === 'true')).toBe(true);
     fireEvent.click(casillas[0]);

@@ -228,8 +228,8 @@ function FaseV2({ r, f, hoy }: { r: RoadmapEstudio; f: Fase; hoy: string }) {
             <Casilla key={c} marcada={e.estado === 'cerrada' || hechos.has(k)} etiqueta={c} deshabilitada={!editable} onCambio={() => { if (editable) toggleCriterio(r.id, f.id, k); }} />
           ))}
         </div>
-        {e.evidencia && e.estado !== 'cerrada' && <p className="t-nota pt-pie">Evidencia: {e.evidencia.hechos} de {e.evidencia.total} {study.activities.find((x) => x.id === f.actividad)?.units?.length ? 'capítulos aprobados' : `${study.activities.find((x) => x.id === f.actividad)?.unit ?? 'avances'} hechos`} en Estudio.</p>}
-        {e.estado === 'proxima' && <p className="t-nota pt-pie">Se habilita cuando cerrás las fases anteriores.</p>}
+        {e.evidencia && e.estado !== 'cerrada' && <p className="t-nota pt-pie">{e.evidencia.hechos} de {e.evidencia.total} {study.activities.find((x) => x.id === f.actividad)?.units?.length ? 'capítulos aprobados' : `${study.activities.find((x) => x.id === f.actividad)?.unit ?? 'avances'} hechos`}.</p>}
+        {e.estado === 'proxima' && <p className="t-nota pt-pie">Se habilita al cerrar las fases anteriores.</p>}
         {e.estado === 'actual' && <div className="pt-acciones"><Boton variante="primario" ancho deshabilitado={e.lista ? false : `Faltan ${falta} para cerrar ${f.id}`} onClick={cerrar}>Cerrar {f.id}</Boton></div>}
         {e.estado === 'cerrada' && ultimaCerrada?.fase.id === f.id && <div className="pt-acciones"><Boton variante="secundario" icono="deshacer" onClick={reabrir}>Reabrir {f.id}</Boton></div>}
       </Grupo>

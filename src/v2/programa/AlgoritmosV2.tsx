@@ -65,7 +65,7 @@ export default function AlgoritmosV2({ day }: PropsV2) {
         ) : (
           <>
             <p className="t-cuerpo">{ALG.sprint.dias} días de {ALG.sprint.minPorDia} min.</p>
-            <Boton variante="primario" icono="play" onClick={() => { iniciarSprintSinIA(hoy); aviso({ titulo: 'Sprint sin IA', sub: `${ALG.sprint.dias} días desde hoy`, tono: 'hecho' }); }}>Arrancar el sprint hoy</Boton>
+            <Boton variante="primario" icono="play" onClick={() => { iniciarSprintSinIA(hoy); aviso({ titulo: 'Sprint sin IA', sub: `${ALG.sprint.dias} días desde hoy`, tono: 'hecho' }); }}>Arrancar hoy</Boton>
           </>
         )}
         <div className="pg-datos pg-datos-hero">
