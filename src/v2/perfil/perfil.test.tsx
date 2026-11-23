@@ -196,7 +196,8 @@ describe('Perfil 2.0 · la pantalla', () => {
     const hitos = within(screen.getByRole('region', { name: 'Próximos hitos' })).getAllByRole('button');
     expect(hitos.length).toBeGreaterThan(0);
     expect(hitos.length).toBeLessThanOrEqual(3);
-    expect(hitos.some((h) => /^7 seguidos: /.test(h.getAttribute('aria-label') ?? ''))).toBe(true);
+    // El nombre empieza con lo que se ve ("7 seguidos 3 de 7") y sigue, oculto, con la pista.
+    expect(within(screen.getByRole('region', { name: 'Próximos hitos' })).getByRole('button', { name: '7 seguidos 3 de 7. Mejor racha: 3' })).toBeTruthy();
     const sellos = screen.getByRole('region', { name: 'Sellos' });
     for (const g of ['Constancia', 'Cuerpo', 'Estudio', 'Trabajo']) expect(within(within(sellos).getByRole('region', { name: g })).getAllByRole('button')).toHaveLength(6);
     expect(within(sellos).getByRole('button', { name: 'Hombre nuevo: ganado' })).toBeTruthy();
@@ -241,11 +242,12 @@ describe('Perfil 2.0 · la pantalla', () => {
     abrir();
     const vitrina = within(screen.getByRole('region', { name: 'Lo último' }));
     const botones = vitrina.getAllByRole('button');
-    expect(botones.map((b) => b.getAttribute('aria-label')?.split(':')[0])).toEqual(['Madrugador', 'Primer entreno', '7 seguidos']); // los tres últimos; el más nuevo, al medio
+    expect(botones.map((b) => b.querySelector('b')?.textContent)).toEqual(['Madrugador', 'Primer entreno', '7 seguidos']); // los tres últimos; el más nuevo, al medio
     expect(botones[1].closest('li')!.classList.contains('pf-vitrina-primero')).toBe(true);
     expect(botones[1].querySelector('svg')!.getAttribute('width')).toBe('112');
     expect(botones[0].querySelector('svg')!.getAttribute('width')).toBe('84');
-    expect(botones[1].getAttribute('aria-label')).toMatch(/^Primer entreno: ganado el /);
+    // El nombre es lo que se ve ("Primer entreno 22 nov") más, oculto, que está ganado: quien lo pide por voz lo encuentra.
+    expect(vitrina.getByRole('button', { name: /^Primer entreno ganado el\s22 nov$/i })).toBe(botones[1]);
     fireEvent.click(botones[1]);
     expect(within(dialogo()).getByText('Terminar tu primer entrenamiento.')).toBeTruthy();
   });
@@ -276,7 +278,7 @@ describe('Perfil 2.0 · la pantalla', () => {
 
   it('el primer día ya tiene un hito a la vista (madrugar) y un historial que dice cómo se llena', () => {
     abrir();
-    expect(within(screen.getByRole('region', { name: 'Próximos hitos' })).getByRole('button', { name: /^Madrugador: / })).toBeTruthy();
+    expect(within(screen.getByRole('region', { name: 'Próximos hitos' })).getByRole('button', { name: /^Madrugador \d/ })).toBeTruthy();
     expect(within(screen.getByRole('region', { name: 'El año' })).getByText('1 día · promedio 0 %')).toBeTruthy();
     fireEvent.click(screen.getByRole('button', { name: /^Historial/ }));
     expect(within(dialogo()).getByText('Todavía no cerraste ningún día')).toBeTruthy();

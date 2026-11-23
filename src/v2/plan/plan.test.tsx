@@ -103,10 +103,12 @@ describe('Plan 2.0 · el centro', () => {
     expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent('Plan');
     expect(screen.getByText('Semana 1 de 52')).toBeInTheDocument();
     // El héroe es el primero; "PetrIA" también aparece en la semana, día por día.
+    // El link se llama como el bloque y se estira sobre la tarjeta; lo demás se lee aparte.
     const heroe = screen.getAllByRole('link', { name: 'PetrIA' })[0];
-    expect(heroe).toHaveClass('tp-heroe-tarjeta');
+    expect(heroe).toHaveClass('s-tarjeta-enlace');
     expect(heroe).toHaveAttribute('href', '#/metas/periodos/P1');
-    expect(within(heroe).getByRole('img', { name: 'PetrIA: trabajo hecho: 0 %' })).toBeInTheDocument();
+    const tarjeta = heroe.closest('.tp-heroe-tarjeta') as HTMLElement;
+    expect(within(tarjeta).getByRole('img', { name: 'PetrIA: trabajo hecho: 0 %' })).toBeInTheDocument();
     const adentro = within(screen.getByRole('region', { name: 'Adentro de PetrIA' }));
     expect(adentro.getByRole('link', { name: /v1\.0 MVP/ })).toHaveAttribute('href', '#/metas/periodos/P1%3Av1.0');
     expect(adentro.getByRole('link', { name: /Lote 1\.3/ })).toBeInTheDocument();
@@ -145,7 +147,7 @@ describe('Plan 2.0 · un período', () => {
 
   it('atrasado: sugiere correr lo que sigue; confirmar guarda las fechas y "Deshacer" las vuelve', () => {
     const { otra } = abrir('#/metas/periodos/P1');
-    fireEvent.click(screen.getByRole('button', { name: /^Correr lo que sigue\d+ cambios$/ }));
+    fireEvent.click(screen.getByRole('button', { name: /^Correr lo que sigue \d+ cambios$/ }));
     const sug = within(screen.getByRole('dialog', { name: 'Correr lo que sigue' }));
     expect(sug.getByText(/A este ritmo, PetrIA termina el 11 dic \(2 días más\)\./)).toBeInTheDocument();
     const cambios = sug.getAllByRole('checkbox');

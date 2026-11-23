@@ -79,10 +79,11 @@ export default function PerfilV2({ day }: PropsV2) {
           <ul className="capa-1 pf-vitrina" style={{ ['--v-c' as string]: colorDeSello(podio[0].color) }}>
             {enPodio.map((x, k) => (
               <li key={x.id} className={x.id === podio[0].id ? 'pf-vitrina-primero' : undefined}>
-                <button type="button" onClick={() => abrir(x)} aria-label={`${x.name}: ganado el ${fmtFecha(s.profile.seals[x.id]).toLowerCase()}`}>
+                {/* El nombre del botón es lo que se ve (para quien lo pide por voz) y, oculto, que está ganado. */}
+                <button type="button" onClick={() => abrir(x)}>
                   <SelloInclinable marca={x.mark} color={x.color} grupo={x.group} ganado lado={LADO_PODIO(x)} i={k} className="sl-grande" />
-                  <b className="t-nota">{x.name}</b>
-                  <span className="t-rotulo">{fmtFecha(s.profile.seals[x.id]).split(' ').slice(1).join(' ')}</span>
+                  <b className="t-nota">{x.name}</b>{' '}
+                  <span className="t-rotulo"><span className="v2-oculto">ganado el</span>{' '}{fmtFecha(s.profile.seals[x.id]).split(' ').slice(1).join(' ')}</span>
                 </button>
               </li>
             ))}
@@ -101,11 +102,13 @@ export default function PerfilV2({ day }: PropsV2) {
           <ul className="capa-1 pf-hitos">
             {hs.map(({ def, p }) => (
               <li key={def.id}>
-                <button type="button" onClick={() => abrir(def)} aria-label={`${def.name}: ${p.hint}`}>
+                <button type="button" onClick={() => abrir(def)}>
                   <SelloDe def={def} ganado={false} lado={44} progreso={p.target > 0 ? p.value / p.target : 0} />
                   <span className="pf-hito-texto">
-                    <span className="pf-hito-cab"><b className="t-cuerpo">{def.name}</b><span className="t-dato">{def.id.startsWith('peso-') ? `${Math.round(p.value)} %` : `${fmt1(p.value)} de ${p.target}`}</span></span>
-                    <Barra valor={p.value} max={p.target} nombre={`${def.name}: avance`} area={colorDeSello(def.color)} />
+                    <span className="pf-hito-cab"><b className="t-cuerpo">{def.name}</b>{' '}<span className="t-dato">{def.id.startsWith('peso-') ? `${Math.round(p.value)} %` : `${fmt1(p.value)} de ${p.target}`}</span></span>
+                    {/* Dentro de un botón la barra no se anuncia como tal: la cifra de al lado ya lo dice. */}
+                    <span aria-hidden="true"><Barra valor={p.value} max={p.target} nombre={`${def.name}: avance`} area={colorDeSello(def.color)} /></span>
+                    <span className="v2-oculto">. {p.hint}</span>
                   </span>
                 </button>
               </li>
@@ -126,9 +129,11 @@ export default function PerfilV2({ day }: PropsV2) {
                   const camino = caminoDe(x);
                   return (
                     <li key={x.id}>
-                      <button type="button" onClick={() => abrir(x)} aria-label={`${x.name}: ${ganado ? 'ganado' : `bloqueado${camino ? `, ${Math.round(camino * 100)} %` : ''}`}`}>
+                      {/* Se llama por lo que se ve (el nombre) y sigue, oculto, con el estado: "100 días: bloqueado, 3 %". */}
+                      <button type="button" onClick={() => abrir(x)}>
                         <span className="pf-pieza"><SelloDe def={x} ganado={ganado} lado={70} i={i} progreso={camino} /></span>
                         <span className={ganado ? undefined : 'pf-apagado'}>{x.name}</span>
+                        <span className="v2-oculto">: {ganado ? 'ganado' : `bloqueado${camino ? `, ${Math.round(camino * 100)} %` : ''}`}</span>
                       </button>
                     </li>
                   );

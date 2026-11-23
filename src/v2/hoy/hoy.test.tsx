@@ -104,8 +104,8 @@ describe('Hoy 2.0 · la pantalla', () => {
     hoy('09:30');
     const linea = within(screen.getByRole('region', { name: 'El día' }));
     expect(linea.getAllByRole('listitem')).toHaveLength(14);
-    expect(linea.getByRole('button', { name: /^08:30, Abi \+ correr, ahora\. 1 h 30 · 2 pasos$/ })).toBeInTheDocument();
-    expect(linea.getByRole('button', { name: /^04:00, .*, sin hacer\. 30 min · 2 pasos$/ })).toBeInTheDocument();
+    expect(linea.getByRole('button', { name: /^08:30, Abi \+ correr\. 1 h 30 \(ahora, 2 pasos\)$/ })).toBeInTheDocument();
+    expect(linea.getByRole('button', { name: /^04:00, .*\. 30 min \(sin hacer, 2 pasos\)$/ })).toBeInTheDocument();
   });
 
   it('tildar los pasos en el héroe cumple la meta, avisa cuánto suma y el héroe pasa a lo próximo', () => {
@@ -155,7 +155,7 @@ describe('Hoy 2.0 · la pantalla', () => {
     otra();
     expect(bloque('trabajo').hecho).toMatchObject({ nota: 'La reunión no se dio' });
     expect(screen.getAllByRole('status').map((x) => x.textContent).join(' ')).toMatch(/Meta 4 cumplida/);
-    fireEvent.click(screen.getByRole('button', { name: /^10:00, Trabajo actual, hecha\. 2 h · dada por hecha$/ }));
+    fireEvent.click(screen.getByRole('button', { name: /^10:00, Trabajo actual\. 2 h · dada por hecha$/ }));
     fireEvent.click(within(screen.getByRole('dialog', { name: 'Trabajo actual' })).getByRole('button', { name: 'Deshacer' }));
     expect(bloque('trabajo').hecho).toBeUndefined();
   });

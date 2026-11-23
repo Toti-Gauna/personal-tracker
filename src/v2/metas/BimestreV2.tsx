@@ -64,7 +64,7 @@ function Vista({ day, elegido }: { day: PropsV2['day']; elegido?: number }) {
 
       <div className="mt-bims" role="tablist" aria-label="Bimestres del plan" ref={fila}>
         {Array.from({ length: BIMESTRES }, (_, i) => i + 1).map((x) => (
-          <button key={x} type="button" role="tab" aria-selected={x === n} className={x === actual ? 'actual' : undefined} aria-label={`Bimestre ${x}${x === actual ? ', el de ahora' : ''}`} onClick={() => setN(x)}>B{x}</button>
+          <button key={x} type="button" role="tab" aria-selected={x === n} className={x === actual ? 'actual' : undefined} aria-label={`B${x}, bimestre ${x}${x === actual ? ', el de ahora' : ''}`} onClick={() => setN(x)}>B{x}</button>
         ))}
       </div>
 

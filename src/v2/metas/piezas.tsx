@@ -119,9 +119,9 @@ export function FilaMetaPlan({ m, tipo, clave, base, desde, hasta, date, ctx, co
         </div>
       ) : (
         <div className="mt-fila-cuenta">
-          <button type="button" className="mt-cuerpo" onClick={() => setHoja(true)} aria-label={`${m.texto}: ${fmt(v)} de ${fmt(meta)}${m.unidad ? ` ${m.unidad}` : ''}. Opciones`}>
+          <button type="button" className="mt-cuerpo" onClick={() => setHoja(true)} aria-label={`${m.texto}${nota ? `, ${nota}` : ''}: ${fmt(v)} de ${fmt(meta)}${m.unidad ? ` ${m.unidad}` : ''}. Opciones`}>
             <span className="mt-titulo">{color && <i className="area-punto" />}{m.texto}</span>
-            {nota && <small>{nota}</small>}
+            {nota && <>{' '}<small>{nota}</small></>}
           </button>
           <span className="mt-valor t-dato" aria-hidden="true">{fmt(v)}/{fmt(meta)}{m.unidad === 'h' ? ' h' : ''}</span>
           {auto ? <span className="t-rotulo mt-auto" title="Se suma solo">auto</span>
@@ -187,9 +187,9 @@ export function FilaMetaPropia({ g, date, nota, valorTexto }: { g: Goal; date: s
   };
   const agregarSub = () => { if (!sub.trim()) return; addSub(g.id, date, sub.trim()); setSub(''); };
   const cabeza = (
-    <button type="button" className="mt-cuerpo" onClick={() => setHoja(true)} aria-label={`${g.title}: ${nombreValor}. Opciones`}>
+    <button type="button" className="mt-cuerpo" onClick={() => setHoja(true)} aria-label={`${g.title}${texto ? `, ${texto}` : ''}: ${nombreValor}. Opciones`}>
       <span className="mt-titulo"><i className="area-punto" />{g.title}</span>
-      {texto && <small>{texto}</small>}
+      {texto && <>{' '}<small>{texto}</small></>}
     </button>
   );
   return (
@@ -279,7 +279,7 @@ export function FilaFija({ rama, clave, titulo, sub, lado, avance, de }: { rama:
     <div className="mt-fila" style={{ ['--area' as string]: color }}>
       <div className="mt-fila-cuenta sin-control">
         <button type="button" className="mt-cuerpo" onClick={() => setHoja(true)} aria-label={`${nombre}: ${titulo}. ${lado}. Cambiar`}>
-          <span className="mt-titulo"><i className="area-punto" />{nombre}</span>
+          <span className="mt-titulo"><i className="area-punto" />{nombre}</span>{' '}
           <span className="mt-detalle t-cuerpo">{titular(titulo)}</span>
         </button>
         <span className="mt-valor t-dato" aria-hidden="true">{lado}</span>

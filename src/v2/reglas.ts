@@ -47,6 +47,16 @@ export function numeroEscrito(s: string): number | undefined {
  * El tono de un estado decide su forma: `neutro` es una píldora de contorno, `atencion` una píldora llena del color del texto
  * (sin tinte) y `critico` la única que usa el rojo. `hecho` lleva el trazo de la marca.
  */
+/** Un texto sin acentos, mayúsculas ni signos: para comparar lo que se ve con lo que se anuncia. */
+export const textoPlano = (t: string) => t.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9ñ]+/g, ' ').trim();
+
+/**
+ * El nombre accesible de algo que muestra un rótulo corto: empieza con ese rótulo cuando el nombre no lo contiene ya
+ * ("P2, VitalIA, …"). Quien usa la voz dice lo que ve (WCAG 2.5.3, la etiqueta dentro del nombre).
+ */
+export const nombreConRotulo = (rotulo: string, nombre: string) =>
+  rotulo && !textoPlano(nombre).includes(textoPlano(rotulo)) ? `${rotulo}, ${nombre}` : nombre;
+
 export type TonoEstado = 'neutro' | 'atencion' | 'critico' | 'hecho';
 
 export interface EstadoVisual { palabra: string; icono: NombreIcono; tono: TonoEstado }

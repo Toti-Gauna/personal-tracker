@@ -61,9 +61,9 @@ export function Paradas({ area, paradas, onElegir, etiqueta }: { area: string; p
     <ol className="pg-linea" style={{ ['--area' as string]: area } as CSSProperties} aria-label={etiqueta}>
       {paradas.map((p) => (
         <li key={p.id} className={p.estado} aria-current={p.estado === 'actual' ? 'step' : undefined}>
-          <button type="button" aria-label={`${p.nombre}, ${PALABRA[p.estado]}${p.nota ? `. ${p.nota}` : ''}`} onClick={() => onElegir(p.id)}>
+          <button type="button" aria-label={`${p.nombre}${p.nota ? `. ${p.nota}` : ''}. ${PALABRA[p.estado]}`} onClick={() => onElegir(p.id)}>
             <i aria-hidden="true" />
-            <span className="pg-linea-texto"><b>{p.nombre}</b>{p.nota && <small>{p.nota}</small>}</span>
+            <span className="pg-linea-texto"><b>{p.nombre}</b>{p.nota && <>{' '}<small>{p.nota}</small></>}</span>
           </button>
         </li>
       ))}

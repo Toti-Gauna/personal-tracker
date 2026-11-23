@@ -130,7 +130,8 @@ describe('2.0 · Campos', () => {
     // Noviembre 2026 empieza en domingo: 6 huecos antes.
     expect(grillaMes(2026, 10).slice(0, 7)).toEqual([null, null, null, null, null, null, '2026-11-01']);
     render(<Con inicial={null as string | null}>{(v, set) => <CampoFecha etiqueta="Examen" valor={v} onCambio={set} hoy="2026-11-23" min="2026-11-23" />}</Con>);
-    fireEvent.click(screen.getByRole('button', { name: 'Examen' }));
+    // El nombre del campo es la etiqueta y lo que muestra (quien usa la voz dice lo que ve).
+    fireEvent.click(screen.getByRole('button', { name: 'Examen Elegir fecha' }));
     const cal = screen.getByRole('dialog', { name: 'Examen: calendario' });
     expect(within(cal).getByText('noviembre 2026')).toBeInTheDocument();
     expect(within(cal).getByRole('gridcell', { name: '22 nov 2026' })).toBeDisabled();
@@ -138,21 +139,21 @@ describe('2.0 · Campos', () => {
     fireEvent.click(within(cal).getByRole('button', { name: 'Mes siguiente' }));
     fireEvent.click(within(cal).getByRole('gridcell', { name: '12 dic 2026' }));
     expect(screen.queryByRole('dialog')).toBeNull();
-    expect(screen.getByRole('button', { name: 'Examen' })).toHaveTextContent('12 dic 2026');
+    expect(screen.getByRole('button', { name: 'Examen 12 dic 2026' })).toHaveTextContent('12 dic 2026');
   });
 
   it('selector: abre la lista desde abajo, elige y cierra; Escape cierra sin cambiar', () => {
     render(<Con inicial={'completo' as string | null}>{(v, set) => <Selector etiqueta="Rutina" valor={v} onCambio={set} opciones={[{ valor: 'completo', etiqueta: 'Día completo' }, { valor: 'corto', etiqueta: 'Día corto', nota: '05:00' }]} />}</Con>);
-    fireEvent.click(screen.getByRole('button', { name: 'Rutina' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Rutina Día completo' }));
     const hoja = screen.getByRole('dialog', { name: 'Rutina' });
     expect(within(hoja).getByRole('radio', { name: /Día completo/ })).toHaveAttribute('aria-checked', 'true');
     expect(document.activeElement).toBe(within(hoja).getByRole('radio', { name: /Día completo/ }));
     fireEvent.click(within(hoja).getByRole('radio', { name: /Día corto/ }));
     expect(screen.queryByRole('dialog')).toBeNull();
-    expect(screen.getByRole('button', { name: 'Rutina' })).toHaveTextContent('Día corto');
+    expect(screen.getByRole('button', { name: /^Rutina / })).toHaveTextContent('Día corto');
     // El foco vuelve al campo, no al cuerpo de la página.
-    expect(document.activeElement).toBe(screen.getByRole('button', { name: 'Rutina' }));
-    fireEvent.click(screen.getByRole('button', { name: 'Rutina' }));
+    expect(document.activeElement).toBe(screen.getByRole('button', { name: /^Rutina / }));
+    fireEvent.click(screen.getByRole('button', { name: /^Rutina / }));
     // Escape se atiende en la lista y no sigue (dentro de una hoja, no la cierra).
     const fuera = vi.fn();
     document.addEventListener('keydown', fuera);
@@ -160,7 +161,7 @@ describe('2.0 · Campos', () => {
     document.removeEventListener('keydown', fuera);
     expect(fuera).not.toHaveBeenCalled();
     expect(screen.queryByRole('dialog')).toBeNull();
-    expect(screen.getByRole('button', { name: 'Rutina' })).toHaveTextContent('Día corto');
+    expect(screen.getByRole('button', { name: /^Rutina / })).toHaveTextContent('Día corto');
   });
 
   it('segmentado: las flechas eligen y llevan el foco a la elegida; Inicio y Fin van a las puntas', () => {

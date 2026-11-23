@@ -14,7 +14,7 @@ import { Boton, Segmentado } from '../kit/controles';
 import { Barra } from '../kit/superficies';
 import { Grupo, Marco } from '../marco/Marco';
 import { reducido } from '../movimiento/movimiento';
-import { ESTADOS } from '../reglas';
+import { ESTADOS, nombreConRotulo } from '../reglas';
 import { HojaPeriodo, Lentes } from './Compartido';
 import { fecha, partesNombre, rango } from './datos';
 import { ZOOMS, acotar, anchoDe, carriles, empezados, escalaDe, limitesPpd, marcasEje, ppdDe, scrollAlEscalar, xDe, zoomCercano, type Escala, type Zoom } from './linea-datos';
@@ -148,7 +148,7 @@ export function LineaV2({ hoy }: { hoy: string }) {
     const ahora = p.inicio <= hoy && hoy <= p.fin && p.estado !== 'hecho';
     return (
       <button key={p.id} type="button" className={`ln-barra ${p.estado}${ahora ? ' ahora' : ''}`} style={estilo} onClick={() => setElegido(p)}
-        aria-label={`${p.nombre}, ${rango(p.inicio, p.fin, hoy)}, ${ESTADOS[p.estado].palabra.toLowerCase()}`}>
+        aria-label={nombreConRotulo(texto, `${p.nombre}, ${rango(p.inicio, p.fin, hoy)}, ${ESTADOS[p.estado].palabra.toLowerCase()}`)}>
         <i style={{ width: `${p.trabajo * 100}%` }} />
         {texto && <span>{texto}</span>}
       </button>
@@ -156,10 +156,11 @@ export function LineaV2({ hoy }: { hoy: string }) {
   };
   const tramo = (p: PeriodoMedido) => {
     const w = Math.max(3, anchoDe(escala, p.inicio, p.fin) - 1);
+    const texto = rotuloTramo(p, w);
     return (
       <button key={p.id} type="button" className={`ln-tramo ${p.estado}`} style={{ left: xDe(escala, p.inicio), width: w }} onClick={() => setElegido(p)}
-        aria-label={`${p.nombre}, ${rango(p.inicio, p.fin, hoy)}, ${ESTADOS[p.estado].palabra.toLowerCase()}`}>
-        <span>{rotuloTramo(p, w)}</span>
+        aria-label={nombreConRotulo(texto, `${p.nombre}, ${rango(p.inicio, p.fin, hoy)}, ${ESTADOS[p.estado].palabra.toLowerCase()}`)}>
+        <span>{texto}</span>
       </button>
     );
   };

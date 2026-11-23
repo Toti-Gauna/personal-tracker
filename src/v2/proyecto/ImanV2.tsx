@@ -26,12 +26,12 @@ const INFO = (
 );
 
 /** Los 8 tramos del Imán: uno por punto, empezando arriba y hacia la derecha; se dibujan encendidos con el trazo. */
-export function AnilloIman({ ok, tamano = 168, grosor = 10, nombre }: { ok: boolean[]; tamano?: number; grosor?: number; nombre?: string }) {
+export function AnilloIman({ ok, tamano = 168, grosor = 10, nombre, decorativo }: { ok: boolean[]; tamano?: number; grosor?: number; nombre?: string; /** Dentro de un link que ya lo dice. */ decorativo?: boolean }) {
   const r = (tamano - grosor) / 2, c = tamano / 2;
   const punto = (g: number) => [c + r * Math.cos((g * Math.PI) / 180), c + r * Math.sin((g * Math.PI) / 180)].map((x) => Math.round(x * 100) / 100);
   const n = ok.filter(Boolean).length;
   return (
-    <span className="pt-iman" role="img" aria-label={nombre ?? `Imán: ${n} de 8 puntos`} style={{ width: tamano, height: tamano }}>
+    <span className="pt-iman" {...(decorativo ? { 'aria-hidden': true } : { role: 'img', 'aria-label': nombre ?? `Imán: ${n} de 8 puntos` })} style={{ width: tamano, height: tamano }}>
       <svg viewBox={`0 0 ${tamano} ${tamano}`} aria-hidden="true">
         {ok.map((v, i) => {
           const [x0, y0] = punto(-90 + i * 45 + 3.5), [x1, y1] = punto(-90 + i * 45 + 41.5);

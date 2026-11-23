@@ -266,9 +266,10 @@ export function CampoFecha({ etiqueta, valor, onCambio, hoy, min, max, nota }: F
   return (
     <div className="k-campo">
       <span className="k-campo-etiqueta" id={id}>{etiqueta}</span>
-      <button ref={campo} type="button" className="k-campo-caja k-fecha-boton" aria-labelledby={id} aria-expanded={abierto} aria-describedby={nota ? `${id}-n` : undefined} onClick={() => setAbierto((x) => !x)}>
+      {/* El nombre es la etiqueta y lo que muestra el campo (WCAG 2.5.3: quien lo pide por voz dice lo que ve). */}
+      <button ref={campo} type="button" className="k-campo-caja k-fecha-boton" aria-labelledby={`${id} ${id}-v`} aria-expanded={abierto} aria-describedby={nota ? `${id}-n` : undefined} onClick={() => setAbierto((x) => !x)}>
         <Icono nombre="calendario" lado={20} />
-        <span className={valor ? undefined : 'k-vacio'}>{valor ? fechaLarga(valor) : 'Elegir fecha'}</span>
+        <span id={`${id}-v`} className={valor ? undefined : 'k-vacio'}>{valor ? fechaLarga(valor) : 'Elegir fecha'}</span>
         <Icono nombre={abierto ? 'arriba' : 'abajo'} lado={18} />
       </button>
       {nota && <div className="k-campo-pie"><small id={`${id}-n`}>{nota}</small></div>}
@@ -316,8 +317,8 @@ export function Selector<T extends string>({ etiqueta, valor, opciones, onCambio
   return (
     <div className="k-campo">
       <span className="k-campo-etiqueta" id={id}>{etiqueta}</span>
-      <button ref={campo} type="button" className="k-campo-caja k-fecha-boton" aria-labelledby={id} aria-haspopup="dialog" aria-expanded={abierto} onClick={() => setAbierto(true)}>
-        <span className={actual ? undefined : 'k-vacio'}>{actual?.etiqueta ?? placeholder}</span>
+      <button ref={campo} type="button" className="k-campo-caja k-fecha-boton" aria-labelledby={`${id} ${id}-v`} aria-haspopup="dialog" aria-expanded={abierto} onClick={() => setAbierto(true)}>
+        <span id={`${id}-v`} className={actual ? undefined : 'k-vacio'}>{actual?.etiqueta ?? placeholder}</span>
         <Icono nombre="abajo" lado={18} />
       </button>
       {abierto && (

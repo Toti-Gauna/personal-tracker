@@ -59,7 +59,7 @@ export default function AnioV2({ day }: PropsV2) {
 
       <nav className="mt-bims" aria-label="Bimestres del año 1">
         {[1, 2, 3, 4, 5, 6].map((n) => (
-          <a key={n} href={`#/metas/bimestre/${n}`} aria-current={n === actual ? 'true' : undefined} className={n === actual ? 'actual' : undefined} aria-label={`Bimestre ${n}: ${nombreBimestre(n, nombres)}${n === actual ? ', el de ahora' : ''}`}>B{n}</a>
+          <a key={n} href={`#/metas/bimestre/${n}`} aria-current={n === actual ? 'true' : undefined} className={n === actual ? 'actual' : undefined} aria-label={`B${n}, bimestre ${n}: ${nombreBimestre(n, nombres)}${n === actual ? ', el de ahora' : ''}`}>B{n}</a>
         ))}
       </nav>
 

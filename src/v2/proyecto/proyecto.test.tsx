@@ -120,7 +120,7 @@ describe('Página de un bloque', () => {
   it('las versiones son un paso a paso: cada una abre su hoja, se tildan los entregables y se publica', () => {
     abrir('proyecto/P1');
     const pasos = screen.getAllByRole('button', { name: /^Versión \d/ });
-    expect(pasos.map((p) => p.textContent)).toEqual(['1.0MVP', '1.1Producto', '2.0Plataforma', '3.0Producción']);
+    expect(pasos.map((p) => p.textContent)).toEqual(['1.0 MVP', '1.1 Producto', '2.0 Plataforma', '3.0 Producción']);
     fireEvent.click(pasos[0]);
     const d = dialogo();
     expect(within(d).getByText('1.0 · MVP')).toBeTruthy();
@@ -312,7 +312,7 @@ describe('De fondo 2.0', () => {
 
   it('la pista secundaria: una tarjeta por app, cada una con su portada; la comercial, un pipeline por estado', () => {
     const { container, unmount } = abrir('pista/secundaria');
-    expect(screen.getAllByRole('link', { name: /^(HandyX|JulIA|Clip Studio|Roofy),/ })).toHaveLength(4);
+    expect(screen.getAllByRole('link', { name: /^(HandyX|JulIA|Clip Studio|Roofy) / })).toHaveLength(4);
     expect(container.querySelectorAll('.pt-app .pt-portada')).toHaveLength(4);
     unmount();
     abrir('pista/comercial');
@@ -330,7 +330,7 @@ describe('De fondo 2.0', () => {
     fireEvent.keyDown(dialogo(), { key: 'Escape' });
     escribir('Repo', 'https://github.com/yo/handyx', true);
     expect(plan().fondo?.handyx?.repo).toBe('https://github.com/yo/handyx');
-    expect(screen.getByRole('link', { name: 'Imán: 0 de 8 puntos' }).getAttribute('href')).toBe('#/metas/iman/handyx');
+    expect(screen.getByRole('link', { name: 'Imán 0/8: 0 de 8 puntos' }).getAttribute('href')).toBe('#/metas/iman/handyx');
   });
 
   it('un showcase comercial: publicarlo pide el Imán y la seguridad; los leads se suman y cambian de estado', () => {
@@ -399,15 +399,16 @@ describe('Imán 2.0', () => {
 describe('Open source 2.0', () => {
   it('una tarjeta de paquete por herramienta, con su versión y registro', () => {
     abrir('open-source');
-    const tarjetas = screen.getAllByRole('button', { name: /sin publicar$|publicada$/ });
+    // Cada tarjeta se llama por lo que muestra: el nombre, el tipo, el paquete, la versión y el registro.
+    const tarjetas = document.querySelectorAll('button.pt-paquete');
     expect(tarjetas).toHaveLength(HERRAMIENTAS.length);
-    expect(screen.getByRole('button', { name: 'Alawys, sin publicar' }).textContent).toContain('npm');
+    expect(screen.getByRole('button', { name: /^Alawys Producto propio .* Sin publicar npm$/ }).textContent).toContain('npm');
     expect(screen.getByText('Presets de Alawys')).toBeTruthy();
   });
 
   it('la hoja de una herramienta: qué falta para publicar, el link y las descargas se guardan', () => {
     abrir('open-source');
-    fireEvent.click(screen.getByRole('button', { name: 'Alawys, sin publicar' }));
+    fireEvent.click(screen.getByRole('button', { name: /^Alawys / }));
     const d = dialogo();
     expect(within(d).getAllByText(/Para publicar falta/).length).toBeGreaterThanOrEqual(1);
     escribir('Link del paquete', 'https://npmjs.com/package/create-alawys', true);

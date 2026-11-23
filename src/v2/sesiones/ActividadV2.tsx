@@ -114,7 +114,7 @@ export default function ActividadV2({ ruta }: PropsV2) {
         <span className="k-campo-etiqueta">Cuándo</span>
         <div className="se-dias">
           {DIAS.map((d, i) => (
-            <button key={d} type="button" aria-pressed={a.days.includes(i)} aria-label={DIAS_LARGO[i]} onClick={() => set({ days: a.days.includes(i) ? a.days.filter((x) => x !== i) : [...a.days, i].sort() })}>{d}</button>
+            <button key={d} type="button" aria-pressed={a.days.includes(i)} aria-label={`${d}, ${DIAS_LARGO[i].toLowerCase()}`} onClick={() => set({ days: a.days.includes(i) ? a.days.filter((x) => x !== i) : [...a.days, i].sort() })}>{d}</button>
           ))}
         </div>
       </div>

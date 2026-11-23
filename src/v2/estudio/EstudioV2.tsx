@@ -88,8 +88,8 @@ function Hub({ day, hoy }: { day: PropsV2['day']; hoy: string }) {
       <Grupo titulo="Tus caminos">
         <div className="es-lineas">
           {lineas.map((l) => (
-            <a key={l.id} className="capa-1 es-linea" href={l.href} style={{ ['--area' as string]: l.area }} aria-label={`${l.nombre}: ${l.ahora}`}>
-              <span className="es-linea-cab"><i className="area-punto" /><b className="t-encabezado">{l.nombre}</b><span className="t-dato">{l.hechas} de {l.estaciones.length}</span></span>
+            <a key={l.id} className="capa-1 es-linea" href={l.href} style={{ ['--area' as string]: l.area }}>
+              <span className="es-linea-cab"><i className="area-punto" /><b className="t-encabezado">{l.nombre}</b>{' '}<span className="t-dato">{l.hechas} de {l.estaciones.length}{' '}<span className="v2-oculto">{l.unidad} hechos.</span></span></span>{' '}
               <Metro linea={l} />
               <span className="t-nota es-linea-ahora"><b>{l.ahora}</b>{l.vasASer ? <> → {l.vasASer}</> : null}</span>
             </a>

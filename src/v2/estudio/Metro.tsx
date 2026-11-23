@@ -7,10 +7,11 @@ import type { Estacion, Linea } from './lineas';
 
 const estilo = (area: string, n?: number) => ({ ['--area' as string]: area, ...(n != null ? { ['--n' as string]: n } : {}) }) as CSSProperties;
 
+/** Va siempre dentro de un link que ya dice cuántos van: es dibujo, no se anuncia. */
 export function Metro({ linea }: { linea: Pick<Linea, 'nombre' | 'area' | 'estaciones' | 'hechas' | 'unidad'> }) {
   const n = linea.estaciones.length;
   return (
-    <ol className="es-metro" style={estilo(linea.area, n)} aria-label={`${linea.nombre}: ${linea.hechas} de ${n} ${linea.unidad} hechos`}>
+    <ol className="es-metro" style={estilo(linea.area, n)} aria-hidden="true">
       {linea.estaciones.map((e) => <li key={e.id} className={e.estado} aria-current={e.estado === 'actual' ? 'step' : undefined}><i /></li>)}
     </ol>
   );

@@ -48,7 +48,7 @@ export function Pasos({ items, onElegir }: { items: { id: string; nombre: string
           <li key={x.id} className={`pt-paso ${x.estado}`}>
             <button type="button" onClick={() => onElegir(x.id)} aria-label={`Versión ${x.id}, ${x.nombre}, ${e.palabra.toLowerCase()}`}>
               <span className="pt-nodo"><Icono nombre={e.icono} lado={16} /></span>
-              <b className="t-dato">{x.id}</b>
+              <b className="t-dato">{x.id}</b>{' '}
               <small>{x.nombre}</small>
             </button>
           </li>

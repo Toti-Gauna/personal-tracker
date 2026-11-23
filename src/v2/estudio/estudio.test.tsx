@@ -56,7 +56,8 @@ describe('Estudio 2.0 · el metro', () => {
     const ls = renderHook(() => useLineas(HOY)).result.current;
     const { container } = render(<Metro linea={ls[0]} />);
     expect(container.querySelectorAll('.es-metro > li')).toHaveLength(ls[0].estaciones.length);
-    expect(screen.getByRole('list', { name: new RegExp(`^Matemática: 0 de ${ls[0].estaciones.length} tramos hechos$`) })).toBeTruthy();
+    // Es dibujo: va dentro de un link que ya dice cuántos van.
+    expect(container.querySelector('.es-metro')!.getAttribute('aria-hidden')).toBe('true');
     expect(container.querySelectorAll('.es-metro > li.actual')).toHaveLength(1);
     expect(container.querySelector('.es-metro > li.actual')!.getAttribute('aria-current')).toBe('step');
   });
@@ -66,9 +67,9 @@ describe('Estudio 2.0 · el centro', () => {
   it('arriba lo de hoy; abajo los caminos, los pasos, la semana y el repaso', () => {
     abrir('#/estudio');
     expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent('Estudio');
-    expect(screen.getByRole('link', { name: /^Matemática:/ }).getAttribute('href')).toBe('#/estudio/mate');
-    expect(screen.getByRole('link', { name: /^Idiomas:/ }).getAttribute('href')).toBe('#/estudio/idiomas');
-    expect(screen.getByRole('link', { name: /^Programación:/ }).getAttribute('href')).toBe('#/estudio/prog');
+    expect(screen.getByRole('link', { name: /^Matemática \d+ de \d+ \S+ hechos\./ }).getAttribute('href')).toBe('#/estudio/mate');
+    expect(screen.getByRole('link', { name: /^Idiomas \d+ de \d+ \S+ hechos\./ }).getAttribute('href')).toBe('#/estudio/idiomas');
+    expect(screen.getByRole('link', { name: /^Programación \d+ de \d+ \S+ hechos\./ }).getAttribute('href')).toBe('#/estudio/prog');
     for (const t of ['Tus caminos', 'Esta semana', 'Repasar', 'Más']) expect(screen.getByRole('region', { name: t })).toBeTruthy();
     expect(screen.getByRole('img', { name: /^Minutos de estudio por día:/ })).toBeTruthy();
     expect(screen.getByRole('img', { name: /^Minutos de repaso que vienen:.*tope 20/ })).toBeTruthy();

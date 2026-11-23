@@ -49,9 +49,9 @@ function Secundarias({ hoy }: { hoy: string }) {
         {apps.map((a) => {
           const n = puntosIman(plan.iman?.[a.id]).filter((p) => p.ok).length;
           return (
-            <a key={a.id} className="capa-1 pt-app" href={`#/metas/fondo/${a.id}`} aria-label={`${a.nombre}, ${rango(a.inicio, a.fin, hoy)}`}>
+            <a key={a.id} className="capa-1 pt-app" href={`#/metas/fondo/${a.id}`}>
               <Portada id={a.id} area={areaDe(a)} className="pt-mini"><b className="t-encabezado pt-app-nombre">{a.nombre}</b></Portada>
-              <span className="pt-app-pie"><Estado estado={a.estado} /><span className="t-dato">{rango(a.inicio, a.fin, hoy)}</span><span className="t-nota">Imán {n}/8</span></span>
+              {' '}<span className="pt-app-pie"><Estado estado={a.estado} />{' '}<span className="t-dato">{rango(a.inicio, a.fin, hoy)}</span>{' '}<span className="t-nota">Imán {n}/8</span></span>
             </a>
           );
         })}

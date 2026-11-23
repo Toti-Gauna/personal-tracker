@@ -66,14 +66,15 @@ export default function SemanaV2({ day }: PropsV2) {
           const hecho = hechos.has(addDays(m, i));
           const nombre = r ? r.name : id === REST_DAY ? 'Descanso activo' : 'Libre';
           const detalle = r ? `18:00 · ${fmtH(trainingMin(r))}${alterna ? ' · A/B' : ''}` : id === REST_DAY ? `Caminar ${REST_DAY_MIN} min` : 'Sin entreno';
+          const pie = perdido ? 'No se hizo' : hecho ? 'Hecho' : detalle;
           return (
             <li key={i} className={i === hoy ? 'ax-hoy' : undefined}>
-              <button type="button" className="ax-dia" aria-label={`${NOMBRES[i]}${i === hoy ? ' (hoy)' : ''}: ${nombre}. Cambiar`} onClick={() => setEditando(i)}>
+              <button type="button" className="ax-dia" aria-label={`${NOMBRES[i]}${i === hoy ? ' (hoy)' : ''}: ${nombre} ${pie}. Cambiar`} onClick={() => setEditando(i)}>
                 <span className="ax-dia-n t-rotulo" aria-hidden="true">{DIAS[i]}</span>
                 <span className="ax-dia-t">
-                  <b>{nombre}</b>
+                  <b>{nombre}</b>{' '}
                   <small>
-                    {perdido ? <><Icono nombre="atencion" lado={14} /> No se hizo</> : hecho ? <><Icono nombre="tilde" lado={14} /> Hecho</> : detalle}
+                    {perdido || hecho ? <><Icono nombre={perdido ? 'atencion' : 'tilde'} lado={14} /> {pie}</> : pie}
                   </small>
                 </span>
                 <Icono nombre="siguiente" lado={18} className="icono s-chevron" />

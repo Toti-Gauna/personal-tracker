@@ -65,7 +65,7 @@ export function FondoItemV2({ id, hoy }: { id: string; hoy: string }) {
         <span className="t-rotulo">{sec ? 'App secundaria' : com ? marca ?? 'Marca a definir' : 'Lanzamiento'}</span>
         <div className="pt-hero-fila">
           {inicio && <span className="t-dato">{rango(inicio, fin, hoy)}</span>}
-          <a className="pt-iman-enlace" href={`#/metas/iman/${id}`} aria-label={`Imán: ${ok.filter(Boolean).length} de 8 puntos`}><AnilloIman ok={ok} tamano={40} grosor={4} /><span className="t-dato">Imán {ok.filter(Boolean).length}/8</span><Icono nombre="siguiente" lado={14} /></a>
+          <a className="pt-iman-enlace" href={`#/metas/iman/${id}`} aria-label={`Imán ${ok.filter(Boolean).length}/8: ${ok.filter(Boolean).length} de 8 puntos`}><AnilloIman ok={ok} tamano={40} grosor={4} decorativo /><span className="t-dato">Imán {ok.filter(Boolean).length}/8</span><Icono nombre="siguiente" lado={14} /></a>
         </div>
       </Portada>
 

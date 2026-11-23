@@ -160,8 +160,9 @@ export default function EntrenoV2({ day }: PropsV2) {
             {visibles.map((m) => (
               <li key={m}>
                 <button type="button" onClick={() => setMusculo(m)} aria-label={`${NOMBRE[m]}: ${fmtSeries(vol.hecho[m] ?? 0)} de ${fmtSeries(vol.plan[m] ?? 0)} series`}>
-                  <span className="en-musculo-cab"><b className="t-cuerpo">{NOMBRE[m]}</b><span className="t-dato">{fmtSeries(vol.hecho[m] ?? 0)} de {fmtSeries(vol.plan[m] ?? 0)}</span></span>
-                  <Barra valor={vol.hecho[m] ?? 0} max={Math.max(vol.plan[m] ?? 0, vol.hecho[m] ?? 0, 1)} nombre={`${NOMBRE[m]}: series hechas`} area="var(--trazo)" />
+                  <span className="en-musculo-cab"><b className="t-cuerpo">{NOMBRE[m]}</b>{' '}<span className="t-dato">{fmtSeries(vol.hecho[m] ?? 0)} de {fmtSeries(vol.plan[m] ?? 0)}</span></span>
+                  {/* Dentro del botón la barra es dibujo: la cifra de al lado ya lo dice. */}
+                  <span aria-hidden="true"><Barra valor={vol.hecho[m] ?? 0} max={Math.max(vol.plan[m] ?? 0, vol.hecho[m] ?? 0, 1)} nombre={`${NOMBRE[m]}: series hechas`} area="var(--trazo)" /></span>
                 </button>
               </li>
             ))}

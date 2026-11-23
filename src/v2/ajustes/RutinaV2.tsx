@@ -37,7 +37,7 @@ function Fila({ texto, extra, i, n, nombre, onAbrir, onMover }: { texto: string;
   return (
     <li className="ax-item">
       <button type="button" className="s-fila s-tocable ax-item-main" aria-label={`Editar ${nombre}: ${texto || 'sin nombre'}, ${extra}`} onClick={onAbrir}>
-        <span className="s-fila-texto"><b>{texto || 'Sin nombre'}</b><small className="t-dato">{extra}</small></span>
+        <span className="s-fila-texto"><b>{texto || 'Sin nombre'}</b>{' '}<small className="t-dato">{extra}</small></span>
         <Icono nombre="editar" lado={18} className="icono s-chevron" />
       </button>
       <span className="ax-mover">

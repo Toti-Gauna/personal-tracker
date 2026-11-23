@@ -314,7 +314,7 @@ describe('Actividad 2.0', () => {
     fireEvent.change(screen.getByRole('textbox', { name: 'Qué vas a estudiar' }), { target: { value: 'Leer Pensar rápido y lento' } });
     fireEvent.click(screen.getByRole('button', { name: 'Curso' }));
     mas('Por sesión');
-    fireEvent.click(screen.getByRole('button', { name: 'Martes' }));
+    fireEvent.click(screen.getByRole('button', { name: /, martes$/ }));
     const antes = estudio().activities.length;
     fireEvent.click(screen.getByRole('button', { name: 'Guardar actividad' }));
     expect(estudio().activities).toHaveLength(antes + 1);
@@ -326,7 +326,7 @@ describe('Actividad 2.0', () => {
   it('sin días no se guarda; el frente nuevo se crea y queda elegido', () => {
     render(<><ActividadV2 {...props('#/actividad')} />{global}</>);
     fireEvent.change(screen.getByRole('textbox', { name: 'Qué vas a estudiar' }), { target: { value: 'Algo' } });
-    for (const d of ['Lunes', 'Miércoles', 'Viernes']) fireEvent.click(screen.getByRole('button', { name: d }));
+    for (const d of ['lunes', 'miércoles', 'viernes']) fireEvent.click(screen.getByRole('button', { name: new RegExp(`, ${d}$`) }));
     expect(screen.getByText('Elegí al menos un día.')).toBeTruthy();
     fireEvent.click(screen.getByRole('button', { name: /^Frente/ }));
     fireEvent.click(within(dialogo()).getByRole('radio', { name: /Nuevo frente/ }));
@@ -334,7 +334,7 @@ describe('Actividad 2.0', () => {
     fireEvent.click(within(dialogo()).getByRole('button', { name: 'Crear frente' }));
     const f = estudio().fronts.find((x) => x.name === 'Finanzas')!;
     expect(f).toBeTruthy();
-    fireEvent.click(screen.getByRole('button', { name: 'Martes' }));
+    fireEvent.click(screen.getByRole('button', { name: /, martes$/ }));
     fireEvent.click(screen.getByRole('button', { name: 'Guardar actividad' }));
     expect(estudio().activities.at(-1)!.front).toBe(f.id);
   });

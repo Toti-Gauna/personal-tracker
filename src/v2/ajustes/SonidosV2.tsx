@@ -57,7 +57,7 @@ export default function SonidosV2({ today }: PropsV2) {
             return (
               <div key={ev} className="ax-evento">
                 <button type="button" className="s-fila s-tocable" aria-label={`${EVENT_LABEL[ev]}: ${SOUNDS[id].name}. Cambiar`} onClick={() => setEvento(ev)}>
-                  <span className="s-fila-texto"><b>{EVENT_LABEL[ev]}</b><small>{SOUNDS[id].name}</small></span>
+                  <span className="s-fila-texto"><b>{EVENT_LABEL[ev]}</b>{' '}<small>{SOUNDS[id].name}</small></span>
                   <Icono nombre="siguiente" lado={18} className="icono s-chevron" />
                 </button>
                 <Boton soloIcono variante="fantasma" icono="play" etiqueta={`Probar: ${EVENT_LABEL[ev]}`} onClick={() => playSound(id, sonidos.volume)} />

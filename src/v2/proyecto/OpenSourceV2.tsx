@@ -64,11 +64,11 @@ function Paquete({ h, onElegir }: { h: Herramienta; onElegir: () => void }) {
   const e = useStore((s) => s.plan.fondo?.[h.id]);
   const ultima = h.versiones.filter((v) => e?.versiones?.[v.id]?.publicada).pop();
   return (
-    <button type="button" className="capa-1 pt-paquete" onClick={onElegir} aria-label={`${h.nombre}, ${ultima ? `versión ${ultima.id} publicada` : 'sin publicar'}`}>
-      <span className="pt-paquete-cab"><Icono nombre="paquete" lado={20} /><b className="t-encabezado">{h.nombre}</b><span className="t-rotulo">{KIND[h.kind]}</span></span>
-      <span className="t-dato pt-paquete-nombre">{h.paquete}</span>
+    <button type="button" className="capa-1 pt-paquete" onClick={onElegir}>
+      <span className="pt-paquete-cab"><Icono nombre="paquete" lado={20} /><b className="t-encabezado">{h.nombre}</b>{' '}<span className="t-rotulo">{KIND[h.kind]}</span></span>{' '}
+      <span className="t-dato pt-paquete-nombre">{h.paquete}</span>{' '}
       <span className="pt-paquete-pie">
-        <span className={`pt-version-pill${ultima ? ' on' : ''}`}>{ultima ? <><Icono nombre="tilde" lado={14} />v{ultima.id}</> : 'Sin publicar'}</span>
+        <span className={`pt-version-pill${ultima ? ' on' : ''}`}>{ultima ? <><Icono nombre="tilde" lado={14} />v{ultima.id}</> : 'Sin publicar'}</span>{' '}
         <span className="t-nota">{h.registro}{e?.descargas != null ? ` · ${e.descargas} descargas` : ''}</span>
       </span>
     </button>

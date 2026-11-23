@@ -31,18 +31,19 @@ export function Linea({ day, now, titulo, color, onAbrir }: Props) {
         const como = estado === 'salteada' ? 'salteada' : b.hecho ? 'dada por hecha' : '';
         // A la vista, lo justo: la duración, y los pasos solo cuando vas por la mitad. Leído en voz alta, todo.
         const detalle = [fmtDur(b.min), como || (hechos > 0 && hechos < total ? textoPasos(hechos, total) : ''), b.propia ? 'sumada hoy' : ''].filter(Boolean).join(' · ');
-        const leido = [fmtDur(b.min), como || textoPasos(hechos, total), b.propia ? 'sumada hoy' : ''].filter(Boolean).join(' · ');
+        // Leído: primero lo que se ve, tal cual (quien usa la voz dice lo que ve), y después lo que la vista calla.
+        const calla = como ? '' : [LEE[estado], hechos > 0 && hechos < total ? '' : textoPasos(hechos, total)].filter(Boolean).join(', ');
         return (
           <li key={b.key} className={`hy-fila-li ${estado}`} style={{ ['--area' as string]: color(b) }}>
-            <button type="button" className="hy-fila" onClick={() => onAbrir(b.key)} aria-label={`${b.start}, ${nombre}${LEE[estado] ? `, ${LEE[estado]}` : ''}. ${leido}`}>
-              <span className={`hy-hora t-dato${estado === 'ahora' ? ' trazo-marca' : ''}`}>{b.start}</span>
+            <button type="button" className="hy-fila" onClick={() => onAbrir(b.key)} aria-label={`${b.start}, ${nombre}. ${detalle}${calla ? ` (${calla})` : ''}`}>
+              <span className={`hy-hora t-dato${estado === 'ahora' ? ' trazo-marca' : ''}`}>{b.start}</span>{' '}
               <span className="hy-nodo" aria-hidden="true">
                 {estado === 'hecha' ? <span className="hy-nodo-hecho"><Icono nombre="tilde" lado={16} /></span>
                   : estado === 'salteada' ? <span className="hy-nodo-salteado" />
                   : <Anillo nombre="" valor={total ? hechos / total : 0} tamano={24} grosor={3} etiqueta=" " />}
               </span>
               <span className="hy-fila-texto">
-                <b>{nombre}</b>
+                <b>{nombre}</b>{' '}
                 <small><i className="area-punto" />{detalle}</small>
               </span>
               <Icono nombre="siguiente" lado={16} className="icono s-chevron" />

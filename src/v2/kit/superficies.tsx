@@ -15,12 +15,17 @@ const pct = (x: number) => `${Math.round(Math.max(0, Math.min(1, x)) * 100)} %`;
 
 interface TarjetaProps { children: ReactNode; capa?: 1 | 2; heroe?: boolean; area?: string; href?: string; etiqueta?: string; className?: string }
 
-/** Una tarjeta. `heroe`: la principal de la pantalla, con el halo del área. Con `href`, toda la tarjeta es un link. */
+/**
+ * Una tarjeta. `heroe`: la principal de la pantalla, con el halo del área. Con `href`, toda la tarjeta se toca. Si además tiene
+ * `etiqueta`, el link se llama así y se estira sobre la tarjeta (el contenido se lee aparte): un nombre corto que se ve en la
+ * tarjeta, y no todo lo que dice (WCAG 2.5.3, quien usa la voz dice lo que ve).
+ */
 export function Tarjeta({ children, capa = 1, heroe, area, href, etiqueta, className }: TarjetaProps) {
-  const clase = cx('s-tarjeta', heroe ? 'capa-heroe' : `capa-${capa}`, href && 's-tocable', className);
+  const clase = cx('s-tarjeta', heroe ? 'capa-heroe' : `capa-${capa}`, href && 's-tocable', href && etiqueta && 's-con-enlace', className);
   const estilo = area ? { ['--area' as string]: area } : undefined;
+  if (href && etiqueta) return <div className={clase} style={estilo}><a className="s-tarjeta-enlace" href={href}><span className="v2-oculto">{etiqueta}</span></a>{children}</div>;
   return href
-    ? <a className={clase} href={href} style={estilo} aria-label={etiqueta}>{children}</a>
+    ? <a className={clase} href={href} style={estilo}>{children}</a>
     : <section className={clase} style={estilo} aria-label={etiqueta}>{children}</section>;
 }
 
@@ -33,7 +38,7 @@ export function Fila({ titulo, nota, icono, area, valor, href, onClick, extremo 
   const dentro = (
     <>
       {icono ? <span className="s-fila-icono"><Icono nombre={icono} lado={20} /></span> : area && <i className="area-punto" style={{ ['--area' as string]: area }} />}
-      <span className="s-fila-texto"><b>{titulo}</b>{nota && <small>{nota}</small>}</span>
+      <span className="s-fila-texto"><b>{titulo}</b>{nota && <>{' '}<small>{nota}</small></>}</span>
       {valor != null && <span className="s-fila-valor t-dato">{valor}</span>}
       {extremo ?? ((href || onClick) && <Icono nombre="siguiente" lado={18} className="icono s-chevron" />)}
     </>
@@ -161,7 +166,7 @@ export function EsqueletoLista({ filas = 4 }: { filas?: number }) {
 
 /** Mientras `cargando`, el esqueleto; después, el contenido con un fundido. */
 export function ConCarga({ cargando, esqueleto, children, nombre }: { cargando: boolean; esqueleto: ReactNode; children: ReactNode; nombre: string }) {
-  return <div className="s-con-carga" aria-busy={cargando} aria-label={cargando ? `Cargando ${nombre}` : undefined}>{cargando ? esqueleto : <div className="s-aparece">{children}</div>}</div>;
+  return <div className="s-con-carga" role={cargando ? 'status' : undefined} aria-busy={cargando} aria-label={cargando ? `Cargando ${nombre}` : undefined}>{cargando ? esqueleto : <div className="s-aparece">{children}</div>}</div>;
 }
 
 // ——— Vacío ———

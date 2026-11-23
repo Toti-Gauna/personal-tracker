@@ -29,7 +29,9 @@ const props = (hash: string, fecha = HOY): PropsV2 => ({ ruta: leerRuta(hash), d
 const abrir = (C: ComponentType<PropsV2>, hash: string, fecha = HOY) => render(<><C {...props(hash, fecha)} />{global}</>);
 const dialogo = () => { const d = screen.getAllByRole('dialog'); return d[d.length - 1]; };
 const escribir = (c: HTMLElement | Document, nombre: string, valor: string) => { const i = within(c as HTMLElement).getByRole('textbox', { name: nombre }); fireEvent.change(i, { target: { value: valor } }); fireEvent.blur(i); };
-const elegir = (nombre: string, opcion: RegExp) => { fireEvent.click(within(dialogo()).getByRole('button', { name: nombre })); fireEvent.click(within(dialogo()).getByRole('radio', { name: opcion })); };
+/** Un campo (selector o fecha) se llama por su etiqueta y lo que muestra: "Mes noviembre 2026". */
+const campo = (nombre: string) => (n: string) => n === nombre || n.startsWith(`${nombre} `);
+const elegir = (nombre: string, opcion: RegExp) => { fireEvent.click(within(dialogo()).getByRole('button', { name: campo(nombre) })); fireEvent.click(within(dialogo()).getByRole('radio', { name: opcion })); };
 const deshacer = () => fireEvent.click(screen.getAllByRole('button', { name: 'Deshacer' }).pop()!);
 
 /** Una planilla con una campaña que paga bien, una cuenta activa y tres filas. */
@@ -177,7 +179,7 @@ describe('Clipping 2.0 · el centro', () => {
     escribir(d, 'Aprobados', '4');
     escribir(d, 'Cobrado · USD', '12,5');
     escribir(d, 'Nota', 'Gancho de los primeros 2 segundos');
-    fireEvent.click(within(d).getByRole('button', { name: 'Fecha' }));
+    fireEvent.click(within(d).getByRole('button', { name: campo('Fecha') }));
     fireEvent.click(within(screen.getByRole('dialog', { name: 'Fecha: calendario' })).getByRole('gridcell', { name: '19 nov 2026' }));
     fireEvent.click(within(d).getByRole('button', { name: 'Guardar' }));
     expect(clip().registro[0]).toMatchObject({ fecha: '2026-11-19', clips: 4, views: 0, aprobados: 4, cobrado: 12.5, nota: 'Gancho de los primeros 2 segundos' });
