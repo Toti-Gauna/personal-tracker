@@ -1,6 +1,6 @@
 import { render } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
-import { ICONOS, Icono, Ilustracion, NOMBRES_ICONO } from './iconos';
+import { ICONOS, Icono, Ilustracion, NOMBRES_ICONO, NOMBRES_ILUSTRACION } from './iconos';
 import { ESTADOS } from './reglas';
 
 describe('2.0 · íconos', () => {
@@ -41,11 +41,25 @@ describe('2.0 · íconos', () => {
     for (const e of Object.values(ESTADOS)) expect(NOMBRES_ICONO).toContain(e.icono);
   });
 
-  it('las ilustraciones de vacío llevan un solo trazo amarillo', () => {
-    for (const n of ['plan', 'datos', 'repaso'] as const) {
+  it('las ilustraciones de vacío: más de quince, todas en 120 × 96, con un solo trazo amarillo y nada fuera del lienzo', () => {
+    expect(NOMBRES_ILUSTRACION.length).toBeGreaterThanOrEqual(15);
+    for (const n of NOMBRES_ILUSTRACION) {
       const { container, unmount } = render(<Ilustracion nombre={n} />);
-      expect(container.querySelectorAll('.il-trazo')).toHaveLength(1);
+      const svg = container.querySelector('svg')!;
+      expect(svg.getAttribute('viewBox'), n).toBe('0 0 120 96');
+      expect(container.querySelectorAll('.il-trazo'), n).toHaveLength(1);
+      expect(svg.children.length, n).toBeGreaterThan(1); // el trazo y, al menos, un dibujo
+      // El punto de partida de cada trazo cae dentro del lienzo (el resto de los comandos son relativos).
+      for (const el of svg.querySelectorAll('path')) {
+        const [x, y] = el.getAttribute('d')!.match(/^M(-?[\d.]+)[ ,](-?[\d.]+)/)!.slice(1).map(Number);
+        expect(x >= 0 && x <= 120 && y >= 0 && y <= 96, `${n}: M${x} ${y}`).toBe(true);
+      }
       unmount();
     }
+  });
+
+  it('el trazo amarillo es siempre el mismo gesto: misma forma y tamaño en todas', () => {
+    const formas = NOMBRES_ILUSTRACION.map((n) => { const { container, unmount } = render(<Ilustracion nombre={n} />); const d = container.querySelector('.il-trazo')!.getAttribute('d')!.replace(/^M[\d.]+ [\d.]+/, ''); unmount(); return d; });
+    expect(new Set(formas).size).toBe(1);
   });
 });

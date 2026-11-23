@@ -129,20 +129,57 @@ export function Icono({ nombre, lado = 24, titulo, ...resto }: Props) {
   );
 }
 
+/** El único gesto en amarillo de cada ilustración: el trazo, inclinado, siempre del mismo tamaño. */
+const trazo = (x: number, y: number) => <path className="il-trazo" d={`M${x} ${y}l34-12 3 7-34 12z`} />;
+
 /**
  * Ilustraciones de los estados vacíos: línea fina del color del texto secundario y un solo gesto en amarillo, el trazo.
- * Siempre 120 × 96, siempre con una acción al lado (regla 6 de escritura).
+ * Siempre 120 × 96, siempre con una acción al lado (regla 6 de escritura). Cada una dibuja lo que todavía no está:
+ * punteado, lo que falta; con línea llena, lo que ya tenés para empezar.
  */
 export const ILUSTRACIONES = {
   /** Todavía no hay plan o metas: una bandera esperando en el horizonte. */
-  plan: <><path d="M14 78h92" strokeDasharray="2 6" /><path d="M52 78V26M52 28h30l-7 10 7 10H52" /><path className="il-trazo" d="M22 70l34-12 3 7-34 12z" /></>,
+  plan: <><path d="M14 78h92" strokeDasharray="2 6" /><path d="M52 78V26M52 28h30l-7 10 7 10H52" />{trazo(22, 70)}</>,
   /** Todavía no hay datos: los ejes de un gráfico y la primera barra por venir. */
-  datos: <><path d="M26 22v56h72" /><path d="M42 78V62M58 78V50M74 78V58" strokeDasharray="2 5" /><path className="il-trazo" d="M34 54l52-22 3 7-52 22z" /></>,
+  datos: <><path d="M26 22v56h72" /><path d="M42 78V62M58 78V50M74 78V58" strokeDasharray="2 5" />{trazo(34, 54)}</>,
   /** Nada para repasar: una pila de tarjetas al día. */
-  repaso: <><rect x="34" y="30" width="56" height="38" rx="6" /><path d="M28 40v30a6 6 0 0 0 6 6h46" /><path d="M48 44h28M48 54h16" strokeDasharray="2 5" /><path className="il-trazo" d="M70 62l26-11 3 7-26 11z" /></>,
+  repaso: <><rect x="34" y="30" width="56" height="38" rx="6" /><path d="M28 40v30a6 6 0 0 0 6 6h46" /><path d="M48 44h28M48 54h16" strokeDasharray="2 5" />{trazo(70, 62)}</>,
+  /** Sin entreno en curso: la mancuerna apoyada, esperando. */
+  entreno: <><rect x="22" y="28" width="11" height="36" rx="4" /><rect x="33" y="35" width="8" height="22" rx="3" /><path d="M41 46h38" /><rect x="79" y="35" width="8" height="22" rx="3" /><rect x="87" y="28" width="11" height="36" rx="4" /><path d="M14 76h92" strokeDasharray="2 6" />{trazo(43, 84)}</>,
+  /** Día de descanso: un camino que va hasta un árbol. Hoy se camina. */
+  descanso: <><path d="M16 78c18 0 16-18 32-18s14-16 30-16" strokeDasharray="2 6" /><circle cx="88" cy="32" r="13" /><path d="M88 45v20M82 65h12" />{trazo(14, 86)}</>,
+  /** Todavía no hay pesajes: la balanza con la aguja en cero. */
+  peso: <><rect x="32" y="20" width="56" height="58" rx="12" /><path d="M44 46a16 16 0 0 1 32 0z" /><path d="M60 46l7-9" /><path d="M48 64h24" strokeDasharray="2 5" />{trazo(66, 86)}</>,
+  /** Todavía no hay corridas: la zapatilla lista y la pista por delante. */
+  correr: <><path d="M30 66V52c0-3 2-5 5-5 4 0 6-3 8-7l3-6c1-2 4-3 6-1l5 6c6 7 13 10 24 12 6 1 9 4 9 9v6z" /><path d="M52 42l5 4M57 37l5 5" /><path d="M10 78h100" strokeDasharray="2 6" /><path d="M12 50h10M8 58h12" />{trazo(54, 90)}</>,
+  /** Todavía no ganaste sellos: el lugar del primero, con sus cintas. */
+  sello: <><circle cx="60" cy="38" r="22" strokeDasharray="3 5" /><path d="M48 58l-7 22 13-7M72 58l7 22-13-7" /><path d="M60 28v20M50 38h20" strokeDasharray="1 4" />{trazo(72, 30)}</>,
+  /** Todavía no hay días cerrados: el calendario con el primer día por tachar. */
+  historial: <><rect x="28" y="22" width="64" height="56" rx="10" /><path d="M28 38h64M44 14v14M76 14v14" /><path d="M40 50h8M56 50h8M72 50h8M40 64h8M56 64h8" strokeDasharray="2 5" />{trazo(62, 72)}</>,
+  /** No encontré eso: la lupa sobre un lugar vacío. */
+  buscar: <><circle cx="54" cy="42" r="20" /><path d="M68 57l18 19" /><path d="M46 42h16" strokeDasharray="2 5" />{trazo(16, 84)}</>,
+  /** Todavía no hay nada para estudiar: el libro abierto en la primera página. */
+  estudio: <><path d="M60 32c-9-6-20-7-32-3v44c12-4 23-3 32 3 9-6 20-7 32-3V29c-12-4-23-3-32 3z" /><path d="M60 32v44" /><path d="M38 44h12M38 54h12M70 44h12" strokeDasharray="2 5" />{trazo(64, 62)}</>,
+  /** Todavía no hay metas en este horizonte: el blanco, sin flecha. */
+  metas: <><circle cx="54" cy="48" r="26" /><circle cx="54" cy="48" r="15" strokeDasharray="2 5" /><circle cx="54" cy="48" r="4" /><path d="M76 26l16-12M92 14v10M92 14h-10" />{trazo(60, 86)}</>,
+  /** Sin avisos: la campana quieta. */
+  avisos: <><path d="M42 62V46a18 18 0 0 1 36 0v16l7 9H35z" /><path d="M53 77a7 7 0 0 0 14 0" /><path d="M60 22v6" /><path d="M90 30h10l-10 10h10" strokeDasharray="1 4" />{trazo(14, 52)}</>,
+  /** Todo hecho por hoy: el tilde, con sus rayos. */
+  listo: <><circle cx="60" cy="46" r="22" /><path d="M49 46l8 8 15-17" /><path d="M60 12v6M26 46h6M88 46h6M36 22l4 4M84 22l-4 4" strokeDasharray="1 4" />{trazo(42, 90)}</>,
+  /** Todavía no hay postulaciones ni ventas: el maletín cerrado. */
+  trabajo: <><rect x="26" y="34" width="68" height="42" rx="9" /><path d="M46 34v-6a5 5 0 0 1 5-5h18a5 5 0 0 1 5 5v6" /><path d="M26 54h28M66 54h28" /><rect x="54" y="49" width="12" height="10" rx="3" />{trazo(70, 88)}</>,
+  /** Todavía no hay clips: el cuadro de video esperando el primero. */
+  clip: <><rect x="24" y="26" width="72" height="48" rx="10" /><path d="M54 40v20l17-10z" /><path d="M34 26v-8M50 26v-8M66 26v-8M82 26v-8" strokeDasharray="1 4" />{trazo(16, 88)}</>,
+  /** Sin sesión de foco: el cronómetro en cero. */
+  foco: <><circle cx="60" cy="52" r="26" /><path d="M52 18h16M60 18v8M82 30l5-5" /><path d="M60 52V36" /><path d="M60 68v4M44 52h-4M76 52h4" strokeDasharray="1 4" />{trazo(14, 88)}</>,
+  /** Todavía no escribiste nada: la hoja en blanco y el primer renglón. */
+  escribir: <><path d="M34 18h36l16 16v44H34z" /><path d="M70 18v16h16" /><path d="M44 46h30M44 56h30" strokeDasharray="2 5" />{trazo(44, 74)}</>,
+  /** Nada importado todavía: la bandeja con la flecha que entra. */
+  importar: <><path d="M24 54l10-24h52l10 24v22H24z" /><path d="M24 54h22a14 14 0 0 0 28 0h22" /><path d="M60 8v26M52 27l8 8 8-8" strokeDasharray="2 5" />{trazo(70, 92)}</>,
 } satisfies Record<string, ReactNode>;
 
 export type NombreIlustracion = keyof typeof ILUSTRACIONES;
+export const NOMBRES_ILUSTRACION = Object.keys(ILUSTRACIONES) as NombreIlustracion[];
 
 export function Ilustracion({ nombre, titulo }: { nombre: NombreIlustracion; titulo?: string }) {
   return (

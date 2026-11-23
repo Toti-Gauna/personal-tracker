@@ -5,7 +5,7 @@
  */
 import { useEffect, useState, type ReactNode } from 'react';
 import { contraste } from '../color';
-import { Icono, Ilustracion, NOMBRES_ICONO } from '../iconos';
+import { Icono, Ilustracion, NOMBRES_ICONO, NOMBRES_ILUSTRACION } from '../iconos';
 import { ESTADOS, GLOSARIO, PRESUPUESTO, contarPalabras, type EstadoVisual } from '../reglas';
 import '../tokens.css';
 import '../base.css';
@@ -126,7 +126,7 @@ export default function Lenguaje() {
 
       <Seccion titulo="Vacíos" nota="línea fina + un trazo">
         <div className="mu-vacios">
-          {([['plan', 'Armá tu primera meta'], ['datos', 'Cargá el primer dato'], ['repaso', 'Estás al día']] as const).map(([n, t]) => <div key={n} className="capa-1"><Ilustracion nombre={n} /><span className="t-nota">{t}</span></div>)}
+          {NOMBRES_ILUSTRACION.map((n) => <div key={n} className="capa-1"><Ilustracion nombre={n} /><span className="t-nota">{n}</span></div>)}
         </div>
       </Seccion>
 
