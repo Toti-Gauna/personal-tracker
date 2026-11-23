@@ -32,11 +32,11 @@ describe.each(Object.entries(TEMAS))('tokens 2.0 · tema %s', (_, t) => {
     for (const k of [...CAPAS, ...AREAS, '--texto', '--texto-2', '--texto-3', '--trazo', '--trazo-texto', '--sobre-trazo', '--e-critico', '--sobre-critico']) expect(t[k], k).toMatch(/^#[0-9a-f]{6}$/i);
   });
 
-  it('el texto se lee sobre cualquier capa: principal AAA, secundario AA, tenue 3:1', () => {
+  it('el texto se lee sobre cualquier capa: principal AAA, secundario y tenue AA', () => {
     for (const c of CAPAS) {
       expect(contraste(t['--texto'], t[c]), `texto / ${c}`).toBeGreaterThanOrEqual(7);
       expect(contraste(t['--texto-2'], t[c]), `texto-2 / ${c}`).toBeGreaterThanOrEqual(4.5);
-      expect(contraste(t['--texto-3'], t[c]), `texto-3 / ${c}`).toBeGreaterThanOrEqual(3);
+      expect(contraste(t['--texto-3'], t[c]), `texto-3 / ${c}`).toBeGreaterThanOrEqual(4.5);
     }
   });
 

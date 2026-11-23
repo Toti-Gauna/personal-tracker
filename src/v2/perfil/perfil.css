@@ -63,6 +63,8 @@ html[data-ui='v2'][data-theme='light'] .ca, html[data-ui='v2'][data-theme='light
 .ca-calendario > i { display: grid; place-items: center; aspect-ratio: 1.25; border-radius: var(--r-s); font-style: normal; }
 .ca-calendario > i > b { font: 500 var(--t-13)/1 var(--font-mono); color: var(--texto-2); }
 .ca-calendario > i.ca-n3 > b, .ca-calendario > i.ca-n4 > b { color: var(--sobre-trazo); }
+/* Sobre el gris del día flojo, el número va en el texto principal (el secundario quedaba en 4,1:1). */
+.ca-calendario > i.ca-n1 > b { color: var(--texto); }
 .ca-calendario > i.ca-hoy { box-shadow: 0 0 0 2px var(--capa-1), 0 0 0 3.5px var(--texto); }
 .ca-calendario > i.ca-futuro > b { color: var(--texto-3); }
 
