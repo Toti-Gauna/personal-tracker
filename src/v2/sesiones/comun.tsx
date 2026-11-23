@@ -56,4 +56,5 @@ export function Inmersiva({ titulo, area, salir, info, progreso, pie, children, 
 }
 
 /** "1 ejercicio", "3 ejercicios". */
-export const plural = (n: number, uno: string, varios: string) => `${n} ${n === 1 ? uno : varios}`;
+/** El número con su palabra, en singular cuando es uno: la misma función de todo el 2.0 (`cuantos`, en reglas.ts). */
+export { cuantos as plural } from '../reglas';

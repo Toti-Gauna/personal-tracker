@@ -21,7 +21,8 @@ export const mesAnio = (ym: string) => `${MES[Number(ym.slice(5, 7)) - 1]} ${ym.
 /** Una decimal con coma: "11,5". */
 export const num = (n: number) => String(Math.round(n * 10) / 10).replace('.', ',');
 export const mayuscula = (x: string) => x.charAt(0).toUpperCase() + x.slice(1);
-export const plural = (n: number, uno: string, varios: string) => `${n} ${n === 1 ? uno : varios}`;
+/** El número con su palabra, en singular cuando es uno: la misma función de todo el 2.0 (`cuantos`, en reglas.ts). */
+export { cuantos as plural } from '../reglas';
 
 /** El inicio del plan (el de los ajustes o el de fábrica). */
 export function useT0() {
