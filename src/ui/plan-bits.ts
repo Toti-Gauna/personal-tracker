@@ -62,7 +62,6 @@ export function useItemsSemana(date: string, abrirClips: () => void): ItemSemana
   const t0 = useStore((s) => s.settings?.startDate);
   const sesiones = useStore((s) => s.train.sessions.filter((x) => x.date >= lunesDe(date) && x.date <= addDays(lunesDe(date), 6)).length);
   const metas = Object.fromEntries(metasSemanaPlan(date, t0).map((m) => [m.id, m.meta]));
-  const ensayadas = plan.respuestas.filter((r) => r.veces > 0).length;
   const ops = plan.handyx[lunesDe(date)]?.operaciones ?? 0;
   const intensiva = useStore((s) => intensivaEn(s.settings, date));
   const clippingOn = useStore((s) => !!planSettings(s.settings).bloquesPendientes?.clipping);
@@ -72,7 +71,8 @@ export function useItemsSemana(date: string, abrirClips: () => void): ItemSemana
   const clipsSem = clipsEntre(clipping, l, addDays(l, 6)) + contador(plan, date, 'clips');
   const items: ItemSemana[] = [
     { id: 'postulaciones', label: intensiva ? '+1 Postulación a medida' : '+1 Postulación', v: contador(plan, date, 'postulaciones'), meta: metas.postulaciones, rama: 'trabajo', run: () => sumarContador(date, 'postulaciones') },
-    { id: 'respuestas', label: '+1 Respuesta ensayada', v: ensayadas, meta: plan.respuestas.length, rama: 'ingles', run: () => ensayarRespuesta(date) },
+    // La semana: cuántas ensayaste esta semana contra la meta semanal (antes contaba las ensayadas alguna vez y quedaba lleno para siempre).
+    { id: 'respuestas', label: '+1 Respuesta ensayada', v: contador(plan, date, 'respuestas'), meta: metas.respuestas, rama: 'ingles', run: () => ensayarRespuesta(date) },
     // Una rama en pausa no genera contadores nuevos.
     ...(enPausa(plan, 'handyx', date) ? [] : [{ id: 'operaciones', label: '+1 Operación Handyx', v: ops, rama: 'handyx' as RamaOMain, run: () => sumarHandyx(date, { operaciones: 1 }) }]),
     ...(intensiva && clippingOn ? [{ id: 'clips', label: 'Registrar clips', v: clipsSem, meta: planEntre(l, addDays(l, 6)).clips, rama: 'main' as RamaOMain, color: 'var(--eclipse)', run: abrirClips }] : []),

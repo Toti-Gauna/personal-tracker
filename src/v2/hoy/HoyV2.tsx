@@ -7,7 +7,7 @@ import { useState } from 'react';
 import { bimester, dayNumber, mejoraAyer, racha } from '../../data/derive';
 import { colorDeBloque, etiquetaDeBloque, tituloDeBloque } from '../../data/etiquetas';
 import { fmtPct, mejoraDia } from '../../data/mejora';
-import { addDays, fmtFecha, nowMin } from '../../data/time';
+import { addDays, dateKey, fmtFecha, nowMin } from '../../data/time';
 import type { Block } from '../../data/types';
 import { useStore } from '../../state/store';
 import { HojaFila } from '../clipping/HojaFila';
@@ -39,7 +39,10 @@ export default function HoyV2({ day }: PropsV2) {
   const train = useStore((s) => s.train);
   const plan = useStore((s) => s.plan);
   const nombres = useStore((s) => s.goals.bimesterNames);
-  const now = nowMin(new Date(useNow(30000)));
+  const reloj = useNow(30000);
+  // Pasada la medianoche, la app cambia de día en menos de un minuto; mientras tanto, el día de ayer se muestra terminado (sin
+  // "lo próximo · 04:00" ni la marca de ahora al principio).
+  const now = day.date < dateKey(new Date(reloj)) ? 24 * 60 - 1 : nowMin(new Date(reloj));
   const [abierta, setAbierta] = useState<string | null>(null);
   const [hoja, setHoja] = useState<'meta' | 'avisos' | 'mas' | null>(null);
   const [clips, setClips] = useState(false);

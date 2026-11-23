@@ -32,8 +32,11 @@ function Habito({ h, day, onAbrir }: { h: EstadoHabito; day: DayLog; onAbrir: (c
   const nota = h.hoy.hecho ? 'Hecho hoy' : !h.hoy.toca ? 'Hoy no toca' : bloque ? `Hoy · ${bloque.start}` : 'No está en la rutina de hoy';
   return (
     <li className={`hy-habito${h.hoy.hecho ? ' hecho' : ''}${h.hoy.toca ? '' : ' no-toca'}`}>
-      {sePuede
-        ? <button type="button" className="hy-habito-marca" aria-label={`Marcar hecho: ${nombre}`} onClick={(e) => { festejar(e.currentTarget); marcarHabito(day, h.habito.id); }} />
+      {/* Al marcarlo el botón queda (con su tilde y "hecho"): si se cambiara por un adorno, el foco del teclado se perdería. */}
+      {sePuede || (h.hoy.hecho && h.hoy.toca)
+        ? <button type="button" className={`hy-habito-marca${h.hoy.hecho ? ' fija' : ''}`} aria-pressed={h.hoy.hecho} aria-disabled={h.hoy.hecho || undefined}
+            aria-label={h.hoy.hecho ? `${nombre}: hecho hoy` : `Marcar hecho: ${nombre}`}
+            onClick={(e) => { if (h.hoy.hecho) return; festejar(e.currentTarget); marcarHabito(day, h.habito.id); }}>{h.hoy.hecho && <Icono nombre="tilde" lado={16} />}</button>
         : <span className="hy-habito-marca fija" aria-hidden="true">{h.hoy.hecho && <Icono nombre="tilde" lado={16} />}</span>}
       {bloque
         ? <button type="button" className="hy-habito-texto" onClick={() => onAbrir(bloque.key)} title={h.habito.nombre}><b>{nombre}</b><small>{nota} · Racha: {h.racha}</small></button>

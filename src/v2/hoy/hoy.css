@@ -74,7 +74,8 @@
 .hy-fila-li.ahora .hy-nodo { background: var(--capa-1); }
 .hy-fila-li.ahora .hy-fila-texto b { font-weight: 650; }
 .hy-fila-li.hecha .hy-fila-texto b { color: var(--texto-2); }
-.hy-fila-li.salteada .hy-fila-texto, .hy-fila-li.salteada .hy-hora { opacity: 0.55; }
+/* Salteada: tachada y en el color secundario (no transparente: sigue siendo un botón y tiene que leerse). */
+.hy-fila-li.salteada .hy-fila-texto, .hy-fila-li.salteada .hy-fila-texto :is(b, small), .hy-fila-li.salteada .hy-hora { color: var(--texto-2); }
 .hy-fila-li.salteada .hy-fila-texto b { text-decoration: line-through; text-decoration-thickness: 1px; }
 /* La marca de "ahora" cuando la hora cae en un hueco. */
 .hy-marca { position: relative; display: grid; grid-template-columns: 48px 1fr; align-items: center; gap: var(--sp-3); height: 28px; }
@@ -95,6 +96,11 @@ a.hy-chip:active { background: var(--capa-2); }
 .hy-habito + .hy-habito { border-top: 1px solid var(--raya); }
 .hy-habito-marca { display: grid; place-items: center; width: 32px; height: 32px; border-radius: 50%; color: var(--texto-2); box-shadow: inset 0 0 0 1.75px var(--raya-fuerte); background: var(--capa-2); transition: transform var(--dur-1) var(--curva-salida), background-color var(--dur-2); }
 button.hy-habito-marca:active { transform: scale(0.9); }
+/* El círculo se ve de 32 px; el toque toma 44. */
+button.hy-habito-marca { position: relative; }
+button.hy-habito-marca::after { content: ''; position: absolute; inset: -6px; border-radius: 50%; }
+button.hy-habito-marca[aria-disabled='true'] { cursor: default; }
+button.hy-habito-marca[aria-disabled='true']:active { transform: none; }
 .hy-habito-marca.fija { box-shadow: none; background: transparent; }
 .hy-habito.hecho .hy-habito-marca { background: var(--trazo); color: var(--sobre-trazo); }
 .hy-habito.no-toca .hy-habito-marca.fija::after { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--texto-3); }

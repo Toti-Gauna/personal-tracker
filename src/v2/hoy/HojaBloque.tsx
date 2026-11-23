@@ -8,7 +8,7 @@ import { blockDone, fmtPct, mejoraDia, valorMeta } from '../../data/mejora';
 import { toHHMM, toMin } from '../../data/time';
 import type { Block, DayLog } from '../../data/types';
 import { cambiarHorario, darPorHecho, deshacerHecho, quitarMetaPropia, saltear } from '../../state/dia';
-import { getState } from '../../state/store';
+import { getState, updateDay } from '../../state/store';
 import { preguntarSiEsMate } from '../../ui/acciones';
 import { aviso, confirmar } from '../kit/capas';
 import { Boton, CampoHora, CampoTexto, Contador, Segmentado } from '../kit/controles';
@@ -70,9 +70,11 @@ export function HojaBloque({ day, clave, now, titulo, etiqueta, color, destino, 
   };
   const guardarHorario = () => {
     if (min == null || min < 5) { setError('La duración mínima es de 5 minutos.'); return; }
+    // Acortar o correr toca también las metas que siguen: Deshacer vuelve el día entero a como estaba.
+    const antes = getState().days[date]?.blocks;
     const r = cambiarHorario(date, b.key, start, min, modo);
     if (!r.ok) { setError(r.error); return; }
-    aviso({ titulo: 'Horario cambiado', sub: `${nombre}: ${start} a ${toHHMM((toMin(start) + min) % (24 * 60))}` });
+    aviso({ titulo: 'Horario cambiado', sub: `${nombre}: ${start} a ${toHHMM((toMin(start) + min) % (24 * 60))}`, deshacer: antes ? () => updateDay(date, (d) => ({ ...d, blocks: antes })) : undefined });
     setVista('pasos');
   };
   const quitar = async () => {

@@ -174,6 +174,8 @@ function Sugerencia({ p, hoy, cal, plan }: { p: PeriodoMedido; hoy: string; cal:
   }, [cal, plan, p, hoy]);
   const [fuera, setFuera] = useState<string[]>([]);
   const [todos, setTodos] = useState(false);
+  // Antes del return temprano: al confirmar, la lista se vacía y el componente tiene que llamar a los mismos hooks en cada render.
+  const [abierta, setAbierta] = useState(false);
   if (!sug.length) return null;
   const elegidos = sug.filter((c) => !fuera.includes(c.id));
   const vistos = todos ? sug : sug.slice(0, 4);
@@ -182,7 +184,6 @@ function Sugerencia({ p, hoy, cal, plan }: { p: PeriodoMedido; hoy: string; cal:
     confirmarCorrimiento(cs, hoy);
     aviso({ titulo: elegidos.length === 1 ? 'Fecha corrida' : `${elegidos.length} fechas corridas`, sub: `${p.nombre} termina el ${fecha(sug[0].nuevoFin, hoy)}`, tono: 'hecho', deshacer: () => deshacerCorrimiento(cs.map((c) => c.id)) });
   };
-  const [abierta, setAbierta] = useState(false);
   return (
     <>
       <div className="capa-1 s-lista pl-sug-fila">

@@ -8,6 +8,7 @@ import { agregarMetaHoy } from '../../state/dia';
 import { aviso } from '../kit/capas';
 import { Boton, CampoHora, CampoTexto, Contador, Segmentado, Selector, type OpcionSelector } from '../kit/controles';
 import { Hoja } from '../kit/hoja';
+import { getState, updateDay } from '../../state/store';
 
 type RamaMeta = RamaOMain | 'ninguna';
 const RAMAS: OpcionSelector<RamaMeta>[] = [
@@ -32,9 +33,11 @@ export function HojaMeta({ date, abierta, onCerrar }: { date: string; abierta: b
   const falta = !titulo.trim() ? 'Ponele un nombre.' : !min || min < 5 ? 'La duración mínima es de 5 minutos.' : '';
   const sumar = () => {
     if (falta || !min) return;
+    // Sumar una meta acorta o corre las que siguen: Deshacer vuelve el día a como estaba (y la saca).
+    const antes = getState().days[date]?.blocks;
     const r = agregarMetaHoy(date, { titulo, rama: rama === 'ninguna' ? undefined : rama, start, min, tareas: pasos.split('\n') }, modo);
     if (!r.ok) { setError(r.error); return; }
-    aviso({ titulo: 'Meta sumada a hoy', sub: `${titulo.trim()} · ${start} a ${toHHMM((toMin(start) + min) % (24 * 60))}`, tono: 'hecho' });
+    aviso({ titulo: 'Meta sumada a hoy', sub: `${titulo.trim()} · ${start} a ${toHHMM((toMin(start) + min) % (24 * 60))}`, tono: 'hecho', deshacer: antes ? () => updateDay(date, (d) => ({ ...d, blocks: antes })) : undefined });
     onCerrar();
   };
   return (

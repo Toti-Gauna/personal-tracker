@@ -2,7 +2,7 @@
  * Trazo 2.0 · los pasos de una meta (las casillas). En el héroe van hasta tres, sin editar; en la hoja de la meta van todos,
  * se editan en el lugar y se agrega uno nuevo abajo.
  */
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import type { Block } from '../../data/types';
 import { borrarTarea, editarTarea, restaurarTarea } from '../../state/dia';
 import { addTask } from '../../state/store';
@@ -26,7 +26,15 @@ export function Pasos({ date, block, max, editable, onMas }: Props) {
   const [texto, setTexto] = useState('');
   const [nuevo, setNuevo] = useState('');
   const orden = max ? [...block.tasks.filter((t) => !t.done), ...block.tasks.filter((t) => t.done)] : block.tasks;
-  const visibles = max ? orden.slice(0, max) : orden;
+  // Con tope (el héroe de Hoy), los pasos a la vista se eligen una vez y no se reordenan al tildar: el que tildaste queda donde
+  // estaba (con su tilde) en vez de saltar o desaparecer bajo el dedo. Se vuelven a elegir con otra meta o cuando están todos hechos.
+  const elegidos = useRef<{ key: string; ids: string[] } | null>(null);
+  if (max) {
+    const actuales = elegidos.current?.key === block.key ? elegidos.current.ids.map((id) => block.tasks.find((t) => t.id === id)).filter((t): t is NonNullable<typeof t> => !!t) : [];
+    const agotados = actuales.length > 0 && actuales.every((t) => t.done) && block.tasks.some((t) => !t.done && !elegidos.current!.ids.includes(t.id));
+    if (!actuales.length || agotados) elegidos.current = { key: block.key, ids: orden.slice(0, max).map((t) => t.id) };
+  }
+  const visibles = max ? elegidos.current!.ids.map((id) => block.tasks.find((t) => t.id === id)).filter((t): t is NonNullable<typeof t> => !!t) : orden;
   const resto = block.tasks.length - visibles.length;
 
   const guardar = (id: string) => { if (texto.trim()) editarTarea(date, block.key, id, texto); setEditando(null); };

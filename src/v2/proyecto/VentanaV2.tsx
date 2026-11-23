@@ -14,6 +14,7 @@ import { diaMes } from './datos';
 import { Lista, hechasDe } from './piezas';
 import { Portada } from './Portada';
 import './proyecto.css';
+import { aviso } from '../kit/capas';
 
 const LIBRO: Record<string, string> = { conamat: 'Conamat · Aritmética', 'conamat-algebra': 'Conamat · Álgebra' };
 
@@ -78,7 +79,7 @@ export function VentanaV2({ id, hoy }: { id: string; hoy: string }) {
 
       <div className="pt-cerrar">
         {cerrada
-          ? <><p className="t-cuerpo">Ventana cerrada el {fp(cerrada)}.</p><Boton variante="fantasma" icono="deshacer" onClick={() => marcarHito(claveHito.bloque(id), null)}>Reabrir</Boton></>
+          ? <><p className="t-cuerpo">Ventana cerrada el {fp(cerrada)}.</p><Boton variante="fantasma" icono="deshacer" onClick={() => { const antes = cerrada; marcarHito(claveHito.bloque(id), null); aviso({ titulo: 'Ventana reabierta', deshacer: () => marcarHito(claveHito.bloque(id), antes) }); }}>Reabrir</Boton></>
           : <Boton variante="primario" icono="tilde" ancho deshabilitado={puede ? false : `Faltan ${b.hitos.length - hechos} ${b.hitos.length - hechos === 1 ? 'hito' : 'hitos'}`} onClick={() => marcarHito(claveHito.bloque(id), hoy)}>Cerrar la ventana</Boton>}
       </div>
     </Marco>

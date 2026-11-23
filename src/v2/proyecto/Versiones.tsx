@@ -18,6 +18,7 @@ import { Icono, type NombreIcono } from '../iconos';
 import { Boton } from '../kit/controles';
 import { Hoja } from '../kit/hoja';
 import { Lista } from './piezas';
+import { aviso } from '../kit/capas';
 
 export const ESTADO_VERSION: Record<VersionFechada['estado'], { palabra: string; icono: NombreIcono }> = {
   publicada: { palabra: 'Publicada', icono: 'tilde' },
@@ -81,7 +82,7 @@ function HojaVersion({ id, v, vs, hoy, onCerrar }: { id: string; v: VersionFecha
   const g = puedePublicar({ version: x.id, lanzamiento: lanzamientoDe(vs, plan.fondo?.[id]?.lanzamiento), iman: plan.iman?.[id] });
   const fechas = x.enCurso && !x.inicioTrazo ? 'En curso: la arman los agentes' : `${fp(x.inicioTrazo ?? x.inicio!)} – ${fp(x.finTrazo ?? x.fin!)}`;
   const pie = r.publicada
-    ? <Boton variante="fantasma" icono="deshacer" onClick={() => publicarVersion(id, x.id, null)}>Sacar de publicadas</Boton>
+    ? <Boton variante="fantasma" icono="deshacer" onClick={() => { const antes = r.publicada!; publicarVersion(id, x.id, null); aviso({ titulo: `v${x.id}: sin publicar`, sub: `Era del ${fp(antes)}`, deshacer: () => publicarVersion(id, x.id, antes) }); }}>Sacar de publicadas</Boton>
     : g.ok
       ? <Boton variante="primario" icono="tilde" onClick={() => publicarVersion(id, x.id, hoy)}>Publicada hoy</Boton>
       : <Boton variante="primario" icono="iman" href={`#/metas/iman/${id}`}>{g.faltan.length === 1 ? 'Falta 1 punto del Imán' : `Faltan ${g.faltan.length} puntos del Imán`}</Boton>;

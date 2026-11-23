@@ -7,7 +7,7 @@ import { useState } from 'react';
 import { HERRAMIENTAS, REGLA_HERRAMIENTAS, estadoVersion, nombreOrigen, presetsAlawys, puedePublicarHerramienta } from '../../data/herramientas';
 import { PLAN_EXT } from '../../data/plan-extendido';
 import { V122, type Herramienta } from '../../data/v12-2';
-import { agregarPost, publicarVersionFondo, setItem } from '../../state/fondo';
+import { agregarPost, borrarPost, publicarVersionFondo, setItem } from '../../state/fondo';
 import { marcarHito } from '../../state/plan';
 import { useStore } from '../../state/store';
 import { fp } from '../../ui/periodos';
@@ -18,6 +18,7 @@ import { Dato } from '../kit/superficies';
 import { Grupo, Marco } from '../marco/Marco';
 import { CampoAlSalir, Lista } from './piezas';
 import './proyecto.css';
+import { aviso } from '../kit/capas';
 
 const KIND: Record<Herramienta['kind'], string> = { standalone: 'Producto propio', extracted: 'Extraída', interna: 'Interna' };
 const CAMPOS_FICHA: [string, string][] = [['puesto', 'Puesto'], ['descripcion', 'Descripción'], ['problema', 'Problema'], ['valor', 'Valor'], ['diferencial', 'Diferencial'], ['stack', 'Stack'], ['pesoEntrevistas', 'Peso en entrevistas'], ['hook', 'Imán (hook)'], ['metrica', 'Métrica']];
@@ -119,7 +120,7 @@ function HojaHerramienta({ h, hoy, onCerrar }: { h: Herramienta | null; hoy: str
           <div className="pt-campo-hoja">
             <CampoAlSalir etiqueta="Link del paquete" valor={e.enlace} guardar={(v) => setItem(x.id, { enlace: v || undefined })} modo="url" />
             <CampoAlSalir etiqueta="Descargas (a mano)" valor={e.descargas != null ? String(e.descargas) : ''} guardar={(v) => setItem(x.id, { descargas: v ? Number(v.replace(/\D/g, '')) : undefined })} modo="numeric" />
-            {posteada ? <p className="t-nota">Post del jueves: hecho.</p> : <Boton variante="secundario" icono="tilde" onClick={() => agregarPost({ fecha: hoy, canales: ['linkedin-en', 'linkedin-es', 'x'], pista: 'principal', item: x.id })}>Post del jueves hecho hoy</Boton>}
+            {posteada ? <p className="t-nota">Post del jueves: hecho.</p> : <Boton variante="secundario" icono="tilde" onClick={() => { const pid = agregarPost({ fecha: hoy, canales: ['linkedin-en', 'linkedin-es', 'x'], pista: 'principal', item: x.id }); aviso({ titulo: 'Post anotado', sub: 'Cuenta para el Imán', tono: 'hecho', deshacer: () => borrarPost(pid) }); }}>Post del jueves hecho hoy</Boton>}
           </div>
         )}
       </div>

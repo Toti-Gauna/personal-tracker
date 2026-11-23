@@ -165,7 +165,7 @@ function Comercial({ id, hoy }: { id: string; hoy: string }) {
   return (
     <>
       <Grupo titulo="Estado">
-        <div className="pt-etapas" role="radiogroup" aria-label="Estado del showcase">
+        <div className="pt-etapas" role="group" aria-label="Estado del showcase">
           {ESTADOS_COMERCIAL.map((x) => <Chip key={x} activo={estado === x} onCambio={() => cambiar(x)}>{ESTADO_COMERCIAL_TXT[x]}</Chip>)}
         </div>
         {!g.ok && <p className="t-nota" role="alert">Para publicarlo falta {faltaTexto(g.faltan)}.</p>}

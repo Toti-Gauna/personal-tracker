@@ -36,7 +36,11 @@ export function areaDe(p: Pick<PeriodoMedido, 'id' | 'nivel' | 'track'>): string
 export function useAccion(p: PeriodoMedido, hoy: string) {
   const plan = useStore((s) => s.plan);
   const accion = p.track && p.track !== 'principal' ? null : !p.hijos?.length || p.nivel === 'version' ? accionDe(p.id) : null;
-  const hecho = p.estado === 'hecho';
+  // Lo marcado a mano se lee de lo guardado: una versión sin lotes queda "hecha" al tildar sus entregables, pero publicada es otra
+  // cosa (y pasa por el Imán). Si no, el botón diría "Sacar de publicadas" sobre algo que nunca se publicó y no haría nada.
+  const hecho = accion?.tipo === 'version' ? !!plan.versiones?.[accion.proyecto]?.[accion.version]?.publicada
+    : accion?.tipo === 'hito' ? !!plan.hitos[accion.clave]?.hecho
+    : p.estado === 'hecho';
   // v12.2: el lanzamiento no se marca publicado sin el Imán completo (las versiones de antes, sí).
   const gate = accion?.tipo === 'version' && !hecho
     ? puedePublicar({ version: accion.version, lanzamiento: lanzamientoDe(fichaV7(accion.proyecto)?.versiones ?? [], plan.fondo?.[accion.proyecto]?.lanzamiento), iman: plan.iman?.[accion.proyecto] })
@@ -52,6 +56,10 @@ export function useAccion(p: PeriodoMedido, hoy: string) {
     if (!hecho) {
       const deshacer = () => (accion.tipo === 'version' ? publicarVersion(accion.proyecto, accion.version, null) : marcarHito(accion.clave, null));
       aviso({ titulo: accion.tipo === 'version' ? `${p.nombre}: publicada` : `${p.nombre}: hecho`, tono: 'hecho', deshacer });
+    } else {
+      // Desmarcar borra la fecha: Deshacer la devuelve tal cual (volver a tildar pondría la de hoy).
+      const antes = accion.tipo === 'version' ? plan.versiones?.[accion.proyecto]?.[accion.version]?.publicada : plan.hitos[accion.clave]?.hecho;
+      if (antes) aviso({ titulo: accion.tipo === 'version' ? `${p.nombre}: sin publicar` : `${p.nombre}: sin hacer`, deshacer: () => (accion.tipo === 'version' ? publicarVersion(accion.proyecto, accion.version, antes) : marcarHito(accion.clave, antes)) });
     }
     return true;
   };

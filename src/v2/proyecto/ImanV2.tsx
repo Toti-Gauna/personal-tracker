@@ -7,7 +7,7 @@ import { useState } from 'react';
 import { PASOS_ANTES, PASOS_SERIE, PASO_TXT, puntosIman, type Canal, type PasoSerie } from '../../data/iman';
 import { PLAN_EXT } from '../../data/plan-extendido';
 import { comercial, secundaria } from '../../data/v12-2';
-import { agregarPost, setIman } from '../../state/fondo';
+import { agregarPost, borrarPost, setIman } from '../../state/fondo';
 import { useStore } from '../../state/store';
 import { fp } from '../../ui/periodos';
 import { Boton, CampoTexto, Casilla } from '../kit/controles';
@@ -15,6 +15,7 @@ import { Vacio } from '../kit/superficies';
 import { Grupo, Marco } from '../marco/Marco';
 import { CampoAlSalir, FilaHoja } from './piezas';
 import './proyecto.css';
+import { aviso } from '../kit/capas';
 
 const INFO = (
   <>
@@ -93,7 +94,7 @@ export function ImanV2({ id, hoy }: { id: string; hoy: string }) {
                 {p ? <p className="t-nota">{fp(p.fecha)} · LinkedIn (EN y ES) y X{p.link ? <> · <a href={p.link}>link</a></> : ''}</p> : (
                   <>
                     <CampoTexto etiqueta="Link del post (opcional)" valor={links[paso] ?? ''} onCambio={(v) => setLinks({ ...links, [paso]: v })} placeholder="https://…" modo="url" />
-                    <Boton variante="secundario" icono="tilde" onClick={() => agregarPost({ fecha: hoy, canales: ['linkedin-en', 'linkedin-es', 'x'] as Canal[], pista, item: id, paso, ...(links[paso]?.trim() ? { link: links[paso].trim() } : {}) })}>Post hecho hoy</Boton>
+                    <Boton variante="secundario" icono="tilde" onClick={() => { const pid = agregarPost({ fecha: hoy, canales: ['linkedin-en', 'linkedin-es', 'x'] as Canal[], pista, item: id, paso, ...(links[paso]?.trim() ? { link: links[paso].trim() } : {}) }); aviso({ titulo: 'Post anotado', sub: 'Cuenta para el Imán', tono: 'hecho', deshacer: () => borrarPost(pid) }); }}>Post hecho hoy</Boton>
                   </>
                 )}
               </div>

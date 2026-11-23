@@ -19,6 +19,7 @@ import { FilaHoja } from './piezas';
 import { Portada } from './Portada';
 import './proyecto.css';
 import { cuantos } from '../reglas';
+import { aviso } from '../kit/capas';
 
 const INFO = (
   <>
@@ -104,7 +105,7 @@ export function CertV2({ id, hoy }: { id: string; hoy: string }) {
 
       <Grupo titulo="Resultado">
         <div className="capa-1 pt-check">
-          <Casilla marcada={!!e.aprobada} etiqueta={e.aprobada ? `Aprobada el ${fp(e.aprobada)}` : 'Aprobada'} nota={e.renovacion ? `${e.renovacion.vence ? `Vence el ${fp(e.renovacion.vence)} · ` : ''}${e.renovacion.nota}` : undefined} onCambio={() => marcarHito(claveHito.cert(id), e.aprobada ? null : hoy)} />
+          <Casilla marcada={!!e.aprobada} etiqueta={e.aprobada ? `Aprobada el ${fp(e.aprobada)}` : 'Aprobada'} nota={e.renovacion ? `${e.renovacion.vence ? `Vence el ${fp(e.renovacion.vence)} · ` : ''}${e.renovacion.nota}` : undefined} onCambio={() => { const antes = e.aprobada; marcarHito(claveHito.cert(id), antes ? null : hoy); if (antes) aviso({ titulo: 'Aprobación sacada', sub: `Era del ${fp(antes)}`, deshacer: () => marcarHito(claveHito.cert(id), antes) }); }} />
         </div>
       </Grupo>
 

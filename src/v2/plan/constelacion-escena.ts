@@ -485,10 +485,11 @@ export function crearEscena(o: OpcionesEscena): Escena {
     antes = ahora;
     const tocando = dedos.size > 0;
     // Inercia al soltar y giro lento cuando nadie toca.
-    if (!tocando && Math.abs(impulso) > 0.0002) { meta.theta += impulso; impulso *= Math.exp(-dt * 5); sucio = true; }
+    if (!o.quieto && !tocando && Math.abs(impulso) > 0.0002) { meta.theta += impulso; impulso *= Math.exp(-dt * 5); sucio = true; }
     const solo = !o.quieto && !tocando && ahora - quietoDesde > 2600;
     if (solo) meta.theta += dt * 0.03;
-    const k = 1 - Math.exp(-dt * 3.4);
+    // Con movimiento reducido la cámara no vuela: salta a donde va (Hoy, Todo, las flechas, al soltar o al cambiar el tamaño).
+    const k = o.quieto ? 1 : 1 - Math.exp(-dt * 3.4);
     const falta = Math.abs(meta.theta - cam.theta) + Math.abs(meta.phi - cam.phi) + Math.abs(meta.dist - cam.dist) / 10 + cam.obj.distanceTo(meta.obj);
     const volando = falta > 0.0006;
     if (volando) {
