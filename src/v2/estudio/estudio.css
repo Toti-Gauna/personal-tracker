@@ -165,3 +165,36 @@
 .es-leyenda { list-style: none; display: flex; flex-wrap: wrap; gap: var(--sp-2) var(--sp-4); margin: var(--sp-4) 0 0; padding: 0; font: 400 var(--t-11)/1 var(--font-mono); color: var(--texto-2); }
 .es-leyenda li { display: inline-flex; align-items: center; gap: 6px; }
 .es > .k-boton + .m-grupo { margin-top: var(--sp-6); }
+
+/* El análisis (#/flojo/analisis): el mapa, los errores, el recall por semana y la calibración. */
+.es-mapa { display: grid; padding: var(--sp-2) var(--sp-3) var(--sp-3); }
+.es-mapa-fila { display: grid; grid-template-columns: minmax(0, 1fr) repeat(4, 44px); align-items: center; gap: 4px; min-height: var(--toque); padding: 4px 0; color: var(--texto); text-decoration: none; }
+.es-mapa-fila + .es-mapa-fila { border-top: 1px solid var(--raya); }
+.es-mapa-cab { min-height: 28px; }
+.es-mapa-cab .t-rotulo { text-align: center; color: var(--texto-3); }
+.es-mapa-fila [role='rowheader'] { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--texto-2); }
+.es-mapa-fila [role='rowheader'] b { color: var(--texto); font-weight: 500; margin-right: 4px; }
+.es-celda { display: grid; place-items: center; height: 32px; border-radius: var(--r-s); font: 500 var(--t-13)/1 var(--font-mono); color: var(--texto); background: var(--capa-2); }
+.es-celda-vacia { background: none; color: var(--texto-3); box-shadow: inset 0 0 0 1px var(--raya); }
+.es-celda-mal { background: var(--texto); color: var(--capa-0); }
+.es-celda-bien { background: color-mix(in oklab, var(--trazo) 22%, var(--capa-2)); box-shadow: inset 0 -3px 0 var(--trazo); }
+.es-mapa-leyenda { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; margin: var(--sp-3) 0 0; font: 400 var(--t-11)/1 var(--font-mono); color: var(--texto-3); }
+.es-mapa-leyenda .es-celda { width: 14px; height: 14px; margin-right: -4px; border-radius: 4px; }
+.es-fallas, .es-calib { list-style: none; display: grid; gap: var(--sp-4); margin: 0; padding: var(--sp-4); }
+.es-fallas > li, .es-calib > li { display: grid; gap: 6px; }
+.es-falla-cab { display: flex; justify-content: space-between; align-items: baseline; gap: var(--sp-3); }
+.es-falla-cab b { font-weight: 500; }
+.es-falla-cab .t-dato { color: var(--texto-2); }
+.es-fallas small { color: var(--texto-2); }
+.es-recall { margin: 0; padding: var(--sp-4); }
+.es-recall svg { display: block; width: 100%; height: auto; overflow: visible; }
+.es-recall-grilla { stroke: var(--raya); stroke-width: 1; }
+.es-recall-tope { stroke: var(--texto-2); stroke-width: 1.25; stroke-dasharray: 3 4; }
+.es-recall-linea { fill: none; stroke: var(--area); stroke-width: 2.25; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 1; animation: es-dibuja 900ms var(--curva-salida) backwards; }
+.es-recall-punto { fill: var(--capa-1); stroke: var(--area); stroke-width: 1.75; }
+.es-recall-eje { font: 400 var(--t-11)/1 var(--font-mono); fill: var(--texto-3); }
+.es-recall-leyenda { display: flex; flex-wrap: wrap; gap: 6px var(--sp-4); margin-top: var(--sp-3); font: 400 var(--t-13)/1.2 var(--font-text); color: var(--texto-2); }
+.es-recall-leyenda span { display: inline-flex; align-items: center; gap: 6px; }
+.es-recall-leyenda b { color: var(--texto); font-weight: 500; }
+@keyframes es-dibuja { from { stroke-dashoffset: 1; } }
+@media (prefers-reduced-motion: reduce) { .es-recall-linea { animation: none; } }

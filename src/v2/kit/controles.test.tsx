@@ -1,4 +1,4 @@
-import { fireEvent, render, screen, within } from '@testing-library/react';
+import { act, fireEvent, render, screen, within } from '@testing-library/react';
 import { useState } from 'react';
 import { describe, expect, it, vi } from 'vitest';
 import { Boton, CampoFecha, CampoHora, CampoTexto, Casilla, Chip, Contador, Interruptor, Segmentado, Selector, fechaLarga, grillaMes } from './controles';
@@ -109,6 +109,20 @@ describe('2.0 · Campos', () => {
     fireEvent.keyDown(screen.getByRole('textbox', { name: 'Me levanto: minutos' }), { key: 'ArrowDown' });
     expect(screen.getByText('23:55')).toBeInTheDocument();
     expect(document.body.textContent).not.toMatch(/AM|PM/);
+  });
+
+  it('hora: escribir "16" de a un dígito, con el foco en la casilla, deja 16 (y no el primer dígito)', () => {
+    render(<Con inicial="04:00">{(v, set) => <><CampoHora etiqueta="Me levanto" valor={v} onCambio={set} /><output>{v}</output></>}</Con>);
+    const h = screen.getByRole('textbox', { name: 'Me levanto: hora' }) as HTMLInputElement;
+    act(() => h.focus());
+    fireEvent.change(h, { target: { value: '1' } });
+    fireEvent.change(h, { target: { value: '16' } }); // completa la hora: el foco pasa a los minutos y la casilla "sale"
+    expect(document.activeElement).toBe(screen.getByRole('textbox', { name: 'Me levanto: minutos' }));
+    expect(screen.getByText('16:00')).toBeInTheDocument();
+    const m = screen.getByRole('textbox', { name: 'Me levanto: minutos' }) as HTMLInputElement;
+    fireEvent.change(m, { target: { value: '4' } });
+    fireEvent.blur(m); // un solo dígito y salir: 16:04
+    expect(screen.getByText('16:04')).toBeInTheDocument();
   });
 
   it('fecha: "23 nov 2026", calendario de lunes a domingo, hoy marcado y lo anterior al mínimo apagado', () => {

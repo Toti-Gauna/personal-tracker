@@ -1,7 +1,7 @@
 import { act, fireEvent, render, renderHook, screen, waitFor, within } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { leerRuta } from '../../lib/routes';
-import { getState, register, resetState, startDay } from '../../state/store';
+import { getState, register, resetState, setState, startDay } from '../../state/store';
 import { addCards } from '../../state/study';
 import { limpiarCapas } from '../kit/capas';
 import GlobalV2 from '../marco/Global';
@@ -189,9 +189,51 @@ describe('Puntos débiles', () => {
     expect(getState().study.rules.priorizarFlojo).toBe(!antes);
   });
 
-  it('el análisis de la 1.0 queda a un toque, dentro del marco 2.0', async () => {
+  it('el análisis sin datos invita a estudiar, en vez de cuatro gráficos vacíos', async () => {
     render(<>{<Flojo {...pantalla('#/flojo/analisis')} />}{global}</>);
     expect(await screen.findByRole('heading', { level: 1, name: /Análisis/ })).toBeTruthy();
+    expect(screen.getByText('Todavía no hay nada que analizar')).toBeTruthy();
+    expect(screen.getByRole('link', { name: 'Ir a Estudio' }).getAttribute('href')).toBe('#/estudio');
+    expect(screen.queryByRole('table')).toBeNull();
+  });
+
+  it('el análisis con datos: el mapa por capítulo (la banda es una forma, no solo color), los errores, el recall y la calibración', async () => {
+    act(() => setState((s) => {
+      const a = s.study.activities.find((x) => x.id === 'conamat')!;
+      const frente = a.front;
+      const test = (score: number, errors: Record<'descuido' | 'tecnica' | 'concepto' | 'enunciado', number>) => ({ date: '2026-11-20', score, total: 10, errors, mode: 'app' as const, approved: score >= 8 });
+      return { ...s, study: { ...s.study,
+        units: { ...s.study.units, conamat: { 1: { learnedOn: '2026-11-18', approvedOn: '2026-11-20', tests: [test(9, { descuido: 1, tecnica: 0, concepto: 0, enunciado: 0 })] }, 2: { learnedOn: '2026-11-19', tests: [test(5, { descuido: 1, tecnica: 2, concepto: 1, enunciado: 1 })] } } },
+        attempts: [
+          { tema: 'conamat:1', frontId: frente, kind: 'cold' as const, date: '2026-11-19', ok: 0.9, creia: 0.9 },
+          { tema: 'conamat:2', frontId: frente, kind: 'cold' as const, date: '2026-11-20', ok: 0.5, creia: 0.8 },
+          { tema: 'conamat:2', frontId: frente, kind: 'cold' as const, date: '2026-11-10', ok: 0.7, creia: 0.7 },
+          { tema: 'conamat:1', frontId: frente, kind: 'ejercicio' as const, date: '2026-11-22', ok: 0.8, de: [4, 5] as [number, number] },
+        ],
+      } };
+    }));
+    render(<>{<Flojo {...pantalla('#/flojo/analisis')} />}{global}</>);
+    const mapa = within(await screen.findByRole('table', { name: 'Fortaleza por capítulo' }));
+    const filas = mapa.getAllByRole('row');
+    expect(filas).toHaveLength(3); // el encabezado y dos capítulos
+    expect(filas[1].getAttribute('href')).toBe('#/flojo/conamat%3A1');
+    expect(within(filas[1]).getByRole('cell', { name: 'cold recall: 90 %, fuerte' })).toHaveClass('es-celda-bien');
+    expect(within(filas[1]).getByRole('cell', { name: 'ejercicio del día 8: 4/5' })).toBeTruthy();
+    expect(within(filas[2]).getByRole('cell', { name: /^cold recall: (50|60) %, flojo$/ })).toHaveClass('es-celda-mal');
+    expect(within(filas[2]).getByRole('cell', { name: 'test: 50 %, flojo' })).toBeTruthy();
+    expect(within(filas[2]).getByRole('cell', { name: 'ejercicio del día 8: sin datos' })).toBeTruthy();
+
+    const fallas = within(screen.getByRole('region', { name: 'Cómo fallás' }));
+    expect(fallas.getByText('6 errores en 2 tests')).toBeTruthy();
+    expect(fallas.getByRole('progressbar', { name: 'Técnica: 2 de 6 errores' })).toBeTruthy();
+    expect(fallas.getAllByRole('listitem')).toHaveLength(4);
+
+    expect(within(screen.getByRole('region', { name: 'Recall por semana' })).getByRole('img', { name: /^Cold recall por semana, de 0 a 100: .* Tope: 85 %\.$/ })).toBeTruthy();
+
+    const cal = within(screen.getByRole('region', { name: 'Calibración' }));
+    expect(cal.getByRole('progressbar', { name: /: creías 80 %$/ })).toBeTruthy();
+    expect(cal.getByRole('progressbar', { name: /: recordaste 70 %$/ })).toBeTruthy();
+    expect(cal.getByText(/creés 10 puntos más de lo que recordás/)).toBeTruthy();
   });
 });
 

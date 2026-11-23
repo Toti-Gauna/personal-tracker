@@ -190,6 +190,8 @@ export function CampoTexto({ etiqueta, valor, onCambio, nota, error, icono, plac
 const dos = (n: number) => String(n).padStart(2, '0');
 
 /** Hora en 24 h con dos casillas (hora y minuto): se escribe, se sube y baja con las flechas, y nunca muestra AM/PM. */
+// Al salir de una casilla se lee lo que tiene escrito (no el estado): pasar el foco a los minutos al completar la hora dispara
+// ese "salir" en el mismo instante, cuando el estado todavía guarda el dígito anterior (escribir "16" dejaba "01").
 export function CampoHora({ etiqueta, valor, onCambio, pasoMin = 5 }: { etiqueta: string; valor: string; onCambio: (v: string) => void; pasoMin?: number }) {
   const [h, m] = (valor || '00:00').split(':').map(Number);
   const [th, setTh] = useState(dos(h));
@@ -209,13 +211,13 @@ export function CampoHora({ etiqueta, valor, onCambio, pasoMin = 5 }: { etiqueta
         <input className="t-dato" inputMode="numeric" aria-label={`${etiqueta}: hora`} value={th} maxLength={2}
           onFocus={(e) => e.target.select()}
           onChange={(e) => { const v = e.target.value.replace(/\D/g, ''); setTh(v); if (v.length === 2) { fijar(Math.min(23, Number(v)), m); minRef.current?.focus(); } }}
-          onBlur={() => fijar(Math.min(23, Number(th) || 0), m)}
+          onBlur={(e) => fijar(Math.min(23, Number(e.target.value.replace(/\D/g, '')) || 0), m)}
           onKeyDown={(e) => { if (e.key === 'ArrowUp') { e.preventDefault(); fijar(h + 1, m); } if (e.key === 'ArrowDown') { e.preventDefault(); fijar(h - 1, m); } }} />
         <span aria-hidden="true">:</span>
         <input ref={minRef} className="t-dato" inputMode="numeric" aria-label={`${etiqueta}: minutos`} value={tm} maxLength={2}
           onFocus={(e) => e.target.select()}
           onChange={(e) => { const v = e.target.value.replace(/\D/g, ''); setTm(v); if (v.length === 2) fijar(h, Math.min(59, Number(v))); }}
-          onBlur={() => fijar(h, Math.min(59, Number(tm) || 0))}
+          onBlur={(e) => fijar(h, Math.min(59, Number(e.target.value.replace(/\D/g, '')) || 0))}
           onKeyDown={(e) => { if (e.key === 'ArrowUp') { e.preventDefault(); fijar(h, m + pasoMin); } if (e.key === 'ArrowDown') { e.preventDefault(); fijar(h, m - pasoMin); } }} />
       </div>
     </div>
