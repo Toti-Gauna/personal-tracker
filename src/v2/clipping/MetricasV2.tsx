@@ -94,7 +94,7 @@ export default function MetricasV2({ day, today }: PropsV2) {
       <Grupo titulo="Ingreso por mes">
         <Tarjeta capa={1} className="cl-grafico">
           <BarrasG barras={MESES.map((k) => ({ etiqueta: String(k), valor: d.porMes[k - 1], hoy: k === nPlan, texto: d.porMes[k - 1] ? corto(d.porMes[k - 1]) : '' }))}
-            nombre={`Ingreso por mes del roadmap, en USD: ${MESES.map((k) => `mes ${k}, ${Math.round(d.porMes[k - 1])}`).join('; ')}. Meta del mes ${nPlan}: ${Math.round(mesActual.meta)}.`} leyenda={`Mes del roadmap. Meta del mes ${nPlan}: ${usd(mesActual.meta)}.`} />
+            nombre={`Ingreso por mes del roadmap, en USD: ${MESES.map((k) => `mes ${k}, ${Math.round(d.porMes[k - 1])}`).join('; ')}. Meta del mes ${nPlan}: ${Math.round(mesActual.meta)}.`} leyenda={`Meta del mes ${nPlan}: ${usd(mesActual.meta)}`} />
         </Tarjeta>
       </Grupo>
 
@@ -103,7 +103,7 @@ export default function MetricasV2({ day, today }: PropsV2) {
           <div className="cl-anillo" data-grafico><Anillo valor={mes12 / CLIP.metaFinal} tamano={104} etiqueta={d.proy ? `${(mes12 / 1000).toFixed(1).replace('.', ',')}k` : '—'} sub="mes 12" area={AREA} nombre="Proyección del mes 12 contra USD 10.000" /></div>
           <div className="cl-camino-texto">
             {d.proy
-              ? <p className="t-cuerpo">Con tu ritmo real, el mes 12 cierra en <b className="t-dato">{usd(mes12)}</b>{d.proy.falta ? <>: faltan <b className="t-dato">{usd(d.proy.falta)}</b> para USD 10k.</> : ', arriba de USD 10k.'}</p>
+              ? <p className="t-cuerpo">{d.proy.falta ? <>A tu ritmo faltan <b className="t-dato">{usd(d.proy.falta)}</b> para USD 10k.</> : <>A tu ritmo cerrás en <b className="t-dato">{usd(mes12)}</b>.</>}</p>
               : <p className="t-cuerpo">Con el primer cobro aparece tu proyección.</p>}
             <p className="t-nota">Base, mes {mesCruce('base') ?? 'no llega'} · optimista, mes {mesCruce('optimista') ?? 'no llega'} · conservador, {mesCruce('conservador') ? `mes ${mesCruce('conservador')}` : 'no llega'}.</p>
           </div>
@@ -127,7 +127,7 @@ export default function MetricasV2({ day, today }: PropsV2) {
               </ul>
               <p className="t-nota cl-leyenda" data-grafico>Barra: pago real. Rayita: tarifa listada. Rayitas finas: los dos pisos.</p>
             </>
-          ) : <p className="t-nota">Cargá campañas y cobros para comparar el pago real con la tarifa listada.</p>}
+          ) : <p className="t-nota">Aparece con tus campañas y cobros.</p>}
         </Tarjeta>
       </Grupo>
 

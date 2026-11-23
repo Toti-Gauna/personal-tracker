@@ -361,7 +361,7 @@ describe('Clipping 2.0 · cuentas, campañas y retainers', () => {
 describe('Clipping 2.0 · las métricas', () => {
   it('vacío: los gráficos dicen qué cargar; con datos: el período, el ingreso por mes, el pago por campaña y la concentración', () => {
     const { unmount } = abrir(MetricasV2, '#/metas/clipping/metricas');
-    expect(screen.getByText('Cargá campañas y cobros para comparar el pago real con la tarifa listada.')).toBeTruthy();
+    expect(screen.getByText('Aparece con tus campañas y cobros.')).toBeTruthy();
     expect(screen.getByText('Sin cobros en el período.')).toBeTruthy();
     unmount();
     sembrar();
@@ -372,6 +372,7 @@ describe('Clipping 2.0 · las métricas', () => {
     expect(screen.getByRole('img', { name: 'GTA 6 · streamer: 100 % del ingreso, tope 30 %' })).toBeTruthy();
     expect(screen.getByText('Pasa el tope')).toBeTruthy();
     expect(screen.getByRole('img', { name: /^Proyección del mes 12 contra USD 10\.000: 81 %$/ })).toBeTruthy();
+    expect(screen.getByText(/^A tu ritmo faltan/)).toBeTruthy();
     fireEvent.click(screen.getByRole('radio', { name: 'Todo' }));
     expect(screen.getByRole('radio', { name: 'Todo' }).getAttribute('aria-checked')).toBe('true');
     fireEvent.click(screen.getByRole('radio', { name: 'Plataforma' }));

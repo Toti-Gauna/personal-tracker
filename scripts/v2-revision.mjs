@@ -146,6 +146,9 @@ const PANTALLAS = [
   { id: 'taller-piezas', hash: '#/v2/piezas' },
   { id: 'taller-movimiento', hash: '#/v2/movimiento' },
 ];
+/** `SOLO=id,id` mide solo esas pantallas: para volver a revisar una sin esperar a las otras cien. */
+const SOLO = (process.env.SOLO ?? '').split(',').map((x) => x.trim()).filter(Boolean);
+const ELEGIDAS = SOLO.length ? PANTALLAS.filter((p) => SOLO.includes(p.id)) : PANTALLAS;
 
 const SEMBRAR = () => {
   const s = JSON.parse(localStorage.getItem('trazo.v1'));
@@ -240,7 +243,7 @@ for (const tema of ['light', 'dark']) {
   await page.evaluate(SEMBRAR);
   const dir = join(OUT, tema);
   mkdirSync(dir, { recursive: true });
-  for (const p of PANTALLAS) {
+  for (const p of ELEGIDAS) {
     const previo = p.antes ? await page.evaluate(() => localStorage.getItem('trazo.v1')) : null;
     if (p.antes) await page.evaluate(ANTES[p.antes]);
     await page.goto(BASE + p.hash);
