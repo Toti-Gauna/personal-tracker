@@ -99,7 +99,7 @@ describe('2.0 · Ajustes', () => {
     expect(within(screen.getByRole('region', { name: 'Áreas' })).getByRole('button', { name: /Código/ })).toHaveTextContent('Antes: Ingeniería');
   });
 
-  it('las subpáginas: bimestres con su hoja, y el plan dentro del marco nuevo', () => {
+  it('las subpáginas: bimestres con su hoja, y el plan como página 2.0 aparte (chunk propio)', async () => {
     const { unmount } = ajustes('#/ajustes/bimestres');
     expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent('Bimestres');
     fireEvent.click(screen.getAllByRole('button').find((b) => /01$/.test(b.textContent ?? ''))!);
@@ -109,8 +109,10 @@ describe('2.0 · Ajustes', () => {
     expect(getState().goals.bimesterNames[1]).toBe('Arranque');
     unmount();
     ajustes('#/ajustes/plan');
-    expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent('Plan');
+    // El plan T+18 se carga aparte (lazy): primero la carga, después la página.
+    expect(await screen.findByRole('heading', { level: 1 })).toHaveTextContent('Plan y rutina');
     expect(screen.getByRole('link', { name: 'Ajustes' })).toHaveAttribute('href', '#/ajustes');
+    expect(screen.queryByText('1.0')).toBeNull();
   });
 });
 

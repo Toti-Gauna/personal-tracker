@@ -129,5 +129,4 @@ html[data-ui='v2'] .app > .barra, html[data-ui='v2'] .app > .lateral { display: 
 
 /* Ajustes 2.0 */
 .aj2-tema { margin-top: var(--sp-6); }
-.aj2-v1 { font-family: var(--font-text); }
 .m-marco .v2-marca { font: 500 var(--t-11)/1 var(--font-mono); letter-spacing: 0.08em; padding: 3px 6px; border: 1px solid var(--raya-fuerte); border-radius: 999px; color: var(--texto-2); }

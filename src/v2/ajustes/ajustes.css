@@ -1,0 +1,164 @@
+/* ——— Ajustes y herramientas de Hoy 2.0 (tanda 3.3): todo con el prefijo ax- ——— */
+
+/* El aire entre lo que va suelto en la pantalla (tarjetas, botones) y los grupos que le siguen. */
+.ax > :not(.m-barra):not(.m-cabeza) + :not(.m-grupo) { margin-top: var(--sp-4); }
+.ax > :not(.m-barra):not(.m-cabeza) + .m-grupo { margin-top: var(--sp-7); }
+
+/* Lo que repiten varias pantallas. */
+.ax-form { display: grid; gap: var(--sp-4); padding: var(--sp-4); }
+.ax-dos { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--sp-3); align-items: start; }
+.ax-pila { display: grid; gap: var(--sp-2); }
+.ax-editar { display: grid; gap: var(--sp-4); }
+.ax-alerta { display: flex; align-items: flex-start; gap: var(--sp-2); margin: 0; padding: var(--sp-3); border-radius: var(--r-m); background: var(--capa-2); color: var(--texto); box-shadow: inset 0 0 0 1px var(--raya-fuerte); }
+.ax-alerta .icono { margin-top: 1px; }
+.ax-interruptores, .ax-alarmas { padding: 0 var(--sp-4); }
+.ax-interruptores > * + *, .ax-alarmas > * + * { border-top: 1px solid var(--raya); }
+.ax-horas { display: grid; gap: var(--sp-4); }
+.ax-etiquetado { display: grid; gap: var(--sp-2); }
+.ax-copia.s-tarjeta { display: grid; gap: var(--sp-3); }
+.ax-datos { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); gap: var(--sp-3); }
+.ax-ruta { margin: 0; font-family: var(--font-mono); overflow-wrap: anywhere; }
+.ax-pre { margin: 0; padding: var(--sp-3); border-radius: var(--r-s); background: var(--capa-2); color: var(--texto); font: 400 var(--t-13)/1.5 var(--font-mono); white-space: pre; overflow: auto; }
+.ax-hecho.s-tarjeta { display: grid; gap: var(--sp-3); }
+.ax-repartido, .ax-pasos { margin: 0; padding-left: var(--sp-5); display: grid; gap: var(--sp-2); }
+
+/* La barra de tramos de un pomodoro: foco lleno, descanso rayado, el tramo en curso con un contorno. */
+.ax-tramos { display: flex; gap: 4px; height: 10px; }
+.ax-tramos > span { min-width: 4px; border-radius: 2px; }
+.ax-tramos > .ax-t-foco { background: var(--area); }
+.ax-tramos > .ax-t-descanso { background: repeating-linear-gradient(-45deg, var(--texto-3) 0 1.5px, transparent 1.5px 5px); box-shadow: inset 0 0 0 1px var(--raya-fuerte); }
+.ax-tramos > .ax-t-paso { opacity: 0.45; }
+.ax-tramos > .ax-t-actual { outline: 2px solid var(--texto); outline-offset: 2px; }
+
+/* Sonidos. */
+.ax-evento { display: flex; align-items: center; gap: var(--sp-1); }
+.ax-evento + .ax-evento { border-top: 1px solid var(--raya); }
+.ax-evento > .s-fila { flex: 1; min-width: 0; }
+.ax-volumen { display: grid; gap: var(--sp-1); padding: var(--sp-3) var(--sp-4) var(--sp-1); }
+.ax-volumen-cab { display: flex; align-items: baseline; justify-content: space-between; gap: var(--sp-3); }
+.ax-volumen-cab .t-dato { color: var(--texto-2); }
+.ax-rango { -webkit-appearance: none; appearance: none; width: 100%; height: var(--toque); margin: 0; background: transparent; cursor: pointer; }
+.ax-rango::-webkit-slider-runnable-track { height: 6px; border-radius: var(--r-pildora); background: linear-gradient(to right, var(--texto) var(--v), var(--capa-3) var(--v)); box-shadow: inset 0 0 0 1px var(--raya-fuerte); }
+.ax-rango::-moz-range-track { height: 6px; border-radius: var(--r-pildora); background: var(--capa-3); box-shadow: inset 0 0 0 1px var(--raya-fuerte); }
+.ax-rango::-moz-range-progress { height: 6px; border-radius: var(--r-pildora); background: var(--texto); }
+.ax-rango::-webkit-slider-thumb { -webkit-appearance: none; width: 26px; height: 26px; margin-top: -10px; border-radius: 50%; background: var(--texto); border: 4px solid var(--capa-1); box-shadow: var(--sombra-1); }
+.ax-rango::-moz-range-thumb { width: 18px; height: 18px; border-radius: 50%; background: var(--texto); border: 4px solid var(--capa-1); box-shadow: var(--sombra-1); }
+.ax-rango:focus-visible { outline: 2px solid var(--trazo-texto); outline-offset: 2px; border-radius: var(--r-pildora); }
+
+/* Pomodoros. */
+.ax-presets { list-style: none; margin: 0; padding: 0 var(--sp-4); }
+.ax-presets > li { display: grid; gap: var(--sp-2); padding: var(--sp-4) 0; }
+.ax-presets > li + li { border-top: 1px solid var(--raya); }
+.ax-preset-cab { display: flex; align-items: baseline; justify-content: space-between; gap: var(--sp-3); }
+.ax-preset-cab .t-dato { color: var(--texto-2); }
+.ax-preset-pie { display: flex; align-items: center; justify-content: space-between; gap: var(--sp-3); }
+.ax-previa { display: grid; gap: var(--sp-2); }
+
+/* Elegir foco. */
+.ax-bloque.s-tarjeta { display: grid; gap: var(--sp-2); }
+.ax-bloque .t-rotulo { display: flex; align-items: center; gap: var(--sp-2); }
+.ax-bloque .t-dato { color: var(--texto-2); }
+.ax-opciones { display: grid; gap: var(--sp-3); }
+.ax-opcion { display: grid; grid-template-columns: 24px minmax(0, 1fr) auto; column-gap: var(--sp-3); row-gap: var(--sp-3); align-items: start; width: 100%; min-height: var(--toque); padding: var(--sp-4); border: 0; border-radius: var(--r-m); background: var(--capa-1); color: var(--texto); text-align: left; cursor: pointer; box-shadow: var(--brillo), inset 0 0 0 1px var(--raya); transition: background-color var(--dur-2), box-shadow var(--dur-2); -webkit-tap-highlight-color: transparent; }
+.ax-opcion[aria-checked='true'] { background: var(--capa-2); box-shadow: var(--brillo), inset 0 0 0 1.75px var(--texto); }
+.ax-radio { position: relative; width: 22px; height: 22px; margin-top: 1px; border-radius: 50%; box-shadow: inset 0 0 0 1.75px var(--texto-3); }
+.ax-opcion[aria-checked='true'] .ax-radio { box-shadow: inset 0 0 0 1.75px var(--texto); }
+.ax-opcion[aria-checked='true'] .ax-radio::after { content: ''; position: absolute; inset: 5px; border-radius: 50%; background: var(--texto); }
+.ax-opcion-t { display: flex; align-items: center; flex-wrap: wrap; gap: var(--sp-2); min-width: 0; }
+.ax-opcion-t b { font: 600 var(--t-17)/1.2 var(--font-text); }
+.ax-mio { padding: 3px 6px; border-radius: var(--r-pildora); box-shadow: inset 0 0 0 1px var(--raya-fuerte); color: var(--texto-2); font: 500 var(--t-11)/1 var(--font-mono); letter-spacing: 0.08em; text-transform: uppercase; }
+.ax-opcion-min { color: var(--texto-2); font: 400 var(--t-13)/1.3 var(--font-text); text-align: right; }
+.ax-opcion-min b { color: var(--texto); font-size: var(--t-15); }
+.ax-opcion-plan { grid-column: 1 / -1; display: grid; gap: var(--sp-2); }
+.ax-opcion .ax-tramos { height: 14px; }
+.ax-ejes { display: flex; justify-content: space-between; align-items: baseline; gap: var(--sp-3); color: var(--texto-2); font-size: var(--t-13); }
+.ax-ejes > span:first-child, .ax-ejes > span:last-child { flex: none; }
+.ax-ejes > span:nth-child(2) { flex: 1; min-width: 0; text-align: center; }
+.ax-siempre { padding: 0 var(--sp-4); }
+
+/* Foco: a pantalla completa, con el anillo grande. */
+.ax-foco { position: fixed; inset: 0; z-index: 40; display: flex; flex-direction: column; overflow-y: auto; overscroll-behavior: contain; background: radial-gradient(70% 42% at 50% 0%, color-mix(in oklab, var(--area) 18%, transparent), transparent), var(--capa-0); padding-bottom: calc(var(--sp-8) + env(safe-area-inset-bottom, 0px)); }
+.ax-foco-barra { display: flex; align-items: center; justify-content: space-between; gap: var(--sp-3); padding: calc(env(safe-area-inset-top, 0px) + var(--sp-3)) var(--margen) var(--sp-2); }
+.ax-foco-cuerpo { display: grid; grid-template-columns: minmax(0, 1fr); justify-items: center; gap: var(--sp-4); width: 100%; max-width: 480px; margin: 0 auto; padding: var(--sp-2) var(--margen) 0; text-align: center; }
+.ax-foco-kicker { display: flex; align-items: center; justify-content: center; gap: var(--sp-2); }
+.ax-foco-titulo { overflow-wrap: anywhere; }
+.ax-foco-reloj { position: relative; width: min(72vw, 300px); aspect-ratio: 1; margin: var(--sp-2) 0; }
+.ax-foco-reloj svg { display: block; width: 100%; height: 100%; overflow: visible; }
+.ax-foco-fondo, .ax-foco-valor { fill: none; stroke-width: 7; }
+.ax-foco-fondo { stroke: var(--raya-fuerte); }
+.ax-foco-valor { stroke: var(--area); stroke-linecap: round; transition: stroke-dashoffset 250ms linear, stroke var(--dur-2); }
+.ax-foco-centro { position: absolute; inset: 0; display: grid; place-content: center; justify-items: center; gap: var(--sp-1); }
+.ax-foco-tiempo { font-size: calc(var(--t-44) * 1.5); line-height: 1; letter-spacing: -0.02em; font-weight: 500; color: var(--texto); }
+.ax-foco-pausa .ax-foco-tiempo { color: var(--texto-2); }
+.ax-foco-plan { display: grid; grid-template-columns: minmax(0, 1fr); justify-items: center; gap: var(--sp-2); width: 100%; }
+.ax-foco-plan .ax-tramos { width: 100%; max-width: 320px; }
+.ax-foco-botones { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--sp-3); width: 100%; }
+.ax-foco-pasos { width: 100%; padding: var(--sp-2) var(--sp-4) var(--sp-3); text-align: left; }
+.ax-foco-pasos > .hy-pasos { grid-template-columns: minmax(0, 1fr); }
+.ax-foco-fila { width: 100%; text-align: left; }
+@media (prefers-reduced-motion: reduce) { .ax-foco-valor { transition: none; } }
+
+/* Semana de entreno. */
+.ax-ajuste { display: grid; gap: var(--sp-3); padding: var(--sp-4); }
+.ax-dias { list-style: none; margin: 0; padding: 0 var(--sp-4); }
+.ax-dias > li + li { border-top: 1px solid var(--raya); }
+.ax-dia { display: flex; align-items: center; gap: var(--sp-3); width: 100%; min-height: 60px; padding: var(--sp-2) 0; border: 0; background: none; color: var(--texto); text-align: left; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+.ax-dia-n { position: relative; isolation: isolate; flex: none; width: 42px; padding: 4px 0; text-align: center; }
+.ax-hoy .ax-dia-n { color: var(--sobre-trazo); }
+.ax-hoy .ax-dia-n::before { content: ''; position: absolute; inset: 0 -2px; z-index: -1; background: var(--trazo); clip-path: var(--bisel); }
+.ax-dia-t { flex: 1; display: grid; gap: 2px; min-width: 0; }
+.ax-dia-t b { font: 500 var(--t-17)/1.3 var(--font-text); }
+.ax-dia-t small { display: flex; align-items: center; gap: 4px; color: var(--texto-2); font: 400 var(--t-13)/1.35 var(--font-text); }
+
+/* Editar rutina. */
+.ax-items { list-style: none; margin: 0; padding: 0 var(--sp-4); }
+.ax-items:empty { display: none; }
+.ax-item { display: flex; align-items: center; gap: var(--sp-1); }
+.ax-item + .ax-item { border-top: 1px solid var(--raya); }
+.ax-item-main { flex: 1; min-width: 0; }
+.ax-mover { display: flex; flex: none; }
+.ax-mover button { display: grid; place-items: center; width: var(--toque); height: var(--toque); border: 0; border-radius: var(--r-s); background: none; color: var(--texto-2); cursor: pointer; -webkit-tap-highlight-color: transparent; }
+.ax-mover button[aria-disabled='true'] { opacity: 0.35; cursor: default; }
+
+/* Rutinas del día. */
+.ax-rutinas { list-style: none; margin: 0; padding: 0 var(--sp-2) 0 var(--sp-4); }
+.ax-rutinas > li { display: flex; align-items: center; gap: var(--sp-1); }
+.ax-rutinas > li + li { border-top: 1px solid var(--raya); }
+.ax-rutinas > li > .s-fila { flex: 1; min-width: 0; }
+.ax-bloques { list-style: none; margin: 0; padding: 0 var(--sp-4); }
+.ax-bloques > li { display: grid; grid-template-columns: 104px minmax(0, 1fr); gap: var(--sp-3); align-items: baseline; padding: var(--sp-3) 0; }
+.ax-bloques > li + li { border-top: 1px solid var(--raya); }
+.ax-hora { color: var(--texto-2); font-size: var(--t-13); }
+.ax-bloque-t { display: grid; gap: 2px; min-width: 0; }
+.ax-bloque-t b { display: flex; align-items: center; gap: var(--sp-2); font: 500 var(--t-15)/1.3 var(--font-text); }
+.ax-bloque-t small { display: flex; align-items: center; gap: var(--sp-1); color: var(--texto-2); font: 400 var(--t-13)/1.35 var(--font-text); }
+.ax-asig { list-style: none; margin: 0; padding: 0 var(--sp-4); }
+.ax-asig > li { display: flex; align-items: center; justify-content: space-between; gap: var(--sp-3); min-height: 52px; }
+.ax-asig > li + li { border-top: 1px solid var(--raya); }
+.ax-chips { display: flex; flex-wrap: wrap; gap: var(--sp-2); }
+
+/* Importar. */
+.ax-json { display: flex; max-height: min(52vh, 440px); overflow-y: auto; border-radius: var(--r-m); background: var(--capa-1); box-shadow: var(--brillo), inset 0 0 0 1px var(--raya-fuerte); }
+.ax-json:focus-within, .ax-json.ax-con-error { box-shadow: var(--brillo), inset 0 0 0 1.75px var(--texto); }
+.ax-json-num { flex: none; display: grid; align-content: start; min-width: 40px; padding: var(--sp-3) var(--sp-2); background: var(--capa-2); color: var(--texto-3); font-size: var(--t-campo); line-height: 1.5; text-align: right; user-select: none; }
+.ax-json-num > span { display: block; }
+.ax-json-num > .ax-mal { color: var(--texto); font-weight: 700; box-shadow: inset -2px 0 0 var(--texto); }
+.ax-json textarea { flex: 1; min-width: 0; padding: var(--sp-3); border: 0; outline: 0; background: transparent; color: var(--texto); font-size: var(--t-campo); line-height: 1.5; resize: none; overflow-x: auto; overflow-y: hidden; white-space: pre; }
+.ax-json textarea::placeholder { color: var(--texto-3); }
+.ax-estado { display: flex; align-items: center; gap: var(--sp-2); min-height: 24px; margin: 0; color: var(--texto-2); font-size: var(--t-13); }
+.ax-estado.ax-mal { color: var(--texto); }
+.ax-cambios { list-style: none; margin: 0; padding: 0 var(--sp-4); }
+.ax-cambios > li { display: flex; align-items: flex-start; gap: var(--sp-3); padding: var(--sp-3) 0; }
+.ax-cambios > li + li { border-top: 1px solid var(--raya); }
+.ax-cambios > li > div { display: grid; gap: 2px; min-width: 0; }
+.ax-cambios > li .area-punto { margin-top: 7px; }
+.ax-ramas { display: flex; flex-wrap: wrap; gap: var(--sp-2); }
+.ax-rama { display: inline-flex; align-items: center; gap: var(--sp-2); height: var(--toque); padding: 0 var(--sp-4); border: 0; border-radius: var(--r-pildora); background: none; color: var(--texto); font: 500 var(--t-13)/1 var(--font-text); box-shadow: inset 0 0 0 1px var(--raya-fuerte); cursor: pointer; -webkit-tap-highlight-color: transparent; transition: background-color var(--dur-2), color var(--dur-2); }
+.ax-rama[aria-checked='true'] { background: var(--texto); color: var(--capa-0); box-shadow: none; }
+.ax-rama[aria-disabled='true'] { opacity: 0.4; cursor: default; }
+
+/* Plan y rutina. */
+.ax-puntos { display: inline-flex; align-items: center; gap: 4px; }
+.ax-ramas-lista { list-style: none; margin: 0; padding: 0 var(--sp-4); }
+.ax-ramas-lista > li { display: flex; align-items: center; gap: var(--sp-3); min-height: 48px; }
+.ax-ramas-lista > li + li { border-top: 1px solid var(--raya); }

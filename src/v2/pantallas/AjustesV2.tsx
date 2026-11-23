@@ -2,7 +2,7 @@
  * Trazo 2.0 · Ajustes. Una lista corta de grupos: apariencia, áreas, plan y datos. Lo largo (nombres de bimestres, el
  * plan T+18) vive en su propia página; renombrar se hace en una hoja. Las subpáginas que todavía son 1.0 se abren igual.
  */
-import { useEffect, useState } from 'react';
+import { Suspense, lazy, useEffect, useState } from 'react';
 import { AREAS, areaDefaultName } from '../../data/defaults';
 import { BIMESTRES, PLAN } from '../../data/plan';
 import { DAY_TYPES } from '../../data/routines';
@@ -10,7 +10,7 @@ import { DEFAULT_ALARMS } from '../../data/sounds';
 import type { Area } from '../../data/types';
 import { INTERFACES, forzadaPorUrl, interfazActiva, type Interfaz } from '../../lib/interfaz';
 import type { ThemePref } from '../../lib/theme';
-import { PlanT18, pedirInstalacion } from '../../screens/Ajustes';
+import { pedirInstalacion } from '../../screens/Ajustes';
 import { renameBimester } from '../../state/goals';
 import { setAreaName, setInterfaz } from '../../state/profile';
 import { planSettings, useStore } from '../../state/store';
@@ -57,16 +57,10 @@ function Bimestres() {
   );
 }
 
-/** El plan T+18 todavía usa los controles de la 1.0, dentro del marco nuevo. */
-function PlanPagina() {
-  return (
-    <Marco titulo="Plan" volver={{ href: '#/ajustes', nombre: 'Ajustes' }} rotulo={<>Inicio, rutina y ramas · <span className="v2-marca">1.0</span></>}>
-      <div className="ajustes aj2-v1"><PlanT18 /></div>
-    </Marco>
-  );
-}
+/** El plan T+18 es una página 2.0 aparte (tanda 3.3): su propio chunk, que solo baja quien entra a #/ajustes/plan. */
+const PlanAjustes = lazy(() => import('../ajustes/PlanAjustesV2'));
 
-export default function AjustesV2({ ruta }: PropsV2) {
+export default function AjustesV2({ ruta, day, today }: PropsV2) {
   const settings = useStore((s) => s.settings)!;
   const propiosB = useStore((s) => Object.values(s.goals.bimesterNames).filter((x) => x?.trim()).length);
   const [tema, setTema] = useState<ThemePref>(temaV2);
@@ -74,7 +68,7 @@ export default function AjustesV2({ ruta }: PropsV2) {
   const [instalada, setInstalada] = useState(false);
   useEffect(() => { setInstalada(window.matchMedia?.('(display-mode: standalone)').matches ?? false); }, []);
   if (ruta.param === 'bimestres') return <Bimestres />;
-  if (ruta.param === 'plan') return <PlanPagina />;
+  if (ruta.param === 'plan') return <Suspense fallback={<main className="pantalla v2-carga" aria-busy="true" aria-label="Cargando" />}><PlanAjustes ruta={ruta} day={day} today={today} /></Suspense>;
 
   const activa = interfazActiva(settings.interfaz);
   const forzada = forzadaPorUrl();
