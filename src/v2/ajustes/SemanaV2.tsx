@@ -69,8 +69,9 @@ export default function SemanaV2({ day }: PropsV2) {
           const pie = perdido ? 'No se hizo' : hecho ? 'Hecho' : detalle;
           return (
             <li key={i} className={i === hoy ? 'ax-hoy' : undefined}>
-              <button type="button" className="ax-dia" aria-label={`${NOMBRES[i]}${i === hoy ? ' (hoy)' : ''}: ${nombre} ${pie}. Cambiar`} onClick={() => setEditando(i)}>
-                <span className="ax-dia-n t-rotulo" aria-hidden="true">{DIAS[i]}</span>
+              <button type="button" className="ax-dia" aria-label={`${DIAS[i]} ${nombre} ${pie}. ${NOMBRES[i]}${i === hoy ? ', hoy' : ''}. Cambiar`} onClick={() => setEditando(i)}>
+                {/* El nombre empieza con lo que se ve ("LUN Pull A 18:00 · 1 h 25"): quien usa la voz dice eso. */}
+                <span className="ax-dia-n t-rotulo" aria-hidden="true">{DIAS[i]}</span>{' '}
                 <span className="ax-dia-t">
                   <b>{nombre}</b>{' '}
                   <small>

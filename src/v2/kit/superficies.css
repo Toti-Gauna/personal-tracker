@@ -8,6 +8,8 @@
 /* El link estirado de una tarjeta con nombre: cubre toda la tarjeta (y lo que tenga posición adentro) y lleva el anillo de foco. */
 .s-con-enlace { position: relative; }
 .s-tarjeta-enlace { position: absolute; inset: 0; z-index: 1; border-radius: inherit; }
+/* Por dentro: el héroe recorta lo que sale de su borde (overflow: hidden) y el anillo de afuera no se vería. */
+.v2 .s-tarjeta-enlace:focus-visible, html[data-ui='v2'] .s-tarjeta-enlace:focus-visible { outline-offset: -3px; border-radius: inherit; }
 .s-fila { display: flex; align-items: center; gap: var(--sp-3); width: 100%; min-height: 56px; padding: var(--sp-2) 0; color: var(--texto); text-decoration: none; text-align: left; }
 .s-tarjeta > .s-fila + .s-fila, .s-lista > .s-fila + .s-fila { border-top: 1px solid var(--raya); }
 .s-lista { padding: 0 var(--sp-4); }
