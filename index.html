@@ -20,8 +20,44 @@
         document.documentElement.dataset.theme = t;
       } catch (e) {}
     </script>
+    <style>
+      /* La carga, pintada con el HTML: el primer cuadro no espera a los scripts. (La misma que en src/v2/marco/marco.css.) */
+      html { background: #0c0d0e; }
+      html[data-theme='light'] { background: #f3f2ec; }
+      /* ——— Carga ——— */
+      .sp2 { position: fixed; inset: 0; z-index: 100; display: grid; place-content: center; justify-items: center; gap: 18px; background: var(--capa-0, var(--papel)); color: var(--texto, var(--tinta)); transition: opacity 200ms ease; }
+      .sp2.saliendo { opacity: 0; }
+      .sp2 svg { width: 132px; overflow: visible; }
+      .sp2 svg g polygon { fill: currentColor; animation: sp2-cae 320ms var(--curva-salida, ease-out) both; }
+      .sp2 svg g polygon:nth-child(2) { animation-delay: 70ms; }
+      .sp2 svg g polygon:nth-child(3) { animation-delay: 140ms; }
+      .sp2 svg g polygon:nth-child(4) { animation-delay: 210ms; }
+      .sp2-trazo { fill: var(--trazo, var(--economia)); fill-opacity: 0.92; animation: sp2-cruza 340ms var(--curva-salida, ease-out) 380ms both; }
+      .sp2-nombre { font: 900 var(--t-32)/1 var(--font-title); font-stretch: 125%; letter-spacing: -0.03em; animation: sp2-nombre 300ms ease 300ms both; }
+      .sp2-linea { width: 96px; height: 3px; border-radius: 3px; background: var(--capa-3, var(--linea)); overflow: hidden; }
+      .sp2-linea i { display: block; height: 100%; background: currentColor; transform-origin: left; animation: sp2-avanza 850ms cubic-bezier(0.3, 0, 0.2, 1) both; }
+      @keyframes sp2-cae { from { opacity: 0; transform: translateY(-46px); } }
+      @keyframes sp2-cruza { from { clip-path: inset(0 100% 0 0); } to { clip-path: inset(0 0 0 0); } }
+      @keyframes sp2-nombre { from { opacity: 0; transform: translateY(8px); } }
+      @keyframes sp2-avanza { from { transform: scaleX(0); } }
+      @media (prefers-reduced-motion: reduce) {
+        .sp2 svg g polygon, .sp2-trazo, .sp2-nombre { animation: none; }
+        .sp2-linea i { animation-duration: 280ms; }
+      }
+    </style>
   </head>
   <body>
+    <div id="sp2" class="sp2" role="status" aria-label="Cargando Trazo">
+      <svg viewBox="80 130 360 250" aria-hidden="true">
+        <g>
+          <polygon points="168,158 202,158 186,354 152,354" /><polygon points="220,150 254,150 238,362 204,362" />
+          <polygon points="272,152 306,152 290,358 256,358" /><polygon points="324,148 358,148 342,350 308,350" />
+        </g>
+        <polygon class="sp2-trazo" points="96,330 372,150 424,186 150,372" />
+      </svg>
+      <div class="sp2-nombre">trazo</div>
+      <div class="sp2-linea" aria-hidden="true"><i></i></div>
+    </div>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>

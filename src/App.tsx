@@ -8,9 +8,10 @@ import { useNow } from './ui/useNow';
 import { useSealSync } from './ui/useSealSync';
 import { usePendientes } from './ui/useStudy';
 import { Callado, Cargando, LimiteV2, PantallaV2 } from './v2/Resolutor';
+// La carga va en el primer pedazo (es chica): index.html ya la pintó y acá solo se cuenta el tiempo y se la saca.
+import SplashV2 from './v2/marco/SplashV2';
 
 const GlobalV2 = lazy(() => import('./v2/marco/Global'));
-const SplashV2 = lazy(() => import('./v2/marco/SplashV2'));
 const DespertarV2 = lazy(() => import('./v2/pantallas/DespertarV2'));
 const InstalarV2 = lazy(() => import('./v2/pantallas/InstalarV2'));
 
@@ -43,7 +44,7 @@ export function App() {
       <div className="envoltura"><Suspense fallback={<Cargando />}>{contenido}</Suspense></div>
       {/* En el teléfono, Avance cuelga de Perfil; la barra ancha lo trae como destino propio. */}
       {settings && <Callado><Suspense fallback={null}><GlobalV2 activa={ruta.seccion} pendientes={pendientes} conBarra={conBarra} conMini={conMini} /></Suspense></Callado>}
-      {cargando && <Callado alFallar={fin}><Suspense fallback={<div className="sp2" />}><SplashV2 onFin={fin} /></Suspense></Callado>}
+      {cargando && <Callado alFallar={fin}><SplashV2 onFin={fin} /></Callado>}
     </div>
   );
 }

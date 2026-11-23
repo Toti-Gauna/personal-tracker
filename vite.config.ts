@@ -12,6 +12,8 @@ export default defineConfig({
     react(),
     VitePWA({
       registerType: 'autoUpdate',
+      // El registro del service worker no frena el primer cuadro.
+      injectRegister: 'script-defer',
       includeAssets: ['trazo.svg', 'apple-touch-icon.png'],
       manifest: {
         name: 'Trazo',
