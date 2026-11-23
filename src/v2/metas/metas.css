@@ -1,0 +1,269 @@
+/* ——— Metas 2.0 (tanda 3.3): la ruta, las metas por horizonte, una meta nueva, el mapa por ramas, las etapas y la evolución ——— */
+
+@media (min-width: 1100px) { .m-marco.mt { max-width: 880px; } }
+
+/* ——— Las pestañas de Metas ——— */
+.mt-pestanas { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); margin: calc(var(--sp-2) * -1) 0 var(--sp-5); border-bottom: 1px solid var(--raya); }
+.mt-pestanas a { position: relative; display: grid; place-items: center; min-height: var(--toque); padding: 0 var(--sp-1); color: var(--texto-2); text-decoration: none; font: 550 var(--t-13)/1 var(--font-text); }
+.mt-pestanas a[aria-current='page'] { color: var(--texto); }
+.mt-pestanas a[aria-current='page']::after { content: ''; position: absolute; left: var(--sp-2); right: var(--sp-2); bottom: -2px; height: 4px; background: var(--trazo); clip-path: var(--bisel); }
+
+/* ——— El héroe de cada pestaña ——— */
+.mt-heroe.s-tarjeta { display: grid; gap: var(--sp-3); margin-bottom: var(--sp-5); }
+.mt-heroe-fila { display: flex; align-items: center; justify-content: space-between; gap: var(--sp-3); }
+.mt-heroe-fila h2 { min-width: 0; overflow-wrap: anywhere; }
+.mt-heroe-numero { display: grid; justify-items: end; gap: 2px; margin: 0; flex: none; }
+.mt-heroe-numero b { line-height: 1; }
+.mt-fase { margin: 0 0 var(--sp-4); }
+.mt-confirmado { display: inline-flex; align-items: center; gap: 6px; margin: 0; color: var(--trazo-texto); }
+.mt .m-grupo { margin-top: var(--sp-6); }
+.mt .m-grupo + .mt-plegable, .mt .mt-plegable + .mt-plegable, .mt .mt-plegable + .m-grupo { margin-top: var(--sp-3); }
+.mt .mt-plegable + .m-grupo { margin-top: var(--sp-6); }
+.mt-heroe + .mt-plegable, .mt-fase + .mt-plegable { margin-top: 0; }
+
+/* ——— Una rama que se pliega ——— */
+.mt-plegable { padding: 0; overflow: hidden; }
+.mt-plegable + .mt-plegable { margin-top: var(--sp-3); }
+.mt-plegable-cab { display: flex; align-items: center; gap: var(--sp-3); width: 100%; min-height: 60px; padding: var(--sp-2) var(--sp-4); background: none; border: 0; color: var(--texto); text-align: left; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+.mt-plegable-cab:focus-visible { outline: 2px solid var(--trazo-texto); outline-offset: -2px; }
+.mt-plegable-texto { flex: 1; display: grid; gap: 2px; min-width: 0; }
+.mt-plegable-texto b { font: 500 var(--t-17)/1.25 var(--font-text); }
+.mt-plegable-texto small { font: 400 var(--t-13)/1.3 var(--font-text); color: var(--texto-2); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.mt-plegable-valor { color: var(--texto-2); font-size: var(--t-13); white-space: nowrap; }
+.mt-plegable-cab .icono { color: var(--texto-3); flex: none; }
+.mt-plegable-cuerpo { padding: 0 var(--sp-4) var(--sp-2); border-top: 1px solid var(--raya); }
+
+/* ——— Una meta ——— */
+.mt-lista { padding: 0 var(--sp-4); }
+.mt-lista-plana { display: block; }
+.mt-fila { padding: 0; }
+.mt-fila + .mt-fila, .mt-lista > .s-fila { border-top: 1px solid var(--raya); }
+.mt-lista > .s-fila { padding-left: 0; }
+.mt-fila-tarea { display: flex; align-items: center; gap: var(--sp-1); }
+.mt-fila-tarea > :first-child { flex: 1; min-width: 0; }
+.mt-fila-cuenta { display: grid; grid-template-columns: minmax(0, 1fr) auto auto; align-items: center; column-gap: var(--sp-2); padding-top: var(--sp-1); }
+.mt-fila-cuenta.sin-control { grid-template-columns: minmax(0, 1fr) auto; }
+.mt-cuerpo { display: grid; gap: 2px; min-height: var(--toque); padding: var(--sp-2) 0; background: none; border: 0; color: var(--texto); text-align: left; cursor: pointer; align-content: center; -webkit-tap-highlight-color: transparent; }
+.mt-cuerpo:focus-visible { outline: 2px solid var(--trazo-texto); outline-offset: 2px; border-radius: var(--r-s); }
+.mt-titulo { display: flex; align-items: baseline; gap: var(--sp-2); font: 500 var(--t-15)/1.3 var(--font-text); overflow-wrap: anywhere; }
+.mt-titulo .area-punto { align-self: center; }
+.mt-cuerpo small { font: 400 var(--t-13)/1.3 var(--font-text); color: var(--texto-2); padding-left: calc(8px + var(--sp-2)); }
+.mt-detalle { color: var(--texto-2); padding-left: calc(8px + var(--sp-2)); }
+.mt-valor { color: var(--texto-2); font-size: var(--t-13); white-space: nowrap; }
+.mt-auto { min-width: var(--toque); text-align: center; color: var(--texto-3); }
+.mt-barra { grid-column: 1 / -1; padding: 0 0 var(--sp-3); }
+.mt-subs { padding: 0 0 var(--sp-2) var(--sp-4); margin-left: var(--sp-2); border-left: 2px solid var(--raya); }
+.mt-dias { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 4px; padding: 0 0 var(--sp-3); }
+.mt-dia { display: grid; justify-items: center; align-content: center; gap: 4px; min-height: var(--toque); padding: 0; background: var(--capa-2); border: 0; border-radius: var(--r-s); color: var(--texto-2); cursor: pointer; box-shadow: var(--brillo); -webkit-tap-highlight-color: transparent; }
+.mt-dia i { display: grid; place-items: center; width: 22px; height: 22px; border-radius: 50%; box-shadow: inset 0 0 0 1.75px var(--raya-fuerte); }
+.mt-dia[aria-pressed='true'] i { background: var(--trazo); color: var(--sobre-trazo); box-shadow: none; }
+.mt-dia.hoy { box-shadow: inset 0 0 0 1.75px var(--texto); }
+.mt-dia:disabled { opacity: 0.45; cursor: default; }
+.mt-hoja { display: grid; gap: var(--sp-4); }
+.mt-hito { display: grid; }
+.mt-hito .k-boton { justify-self: start; margin: 0 0 var(--sp-2) calc(var(--sp-4) + 24px); }
+.mt-info-lista { margin: 0 0 var(--sp-3); padding-left: var(--sp-5); display: grid; gap: var(--sp-2); }
+
+/* ——— Lo que cierra en el mes ——— */
+.mt-cierra { list-style: none; margin: 0; padding: 0 var(--sp-4); }
+.mt-cierra li { display: grid; grid-template-columns: 52px 8px minmax(0, 1fr); align-items: center; gap: var(--sp-3); min-height: 52px; padding: var(--sp-2) 0; }
+.mt-cierra li + li { border-top: 1px solid var(--raya); }
+.mt-cierra .sin-rama { background: transparent; box-shadow: inset 0 0 0 1.5px var(--texto-3); }
+.mt-leyenda { --ca-c: var(--trazo); display: flex; align-items: center; justify-content: center; gap: 4px; font: 500 var(--t-11)/1 var(--font-mono); letter-spacing: 0.04em; text-transform: uppercase; color: var(--texto-2); }
+html[data-ui='v2'][data-theme='light'] .mt-leyenda { --ca-c: color-mix(in oklab, var(--trazo) 62%, var(--trazo-texto)); }
+.mt-leyenda i { width: 14px; height: 14px; border-radius: 4px; }
+.mt-leyenda span:first-child { margin-right: 4px; }
+.mt-leyenda span:last-child { margin-left: 4px; }
+
+/* ——— Bimestre ——— */
+.mt-bims { display: flex; gap: var(--sp-2); margin: 0 calc(var(--margen) * -1) var(--sp-4); padding: 0 var(--margen); overflow-x: auto; scroll-snap-type: x proximity; scrollbar-width: none; }
+.mt-bims::-webkit-scrollbar { display: none; }
+.mt-bims button, .mt-bims a { position: relative; display: grid; place-items: center; text-decoration: none; flex: none; scroll-snap-align: center; min-width: 48px; min-height: var(--toque); padding: 0 var(--sp-3); border: 0; border-radius: var(--r-pildora); background: var(--capa-2); color: var(--texto-2); font: 600 var(--t-13)/1 var(--font-mono); cursor: pointer; box-shadow: var(--brillo); -webkit-tap-highlight-color: transparent; }
+.mt-bims button[aria-selected='true'] { background: var(--texto); color: var(--capa-0); box-shadow: none; }
+.mt-bims a.actual { color: var(--texto); }
+.mt-bims button.actual::after, .mt-bims a.actual::after { content: ''; position: absolute; left: 30%; right: 30%; bottom: 5px; height: 3px; border-radius: 2px; background: var(--trazo); }
+.mt-semanas { margin: 0; display: grid; gap: var(--sp-2); }
+.mt-semanas > div { display: grid; grid-template-columns: repeat(var(--n), minmax(0, 1fr)); gap: 3px; }
+.mt-semanas span { display: grid; place-items: center; height: 30px; border-radius: 6px; background: var(--capa-2); color: var(--texto-2); font: 600 var(--t-11)/1 var(--font-mono); box-shadow: var(--brillo); }
+.mt-semanas span.pas { background: color-mix(in oklab, var(--texto) 18%, var(--capa-2)); color: var(--texto); }
+.mt-semanas span.on { background: var(--trazo); color: var(--sobre-trazo); box-shadow: none; }
+
+/* ——— Año ——— */
+.mt-fechas { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--sp-2); margin: var(--sp-3) 0 0; }
+.mt-fechas div { display: grid; gap: 2px; }
+.mt-fechas dd { margin: 0; font-size: var(--t-13); color: var(--texto); }
+.mt-meses { padding: var(--sp-4) var(--sp-3) var(--sp-3); }
+.mt-final { display: grid; gap: var(--sp-3); padding: var(--sp-4); }
+.mt-final h3 { margin: 0; }
+.mt-final p { margin: 0; }
+
+/* ——— Una meta nueva ——— */
+.mt-form { display: grid; gap: var(--sp-5); }
+.mt-form .m-grupo { margin-top: 0; }
+.mt-dos { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: var(--sp-3); }
+.mt-dos > *, .mt-form > * { min-width: 0; }
+.mt-dos input { width: 100%; min-width: 0; }
+.mt-sub-fila { display: flex; align-items: center; gap: var(--sp-3); min-height: 52px; }
+.mt-sub-fila + .mt-sub-fila, .mt-sub-fila + .s-fila { border-top: 1px solid var(--raya); }
+.mt-sub-fila .t-cuerpo { flex: 1; min-width: 0; overflow-wrap: anywhere; }
+.mt-sub-n { color: var(--texto-3); min-width: 16px; }
+.mt-aviso { margin: calc(var(--sp-3) * -1) 0 0; color: var(--texto); font-weight: 550; }
+
+/* ——— La ruta ——— */
+.mt-segs { display: grid; grid-template-columns: repeat(var(--n), minmax(0, 1fr)); gap: 2px; margin: 0; }
+.mt-segs span { height: 14px; border-radius: 2px; background: var(--raya-fuerte); }
+.mt-segs span.pasada { background: color-mix(in oklab, var(--texto) 55%, transparent); }
+.mt-segs span.actual { background: var(--trazo); box-shadow: 0 0 10px color-mix(in oklab, var(--trazo) 60%, transparent); }
+.mt-segs span.hito { box-shadow: inset 0 -3px 0 var(--texto-2); }
+.mt-segs span.actual.hito { box-shadow: 0 0 10px color-mix(in oklab, var(--trazo) 60%, transparent), inset 0 -3px 0 var(--texto); }
+.mt-enlace { color: var(--texto-2); text-decoration: underline; text-underline-offset: 3px; }
+.mt-ramas { list-style: none; margin: 0; }
+.mt-ramas > li + li { border-top: 1px solid var(--raya); }
+.mt-rama-fila { display: grid; grid-template-columns: minmax(0, 1fr) auto; column-gap: var(--sp-3); row-gap: 2px; padding: var(--sp-3) 0; color: var(--texto); text-decoration: none; -webkit-tap-highlight-color: transparent; }
+.mt-rama-fila:active { background: var(--capa-2); }
+.mt-rama-nombre { display: flex; align-items: center; gap: var(--sp-2); font: 500 var(--t-11)/1.2 var(--font-mono); letter-spacing: 0.06em; text-transform: uppercase; color: var(--texto-2); }
+.mt-rama-lado { color: var(--texto-2); font-size: var(--t-13); white-space: nowrap; text-align: right; }
+.mt-rama-titulo { grid-column: 1 / -1; font-weight: 500; overflow-wrap: anywhere; }
+.mt-rama-sub { grid-column: 1 / -1; font: 400 var(--t-13)/1.35 var(--font-text); color: var(--texto-2); }
+.mt-riesgo { grid-column: 1 / -1; display: flex; align-items: center; gap: 6px; font: 550 var(--t-13)/1.3 var(--font-text); color: var(--texto); }
+.mt-rama-barra { grid-column: 1 / -1; padding-top: var(--sp-2); }
+.mt-ramas > li.standby { opacity: 0.7; }
+.mt-hitos { list-style: none; margin: 0; padding: 0 var(--sp-4); }
+.mt-hitos li { display: grid; grid-template-columns: 48px minmax(0, 1fr) auto; align-items: center; gap: var(--sp-3); min-height: 56px; padding: var(--sp-2) 0; }
+.mt-hitos li + li { border-top: 1px solid var(--raya); }
+.mt-hitos li.hecho b { color: var(--trazo-texto); }
+.mt-hito-fecha { display: inline-flex; align-items: center; gap: 4px; color: var(--texto-2); font-size: var(--t-13); text-align: right; }
+.mt-hitos li.hecho .mt-hito-fecha { color: var(--trazo-texto); }
+.mt-clip { display: grid; gap: var(--sp-3); padding: var(--sp-4); color: var(--texto); text-decoration: none; }
+.mt-clip-tira { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 3px; }
+.mt-clip-tira i { height: 8px; border-radius: 2px; background: var(--raya-fuerte); }
+.mt-clip-tira i.cerrada { background: color-mix(in oklab, var(--texto) 55%, transparent); }
+.mt-clip-tira i.actual { background: var(--trazo); }
+.mt-clip-datos { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--sp-3); }
+.mt-clip-datos .s-dato-valor b { font-size: var(--t-20); }
+.mt-clip small { margin: 0; }
+
+@media (prefers-reduced-motion: reduce) { .mt-plegable-cab, .mt-bims { scroll-behavior: auto; } }
+
+/* ——— Los datos sueltos y las leyendas ——— */
+.mt-datos { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--sp-3); margin: var(--sp-5) 0 0; }
+.mt-grafico { display: grid; gap: var(--sp-3); padding: var(--sp-4) var(--sp-3) var(--sp-3); }
+.mt-grafico + .mt-datos, .mt-grafico + .s-lista, .capa-1 + .capa-1.s-lista { margin-top: var(--sp-3); }
+.mt-leyenda-fila { display: flex; flex-wrap: wrap; gap: var(--sp-1) var(--sp-4); list-style: none; margin: 0; padding: 0 var(--sp-1); font: 400 var(--t-13)/1.3 var(--font-text); color: var(--texto-2); }
+.mt-leyenda-fila li { display: inline-flex; align-items: center; gap: 6px; }
+.mt-muestra { display: inline-block; flex: none; width: 16px; height: 8px; border-radius: 2px; }
+.mt-muestra.barra { background: color-mix(in oklab, var(--texto) 34%, transparent); }
+.mt-muestra.linea { height: 0; border-top: 2px dashed var(--texto); border-radius: 0; }
+.mt-muestra.relleno { background: var(--texto); }
+.mt-muestra.rayita { width: 2px; height: 12px; border-radius: 1px; background: var(--texto); }
+.mt-muestra.rayita.a3 { background: var(--texto-3); }
+.mt-pie { text-align: center; margin: var(--sp-6) 0 0; }
+
+/* ——— Columnas con una línea ——— */
+.mt-cols { margin: 0; display: grid; gap: var(--sp-2); --gap: max(1px, calc(24px / var(--n))); }
+.mt-cols-area { position: relative; height: var(--alto); }
+.mt-cols-barras { position: absolute; inset: 0; display: grid; grid-template-columns: repeat(var(--n), minmax(0, 1fr)); gap: var(--gap); }
+.mt-col { display: flex; flex-direction: column-reverse; align-items: center; min-width: 0; }
+.mt-col i { display: block; width: 100%; max-width: 32px; background: var(--parte, color-mix(in oklab, var(--texto) 34%, transparent)); transition: height var(--dur-3) var(--curva-salida); }
+.mt-col i:last-child { border-radius: 3px 3px 0 0; }
+.mt-col.hoy i { background: var(--trazo); }
+.mt-cols-meta { position: absolute; left: 0; right: 0; border-top: 1px dashed var(--texto-3); pointer-events: none; }
+.mt-cols-linea { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; }
+.mt-cols-linea polyline { fill: none; stroke: var(--texto); stroke-width: 1.75; stroke-linejoin: round; stroke-linecap: round; vector-effect: non-scaling-stroke; }
+.mt-cols-linea.punteada polyline { stroke-dasharray: 4 4; }
+.mt-cols-val { display: grid; grid-template-columns: repeat(var(--n), minmax(0, 1fr)); gap: var(--gap); text-align: center; font-size: var(--t-11); color: var(--texto-2); }
+.mt-cols-val span { min-width: 0; }
+.mt-cols-et { display: grid; grid-template-columns: repeat(var(--n), minmax(0, 1fr)); gap: var(--gap); }
+.mt-cols-et span { display: flex; justify-content: center; min-width: 0; white-space: nowrap; }
+.mt-cols-et span.hoy { color: var(--texto); }
+
+/* ——— La constancia ——— */
+.mt-constancia { display: grid; gap: var(--sp-3); padding: var(--sp-4); }
+.mt-constancia p { margin: 0; }
+.mt-heat { --ca-c: var(--trazo); margin: 0; display: grid; grid-auto-flow: column; grid-template-rows: repeat(7, auto); grid-template-columns: repeat(15, minmax(0, 1fr)); gap: 3px; }
+html[data-ui='v2'][data-theme='light'] .mt-heat { --ca-c: color-mix(in oklab, var(--trazo) 62%, var(--trazo-texto)); }
+.mt-heat i { display: block; aspect-ratio: 1; border-radius: 3px; background: color-mix(in oklab, var(--texto) 7%, transparent); }
+.mt-heat i.n0 { background: color-mix(in oklab, var(--texto) 20%, transparent); }
+.mt-heat i.n1 { background: color-mix(in oklab, var(--ca-c) 38%, var(--capa-2)); }
+.mt-heat i.n2 { background: color-mix(in oklab, var(--ca-c) 68%, var(--capa-2)); }
+.mt-heat i.n3 { background: var(--ca-c); }
+.mt-heat i.libre { background: transparent; box-shadow: inset 0 0 0 1px var(--raya-fuerte); }
+.mt-heat i.futuro { background: transparent; box-shadow: inset 0 0 0 1px var(--raya); }
+
+/* ——— Las competencias ——— */
+.mt-comp-lista { list-style: none; margin: 0; padding: var(--sp-2) var(--sp-4) var(--sp-4); }
+.mt-comp { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: baseline; row-gap: var(--sp-2); padding: var(--sp-3) 0; }
+.mt-comp + .mt-comp { border-top: 1px solid var(--raya); }
+.mt-comp-riel { grid-column: 1 / -1; position: relative; height: 8px; border-radius: var(--r-pildora); background: var(--raya-fuerte); margin: 4px 0; }
+.mt-comp-riel .hoy { position: absolute; inset: 0 auto 0 0; border-radius: inherit; background: var(--texto); transition: width var(--dur-4) var(--curva-salida); }
+.mt-comp-riel .meta { position: absolute; top: -4px; bottom: -4px; width: 2px; margin-left: -1px; border-radius: 1px; background: var(--texto); box-shadow: 0 0 0 1px var(--capa-1); }
+.mt-comp-riel .meta.a3 { background: var(--texto-3); }
+.mt-comp-ley { display: flex; flex-wrap: wrap; gap: var(--sp-1) var(--sp-4); padding-top: var(--sp-3); border-top: 1px solid var(--raya); }
+.mt-comp-ley span { display: inline-flex; align-items: center; gap: 6px; }
+.mt-construido { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--sp-3); }
+.mt-construido > div { display: grid; gap: 4px; padding: var(--sp-4); }
+.mt-chispa { display: block; width: 100%; height: 32px; margin-top: var(--sp-2); overflow: visible; }
+.mt-chispa polyline { fill: none; stroke: var(--area); stroke-width: 2; stroke-linejoin: round; stroke-linecap: round; vector-effect: non-scaling-stroke; }
+
+/* ——— Las etapas ——— */
+.mt-vas { display: grid; gap: 4px; margin-top: var(--sp-3); padding-top: var(--sp-3); border-top: 1px solid var(--raya); }
+.mt-vas p { margin: 0; }
+.mt-heroe h2 { margin: 0; }
+.mt-heroe > p { margin: 0; }
+.mt-aca { color: var(--trazo-texto); }
+.mt-etapa.s-tarjeta { display: grid; gap: var(--sp-3); }
+.mt-etapa p { margin: 0; }
+.mt-etapa.actual { box-shadow: inset 0 0 0 1.5px var(--texto); }
+.mt-etapa-barra { display: flex; gap: 2px; height: var(--toque); }
+.mt-bloque { display: grid; place-items: center; min-width: 3px; border-radius: 4px; overflow: hidden; color: var(--texto-2); text-decoration: none; font: 600 var(--t-11)/1 var(--font-mono); background-color: color-mix(in oklab, var(--texto) 14%, var(--capa-2)); }
+.mt-bloque.proyecto, .mt-bloque.cert { background-color: color-mix(in oklab, var(--a-ing) 32%, var(--capa-2)); }
+.mt-bloque.ventana { background-color: color-mix(in oklab, var(--a-economia) 32%, var(--capa-2)); }
+.mt-bloque.cert { background-image: repeating-linear-gradient(135deg, transparent 0 3px, color-mix(in oklab, var(--texto) 22%, transparent) 3px 5px); }
+.mt-bloque.ventana { background-image: radial-gradient(color-mix(in oklab, var(--texto) 30%, transparent) 1px, transparent 1.5px); background-size: 6px 6px; }
+.mt-bloque.hecho { background-color: var(--trazo); color: var(--sobre-trazo); }
+.mt-bloque.actual { box-shadow: inset 0 0 0 2px var(--texto); color: var(--texto); }
+.mt-bloque:focus-visible { outline: 2px solid var(--trazo-texto); outline-offset: 1px; }
+.mt-detalle-lista { margin: 0; padding-left: var(--sp-5); display: grid; gap: var(--sp-3); }
+
+/* ——— El mapa por ramas ——— */
+.mt-ramas-filtro { display: flex; gap: var(--sp-2); margin: var(--sp-4) calc(var(--margen) * -1) var(--sp-5); padding: 0 var(--margen); overflow-x: auto; scrollbar-width: none; }
+.mt-ramas-filtro::-webkit-scrollbar { display: none; }
+.mt-ramas-filtro > * { flex: none; }
+.mt-mapa { display: flex; align-items: flex-start; gap: var(--sp-2); margin-bottom: var(--sp-4); }
+.mt-mapa-svg { flex: none; display: block; overflow: visible; }
+.mt-mp-linea { fill: none; stroke-width: 2; stroke-linecap: round; }
+.mt-mp-linea.futuro { stroke-dasharray: 2 5; }
+.mt-mp-linea.standby { stroke-dasharray: 1 6; opacity: 0.55; }
+.mt-mp-linea.flecha { stroke-width: 1.5; }
+.mt-mp-commit { fill: var(--c); stroke: var(--c); stroke-width: 2; transition: opacity var(--dur-2); }
+.mt-mp-commit.futuro { fill: var(--capa-0); }
+.mt-mp-commit.standby { opacity: 0.6; }
+.mt-mp-commit.vencido { stroke: var(--e-critico); }
+.mt-mp-commit.head { fill: var(--trazo); stroke: var(--trazo-texto); }
+.mt-mp-halo { fill: color-mix(in oklab, var(--trazo) 28%, transparent); }
+.mt-mp-sel { fill: none; stroke: var(--c); stroke-width: 1.5; stroke-dasharray: 3 3; }
+.mt-mapa-filas { list-style: none; margin: 0; padding: 0; flex: 1; min-width: 0; }
+.mt-mapa-filas li { height: 58px; overflow: hidden; }
+.mt-mapa-filas li.atenuada { opacity: 0.4; }
+.mt-mapa-filas li.standby { opacity: 0.6; }
+.mt-mf-boton, .mt-mapa-filas li.gap { display: grid; align-content: start; gap: 1px; width: 100%; height: 58px; padding: 6px var(--sp-2) 0 var(--sp-2); background: none; border: 0; border-radius: var(--r-s); color: var(--texto); text-align: left; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+.mt-mapa-filas li.gap { cursor: default; color: var(--texto-2); }
+.mt-mf-boton:active { background: var(--capa-1); }
+.mt-mf-boton:focus-visible { outline: 2px solid var(--trazo-texto); outline-offset: -2px; }
+.mt-mapa-filas li.sel .mt-mf-boton { background: var(--capa-1); box-shadow: inset 2px 0 0 var(--c); }
+.mt-mf-et { color: var(--texto-2); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.mt-mf-t { font: 450 var(--t-13)/1.3 var(--font-text); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.mt-mf-t.grande { font-weight: 650; }
+.mt-mapa-filas li.vencido .mt-mf-et { color: var(--texto); }
+.mt-simbolos { list-style: none; margin: 0 0 var(--sp-3); padding: 0; display: grid; gap: var(--sp-3); }
+.mt-simbolos li { display: flex; align-items: center; gap: var(--sp-3); }
+.mt-simbolos svg { flex: none; }
+
+/* ——— El plan entero ——— */
+.mt-bloque-det { display: grid; gap: var(--sp-2); padding: var(--sp-4); }
+.mt-bloque-det p { margin: 0; }
+.mt-bloque-titulo { display: flex; align-items: center; justify-content: space-between; gap: var(--sp-3); min-height: var(--toque); color: var(--texto); text-decoration: none; overflow-wrap: anywhere; }
+.mt-bloque-titulo .icono { flex: none; color: var(--texto-3); }
+.mt-bloque-det .mt-detalle-lista { gap: var(--sp-2); }
+.mt-lista-plana > .s-fila + .s-fila { border-top: 1px solid var(--raya); }
+.mt-plegable-intro { margin: 0; padding: var(--sp-3) 0 var(--sp-1); }

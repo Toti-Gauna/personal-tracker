@@ -83,12 +83,19 @@ describe('Plan 2.0 · las frases y los datos', () => {
 });
 
 describe('Plan 2.0 · qué cubre', () => {
-  it('el centro, los períodos, el análisis, la línea y el mapa son 2.0; lo demás de Metas sigue en 1.0 con su marca', () => {
+  it('el centro, los períodos, el análisis, la línea y el mapa son 2.0 en la entrada principal; lo demás lo reparten las familias de la 3.3 y lo que nadie cubre sigue en 1.0 con su marca', async () => {
     const cubre = PANTALLAS_V2.metas!.cubre!;
     for (const h of ['#/metas', '#/metas/periodos', '#/metas/periodos/P1', '#/metas/analisis', '#/metas/linea', '#/metas/constelacion']) expect(cubre(leerRuta(h)), h).toBe(true);
     for (const h of ['#/metas/semana', '#/metas/mapa', '#/metas/clipping', '#/metas/proyecto/P0', '#/metas/proyecto', '#/metas/ruta', '#/metas/roadmap']) expect(cubre(leerRuta(h)), h).toBe(false);
-    render(<PantallaV2 interfaz="v2" ruta={leerRuta('#/metas/semana')} day={getState().days[HOY]} today={HOY} v1={<p>semana 1.0</p>} />);
-    expect(screen.getByText('semana 1.0')).toBeInTheDocument();
+    // La semana ya no es 1.0: la convirtió la familia «metas» (3.3, `metas/entradas.ts`).
+    const { unmount } = render(<PantallaV2 interfaz="v2" ruta={leerRuta('#/metas/semana')} day={getState().days[HOY]} today={HOY} v1={<p>semana 1.0</p>} />);
+    expect(await screen.findByRole('heading', { level: 1, name: 'Metas' })).toBeInTheDocument();
+    expect(screen.queryByText('semana 1.0')).not.toBeInTheDocument();
+    expect(document.querySelector('.v2-marca')).toBeNull();
+    unmount();
+    // Una ruta que ninguna entrada cubre sigue en 1.0, con su marca.
+    render(<PantallaV2 interfaz="v2" ruta={leerRuta('#/metas/nada-que-cubra')} day={getState().days[HOY]} today={HOY} v1={<p>otra 1.0</p>} />);
+    expect(screen.getByText('otra 1.0')).toBeInTheDocument();
     expect(screen.getByText('1.0', { selector: '.v2-marca' })).toBeInTheDocument();
   });
 });
