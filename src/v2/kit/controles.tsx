@@ -102,10 +102,17 @@ export function Interruptor({ prendido, onCambio, etiqueta, nota }: { prendido: 
 
 export function Segmentado<T extends string>({ opciones, valor, onCambio, etiqueta }: { opciones: [T, string][]; valor: T; onCambio: (v: T) => void; etiqueta: string }) {
   const i = Math.max(0, opciones.findIndex(([v]) => v === valor));
-  const mover = (d: number) => onCambio(opciones[(i + d + opciones.length) % opciones.length][0]);
+  const grupo = useRef<HTMLDivElement>(null);
+  // Las flechas eligen y llevan el foco a la elegida (como un grupo de radios): si no, el foco queda en una que ya no está elegida.
+  const ir = (k: number) => {
+    const j = (k + opciones.length) % opciones.length;
+    onCambio(opciones[j][0]);
+    grupo.current?.querySelectorAll<HTMLButtonElement>('button[role="radio"]')[j]?.focus();
+  };
+  const teclas: Record<string, () => void> = { ArrowRight: () => ir(i + 1), ArrowDown: () => ir(i + 1), ArrowLeft: () => ir(i - 1), ArrowUp: () => ir(i - 1), Home: () => ir(0), End: () => ir(opciones.length - 1) };
   return (
-    <div className="k-segmentado" role="radiogroup" aria-label={etiqueta} style={{ ['--n' as string]: opciones.length, ['--i' as string]: i }}
-      onKeyDown={(e) => { if (e.key === 'ArrowRight') { e.preventDefault(); mover(1); } if (e.key === 'ArrowLeft') { e.preventDefault(); mover(-1); } }}>
+    <div ref={grupo} className="k-segmentado" role="radiogroup" aria-label={etiqueta} style={{ ['--n' as string]: opciones.length, ['--i' as string]: i }}
+      onKeyDown={(e) => { const f = teclas[e.key]; if (f) { e.preventDefault(); f(); } }}>
       <span className="k-seg-indicador" aria-hidden="true" />
       {opciones.map(([v, n]) => <button key={v} type="button" role="radio" aria-checked={v === valor} tabIndex={v === valor ? 0 : -1} onClick={() => onCambio(v)}>{n}</button>)}
     </div>
@@ -132,7 +139,8 @@ interface ContadorProps { valor: number | null; onCambio: (v: number) => void; e
 export function Contador({ valor, onCambio, etiqueta, min = -Infinity, max = Infinity, paso = 1, unidad, decimales = 0, inicial }: ContadorProps) {
   const [texto, setTexto] = useState(valor == null ? '' : fmtNum(valor, decimales));
   useEffect(() => { setTexto(valor == null ? '' : fmtNum(valor, decimales)); }, [valor, decimales]);
-  const fijar = (n: number) => onCambio(Math.round(Math.min(max, Math.max(min, n)) * 10 ** decimales) / 10 ** decimales);
+  // El campo muestra siempre lo que quedó guardado: si escribís 50 con tope 10 y ya había 10, el valor no cambia y el texto tampoco se resincronizaría solo.
+  const fijar = (n: number) => { const v = Math.round(Math.min(max, Math.max(min, n)) * 10 ** decimales) / 10 ** decimales; setTexto(fmtNum(v, decimales)); onCambio(v); };
   const base = valor ?? inicial ?? (Number.isFinite(min) ? min : 0);
   return (
     <div className="k-contador" role="group" aria-label={etiqueta}>
@@ -200,6 +208,9 @@ export function CampoHora({ etiqueta, valor, onCambio, pasoMin = 5 }: { etiqueta
   const minRef = useRef<HTMLInputElement>(null);
   const fijar = (hh: number, mm: number) => {
     const total = (((hh * 60 + mm) % 1440) + 1440) % 1440;
+    // Las casillas muestran lo guardado aunque no cambie (escribir "99" con 23 ya puesto deja 23, no 99).
+    setTh(dos(Math.floor(total / 60)));
+    setTm(dos(total % 60));
     onCambio(`${dos(Math.floor(total / 60))}:${dos(total % 60)}`);
   };
   const id = useId();
@@ -249,17 +260,20 @@ export function CampoFecha({ etiqueta, valor, onCambio, hoy, min, max, nota }: F
   const id = useId();
   const [y, m] = mes;
   const mover = (d: number) => setMes(([yy, mm]) => { const t = yy * 12 + mm + d; return [Math.floor(t / 12), t % 12]; });
+  const campo = useRef<HTMLButtonElement>(null);
+  const cerrar = () => { setAbierto(false); campo.current?.focus(); };
+  const elegir = (f: string) => { onCambio(f); cerrar(); };
   return (
     <div className="k-campo">
       <span className="k-campo-etiqueta" id={id}>{etiqueta}</span>
-      <button type="button" className="k-campo-caja k-fecha-boton" aria-labelledby={id} aria-expanded={abierto} aria-describedby={nota ? `${id}-n` : undefined} onClick={() => setAbierto((x) => !x)}>
+      <button ref={campo} type="button" className="k-campo-caja k-fecha-boton" aria-labelledby={id} aria-expanded={abierto} aria-describedby={nota ? `${id}-n` : undefined} onClick={() => setAbierto((x) => !x)}>
         <Icono nombre="calendario" lado={20} />
         <span className={valor ? undefined : 'k-vacio'}>{valor ? fechaLarga(valor) : 'Elegir fecha'}</span>
         <Icono nombre={abierto ? 'arriba' : 'abajo'} lado={18} />
       </button>
       {nota && <div className="k-campo-pie"><small id={`${id}-n`}>{nota}</small></div>}
       {abierto && (
-        <div className="k-calendario" role="dialog" aria-label={`${etiqueta}: calendario`}>
+        <div className="k-calendario" role="dialog" aria-label={`${etiqueta}: calendario`} onKeyDown={(e) => { if (e.key === 'Escape') { e.stopPropagation(); cerrar(); } }}>
           <div className="k-cal-cabeza">
             <button type="button" className="k-boton fantasma solo-icono chico" aria-label="Mes anterior" onClick={() => mover(-1)}><Icono nombre="atras" lado={18} /></button>
             <b>{MESES[m]} {y}</b>
@@ -271,11 +285,11 @@ export function CampoFecha({ etiqueta, valor, onCambio, hoy, min, max, nota }: F
               <button key={f} type="button" role="gridcell" disabled={(min && f < min) || (max && f > max) || undefined}
                 aria-selected={f === valor} aria-current={f === hoy ? 'date' : undefined} aria-label={fechaLarga(f)}
                 className={cx(f === valor && 'elegida', f === hoy && 'hoy')}
-                onClick={() => { onCambio(f); setAbierto(false); }}>{Number(f.slice(8))}</button>
+                onClick={() => elegir(f)}>{Number(f.slice(8))}</button>
             ) : <span key={`v${i}`} />)}
           </div>
           <div className="k-cal-pie">
-            <Boton variante="fantasma" tamano="s" onClick={() => { onCambio(hoy); setAbierto(false); }}>Hoy</Boton>
+            <Boton variante="fantasma" tamano="s" onClick={() => elegir(hoy)}>Hoy</Boton>
           </div>
         </div>
       )}
@@ -293,28 +307,29 @@ export function Selector<T extends string>({ etiqueta, valor, opciones, onCambio
   const id = useId();
   const actual = opciones.find((o) => o.valor === valor);
   const lista = useRef<HTMLDivElement>(null);
+  const campo = useRef<HTMLButtonElement>(null);
   useEffect(() => {
-    if (!abierto) return;
-    (lista.current?.querySelector('[aria-checked="true"]') as HTMLElement | null ?? lista.current?.querySelector('button'))?.focus();
-    const esc = (e: KeyboardEvent) => { if (e.key === 'Escape') setAbierto(false); };
-    window.addEventListener('keydown', esc);
-    return () => window.removeEventListener('keydown', esc);
+    if (abierto) (lista.current?.querySelector('[aria-checked="true"]') as HTMLElement | null ?? lista.current?.querySelector('button'))?.focus();
   }, [abierto]);
+  // Al cerrar (elegir, Escape o tocar afuera) el foco vuelve al campo, no al cuerpo de la página.
+  const cerrar = () => { setAbierto(false); campo.current?.focus(); };
   return (
     <div className="k-campo">
       <span className="k-campo-etiqueta" id={id}>{etiqueta}</span>
-      <button type="button" className="k-campo-caja k-fecha-boton" aria-labelledby={id} aria-haspopup="dialog" aria-expanded={abierto} onClick={() => setAbierto(true)}>
+      <button ref={campo} type="button" className="k-campo-caja k-fecha-boton" aria-labelledby={id} aria-haspopup="dialog" aria-expanded={abierto} onClick={() => setAbierto(true)}>
         <span className={actual ? undefined : 'k-vacio'}>{actual?.etiqueta ?? placeholder}</span>
         <Icono nombre="abajo" lado={18} />
       </button>
       {abierto && (
-        <div className="k-velo" onClick={() => setAbierto(false)}>
-          <div className="k-lista-hoja capa-3" role="dialog" aria-modal="true" aria-label={etiqueta} ref={lista} onClick={(e) => e.stopPropagation()}>
+        <div className="k-velo" onClick={cerrar}>
+          {/* Escape cierra la lista y no sigue: dentro de una hoja, cerraría la hoja entera (y lo que estabas cargando). */}
+          <div className="k-lista-hoja capa-3" role="dialog" aria-modal="true" aria-label={etiqueta} ref={lista} onClick={(e) => e.stopPropagation()}
+            onKeyDown={(e) => { if (e.key === 'Escape') { e.stopPropagation(); cerrar(); } }}>
             <div className="k-hoja-asa" aria-hidden="true" />
             <p className="t-rotulo">{etiqueta}</p>
             <div role="radiogroup" aria-label={etiqueta}>
               {opciones.map((o) => (
-                <button key={o.valor} type="button" role="radio" aria-checked={o.valor === valor} className="k-opcion" onClick={() => { onCambio(o.valor); setAbierto(false); }}>
+                <button key={o.valor} type="button" role="radio" aria-checked={o.valor === valor} className="k-opcion" onClick={() => { onCambio(o.valor); cerrar(); }}>
                   <span><b>{o.etiqueta}</b>{o.nota && <small>{o.nota}</small>}</span>
                   {o.valor === valor && <Icono nombre="tilde" lado={20} />}
                 </button>

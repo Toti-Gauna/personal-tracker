@@ -81,7 +81,15 @@ function Puntaje({ score, total, onCambio, etiqueta }: { score: number; total: n
   );
 }
 
-/** Por qué fallaste: cuántos de cada tipo. */
+/** Los tipos de error no pueden sumar más que los fallados: si bajan los fallados, se recortan desde el último tipo. */
+export function ajustarErrores(e: Record<ErrType, number>, fallados: number): Record<ErrType, number> {
+  const r = { ...e };
+  let sobra = ERR_TYPES.reduce((s, k) => s + r[k], 0) - Math.max(0, fallados);
+  for (const k of [...ERR_TYPES].reverse()) { if (sobra <= 0) break; const q = Math.min(r[k], sobra); r[k] -= q; sobra -= q; }
+  return r;
+}
+
+/** Por qué fallaste: cuántos de cada tipo (entre todos, no más que los que fallaste). */
 function Errores({ fallados, errors, onCambio, detalle }: { fallados: number; errors: Record<ErrType, number>; onCambio: (k: ErrType, v: number) => void; detalle: boolean }) {
   return (
     <Grupo titulo={`¿Por qué fallaste ${fallados === 1 ? 'el que fallaste' : `los ${fallados}`}?`}>
@@ -89,7 +97,7 @@ function Errores({ fallados, errors, onCambio, detalle }: { fallados: number; er
         {ERR_TYPES.map((k) => (
           <div className="se-err" key={k}>
             <span className="se-err-txt"><b>{ERR[k][0]}</b>{detalle && <small>{ERR[k][1]}</small>}</span>
-            <div className="se-err-cont"><Contador etiqueta={ERR[k][0]} valor={errors[k]} min={0} max={fallados} onCambio={(v) => onCambio(k, v)} /></div>
+            <div className="se-err-cont"><Contador etiqueta={ERR[k][0]} valor={errors[k]} min={0} max={fallados - ERR_TYPES.reduce((s, x) => s + (x === k ? 0 : errors[x]), 0)} onCambio={(v) => onCambio(k, v)} /></div>
           </div>
         ))}
       </div>
@@ -122,7 +130,8 @@ function TestUnidad({ day, actId, nStr }: { day: PropsV2['day']; actId: string; 
   const [errors, setErrors] = useState(zero);
   const [perEx, setPerEx] = useState<(ErrType | null)[]>(() => Array.from({ length: total }, () => null));
   const [guardado, setGuardado] = useState<{ approved: boolean; flojo: boolean } | null>(null);
-  const intento = unit ? (study.units[actId]?.[unit.n]?.tests.length ?? 0) : 0;
+  // El intento se fija al abrir: guardar suma uno al estado, y el resultado tiene que seguir hablando de este intento.
+  const [intento] = useState(() => (unit ? (study.units[actId]?.[unit.n]?.tests.length ?? 0) : 0));
   const ex = useMemo(() => (unit && t ? testExercises(actId, unit.n, t.nuevos, t.prev, intento) : []), [actId, unit, t?.nuevos, t?.prev, intento]); // eslint-disable-line react-hooks/exhaustive-deps
   const [resp, setResp] = useState<string[]>(() => Array.from({ length: total }, () => ''));
   const [tipo, setTipo] = useState<ErrType[]>(() => Array.from({ length: total }, () => 'descuido'));
@@ -152,7 +161,7 @@ function TestUnidad({ day, actId, nStr }: { day: PropsV2['day']; actId: string; 
   if (conEj) mal.forEach((k) => papelErr[tipoDe(k)]++);
   else perEx.forEach((e) => e && papelErr[e]++);
   const sc = papel ? (conEj ? bien.filter((b) => b === true).length : total - perEx.filter(Boolean).length) : score;
-  const er = papel ? papelErr : errors;
+  const er = papel ? papelErr : ajustarErrores(errors, total - score);
   const pct = total ? Math.round((sc / total) * 100) : 0;
   const ok = approves(sc, total);
   const fallados = total - sc;
@@ -283,7 +292,7 @@ function TestUnidad({ day, actId, nStr }: { day: PropsV2['day']; actId: string; 
         {!papel && <Puntaje score={score} total={total} etiqueta="Ejercicios bien resueltos" onCambio={setScore} />}
       </Tarjeta>
 
-      {!papel && fallados > 0 && <Errores fallados={fallados} errors={errors} detalle onCambio={(k, v) => setErrors((e) => ({ ...e, [k]: v }))} />}
+      {!papel && fallados > 0 && <Errores fallados={fallados} errors={er} detalle onCambio={(k, v) => setErrors({ ...er, [k]: v })} />}
 
       {papel && conEj && (
         <Grupo titulo="Los que fallaste" extremo={<Boton tamano="s" variante="fantasma" icono="editar" onClick={() => setFase('hacer')}>Revisar respuestas</Boton>}>
@@ -337,9 +346,10 @@ function TestFinal({ day, actId }: { day: PropsV2['day']; actId: string }) {
   const pct = Math.round((score / total) * 100);
   const ok = approves(score, total);
   const fallados = total - score;
+  const errOk = ajustarErrores(errors, fallados);
   const volver = { href: l ? `#/estudio/libro/${l.id}` : '#/estudio', nombre: l ? 'el libro' : 'Estudio' };
   const guardar = () => {
-    const r = guardarTestFinal(day.date, a.id, { score, total, errors, mode: 'app' });
+    const r = guardarTestFinal(day.date, a.id, { score, total, errors: errOk, mode: 'app' });
     setHecho(r.approved);
     aviso({ titulo: r.approved ? `Test final aprobado · ${pct} %` : `${pct} % · se repite`, sub: r.approved ? 'Mañana, la tesis final' : 'Repasá lo que falló y repetilo', tono: r.approved ? 'hecho' : 'info' });
   };
@@ -367,7 +377,7 @@ function TestFinal({ day, actId }: { day: PropsV2['day']; actId: string }) {
             <Resultado pct={pct} ok={ok} nota={`${score} de ${total} bien`} refNumero={numero} />
             {hecho == null && <Puntaje score={score} total={total} etiqueta="Preguntas bien respondidas" onCambio={setScore} />}
           </Tarjeta>
-          {hecho == null && fallados > 0 && <Errores fallados={fallados} errors={errors} detalle={false} onCambio={(k, v) => setErrors((e) => ({ ...e, [k]: v }))} />}
+          {hecho == null && fallados > 0 && <Errores fallados={fallados} errors={errOk} detalle={false} onCambio={(k, v) => setErrors({ ...errOk, [k]: v })} />}
           {hecho != null && <p className="t-cuerpo-l se-sigue">{hecho ? 'Aprobado. Mañana, la tesis final.' : 'No llegaste. Repasá lo que falló y repetilo.'}</p>}
         </>
       )}

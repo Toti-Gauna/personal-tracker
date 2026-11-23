@@ -80,6 +80,48 @@ describe('2.0 · hoja e ⓘ', () => {
   });
 });
 
+describe('2.0 · el foco con hojas', () => {
+  function Dos() {
+    const [a, setA] = useState(false);
+    const [b, setB] = useState(false);
+    const [vista, setVista] = useState(1);
+    return (
+      <>
+        <button onClick={() => setA(true)}>Abrir A</button>
+        <Hoja abierta={a} onCerrar={() => setA(false)} titulo="A">
+          <button onClick={() => setB(true)}>Abrir B</button>
+          {vista === 1 ? <button onClick={() => setVista(2)}>Cambiar de vista</button> : <p>Otra vista</p>}
+        </Hoja>
+        <Hoja abierta={b} onCerrar={() => setB(false)} titulo="B"><p>Adentro de B</p></Hoja>
+      </>
+    );
+  }
+
+  it('al cerrar una hoja encima de otra, el foco vuelve a lo que la abrió adentro de la de abajo', () => {
+    vi.useFakeTimers();
+    render(<Dos />);
+    fireEvent.click(screen.getByRole('button', { name: 'Abrir A' }));
+    const abrirB = screen.getByRole('button', { name: 'Abrir B' });
+    abrirB.focus();
+    fireEvent.click(abrirB);
+    expect(document.activeElement).toBe(screen.getByRole('dialog', { name: 'B' }));
+    fireEvent.keyDown(screen.getByRole('dialog', { name: 'B' }), { key: 'Escape' });
+    act(() => { vi.advanceTimersByTime(400); });
+    expect(document.activeElement).toBe(abrirB);
+    vi.useRealTimers();
+  });
+
+  it('si lo que tenía el foco desaparece adentro de la hoja, el foco vuelve a la hoja (no a la página)', async () => {
+    render(<Dos />);
+    fireEvent.click(screen.getByRole('button', { name: 'Abrir A' }));
+    const cambiar = screen.getByRole('button', { name: 'Cambiar de vista' });
+    cambiar.focus();
+    fireEvent.click(cambiar);
+    await act(async () => {});
+    expect(document.activeElement).toBe(screen.getByRole('dialog', { name: 'A' }));
+  });
+});
+
 describe('2.0 · lectura del avance', () => {
   it('el anillo y el ritmo se leen en voz alta; el ritmo marca "atrás" si el trabajo va 10 puntos detrás del tiempo', () => {
     const { container } = render(<><Anillo nombre="PetrIA" valor={0.62} /><Ritmo nombre="Ritmo" tiempo={0.74} trabajo={0.62} frase="Vas 1 día atrás." /><Ritmo nombre="Otro" tiempo={0.5} trabajo={0.45} /></>);

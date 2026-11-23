@@ -31,13 +31,30 @@ export function PantallaFallida({ reintentar }: { reintentar: () => void }) {
   );
 }
 
+/**
+ * ¿No bajó el archivo de la pantalla? Pasa después de publicar una versión nueva: el pedazo viejo ya no está. `lazy()` recuerda
+ * el fallo, así que reintentar sin recargar repite el error: hay que recargar la página (y baja la versión nueva).
+ */
+export const esFalloDeCarga = (e: unknown) => e instanceof Error && (e.name === 'ChunkLoadError' || /dynamically imported module|Importing a module script failed|error loading dynamically/i.test(e.message));
+
 interface LimiteProps { children: ReactNode }
 /** Atrapa el error de una pantalla. Se reinicia al cambiar de pantalla (por la `key`) o con "Probar de nuevo". */
-export class LimiteV2 extends Component<LimiteProps, { fallo: boolean }> {
+export class LimiteV2 extends Component<LimiteProps, { fallo: boolean; recargar: boolean }> {
+  state = { fallo: false, recargar: false };
+  static getDerivedStateFromError(e: unknown) { return { fallo: true, recargar: esFalloDeCarga(e) }; }
+  componentDidCatch(error: Error, info: ErrorInfo) { console.error('Trazo: falló una pantalla.', error, info.componentStack); }
+  render() {
+    if (!this.state.fallo) return this.props.children;
+    return <PantallaFallida reintentar={() => (this.state.recargar ? window.location.reload() : this.setState({ fallo: false, recargar: false }))} />;
+  }
+}
+
+/** Para lo que acompaña a la pantalla (la barra, la carga): si su archivo no baja, no se muestra, pero la app sigue. */
+export class Callado extends Component<{ children: ReactNode; alFallar?: () => void }, { fallo: boolean }> {
   state = { fallo: false };
   static getDerivedStateFromError() { return { fallo: true }; }
-  componentDidCatch(error: Error, info: ErrorInfo) { console.error('Trazo: falló una pantalla.', error, info.componentStack); }
-  render() { return this.state.fallo ? <PantallaFallida reintentar={() => this.setState({ fallo: false })} /> : this.props.children; }
+  componentDidCatch(error: Error) { console.error('Trazo: no cargó una pieza de la app.', error); this.props.alFallar?.(); }
+  render() { return this.state.fallo ? null : this.props.children; }
 }
 
 interface Props {

@@ -10,6 +10,7 @@ import { getState, setFocus } from '../state/store';
 import { logStudy, tramoDone } from '../state/study';
 import { showModal, toast } from './avisos';
 import { abrirEstadoEstudio } from './estado-estudio';
+import { empezarFoco } from './foco';
 
 const colorOf = (activityId?: string) => {
   const st = getState().study;
@@ -18,11 +19,16 @@ const colorOf = (activityId?: string) => {
   return f ? AREAS[f.color].css : 'var(--economia)';
 };
 
+/**
+ * Empieza una sesión de estudio. Si esa misma sesión ya corre, vuelve a ella (no la reinicia); si corre otro foco, pregunta antes
+ * de cortarlo (`empezarFoco`).
+ */
 export function startStudy(date: string, activityId: string, blockKey: string, tramos: Tramo[]) {
+  const actual = getState().focus;
+  if (actual && actual.date === date && actual.activityId === activityId) { ir(`sesion/${activityId}`); return; }
   const segs = tramos.map((t) => ({ type: t.kind === 'descanso' ? ('rest' as const) : ('focus' as const), min: t.min }));
   const f: FocusState = { ...startFocus(date, blockKey, 'Sesión de estudio', segs, Date.now()), tramos, activityId };
-  setFocus(f);
-  ir(`sesion/${activityId}`);
+  empezarFoco(f, () => ir(`sesion/${activityId}`));
 }
 
 /** Efectos de los tramos que terminaron (por tiempo o con "Hecho"). */

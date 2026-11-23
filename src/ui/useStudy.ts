@@ -21,6 +21,8 @@ export interface Contenido {
   total: number;
   done: (s: PlanStep) => boolean;
   falta: number;
+  /** Los tramos que faltan (los de pasos no hechos, con sus descansos): lo que corre "Entrar en foco · {falta}". */
+  pendientes: Tramo[];
 }
 
 /** El plan de estudio del día: contenidos, pasos y lo que no toca. */
@@ -43,7 +45,7 @@ export function useStudyPlan(day: DayLog) {
         id: 'repaso', title: 'Repaso del día', front: 'Repaso · todos', color: 'economia',
         // v12.1: el repaso del día va en el bloque de Anki (si el día lo tiene).
         blockKey: day.blocks.some((b) => b.key === 'anki') ? 'anki' : blockOfReview(review, study.activities),
-        tramos, steps, total: sumMin(tramos), done: isDone, falta: sumMin(steps.filter((s) => !isDone(s))),
+        tramos, steps, total: sumMin(tramos), done: isDone, falta: sumMin(steps.filter((s) => !isDone(s))), pendientes: tramos.filter((t) => !doneRefs.has(t.ref) && !cardsDone.has(t.ref)),
       });
     }
     const v12 = !!day.dayType?.startsWith('busqueda-intensiva');
@@ -62,7 +64,7 @@ export function useStudyPlan(day: DayLog) {
       contenidos.push({
         id: a.id, activity: a, title: a.title, front: f?.name ?? a.front, color: f?.color ?? 'ing', blockKey: a.block,
         start, end: start ? addMin(start, blockMin) : undefined,
-        tramos, steps, total: sumMin(tramos), done: isDone, falta: sumMin(steps.filter((s) => !isDone(s))),
+        tramos, steps, total: sumMin(tramos), done: isDone, falta: sumMin(steps.filter((s) => !isDone(s))), pendientes: tramos.filter((t) => !doneRefs.has(t.ref) && !cardsDone.has(t.ref)),
       });
     }
     // Pasos únicos: el repaso de cada actividad ya figura dentro del Repaso del día.

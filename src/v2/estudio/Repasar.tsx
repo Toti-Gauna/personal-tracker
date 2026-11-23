@@ -10,6 +10,7 @@ import { forecast, unitShort, weekday } from '../../data/study';
 import { fmtDur, fmtFecha } from '../../data/time';
 import type { Tramo } from '../../data/study-types';
 import type { StudyState } from '../../data/study-types';
+import { LADDER } from '../../data/study-catalog';
 import { getState, useStore } from '../../state/store';
 import { completeExercises, setRules } from '../../state/study';
 import { startStudy } from '../../ui/estudio-acciones';
@@ -24,6 +25,9 @@ import { Barras } from './Barras';
 import '../proyecto/proyecto.css';
 import './estudio.css';
 import { cuantos } from '../reglas';
+
+/** Cuántos ejercicios tiene un repaso: 5, o 3 si quedó acortado porque el anterior salió perfecto (Cómo funciona, día 22). */
+export const ejerciciosDe = (min: number) => (min < LADDER.e22.min ? 3 : 5);
 
 const DIA = ['D', 'L', 'M', 'X', 'J', 'V', 'S'];
 
@@ -103,9 +107,12 @@ export function RepasoV2({ day, hoy }: { day: PropsV2['day']; hoy: string }) {
                   <div className="es-repetir-cab"><i className="area-punto" style={{ ['--area' as string]: colorOf(frontOfAct(r.activityId)) }} /><b className="t-encabezado">{r.label}</b></div>
                   {hecho ? <p className="t-nota">{r.perfect ? 'Perfecto' : 'Hecho'}</p> : (
                     <>
-                      <p className="t-nota">{r.min} min · cuántos salieron bien</p>
-                      <div className="es-bien" role="group" aria-label="Cuántos bien de 5">
-                        {[0, 1, 2, 3, 4, 5].map((n) => <button key={n} type="button" aria-label={`${n} bien de 5`} onClick={() => completeExercises(day.date, r.id, n === 5, [n, 5])}>{n}</button>)}
+                      <p className="t-nota">{r.min} min · {cuantos(ejerciciosDe(r.min), 'ejercicio', 'ejercicios')}: cuántos salieron bien</p>
+                      <div className="es-bien" role="group" aria-label={`Cuántos bien de ${ejerciciosDe(r.min)}`}>
+                        {Array.from({ length: ejerciciosDe(r.min) + 1 }, (_, n) => n).map((n) => {
+                          const de = ejerciciosDe(r.min);
+                          return <button key={n} type="button" aria-label={`${n} bien de ${de}`} onClick={() => completeExercises(day.date, r.id, n === de, [n, de])}>{n}</button>;
+                        })}
                       </div>
                     </>
                   )}

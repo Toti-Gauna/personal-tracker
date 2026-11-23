@@ -13,6 +13,8 @@ import './superficies.css';
  * la que se va no destrabe la página de la que llega, ni la deje trabada al revés.
  */
 let abiertas = 0;
+/** Las hojas abiertas, de abajo hacia arriba: la de arriba es la que tiene el foco. */
+const pila: HTMLElement[] = [];
 let desbordePrevio = '';
 function bloquear() {
   if (abiertas++ > 0) return;
@@ -62,12 +64,36 @@ export function Hoja({ abierta, onCerrar, titulo, children, alto = 'auto', pie }
   }, [abierta]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
-    if (!montada || saliendo) return;
+    if (!montada || saliendo || !caja.current) return;
+    const yo = caja.current;
     previo.current = document.activeElement as HTMLElement | null;
     bloquear();
-    caja.current?.focus();
-    // El foco vuelve a quien abrió la hoja, salvo que ya haya otra hoja abierta (que lo tiene ella).
-    return () => { if (liberar()) previo.current?.focus?.(); };
+    pila.push(yo);
+    yo.focus();
+    // Si lo que tenía el foco desaparece adentro de la hoja (cambiar de vista, guardar, borrar un paso), el foco vuelve a la hoja:
+    // si no, cae en la página de atrás, y Escape y Tab dejan de funcionar.
+    const vigia = new MutationObserver(() => {
+      if (pila[pila.length - 1] !== yo) return;
+      const a = document.activeElement as HTMLElement | null;
+      if (!a || a === document.body || (!yo.contains(a) && !a.closest('.h-velo, .c-avisos'))) yo.focus();
+    });
+    vigia.observe(yo, { childList: true, subtree: true });
+    return () => {
+      vigia.disconnect();
+      const i = pila.lastIndexOf(yo);
+      const arriba = i === pila.length - 1;
+      if (i >= 0) pila.splice(i, 1);
+      liberar();
+      // Si después se abrió otra hoja que sigue abierta, el foco es de ella.
+      if (!arriba) return;
+      // El foco vuelve a quien abrió la hoja; si ya no está (se borró lo que la abrió), a la hoja de abajo o al título de la pantalla.
+      const p = previo.current;
+      if (p?.isConnected && p !== document.body) { p.focus(); return; }
+      const abajo = pila[pila.length - 1];
+      if (abajo) { abajo.focus(); return; }
+      const titulo = document.querySelector<HTMLElement>('main h1');
+      if (titulo) { titulo.tabIndex = -1; titulo.focus({ preventScroll: true }); }
+    };
   }, [montada, saliendo]);
 
   if (!montada) return null;

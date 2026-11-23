@@ -94,7 +94,7 @@
 .h-velo.saliendo { animation: h-velo-sale var(--dur-3) both; }
 @keyframes k-velo { from { opacity: 0; } }
 @keyframes h-velo-sale { to { opacity: 0; } }
-.h-velo.centro { align-items: center; padding: var(--margen); }
+.h-velo.centro { z-index: var(--z-dialogo); align-items: center; padding: var(--margen); }
 .h-hoja { width: 100%; max-width: 560px; max-height: 86vh; display: flex; flex-direction: column; border-radius: var(--r-l) var(--r-l) 0 0; padding-bottom: env(safe-area-inset-bottom, 0px); outline: none; animation: h-sube var(--dur-3) var(--curva-salida) both; transition: max-height var(--dur-3) var(--curva-salida), transform var(--dur-3) var(--curva-salida); }
 .h-hoja.completa { height: 94vh; max-height: 94vh; }
 .h-hoja.arrastrando { transition: none; }
@@ -124,12 +124,14 @@
 .c-aviso-texto small { font-size: var(--t-13); color: var(--texto-2); }
 
 /* Con una hoja abierta (de la 2.0 o un modal de la 1.0), los avisos van arriba: no tapan sus botones. */
-html[data-ui='v2'][data-hoja] .c-avisos, html[data-ui='v2']:has(.modal-fondo) .c-avisos { bottom: auto; top: calc(env(safe-area-inset-top, 0px) + 12px); }
+html[data-ui='v2'][data-hoja] .c-avisos { bottom: auto; top: calc(env(safe-area-inset-top, 0px) + 12px); }
 @media (min-width: 720px) { .c-avisos { left: var(--lat-w, 0px); bottom: var(--sp-5); } }
 
 /* ——— Diálogo de confirmación ——— */
 .c-dialogo { width: 100%; max-width: 360px; padding: var(--sp-6) var(--sp-5) var(--sp-5); display: grid; gap: var(--sp-3); animation: c-dialogo var(--dur-3) var(--curva-resorte) both; outline: none; }
 @keyframes c-dialogo { from { opacity: 0; transform: scale(0.94); } }
+/* El diálogo recibe el foco él mismo cuando llega solo (el fin de un bloque): no lleva anillo, el que se ve es el de sus botones. */
+.c-dialogo:focus { outline: none; }
 .c-dialogo .t-cuerpo { color: var(--texto-2); }
 .c-dialogo-botones { display: grid; grid-template-columns: 1fr 1fr; gap: var(--sp-2); margin-top: var(--sp-2); }
 .k-boton.peligro.lleno { background: var(--e-critico); color: var(--sobre-critico); box-shadow: none; }

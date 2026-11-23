@@ -82,7 +82,7 @@ function Hub({ day, hoy }: { day: PropsV2['day']; hoy: string }) {
             {plan.contenidos.length > 0 && <span className="t-nota">{plan.contenidos.length} {plan.contenidos.length === 1 ? 'contenido' : 'contenidos'}</span>}
           </div>
         </div>
-        {aEntrar && <Boton variante="primario" icono="play" ancho onClick={() => (enSesion ? ir(`sesion/${aEntrar.id}`) : startStudy(day.date, aEntrar.id, aEntrar.blockKey, aEntrar.tramos))}>{enSesion ? 'Volver a la sesión' : `Entrar en foco · ${fmtDur(aEntrar.falta)}`}</Boton>}
+        {aEntrar && <Boton variante="primario" icono="play" ancho onClick={() => (enSesion ? ir(`sesion/${aEntrar.id}`) : startStudy(day.date, aEntrar.id, aEntrar.blockKey, aEntrar.pendientes))}>{enSesion ? 'Volver a la sesión' : `Entrar en foco · ${fmtDur(aEntrar.falta)}`}</Boton>}
       </Tarjeta>
 
       <Grupo titulo="Tus caminos">

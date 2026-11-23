@@ -87,6 +87,7 @@ function Aviso({ a }: { a: AvisoV2 }) {
   return (
     <div className={`c-aviso capa-3 ${a.tono}`} role={a.tono === 'error' ? 'alert' : 'status'} style={dx ? { transform: `translateX(${dx}px)`, opacity: 1 - Math.min(0.8, Math.abs(dx) / 200) } : undefined}
       onMouseEnter={() => setPausa(true)} onMouseLeave={() => setPausa(false)}
+      onFocus={() => setPausa(true)} onBlur={(e) => { if (!e.currentTarget.contains(e.relatedTarget as Node | null)) setPausa(false); }}
       onPointerDown={(e) => { if ((e.target as HTMLElement).closest('button')) return; toque.current = e.clientX; setPausa(true); (e.currentTarget as HTMLElement).setPointerCapture?.(e.pointerId); }}
       onPointerMove={(e) => { if (toque.current != null) setDx(e.clientX - toque.current); }}
       onPointerUp={(e) => { if (toque.current == null) return; const d = e.clientX - toque.current; toque.current = null; setPausa(false); if (Math.abs(d) > 80) quitarAviso(a.id); else setDx(0); }}>
@@ -101,14 +102,17 @@ function Aviso({ a }: { a: AvisoV2 }) {
 function Confirmar({ p }: { p: PedidoConfirmar }) {
   const no = useRef<HTMLButtonElement>(null);
   const si = useRef<HTMLButtonElement>(null);
+  const caja = useRef<HTMLDivElement>(null);
   useEffect(() => {
     const previo = document.activeElement as HTMLElement | null;
-    (p.peligro ? no : si).current?.focus();
-    return () => previo?.focus?.();
+    // El freno de fin de bloque llega solo (por tiempo), no por un toque: el foco va al diálogo y no a un botón, para que un
+    // Enter que ibas a dar en otro lado no elija por vos.
+    (p.obligatorio ? caja : p.peligro ? no : si).current?.focus();
+    return () => { if (previo?.isConnected) previo.focus(); };
   }, [p]);
   return (
     <div className="h-velo centro" onClick={() => { if (!p.obligatorio) p.responder(false); }}>
-      <div className="c-dialogo capa-3" role="alertdialog" aria-modal="true" aria-labelledby="c-dialogo-t" aria-describedby={p.texto ? 'c-dialogo-d' : undefined}
+      <div ref={caja} tabIndex={-1} className="c-dialogo capa-3" role="alertdialog" aria-modal="true" aria-labelledby="c-dialogo-t" aria-describedby={p.texto ? 'c-dialogo-d' : undefined}
         onClick={(e) => e.stopPropagation()}
         onKeyDown={(e) => {
           if (e.key === 'Escape' && !p.obligatorio) p.responder(false);

@@ -115,4 +115,6 @@
 
 @media (prefers-reduced-motion: reduce) {
   .k-giro { animation-duration: 1.5s; }
+  /* La lista que sube y el calendario que cae: con movimiento reducido, solo aparecen (como las hojas). */
+  .k-lista-hoja, .k-calendario { animation-name: k-velo; }
 }

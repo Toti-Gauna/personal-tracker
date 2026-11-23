@@ -12,7 +12,8 @@ import { DEFAULT_SOUNDS, SOUNDS } from '../../data/sounds';
 import { fmtDur, nowMin, toHHMM, toMin } from '../../data/time';
 import type { Preset } from '../../data/types';
 import { ir } from '../../lib/routes';
-import { setBlockPreset, setFocus, useStore } from '../../state/store';
+import { setBlockPreset, useStore } from '../../state/store';
+import { empezarFoco } from '../../ui/foco';
 import { colorV2 } from '../hoy/datos';
 import { Boton, Interruptor } from '../kit/controles';
 import { Fila, Tarjeta, Vacio } from '../kit/superficies';
@@ -70,11 +71,10 @@ export default function ElegirV2({ ruta, day }: PropsV2) {
   const elegida = opciones[Math.min(sel, opciones.length - 1)];
   const sonido = SOUNDS[(settings.sounds ?? DEFAULT_SOUNDS).events.pomodoro].name;
 
-  const empezar = () => {
+  const empezar = () => empezarFoco(startFocus(day.date, block.key, elegida.label, elegida.segs, Date.now()), () => {
     if (siempre) setBlockPreset(block.key, elegida.preset.id);
-    setFocus(startFocus(day.date, block.key, elegida.label, elegida.segs, Date.now()));
     ir('foco');
-  };
+  });
 
   return (
     <Marco className="ax" titulo="Elegir foco" volver={{ href: '#/hoy', nombre: 'Hoy' }} info={INFO}>

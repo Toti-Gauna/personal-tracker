@@ -150,9 +150,35 @@ describe('2.0 · Campos', () => {
     fireEvent.click(within(hoja).getByRole('radio', { name: /Día corto/ }));
     expect(screen.queryByRole('dialog')).toBeNull();
     expect(screen.getByRole('button', { name: 'Rutina' })).toHaveTextContent('Día corto');
+    // El foco vuelve al campo, no al cuerpo de la página.
+    expect(document.activeElement).toBe(screen.getByRole('button', { name: 'Rutina' }));
     fireEvent.click(screen.getByRole('button', { name: 'Rutina' }));
-    fireEvent.keyDown(window, { key: 'Escape' });
+    // Escape se atiende en la lista y no sigue (dentro de una hoja, no la cierra).
+    const fuera = vi.fn();
+    document.addEventListener('keydown', fuera);
+    fireEvent.keyDown(screen.getByRole('dialog', { name: 'Rutina' }), { key: 'Escape' });
+    document.removeEventListener('keydown', fuera);
+    expect(fuera).not.toHaveBeenCalled();
     expect(screen.queryByRole('dialog')).toBeNull();
     expect(screen.getByRole('button', { name: 'Rutina' })).toHaveTextContent('Día corto');
+  });
+
+  it('segmentado: las flechas eligen y llevan el foco a la elegida; Inicio y Fin van a las puntas', () => {
+    render(<Con inicial="a">{(v, set) => <Segmentado etiqueta="Vista" valor={v} onCambio={set} opciones={[['a', 'Uno'], ['b', 'Dos'], ['c', 'Tres']]} />}</Con>);
+    const uno = screen.getByRole('radio', { name: 'Uno' });
+    uno.focus();
+    fireEvent.keyDown(uno, { key: 'ArrowRight' });
+    expect(screen.getByRole('radio', { name: 'Dos' })).toHaveAttribute('aria-checked', 'true');
+    expect(document.activeElement).toBe(screen.getByRole('radio', { name: 'Dos' }));
+    fireEvent.keyDown(document.activeElement!, { key: 'End' });
+    expect(document.activeElement).toBe(screen.getByRole('radio', { name: 'Tres' }));
+  });
+
+  it('contador: lo escrito fuera del tope vuelve a mostrar el tope aunque el valor no cambie', () => {
+    render(<Con inicial={10 as number | null}>{(v, set) => <Contador etiqueta="Horas" valor={v} onCambio={set} min={0} max={10} />}</Con>);
+    const campo = screen.getByRole('textbox', { name: 'Horas' });
+    fireEvent.change(campo, { target: { value: '50' } });
+    fireEvent.blur(campo);
+    expect(campo).toHaveValue('10');
   });
 });

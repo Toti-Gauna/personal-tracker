@@ -120,6 +120,20 @@ describe('Test 2.0', () => {
     expect(u.approvedOn).toBeUndefined();
     expect(estudio().reviews.some((r) => r.activityId === 'prog-b1' && r.unit === 3 && r.kind === 'retest')).toBe(true);
     expect(screen.getByRole('link', { name: 'Volver a Estudio' }).getAttribute('href')).toBe('#/estudio');
+    // El resultado sigue hablando de este intento (el primero), aunque el estado ya tenga el test guardado.
+    expect(screen.getByRole('heading', { level: 1, name: 'Test' })).toBeTruthy();
+    expect(screen.getByText(/intento 2 de 3/)).toBeTruthy();
+  });
+
+  it('los tipos de error no suman más que los fallados, ni quedan si después subís el puntaje', () => {
+    render(<><TestV2 {...props('#/test/prog-b1/3')} />{global}</>);
+    menos('Ejercicios bien resueltos');
+    mas('Concepto');
+    // Con un solo fallado, ya no se puede sumar otro tipo.
+    expect(within(screen.getByRole('group', { name: 'Técnica' })).getByRole('button', { name: 'Sumar 1' }).getAttribute('aria-disabled')).toBe('true');
+    mas('Ejercicios bien resueltos');
+    fireEvent.click(screen.getByRole('button', { name: 'Guardar resultado' }));
+    expect(estudio().units['prog-b1'][3].tests[0]).toMatchObject({ score: 5, errors: { concepto: 0, tecnica: 0, descuido: 0, enunciado: 0 } });
   });
 
   it('en la app con todo bien: aprueba, agenda la tesis y festeja', () => {

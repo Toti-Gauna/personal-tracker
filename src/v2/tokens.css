@@ -7,6 +7,7 @@
 /* ——— Oscuro: la firma ——— */
 html[data-ui='v2'],
 html[data-ui='v2'][data-theme='dark'] {
+  color-scheme: dark;
   /* Capas: de la mesa (0) a lo que flota (3). La profundidad es luz, no borde. */
   --capa-0: #0c0d0e;
   --capa-1: #141517;
@@ -47,6 +48,7 @@ html[data-ui='v2'][data-theme='dark'] {
 
 /* ——— Claro: el segundo tema, completo ——— */
 html[data-ui='v2'][data-theme='light'] {
+  color-scheme: light;
   --capa-0: #f3f2ec;
   --capa-1: #faf9f5;
   --capa-2: #ffffff;
@@ -131,6 +133,8 @@ html[data-ui='v2'] {
   /* Orden de las capas que flotan. */
   --z-barra: 20;
   --z-hoja: 40;
+  /* La confirmación se pide a menudo desde una hoja: va arriba de ella. */
+  --z-dialogo: 50;
   --z-aviso: 60;
 
   /* El halo de un héroe: el color del área (o la marca) entrando desde una esquina. */

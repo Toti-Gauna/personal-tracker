@@ -36,6 +36,17 @@ describe('el resolutor', () => {
     expect(screen.getByText('ya anda')).toBeInTheDocument();
   });
 
+  it('si no bajó el archivo de la pantalla (después de publicar otra versión), "Probar de nuevo" recarga la página', () => {
+    vi.spyOn(console, 'error').mockImplementation(() => {});
+    const recargar = vi.fn();
+    vi.stubGlobal('location', { ...window.location, reload: recargar });
+    const NoBaja = () => { throw new TypeError('Failed to fetch dynamically imported module: /assets/HoyV2-viejo.js'); };
+    render(<PantallaV2 {...props} registro={{ hoy: { nombre: 'Hoy', Componente: NoBaja } }} extras={{}} />);
+    fireEvent.click(screen.getByRole('button', { name: 'Probar de nuevo' }));
+    expect(recargar).toHaveBeenCalledOnce();
+    vi.unstubAllGlobals();
+  });
+
   it('el límite se reinicia solo al cambiar de pantalla (la key)', () => {
     vi.spyOn(console, 'error').mockImplementation(() => {});
     const { rerender } = render(<LimiteV2 key="a"><Rota /></LimiteV2>);

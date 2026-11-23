@@ -7,7 +7,7 @@ import { useFocusRunner } from './ui/useFocusRunner';
 import { useNow } from './ui/useNow';
 import { useSealSync } from './ui/useSealSync';
 import { usePendientes } from './ui/useStudy';
-import { Cargando, PantallaV2 } from './v2/Resolutor';
+import { Callado, Cargando, LimiteV2, PantallaV2 } from './v2/Resolutor';
 
 const GlobalV2 = lazy(() => import('./v2/marco/Global'));
 const SplashV2 = lazy(() => import('./v2/marco/SplashV2'));
@@ -34,16 +34,16 @@ export function App() {
   const conBarra = !!settings && !!day && !presentacion;
   const conMini = hayFoco && !!day && !sinMini;
 
-  const contenido = !settings ? <InstalarV2 />
-    : !day ? <DespertarV2 date={today} />
+  const contenido = !settings ? <LimiteV2 key="instalar"><InstalarV2 /></LimiteV2>
+    : !day ? <LimiteV2 key="despertar"><DespertarV2 date={today} /></LimiteV2>
     : <PantallaV2 ruta={ruta} day={day} today={today} />;
 
   return (
     <div className={`app${conMini ? ' con-mini' : ''}${presentacion ? ' presentacion' : ''}`}>
       <div className="envoltura"><Suspense fallback={<Cargando />}>{contenido}</Suspense></div>
       {/* En el teléfono, Avance cuelga de Perfil; la barra ancha lo trae como destino propio. */}
-      {settings && <Suspense fallback={null}><GlobalV2 activa={ruta.seccion} pendientes={pendientes} conBarra={conBarra} conMini={conMini} /></Suspense>}
-      {cargando && <Suspense fallback={<div className="sp2" />}><SplashV2 onFin={fin} /></Suspense>}
+      {settings && <Callado><Suspense fallback={null}><GlobalV2 activa={ruta.seccion} pendientes={pendientes} conBarra={conBarra} conMini={conMini} /></Suspense></Callado>}
+      {cargando && <Callado alFallar={fin}><Suspense fallback={<div className="sp2" />}><SplashV2 onFin={fin} /></Suspense></Callado>}
     </div>
   );
 }
