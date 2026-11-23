@@ -39,6 +39,8 @@ Clipping's charts, Entreno motor bars, the "Buen día" modal, the depth of the d
   exists in both versions' Ajustes.
 - **Tests/CI**: 1.0 tests stay as they are; v2 gets its own; screenshots capture both modes side by side.
 - **End**: after Wave 3, 2.0 becomes the default (your call), 1.0 stays one cycle behind the switch, then it's removed (your call).
+  **Done (3.5 + 3.6):** you chose to skip the cycle: 2.0 is the only interface and the 1.0 code was deleted (data untouched).
+  Lighthouse reached 99 on desktop and 86 on mobile, not 95: the plan data loads at startup (see `docs/ux/lenguaje-2.0.md` §23).
 
 ## 2. Principles (the definition of 10/10)
 
@@ -115,5 +117,5 @@ Demo: flip to 2.0 in Ajustes → new shell, Ajustes, splash and the component ga
 | 3.2 | ✅ **Perfil, Avance, Cierre**: identity card with level ring, medals with sheen, year heat map; Cierre (848 words) as 3 swipeable cards; Presentation mode as a "Wrapped"-style recap | Fable 5.2 | high |
 | 3.3 | ✅ **Sweep of the remaining ~45 screens** onto the kit: Clipping (10), Ajustes sub-pages, Rutinas (24 h pickers), JSON/Importar, Pomodoros, Revisión, Compras, Calibración… one floating action per screen | Sonnet 5.5 | medium |
 | 3.4 | ✅ **Empty states + illustrations + final copy pass**: ~15 custom line illustrations, day-0 states that invite action, every screen within the word budget, wording bugs ("1 días", "de El") | Fable 5.2 | medium |
-| 3.5 | **Performance, accessibility, launch**: Lighthouse ≥ 95, bundle budget, AA contrast in both themes, reduced motion, before/after gallery, docs; then you decide when 2.0 becomes the default | Sonnet 5.5 | high |
-| 3.6 | **Final review** of the whole 2.0 diff (correctness, accessibility, motion, both themes) before it becomes the default | Opus 5.5 | high |
+| 3.5 | ✅ **Performance, accessibility, launch**: Lighthouse ≥ 95, bundle budget, AA contrast in both themes, reduced motion, before/after gallery, docs; then you decide when 2.0 becomes the default | Sonnet 5.5 | high |
+| 3.6 | ✅ **Final review** of the whole 2.0 diff (correctness, accessibility, motion, both themes) before it becomes the default | Opus 5.5 | high |

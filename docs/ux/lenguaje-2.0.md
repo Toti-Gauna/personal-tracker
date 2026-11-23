@@ -1,7 +1,7 @@
 # Trazo 2.0 · design language: "Instrumento"
 
 Batch 1.2 of `docs/prompts/plan-ux-2.0.md`. This is the contract every 2.0 screen and component follows.
-Live specimen: turn on 2.0 in Ajustes → Interfaz, then open `#/v2`.
+Live specimen: Ajustes → Taller de diseño (`#/v2`). Since batch 3.5 the 2.0 is the only interface (see §23).
 
 Code: `src/v2/tokens.css` (tokens, dark + light) · `src/v2/base.css` (type roles, surfaces, the mark) ·
 `src/v2/reglas.ts` (word budgets, status vocabulary, glossary) · `src/v2/tokens.test.ts` (contrast and system checks).
@@ -34,7 +34,7 @@ entering from a corner) and `--grano` (fine noise) so they don't look like flat 
 |---|---|---|
 | `--texto` | everything you read | ≥ 7:1 (AAA) |
 | `--texto-2` | secondary: labels, notes, metadata | ≥ 4.5:1 (AA) |
-| `--texto-3` | decorative or disabled only, never information | ≥ 3:1 |
+| `--texto-3` | the quietest text (hints, decorations); since 3.5 it also passes AA, because small notes in it do carry information | ≥ 4.5:1 |
 
 ### The mark
 `--trazo` `#f1e34c` (the logo yellow). Fill only, with `--sobre-trazo` ink on top. As text use `--trazo-texto`.
@@ -147,9 +147,9 @@ Spanish, rioplatense, voseo. Direct, warm, no guilt, no exclamation marks. The p
 
 Example (Períodos): 37 words under the title in 1.0 → "Tu plan, de la etapa al lote." (7).
 
-## 8. Structure (2.0 only; 1.0 routes stay)
+## 8. Structure
 
-| 2.0 home | Holds (1.0 routes) |
+| Home | Holds (routes) |
 |---|---|
 | **Hoy** | hoy, cierre; tools sheet "⋯": pomodoros, json, importar, ajustes-rutinas/hoy |
 | **Plan** · Ahora | metas/periodos (+ drill-down), metas/ruta, metas/etapas, metas/proyecto, metas/cert, metas/ventana; week/month/bimester/year as zoom |
@@ -232,7 +232,7 @@ metadata); one floating action per screen at most; the breadcrumb is a compact p
   default (there are no settings yet where 2.0 could be chosen).
 - **Ajustes 2.0**: groups of rows; renaming (areas, bimesters) happens in a sheet; `#/ajustes/bimestres` and
   `#/ajustes/plan` are sub-pages (the plan one was rebuilt in batch 3.3, see §21).
-- **What 2.0 fixes from outside on screens that are still 1.0**: on Perfil the sun-like settings icon is hidden and
+- **What 2.0 fixed from outside on screens that were still 1.0** (history: since 3.5 there are none): on Perfil the sun-like settings icon is hidden and
   a labelled **Ajustes** button with the gear sits next to the "1.0" mark; the weight check is a toast with "Cargar"
   (asked once, never a sheet that follows you); toasts jump to the top while a sheet is open.
 
@@ -252,8 +252,8 @@ metadata); one floating action per screen at most; the breadcrumb is a compact p
 - **Dev warnings**: `Marco` logs in development when a title or intro goes over budget.
 - **Gallery**: `#/v2/kit`, `#/v2/piezas` and `#/v2/movimiento` are the component gallery; the revision covers all three.
 
-Current result: no failures and no pending items. Since batch 3.3 the revision also fails if any route still shows the 1.0
-screen (the "1.0" mark) inside 2.0.
+Current result: no failures and no pending items. Since batch 3.5 (1.0 deleted) the revision also fails if any route says "No
+encontré esa pantalla", that is, if a route lost its screen in the registry.
 
 ## 14. Hoy 2.0 (`src/v2/hoy/`, batch 2.1)
 
@@ -642,3 +642,70 @@ reads 55 empty and 53 with data. Checked with seeded data too, not only day 0, s
 Demo: `docs/demo/ux-2.0/ilustraciones.png` (the 19, dark and light), `vacios-dia-0.png` (day 0 of Avance, Perfil, Repasar, the
 analysis, Peso, the clipping registry, Tarjetas and Metas) and `puntos-analisis.png` (the weak-points analysis with data, both themes).
 
+
+## 23. One interface: launch, performance, accessibility and the final review (batches 3.5 and 3.6)
+
+**1.0 is gone.** After 3.3 every route had its 2.0 screen, so in this wave the switch, the "1.0" mark and the 1.0 code were deleted
+(`src/screens`, `src/components`, the 1.0 parts of `src/ui`, all of `src/styles`: about 21,000 lines). Saved data is untouched:
+`settings.interfaz` stays in old backups but is no longer read. What 2.0 still borrowed from 1.0 is now its own:
+
+- the first sign-up (`pantallas/InstalarV2`), the run sheet (`entreno/HojaCorridaV2`), "¿En qué estado estás?"
+  (`estudio/EstadoEstudioV2`), the project detail (`proyecto/DetalleProyectoV2`), the focus card and side-bar timer
+  (`marco/MiniFoco`), the clip sheet in Hoy (the clipping `HojaFila`);
+- the end-of-block and end-of-session dialog is `elegir()` in `kit/capas.tsx`: two ways out, it can't be dismissed by tapping
+  outside or Escape, and it takes focus itself so a stray Enter can't choose;
+- the base CSS (box model, body, fields at 16 px, the side-bar width) lives in `src/v2/raiz.css`; fonts, bar height and the old area
+  color names (`--ing`, `--salud`…, which the data still uses) are tokens that point to the 2.0 palette;
+- the logic the 1.0 components shared moved to small modules in `src/ui/` (`periodos`, `plan-bits`, `barras-estudio`,
+  `estado-estudio`, `checkins`, `avisos`, `foco`).
+
+A route nobody covers says "No encontré esa pantalla"; a screen that crashes says "Esta pantalla no cargó" with "Probar de nuevo"
+(which reloads the page when the cause was a file that no longer exists after a deploy). The splash is painted by `index.html`
+itself, so the first frame doesn't wait for any script; `SplashV2` only times it and fades it out.
+
+**Checked before and after deleting.** The 114 screens of the revision were captured in both themes before the deletion and again
+after: no regressions, only entrance animations caught at a different moment. The before/after gallery of the main screens (1.0 next
+to 2.0) is in `docs/demo/ux-2.0/antes-despues-1.png` and `antes-despues-2.png`.
+
+**Performance** (`npm run build` and `vite preview`, Lighthouse 12):
+
+| | Performance | Accessibility | Best practices | SEO |
+|---|---|---|---|---|
+| Desktop | 99 | 100 | 100 | 100 |
+| Mobile (simulated slow 4G, 4× CPU) | 86 | 100 | 100 | 100 |
+
+Total blocking time 0 ms and layout shift 0 on both. On mobile the first paint and LCP are ~3 s because the startup JavaScript is
+~280 KB gzipped, ~165 KB of it the plan data that the store needs to boot (unthrottled: first paint 0.1 s, LCP 0.5 s). Reaching 95 on
+mobile means loading that data after the first render: a change to the state layer, left as the next step. **Budget**: `npm run peso`
+(in CI after the build) fails if the first load passes 290 KB gzipped, a lazy chunk 45 KB, a CSS file 20 KB, or the 3D map (150 KB)
+ends up in the first load.
+
+**Accessibility**: `npm run a11y` runs axe-core (WCAG 2.1 A and AA) on every route of the revision in both themes and writes
+`a11y.md`. The first run found 74 problems on 54 screens; the last one, **none**. What it found, and the rule each one left:
+
+- **Contrast** (64 elements): the dimmest text (`--texto-3`) and labels drawn at reduced opacity. `--texto-3` now passes 4.5:1 on
+  every surface (`tokens.test.ts` checks it); to dim something, dim its bar or dot, never its text.
+- **A name that doesn't say what you see** (362 controls, WCAG 2.5.3): someone using voice control says "tap B2", so the spoken name
+  must contain the visible text. Short labels go first in the name (`nombreConRotulo` in `reglas.ts`: "P2, VitalIA, 21 – 30 dic,
+  próximo", "B2, bimestre 2"); fields say their label and their value ("Fecha 12 dic 2026"); rows and cards are named by their
+  content, with the extra words for screen readers hidden with `.v2-oculto`; a card with a short name (`Tarjeta` with `href` and
+  `etiqueta`) gets a stretched link with that name; bars, rings and the small metro inside a button or link are drawing only.
+- **Inside a button or link, a space between inline pieces** (`<b>Pull A</b>{' '}<small>18:00</small>`): without it, screen
+  readers and axe read "Pull A18:00".
+- Two loading states with `aria-busy` and no role now are `role="status"`.
+
+**The final review (3.6)**: five independent reviewers read the whole UI (core and kit; Hoy and the plan; study; training and
+profile; settings, goals, work and clipping) and reported about 60 verified findings; all were fixed, most with a test. The ones that
+mattered most:
+
+- focus minutes counted twice after "Seguir 10 min más", and lost when a new focus or study session started over a running one (it
+  now asks first and keeps them);
+- a training session left open from another day was silently overwritten; the test result screen talked about the next attempt after
+  saving; error types could add up to more than the failed exercises; saving a thesis twice duplicated its cards;
+- a version showed as "published" because its deliverables were ticked, skipping the Imán gate; restoring an old backup skipped the
+  migration; undo after editing a campaign or retainer kept the edited fields; numbers like "10.000" were read as 10;
+- keyboard and screen readers: the confirm dialog opened under sheets, focus fell to the page when a sheet's view changed or its opener
+  was deleted, Escape in a list closed the sheet under it, segmented controls didn't move focus, the presentation's Pause and Exit
+  were covered by its tap zone;
+- reduced motion: the 3D map still flew the camera, the seals' sheen looped forever; contrast: month calendar, week dots, timeline
+  labels, dimmed rows.
