@@ -79,6 +79,11 @@ describe('Clipping 2.0 · lo que se calcula y se escribe', () => {
     expect(decimal('1.234,5')).toBe(1234.5);
     expect(decimal('12.000')).toBe(12000);
     expect(decimal('')).toBeUndefined();
+    // Pegado de una página en inglés, y los que empiezan en cero.
+    expect(decimal('$1,234.56')).toBe(1234.56);
+    expect(decimal('0.125')).toBe(0.125);
+    expect(decimal('12.50')).toBe(12.5);
+    expect(decimal('1,234,567')).toBe(1234567);
     expect(decimal('abc')).toBeUndefined();
   });
 

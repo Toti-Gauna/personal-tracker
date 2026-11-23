@@ -15,7 +15,7 @@ import { RAMA_NOMBRE } from '../../data/ramas';
 import { addDays } from '../../data/time';
 import { runWeek } from '../../data/train';
 import { aceptaSubs, addProgress, addSub, deleteGoal, removeSub, stepOf, toggleGoal, toggleMark, toggleSub } from '../../state/goals';
-import { confirmarMetas, editarMeta, editarMetaFija, ensayarRespuesta, marcarHito, moverHito, sumarContador, sumarHandyx, sumarHechoMeta, togglePasoMapa } from '../../state/plan';
+import { confirmarMetas, editarMeta, editarMetaFija, ensayarRespuesta, marcarHito, moverHitoConDeshacer, sumarContador, sumarHandyx, sumarHechoMeta, togglePasoMapa } from '../../state/plan';
 import { getState, useStore } from '../../state/store';
 import { abrirCorrida } from '../../ui/checkins';
 import { Icono } from '../iconos';
@@ -314,7 +314,7 @@ export function HitosPeriodo({ desde, hasta, date }: { desde: string; hasta: str
             <Casilla marcada={h.estado === 'hecho'} etiqueta={h.texto} area={h.rama === 'main' ? undefined : colorRama(h.rama)} festejo={false}
               nota={`${h.rama === 'main' ? 'Trazo' : RAMA_NOMBRE[h.rama as keyof typeof RAMA_NOMBRE] ?? h.rama} · ${dm(h.fecha)}${h.tipo === 'grande' ? ' · hito grande' : ''}${h.estado === 'vencido' ? ' · vencido' : ''}${h.rama !== 'main' && h.rama !== 'clipping' && enPausa(plan, h.rama, h.fecha) ? ' · stand-by' : ''}`}
               onCambio={() => marcarHito(h.id, h.estado === 'hecho' ? null : date)} />
-            {h.propuesta && <Boton tamano="s" variante="fantasma" icono="calendario" onClick={() => moverHito(h.id, h.propuesta!)}>Mover al {dm(h.propuesta)}</Boton>}
+            {h.propuesta && <Boton tamano="s" variante="fantasma" icono="calendario" onClick={() => { const deshacer = moverHitoConDeshacer(h.id, h.propuesta!); aviso({ titulo: 'Hito movido', sub: `Al ${dm(h.propuesta!)}`, tono: 'hecho', deshacer }); }}>Mover al {dm(h.propuesta)}</Boton>}
           </div>
         ))}
       </div>

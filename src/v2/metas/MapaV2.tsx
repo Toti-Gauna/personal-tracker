@@ -8,7 +8,7 @@ import type { RamaMapa } from '../../data/hitos';
 import { COLUMNAS, filasMapa, type Fila as FilaMapa, type Rango } from '../../data/mapa';
 import { PLAN, fechaCorta, fechaHito } from '../../data/plan';
 import { RAMA_NOMBRE } from '../../data/ramas';
-import { marcarHito, moverHito } from '../../state/plan';
+import { marcarHito, moverHitoConDeshacer } from '../../state/plan';
 import { getState, useStore } from '../../state/store';
 import { aviso } from '../kit/capas';
 import { Boton, Chip, Segmentado } from '../kit/controles';
@@ -195,7 +195,7 @@ export default function MapaV2({ day }: PropsV2) {
       <Hoja abierta={!!fSel && fSel.tipo !== 'gap'} onCerrar={() => setSel(null)} titulo={fSel && fSel.tipo !== 'gap' ? etiqueta(fSel) : ''}
         pie={fSel?.hitoId ? <>
           <Boton variante="primario" icono="tilde" onClick={() => marcar(fSel)}>{fSel.estado === 'hecho' ? 'Desmarcar' : 'Marcar hecho'}</Boton>
-          {fSel.estado === 'vencido' && fSel.propuesta && <Boton variante="secundario" icono="calendario" onClick={() => { moverHito(fSel.hitoId!, fSel.propuesta!); aviso({ titulo: 'Hito movido', sub: `Al ${fechaCorta(fSel.propuesta!)}`, tono: 'hecho' }); setSel(null); }}>Mover al {fechaCorta(fSel.propuesta)}</Boton>}
+          {fSel.estado === 'vencido' && fSel.propuesta && <Boton variante="secundario" icono="calendario" onClick={() => { const deshacer = moverHitoConDeshacer(fSel.hitoId!, fSel.propuesta!); aviso({ titulo: 'Hito movido', sub: `Al ${fechaCorta(fSel.propuesta!)}`, tono: 'hecho', deshacer }); setSel(null); }}>Mover al {fechaCorta(fSel.propuesta)}</Boton>}
         </> : undefined}>
         {fSel && fSel.tipo !== 'gap' && (
           <div className="mt-hoja">

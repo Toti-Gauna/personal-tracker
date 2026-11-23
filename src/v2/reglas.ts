@@ -25,6 +25,25 @@ export const contarPalabras = (texto: string) => texto.trim().split(/\s+/).filte
 export const cuantos = (n: number, uno: string, varios: string) => `${String(n).replace('.', ',')} ${n === 1 ? uno : varios}`;
 
 /**
+ * Un número escrito a mano, en español o como viene de una página en inglés. Vacío o ilegible = sin dato; nunca negativo.
+ * - Con coma y punto, el último es el de los decimales: "1.234,5" y "1,234.5" son 1234,5.
+ * - Solo coma: decimales ("1,09"), salvo grupos de tres en serie ("1,234,567").
+ * - Solo punto: miles si separa grupos de tres ("12.000", "1.500"), si no decimales ("1.09", "0.125", "12.50").
+ */
+export function numeroEscrito(s: string): number | undefined {
+  const t = s.trim().replace(/[\s$€]/g, '').replace(/^USD/i, '');
+  if (t === '') return undefined;
+  const coma = t.lastIndexOf(',');
+  const punto = t.lastIndexOf('.');
+  let limpio = t;
+  if (coma >= 0 && punto >= 0) limpio = coma > punto ? t.replace(/\./g, '').replace(',', '.') : t.replace(/,/g, '');
+  else if (coma >= 0) limpio = /^\d{1,3}(,\d{3}){2,}$/.test(t) ? t.replace(/,/g, '') : t.replace(',', '.');
+  else if (/^[1-9]\d{0,2}(\.\d{3})+$/.test(t)) limpio = t.replace(/\./g, '');
+  const n = Number(limpio);
+  return Number.isFinite(n) && n >= 0 ? n : undefined;
+}
+
+/**
  * El tono de un estado decide su forma: `neutro` es una píldora de contorno, `atencion` una píldora llena del color del texto
  * (sin tinte) y `critico` la única que usa el rojo. `hecho` lleva el trazo de la marca.
  */

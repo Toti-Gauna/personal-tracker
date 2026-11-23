@@ -5,7 +5,7 @@
 import { useRef } from 'react';
 import { reviewsJson, testsJson } from '../../data/debiles';
 import { markBackup } from '../../state/profile';
-import { getState, resetState, setState, useStore } from '../../state/store';
+import { getState, migrate, resetState, setState, useStore } from '../../state/store';
 import { confirmar, aviso } from '../kit/capas';
 import { Boton, fechaLarga } from '../kit/controles';
 import { Dato, Fila, Tarjeta } from '../kit/superficies';
@@ -62,9 +62,22 @@ export default function DatosV2({ today }: PropsV2) {
       }
       const ok = await confirmar({ titulo: '¿Restaurar esta copia?', texto: 'Esto reemplaza todo lo que hay en este teléfono por lo que trae la copia. No se puede deshacer.', accion: 'Restaurar copia', peligro: true });
       if (!ok) return;
-      try { localStorage.setItem('trazo.v1', JSON.stringify(j.estado)); } catch { /* sin storage */ }
-      resetState(j.estado);
-      setState((s) => s);
+      // Una copia vieja puede no traer partes que la app sumó después (el clipping, el plan): pasa por la misma migración que al abrir.
+      let estado;
+      try { estado = migrate(j.estado); } catch {
+        aviso({ titulo: 'No se pudo leer la copia', sub: 'No se cambió nada.', tono: 'atencion' });
+        return;
+      }
+      const antes = getState();
+      try {
+        resetState(estado);
+        setState((s) => s);
+      } catch {
+        resetState(antes);
+        aviso({ titulo: 'No se pudo restaurar la copia', sub: 'No se cambió nada.', tono: 'atencion' });
+        return;
+      }
+      try { localStorage.setItem('trazo.v1', JSON.stringify(estado)); } catch { /* sin storage */ }
       aviso({ titulo: 'Copia restaurada', sub: 'Recargá la app para ver todo al día', tono: 'hecho', accion: { etiqueta: 'Recargar', run: () => window.location.reload() } });
     };
     rd.onerror = () => aviso({ titulo: 'No se pudo leer el archivo', sub: 'No se cambió nada.', tono: 'atencion' });

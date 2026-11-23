@@ -42,7 +42,8 @@ function Formulario({ hoy, fila, onCerrar }: { hoy: string; fila?: FilaClip; onC
   const cobrado = decimal(v.cobrado);
   const aprobados = entero(v.aprobados);
   const listo = /^\d{4}-\d{2}-\d{2}$/.test(fecha) && (clips != null || cobrado != null);
-  const aprobOk = aprobados == null || clips == null || aprobados <= clips;
+  // Sin clips cargados la fila guarda 0 clips: los aprobados tampoco pueden pasar de ahí.
+  const aprobOk = aprobados == null || aprobados <= (clips ?? 0);
   const motivo = !listo ? 'Cargá los clips o lo cobrado.' : !aprobOk ? 'Hay más aprobados que clips.' : undefined;
 
   const guardar = () => {

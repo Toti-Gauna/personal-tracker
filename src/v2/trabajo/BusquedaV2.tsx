@@ -18,6 +18,7 @@ import type { PropsV2 } from '../registro';
 import { AREA, dm, miles, useT0 } from './comun';
 import '../proyecto/proyecto.css';
 import './trabajo.css';
+import { numeroEscrito } from '../reglas';
 
 const ESTADOS: [EstadoPostulacion, string][] = [['enviada', 'Enviada'], ['respuesta', 'Respuesta'], ['entrevista', 'Entrevista'], ['oferta', 'Oferta'], ['rechazada', 'Rechazada']];
 const NOMBRE_ESTADO = Object.fromEntries(ESTADOS) as Record<EstadoPostulacion, string>;
@@ -154,7 +155,7 @@ function Mercado({ hoy, t0 }: { hoy: string; t0: string }) {
         <div className="capa-1 pt-check tr-movibles">
           {MOVIBLES.map(([id, n]) => (
             <div key={id} className="tr-movible">
-              <CampoAlSalir etiqueta={`% de ofertas que piden ${n}`} valor={m.pct?.[id] != null ? String(m.pct[id]) : ''} modo="numeric" guardar={(v) => { const x = v.replace(/\D/g, ''); if (x !== '') setMercado({ pct: { [id]: Math.min(100, Number(x)) } }); }} />
+              <CampoAlSalir etiqueta={`% de ofertas que piden ${n}`} valor={m.pct?.[id] != null ? String(m.pct[id]) : ''} modo="numeric" guardar={(v) => { const x = numeroEscrito(v); if (x != null) setMercado({ pct: { [id]: Math.min(100, Math.round(x)) } }); }} />
               <b className="t-dato tr-veredicto">{veredicto(m.pct?.[id])}</b>
             </div>
           ))}

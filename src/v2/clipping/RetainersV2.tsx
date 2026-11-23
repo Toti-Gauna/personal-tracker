@@ -93,7 +93,7 @@ function Formulario({ retainer, hoy, onCerrar }: { retainer?: Retainer; hoy: str
     if (!ok) return;
     const datos = { id: retainer?.id, nombre: x.nombre.trim(), estado: x.estado, usdMes: usdMes!, clipsMes: entero(x.clipsMes), desde: x.desde, hasta: x.hasta || undefined };
     const id = guardarRetainer(datos);
-    aviso({ titulo: retainer ? 'Retainer actualizado' : 'Retainer guardado', sub: datos.nombre, tono: 'hecho', deshacer: () => (retainer ? guardarRetainer(retainer) : borrarRetainer(id)) });
+    aviso({ titulo: retainer ? 'Retainer actualizado' : 'Retainer guardado', sub: datos.nombre, tono: 'hecho', deshacer: () => (retainer ? guardarRetainer(retainer, true) : borrarRetainer(id)) });
     onCerrar();
   };
   const borrar = () => {

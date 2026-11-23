@@ -22,13 +22,14 @@ import type { PropsV2 } from '../registro';
 import { AREA, dm, dma, miles, n1, useT0 } from './comun';
 import '../proyecto/proyecto.css';
 import './trabajo.css';
+import { numeroEscrito } from '../reglas';
 
 const LETRAS = ['L', 'M', 'X', 'J', 'V', 'S', 'D'];
 
 /** Cargar un número a mano (usuarios activos o margen): un campo y un botón. */
 function CargarNumero({ etiqueta, nota, modo, placeholder, onGuardar }: { etiqueta: string; nota?: string; modo: 'numeric' | 'decimal'; placeholder?: string; onGuardar: (n: number) => void }) {
   const [v, setV] = useState('');
-  const n = Number(v.replace(',', '.'));
+  const n = numeroEscrito(v) ?? NaN; // "1.500" es mil quinientos
   const valido = v.trim() !== '' && Number.isFinite(n) && n >= 0;
   return (
     <div className="pt-campo-hoja">

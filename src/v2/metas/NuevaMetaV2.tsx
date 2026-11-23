@@ -21,6 +21,7 @@ import { navegar } from '../movimiento/movimiento';
 import type { PropsV2 } from '../registro';
 import '../proyecto/proyecto.css';
 import './metas.css';
+import { numeroEscrito } from '../reglas';
 
 const HORIZONTES: Horizon[] = ['dia', 'semana', 'mes', 'bim', 'anio'];
 const TIPOS: [GoalType, string, string][] = [
@@ -66,7 +67,7 @@ export default function NuevaMetaV2({ ruta, today }: PropsV2) {
 
   const conSubs = subs.length > 0;
   const porDia = diaria && h === 'semana' && !conSubs && tipo !== 'tarea';
-  const target = conSubs ? subs.length : tipo === 'tarea' ? 1 : porDia ? Math.min(7, Number(meta.replace(',', '.')) || 0) : Number(meta.replace(',', '.')) || 0;
+  const target = conSubs ? subs.length : tipo === 'tarea' ? 1 : porDia ? Math.min(7, numeroEscrito(meta) ?? 0) : numeroEscrito(meta) ?? 0; // "10.000 pasos" es diez mil, no diez
   const falta = !titulo.trim() ? 'Escribí qué querés lograr.' : !(target > 0) ? 'Poné a cuánto querés llegar.' : false;
 
   const guardar = () => {

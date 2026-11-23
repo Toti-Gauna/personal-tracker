@@ -98,7 +98,7 @@ function Formulario({ campana, hoy, onCerrar }: { campana?: Campana; hoy: string
     if (!ok) return;
     const datos = { id: campana?.id, nombre: x.nombre.trim(), plataforma: x.plataforma, nicho: x.nicho, tarifa: tarifa!, tope: decimal(x.tope), fuente: x.fuente.trim() || undefined, estado: x.estado, desde: x.desde };
     const id = guardarCampana(datos);
-    aviso({ titulo: campana ? 'Campaña actualizada' : 'Campaña guardada', sub: datos.nombre, tono: 'hecho', deshacer: () => (campana ? guardarCampana(campana) : borrarCampana(id)) });
+    aviso({ titulo: campana ? 'Campaña actualizada' : 'Campaña guardada', sub: datos.nombre, tono: 'hecho', deshacer: () => (campana ? guardarCampana(campana, true) : borrarCampana(id)) });
     onCerrar();
   };
   const borrar = () => {

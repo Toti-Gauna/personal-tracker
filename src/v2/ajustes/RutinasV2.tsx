@@ -30,6 +30,13 @@ import './ajustes.css';
 const DIAS = ['lun', 'mar', 'mié', 'jue', 'vie', 'sáb', 'dom'];
 const RAMAS: [RamaOMain | '', string][] = [['', 'Sin rama'], ['programacion', 'Programación'], ['matematica', 'Matemática'], ['ingles', 'Inglés'], ['trabajo', 'Trabajo'], ['salud', 'Salud'], ['main', 'Trazo']];
 
+/** Vuelve a poner cada asignación en su posición de antes (de menor a mayor, así las de adelante no corren a las de atrás). */
+function reinsertar(lista: AsignacionRutina[], quitadas: readonly (readonly [number, AsignacionRutina])[]): AsignacionRutina[] {
+  const r = [...lista];
+  for (const [k, a] of [...quitadas].sort((x, y) => x[0] - y[0])) r.splice(Math.min(Math.max(0, k), r.length), 0, a);
+  return r;
+}
+
 export default function RutinasV2({ ruta, day }: PropsV2) {
   if (ruta.param === 'hoy') return <AdaptarHoy day={day} />;
   if (ruta.param) return <Editor day={day} id={ruta.param === 'nueva' ? undefined : ruta.param} />;
@@ -57,11 +64,12 @@ function Inicio({ day }: { day: DayLog }) {
     const r = rutinas.find((x) => x.id === id);
     if (!r) return;
     const indice = rutinas.indexOf(r);
-    const suyas = asig.filter((a) => a.rutina === id);
+    // Cada asignación vuelve a su lugar: entre dos del mismo tipo gana la más nueva, así que el orden decide qué rutina rige.
+    const suyas = asig.flatMap((a, k) => (a.rutina === id ? [[k, a] as const] : []));
     borrarRutina(id);
     aviso({ titulo: 'Rutina borrada', sub: r.nombre, deshacer: () => setState((s) => {
       const otras = (s.plan.rutinasPropias ?? []).filter((x) => x.id !== id);
-      return { ...s, plan: { ...s.plan, rutinasPropias: [...otras.slice(0, indice), r, ...otras.slice(indice)], asignacionesRutina: [...(s.plan.asignacionesRutina ?? []), ...suyas] } };
+      return { ...s, plan: { ...s.plan, rutinasPropias: [...otras.slice(0, indice), r, ...otras.slice(indice)], asignacionesRutina: reinsertar(s.plan.asignacionesRutina ?? [], suyas) } };
     }) });
   };
 
@@ -265,8 +273,9 @@ function Asignar({ id, actuales, hoy }: { id: string; actuales: AsignacionRutina
     aviso({ titulo: 'Rutina asignada', sub: textoAsignacion({ ...nueva, id: aid }), tono: 'hecho', deshacer: () => setState((s) => ({ ...s, plan: { ...s.plan, asignacionesRutina: antes } })) });
   };
   const quitar = (a: AsignacionRutina) => {
+    const k = (getState().plan.asignacionesRutina ?? []).findIndex((x) => x.id === a.id);
     quitarAsignacion(a.id);
-    aviso({ titulo: 'Asignación quitada', sub: textoAsignacion(a), deshacer: () => setState((s) => ({ ...s, plan: { ...s.plan, asignacionesRutina: [...(s.plan.asignacionesRutina ?? []), a] } })) });
+    aviso({ titulo: 'Asignación quitada', sub: textoAsignacion(a), deshacer: () => setState((s) => ({ ...s, plan: { ...s.plan, asignacionesRutina: reinsertar(s.plan.asignacionesRutina ?? [], [[k, a]]) } })) });
   };
   return (
     <Grupo titulo="Cuándo se usa">

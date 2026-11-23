@@ -90,7 +90,7 @@ function Formulario({ cuenta, hoy, onCerrar }: { cuenta?: Cuenta; hoy: string; o
     if (!ok) return;
     const datos = { id: cuenta?.id, alias: x.alias.trim(), red: x.red, nicho: x.nicho, estilo: x.estilo.trim() || undefined, estado: x.estado, desde: x.desde };
     const id = guardarCuenta(datos);
-    aviso({ titulo: cuenta ? 'Cuenta actualizada' : 'Cuenta guardada', sub: datos.alias, tono: 'hecho', deshacer: () => (cuenta ? guardarCuenta(cuenta) : borrarCuenta(id)) });
+    aviso({ titulo: cuenta ? 'Cuenta actualizada' : 'Cuenta guardada', sub: datos.alias, tono: 'hecho', deshacer: () => (cuenta ? guardarCuenta(cuenta, true) : borrarCuenta(id)) });
     onCerrar();
   };
   const borrar = () => {

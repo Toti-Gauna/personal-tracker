@@ -19,6 +19,7 @@ import { fc, usd } from './datos';
 import { HojaFila, useHojaFila } from './HojaFila';
 import '../proyecto/proyecto.css';
 import './clipping.css';
+import { dateKey } from '../../data/time';
 
 const INFO = (
   <>
@@ -112,7 +113,7 @@ function ExportarImportar() {
     const blob = new Blob([JSON.stringify({ tipo: 'clipping', version: 1, ...getState().clipping }, null, 2)], { type: 'application/json' });
     const a = document.createElement('a');
     a.href = URL.createObjectURL(blob);
-    a.download = `trazo-clipping-${new Date().toISOString().slice(0, 10)}.json`;
+    a.download = `trazo-clipping-${dateKey()}.json`; // la fecha de acá (toISOString es la de Greenwich: a las 22 h ya es mañana)
     a.click();
     setTimeout(() => URL.revokeObjectURL(a.href), 1000);
   };

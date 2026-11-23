@@ -9,6 +9,7 @@ import type { ClippingState } from '../../data/clipping-state';
 import { addDays } from '../../data/time';
 import { useStore } from '../../state/store';
 import type { Ruta } from '../../lib/routes';
+import { numeroEscrito } from '../reglas';
 
 const MES = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'];
 /** "19 nov" */
@@ -83,19 +84,8 @@ export function entero(s: string): number | undefined {
   return t === '' ? undefined : Number(t);
 }
 
-/**
- * Un decimal en español: la coma es la de los decimales y el punto, el de los miles ("1.234,5" → 1234,5). Un punto solo vale como
- * decimal si no separa grupos de tres ("1.09" → 1,09; "12.000" → 12000). Vacío o ilegible = sin dato.
- */
-export function decimal(s: string): number | undefined {
-  const t = s.trim().replace(/\s/g, '');
-  if (t === '') return undefined;
-  let limpio = t;
-  if (t.includes(',')) limpio = t.replace(/\./g, '').replace(',', '.');
-  else if (/^\d{1,3}(\.\d{3})+$/.test(t)) limpio = t.replace(/\./g, '');
-  const n = Number(limpio);
-  return Number.isFinite(n) && n >= 0 ? n : undefined;
-}
+/** Un decimal escrito a mano (ver `numeroEscrito`): "1.234,5", "12.50", "1,09", "$1,234.56". */
+export const decimal = (s: string) => numeroEscrito(s);
 
 /** Cómo se muestra un número guardado dentro de un campo de texto. */
 export const aTexto = (v?: number) => (v == null ? '' : String(v).replace('.', ','));
