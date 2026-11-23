@@ -12,6 +12,8 @@ export default defineConfig({
     react(),
     VitePWA({
       registerType: 'autoUpdate',
+      // El registro del service worker no frena el primer cuadro.
+      injectRegister: 'script-defer',
       includeAssets: ['trazo.svg', 'apple-touch-icon.png'],
       manifest: {
         name: 'Trazo',
@@ -22,8 +24,8 @@ export default defineConfig({
         scope: base,
         display: 'standalone',
         orientation: 'portrait',
-        background_color: '#0B0C0D',
-        theme_color: '#0E0F10',
+        background_color: '#0c0d0e',
+        theme_color: '#0c0d0e',
         icons: [
           { src: 'icon-192.png', sizes: '192x192', type: 'image/png' },
           { src: 'icon-512.png', sizes: '512x512', type: 'image/png' },

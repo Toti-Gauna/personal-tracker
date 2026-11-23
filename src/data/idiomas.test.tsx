@@ -1,7 +1,6 @@
 import { fireEvent, render, screen, within } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { getState, register, resetState, startDay } from '../state/store';
-import { IdiomasPlan } from '../screens/Idiomas';
 import { tituloDeBloque } from './etiquetas';
 import {
   ERRORES_IDIOMAS, IDIOMAS, IDIOMAS_ARCHIVADO, alertasIdiomas, aniosIdiomas, calendarioIdiomas, eventosIdiomas, faseIdiomaEn, horasDeLaRutina, nivelesIdiomas, validarIdiomas, type IdiomasFile,
@@ -114,48 +113,5 @@ describe('la biblioteca', () => {
     const ids = new Set(nucleo().map((l) => l.id));
     for (const a of IDIOMAS.anios) for (const f of a.fases) for (const id of f.libros ?? []) expect(ids.has(id), id).toBe(true);
     expect(nucleo().filter((l) => l.faseA === 1).map((l) => l.titulo)).toEqual(['Make It Stick', 'Getting to Yes']);
-  });
-});
-
-describe('pantallas de Idiomas', () => {
-  const D = '2026-11-20';
-  const day = { date: D, wake: '04:00', routine: 'completo' as const, blocks: [], notes: [], focus: [] };
-  beforeEach(() => { resetState(); register('Toti', 'Abi', T0); });
-  afterEach(() => vi.useRealTimers());
-
-  it('el roadmap: estás acá, hoy sos → vas a ser, horas y la escalera de 6 años', () => {
-    render(<IdiomasPlan day={day} param="idiomas" />);
-    expect(screen.getByRole('heading', { name: 'Idiomas y libros' })).toBeInTheDocument();
-    expect(screen.getByText('Inglés · Measure What Matters')).toBeInTheDocument();
-    expect(screen.getByText('Inglés B1–B2')).toBeInTheDocument();
-    expect(screen.getByText('Inglés C1')).toBeInTheDocument();
-    expect(screen.getByText(/pide 11,5 h por semana · la búsqueda intensiva le da 1,8 h/)).toBeInTheDocument();
-    const tl = document.querySelector('.re-tl') as HTMLElement;
-    expect(within(tl).getAllByRole('link').map((a) => a.querySelector('b')!.textContent)).toEqual(['Inglés', 'Francés', 'Italiano', 'Alemán', 'Japonés', 'Chino']);
-  });
-
-  it('el año de inglés: fases con fechas, el enlace de Udemy queda en el teléfono y los libros de la consolidación', () => {
-    render(<IdiomasPlan day={day} param="idiomas/ingles" />);
-    expect(screen.getByRole('heading', { name: 'Inglés' })).toBeInTheDocument();
-    expect(screen.getByText('Preparación Cambridge C1 Advanced + Advanced Grammar in Use')).toBeInTheDocument();
-    expect(screen.getByText('Make It Stick')).toBeInTheDocument();
-    const input = screen.getByLabelText('Enlace del curso de Udemy');
-    fireEvent.change(input, { target: { value: 'no-es-un-enlace' } });
-    fireEvent.click(screen.getByRole('button', { name: 'Guardar' }));
-    expect(getState().idiomas.enlaces).toEqual({});
-    fireEvent.change(screen.getByLabelText('Enlace del curso de Udemy'), { target: { value: 'https://ejemplo.com/curso' } });
-    fireEvent.click(screen.getByRole('button', { name: 'Guardar' }));
-    expect(getState().idiomas.enlaces).toEqual({ 'udemy-ingles': 'https://ejemplo.com/curso' });
-    expect(screen.getByRole('link', { name: 'Abrir el curso de Udemy' })).toHaveAttribute('href', 'https://ejemplo.com/curso');
-  });
-
-  it('la biblioteca y el ascenso a C1', () => {
-    const { unmount } = render(<IdiomasPlan day={day} param="idiomas/biblioteca" />);
-    expect(screen.getByText('Bloque 1 · Pensar, decidir y negociar')).toBeInTheDocument();
-    expect(screen.getAllByText(/sin capítulos/).length).toBeGreaterThanOrEqual(42);
-    unmount();
-    render(<IdiomasPlan day={day} param="idiomas/ascenso" />);
-    expect(screen.getByText('Italiano C1')).toBeInTheDocument();
-    expect(screen.getByText('feb 2045 (aprox.)')).toBeInTheDocument();
   });
 });

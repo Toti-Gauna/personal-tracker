@@ -2,8 +2,6 @@ import { fireEvent, render, screen, within } from '@testing-library/react';
 import { beforeEach, describe, expect, it } from 'vitest';
 import { getState, migrate, register, resetState } from '../state/store';
 import { completeLearn, completeReview, guardarArtefacto, guardarMicrotesis, guardarTestFinal, marcarRecurso, saveTest } from '../state/study';
-import { LibroPantalla } from '../screens/Libro';
-import { TestFinal } from '../screens/TestFinal';
 import { DEFAULT_BLOCK_PRESETS, DEFAULT_PRESETS } from './defaults';
 import {
   LIBROS, actividadDeLibro, actIdDeLibro, capsTexto, estadoLibro, libroCerrado, libroPorId, microFaltantes, unidadesDe, unidadesMotor, validarLibro, validarLibros,
@@ -131,36 +129,5 @@ describe('el libro en el motor de estudio', () => {
 
   it('actividadDeLibro arma la actividad en otro bloque si se pide', () => {
     expect(actividadDeLibro(mwm, { block: 'cierre', front: 'ingles', days: [0, 2] })).toMatchObject({ block: 'cierre', front: 'ingles', days: [0, 2], id: ACT });
-  });
-});
-
-describe('pantallas del libro', () => {
-  beforeEach(() => {
-    resetState();
-    register('Toti', 'Abi', D0);
-  });
-  const day = () => ({ date: D0, wake: '04:00', routine: 'completo' as const, blocks: [], notes: [], focus: [] });
-
-  it('el libro muestra dónde estás, las unidades por parte y el cierre de 3 pasos', () => {
-    render(<LibroPantalla day={day()} id="mwm" />);
-    expect(screen.getByRole('heading', { name: 'Measure What Matters' })).toBeInTheDocument();
-    expect(screen.getByText('Unidad 1 de 11 · caps. 1 y 2')).toBeInTheDocument();
-    expect(screen.getByText('Parte 1 · OKRs in Action')).toBeInTheDocument();
-    expect(screen.getByText('Parte 2 · The New World of Work')).toBeInTheDocument();
-    // La unidad actual viene abierta, con las micro-tesis de sus 2 capítulos.
-    const micro = screen.getByRole('region', { name: 'Micro-tesis de la unidad 1' });
-    fireEvent.change(within(micro).getByLabelText('Micro-tesis del cap. 1'), { target: { value: 'OKR: qué y cómo medirlo.' } });
-    fireEvent.click(within(micro).getByRole('button', { name: 'Guardar micro-tesis' }));
-    expect(getState().study.microtesis![`${ACT}:1`].texto).toBe('OKR: qué y cómo medirlo.');
-    expect(screen.getByRole('region', { name: 'Cierre del libro' })).toHaveTextContent('Por ahora no: primero se lee el libro y después se aplica.');
-  });
-
-  it('el test final guarda el resultado con el corte de 85 %', () => {
-    render(<TestFinal day={day()} actId={ACT} />);
-    expect(screen.getByRole('heading', { name: 'Test final · Measure What Matters' })).toBeInTheDocument();
-    for (let i = 0; i < 3; i++) fireEvent.click(screen.getByRole('button', { name: 'Una menos' }));
-    expect(screen.getByText(/Aprobado · el corte es 85/)).toBeInTheDocument();
-    fireEvent.click(screen.getByRole('button', { name: 'Guardar resultado' }));
-    expect(getState().study.finales![ACT].aprobadoOn).toBe(D0);
   });
 });

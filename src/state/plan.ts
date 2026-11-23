@@ -403,6 +403,21 @@ export function moverHito(id: string, fecha: string) {
   update((p) => ({ ...p, hitos: { ...p.hitos, [id]: { ...(p.hitos[id] ?? {}), fecha } } }));
 }
 
+/** Deshace "Mover al…": vuelve a la fecha movida de antes, o a la del plan si no había ninguna. */
+export function devolverHito(id: string, fecha?: string) {
+  update((p) => {
+    const { fecha: _f, ...resto } = p.hitos[id] ?? {}; // eslint-disable-line @typescript-eslint/no-unused-vars
+    return { ...p, hitos: { ...p.hitos, [id]: fecha ? { ...resto, fecha } : resto } };
+  });
+}
+
+/** Mueve un hito y devuelve cómo deshacerlo. */
+export function moverHitoConDeshacer(id: string, fecha: string): () => void {
+  const antes = (getState().plan.hitos[id] as { fecha?: string } | undefined)?.fecha;
+  moverHito(id, fecha);
+  return () => devolverHito(id, antes);
+}
+
 /** Sprint de búsqueda: cambiar una meta del embudo (son supuestos) o marcar CV, LinkedIn y caso. */
 export function setMetaEmbudo(id: string, n: number) {
   update((p) => ({ ...p, sprint: { ...(p.sprint ?? {}), metas: { ...(p.sprint?.metas ?? {}), [id]: n } } }));

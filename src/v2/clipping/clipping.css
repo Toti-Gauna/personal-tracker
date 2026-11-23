@@ -1,0 +1,137 @@
+/* ——— Clipping 2.0 (tanda 3.3) · todo cuelga de `.cl-…` ——— */
+
+/* El hero del centro: lo cobrado, el anillo, el ritmo y los clips de hoy. */
+.cl-hero.s-tarjeta, .cl-resumen.s-tarjeta { display: grid; gap: var(--sp-4); padding: var(--sp-4); }
+.cl-hero-fila { display: flex; align-items: center; justify-content: space-between; gap: var(--sp-4); }
+.cl-hoy { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--sp-3); padding-top: var(--sp-4); border-top: 1px solid var(--raya); }
+.cl-tres { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); gap: var(--sp-3); }
+.cl-tres { align-items: end; }
+.cl-tres .s-dato-valor b { overflow-wrap: anywhere; }
+
+/* Un anillo del kit como dibujo (`data-grafico`): el envoltorio no pinta nada. */
+.cl-anillo { display: contents; }
+
+/* Los cuatro indicadores del mes. */
+.cl-ind.s-tarjeta { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--sp-5) var(--sp-4); padding: var(--sp-4); }
+.cl-ind-uno { display: grid; gap: var(--sp-1); align-content: start; min-width: 0; }
+.cl-ind-uno .t-nota { color: var(--texto-2); }
+
+/* Valores largos en una fila: se cortan antes de empujar el título. */
+.cl .s-fila-valor { max-width: 52%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.cl .s-fila-valor .pt-valor { display: inline-flex; align-items: center; }
+
+/* La compuerta: sus chequeos con un ícono (hecho, falta, sin datos) además del texto. */
+.cl-chequeos { list-style: none; display: grid; margin: var(--sp-3) 0; padding: 0; }
+.cl-chequeos > li { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: start; gap: var(--sp-3); padding: var(--sp-3) 0; }
+.cl-chequeos > li + li { border-top: 1px solid var(--raya); }
+.cl-chequeos > li > .icono { margin-top: 2px; color: var(--texto-2); }
+.cl-chequeos > li.ok > .icono { color: var(--trazo-texto); }
+.cl-chequeos > li > span { display: grid; gap: 2px; }
+.cl-chequeos > li > b { text-align: right; max-width: 12ch; overflow-wrap: anywhere; }
+
+/* Texto de las hojas. */
+.cl-mes { display: grid; gap: var(--sp-3); }
+.cl-mes p { margin: 0; }
+.cl-lista { margin: 0; padding: 0 0 0 var(--sp-5); display: grid; gap: var(--sp-2); font: 400 var(--t-15)/1.4 var(--font-text); }
+.cl-plataformas { list-style: none; margin: 0 0 var(--sp-3); padding: 0; display: grid; }
+.cl-plataformas > li { display: grid; gap: 2px; padding: var(--sp-3) 0; }
+.cl-plataformas > li + li { border-top: 1px solid var(--raya); }
+.cl-plataformas > li > span { color: var(--texto-2); }
+
+/* Los meses de una fase: un paso a paso con el actual marcado. */
+.cl-meses { list-style: none; margin: 0; padding: 0; display: grid; }
+.cl-meses > li { display: grid; grid-template-columns: 28px minmax(0, 1fr) auto; align-items: start; gap: var(--sp-3); padding: var(--sp-3) 0; }
+.cl-meses > li + li { border-top: 1px solid var(--raya); }
+.cl-mes-n { display: grid; place-items: center; width: 28px; height: 28px; border-radius: 50%; box-shadow: inset 0 0 0 1.5px var(--raya-fuerte); color: var(--texto-2); font-size: var(--t-13); }
+.cl-meses > li.hecho .cl-mes-n { background: var(--trazo); color: var(--sobre-trazo); box-shadow: none; }
+.cl-meses > li.actual .cl-mes-n { box-shadow: inset 0 0 0 2px var(--trazo); color: var(--trazo-texto); }
+.cl-mes-t { display: grid; gap: 2px; min-width: 0; }
+.cl-mes-t b { font-weight: 500; }
+.cl-mes-t small { color: var(--texto-2); }
+.cl-criterios { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--sp-3); }
+.cl-criterios > li { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: var(--sp-3); align-items: start; font: 400 var(--t-15)/1.4 var(--font-text); }
+.cl-criterios > li > .icono { margin-top: 2px; color: var(--texto-2); }
+.cl-hitos { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--sp-2); }
+.cl-hitos > li { display: grid; grid-template-columns: 56px minmax(0, 1fr); gap: var(--sp-3); font: 400 var(--t-15)/1.4 var(--font-text); }
+.cl-hitos > li > .t-dato { color: var(--texto-2); font-size: var(--t-13); }
+.cl-hitos > li.hecho { color: var(--texto-2); }
+
+/* Formularios (en hojas). */
+.cl-form { display: grid; gap: var(--sp-4); padding-bottom: var(--sp-4); }
+.cl-form > .k-boton, .cl-form .k-boton-con-motivo { justify-self: stretch; }
+.cl-campo { display: grid; gap: 6px; min-width: 0; }
+.cl-dos { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--sp-3); }
+/* Un campo en media columna: su pista no puede ser más ancha que la columna (el `input` trae su ancho). */
+.cl-dos .k-campo { grid-template-columns: minmax(0, 1fr); }
+.cl-extra { display: grid; gap: var(--sp-3); margin: 0; padding: var(--sp-4) 0 0; border: 0; border-top: 1px solid var(--raya); min-width: 0; }
+.cl-extra > legend { padding: 0; }
+.cl-acciones { display: grid; gap: var(--sp-2); justify-items: stretch; }
+.cl-acciones > .k-boton.fantasma { justify-self: center; }
+.cl-errores { list-style: none; display: grid; gap: var(--sp-1); margin: 0; padding: var(--sp-3); border-radius: var(--r-m); background: var(--capa-2); font: 400 var(--t-13)/1.4 var(--font-text); color: var(--texto); }
+.cl-errores > li::before { content: '– '; color: var(--texto-2); }
+.cl-chips { display: flex; flex-wrap: wrap; gap: var(--sp-2); }
+
+/* Campañas: qué seguir y qué dejar. */
+.cl-ranking { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--sp-4); }
+.cl-ranking > div { display: grid; gap: var(--sp-2); align-content: start; min-width: 0; }
+.cl-ranking .t-rotulo { display: inline-flex; align-items: center; gap: 4px; }
+.cl-ranking b { font-weight: 500; overflow-wrap: anywhere; }
+
+/* Retainers: el embudo y los contadores de la semana. */
+.cl-embudo { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--sp-4); }
+.cl-embudo > li { display: grid; gap: var(--sp-2); }
+.cl-embudo-cab { display: flex; align-items: baseline; justify-content: space-between; gap: var(--sp-3); }
+.cl-embudo-cab .t-dato { color: var(--texto-2); }
+.cl-semana { display: grid; gap: var(--sp-4); padding: var(--sp-4); border-radius: var(--r-m); }
+
+/* Métricas. */
+.cl-grafico.s-tarjeta { display: grid; gap: var(--sp-4); padding: var(--sp-4); }
+.cl-grafico .t-nota, .cl-leyenda { margin: 0; color: var(--texto-2); }
+.cl-camino.s-tarjeta { display: flex; align-items: center; gap: var(--sp-4); padding: var(--sp-4); }
+.cl-camino-texto { display: grid; gap: var(--sp-2); min-width: 0; }
+.cl-camino-texto p { margin: 0; }
+.cl-camino-texto .t-nota { color: var(--texto-2); }
+.cl-filas-grafico { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--sp-4); }
+.cl-filas-grafico > li { display: grid; gap: 6px; }
+.cl-fg-cab { display: flex; align-items: baseline; justify-content: space-between; gap: var(--sp-3); }
+.cl-fg-cab b { font-weight: 500; min-width: 0; overflow-wrap: anywhere; }
+.cl-fg-cab .t-dato { flex: none; color: var(--texto-2); }
+.cl-pasa { display: inline-flex; align-items: center; gap: 4px; color: var(--texto); font-weight: 550; }
+.cl-granja { display: grid; gap: var(--sp-3); }
+.cl-granja-pie { margin: 0; color: var(--texto-2); }
+
+/* Barras como dibujo: la línea de la meta es de esta pieza y las etiquetas no se parten. */
+.cl-barras { --cl-pie: 22px; position: relative; }
+.cl-barras .es-meta { display: none; }
+.cl-barras-meta { position: absolute; left: 0; right: 0; height: 0; border-top: 1px dashed var(--texto-2); pointer-events: none; }
+.cl .es-barra-et { white-space: nowrap; }
+.cl-hoja-grafico { display: grid; gap: var(--sp-4); }
+.cl-hoja-grafico .t-nota, .cl-hoja-grafico p { margin: 0; }
+
+/* La pista con marcas. */
+.cl-pista { position: relative; height: 8px; border-radius: var(--r-pildora); background: var(--raya-fuerte); margin: var(--sp-1) 0; }
+.cl-pista-valor { position: absolute; inset: 0 auto 0 0; border-radius: inherit; background: var(--area, var(--texto)); transition: width var(--dur-4) var(--curva-salida); }
+.cl-pista-marca { position: absolute; top: -5px; bottom: -5px; width: 0; margin-left: -1px; border-left: 2px solid var(--texto); border-radius: 1px; }
+.cl-pista-marca.piso { top: -3px; bottom: -3px; border-left: 1.5px dashed var(--texto-2); }
+
+/* La actividad: una semana por columna, un día por fila. */
+.cl-calor { --cl-c: var(--a-eclipse); display: grid; grid-template-columns: 14px minmax(0, 1fr); gap: var(--sp-2); margin: 0; }
+.cl-calor-dias { display: grid; grid-template-rows: repeat(7, 1fr); gap: 3px; }
+.cl-calor-dias > b { display: grid; place-items: center; color: var(--texto-3); line-height: 1; font-weight: 500; }
+.cl-calor-grilla { display: grid; grid-auto-flow: column; grid-template-rows: repeat(7, 1fr); grid-auto-columns: minmax(0, 1fr); gap: 3px; }
+.cl-calor-grilla > i { aspect-ratio: 1; border-radius: 3px; }
+.cl-n0 { background: color-mix(in oklab, var(--texto) 7%, transparent); }
+.cl-n1 { background: color-mix(in oklab, var(--cl-c) 34%, var(--capa-2)); }
+.cl-n2 { background: color-mix(in oklab, var(--cl-c) 66%, var(--capa-2)); }
+.cl-n3 { background: var(--cl-c); }
+.cl-calor-grilla > i.futuro { background: none; box-shadow: inset 0 0 0 1px color-mix(in oklab, var(--texto) 9%, transparent); }
+.cl-calor-grilla > i.hoy { box-shadow: 0 0 0 1.5px var(--capa-1), 0 0 0 3px var(--texto); position: relative; z-index: 1; }
+.cl-calor-leyenda { grid-column: 2; display: flex; align-items: center; justify-content: flex-end; gap: 4px; font: 400 var(--t-11)/1 var(--font-mono); color: var(--texto-3); }
+.cl-calor-leyenda > i { width: 10px; height: 10px; border-radius: 2px; }
+
+/* La curva de la semana a semana va en el color del Clipping. */
+.cl .en-curva-g0, .cl .en-curva-g1 { stop-color: var(--a-eclipse); }
+
+@media (prefers-reduced-motion: reduce) {
+  .cl-pista-valor { transition: none; }
+}

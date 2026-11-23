@@ -34,9 +34,10 @@ export function restaurarFila(f: FilaClip) {
   update((c) => ({ ...c, registro: [...c.registro.filter((x) => x.id !== f.id), f].sort((a, b) => a.fecha.localeCompare(b.fecha)) }));
 }
 
-export function guardarCuenta(x: Omit<Cuenta, 'id'> & { id?: string }): string {
+/** Guarda (o crea). Con `exacto`, lo deja tal cual viene, sin mezclar con lo que había: es lo que usa Deshacer. */
+export function guardarCuenta(x: Omit<Cuenta, 'id'> & { id?: string }, exacto = false): string {
   const id = x.id ?? `c${newId()}`;
-  update((c) => ({ ...c, cuentas: c.cuentas.some((y) => y.id === id) ? c.cuentas.map((y) => (y.id === id ? limpio({ ...y, ...x, id }) : y)) : [...c.cuentas, limpio({ ...x, id })] }));
+  update((c) => ({ ...c, cuentas: c.cuentas.some((y) => y.id === id) ? c.cuentas.map((y) => (y.id === id ? limpio(exacto ? { ...x, id } : { ...y, ...x, id }) : y)) : [...c.cuentas, limpio({ ...x, id })] }));
   return id;
 }
 
@@ -44,9 +45,10 @@ export function borrarCuenta(id: string) {
   update((c) => ({ ...c, cuentas: c.cuentas.filter((y) => y.id !== id) }));
 }
 
-export function guardarCampana(x: Omit<Campana, 'id'> & { id?: string }): string {
+/** Guarda (o crea). Con `exacto`, lo deja tal cual viene, sin mezclar con lo que había: es lo que usa Deshacer. */
+export function guardarCampana(x: Omit<Campana, 'id'> & { id?: string }, exacto = false): string {
   const id = x.id ?? `k${newId()}`;
-  update((c) => ({ ...c, campanas: c.campanas.some((y) => y.id === id) ? c.campanas.map((y) => (y.id === id ? limpio({ ...y, ...x, id }) : y)) : [...c.campanas, limpio({ ...x, id })] }));
+  update((c) => ({ ...c, campanas: c.campanas.some((y) => y.id === id) ? c.campanas.map((y) => (y.id === id ? limpio(exacto ? { ...x, id } : { ...y, ...x, id }) : y)) : [...c.campanas, limpio({ ...x, id })] }));
   return id;
 }
 
@@ -54,9 +56,10 @@ export function borrarCampana(id: string) {
   update((c) => ({ ...c, campanas: c.campanas.filter((y) => y.id !== id) }));
 }
 
-export function guardarRetainer(x: Omit<Retainer, 'id'> & { id?: string }): string {
+/** Guarda (o crea). Con `exacto`, lo deja tal cual viene, sin mezclar con lo que había: es lo que usa Deshacer. */
+export function guardarRetainer(x: Omit<Retainer, 'id'> & { id?: string }, exacto = false): string {
   const id = x.id ?? `t${newId()}`;
-  update((c) => ({ ...c, retainers: c.retainers.some((y) => y.id === id) ? c.retainers.map((y) => (y.id === id ? limpio({ ...y, ...x, id }) : y)) : [...c.retainers, limpio({ ...x, id })] }));
+  update((c) => ({ ...c, retainers: c.retainers.some((y) => y.id === id) ? c.retainers.map((y) => (y.id === id ? limpio(exacto ? { ...x, id } : { ...y, ...x, id }) : y)) : [...c.retainers, limpio({ ...x, id })] }));
   return id;
 }
 

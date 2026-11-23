@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { BUILTIN_PRESETS, DEFAULT_PRESETS } from './defaults';
 import { dayJson } from './export';
-import { extend, focusIndex, pause, restNow, resume, segRemaining, startFocus, tick } from './focus';
+import { extend, focusIndex, minutosHechos, pause, restNow, resume, segRemaining, startFocus, tick } from './focus';
 import { acumulado, mejoraDia } from './mejora';
 import { fitPreset, focusMinutes, planLabel, totalMinutes } from './pomodoro';
 import { buildBlocks, currentBlock, planDay, remainingMin } from './schedule';
@@ -82,6 +82,16 @@ describe('motor del foco', () => {
     expect(s.segs[0].min).toBe(20);
     s = extend(s, 10, t0 + 30 * M);
     expect(s.segs[s.i]).toEqual({ type: 'focus', min: 10 });
+    // Un foco nuevo de un tramo: lo de antes ya se guardó al terminar el bloque y no se vuelve a contar.
+    expect(s.segs).toHaveLength(1);
+    expect(minutosHechos(s, t0 + 36 * M)).toBe(6);
+  });
+
+  it('minutos hechos: los tramos de foco completos y lo que va del actual (los descansos no cuentan)', () => {
+    let s = startFocus('d', 'k', 'p', segs, t0);
+    expect(minutosHechos(s, t0 + 12 * M)).toBe(12);
+    s = restNow(s, t0 + 20 * M);
+    expect(minutosHechos(s, t0 + 23 * M)).toBe(20);
   });
 });
 

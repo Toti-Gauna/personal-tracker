@@ -1,0 +1,3 @@
+/* Trazo · lo del resolutor: la pantalla mientras carga y los botones de una pantalla que falló. */
+html[data-ui='v2'] .v2-carga { min-height: 60vh; }
+.v2-fallo-acciones { display: flex; flex-wrap: wrap; justify-content: center; gap: var(--sp-2); }

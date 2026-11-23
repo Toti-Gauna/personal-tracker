@@ -196,6 +196,10 @@ describe('ola 23 · la planilla en el estado', () => {
     expect(s2.clipping.registro[0]).toMatchObject({ clips: 3, views: 10 });
     expect(s2.clipping.cuentas).toEqual([]);
     expect(migrarClipping(null)).toEqual(emptyClipping());
+    // Una planilla con números escritos como texto: quedan números (sumar "12.50" + "3" daba "12.503").
+    const m = migrarClipping({ registro: [{ id: 'a', fecha: '2026-11-20', clips: '3', views: '1000', cobrado: '12.50', aprobados: 'x' }] });
+    expect(m.registro[0]).toMatchObject({ clips: 3, views: 1000, cobrado: 12.5 });
+    expect(m.registro[0].aprobados).toBeUndefined();
   });
 
   it('registrar acepta fechas pasadas, ordena por fecha y recuerda la última cuenta y campaña', () => {

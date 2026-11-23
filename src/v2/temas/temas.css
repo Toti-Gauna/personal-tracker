@@ -1,0 +1,148 @@
+/* ——— Temas 2.0 (tanda 3.3): roadmaps, tramos y capítulos de Matemática, exámenes, simulacro y un tema flojo ——— */
+
+/* Lo que se repite. */
+.tm .tm-aca.s-tarjeta { display: grid; gap: var(--sp-3); padding: var(--sp-5); }
+.tm .tm-aca p, .tm .tm-aca b { margin: 0; }
+.tm-sr { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap; border: 0; }
+.tm-datos { display: flex; gap: var(--sp-6); flex-wrap: wrap; }
+.tm-datos.tres { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--sp-3); margin-top: var(--sp-4); }
+.tm-datos.tres .t-rotulo { overflow-wrap: anywhere; }
+.tm-acciones { display: grid; gap: var(--sp-2); margin-top: var(--sp-2); }
+.tm-leyenda { margin: var(--sp-2) 0 0; color: var(--texto-2); }
+.tm-sub { margin: var(--sp-5) 0 var(--sp-2); color: var(--texto-2); }
+.tm-uso { margin: 0 0 var(--sp-3); }
+.tm-filtro { margin: 0 0 var(--sp-4); }
+
+/* Una lista de filas con texto en la hoja (materiales, bloques, roles, pasos). */
+.tm-mats, .tm-bloques, .tm-roles, .tm-pasos, .tm-tarjetas, .tm-arreglo { list-style: none; margin: 0 0 var(--sp-4); padding: 0 var(--sp-4); }
+.tm-mats > li, .tm-bloques > li, .tm-roles > li, .tm-tarjetas > li { display: grid; gap: var(--sp-1); padding: var(--sp-3) 0; }
+.tm-mats > li + li, .tm-bloques > li + li, .tm-roles > li + li, .tm-pasos > li + li, .tm-tarjetas > li + li, .tm-arreglo > li + li { border-top: 1px solid var(--raya); }
+.tm-mats, .tm-arreglo { margin-bottom: 0; }
+.tm-mats > li > *, .tm-bloques > li > *, .tm-roles > li > *, .tm-tarjetas > li > * { margin: 0; }
+.tm-temas { list-style: none; margin: var(--sp-1) 0 0; padding: 0; display: grid; gap: var(--sp-1); }
+.tm-temas > li::before { content: '–'; margin-right: 6px; color: var(--texto-3); }
+.tm-pasos > li { display: grid; grid-template-columns: 28px minmax(0, 1fr); gap: var(--sp-3); padding: var(--sp-3) 0; align-items: baseline; }
+.tm-pasos > li > b { color: var(--texto-2); }
+.tm-como { display: grid; gap: var(--sp-2); }
+.tm-como > p { margin: 0; }
+.tm-como > h3 { margin: var(--sp-4) 0 0; color: var(--texto-2); }
+.tm-como > .capa-1 { margin: 0; }
+
+/* El semáforo: el umbral va en palabras; el punto solo acompaña. */
+.tm-semaforo { list-style: none; margin: 0 0 var(--sp-4); padding: 0 var(--sp-4); }
+.tm-semaforo > li { display: grid; grid-template-columns: 12px minmax(0, 1fr); gap: var(--sp-3); padding: var(--sp-3) 0; align-items: start; }
+.tm-semaforo > li + li { border-top: 1px solid var(--raya); }
+.tm-semaforo > li > span { display: grid; gap: 2px; }
+.tm-semaforo > li > i { width: 12px; height: 12px; margin-top: 5px; border-radius: 50%; background: var(--a-salud); }
+.tm-semaforo > li.amarillo > i { background: var(--a-economia); }
+.tm-semaforo > li.rojo > i { background: var(--a-rutina); }
+
+/* Roadmaps. */
+.tm-rutas { display: grid; gap: var(--sp-3); }
+.tm-ruta .es-linea-ahora { overflow-wrap: anywhere; }
+.tm-perfiles { display: flex; align-items: center; gap: var(--sp-3); flex-wrap: wrap; }
+.tm-perfiles > span { display: grid; gap: 2px; min-width: 0; }
+.tm-objetivo { margin: 0 0 var(--sp-3); color: var(--texto-2); }
+.tm-fase-nota { display: grid; gap: 2px; }
+.tm-fase-nota > span:last-child { color: var(--texto-3); }
+
+/* El tramo, el capítulo y el tema comparten la tarjeta de arriba. */
+.tm-puerta.s-tarjeta { display: grid; gap: var(--sp-3); justify-items: start; margin-top: var(--sp-6); padding: var(--sp-4); }
+.tm-puerta p { margin: 0; }
+.tm-importar { display: grid; gap: var(--sp-4); }
+.tm-importar > p { margin: 0; }
+
+/* Exámenes. */
+.tm-listo.s-tarjeta { display: flex; align-items: center; gap: var(--sp-4); padding: var(--sp-4); }
+.tm-listo-texto { display: grid; gap: var(--sp-1); min-width: 0; }
+.tm-listo-texto > * { margin: 0; }
+.tm-grafico { padding: var(--sp-4); }
+.tm-scroll { overflow-x: auto; padding-inline: var(--sp-3); scrollbar-width: thin; }
+.tm-errores { border-collapse: separate; border-spacing: 3px; width: 100%; min-width: max-content; font: 400 var(--t-11)/1 var(--font-mono); color: var(--texto-2); }
+.tm-errores th { padding: var(--sp-1) var(--sp-1); font-weight: 500; text-align: center; white-space: nowrap; }
+.tm-errores th[scope='row'] { position: sticky; left: 0; z-index: 1; padding-right: var(--sp-2); text-align: left; background: var(--capa-1); color: var(--texto); }
+.tm-errores td { min-width: 28px; padding: var(--sp-2) 0; border-radius: 4px; text-align: center; color: var(--texto); background: color-mix(in oklab, var(--texto) var(--i, 0%), transparent); box-shadow: inset 0 0 0 1px var(--raya); }
+.tm-errores tr.total td { background: none; box-shadow: none; font-weight: 600; }
+.tm-errores tr.total th { color: var(--texto-2); }
+.tm-simul { list-style: none; margin: 0; padding: 0 var(--sp-4); }
+.tm-simul > li { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr) 28px; align-items: center; gap: var(--sp-3); min-height: var(--toque); }
+.tm-simul > li + li { border-top: 1px solid var(--raya); }
+.tm-simul > li > .t-dato { text-align: right; }
+
+/* La hoja del simulacro. */
+.tm-sim-cab.s-tarjeta { display: grid; gap: var(--sp-4); padding: var(--sp-4); }
+.tm-sim-cab .tm-datos.tres { margin-top: 0; }
+.tm-solo-imprimir { display: none; }
+.tm-hoja { list-style: none; margin: var(--sp-5) 0 0; padding: 0 var(--sp-4); counter-reset: ej; }
+.tm-hoja > li { display: grid; grid-template-columns: 28px minmax(0, 1fr); gap: var(--sp-3); padding: var(--sp-5) 0; align-items: baseline; break-inside: avoid; }
+.tm-hoja > li + li { border-top: 1px solid var(--raya); }
+.tm-hoja > li > .t-dato { color: var(--texto-2); }
+.tm-hoja > li > .t-cuerpo { overflow-wrap: anywhere; }
+@media print {
+  html[data-ui='v2'] .b2, html[data-ui='v2'] .m-barra, html[data-ui='v2'] .c-avisos, html[data-ui='v2'] .tm-no-imprimir { display: none !important; }
+  html[data-ui='v2'] .tm-sim { padding: 0; background: white; color: black; }
+  html[data-ui='v2'] .tm-sim .tm-solo-imprimir { display: block; color: black; }
+  html[data-ui='v2'] .tm-sim .tm-hoja { background: none; box-shadow: none; padding: 0; }
+  html[data-ui='v2'] .tm-sim .tm-hoja > li { border-color: black; }
+  html[data-ui='v2'] .tm-sim .tm-hoja .t-dato, html[data-ui='v2'] .tm-sim .tm-hoja .t-cuerpo { color: black; }
+}
+
+/* Un tema flojo. */
+.tm-hero-fila { display: flex; align-items: center; gap: var(--sp-4); }
+.tm-hero-texto { display: grid; gap: var(--sp-1); min-width: 0; }
+.tm-arreglo > li { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: var(--sp-3); padding: var(--sp-3) 0; align-items: baseline; }
+.tm-arreglo > li > .t-dato { color: var(--texto-2); }
+.tm-ideas { padding: var(--sp-2) var(--sp-4) var(--sp-4); }
+.tm-ideas > ul { list-style: none; margin: 0; padding: 0; }
+.tm-ideas > ul > li { display: flex; align-items: center; justify-content: space-between; gap: var(--sp-3); min-height: var(--toque); padding: var(--sp-2) 0; }
+.tm-ideas > ul > li + li { border-top: 1px solid var(--raya); }
+.tm-idea-texto { display: grid; gap: 2px; min-width: 0; }
+.tm-ideas > ul > li.olvidada .t-cuerpo { font-weight: 650; }
+.tm-idea-texto small { color: var(--texto-2); }
+.tm-puntitos { display: inline-flex; gap: var(--sp-2); flex: none; }
+.tm-puntitos > i { width: 12px; height: 12px; border-radius: 50%; box-sizing: border-box; }
+.tm-puntitos > i.si { background: var(--texto); }
+.tm-puntitos > i.no { box-shadow: inset 0 0 0 2px var(--texto); background: none; }
+.tm-puntitos > i.nada { width: 6px; height: 6px; margin: 3px; background: var(--raya-fuerte); }
+.tm-curva { margin: 0; padding: var(--sp-3) var(--sp-3) var(--sp-2); }
+.tm-curva svg { display: block; width: 100%; height: auto; overflow: visible; }
+.tm-futuro { fill: color-mix(in oklab, var(--texto) 5%, transparent); }
+.tm-grilla { stroke: var(--raya); stroke-width: 1; }
+.tm-base { stroke: var(--raya-fuerte); stroke-width: 1; }
+.tm-tope { stroke: var(--texto-3); stroke-width: 1; stroke-dasharray: 4 4; }
+.tm-eje { fill: var(--texto-2); font: 400 var(--t-11)/1 var(--font-mono); }
+.tm-linea-curva { fill: none; stroke: var(--texto); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.tm-punto { fill: var(--capa-1); stroke: var(--texto); stroke-width: 2; }
+.tm-punto.ultimo { fill: var(--trazo); stroke: var(--capa-1); stroke-width: 2; }
+.tm-linea { list-style: none; margin: 0; padding: var(--sp-2) var(--sp-4); }
+.tm-linea > li { position: relative; display: grid; grid-template-columns: 52px 14px minmax(0, 1fr); gap: var(--sp-3); padding: var(--sp-3) 0; align-items: start; }
+.tm-linea > li > .t-rotulo { padding-top: 3px; color: var(--texto-2); }
+.tm-linea > li > i { position: relative; z-index: 1; width: 10px; height: 10px; margin: 6px 2px 0; border-radius: 50%; background: var(--texto); }
+.tm-linea > li::before { content: ''; position: absolute; left: calc(52px + var(--sp-3) + 6px); top: 0; bottom: 0; width: 2px; background: var(--raya-fuerte); }
+.tm-linea > li:first-child::before { top: 20px; }
+.tm-linea > li:last-child::before { bottom: calc(100% - 20px); }
+.tm-linea > li.hueco > i { background: var(--capa-1); box-shadow: inset 0 0 0 2px var(--texto-2); }
+.tm-linea > li > div { display: grid; gap: 2px; min-width: 0; }
+.tm-linea-t { display: flex; align-items: baseline; justify-content: space-between; gap: var(--sp-3); }
+.tm-linea-t b { font-weight: 500; }
+.tm-linea > li > div > .t-nota { color: var(--texto-2); }
+.tm-linea > li.hueco .tm-linea-t .t-dato { color: var(--texto-2); }
+
+/* Las barras de puntaje: de 0 a 100, con el corte punteado. */
+.tm-barras { position: relative; display: grid; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); gap: var(--sp-2); align-items: end; margin: 0; --alto: 104px; }
+.tm-corte { position: absolute; left: 0; right: 0; bottom: calc(24px + var(--alto) * var(--corte)); height: 0; border-top: 1px dashed var(--texto-3); pointer-events: none; z-index: 1; }
+.tm-barra { display: grid; justify-items: center; gap: 4px; }
+.tm-barra > .t-dato { font-size: var(--t-11); color: var(--texto-2); }
+.tm-barra > .t-rotulo { color: var(--texto-2); }
+.tm-barra.ok > .t-rotulo { color: var(--texto); }
+.tm-col { display: flex; align-items: flex-end; width: 100%; height: var(--alto); }
+.tm-col > span { width: 100%; min-height: 3px; border-radius: 4px 4px 2px 2px; background: color-mix(in oklab, var(--texto) 34%, transparent); transition: height var(--dur-3) var(--curva-salida); }
+.tm-barra.ok .tm-col > span { background: var(--trazo); }
+@media (prefers-reduced-motion: reduce) { .tm-col > span { transition: none; } }
+.tm-datos.dos { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--sp-3); margin-top: 0; }
+.tm-avance { display: grid; gap: var(--sp-2); }
+.tm-avance > .t-nota { margin: 0; color: var(--texto-2); }
+
+.tm-simul + .pt-acciones { margin-top: var(--sp-3); }
+.tm-col { justify-content: center; }
+.tm-col > span { max-width: 56px; }

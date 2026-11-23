@@ -1,0 +1,147 @@
+/* Trazo 2.0 · superficies, lectura, hoja, avisos y diálogo (tanda 1.5). */
+
+/* ——— Tarjeta y fila ——— */
+.s-tarjeta { display: block; padding: var(--sp-4); color: var(--texto); text-decoration: none; }
+.s-tarjeta.capa-heroe { padding: var(--sp-5); }
+.s-tocable { cursor: pointer; transition: transform var(--dur-1) var(--curva-salida), background-color var(--dur-2); -webkit-tap-highlight-color: transparent; }
+.s-tocable:active { transform: scale(0.985); }
+/* El link estirado de una tarjeta con nombre: cubre toda la tarjeta (y lo que tenga posición adentro) y lleva el anillo de foco. */
+.s-con-enlace { position: relative; }
+.s-tarjeta-enlace { position: absolute; inset: 0; z-index: 1; border-radius: inherit; }
+/* Por dentro: el héroe recorta lo que sale de su borde (overflow: hidden) y el anillo de afuera no se vería. */
+.v2 .s-tarjeta-enlace:focus-visible, html[data-ui='v2'] .s-tarjeta-enlace:focus-visible { outline-offset: -3px; border-radius: inherit; }
+.s-fila { display: flex; align-items: center; gap: var(--sp-3); width: 100%; min-height: 56px; padding: var(--sp-2) 0; color: var(--texto); text-decoration: none; text-align: left; }
+.s-tarjeta > .s-fila + .s-fila, .s-lista > .s-fila + .s-fila { border-top: 1px solid var(--raya); }
+.s-lista { padding: 0 var(--sp-4); }
+.s-fila-icono { flex: none; display: grid; place-items: center; width: 36px; height: 36px; border-radius: var(--r-s); background: var(--capa-2); color: var(--texto); box-shadow: var(--brillo); }
+.s-fila-texto { flex: 1; display: grid; gap: 2px; min-width: 0; }
+.s-fila-texto b { font: 500 var(--t-17)/1.3 var(--font-text); }
+.s-fila-texto small { font: 400 var(--t-13)/1.35 var(--font-text); color: var(--texto-2); }
+.s-fila-valor { color: var(--texto-2); font-size: var(--t-15); }
+.s-chevron { color: var(--texto-3); }
+
+/* ——— Dato ——— */
+.s-dato { display: grid; gap: 4px; align-content: start; }
+.s-dato-valor { display: flex; align-items: baseline; gap: 4px; }
+.s-dato-valor b { font-size: var(--t-24); font-weight: 500; color: var(--texto); }
+.s-dato.grande .s-dato-valor b { font-size: var(--t-44); }
+.s-dato-unidad { font: 400 var(--t-15)/1 var(--font-text); color: var(--texto-2); }
+.s-delta { display: inline-flex; align-items: center; gap: 4px; font: 400 var(--t-13)/1.3 var(--font-text); color: var(--texto-2); }
+
+/* ——— Estado (la forma dice el tono) ——— */
+.s-estado { flex: none; display: inline-flex; align-items: center; gap: 6px; height: 28px; padding: 0 10px 0 8px; border-radius: var(--r-pildora); font: 550 var(--t-13)/1 var(--font-text); white-space: nowrap; color: var(--texto-2); box-shadow: inset 0 0 0 1px var(--raya-fuerte); }
+.s-estado.atencion { background: var(--texto); color: var(--capa-0); box-shadow: none; }
+.s-estado.critico { background: var(--e-critico); color: var(--sobre-critico); box-shadow: none; }
+.s-estado.hecho { background: var(--trazo); color: var(--sobre-trazo); box-shadow: none; border-radius: 0; clip-path: var(--bisel); padding: 0 14px 0 12px; }
+
+/* ——— Anillo ——— */
+.s-anillo { position: relative; flex: none; display: grid; place-items: center; }
+.s-anillo svg { position: absolute; inset: 0; overflow: visible; }
+.s-anillo circle { fill: none; }
+.s-anillo-fondo { stroke: var(--raya-fuerte); }
+.s-anillo-valor { stroke: var(--area, var(--texto)); stroke-linecap: round; transition: stroke-dashoffset var(--dur-4) var(--curva-salida), stroke var(--dur-3); }
+.s-anillo.completo .s-anillo-valor { stroke: var(--trazo); }
+.s-anillo-centro { position: relative; display: grid; justify-items: center; gap: 2px; text-align: center; }
+.s-anillo-centro b { font-weight: 500; color: var(--texto); line-height: 1; }
+.s-anillo-centro small { font: 500 var(--t-11)/1.2 var(--font-mono); letter-spacing: 0.06em; text-transform: uppercase; color: var(--texto-2); }
+
+/* ——— Ritmo ——— */
+.s-ritmo { display: grid; gap: var(--sp-2); }
+.s-ritmo-riel { position: relative; height: 12px; border-radius: var(--r-pildora); background: var(--raya-fuerte); }
+.s-ritmo-hecho { position: absolute; inset: 0 auto 0 0; border-radius: inherit; background: var(--area, var(--texto)); transition: width var(--dur-4) var(--curva-salida); }
+.s-ritmo.completo .s-ritmo-hecho { background: var(--trazo); }
+/* La marca fantasma: dónde deberías estar según el tiempo. */
+.s-ritmo-fantasma { position: absolute; top: -5px; bottom: -5px; width: 0; transform: translateX(-1px); border-left: 2px dashed var(--texto); transition: left var(--dur-4) var(--curva-salida); }
+.s-ritmo-fantasma::before { content: ''; position: absolute; top: -5px; left: -6px; border: 5px solid transparent; border-top-color: var(--texto); border-bottom: 0; }
+.s-ritmo-pie { display: flex; justify-content: space-between; gap: var(--sp-3); font: 400 var(--t-13)/1.3 var(--font-text); color: var(--texto-2); }
+.s-ritmo-pie b { color: var(--texto); font-weight: 600; }
+.s-ritmo-tiempo { display: inline-flex; align-items: center; gap: 6px; margin-left: auto; }
+.s-ritmo-tiempo i { width: 0; height: 12px; border-left: 2px dashed var(--texto-2); }
+.s-ritmo.atras .s-ritmo-frase { color: var(--texto); font-weight: 550; }
+
+/* ——— Barra ——— */
+.s-barra { height: 6px; border-radius: var(--r-pildora); background: var(--raya-fuerte); overflow: hidden; }
+.s-barra span { display: block; height: 100%; border-radius: inherit; background: var(--area, var(--texto)); transition: width var(--dur-4) var(--curva-salida); }
+.s-barra.completo span { background: var(--trazo); }
+
+/* ——— Esqueletos ——— */
+.s-esqueleto { display: block; border-radius: 6px; background: linear-gradient(90deg, var(--capa-2) 0%, var(--capa-3) 40%, var(--capa-2) 80%); background-size: 300% 100%; animation: s-respira 1.4s ease-in-out infinite; }
+.s-esqueleto.redondo { border-radius: 50%; }
+@keyframes s-respira { from { background-position: 100% 0; } to { background-position: -50% 0; } }
+.s-esq-tarjeta { display: flex; gap: var(--sp-4); align-items: center; }
+.s-esq-tarjeta > div { flex: 1; display: grid; gap: var(--sp-2); }
+.s-esq-lista { padding: var(--sp-2) var(--sp-4); }
+.s-esq-lista > div { display: flex; gap: var(--sp-3); align-items: center; min-height: 56px; }
+.s-esq-lista > div + div { border-top: 1px solid var(--raya); }
+.s-esq-lista > div > div { flex: 1; display: grid; gap: 6px; }
+.s-aparece { animation: s-aparece var(--dur-3) var(--curva-salida) both; }
+@keyframes s-aparece { from { opacity: 0; transform: translateY(4px); } }
+
+/* ——— Vacío ——— */
+.s-vacio { display: grid; justify-items: center; gap: var(--sp-2); padding: var(--sp-6) var(--sp-4); text-align: center; }
+.s-vacio .ilustracion { margin-bottom: var(--sp-2); }
+.s-vacio .t-nota { max-width: 30ch; }
+.s-vacio .k-boton { margin-top: var(--sp-2); }
+.s-vacio.compacto { grid-template-columns: auto minmax(0, 1fr); align-items: center; justify-items: start; gap: var(--sp-4); padding: var(--sp-4); text-align: left; }
+.s-vacio.compacto .ilustracion { width: 80px; height: 64px; margin: 0; }
+.s-vacio-texto { display: grid; justify-items: start; gap: var(--sp-1); min-width: 0; }
+.s-vacio-texto .t-nota { margin: 0; max-width: none; }
+.s-vacio.compacto .k-boton { margin-top: var(--sp-2); }
+
+/* ——— Pista ——— */
+.s-pista { position: relative; display: inline-flex; }
+.s-globo { position: absolute; bottom: calc(100% + 8px); left: 50%; z-index: var(--z-aviso); width: max-content; max-width: 220px; padding: 8px 10px; border-radius: var(--r-s); background: var(--texto); color: var(--capa-0); font: 500 var(--t-13)/1.3 var(--font-text); pointer-events: none; opacity: 0; transform: translate(-50%, 4px); transition: opacity var(--dur-2), transform var(--dur-2) var(--curva-salida); }
+.s-globo::after { content: ''; position: absolute; top: 100%; left: 50%; transform: translateX(-50%); border: 5px solid transparent; border-top-color: var(--texto); }
+.s-globo.ver { opacity: 1; transform: translate(-50%, 0); }
+
+/* ——— Hoja ——— */
+.h-velo { position: fixed; inset: 0; z-index: var(--z-hoja); display: flex; align-items: flex-end; justify-content: center; background: rgba(0, 0, 0, 0.5); color: var(--texto); font: 400 var(--t-15)/1.45 var(--font-text); animation: k-velo var(--dur-2) both; }
+.h-velo.saliendo { animation: h-velo-sale var(--dur-3) both; }
+@keyframes k-velo { from { opacity: 0; } }
+@keyframes h-velo-sale { to { opacity: 0; } }
+.h-velo.centro { z-index: var(--z-dialogo); align-items: center; padding: var(--margen); }
+.h-hoja { width: 100%; max-width: 560px; max-height: 86vh; display: flex; flex-direction: column; border-radius: var(--r-l) var(--r-l) 0 0; padding-bottom: env(safe-area-inset-bottom, 0px); outline: none; animation: h-sube var(--dur-3) var(--curva-salida) both; transition: max-height var(--dur-3) var(--curva-salida), transform var(--dur-3) var(--curva-salida); }
+.h-hoja.completa { height: 94vh; max-height: 94vh; }
+.h-hoja.arrastrando { transition: none; }
+.h-hoja.saliendo { animation: h-baja var(--dur-3) var(--curva-ida-vuelta) both; }
+@keyframes h-sube { from { transform: translateY(100%); } }
+@keyframes h-baja { to { transform: translateY(100%); } }
+.h-asa { display: grid; place-items: center; height: 24px; cursor: grab; touch-action: none; flex: none; }
+.h-asa i { width: 36px; height: 5px; border-radius: var(--r-pildora); background: var(--raya-fuerte); }
+.h-cabeza { display: flex; align-items: center; justify-content: space-between; gap: var(--sp-3); padding: 0 var(--sp-3) var(--sp-2) var(--margen); flex: none; }
+.h-cuerpo { flex: 1; overflow: auto; padding: var(--sp-2) var(--margen) var(--sp-5); display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--sp-3); align-content: start; overscroll-behavior: contain; }
+.h-pie { flex: none; display: flex; gap: var(--sp-2); padding: var(--sp-3) var(--margen) var(--sp-4); border-top: 1px solid var(--raya); }
+.h-pie > * { flex: 1; }
+.h-info { display: inline-grid; place-items: center; width: 32px; height: 32px; margin: -4px 0; border-radius: 50%; color: var(--texto-2); vertical-align: middle; transition: color var(--dur-2), background-color var(--dur-2); }
+.h-info:hover { color: var(--texto); background: var(--capa-2); }
+.h-termino { display: inline-flex; align-items: center; gap: 2px; }
+
+/* ——— Avisos ——— */
+.c-avisos { position: fixed; left: 0; right: 0; bottom: calc(var(--bar-h, 60px) + env(safe-area-inset-bottom, 0px) + 12px); z-index: var(--z-aviso); display: grid; justify-items: center; gap: var(--sp-2); padding: 0 var(--margen); pointer-events: none; }
+.c-aviso { pointer-events: auto; width: 100%; max-width: 480px; display: flex; align-items: center; gap: var(--sp-3); padding: var(--sp-2) var(--sp-2) var(--sp-2) var(--sp-4); color: var(--texto); font: 400 var(--t-15)/1.35 var(--font-text); touch-action: pan-y; animation: c-entra var(--dur-3) var(--curva-resorte) both; transition: transform var(--dur-2) var(--curva-salida), opacity var(--dur-2); }
+@keyframes c-entra { from { opacity: 0; transform: translateY(16px) scale(0.96); } }
+.c-aviso-icono { flex: none; display: grid; place-items: center; width: 32px; height: 32px; border-radius: 50%; background: var(--capa-2); color: var(--texto); }
+.c-aviso.hecho .c-aviso-icono { background: var(--trazo); color: var(--sobre-trazo); }
+.c-aviso.atencion .c-aviso-icono { background: var(--texto); color: var(--capa-0); }
+.c-aviso.error .c-aviso-icono { background: var(--e-critico); color: var(--sobre-critico); }
+.c-aviso-texto { flex: 1; display: grid; gap: 2px; min-width: 0; padding: var(--sp-1) 0; }
+.c-aviso-texto b { font-weight: 600; }
+.c-aviso-texto small { font-size: var(--t-13); color: var(--texto-2); }
+
+/* Con una hoja abierta (de la 2.0 o un modal de la 1.0), los avisos van arriba: no tapan sus botones. */
+html[data-ui='v2'][data-hoja] .c-avisos { bottom: auto; top: calc(env(safe-area-inset-top, 0px) + 12px); }
+@media (min-width: 720px) { .c-avisos { left: var(--lat-w, 0px); bottom: var(--sp-5); } }
+
+/* ——— Diálogo de confirmación ——— */
+.c-dialogo { width: 100%; max-width: 360px; padding: var(--sp-6) var(--sp-5) var(--sp-5); display: grid; gap: var(--sp-3); animation: c-dialogo var(--dur-3) var(--curva-resorte) both; outline: none; }
+@keyframes c-dialogo { from { opacity: 0; transform: scale(0.94); } }
+/* El diálogo recibe el foco él mismo cuando llega solo (el fin de un bloque): no lleva anillo, el que se ve es el de sus botones. */
+.c-dialogo:focus { outline: none; }
+.c-dialogo .t-cuerpo { color: var(--texto-2); }
+.c-dialogo-botones { display: grid; grid-template-columns: 1fr 1fr; gap: var(--sp-2); margin-top: var(--sp-2); }
+.k-boton.peligro.lleno { background: var(--e-critico); color: var(--sobre-critico); box-shadow: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  .s-esqueleto { animation: none; }
+  .h-hoja, .h-hoja.saliendo, .c-aviso, .c-dialogo { animation-name: k-velo; }
+}

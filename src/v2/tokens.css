@@ -1,0 +1,187 @@
+/*
+ * Trazo 2.0 · tokens del lenguaje "Instrumento" (docs/ux/lenguaje-2.0.md).
+ * Todo cuelga de html[data-ui="v2"] (index.html lo pone de entrada: es la única interfaz).
+ * Los colores van en hex para poder medirles el contraste en el test (src/v2/tokens.test.ts); al lado, su OKLCH.
+ */
+
+/* ——— Oscuro: la firma ——— */
+html[data-ui='v2'],
+html[data-ui='v2'][data-theme='dark'] {
+  color-scheme: dark;
+  /* Capas: de la mesa (0) a lo que flota (3). La profundidad es luz, no borde. */
+  --capa-0: #0c0d0e;
+  --capa-1: #141517;
+  --capa-2: #1c1e20;
+  --capa-3: #26282b;
+  /* Texto: principal, secundario y tenue. El tenue también llega a AA (4,5:1): la revisión de accesibilidad lo encontró en
+     notas chicas que sí dicen algo. */
+  --texto: #f0efea;
+  --texto-2: #a3a6a1;
+  --texto-3: #8e928d;
+  /* Rayas: la de siempre y la que separa de verdad. */
+  --raya: rgba(240, 239, 234, 0.08);
+  --raya-fuerte: rgba(240, 239, 234, 0.16);
+  --brillo: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  --sombra-1: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --sombra-2: 0 12px 40px rgba(0, 0, 0, 0.55), 0 2px 8px rgba(0, 0, 0, 0.4);
+  --punto: rgba(240, 239, 234, 0.045);
+
+  /* La marca: el resaltador del logo. Es el color de "acá estás" y de "hecho". */
+  --trazo: #f1e34c; /* oklch(0.90 0.165 104) */
+  --trazo-texto: #f1e34c;
+  --sobre-trazo: #141517;
+
+  /* Áreas: los colores del cuaderno, igualados en claridad. Solo marcan a qué área pertenece algo. */
+  --a-ing: #6cc9fd; /* oklch(0.80 0.115 235) */
+  --a-handyx: #c3afff; /* oklch(0.80 0.115 295) */
+  --a-eclipse: #f99864; /* oklch(0.77 0.135 48) */
+  --a-salud: #7dd89f; /* oklch(0.81 0.12 155) */
+  --a-rutina: #fa969f; /* oklch(0.78 0.12 15) */
+  --a-economia: #eacb6c; /* oklch(0.85 0.12 92) */
+  --a-idi: #f79bd5; /* oklch(0.80 0.13 342) */
+
+  /* Estados: un solo color de señal, reservado para lo vencido. El resto se dice con forma, ícono y palabra. */
+  --e-critico: #fc5950; /* oklch(0.68 0.20 27) */
+  --sobre-critico: #0c0d0e;
+
+  --grano-opacidad: 0.05;
+}
+
+/* ——— Claro: el segundo tema, completo ——— */
+html[data-ui='v2'][data-theme='light'] {
+  color-scheme: light;
+  --capa-0: #f3f2ec;
+  --capa-1: #faf9f5;
+  --capa-2: #ffffff;
+  --capa-3: #ffffff;
+  --texto: #161716;
+  --texto-2: #5a5d5a;
+  --texto-3: #6b6e6a;
+  --raya: rgba(22, 23, 22, 0.1);
+  --raya-fuerte: rgba(22, 23, 22, 0.2);
+  --brillo: inset 0 1px 0 rgba(255, 255, 255, 0.7);
+  --sombra-1: 0 1px 2px rgba(22, 23, 22, 0.06), 0 2px 8px rgba(22, 23, 22, 0.04);
+  --sombra-2: 0 16px 48px rgba(22, 23, 22, 0.16), 0 2px 8px rgba(22, 23, 22, 0.08);
+  --punto: rgba(22, 23, 22, 0.07);
+
+  --trazo: #f1e34c;
+  --trazo-texto: #6b5e00; /* oklch(0.48 0.10 100) */
+  --sobre-trazo: #141517;
+
+  --a-ing: #006aa5; /* oklch(0.50 0.13 240) */
+  --a-handyx: #6646a8; /* oklch(0.48 0.15 295) */
+  --a-eclipse: #a84811; /* oklch(0.52 0.14 45) */
+  --a-salud: #00753e; /* oklch(0.49 0.13 155) */
+  --a-rutina: #a3394e; /* oklch(0.50 0.14 12) */
+  --a-economia: #806600; /* oklch(0.52 0.11 92) */
+  --a-idi: #99387b; /* oklch(0.50 0.15 342) */
+
+  --e-critico: #c2181d; /* oklch(0.52 0.20 27) */
+  --sobre-critico: #ffffff;
+
+  --grano-opacidad: 0.035;
+}
+
+/* ——— Lo que no cambia con el tema ——— */
+html[data-ui='v2'] {
+  /* Tipografía: 8 tamaños, ni uno más. */
+  --t-11: 11px;
+  --t-13: 13px;
+  --t-15: 15px;
+  --t-17: 17px;
+  --t-20: 20px;
+  --t-24: 24px;
+  --t-32: 32px;
+  --t-44: 44px;
+  /* Los campos de texto van a 16 px: menos y iOS hace zoom al enfocarlos. */
+  --t-campo: 16px;
+
+  /* Espacio: de a 4. */
+  --sp-1: 4px;
+  --sp-2: 8px;
+  --sp-3: 12px;
+  --sp-4: 16px;
+  --sp-5: 20px;
+  --sp-6: 24px;
+  --sp-7: 32px;
+  --sp-8: 40px;
+  --sp-9: 56px;
+
+  /* Radios: tres y la píldora. */
+  --r-s: 8px;
+  --r-m: 14px;
+  --r-l: 22px;
+  --r-pildora: 999px;
+
+  /* Medidas. */
+  --margen: 20px;
+  --ancho-max: 720px;
+  --toque: 44px;
+  --alto-barra: 64px;
+
+  /* El corte del resaltador: la forma de la marca. */
+  --bisel: polygon(7px 0, 100% 0, calc(100% - 7px) 100%, 0 100%);
+
+  /* Movimiento: cuatro duraciones y tres curvas. */
+  --dur-1: 120ms;
+  --dur-2: 200ms;
+  --dur-3: 320ms;
+  --dur-4: 520ms;
+  --curva-salida: cubic-bezier(0.22, 1, 0.36, 1);
+  --curva-ida-vuelta: cubic-bezier(0.65, 0, 0.35, 1);
+  --curva-resorte: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  /* Orden de las capas que flotan. */
+  --z-barra: 20;
+  --z-hoja: 40;
+  /* La confirmación se pide a menudo desde una hoja: va arriba de ella. */
+  --z-dialogo: 50;
+  --z-aviso: 60;
+
+  /* El halo de un héroe: el color del área (o la marca) entrando desde una esquina. */
+  --halo: radial-gradient(120% 90% at 0% 0%, color-mix(in oklab, var(--area, var(--trazo)) 16%, transparent), transparent 62%);
+  /* Grano fino, para que las superficies grandes no se vean de plástico. */
+  --grano: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.5 0 0 0 0 0.5 0 0 0 0 0.5 0 0 0 0.9 0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* ——— Letras, alturas y los nombres de color que traen los datos ——— */
+html[data-ui='v2'] {
+  --font-title: 'Archivo Variable', system-ui, sans-serif;
+  --font-text: 'Geist Variable', system-ui, sans-serif;
+  --font-mono: 'Geist Mono Variable', ui-monospace, monospace;
+
+  /* La barra flota: el aire de abajo de cada pantalla crece para que nada quede tapado. */
+  --bar-h: 78px;
+  --safe-b: env(safe-area-inset-bottom, 0px);
+  /* El ancho de la navegación al costado: nada en el teléfono, un riel en tablet, la barra con nombres en escritorio. */
+  --lat-w: 0px;
+
+  /* Los datos nombran las áreas con los nombres de la 1.0 (AREAS[x].css = 'var(--ing)', RAMA_COLOR…): apuntan a los de acá. */
+  --ing: var(--a-ing);
+  --handyx: var(--a-handyx);
+  --eclipse: var(--a-eclipse);
+  --salud: var(--a-salud);
+  --rutina: var(--a-rutina);
+  --economia: var(--a-economia);
+  --idi: var(--a-idi);
+  --tinta: var(--texto);
+  --sub: var(--texto-3);
+  --papel: var(--capa-0);
+  --linea: var(--raya-fuerte);
+}
+
+@media (min-width: 720px) {
+  html[data-ui='v2'] { --lat-w: 96px; }
+}
+
+@media (min-width: 1100px) {
+  html[data-ui='v2'] { --lat-w: 272px; }
+}
+
+@media (max-width: 359px) {
+  html[data-ui='v2'] { --margen: 16px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html[data-ui='v2'] { --dur-1: 1ms; --dur-2: 1ms; --dur-3: 150ms; --dur-4: 150ms; --curva-resorte: ease; }
+}

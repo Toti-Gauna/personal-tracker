@@ -1451,6 +1451,17 @@ Migración: los papers pasan del bloque "leer" al Block 1.
 
 ---
 
+## 6 novodecies. Trazo 2.0: una sola interfaz nueva
+
+Toda la app se rehízo sobre un lenguaje de diseño propio ("Instrumento": tokens, ocho tamaños de texto, estados con ícono y palabra,
+reglas de escritura) y un kit de controles, superficies y movimiento, en tres tandas (núcleo, Hoy/Plan/Estudio, y Entreno/Perfil/el
+resto). Desde la 3.5 la 2.0 es la única interfaz: el interruptor y el código de la 1.0 se borraron; los datos guardados no cambian.
+El detalle, pantalla por pantalla, está en [`docs/ux/lenguaje-2.0.md`](ux/lenguaje-2.0.md) (§23: lanzamiento, rendimiento,
+accesibilidad y la revisión final) y el plan de tandas en [`docs/prompts/plan-ux-2.0.md`](prompts/plan-ux-2.0.md).
+
+- Controles: `npm run v2:revision` (presupuesto de palabras y alto en 390 × 844, claro y oscuro), `npm run a11y` (axe-core, WCAG 2.1
+  AA, las dos paletas) y `npm run peso` (presupuesto del bundle, también en el CI).
+
 ## 7. Registro de cambios
 
 **2026-11-11**

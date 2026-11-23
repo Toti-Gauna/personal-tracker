@@ -68,10 +68,20 @@ export function playSound(id: SoundId, volume = conf.volume) {
   } catch { /* sin audio */ }
 }
 
+/**
+ * Vibrar solo después de que tocaste la página alguna vez: antes, el navegador lo bloquea y deja un error en la consola
+ * (pasa con un aviso que llega al abrir, como un sello nuevo).
+ */
+export function vibrar(patron: number | number[]) {
+  const n = typeof navigator === 'undefined' ? undefined : navigator;
+  if (!n?.vibrate || n.userActivation?.hasBeenActive === false) return;
+  try { n.vibrate(patron); } catch { /* sin vibración */ }
+}
+
 /** El sonido de un aviso, según lo que eligió para ese evento, y la vibración. */
 export function play(event: SoundEvent) {
   playSound(conf.events[event]);
-  if (conf.vibrate) try { navigator.vibrate?.(event === 'tarea' ? 20 : 120); } catch { /* sin vibración */ }
+  if (conf.vibrate) vibrar(event === 'tarea' ? 20 : 120);
 }
 
 /** Compatibilidad: el sonido de fin de pomodoro. */

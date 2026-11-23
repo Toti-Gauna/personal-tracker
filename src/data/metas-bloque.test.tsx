@@ -2,8 +2,6 @@ import { act, fireEvent, render, screen, within } from '@testing-library/react';
 import { beforeEach, describe, expect, it } from 'vitest';
 import { getState, register, resetState } from '../state/store';
 import { agregarMetaBloque, agregarSubBloque, borrarSubBloque, empezarLibro, importarJsonBloque, tildarMetaBloque, tildarSubBloque } from '../state/metas-bloque';
-import { MetasBloque } from '../ui/MetasBloque';
-import { PlanImportar } from '../screens/PlanImportar';
 import { libroPorId } from './libros';
 import { EJEMPLO_BLOQUE, avanceBloque, esJsonDeBloque, exportarBloque, nombreBloque, queCambiaBloque, validarJsonBloque, type ImportMetas } from './metas-bloque';
 import { activitiesFor } from './study';
@@ -98,38 +96,5 @@ describe('metas por bloque · JSON', () => {
     // No se puede pisar un libro que viene en Trazo.
     const v = validarJsonBloque('{ "tipo": "libro", "id": "mwm", "titulo": "X", "capitulos": ["a"] }');
     expect(v.ok ? '' : v.error.mensaje).toMatch(/ya viene cargado/);
-  });
-});
-
-describe('metas por bloque · pantallas', () => {
-  it('agregar una meta, una submeta, tildarla y editar', () => {
-    render(<MetasBloque bloque="P1" date={D} titulo="Metas de P1" />);
-    fireEvent.click(screen.getByRole('button', { name: '+ Agregar meta' }));
-    const hoja = screen.getByRole('dialog');
-    fireEvent.change(within(hoja).getByLabelText('Nombre de la meta'), { target: { value: 'API Spring Boot' } });
-    act(() => { fireEvent.click(within(hoja).getByRole('button', { name: 'Agregar y cerrar' })); });
-    expect(metas('P1').map((m) => m.texto)).toEqual(['API Spring Boot']);
-    fireEvent.click(screen.getByRole('checkbox', { name: 'API Spring Boot' }));
-    expect(metas('P1')[0].hecho).toBe(D);
-    expect(screen.getByText('1 de 1')).toBeInTheDocument();
-    fireEvent.click(screen.getByRole('button', { name: 'Agregar submeta a API Spring Boot' }));
-    fireEvent.change(within(screen.getByRole('dialog')).getByLabelText('Nombre de la submeta'), { target: { value: 'Tests de integración' } });
-    act(() => { fireEvent.click(within(screen.getByRole('dialog')).getByRole('button', { name: 'Agregar y cerrar' })); });
-    expect(metas('P1')[0].subs!.map((s) => s.t)).toEqual(['Tests de integración']);
-    fireEvent.click(screen.getByRole('button', { name: 'Editar' }));
-    fireEvent.click(screen.getByRole('button', { name: 'Editar API Spring Boot' }));
-    fireEvent.change(within(screen.getByRole('dialog')).getByLabelText('Texto de la meta'), { target: { value: 'API en Spring Boot' } });
-    act(() => { fireEvent.click(within(screen.getByRole('dialog')).getByRole('button', { name: 'Guardar' })); });
-    expect(metas('P1')[0].texto).toBe('API en Spring Boot');
-  });
-
-  it('Importar reconoce el JSON de bloque, muestra qué cambia e importa', () => {
-    const day = { date: D, wake: '04:00', routine: 'completo' as const, blocks: [], notes: [], focus: [] };
-    render(<PlanImportar day={day} />);
-    fireEvent.change(screen.getByLabelText('JSON pegado'), { target: { value: EJEMPLO_BLOQUE } });
-    expect(screen.getByRole('status')).toHaveTextContent('✓ formato válido · P0 · Constelación');
-    expect(screen.getByText('Agrega 2')).toBeInTheDocument();
-    fireEvent.click(screen.getByRole('button', { name: 'Importar las metas' }));
-    expect(metas('P0')).toHaveLength(2);
   });
 });

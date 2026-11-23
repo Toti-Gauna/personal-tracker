@@ -97,12 +97,26 @@ export function migrarClipping(x: any): ClippingState {
     ...emptyClipping(),
     cuentas: arr<Cuenta>(x.cuentas),
     campanas: arr<Campana>(x.campanas),
-    registro: arr<FilaClip>(x.registro).map((f) => ({ ...f, clips: Number(f.clips) || 0, views: Number(f.views) || 0 })),
+    registro: arr<FilaClip>(x.registro).map(numerosDeFila),
     retainers: arr<Retainer>(x.retainers),
     prospeccion: obj<Prospeccion>(x.prospeccion),
     rutina: obj<string[]>(x.rutina),
     ...(x.ultima ? { ultima: x.ultima } : {}),
   };
+}
+
+/**
+ * Los números de una fila como números: una planilla importada puede traerlos como texto ("12.50"), y sumar texto los pega en vez
+ * de sumarlos. Los opcionales que no son números se sacan.
+ */
+function numerosDeFila(f: FilaClip): FilaClip {
+  const r: FilaClip = { ...f, clips: Number(f.clips) || 0, views: Number(f.views) || 0 };
+  for (const k of ['verificadas', 'aprobados', 'mas1000', 'estimado', 'cobrado'] as const) {
+    if (r[k] == null) continue;
+    const n = Number(r[k]);
+    if (Number.isFinite(n)) r[k] = n; else delete r[k];
+  }
+  return r;
 }
 
 /** Verifica una planilla importada; devuelve los errores por línea (vacío si está bien). */

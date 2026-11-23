@@ -70,10 +70,20 @@ export function skipRest(s: FocusState, now: number): FocusState {
   return { ...s, segs, i: s.i + 1, segStart: now, pausedAt: null };
 }
 
-/** Suma un tramo de foco al final ("Hacerla ahora · 10 min"). */
+/**
+ * "Hacerla ahora · 10 min" o "Seguir 10 min más", cuando el bloque ya terminó y sus minutos ya se guardaron: un foco nuevo de
+ * un solo tramo. Si se sumara al final de los tramos viejos, al terminar se guardarían otra vez los minutos de antes.
+ */
 export function extend(s: FocusState, min: number, now: number): FocusState {
-  const segs = [...s.segs, { type: 'focus' as const, min }];
-  return { ...s, segs, i: segs.length - 1, segStart: now, pausedAt: null };
+  return { ...s, segs: [{ type: 'focus', min }], tramos: undefined, i: 0, segStart: now, pausedAt: null };
+}
+
+/** Los minutos de foco hechos hasta `now`: los tramos de foco completos y lo que va del actual. */
+export function minutosHechos(s: FocusState, now: number): number {
+  const previos = s.segs.slice(0, s.i).filter((x) => x.type === 'focus').reduce((t, x) => t + x.min, 0);
+  const actual = s.segs[s.i];
+  const enCurso = actual?.type === 'focus' ? Math.max(0, Math.round((actual.min * MS - segRemaining(s, now)) / MS)) : 0;
+  return previos + enCurso;
 }
 
 /** Foco número n de m (para "1 de 2" en el mini reproductor). */

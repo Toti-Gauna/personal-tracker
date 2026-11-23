@@ -1,6 +1,7 @@
 import { AREAS } from '../data/defaults';
 import { advance, lastLearnIndex, startFocus } from '../data/focus';
-import { sumMin } from '../data/study';
+import { capitulosEnJuego } from '../data/estado-capitulo';
+import { librosMate, sumMin } from '../data/study';
 import type { Tramo } from '../data/study-types';
 import { fmtDur } from '../data/time';
 import type { FocusState } from '../data/types';
@@ -8,7 +9,8 @@ import { ir } from '../lib/routes';
 import { getState, setFocus } from '../state/store';
 import { logStudy, tramoDone } from '../state/study';
 import { showModal, toast } from './avisos';
-import { abrirEstadoEstudio, hayQuePreguntar } from './EstadoEstudio';
+import { abrirEstadoEstudio } from './estado-estudio';
+import { empezarFoco } from './foco';
 
 const colorOf = (activityId?: string) => {
   const st = getState().study;
@@ -17,11 +19,16 @@ const colorOf = (activityId?: string) => {
   return f ? AREAS[f.color].css : 'var(--economia)';
 };
 
+/**
+ * Empieza una sesión de estudio. Si esa misma sesión ya corre, vuelve a ella (no la reinicia); si corre otro foco, pregunta antes
+ * de cortarlo (`empezarFoco`).
+ */
 export function startStudy(date: string, activityId: string, blockKey: string, tramos: Tramo[]) {
+  const actual = getState().focus;
+  if (actual && actual.date === date && actual.activityId === activityId) { ir(`sesion/${activityId}`); return; }
   const segs = tramos.map((t) => ({ type: t.kind === 'descanso' ? ('rest' as const) : ('focus' as const), min: t.min }));
   const f: FocusState = { ...startFocus(date, blockKey, 'Sesión de estudio', segs, Date.now()), tramos, activityId };
-  setFocus(f);
-  ir(`sesion/${activityId}`);
+  empezarFoco(f, () => ir(`sesion/${activityId}`));
 }
 
 /** Efectos de los tramos que terminaron (por tiempo o con "Hecho"). */
@@ -91,4 +98,11 @@ export function tramoHecho(f: FocusState) {
     setFocus(null);
     finSesion(r.state);
   } else setFocus(r.state);
+}
+
+/** ¿Hay algo que preguntar? (un libro con capítulos en juego). */
+export function hayQuePreguntar(date: string, actividades?: string[]) {
+  const st = getState().study;
+  const libros = actividades ? st.activities.filter((a) => actividades.includes(a.id) && a.units?.length && !a.libro) : librosMate(st);
+  return libros.some((a) => capitulosEnJuego(st, a, date).length > 0);
 }
