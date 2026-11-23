@@ -80,7 +80,8 @@ export default function PesoV2({ day }: PropsV2) {
   const deHoy = ws.find((w) => w.date === hoy);
   const ritmo = pace(ws);
   const falta = ultimo ? t.goalKg - ultimo.kg : null;
-  const semanas = ritmo && falta != null && ritmo.perWeek > 0.01 && falta > 0 ? Math.round(falta / ritmo.perWeek) : null;
+  // Semanas a la meta al ritmo de ahora, subiendo o bajando: solo si el ritmo va hacia la meta.
+  const semanas = ritmo && falta != null && Math.abs(ritmo.perWeek) > 0.01 && Math.abs(falta) > 0.05 && falta / ritmo.perWeek > 0 ? Math.round(falta / ritmo.perWeek) : null;
   const medidas = [...t.medidas].sort((a, b) => b.date.localeCompare(a.date));
   const tocaMedir = medidasPendientes(t.medidas, hoy);
   const cambio = ultimo && previo ? r1(ultimo.kg - previo.kg) : null;

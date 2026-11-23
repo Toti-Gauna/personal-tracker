@@ -119,10 +119,13 @@ export function logSet(now = Date.now()) {
   update((x) => ({ ...x, active: { ...na, rest, draft, who: who2 } }));
 }
 
+/** Deshace la última serie y vuelve a su ejercicio: si no, sus kilos y repeticiones quedarían cargados en otro ejercicio. */
 export function undoLastSet() {
   patchActive((a) => {
     const last = a.sets[a.sets.length - 1];
-    return last ? { ...a, sets: a.sets.slice(0, -1), who: last.who, draft: { ...a.draft, [last.who]: { kg: last.kg, reps: last.reps, ...(last.rir != null ? { rir: last.rir } : {}) } } } : a;
+    if (!last) return a;
+    const idx = a.order.indexOf(last.ex);
+    return { ...a, idx: idx >= 0 ? idx : a.idx, sets: a.sets.slice(0, -1), who: last.who, draft: { ...a.draft, [last.who]: { kg: last.kg, reps: last.reps, ...(last.rir != null ? { rir: last.rir } : {}) } } };
   });
 }
 
@@ -173,6 +176,21 @@ export function finishTraining(now = Date.now()): string | null {
 
 export function cancelTraining() {
   update((t) => ({ ...t, active: null }));
+}
+
+/** Vuelve a dejar abierto un entreno (para deshacer "Descartar"). */
+export function reabrirEntreno(a: ActiveSession) {
+  update((t) => ({ ...t, active: a }));
+}
+
+/**
+ * Guarda un entreno que quedó abierto de otro día. Los minutos no son "hasta ahora" (serían un día entero): se toma el tope del
+ * bloque, como mucho.
+ */
+export function guardarEntrenoViejo(): string | null {
+  const a = getState().train.active;
+  if (!a) return null;
+  return finishTraining(Math.min(Date.now(), a.startedAt + a.limitMin * 60000));
 }
 
 export function setNote(id: string, note: string) {

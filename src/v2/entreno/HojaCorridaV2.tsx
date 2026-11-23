@@ -2,7 +2,7 @@
  * Trazo 2.0 · la corrida del día: tiempo, distancia (opcional, con el ritmo al lado), tipo y cómo te sentiste. Se abre al tildar
  * "Correr" o con + en la meta, y corrige la de hoy si ya la cargaste. Escribe lo mismo de siempre (`addRun`).
  */
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { FEEL_LABEL, fmtPace, runOn, runWeek, RUN_LABEL } from '../../data/train';
 import { RUN_KINDS, type Run, type RunKind } from '../../data/train-types';
 import { addRun } from '../../state/train';
@@ -19,10 +19,15 @@ const fmt = (n: number) => String(n).replace('.', ',');
 const SENSACIONES: [string, string][] = [1, 2, 3, 4, 5].map((n) => [String(n), String(n)]);
 
 export function HojaCorridaV2({ date, abierta }: { date: string | null; abierta: boolean }) {
-  const hoy = useStore((s) => (date ? runOn(s.train.runs, date) : undefined));
+  const runs = useStore((s) => s.train.runs);
+  // Lo que se ve mientras está abierta queda fijo mientras se va (260 ms): si no, al guardar se vacía el formulario y el título
+  // cambia a "Corregir la de hoy" en plena salida.
+  const vista = useRef<{ date: string; titulo: string } | null>(null);
+  if (abierta && date) vista.current = { date, titulo: runOn(runs, date) ? 'Corregir la de hoy' : '¿Cuánto corriste?' };
+  const v = vista.current;
   return (
-    <Hoja abierta={abierta} onCerrar={cerrarHojas} titulo={hoy ? 'Corregir la de hoy' : '¿Cuánto corriste?'}>
-      {date && <Formulario key={date} date={date} />}
+    <Hoja abierta={abierta} onCerrar={cerrarHojas} titulo={v?.titulo ?? '¿Cuánto corriste?'}>
+      {v && <Formulario key={v.date} date={v.date} />}
     </Hoja>
   );
 }

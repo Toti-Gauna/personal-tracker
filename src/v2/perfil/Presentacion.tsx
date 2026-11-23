@@ -148,7 +148,8 @@ export default function Presentacion({ day }: { day: DayLog }) {
       if (e.key === 'Escape') ir('avance');
       if (e.key === 'ArrowRight') setI((k) => Math.min(n - 1, k + 1));
       if (e.key === 'ArrowLeft') setI((k) => Math.max(0, k - 1));
-      if (e.key === ' ') { e.preventDefault(); setPausa((p) => !p); }
+      // Espacio pausa, salvo que el foco esté en un botón o enlace: ahí activa ese control, como siempre.
+      if (e.key === ' ' && !(e.target as HTMLElement | null)?.closest?.('button, a, input, textarea')) { e.preventDefault(); setPausa((p) => !p); }
     };
     window.addEventListener('keydown', on);
     try { void document.documentElement.requestFullscreen?.()?.catch?.(() => {}); } catch { /* sin pantalla completa */ }
@@ -175,9 +176,11 @@ export default function Presentacion({ day }: { day: DayLog }) {
       </div>
       <button type="button" className="wr-zona wr-atras" aria-label="Lámina anterior" disabled={i === 0} onClick={() => ir_a(i - 1)} />
       <button type="button" className="wr-zona wr-adelante" aria-label="Lámina siguiente" disabled={ultima} onClick={() => ir_a(i + 1)} />
-      <section key={l.id} className="wr-lamina" aria-roledescription="lámina" aria-label={`${i + 1} de ${n}: ${l.nombre}`} aria-live="polite">
+      <section key={l.id} className="wr-lamina" aria-roledescription="lámina" aria-label={`${i + 1} de ${n}: ${l.nombre}`}>
         {l.contenido}
       </section>
+      {/* Una región viva estable (no se vuelve a crear con cada lámina): así el lector anuncia el cambio aunque avance sola. */}
+      <p className="v2-oculto" aria-live="polite">{`Lámina ${i + 1} de ${n}: ${l.nombre}`}</p>
     </main>
   );
 }

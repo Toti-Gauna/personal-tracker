@@ -91,6 +91,8 @@ export default function CierreV2({ day }: PropsV2) {
     setPaso(n);
     const el = riel.current;
     const hijos = el ? ([...el.children] as HTMLElement[]) : [];
+    // La tarjeta de antes queda inerte (el botón que tenía el foco también): el foco pasa a la nueva, para no caer en la página.
+    window.setTimeout(() => { const t = hijos[n]; if (t) { t.tabIndex = -1; t.focus({ preventScroll: true }); } }, 0);
     if (!el || !hijos[n] || !el.scrollTo) return;
     destino.current = n;
     window.setTimeout(() => { if (destino.current === n) destino.current = null; }, 900);

@@ -43,7 +43,7 @@ export default function LogroV2({ ruta }: PropsV2) {
   }
   return (
     <Marco className="pf pf-logro" titulo={def.name} rotulo={`Nuevo sello${fecha ? ` · ${fmtFecha(fecha).toLowerCase()}` : ''}`} volver={{ href: '#/perfil', nombre: 'Perfil' }}>
-      <div className="pf-logro-sello" ref={caja}><SelloInclinable marca={def.mark} color={def.color} grupo={def.group} ganado lado={208} nombre={`Sello ${def.name}`} className="sl-cae sl-grande" /></div>
+      <div className="pf-logro-sello sl-cae" ref={caja}><SelloInclinable marca={def.mark} color={def.color} grupo={def.group} ganado lado={208} nombre={`Sello ${def.name}`} className="sl-grande" /></div>
       <p className="t-cuerpo-l pf-logro-linea">{def.line}</p>
       <p className="t-nota">{def.how}</p>
       <p className="t-dato pf-logro-xp">+{SEAL_XP} XP</p>

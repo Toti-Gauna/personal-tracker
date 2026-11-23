@@ -10,10 +10,10 @@ import { RULES } from '../../data/train-catalog';
 import type { Routine, Run } from '../../data/train-types';
 import { ir } from '../../lib/routes';
 import { useStore } from '../../state/store';
-import { addRun, deleteRun, startTraining } from '../../state/train';
+import { addRun, cancelTraining, deleteRun, guardarEntrenoViejo, reabrirEntreno, startTraining } from '../../state/train';
 import { abrirCorrida, abrirPeso } from '../../ui/checkins';
 import { Barras } from '../estudio/Barras';
-import { aviso } from '../kit/capas';
+import { aviso, confirmar } from '../kit/capas';
 import { Ilustracion } from '../iconos';
 import { Boton, Chip } from '../kit/controles';
 import { Hoja } from '../kit/hoja';
@@ -51,6 +51,17 @@ export default function EntrenoV2({ day }: PropsV2) {
   const rutinasSemana = dias.map((d) => d.rutina).filter((r): r is Routine => !!r);
   const sesionHoy = [...t.sessions].reverse().find((s) => s.date === date);
   const enCurso = t.active?.date === date ? t.active : null;
+  // Un entreno que quedó abierto de otro día no se esconde ni se pisa: primero se guarda o se descarta.
+  const abierto = t.active && t.active.date !== date ? t.active : null;
+  const nombreAbierto = abierto ? t.routines.find((x) => x.id === abierto.routineId)?.name ?? 'El entreno' : '';
+  const guardarAbierto = () => { const id = guardarEntrenoViejo(); if (id) ir(`entreno-resumen/${id}`); };
+  const descartarAbierto = async () => {
+    if (!abierto) return;
+    const copia = abierto;
+    if (!(await confirmar({ titulo: `¿Descartar ${nombreAbierto}?`, texto: `${cuantos(copia.sets.length, 'serie cargada', 'series cargadas')} del ${fmtFechaCorta(copia.date)} no se guardan.`, accion: 'Descartar', peligro: true }))) return;
+    cancelTraining();
+    aviso({ titulo: 'Entreno descartado', sub: `${nombreAbierto} del ${fmtFechaCorta(copia.date)}`, deshacer: () => reabrirEntreno(copia) });
+  };
   const peso = weightAt(t.weights, date);
   const kgSemana = volume(sessionsInWeek(t, date).flatMap((s) => s.sets), 'me');
   const partner = settings.names.partner;
@@ -72,6 +83,16 @@ export default function EntrenoV2({ day }: PropsV2) {
 
   return (
     <Marco className="en" titulo="Entreno" info={INFO}>
+      {abierto && (
+        <div className="capa-1 en-abierto" role="status">
+          <p className="t-cuerpo"><b>{nombreAbierto} quedó abierto</b> desde el {fmtFechaCorta(abierto.date)} · {cuantos(abierto.sets.length, 'serie', 'series')}.</p>
+          <div className="en-abierto-acciones">
+            <Boton variante="primario" tamano="s" icono="tilde" onClick={guardarAbierto}>Guardarlo</Boton>
+            <Boton variante="secundario" tamano="s" href={`#/entreno-sesion/${abierto.routineId}`}>Seguirlo</Boton>
+            <Boton variante="fantasma" tamano="s" onClick={() => { void descartarAbierto(); }}>Descartar</Boton>
+          </div>
+        </div>
+      )}
       <Tarjeta heroe className="en-hoy" area="var(--a-salud)" etiqueta="Entreno de hoy">
         {r ? (
           <>
@@ -89,7 +110,8 @@ export default function EntrenoV2({ day }: PropsV2) {
             ) : (
               <div className="en-hoy-acciones">
                 {!enCurso && <Chip activo={pareja} onCambio={setPareja} icono="companera">{`Con ${partner}`}</Chip>}
-                <Boton variante="primario" icono="play" ancho onClick={() => { if (!enCurso) startTraining(r.id, date, pareja); ir(`entreno-sesion/${r.id}`); }}>{enCurso ? `Volver a ${r.name}` : `Empezar ${r.name}`}</Boton>
+                <Boton variante="primario" icono="play" ancho deshabilitado={abierto ? `Antes, guardá o descartá ${nombreAbierto} del ${fmtFechaCorta(abierto.date)}.` : false}
+                  onClick={() => { if (!enCurso) startTraining(r.id, date, pareja); ir(`entreno-sesion/${r.id}`); }}>{enCurso ? `Volver a ${r.name}` : `Empezar ${r.name}`}</Boton>
               </div>
             )}
           </>

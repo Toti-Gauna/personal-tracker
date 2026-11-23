@@ -28,7 +28,8 @@ html[data-ui='v2'][data-theme='light'] .sl { --sl-metal-luz: color-mix(in oklab,
 .sl-bloqueado .sl-marca { opacity: 0.8; }
 .sl-reflejo { opacity: 0.5; }
 .sl-brillo { opacity: 0.55; transform-origin: 40px 40px; transform: rotate(20deg) translateX(0); animation: sl-brilla 1100ms var(--curva-salida) calc(360ms + var(--i, 0) * 90ms) both; }
-.sl-grande .sl-brillo { animation: sl-brilla-lento 3.6s ease-in-out 700ms infinite both; }
+/* El brillo cruza una vez al aparecer (y otra al pasar o enfocar, con la inclinación): un brillo que no para distrae y no se puede pausar. */
+.sl-grande .sl-brillo { animation: sl-brilla-lento 3.6s ease-in-out 700ms 1 both; }
 .sl-cae { animation: sl-cae 640ms var(--curva-ida-vuelta) both; transform-origin: center; }
 @keyframes sl-brilla { to { transform: rotate(20deg) translateX(150px); } }
 @keyframes sl-brilla-lento { 0% { transform: rotate(20deg) translateX(0); } 40%, 100% { transform: rotate(20deg) translateX(150px); } }
@@ -62,7 +63,6 @@ html[data-ui='v2'][data-theme='light'] .ca, html[data-ui='v2'][data-theme='light
 .ca-calendario > i { display: grid; place-items: center; aspect-ratio: 1.25; border-radius: var(--r-s); font-style: normal; }
 .ca-calendario > i > b { font: 500 var(--t-13)/1 var(--font-mono); color: var(--texto-2); }
 .ca-calendario > i.ca-n3 > b, .ca-calendario > i.ca-n4 > b { color: var(--sobre-trazo); }
-html[data-ui='v2'][data-theme='light'] .ca-calendario > i.ca-n3 > b, html[data-ui='v2'][data-theme='light'] .ca-calendario > i.ca-n4 > b { color: var(--capa-0); }
 .ca-calendario > i.ca-hoy { box-shadow: 0 0 0 2px var(--capa-1), 0 0 0 3.5px var(--texto); }
 .ca-calendario > i.ca-futuro > b { color: var(--texto-3); }
 
@@ -190,7 +190,7 @@ html[data-ui='v2'][data-theme='light'] .pf-pieza::after { background: radial-gra
 .wr-zona:disabled { cursor: default; }
 .wr-atras { left: 0; width: 30%; }
 .wr-adelante { right: 0; width: 70%; }
-.wr-arriba { position: absolute; top: calc(env(safe-area-inset-top, 0px) + var(--sp-5)); right: var(--sp-3); display: flex; gap: var(--sp-1); }
+.wr-arriba { position: absolute; z-index: 1; top: calc(env(safe-area-inset-top, 0px) + var(--sp-5)); right: var(--sp-3); display: flex; gap: var(--sp-1); } /* arriba de las zonas de toque: si no, la de adelante tapa Pausar y Salir */
 .wr-lamina { position: relative; display: grid; gap: var(--sp-4); justify-items: start; width: 100%; max-width: 620px; pointer-events: none; }
 .wr-lamina > * { margin: 0; animation: wr-entra var(--dur-4) var(--curva-salida) backwards; }
 .wr-lamina > :nth-child(2) { animation-delay: 90ms; }

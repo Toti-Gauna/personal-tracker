@@ -1,10 +1,10 @@
 import { act, fireEvent, render, screen, waitFor, within } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
-import { defaultRoutines } from '../../data/train-catalog';
+import { RULES, defaultRoutines } from '../../data/train-catalog';
 import type { TrainSession } from '../../data/train-types';
 import { leerRuta } from '../../lib/routes';
 import { getState, register, resetState, startDay } from '../../state/store';
-import { addRun, addWeight, logSet, patchActive, startTraining } from '../../state/train';
+import { addRun, addWeight, logSet, patchActive, startTraining, undoLastSet } from '../../state/train';
 import { limpiarCapas } from '../kit/capas';
 import GlobalV2 from '../marco/Global';
 import { PANTALLAS_V2 } from '../registro';
@@ -177,6 +177,35 @@ describe('Entreno 2.0 · la semana y el volumen', () => {
     expect(xs.filter((x) => x.principal).map((x) => x.nombre)).toEqual(expect.arrayContaining(['Curl en banco Scott con barra Z']));
     expect(xs.some((x) => !x.principal && x.series === 1.5)).toBe(true);
     expect(ejerciciosDe('gemelos', [rutina('pull-a')])).toEqual([]);
+  });
+});
+
+describe('Entreno 2.0 · un entreno que quedó abierto', () => {
+  it('de otro día no se esconde ni se pisa: se guarda con su fecha (con el tope del bloque como minutos) o se descarta con deshacer', async () => {
+    act(() => { startTraining('pull-a', '2026-11-23', false); logSet(); });
+    render(<><EntrenoV2 {...props('#/entreno')} />{global}</>);
+    expect(screen.getByRole('status')).toHaveTextContent(/quedó abierto desde el 23\/11 · 1 serie/);
+    expect(screen.getByRole('button', { name: /^Empezar / }).getAttribute('aria-disabled')).toBe('true');
+    fireEvent.click(screen.getByRole('button', { name: 'Descartar' }));
+    fireEvent.click(within(await screen.findByRole('alertdialog')).getByRole('button', { name: 'Descartar' }));
+    await act(async () => {});
+    expect(train().active).toBeNull();
+    fireEvent.click(screen.getByRole('button', { name: 'Deshacer' }));
+    expect(train().active?.date).toBe('2026-11-23');
+    fireEvent.click(screen.getByRole('button', { name: 'Guardarlo' }));
+    const s = train().sessions[train().sessions.length - 1];
+    expect(s).toMatchObject({ date: '2026-11-23', routineId: 'pull-a' });
+    expect(s.minutes).toBeLessThanOrEqual(RULES.limiteMin);
+    expect(train().active).toBeNull();
+  });
+
+  it('deshacer la última serie vuelve a su ejercicio, no deja sus kilos en otro', () => {
+    act(() => { startTraining('pull-a', HOY, false); logSet(); });
+    const primero = activa().order[0];
+    act(() => patchActive((a) => ({ ...a, idx: 2 })));
+    act(() => undoLastSet());
+    expect(activa().order[activa().idx]).toBe(primero);
+    expect(activa().sets).toHaveLength(0);
   });
 });
 

@@ -133,8 +133,8 @@ function Descanso({ nombre, restante, total, chico, onMas, onSaltar }: { nombre:
         <span className="en-reloj-centro" aria-hidden="true"><b className="t-dato">{clock(seg(restante))}</b><small className="t-rotulo">{nombre}</small></span>
       </div>
       <div className="en-descanso-acc">
-        <Boton tamano="s" variante="secundario" onClick={onMas}>+15 s</Boton>
-        <Boton tamano="s" variante="primario" onClick={onSaltar}>Saltar</Boton>
+        <Boton variante="secundario" onClick={onMas}>+15 s</Boton>
+        <Boton variante="primario" onClick={onSaltar}>Saltar</Boton>
       </div>
     </div>
   );
