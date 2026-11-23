@@ -16,6 +16,7 @@ import { aviso, confirmar } from '../kit/capas';
 import { Boton, CampoTexto } from '../kit/controles';
 import { Dato, Fila, Tarjeta } from '../kit/superficies';
 import { Grupo, Marco } from '../marco/Marco';
+import { mayuscula } from '../proyecto/datos';
 import { FilaHoja } from '../proyecto/piezas';
 import type { PropsV2 } from '../registro';
 import { AREA, dm, dma, miles, n1, useT0 } from './comun';
@@ -82,7 +83,7 @@ export default function HandyxV2({ day, today }: PropsV2) {
       {pa && (
         <Tarjeta capa={2} etiqueta="Handyx en pausa" className="tr-franja">
           <p className="t-encabezado">En pausa desde el {dm(pa.desde)}</p>
-          <p className="t-nota">{pa.motivo}. Roadmap, cortes y backlog quedan congelados.</p>
+          <p className="t-nota">{pa.motivo ? `${mayuscula(pa.motivo)}. ` : ''}Roadmap, cortes y backlog quedan congelados.</p>
           <Boton variante="primario" icono="play" onClick={retomarHandyx}>Retomar Handyx</Boton>
         </Tarjeta>
       )}

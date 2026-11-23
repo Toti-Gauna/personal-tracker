@@ -70,7 +70,7 @@ export function RepasoV2({ day, hoy }: { day: PropsV2['day']; hoy: string }) {
         <Anillo valor={Math.min(1, daily.min / cap)} tamano={92} grosor={9} etiqueta={`${daily.min}`} sub="min" area="var(--a-economia)" nombre={`${daily.min} de ${cap} minutos del tope`} />
         <div className="es-tope-texto">
           <b className="t-titulo">{daily.min ? `${daily.min} min` : 'Nada hoy'}</b>
-          <span className="t-nota">{daily.min ? `Tope de ${cap} min` : 'Hoy no vence nada'}</span>
+          <span className="t-nota">Tope de {cap} min</span>
         </div>
       </div>
       {contenido && contenido.falta > 0 && <Boton variante="primario" icono="play" ancho onClick={() => startStudy(hoy, 'repaso', contenido.blockKey, contenido.tramos)}>Empezar · {fmtDur(contenido.total)}</Boton>}

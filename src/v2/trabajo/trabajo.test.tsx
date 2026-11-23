@@ -300,6 +300,7 @@ describe('Handyx 2.0', () => {
     mostrar(<HandyxV2 {...props('#/metas/handyx')} />);
     expect(screen.queryByRole('button', { name: 'Sumar 1 hora' })).toBeNull();
     expect(screen.getByText(/En pausa desde el 20 nov/)).toBeTruthy();
+    expect(screen.getByText('Búsqueda intensiva. Roadmap, cortes y backlog quedan congelados.')).toBeTruthy();
     fireEvent.click(screen.getByRole('button', { name: 'Retomar Handyx' }));
     fireEvent.click(await screen.findByRole('button', { name: 'Retomar' }));
     await screen.findByText('Handyx retomado');
