@@ -391,7 +391,7 @@ describe('Semana de entreno', () => {
     expect(screen.getAllByRole('listitem')).toHaveLength(7);
     fireEvent.click(screen.getByRole('radio', { name: 'Full body ×3' }));
     expect(getState().train.plan.template).toBe('full');
-    fireEvent.click(boton(/^martes/));
+    fireEvent.click(boton(/^MAR .*\. martes\. Cambiar$/)); // empieza con lo que se ve ("MAR Full body ×3 …")
     const hoja = dialogo();
     expect(within(hoja).getByRole('radio', { name: /^Descanso activo/ })).toHaveAttribute('aria-checked', 'true');
     fireEvent.click(within(hoja).getByRole('radio', { name: 'Libre' }));
@@ -401,7 +401,7 @@ describe('Semana de entreno', () => {
 
   it('el lunes de hoy lleva la marca; "Crear rutina" va a la rutina nueva', () => {
     render(<SemanaV2 {...props('#/entreno-semana')} />);
-    expect(boton(/^lunes \(hoy\)/)).toBeInTheDocument();
+    expect(boton(/^LUN .*\. lunes, hoy\. Cambiar$/)).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'Crear rutina' })).toHaveAttribute('href', '#/entreno-rutina/nueva');
   });
 
