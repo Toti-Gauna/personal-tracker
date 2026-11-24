@@ -4,6 +4,7 @@
  * la corrida y la de "¿En qué estado estás?". Es un pedazo aparte que App carga una vez que hay ajustes.
  */
 import { useEffect } from 'react';
+import { avisarVersionNueva } from '../../lib/actualizacion';
 import type { Seccion } from '../../lib/routes';
 import { marcarPesoPreguntado } from '../../state/train';
 import { cerrarHojas, useHojaAbierta } from '../../ui/checkins';
@@ -42,6 +43,8 @@ interface Props {
 
 export default function GlobalV2({ activa, pendientes, conBarra, conMini }: Props) {
   useTemaV2();
+  // Después de un deploy, el service worker nuevo toma el control pero la pantalla sigue vieja: se avisa y se actualiza con un toque.
+  useEffect(() => avisarVersionNueva(), []);
   return (
     <>
       {conBarra && <BarraV2 activa={activa} pendientes={pendientes} />}

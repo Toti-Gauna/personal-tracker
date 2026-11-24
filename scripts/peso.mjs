@@ -2,7 +2,8 @@
 /**
  * Trazo · el presupuesto de peso (tanda 3.5). Después de `npm run build`, mide en gzip lo que baja la primera vez (index.html,
  * el script de entrada, lo que precarga y su CSS) y cada pedazo que se carga después, y falla si algo pasa su tope.
- * Corre en el CI después del build: una dependencia o un JSON grande que se cuele en la carga inicial lo frena ahí.
+ * Corre en el CI después del build: una dependencia o un JSON grande que se cuele en la carga inicial lo frena ahí. También
+ * revisa que el service worker se actualice solo.
  */
 import { readFileSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
@@ -39,6 +40,11 @@ for (const f of readdirSync(join(DIST, 'assets')).map((x) => `assets/${x}`)) {
   if (p > 8 * KB) filas.push([n, p, tope]);
 }
 for (const f of iniciales) if (GRANDES.some((r) => r.test(f.slice(7)))) fallos.push(`${f} está en la carga inicial y tiene que bajar solo cuando se usa`);
+
+// La versión nueva tiene que tomar el control sola: sin skipWaiting y clientsClaim, el service worker nuevo espera a que cierres la
+// app del todo y el teléfono se queda con la vieja (vite-plugin-pwa solo las prende solo con injectRegister 'auto').
+const sw = readFileSync(join(DIST, 'sw.js'), 'utf8');
+if (!/self\.skipWaiting\(\),\w+\.clientsClaim\(\)/.test(sw)) fallos.push('sw.js no toma el control solo (falta skipWaiting y clientsClaim): una versión nueva no llegaría hasta cerrar la app');
 
 console.log(filas.map(([n, p, t]) => `${String(n).padEnd(34)} ${(p / KB).toFixed(1).padStart(6)} KB  (tope ${t})`).join('\n'));
 if (fallos.length) { console.error(`\nSe pasó del presupuesto:\n- ${fallos.join('\n- ')}`); process.exit(1); }
