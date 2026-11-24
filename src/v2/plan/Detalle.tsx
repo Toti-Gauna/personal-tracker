@@ -6,7 +6,8 @@
 import { useMemo, useState } from 'react';
 import { fijasDeReservas } from '../../data/certs-v12';
 import { herramientasDe } from '../../data/herramientas';
-import { corrimientoDeFondo, finProyectado, type PeriodoMedido } from '../../data/periodos';
+import { periodosComerciales, periodosSecundarias } from '../../data/fondo';
+import { corrimientoDeFondo, finProyectado, medir, type PeriodoMedido } from '../../data/periodos';
 import { bloqueDe, secuenciaPlan } from '../../data/periodos-plan';
 import { PLAN_EXT } from '../../data/plan-extendido';
 import { sugerirCorrimiento } from '../../data/periodos';
@@ -23,6 +24,7 @@ import { Fila, Tarjeta, Vacio } from '../kit/superficies';
 import { Grupo, Marco } from '../marco/Marco';
 import { Escalonado } from '../movimiento/componentes';
 import { camino, fecha, nombreCorto, partesNombre, plural } from './datos';
+import { destinoDe } from './Compartido';
 import { FilaPeriodo, HeroePeriodo, useAccion, usarNombres } from './TarjetaPeriodo';
 
 const hechos = (p: PeriodoMedido) => p.hijos?.filter((h) => h.estado === 'hecho').length ?? 0;
@@ -74,10 +76,31 @@ export function Detalle({ id, hoy }: { id: string; hoy: string }) {
           </Escalonado>
         </Grupo>
       ) : null}
+      {(p.nivel === 'fase' || p.nivel === 'etapa') && <DeFondo p={p} hoy={hoy} plan={plan} vt={vt} />}
       {p.nivel === 'bloque' && <DelBloque id={p.id} />}
 
     </Marco>
   );
+}
+
+/**
+ * Lo que corre de fondo mientras dura una etapa o una fase: las apps secundarias y los slots comerciales que se pisan con sus
+ * fechas, cada uno con su estado y su página. Con el corrimiento confirmado, valen las fechas nuevas.
+ */
+function DeFondo({ p, hoy, plan, vt }: { p: PeriodoMedido; hoy: string; plan: ReturnType<typeof usePeriodos>['plan']; vt: (id: string) => string }) {
+  const { secundarias, comerciales } = useMemo(() => {
+    const dentro = (x: { inicio: string; fin: string }) => x.inicio <= p.fin && x.fin >= p.inicio;
+    const ver = (xs: ReturnType<typeof periodosSecundarias>) => xs.filter(dentro).map((x) => medir(x, hoy));
+    return { secundarias: ver(periodosSecundarias(plan)), comerciales: ver(periodosComerciales(plan)) };
+  }, [plan, p.inicio, p.fin, hoy]);
+  const grupo = (titulo: string, xs: PeriodoMedido[]) => xs.length ? (
+    <Grupo titulo={titulo} extremo={<span className="t-rotulo">{xs.length}</span>}>
+      <Escalonado className="capa-1 pl-lista" clave={`${p.id}:${titulo}`}>
+        {xs.map((x) => <FilaPeriodo key={x.id} p={x} hoy={hoy} vt={vt(x.id)} href={destinoDe(x)} />)}
+      </Escalonado>
+    </Grupo>
+  ) : null;
+  return <>{grupo('Apps secundarias', secundarias)}{grupo('Slots comerciales', comerciales)}</>;
 }
 
 /** Lo que se hace con el período mismo: marcarlo (o publicarlo), o ir al Imán si el lanzamiento todavía no se puede publicar. */

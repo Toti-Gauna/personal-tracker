@@ -305,7 +305,8 @@ Lenses: Ahora (here) · Línea · Mapa (section 16).
 
 **A period** (`#/metas/periodos/<id>`): back to the parent by its short name ("Fase 1"), the path above it, the hero,
 then by level: version deliverables to tick, "Marcar publicada" (the launch version sends you to complete the Imán
-first), phase exit checklist, market and roles; children as rows that zoom in; a block's extras (card, math window,
+first), phase exit checklist, market and roles; children as rows that zoom in; on a stage or a phase, below its blocks,
+**Apps secundarias** and **Slots comerciales** that overlap its dates (rows to their `#/metas/fondo/<id>` page); a block's extras (card, math window,
 certs, repo/launch/Imán, open-source tools, project detail in a sheet). A late block offers **Correr lo que sigue**: a
 sheet with the proposed dates (fixed dates do not move, background shifts with its window), confirm, and undo from the
 toast or from the block ("Volver a las fechas del plan"). Titles drop the level prefix ("Fase 1 · AI Full-stack

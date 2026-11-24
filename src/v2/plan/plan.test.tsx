@@ -195,6 +195,26 @@ describe('Plan 2.0 · un período', () => {
     expect(screen.getByRole('region', { name: /^Salís al mercado con/ })).toHaveTextContent('Claude Architect');
   });
 
+  it('una fase y una etapa muestran lo que corre de fondo en sus fechas: las apps secundarias y los slots comerciales', () => {
+    const { unmount } = abrir('#/metas/periodos/F1');
+    const sec = within(screen.getByRole('region', { name: /^Apps secundarias/ }));
+    expect(sec.getByRole('link', { name: /^handyx|^HandyX/i })).toHaveAttribute('href', '#/metas/fondo/handyx');
+    // Solo lo que se pisa con la fase (21 nov – 14 ene): JulIA arranca recién el 4 de febrero.
+    expect(sec.queryByText(/JulIA/)).toBeNull();
+    const com = within(screen.getByRole('region', { name: /^Slots comerciales/ }));
+    expect(com.getAllByRole('link').map((a) => a.getAttribute('href'))).toEqual(['#/metas/fondo/com-1', '#/metas/fondo/com-2']);
+    expect(com.getByText(/#1 · Aquasol and water parks/)).toBeInTheDocument();
+    // La etapa 1 lo junta todo: las cuatro apps y los primeros slots.
+    unmount();
+    abrir('#/metas/periodos/etapa-1');
+    expect(within(screen.getByRole('region', { name: /^Apps secundarias/ })).getAllByRole('link')).toHaveLength(4);
+  });
+
+  it('una fase sin nada de fondo no muestra esos grupos', () => {
+    abrir('#/metas/periodos/F11');
+    expect(screen.queryByRole('region', { name: /^Apps secundarias/ })).toBeNull();
+  });
+
   it('un período que no existe dice qué pasó y lleva al plan', () => {
     abrir('#/metas/periodos/NADA');
     expect(screen.getByText('No hay un período con ese nombre')).toBeInTheDocument();
