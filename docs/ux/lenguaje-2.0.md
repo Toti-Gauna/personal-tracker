@@ -681,6 +681,13 @@ mobile means loading that data after the first render: a change to the state lay
 (in CI after the build) fails if the first load passes 290 KB gzipped, a lazy chunk 45 KB, a CSS file 20 KB, or the 3D map (150 KB)
 ends up in the first load.
 
+**Updates reach the phone.** The service worker takes control by itself (`skipWaiting` + `clientsClaim` in `vite.config.ts`;
+`vite-plugin-pwa` only switches them on with the default `injectRegister`, so with `'script-defer'` they must be asked for, and
+`npm run peso` fails if `dist/sw.js` lacks them). Between the 3.5 deploy and the 24 Nov fix they were missing, so a new version
+waited until the app was fully closed. The open screen still runs the old code until it reloads, so when a new version takes
+over a toast says "Hay una versión nueva" with **Actualizar** (`lib/actualizacion.ts`, shown from the lazy `Global`); nothing
+reloads by itself, so it never cuts what you are typing.
+
 **Accessibility**: `npm run a11y` runs axe-core (WCAG 2.1 A and AA) on every route of the revision in both themes and writes
 `a11y.md`. The first run found 74 problems on 54 screens; the last one, **none**. What it found, and the rule each one left:
 

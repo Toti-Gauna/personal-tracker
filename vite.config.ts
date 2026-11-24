@@ -33,7 +33,13 @@ export default defineConfig({
           { src: 'trazo.svg', sizes: 'any', type: 'image/svg+xml' },
         ],
       },
-      workbox: { globPatterns: ['**/*.{js,css,html,svg,png,woff2}'] },
+      workbox: {
+        globPatterns: ['**/*.{js,css,html,svg,png,woff2}'],
+        // vite-plugin-pwa solo las prende solo con injectRegister 'auto': con 'script-defer' hay que pedirlas. Sin ellas, la versión nueva
+        // espera a que cierres la app del todo y el teléfono se queda con la vieja (pasó entre el 23 y el 24 de noviembre).
+        skipWaiting: true,
+        clientsClaim: true,
+      },
     }),
   ],
   test: {
