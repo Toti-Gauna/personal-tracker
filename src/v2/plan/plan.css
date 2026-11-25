@@ -65,6 +65,8 @@ a.tp-fila-link:active { background: var(--capa-2); }
 .pl-sug-lista { padding: 0 var(--sp-4); }
 .pl-sug-lista > * + * { border-top: 1px solid var(--raya); }
 .pl-sug-lista .k-etiqueta { font-size: var(--t-15); }
+/* La vista previa de empezar de nuevo: texto corrido en una tarjeta, no una lista de casillas. */
+.pl-reiniciar { display: grid; gap: var(--sp-2); padding: var(--sp-4); border-radius: var(--r-l); }
 .pl .m-grupo:first-of-type { margin-top: var(--sp-7); }
 
 @media (min-width: 1100px) {

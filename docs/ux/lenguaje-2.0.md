@@ -309,7 +309,12 @@ first), phase exit checklist, market and roles; children as rows that zoom in; o
 **Apps secundarias** and **Slots comerciales** that overlap its dates (rows to their `#/metas/fondo/<id>` page); a block's extras (card, math window,
 certs, repo/launch/Imán, open-source tools, project detail in a sheet). A late block offers **Correr lo que sigue**: a
 sheet with the proposed dates (fixed dates do not move, background shifts with its window), confirm, and undo from the
-toast or from the block ("Volver a las fechas del plan"). Titles drop the level prefix ("Fase 1 · AI Full-stack
+toast or from the block ("Volver a las fechas del plan"). **Empezar el plan de nuevo** (row in "Más del plan"): pick a start day
+(today by default) and everything planned is dated again from there (`reiniciarDesde`): the first unfinished block starts that day
+with the same working days, the rest follow, and it stops at the next absorber, which shrinks (or grows) and keeps its end; the
+December pause and booked exams stay. A block's versions, batches, cert exams and math milestones travel with it (`llevarFecha`;
+the Cert and window pages too), so nothing stays "atrasado" by an old date. The sheet shows what changes first, the toast undoes it,
+and "Volver todo a las fechas del plan" clears every shift. Only dates change: deliverables, batches, hours and notes stay. Titles drop the level prefix ("Fase 1 · AI Full-stack
 Engineer" → "AI Full-stack Engineer", with "Fase 1" in the kicker).
 
 **Análisis** (`#/metas/analisis`): Calibración, Diferencia, Impacto, Evolución, Revisión semanal, Búsqueda, Sprint,

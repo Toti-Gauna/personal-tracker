@@ -5,7 +5,7 @@
  */
 import { useState } from 'react';
 import { certV12, estadoCert } from '../../data/certs-v12';
-import { claveHito } from '../../data/periodos-plan';
+import { claveHito, llevarDeBloque } from '../../data/periodos-plan';
 import { cargarMock, marcarHito, reservarExamen } from '../../state/plan';
 import { useStore } from '../../state/store';
 import { fp } from '../../ui/periodos';
@@ -33,7 +33,7 @@ export function CertV2({ id, hoy }: { id: string; hoy: string }) {
   const plan = useStore((s) => s.plan);
   const c = certV12(id);
   const [pct, setPct] = useState('');
-  const [fecha, setFecha] = useState<string | null>(() => plan.reservas?.[id]?.examen ?? c?.examen ?? hoy);
+  const [fecha, setFecha] = useState<string | null>(() => plan.reservas?.[id]?.examen ?? (c ? llevarDeBloque(plan.corrimientos, c.bloque)(c.examen) : hoy));
   if (!c) {
     return (
       <Marco titulo="Certificación" volver={{ href: '#/metas', nombre: 'Plan' }}>
@@ -111,8 +111,8 @@ export function CertV2({ id, hoy }: { id: string; hoy: string }) {
 
       <Grupo titulo="Preparación" extremo={<span className="t-rotulo">{c.horas} h</span>}>
         <div className="capa-1 s-lista">
-          <FilaHoja icono="calendario" titulo="El plan día por día" valor={cuantos(c.plan.length, 'paso', 'pasos')}>
-            <ol className="capa-1 pt-revs">{c.plan.map((x) => <li key={x.fecha + x.texto} className={x.fecha === hoy ? 'hoy' : undefined}><span className="t-rotulo">{fp(x.fecha)}{x.fecha === hoy ? ' · hoy' : ''}</span><span className="t-cuerpo">{x.texto}</span></li>)}</ol>
+          <FilaHoja icono="calendario" titulo="El plan día por día" valor={cuantos(e.cert.plan.length, 'paso', 'pasos')}>
+            <ol className="capa-1 pt-revs">{e.cert.plan.map((x) => <li key={x.fecha + x.texto} className={x.fecha === hoy ? 'hoy' : undefined}><span className="t-rotulo">{fp(x.fecha)}{x.fecha === hoy ? ' · hoy' : ''}</span><span className="t-cuerpo">{x.texto}</span></li>)}</ol>
           </FilaHoja>
           <FilaHoja icono="documento" titulo="Recursos" valor={`${c.recursos.length}`}>
             <ul className="capa-1 pt-revs">{c.recursos.map((r) => <li key={r}><span className="t-cuerpo">{r}</span></li>)}</ul>

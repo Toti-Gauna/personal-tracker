@@ -17,6 +17,7 @@ import { Grupo, Marco } from '../marco/Marco';
 import { Escalonado } from '../movimiento/componentes';
 import { Lentes } from './Compartido';
 import { HORIZONTES, enHorizonte, fecha, heroeDe, semana, type Horizonte } from './datos';
+import { ReiniciarPlan } from './Reiniciar';
 import { FilaPeriodo, HeroePeriodo, usarNombres } from './TarjetaPeriodo';
 
 const DIA = ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'];
@@ -116,6 +117,7 @@ export function Centro({ hoy }: { hoy: string }) {
           <Fila icono="ritmo" titulo="La ruta por ramas" nota="Las seis ramas y lo que viene" href="#/metas/ruta" />
           <Fila icono="enlace" titulo="El mapa por ramas" nota="Qué depende de qué" href="#/metas/mapa" />
           <Fila icono="hardware" titulo="Etapas, trámites y compras" href="#/metas/etapas" />
+          <ReiniciarPlan hoy={hoy} />
         </div>
       </Grupo>
     </Marco>

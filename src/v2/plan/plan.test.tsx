@@ -215,6 +215,32 @@ describe('Plan 2.0 · un período', () => {
     expect(screen.queryByRole('region', { name: /^Apps secundarias/ })).toBeNull();
   });
 
+  it('empezar el plan de nuevo: la hoja muestra qué cambia, confirma desde el día elegido y se deshace', () => {
+    abrir('#/metas');
+    expect(plan().corrimientos).toBeUndefined();
+    fireEvent.click(screen.getByRole('button', { name: /^Empezar el plan de nuevo/ }));
+    const hoja = within(screen.getByRole('dialog', { name: 'Empezar de nuevo' }));
+    expect(hoja.getByText(/PetrIA/, { selector: 'b' })).toBeInTheDocument();
+    expect(hoja.getByText(/pasa a/)).toBeInTheDocument();
+    expect(hoja.queryByRole('button', { name: /Volver todo a las fechas del plan/ })).toBeNull(); // todavía no hay corrimientos
+    fireEvent.click(hoja.getByRole('button', { name: 'Empezar el 23 nov' }));
+    expect(plan().corrimientos?.P1).toMatchObject({ inicio: HOY, fin: '2026-12-11' }); // sus 19 días, desde hoy
+    expect(screen.getByText('Plan empezado de nuevo')).toBeInTheDocument();
+    fireEvent.click(screen.getAllByRole('button', { name: 'Deshacer' }).pop()!);
+    expect(plan().corrimientos?.P1).toBeUndefined();
+  });
+
+  it('con el plan ya empezado desde ese día no hay nada que cambiar, y se puede volver a las fechas del plan', () => {
+    abrir('#/metas');
+    fireEvent.click(screen.getByRole('button', { name: /^Empezar el plan de nuevo/ }));
+    fireEvent.click(within(screen.getByRole('dialog', { name: 'Empezar de nuevo' })).getByRole('button', { name: 'Empezar el 23 nov' }));
+    fireEvent.click(screen.getByRole('button', { name: /^Empezar el plan de nuevo/ }));
+    const hoja = within(screen.getByRole('dialog', { name: 'Empezar de nuevo' }));
+    expect(hoja.getByRole('button', { name: 'Empezar el 23 nov' })).toHaveAttribute('aria-disabled', 'true');
+    fireEvent.click(hoja.getByRole('button', { name: 'Volver todo a las fechas del plan' }));
+    expect(plan().corrimientos).toEqual({});
+  });
+
   it('un período que no existe dice qué pasó y lleva al plan', () => {
     abrir('#/metas/periodos/NADA');
     expect(screen.getByText('No hay un período con ese nombre')).toBeInTheDocument();
