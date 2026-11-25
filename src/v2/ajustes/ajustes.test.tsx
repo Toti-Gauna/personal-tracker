@@ -5,7 +5,7 @@ import { EJEMPLO_BLOQUE } from '../../data/metas-bloque';
 import { PLANTILLAS } from '../../data/motor-rutinas';
 import { DEFAULT_ALARMS } from '../../data/sounds';
 import { leerRuta } from '../../lib/routes';
-import { getState, register, resetState, setFocus, setState, startDay } from '../../state/store';
+import { getState, register, resetState, setFocus, setState, startDay, toggleTask } from '../../state/store';
 import { guardarRutina, asignarRutina } from '../../state/rutinas';
 import { desactivarIntensiva } from '../../state/plan';
 import CapasV2, { aviso, limpiarCapas } from '../kit/capas';
@@ -534,6 +534,34 @@ describe('Rutinas del día', () => {
     expect(asig()).toHaveLength(1);
   });
 
+  it('asignar una rutina que cubre hoy rearma hoy: lo que ya hiciste queda, el resto cambia, y Deshacer lo devuelve', () => {
+    const antes = getState().days[HOY].blocks.map((b) => b.title);
+    const primero = getState().days[HOY].blocks[0];
+    toggleTask(HOY, primero.key, primero.tasks[0].id);
+    const id = guardarRutina({ nombre: 'Mía', creada: HOY, bloques: PLANTILLAS.find((p) => p.id === 'plantilla:busqueda-intensiva-finde')!.bloques });
+    render(<>{<RutinasV2 {...props(`#/ajustes-rutinas/${id}`)} />}{capas}</>);
+    fireEvent.click(boton('Usarla esos días')); // lunes a viernes desde hoy (lunes)
+    const d = getState().days[HOY];
+    expect(d.rutinaPropia).toBe('Mía');
+    expect(d.blocks.find((b) => b.key === primero.key)!.tasks[0].done).toBe(true);
+    expect(d.blocks.some((b) => /mock interview/.test(b.title))).toBe(true);
+    expect(screen.getByText(/hoy también/)).toBeInTheDocument();
+    fireEvent.click(screen.getAllByRole('button', { name: 'Deshacer' }).pop()!);
+    expect(getState().days[HOY].rutinaPropia).toBeUndefined();
+    expect(getState().days[HOY].blocks.map((b) => b.title)).toEqual(antes);
+    expect(getState().days[HOY].blocks.find((b) => b.key === primero.key)!.tasks[0].done).toBe(true); // nunca se pierde lo hecho
+  });
+
+  it('asignar a días que no incluyen hoy no toca el día de hoy', () => {
+    const id = guardarRutina({ nombre: 'Mía', creada: HOY, bloques: PLANTILLAS[0].bloques });
+    render(<>{<RutinasV2 {...props(`#/ajustes-rutinas/${id}`)} />}{capas}</>);
+    fireEvent.click(screen.getByRole('button', { name: 'lun' })); // hoy es lunes: queda de martes a viernes
+    fireEvent.click(boton('Usarla esos días'));
+    expect(getState().plan.asignacionesRutina).toHaveLength(1);
+    expect(getState().days[HOY].rutinaPropia).toBeUndefined();
+    expect(screen.queryByText(/hoy también/)).toBeNull();
+  });
+
   it('borrar una rutina propia se deshace con sus asignaciones', () => {
     const id = guardarRutina({ nombre: 'Para borrar', creada: HOY, bloques: PLANTILLAS[0].bloques });
     asignarRutina({ rutina: id, tipo: 'dia', fecha: HOY });
@@ -564,6 +592,42 @@ describe('Rutinas del día', () => {
     expect(r.bloques.some((b) => b.label === 'Médico' && b.start === '15:00')).toBe(true);
     expect(getState().days[HOY].rutinaPropia).toBe(r.nombre);
     expect(screen.getByText('Hoy usa la rutina adaptada')).toBeInTheDocument();
+  });
+});
+
+describe('Adaptar hoy · partir de otra rutina', () => {
+  it('ofrece la de hoy, las tuyas y las plantillas; partiendo de una tuya, hoy pasa a usarla y lo hecho queda', () => {
+    const primero = getState().days[HOY].blocks[0];
+    toggleTask(HOY, primero.key, primero.tasks[0].id);
+    guardarRutina({ nombre: 'Tuya larga', creada: HOY, bloques: PLANTILLAS.find((p) => p.id === 'plantilla:busqueda-intensiva-finde')!.bloques });
+    render(<>{<RutinasV2 {...props('#/ajustes-rutinas/hoy')} />}{capas}</>);
+    expect(boton(/^Partir de La de hoy/)).toBeInTheDocument();
+    fireEvent.click(boton(/^Partir de/));
+    const opciones = within(dialogo()).getAllByRole('radio').map((r) => r.textContent ?? '');
+    expect(opciones[0]).toMatch(/^La de hoy/);
+    expect(opciones.some((t) => /^Tuya larga/.test(t))).toBe(true);
+    expect(opciones).toHaveLength(2 + PLANTILLAS.length); // la de hoy + la tuya + las plantillas
+    fireEvent.click(within(dialogo()).getByRole('radio', { name: /^Tuya larga/ }));
+    expect(boton(/^Partir de Tuya larga/)).toBeInTheDocument();
+    fireEvent.click(boton('Usar hoy'));
+    const d = getState().days[HOY];
+    expect(d.rutinaPropia).toBe(`Tuya larga · ${HOY}`);
+    expect(d.blocks.some((b) => /mock interview/.test(b.title))).toBe(true);
+    expect(d.blocks.find((b) => b.key === primero.key)!.tasks[0].done).toBe(true);
+    expect(getState().plan.asignacionesRutina).toEqual([expect.objectContaining({ tipo: 'dia', fecha: HOY })]);
+  });
+
+  it('partiendo de una plantilla, la vista previa muestra sus bloques; sin elegir nada, parte de la de hoy como siempre', () => {
+    render(<>{<RutinasV2 {...props('#/ajustes-rutinas/hoy')} />}{capas}</>);
+    expect(screen.queryByText(/mock interview/)).toBeNull(); // la de un lunes no tiene la demo del sábado
+    fireEvent.click(boton(/^Partir de/));
+    fireEvent.click(within(dialogo()).getByRole('radio', { name: /^Sábado/ }));
+    expect(boton(/^Partir de Sábado/)).toBeInTheDocument();
+    expect(screen.getAllByText(/mock interview/).length).toBeGreaterThan(0);
+    // Volver a "La de hoy" deja la vista previa como estaba.
+    fireEvent.click(boton(/^Partir de/));
+    fireEvent.click(within(dialogo()).getByRole('radio', { name: /^La de hoy/ }));
+    expect(screen.queryByText(/mock interview/)).toBeNull();
   });
 });
 

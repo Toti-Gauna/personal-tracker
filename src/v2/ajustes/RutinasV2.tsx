@@ -5,13 +5,13 @@
  */
 import { useMemo, useState } from 'react';
 import { AREAS } from '../../data/defaults';
-import { PLANTILLAS, adaptarRutina, generarRutina, restriccionesDe, type AsignacionRutina, type Fijo, type Generada, type Necesidad, type Restricciones } from '../../data/motor-rutinas';
+import { PLANTILLAS, adaptarRutina, generarRutina, restriccionesDe, rutinaParaFecha, type AsignacionRutina, type Fijo, type Generada, type Necesidad, type Restricciones } from '../../data/motor-rutinas';
 import { RAMA_NOMBRE } from '../../data/ramas';
 import { blockMin, isMeta, type RoutineBlock } from '../../data/routines';
 import { fmtDur } from '../../data/time';
 import type { DayLog, RamaOMain } from '../../data/types';
 import { ir } from '../../lib/routes';
-import { adaptarDia, asignarRutina, borrarRutina, guardarRutina, quitarAsignacion, rutinaBase } from '../../state/rutinas';
+import { adaptarDia, asignarRutina, borrarRutina, guardarRutina, quitarAsignacion, rearmarDia, restaurarDia, rutinaBase } from '../../state/rutinas';
 import { getState, setState, useStore } from '../../state/store';
 import { colorV2 } from '../hoy/datos';
 import { Icono } from '../iconos';
@@ -216,7 +216,7 @@ const INFO_EDITOR = (
   <>
     <p className="t-cuerpo-l">Decí a qué hora te levantás y te acostás, lo que no se mueve y las horas que pide cada cosa.</p>
     <p className="t-cuerpo">Trazo acomoda lo flexible en los huecos entre lo fijo, en el orden en que lo anotes: lo primero tiene prioridad. Lo que no entra se avisa.</p>
-    <p className="t-cuerpo">Después elegí cuándo se usa: un día, días de la semana desde una fecha, o unas fechas. Los días que ya empezaron no cambian: para hoy, usá Adaptar hoy.</p>
+    <p className="t-cuerpo">Después elegí cuándo se usa: un día, días de la semana desde una fecha, o unas fechas. Si cubre hoy, hoy también pasa a usarla: lo que ya hiciste queda y el resto se acomoda. Los días anteriores no cambian.</p>
     <p className="t-cuerpo">En la vista previa, el candado marca lo fijo; lo demás es flexible.</p>
   </>
 );
@@ -268,9 +268,17 @@ function Asignar({ id, actuales, hoy }: { id: string; actuales: AsignacionRutina
   const valida = tipo !== 'semana' || dias.length > 0;
   const asignar = () => {
     const antes = getState().plan.asignacionesRutina;
+    const diaAntes = getState().days[hoy];
     const nueva = tipo === 'dia' ? { rutina: id, tipo, fecha } : tipo === 'rango' ? { rutina: id, tipo, desde: fecha, hasta: hasta < fecha ? fecha : hasta } : { rutina: id, tipo, dias, desde: fecha };
     const aid = asignarRutina(nueva);
-    aviso({ titulo: 'Rutina asignada', sub: textoAsignacion({ ...nueva, id: aid }), tono: 'hecho', deshacer: () => setState((s) => ({ ...s, plan: { ...s.plan, asignacionesRutina: antes } })) });
+    // Si hoy ya empezó y esta rutina es la que lo rige ahora, se rearma hoy: lo que ya hiciste queda, el resto pasa a la rutina.
+    const s = getState();
+    const rigeHoy = !!diaAntes && rutinaParaFecha(hoy, s.plan.asignacionesRutina, s.plan.rutinasPropias)?.id === id;
+    if (rigeHoy) rearmarDia(hoy);
+    aviso({
+      titulo: 'Rutina asignada', sub: `${textoAsignacion({ ...nueva, id: aid })}${rigeHoy ? ' · hoy también (lo que hiciste queda)' : ''}`, tono: 'hecho',
+      deshacer: () => { setState((x) => ({ ...x, plan: { ...x.plan, asignacionesRutina: antes } })); if (rigeHoy) restaurarDia(hoy, diaAntes); },
+    });
   };
   const quitar = (a: AsignacionRutina) => {
     const k = (getState().plan.asignacionesRutina ?? []).findIndex((x) => x.id === a.id);
@@ -304,14 +312,39 @@ function Asignar({ id, actuales, hoy }: { id: string; actuales: AsignacionRutina
 const INFO_HOY = (
   <>
     <p className="t-cuerpo-l">Lo fijo queda en su lugar y lo flexible se acomoda alrededor.</p>
+    <p className="t-cuerpo">Podés partir de la rutina de hoy, de una tuya o de una plantilla.</p>
     <p className="t-cuerpo">Un compromiso nuevo manda sobre lo fijo que pisa. Lo que ya hiciste hoy no se toca.</p>
     <p className="t-cuerpo">En la vista previa, el candado marca lo fijo; lo demás es flexible.</p>
   </>
 );
 
-/** Adaptar hoy: otra hora, un compromiso nuevo o sacar un fijo; lo que ya hiciste queda. */
+/**
+ * Adaptar hoy: parte de la rutina de hoy, de una tuya o de una plantilla; después, otra hora, un compromiso nuevo o sacar un fijo.
+ * Lo que ya hiciste queda. Cambiar de rutina vuelve a empezar los ajustes (cada una tiene sus fijos).
+ */
 function AdaptarHoy({ day }: { day: DayLog }) {
-  const base = useMemo(() => rutinaBase(day.date, day.dayType), [day.date, day.dayType]);
+  const propias = useStore((s) => s.plan.rutinasPropias) ?? [];
+  const [origen, setOrigen] = useState('hoy');
+  const hoyBase = useMemo(() => rutinaBase(day.date, day.dayType), [day.date, day.dayType]);
+  const elegida = origen === 'hoy' ? null : origen.startsWith('rut:') ? propias.find((r) => `rut:${r.id}` === origen) : PLANTILLAS.find((p) => `pl:${p.id}` === origen);
+  const base = elegida ? elegida.bloques : hoyBase;
+  const opciones = [
+    { valor: 'hoy', etiqueta: 'La de hoy', nota: day.rutinaPropia ?? 'La del plan' },
+    ...propias.map((r) => ({ valor: `rut:${r.id}`, etiqueta: r.nombre, nota: 'Tuya' })),
+    ...PLANTILLAS.map((p) => ({ valor: `pl:${p.id}`, etiqueta: p.nombre, nota: p.grupo === 'v12' ? 'Plantilla del plan' : 'Plantilla archivada' })),
+  ];
+  return (
+    <Marco className="ax" titulo="Adaptar hoy" volver={{ href: '#/hoy', nombre: 'Hoy' }} info={INFO_HOY}
+      acciones={<Boton tamano="s" variante="fantasma" icono="siguiente" href="#/ajustes-rutinas">Rutinas</Boton>}>
+      <div className="capa-1 ax-form">
+        <Selector etiqueta="Partir de" valor={origen} opciones={opciones} onCambio={setOrigen} />
+      </div>
+      <AdaptarHoyDe key={origen} day={day} base={base} nombreBase={elegida ? ('nombre' in elegida ? elegida.nombre : '') : undefined} />
+    </Marco>
+  );
+}
+
+function AdaptarHoyDe({ day, base, nombreBase }: { day: DayLog; base: RoutineBlock[]; nombreBase?: string }) {
   const r0 = useMemo(() => restriccionesDe(base), [base]);
   const [despertar, setDespertar] = useState(r0.despertar);
   const [dormir, setDormir] = useState(r0.dormir);
@@ -322,13 +355,14 @@ function AdaptarHoy({ day }: { day: DayLog }) {
   // La misma cuenta que hace adaptarDia, para la vista previa.
   const g = useMemo(() => adaptarRutina(base, cambio), [base, despertar, dormir, nuevos, quitar]); // eslint-disable-line react-hooks/exhaustive-deps
   const usar = () => {
-    adaptarDia(day.date, cambio);
+    // De la rutina de hoy: el nombre de siempre. De otra: se sabe de cuál partió.
+    if (nombreBase) adaptarDia(day.date, cambio, `${nombreBase} · ${day.date}`, base);
+    else adaptarDia(day.date, cambio);
     setHecho(true);
     aviso({ titulo: 'Hoy adaptado', sub: 'Lo que ya hiciste queda como estaba', tono: 'hecho' });
   };
   return (
-    <Marco className="ax" titulo="Adaptar hoy" volver={{ href: '#/hoy', nombre: 'Hoy' }} info={INFO_HOY}
-      acciones={<Boton tamano="s" variante="fantasma" icono="siguiente" href="#/ajustes-rutinas">Rutinas</Boton>}>
+    <>
       <div className="capa-1 ax-form ax-dos">
         <CampoHora etiqueta="Me levanté" valor={despertar} onCambio={setDespertar} />
         <CampoHora etiqueta="Me acuesto" valor={dormir} onCambio={setDormir} />
@@ -348,6 +382,6 @@ function AdaptarHoy({ day }: { day: DayLog }) {
       ) : (
         <Boton variante="primario" ancho icono="tilde" deshabilitado={g.errores.length > 0 ? 'Revisá lo fijo: hay horarios que se pisan.' : false} onClick={usar}>Usar hoy</Boton>
       )}
-    </Marco>
+    </>
   );
 }

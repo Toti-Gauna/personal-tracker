@@ -3,7 +3,7 @@ import { adaptarRutina, rutinaParaFecha, type AsignacionRutina, type Cambio, typ
 import { planPropio } from '../data/rutinas-propias';
 import { ROUTINES_FILE, type RoutineBlock } from '../data/routines';
 import { buildBlocks, newId } from '../data/schedule';
-import type { Block } from '../data/types';
+import type { Block, DayLog } from '../data/types';
 import { getState, setState } from './store';
 
 const plan = (fn: (p: ReturnType<typeof getState>['plan']) => ReturnType<typeof getState>['plan']) => setState((s) => ({ ...s, plan: fn(s.plan) }));
@@ -33,6 +33,12 @@ export function quitarAsignacion(id: string) {
 
 const conAvance = (b: Block) => !!b.hecho || b.tasks.some((t) => t.done);
 
+/** Los bloques de un día con otros bloques de reemplazo: los que ya tienen avance quedan como están, el resto se cambia. */
+function fusionar(day: DayLog, nuevos: Block[]): Block[] {
+  const hechos = day.blocks.filter(conAvance);
+  return [...hechos, ...nuevos.filter((b) => !hechos.some((h) => h.key === b.key))].sort((a, b) => a.start.localeCompare(b.start)).map((b, i) => ({ ...b, n: i + 1 }));
+}
+
 /**
  * Rearma un día ya empezado con la rutina propia que rige esa fecha: los bloques donde ya hiciste algo quedan como estaban; el resto
  * se reemplaza. Sin rutina propia para esa fecha, no hace nada.
@@ -42,10 +48,20 @@ export function rearmarDia(date: string) {
     const day = s.days[date];
     const r = rutinaParaFecha(date, s.plan.asignacionesRutina, s.plan.rutinasPropias);
     if (!day || !r) return s;
-    const hechos = day.blocks.filter(conAvance);
-    const nuevos = buildBlocks(planPropio(r.bloques)).filter((b) => !hechos.some((h) => h.key === b.key));
-    const blocks = [...hechos, ...nuevos].sort((a, b) => a.start.localeCompare(b.start)).map((b, i) => ({ ...b, n: i + 1 }));
+    const blocks = fusionar(day, buildBlocks(planPropio(r.bloques)));
     return { ...s, days: { ...s.days, [date]: { ...day, rutinaPropia: r.nombre, blocks } } };
+  });
+}
+
+/**
+ * Vuelve un día a como estaba antes de un rearmado (para deshacer): sus bloques de antes vuelven, menos los que tuvieron avance
+ * desde entonces, que se quedan. Lo que hiciste después nunca se pierde.
+ */
+export function restaurarDia(date: string, antes: DayLog | undefined) {
+  setState((s) => {
+    const day = s.days[date];
+    if (!day || !antes) return s;
+    return { ...s, days: { ...s.days, [date]: { ...day, rutinaPropia: antes.rutinaPropia, blocks: fusionar(day, antes.blocks) } } };
   });
 }
 
@@ -58,9 +74,12 @@ export function rutinaBase(date: string, dayType?: string): RoutineBlock[] {
   return (ROUTINES_FILE.dayRoutines[t] ?? ROUTINES_FILE.dayRoutines['busqueda-intensiva']).blocks;
 }
 
-/** Adapta un día: arma la rutina con el cambio, la guarda, la asigna a esa fecha y rearma el día si ya empezó. */
-export function adaptarDia(date: string, cambio: Cambio, nombre = `Adaptada · ${date}`): { id: string; faltan: { label: string; min: number }[]; errores: string[] } {
-  const g = adaptarRutina(rutinaBase(date), cambio);
+/**
+ * Adapta un día: arma la rutina con el cambio, la guarda, la asigna a esa fecha y rearma el día si ya empezó. Parte de la rutina que
+ * rige ese día o, con `base`, de otra (una tuya o una plantilla).
+ */
+export function adaptarDia(date: string, cambio: Cambio, nombre = `Adaptada · ${date}`, base?: RoutineBlock[]): { id: string; faltan: { label: string; min: number }[]; errores: string[] } {
+  const g = adaptarRutina(base ?? rutinaBase(date), cambio);
   const id = guardarRutina({ nombre, origen: getState().days[date]?.dayType, creada: date, bloques: g.bloques });
   asignarRutina({ rutina: id, tipo: 'dia', fecha: date });
   rearmarDia(date);

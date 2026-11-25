@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it } from 'vitest';
-import { generarRutina } from '../data/motor-rutinas';
+import { PLANTILLAS, generarRutina } from '../data/motor-rutinas';
 import { metasSemanaGeneradas } from '../data/metas-plan';
 import { adaptarDia, asignarRutina, borrarRutina, guardarRutina } from './rutinas';
 import { getState, register, resetState, startDay, toggleTask } from './store';
@@ -32,6 +32,17 @@ describe('ola 34 · rutinas propias en el día', () => {
     const ms = metasSemanaGeneradas('2026-11-23', '2026-11-16', { intensiva: true });
     expect(ms.find((m) => m.clave === 'horas-prog')?.meta).toBe(14); // 2 h × 7
     expect(ms.find((m) => m.clave === 'horas-mate')?.meta).toBe(2); // 15 min × 7 = 1,75 → media hora
+  });
+
+  it('adaptar un día con otra rutina de base: parte de ella y no de la de ese día', () => {
+    startDay('completo', '04:00', '2026-11-23');
+    const finde = PLANTILLAS.find((p) => p.id === 'plantilla:busqueda-intensiva-finde')!;
+    const r = adaptarDia('2026-11-23', {}, 'Del sábado · 2026-11-23', finde.bloques);
+    expect(r.errores).toEqual([]);
+    const d = getState().days['2026-11-23'];
+    expect(d.rutinaPropia).toBe('Del sábado · 2026-11-23');
+    expect(d.blocks.some((b) => /mock interview/.test(b.title))).toBe(true);
+    expect(getState().plan.rutinasPropias!.find((x) => x.id === r.id)!.bloques.some((b) => /mock interview/.test(b.label))).toBe(true);
   });
 
   it('adaptar un día empezado: lo que ya hiciste queda, el resto se rearma; borrar la rutina saca sus asignaciones', () => {
