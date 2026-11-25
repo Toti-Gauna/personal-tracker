@@ -57,7 +57,7 @@ describe('Hoy · la alerta de atraso de la principal (más de 7 días)', () => {
     const plan = within(screen.getByRole('region', { name: 'Plan' }));
     const fila = plan.getByRole('link', { name: /Vas \d+ días atrasado/ });
     expect(fila).toHaveTextContent(/termina el .* en vez del 14 dic 2028/);
-    expect(fila).toHaveTextContent(/Pausá primero lo comercial/);
+    expect(fila).toHaveTextContent(/Pausá primero lo comercial \(devuelve 1 h por día: unos \d+ días hasta el final\)/);
     expect(fila).toHaveTextContent(/lo secundario/);
     // También va en la campana de avisos.
     fireEvent.click(screen.getByRole('button', { name: /^Avisos: \d+$/ }));

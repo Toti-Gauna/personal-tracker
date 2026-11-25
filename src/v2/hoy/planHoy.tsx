@@ -30,8 +30,9 @@ const horas = (min: number) => String(Math.round((min / 60) * 10) / 10).replace(
 
 /** v12.4 · el aviso del atraso acumulado: cuánto, el nuevo fin estimado y qué pausar primero (lo comercial) y después (lo secundario). */
 export function textoAtraso(a: ReturnType<typeof atrasoPrincipal>) {
+  const com = a.sugerencias.find((x) => x.pista === 'comercial');
   const pausar = a.sugerencias.length
-    ? ` Pausá primero lo comercial${a.sugerencias.find((x) => x.pista === 'comercial') ? ` (vuelven ${String(a.sugerencias.find((x) => x.pista === 'comercial')!.horas).replace('.', ',')} h)` : ''} y, si no alcanza, lo secundario.`
+    ? ` Pausá primero lo comercial${com ? ` (devuelve 1 h por día: unos ${com.diasRecuperados} días hasta el final)` : ''} y, si no alcanza, lo secundario.`
     : '';
   return { titulo: `Vas ${a.dias} días atrasado`, texto: `La principal termina el ${fp(a.finEstimado)} en vez del ${fp(a.finPlan)}.${pausar}` };
 }
