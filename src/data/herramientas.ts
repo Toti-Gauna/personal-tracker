@@ -23,7 +23,7 @@ export const REGLA_HERRAMIENTAS = 'Como máximo UNA herramienta nueva por proyec
 /** El nombre de un ítem de origen (bloque, app secundaria o slot comercial). */
 export function nombreOrigen(id: string | null): string {
   if (!id) return 'cada proyecto principal';
-  return PLAN_EXT.bloques.find((b) => b.id === id)?.nombre ?? V122.secundarias.find((s) => s.id === id)?.nombre ?? (() => { const c = V122.comerciales.find((x) => x.id === id); return c ? `#${c.n} ${c.marca ?? 'a definir'}` : id; })();
+  return PLAN_EXT.bloques.find((b) => b.id === id)?.nombre ?? V122.secundarias.find((s) => s.id === id)?.nombre ?? (() => { const c = V122.comerciales.find((x) => x.id === id); return c ? `#${c.n} ${c.marca ?? c.sector ?? 'a definir'}` : id; })();
 }
 
 /**

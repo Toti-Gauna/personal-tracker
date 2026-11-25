@@ -34,6 +34,7 @@ import type { StudyState } from '../data/study-types';
 import { emptyEstudioRuta, type EstudioRutaState } from '../data/study-roadmap';
 import { emptyClipping, migrarClipping, type ClippingState } from '../data/clipping-state';
 import type { Block, DayLog, FocusEntry, FocusState, Preset, RoutineId, Settings } from '../data/types';
+import { sincronizarRevision } from '../data/fondo';
 import { esDiaLibre, fondoParaRutina } from '../data/pistas-dia';
 
 export interface State {
@@ -344,7 +345,13 @@ export function entrevistaCerca(p: PlanState, date: string): { rol: string; empr
 export const semanaPlan = (date: string) => semanaDelPlan(date, state.settings?.startDate);
 
 export function updateDay(date: string, fn: (d: DayLog) => DayLog) {
-  setState((s) => (s.days[date] ? { ...s, days: { ...s.days, [date]: fn(s.days[date]) } } : s));
+  setState((s) => {
+    if (!s.days[date]) return s;
+    const day = fn(s.days[date]);
+    // v12.4: tildar la hora de la secundaria o de la comercial anota 60 min de revisión a esa pista (editables después).
+    const revisionFondo = sincronizarRevision(s.plan.revisionFondo, day);
+    return { ...s, days: { ...s.days, [date]: day }, ...(revisionFondo !== s.plan.revisionFondo ? { plan: { ...s.plan, revisionFondo } } : {}) };
+  });
 }
 
 function updateBlock(date: string, key: string, fn: (b: Block) => Block) {

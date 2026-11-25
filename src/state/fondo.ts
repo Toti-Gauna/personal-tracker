@@ -37,6 +37,11 @@ export function anotarRevision(e: Omit<EntradaRevision, 'id'>, tipoBloque?: stri
   plan((p) => ({ ...p, revisionFondo: [...(p.revisionFondo ?? []), { ...e, id: `rev-${newId()}` }] }));
   return avisoRevision(e, tipoBloque);
 }
+/** v12.4 · cambia los minutos de una entrada (la hora de fondo anota 60 y se corrige a 40, por ejemplo). */
+export function editarRevision(id: string, min: number) {
+  const n = Math.max(0, Math.round(min));
+  plan((p) => ({ ...p, revisionFondo: (p.revisionFondo ?? []).map((x) => (x.id === id ? { ...x, min: n } : x)) }));
+}
 export function borrarRevision(id: string) {
   plan((p) => ({ ...p, revisionFondo: (p.revisionFondo ?? []).filter((x) => x.id !== id) }));
 }

@@ -334,7 +334,7 @@ al.versiones = [
 void v01;
 const tour = V.herramientas.find((h) => h.id === 'tour3d');
 tour.versiones = [{ origen: 'com-11', donde: 'cierre', linea: 'tour 3D y AR', id: '1.0' }];
-const DESDE = { 'showcase-kit': 'Aquasol', captions: 'JulIA', 'seat-picker': 'Cinemacenter', 'voice-agent': 'PetrIA voice-gateway', tour3d: 'Roofy' };
+const DESDE = { 'showcase-kit': 'Aquasol', captions: 'JulIA', 'seat-picker': 'Cinemacenter', 'voice-agent': 'PetrIA voice-gateway', tour3d: 'Roofy', notify: 'PetrIA', 'llm-router': 'PetrIA', 'evals-action': 'PetrIA', 'usage-meter': 'PetrIA' };
 for (const [id, desde] of Object.entries(DESDE)) V.herramientas.find((h) => h.id === id).desde = desde;
 
 // §7: los recordatorios de fondo (los de cada slot, 7 y 14 días antes, los arma la app).

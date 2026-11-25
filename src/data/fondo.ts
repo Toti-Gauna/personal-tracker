@@ -5,9 +5,11 @@
  */
 import { HORAS_FINDE, HORAS_LV } from './capacidad';
 import type { Periodo } from './periodos';
+import { blockDone } from './mejora';
 import { fondoEn, type FondoActivo, type PistaFondo } from './pistas-dia';
 import { claveHito } from './periodos-plan';
 import type { PlanState } from './plan-state';
+import type { DayLog } from './types';
 import { ROUTINES_FILE, blockMin } from './routines';
 import { addDays, toMin } from './time';
 import { PAUSAS_FONDO, V122, type AreaForeground, type Comercial } from './v12-2';
@@ -18,7 +20,18 @@ export type EstadoComercial = 'planned' | 'building' | 'review' | 'published' | 
 export const ESTADOS_COMERCIAL: EstadoComercial[] = ['planned', 'building', 'review', 'published', 'pitched'];
 export const ESTADO_COMERCIAL_TXT: Record<EstadoComercial, string> = { planned: 'planificado', building: 'en construcción', review: 'en revisión', published: 'publicado', pitched: 'ofrecido' };
 
-export interface Lead { id: string; nombre: string; contactado: string; estado: 'contactado' | 'respondió' | 'reunión' | 'propuesta' | 'ganado' | 'perdido' }
+/** v12.4 · por dónde se contactó a un lead. */
+export const CANALES_LEAD = ['email', 'WhatsApp', 'LinkedIn', 'Instagram', 'llamada', 'en persona'] as const;
+export type CanalLead = (typeof CANALES_LEAD)[number];
+/** v12.4 · la venta de un slot: el pitch a la marca y a 10 negocios parecidos (11 leads), cada uno con nombre, fecha, canal y estado. */
+export const META_LEADS = 11;
+export interface Lead { id: string; nombre: string; /** La fecha en que se lo contactó. */ contactado: string; /** v12.4: el canal. Los leads viejos no lo tienen. */ canal?: CanalLead; estado: 'contactado' | 'respondió' | 'reunión' | 'propuesta' | 'ganado' | 'perdido' }
+
+/** v12.4 · la pregunta que se hace 14 días antes de cada slot y cuya respuesta se guarda. */
+export const PERFILES_MARCA = [
+  { id: 'regional', etiqueta: 'Marca regional', nota: 'para conseguir clientes' },
+  { id: 'grande', etiqueta: 'Marca grande', nota: 'para hacer ruido' },
+] as const;
 
 /** Lo que se guarda de cada ítem de fondo (y de los principales, para el Imán y el lanzamiento). */
 export interface EstadoItem {
@@ -42,7 +55,36 @@ export interface EstadoItem {
   descargas?: number;
 }
 
-export interface EntradaRevision { id: string; fecha: string; inicio?: string; min: number; item: string; tipo: 'walkthrough' | 'diseño' | 'comercial' | 'otro'; nota?: string }
+export interface EntradaRevision {
+  id: string; fecha: string; inicio?: string; min: number; item: string; tipo: 'walkthrough' | 'diseño' | 'comercial' | 'otro'; nota?: string;
+  /** v12.4: la hora de fondo del día que la anotó sola al tildarse (los minutos se editan después). */
+  bloque?: 'fondo-sec' | 'fondo-com';
+}
+
+/** v12.4 (respuesta 2) · tildar una hora de fondo anota 60 min de revisión a esa pista. */
+export const MIN_HORA_FONDO = 60;
+const TIPO_BLOQUE_FONDO = { 'fondo-sec': 'walkthrough', 'fondo-com': 'comercial' } as const;
+
+/**
+ * Las entradas de revisión de un día según sus horas de fondo: al tildar la hora de la secundaria o la comercial se anotan 60 min a
+ * esa pista (a la app o al slot que corre ese día); al destildarla, se saca la entrada si sus minutos siguen en 60 (si los editaste,
+ * se queda). Devuelve el mismo arreglo si nada cambia.
+ */
+export function sincronizarRevision(log: EntradaRevision[] | undefined, dia: Pick<DayLog, 'date' | 'blocks'>): EntradaRevision[] | undefined {
+  const base = log ?? [];
+  let out = base;
+  const f = fondoEn(dia.date);
+  for (const b of dia.blocks) {
+    const tipo = TIPO_BLOQUE_FONDO[b.key as keyof typeof TIPO_BLOQUE_FONDO];
+    if (!tipo) continue;
+    const id = `rev-${dia.date}-${b.key}`;
+    const item = b.key === 'fondo-sec' ? f.secundaria[0]?.app.id : f.comercial?.id;
+    const existe = out.find((x) => x.id === id);
+    if (blockDone(b) && item && !existe) out = [...out, { id, fecha: dia.date, min: MIN_HORA_FONDO, item, tipo, bloque: b.key as 'fondo-sec' | 'fondo-com', nota: 'La hora de fondo del día' }];
+    else if (!blockDone(b) && existe && existe.min === MIN_HORA_FONDO) out = out.filter((x) => x.id !== id);
+  }
+  return out === base ? log : out;
+}
 
 type Plan = Pick<PlanState, 'hitos'> & { fondo?: Record<string, EstadoItem>; corrimientos?: PlanState['corrimientos'] };
 /** Las fechas de un período de fondo con el corrimiento confirmado, si lo hay. */
@@ -80,7 +122,7 @@ export function periodosComerciales(plan: Plan): Periodo[] {
     const e = plan.fondo?.[c.id];
     const marca = c.marca ?? e?.marca ?? null;
     return {
-      id: c.id, nombre: `#${c.n} · ${marca ?? 'A definir'}`, nivel: 'bloque' as const, ...fechas(plan, c.id, c), track: 'comercial' as const, pausas: pausasDe(plan, c.id),
+      id: c.id, nombre: `#${c.n} · ${marca ?? c.sector ?? 'A definir'}`, nivel: 'bloque' as const, ...fechas(plan, c.id, c), track: 'comercial' as const, pausas: pausasDe(plan, c.id),
       progreso: AVANCE_ESTADO[e?.estado ?? 'planned'],
       ...(entregablesComercial(c).length ? { checklist: entregablesComercial(c).map((texto, i) => ({ clave: claveHito.entregable(c.id, '1.0', i), texto, hecho: !!plan.hitos?.[claveHito.entregable(c.id, '1.0', i)]?.hecho })) } : {}),
     };
@@ -89,7 +131,7 @@ export function periodosComerciales(plan: Plan): Periodo[] {
 
 /** Lo de fondo que se corre con su ventana cuando se corre el plan: los slots comerciales y las versiones de las apps secundarias. */
 export const itemsDeFondo = () => [
-  ...V122.comerciales.map((c) => ({ id: c.id, nombre: `#${c.n} ${c.marca ?? 'a definir'}`, inicio: c.inicio, fin: c.fin })),
+  ...V122.comerciales.map((c) => ({ id: c.id, nombre: `#${c.n} ${c.marca ?? c.sector ?? 'a definir'}`, inicio: c.inicio, fin: c.fin })),
   ...V122.secundarias.flatMap((a) => a.versiones.map((v) => ({ id: `${a.id}:v${v.id}`, nombre: `${a.nombre} v${v.id}`, inicio: v.inicio, fin: v.fin }))),
 ];
 
@@ -158,7 +200,7 @@ export function faltaForeground(areas: AreaForeground[] | undefined, hecha: stri
 export function sugerenciaPausas(usoPct: number | undefined, umbral = 85, activo: Pick<FondoActivo, 'secundaria' | 'comercial'>): { pista: 'comercial' | 'secundaria'; id: string; nombre: string }[] {
   if (usoPct == null || usoPct < umbral) return [];
   return [
-    ...(activo.comercial ? [{ pista: 'comercial' as const, id: activo.comercial.id, nombre: `#${activo.comercial.n} · ${activo.comercial.marca ?? 'A definir'}` }] : []),
+    ...(activo.comercial ? [{ pista: 'comercial' as const, id: activo.comercial.id, nombre: `#${activo.comercial.n} · ${activo.comercial.marca ?? activo.comercial.sector ?? 'A definir'}` }] : []),
     ...activo.secundaria.map((s) => ({ pista: 'secundaria' as const, id: s.app.id, nombre: `${s.app.nombre} v${s.version}` })),
   ];
 }

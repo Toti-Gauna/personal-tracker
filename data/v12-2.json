@@ -3413,7 +3413,8 @@
      "linea": "WhatsApp → llamada → email de respaldo",
      "id": "1.0"
     }
-   ]
+   ],
+   "desde": "PetrIA"
   },
   {
    "id": "llm-router",
@@ -3428,7 +3429,8 @@
      "linea": "cascada, caché semántica y tope de costo",
      "id": "1.0"
     }
-   ]
+   ],
+   "desde": "PetrIA"
   },
   {
    "id": "evals-action",
@@ -3443,7 +3445,8 @@
      "linea": "evals en el CI como GitHub Action",
      "id": "1.0"
     }
-   ]
+   ],
+   "desde": "PetrIA"
   },
   {
    "id": "chatbot-scan",
@@ -3473,7 +3476,8 @@
      "linea": "costos y cuotas",
      "id": "1.0"
     }
-   ]
+   ],
+   "desde": "PetrIA"
   },
   {
    "id": "agent-creds",

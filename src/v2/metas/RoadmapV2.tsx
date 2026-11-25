@@ -36,7 +36,7 @@ export default function RoadmapV2({ day }: PropsV2) {
     if (!f) return null;
     if (f.pausa) return 'Fondo: en pausa (PNPT)';
     const s = f.secundaria === 'libre' ? 'secundaria libre (elegí de "Ver a futuro")' : f.secundaria?.map((x) => `${x.app} v${x.version}`).join(', ');
-    const c = f.comercial ? (() => { const x = V122.comerciales.find((y) => y.n === f.comercial)!; return `#${x.n} ${x.marca ?? plan.fondo?.[x.id]?.marca ?? 'a definir'}`; })() : '—';
+    const c = f.comercial ? (() => { const x = V122.comerciales.find((y) => y.n === f.comercial)!; return `#${x.n} ${x.marca ?? plan.fondo?.[x.id]?.marca ?? x.sector ?? 'a definir'}`; })() : '—';
     return `Fondo: ${s} · comercial: ${c}`;
   };
   const fase = abierta ?? ultima;

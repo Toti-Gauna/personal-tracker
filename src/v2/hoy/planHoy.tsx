@@ -37,7 +37,7 @@ export function usePlanHoy(day: DayLog) {
   const prox = proximaFechaLimite(arbol, hoy, ['bloque', 'version', 'cert']);
   const fondo = fondoEn(hoy);
   const lunes = addDays(hoy, -((new Date(`${hoy}T12:00:00`).getDay() + 6) % 7));
-  const revision = { min: revisionSemana(plan.revisionFondo, lunes).min, meta: metaRevisionSemana(lunes).walkthroughMin };
+  const revision = { min: revisionSemana(plan.revisionFondo, lunes).min, meta: metaRevisionSemana(lunes).walkthroughMin + metaRevisionSemana(lunes).comercialMin };
   const pasarAConTrabajo = async () => {
     if (!(await confirmar({ titulo: '¿Pasar a la rutina con trabajo?', texto: 'De lunes a viernes, desde el próximo día que empieces.', accion: 'Pasar' }))) return;
     ramas.aplicarRutinaConTrabajo();
@@ -53,7 +53,7 @@ export function usePlanHoy(day: DayLog) {
     ...alertasCompras(plan, hoy).map((c) => ({ id: `compra-${c.id}`, titulo: c.titulo, texto: c.texto, href: c.href })),
     ...recordatoriosFondo(plan, hoy).map((a) => ({ id: `fondo-${a.id}`, titulo: a.texto, href: a.href, accion: { etiqueta: 'Listo', run: () => marcarHito(`v12:recordatorio:${a.id}`, hoy) } })),
   ];
-  const comercial = fondo.comercial ? { ...fondo.comercial, marcaVisible: fondo.comercial.marca ?? plan.fondo?.[fondo.comercial.id]?.marca ?? 'a definir', estado: ESTADO_COMERCIAL_TXT[plan.fondo?.[fondo.comercial.id]?.estado ?? 'planned'] } : null;
+  const comercial = fondo.comercial ? { ...fondo.comercial, marcaVisible: fondo.comercial.marca ?? plan.fondo?.[fondo.comercial.id]?.marca ?? fondo.comercial.sector ?? 'a definir', estado: ESTADO_COMERCIAL_TXT[plan.fondo?.[fondo.comercial.id]?.estado ?? 'planned'] } : null;
   return { hoy, cadena, vence, prox, fondo, comercial, revision, avisos };
 }
 

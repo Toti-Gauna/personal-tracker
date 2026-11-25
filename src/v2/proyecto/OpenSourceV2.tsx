@@ -4,7 +4,7 @@
  * el link, las descargas a mano y el post del jueves. El escrow de HandyX figura como interno: nunca se publica.
  */
 import { useState } from 'react';
-import { HERRAMIENTAS, REGLA_HERRAMIENTAS, estadoVersion, nombreOrigen, presetsAlawys, puedePublicarHerramienta } from '../../data/herramientas';
+import { HERRAMIENTAS, REGLA_HERRAMIENTAS, estadoVersion, fechasVersion, nombreOrigen, presetsAlawys, puedePublicarHerramienta } from '../../data/herramientas';
 import { PLAN_EXT } from '../../data/plan-extendido';
 import { V122, type Herramienta } from '../../data/v12-2';
 import { agregarPost, borrarPost, publicarVersionFondo, setItem } from '../../state/fondo';
@@ -27,7 +27,7 @@ const CAMPOS_FICHA: [string, string][] = [['puesto', 'Puesto'], ['descripcion', 
 const ITEMS = [
   ...PLAN_EXT.bloques.filter((b) => b.tipo === 'proyecto' && b.fechas && !b.archivado).map((b) => ({ id: b.id, nombre: b.nombre })),
   ...V122.secundarias.map((s) => ({ id: s.id, nombre: s.nombre })),
-  ...V122.comerciales.map((c) => ({ id: c.id, nombre: `#${c.n} ${c.marca ?? 'a definir'}` })),
+  ...V122.comerciales.map((c) => ({ id: c.id, nombre: `#${c.n} ${c.marca ?? c.sector ?? 'a definir'}` })),
 ];
 
 const INFO = (
@@ -63,10 +63,13 @@ export function OpenSourceV2({ hoy }: { hoy: string }) {
 function Paquete({ h, onElegir }: { h: Herramienta; onElegir: () => void }) {
   const e = useStore((s) => s.plan.fondo?.[h.id]);
   const ultima = h.versiones.filter((v) => e?.versiones?.[v.id]?.publicada).pop();
+  const fecha = fechasVersion(h.versiones[0]);
+  const necesita = e?.necesitadoPor ? ITEMS.find((i) => i.id === e.necesitadoPor)?.nombre : undefined;
   return (
     <button type="button" className="capa-1 pt-paquete" onClick={onElegir}>
       <span className="pt-paquete-cab"><Icono nombre="paquete" lado={20} /><b className="t-encabezado">{h.nombre}</b>{' '}<span className="t-rotulo">{KIND[h.kind]}</span></span>{' '}
       <span className="t-dato pt-paquete-nombre">{h.paquete}</span>{' '}
+      <span className="t-nota">{h.desde ? `Sale de ${h.desde} · ` : ''}{nombreOrigen(h.versiones[0].origen)}{fecha ? ` · ${fp(fecha.fin)}` : ''}{h.kind === 'extracted' ? ` · la necesita: ${necesita ?? 'ninguno todavía'}` : ''}</span>{' '}
       <span className="pt-paquete-pie">
         <span className={`pt-version-pill${ultima ? ' on' : ''}`}>{ultima ? <><Icono nombre="tilde" lado={14} />v{ultima.id}</> : 'Sin publicar'}</span>{' '}
         <span className="t-nota">{h.registro}{e?.descargas != null ? ` · ${e.descargas} descargas` : ''}</span>
@@ -88,7 +91,7 @@ function HojaHerramienta({ h, hoy, onCerrar }: { h: Herramienta | null; hoy: str
     <Hoja abierta={!!h} onCerrar={onCerrar} titulo={x.nombre} alto="completa">
       <div className="pt-herramienta">
         <p className="t-dato">{x.paquete}{x.licencia ? ` · ${x.licencia}` : ''} · {x.registro}</p>
-        <p className="t-nota">Origen: {[...new Set(x.versiones.map((v) => nombreOrigen(v.origen)))].join(', ')}</p>
+        <p className="t-nota">{x.desde ? `Sale de ${x.desde} · ` : ''}Origen: {[...new Set(x.versiones.map((v) => nombreOrigen(v.origen)))].join(', ')}</p>
         {fila.length > 0 && (
           <dl className="capa-1 pt-ficha">
             {fila.map(([k, n]) => <div key={k} className="pt-ficha-fila"><dt className="t-rotulo">{n}</dt><dd><p className="t-cuerpo">{x.ficha![k]}</p></dd></div>)}
