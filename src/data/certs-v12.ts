@@ -2,7 +2,7 @@
  * v12.1 · las certificaciones por dentro: la fecha del examen (la reservada manda: es fija), el plan de los días, los simulacros
  * contra el puntaje para estar listo, la renovación (validez habitual del proveedor, "a verificar") y los avisos para reservar. Puro.
  */
-import { claveHito } from './periodos-plan';
+import { claveHito, llevarDeBloque } from './periodos-plan';
 import { PLAN_EXT, type CertV12, type RecordatorioV12 } from './plan-extendido';
 import type { PlanState } from './plan-state';
 import { addDays, daysBetween } from './time';
@@ -12,7 +12,7 @@ export interface CertConBloque extends CertV12 { bloque: string; bloqueNombre: s
 export const CERTS_V12: CertConBloque[] = PLAN_EXT.bloques.flatMap((b) => (b.certs ?? []).map((c) => ({ ...c, bloque: b.id, bloqueNombre: b.nombre })));
 export const certV12 = (id: string) => CERTS_V12.find((c) => c.id === id);
 
-type Plan = Pick<PlanState, 'hitos' | 'mocks' | 'reservas'>;
+type Plan = Pick<PlanState, 'hitos' | 'mocks' | 'reservas'> & Partial<Pick<PlanState, 'corrimientos'>>;
 
 export interface EstadoCert {
   cert: CertConBloque;
@@ -32,7 +32,10 @@ export interface EstadoCert {
   renovacion: { vence: string | null; nota: string } | null;
 }
 
-export function estadoCert(c: CertConBloque, plan: Plan, hoy: string): EstadoCert {
+export function estadoCert(cert: CertConBloque, plan: Plan, hoy: string): EstadoCert {
+  // Si su ventana se corrió, el examen del plan y el día por día van con ella; el examen reservado no se mueve.
+  const ll = llevarDeBloque(plan.corrimientos, cert.bloque);
+  const c: CertConBloque = { ...cert, examen: ll(cert.examen), plan: cert.plan.map((p) => ({ ...p, fecha: ll(p.fecha) })) };
   const r = plan.reservas?.[c.id];
   const examen = r?.examen ?? c.examen;
   const aprobada = plan.hitos?.[claveHito.cert(c.id)]?.hecho ?? null;

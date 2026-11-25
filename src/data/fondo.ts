@@ -82,6 +82,12 @@ export function periodosComerciales(plan: Plan): Periodo[] {
   });
 }
 
+/** Lo de fondo que se corre con su ventana cuando se corre el plan: los slots comerciales y las versiones de las apps secundarias. */
+export const itemsDeFondo = () => [
+  ...V122.comerciales.map((c) => ({ id: c.id, nombre: `#${c.n} ${c.marca ?? 'a definir'}`, inicio: c.inicio, fin: c.fin })),
+  ...V122.secundarias.flatMap((a) => a.versiones.map((v) => ({ id: `${a.id}:v${v.id}`, nombre: `${a.nombre} v${v.id}`, inicio: v.inicio, fin: v.fin }))),
+];
+
 export interface FondoActivo {
   secundaria: { app: Secundaria; version: string }[];
   comercial: Comercial | null;

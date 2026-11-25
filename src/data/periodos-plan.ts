@@ -11,6 +11,7 @@ import type { BloqueExt } from './plan-extendido';
 import { PLAN_EXT } from './plan-extendido';
 import type { Periodo } from './periodos';
 import type { PlanState } from './plan-state';
+import { addDays, daysBetween } from './time';
 
 /** Las claves de `plan.hitos` para lo que se tilda en el árbol. */
 export const claveHito = {
@@ -24,6 +25,20 @@ export const claveHito = {
 };
 
 type Fechado = BloqueExt & { inicio: string; fin: string; pausa?: boolean };
+
+/**
+ * Una fecha de adentro de un bloque, llevada adonde cae si el bloque se corrió (un corrimiento confirmado o empezar de nuevo): las
+ * de adentro mantienen su lugar relativo (con el mismo largo es correr los mismos días), las de afuera, su distancia al borde. Sin
+ * corrimiento (el bloque está donde dice su plan) devuelve la misma fecha.
+ */
+export function llevarFecha(d: string, de: { inicio: string; fin: string } | undefined, a: { inicio: string; fin: string }): string {
+  if (!de || (de.inicio === a.inicio && de.fin === a.fin)) return d;
+  if (d < de.inicio) return addDays(a.inicio, -daysBetween(d, de.inicio));
+  if (d > de.fin) return addDays(a.fin, daysBetween(de.fin, d));
+  const antes = daysBetween(de.inicio, de.fin);
+  const ahora = daysBetween(a.inicio, a.fin);
+  return addDays(a.inicio, antes === 0 ? 0 : Math.round((daysBetween(de.inicio, d) * ahora) / antes));
+}
 type Ctx = { plan: Pick<PlanState, 'hitos' | 'versiones'>; horasReal?: (bloque: string) => number | undefined };
 
 const hecho = (ctx: Ctx, k: string) => (ctx.plan.hitos?.[k]?.hecho ? 1 : 0);
@@ -31,15 +46,17 @@ const hecho = (ctx: Ctx, k: string) => (ctx.plan.hitos?.[k]?.hecho ? 1 : 0);
 function versiones(b: Fechado, ctx: Ctx): Periodo[] {
   const f = fichaV7(b.id);
   if (!f) return [];
+  // Si el bloque se corrió, sus versiones y lotes van con él.
+  const ll = (d: string) => llevarFecha(d, b.fechas, b);
   const lotes = b.lotes ?? [];
   return f.versiones.filter((v) => v.inicio && v.fin && !v.enCurso).map((v) => {
     const dl = (v as { deadline?: string }).deadline;
     const publicada = ctx.plan.versiones?.[b.id]?.[v.id]?.publicada || ctx.plan.hitos?.[claveHito.version(b.id, v.id)]?.hecho;
-    let previo = v.inicio!;
+    let previo = v.inicio!; // en las fechas del plan; cada una se lleva con ll() al armar el lote
     const hijos: Periodo[] = lotes.filter((l) => l.version === v.id).map((l) => {
       const ini = previo < l.estimado ? previo : l.estimado;
       previo = l.estimado;
-      return { id: `${b.id}:lote:${l.id}`, nombre: `Lote ${l.id} · ${l.nombre}`, nivel: 'lote' as const, inicio: ini, fin: l.estimado, ...(l.deadline !== l.estimado ? { deadline: l.deadline } : {}), peso: l.horas, horasPlan: l.horas, progreso: hecho(ctx, claveHito.lote(b.id, l.id)) };
+      return { id: `${b.id}:lote:${l.id}`, nombre: `Lote ${l.id} · ${l.nombre}`, nivel: 'lote' as const, inicio: ll(ini), fin: ll(l.estimado), ...(l.deadline !== l.estimado ? { deadline: ll(l.deadline) } : {}), peso: l.horas, horasPlan: l.horas, progreso: hecho(ctx, claveHito.lote(b.id, l.id)) };
     });
     // v12.2: la línea de la versión es su checklist de entregables; sin lotes, el trabajo es lo tildado.
     const entregables = detalleDe(b.id)?.versiones.find((x) => x.id === v.id)?.entregables ?? [];
@@ -54,8 +71,8 @@ function versiones(b: Fechado, ctx: Ctx): Periodo[] {
     }
     const tildados = checklist.length ? checklist.filter((c) => c.hecho).length / checklist.length : 0;
     return {
-      id: `${b.id}:v${v.id}`, nombre: `v${v.id} ${v.nombre}`, nivel: 'version' as const, inicio: v.inicio!, fin: v.fin!,
-      ...(dl && dl !== v.fin ? { deadline: dl } : {}),
+      id: `${b.id}:v${v.id}`, nombre: `v${v.id} ${v.nombre}`, nivel: 'version' as const, inicio: ll(v.inicio!), fin: ll(v.fin!),
+      ...(dl && dl !== v.fin ? { deadline: ll(dl) } : {}),
       ...(v.horas != null ? { horasPlan: v.horas } : {}),
       ...(publicada ? { progreso: 1 } : hijos.length ? {} : { progreso: tildados }),
       ...(checklist.length ? { checklist } : {}),
@@ -64,12 +81,24 @@ function versiones(b: Fechado, ctx: Ctx): Periodo[] {
   });
 }
 
+/**
+ * Cómo llevar una fecha de adentro de un bloque adonde está hoy: con el corrimiento confirmado del bloque (corrido a mano o por
+ * empezar de nuevo) lo de adentro va con él; sin corrimiento, queda donde dice el plan. Sirve para las pantallas que leen las
+ * fechas del plan directo (el día por día de una certificación, los hitos de una ventana).
+ */
+export function llevarDeBloque(corrimientos: PlanState['corrimientos'], bloqueId: string): (d: string) => string {
+  const cor = corrimientos?.[bloqueId];
+  const base = PLAN_EXT.bloques.find((b) => b.id === bloqueId)?.fechas;
+  return (d) => (cor && base ? llevarFecha(d, base, cor) : d);
+}
+
 /** Un bloque del calendario como período, con sus hijos según el tipo. */
 export function periodoBloque(b: Fechado, ctx: Ctx): Periodo {
   let hijos: Periodo[] | undefined;
+  const ll = (d: string) => llevarFecha(d, b.fechas, b); // si el bloque se corrió, lo de adentro va con él
   if (b.tipo === 'proyecto') hijos = versiones(b, ctx);
-  else if (b.certs?.length) hijos = b.certs.map((c) => ({ id: `${b.id}:${c.id}`, nombre: c.nombre, nivel: 'cert' as const, inicio: b.inicio, fin: c.examen < b.inicio ? b.inicio : c.examen, peso: c.horas, horasPlan: c.horas, progreso: hecho(ctx, claveHito.cert(c.id)) }));
-  else if (b.hitos?.length) hijos = b.hitos.map((h, i) => ({ id: `${b.id}:hito:${i + 1}`, nombre: `${h.tema}: ${h.hito}`, nivel: 'hito' as const, inicio: h.inicio, fin: h.fin, progreso: hecho(ctx, claveHito.mate(b.id, i)), ...(h.hitoAConfirmar || h.capitulosAConfirmar ? { aConfirmar: true } : {}) }));
+  else if (b.certs?.length) hijos = b.certs.map((c) => ({ id: `${b.id}:${c.id}`, nombre: c.nombre, nivel: 'cert' as const, inicio: b.inicio, fin: ll(c.examen) < b.inicio ? b.inicio : ll(c.examen), peso: c.horas, horasPlan: c.horas, progreso: hecho(ctx, claveHito.cert(c.id)) }));
+  else if (b.hitos?.length) hijos = b.hitos.map((h, i) => ({ id: `${b.id}:hito:${i + 1}`, nombre: `${h.tema}: ${h.hito}`, nivel: 'hito' as const, inicio: ll(h.inicio), fin: ll(h.fin), progreso: hecho(ctx, claveHito.mate(b.id, i)), ...(h.hitoAConfirmar || h.capitulosAConfirmar ? { aConfirmar: true } : {}) }));
   if (hijos && !hijos.length) hijos = undefined;
   const real = ctx.horasReal?.(b.id);
   // Un proyecto lleva el estimado (el fin del bloque) y la fecha límite de su última versión.

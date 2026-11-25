@@ -1460,6 +1460,7 @@ resto). Desde la 3.5 la 2.0 es la única interfaz: el interruptor y el código d
 El detalle, pantalla por pantalla, está en [`docs/ux/lenguaje-2.0.md`](ux/lenguaje-2.0.md) (§23: lanzamiento, rendimiento,
 accesibilidad y la revisión final) y el plan de tandas en [`docs/prompts/plan-ux-2.0.md`](prompts/plan-ux-2.0.md).
 
+- **Empezar el plan de nuevo** (25 nov): en Plan → "Más del plan", elegís desde qué día arranca y todo lo planeado se vuelve a fechar desde ahí (el primer bloque sin terminar empieza ese día, lo que sigue lo acompaña y se frena en el próximo absorbedor, que se achica). Las versiones, lotes, exámenes del plan e hitos de matemática de cada bloque van con él. Se ve qué cambia antes de confirmar y se deshace; lo hecho (entregables, lotes, horas, notas) no se toca.
 - Controles: `npm run v2:revision` (presupuesto de palabras y alto en 390 × 844, claro y oscuro), `npm run a11y` (axe-core, WCAG 2.1
   AA, las dos paletas) y `npm run peso` (presupuesto del bundle, también en el CI).
 

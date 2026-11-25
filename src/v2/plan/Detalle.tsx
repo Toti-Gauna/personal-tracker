@@ -6,7 +6,7 @@
 import { useMemo, useState } from 'react';
 import { fijasDeReservas } from '../../data/certs-v12';
 import { herramientasDe } from '../../data/herramientas';
-import { periodosComerciales, periodosSecundarias } from '../../data/fondo';
+import { itemsDeFondo, periodosComerciales, periodosSecundarias } from '../../data/fondo';
 import { corrimientoDeFondo, finProyectado, medir, type PeriodoMedido } from '../../data/periodos';
 import { bloqueDe, secuenciaPlan } from '../../data/periodos-plan';
 import { PLAN_EXT } from '../../data/plan-extendido';
@@ -192,7 +192,7 @@ function Sugerencia({ p, hoy, cal, plan }: { p: PeriodoMedido; hoy: string; cal:
     const reservas = fijasDeReservas(plan);
     const seq = secuenciaPlan(cal, reservas);
     const s = sugerirCorrimiento(seq, bloqueDe(p.id), finProyectado(p, hoy), [...(PLAN_EXT.capacidad?.fijas ?? []), ...reservas]);
-    const items = [...V122.comerciales.map((c) => ({ id: c.id, nombre: `#${c.n} ${c.marca ?? 'a definir'}`, inicio: c.inicio, fin: c.fin })), ...V122.secundarias.flatMap((a) => a.versiones.map((v) => ({ id: `${a.id}:v${v.id}`, nombre: `${a.nombre} v${v.id}`, inicio: v.inicio, fin: v.fin })))];
+    const items = itemsDeFondo();
     return { sug: s, fondo: corrimientoDeFondo(items, seq, s) };
   }, [cal, plan, p, hoy]);
   const [fuera, setFuera] = useState<string[]>([]);

@@ -226,6 +226,41 @@ export function sugerirCorrimiento(secuencia: Tramo[], atrasadoId: string, nuevo
   return out;
 }
 
+/**
+ * Empezar el plan de nuevo desde `desde` (hoy, por ejemplo): el bloque `anclaId` (el primero sin terminar) arranca ese día con los
+ * mismos días hábiles que tenía, y los que siguen van uno atrás del otro. Se frena en el próximo absorbedor, que conserva su fin: se
+ * achica si el plan se atrasó y crece si se adelantó; si quedaría con menos de 3 días queda en 3 y lo que sobra sigue hasta el próximo.
+ * Las fechas fijas (la pausa de diciembre, los exámenes reservados) no se mueven ni cuentan como días hábiles. Solo calcula: no cambia
+ * nada hasta que lo confirmes. Devuelve lo que cambia (nada, si ya estaba así).
+ */
+export function reiniciarDesde(secuencia: Tramo[], anclaId: string, desde: string, fijas: { inicio: string; fin: string }[] = []): Corrimiento[] {
+  const i = secuencia.findIndex((t) => t.id === anclaId);
+  if (i < 0) return [];
+  const bloqueos = [...fijas, ...secuencia.filter((t) => t.fija)];
+  const bloqueado = (d: string) => bloqueos.some((x) => d >= x.inicio && d <= x.fin);
+  const sinBloqueo = (d: string) => { while (bloqueado(d)) d = addDays(d, 1); return d; };
+  const habiles = (a: string, b: string) => { let n = 0; for (let d = a; d <= b; d = addDays(d, 1)) if (!bloqueado(d)) n++; return n; };
+  const out: Corrimiento[] = [];
+  let libre = sinBloqueo(desde);
+  for (const t of secuencia.slice(i)) {
+    if (t.fija) continue;
+    let n = Math.max(1, habiles(t.inicio, t.fin));
+    const ini = libre;
+    if (t.absorbe) {
+      if ((ini <= t.fin ? habiles(ini, t.fin) : 0) >= MIN_ABSORBEDOR) {
+        out.push({ id: t.id, nombre: t.nombre, inicio: t.inicio, fin: t.fin, nuevoInicio: ini, nuevoFin: t.fin, dias: daysBetween(t.inicio, ini), absorbe: true });
+        break;
+      }
+      n = MIN_ABSORBEDOR;
+    }
+    let fin = ini;
+    for (let c = 1; c < n; ) { fin = addDays(fin, 1); if (!bloqueado(fin)) c++; }
+    out.push({ id: t.id, nombre: t.nombre, inicio: t.inicio, fin: t.fin, nuevoInicio: ini, nuevoFin: fin, dias: daysBetween(t.inicio, ini), ...(t.absorbe ? { absorbe: true } : {}) });
+    libre = sinBloqueo(addDays(fin, 1));
+  }
+  return out.filter((c) => c.nuevoInicio !== c.inicio || c.nuevoFin !== c.fin);
+}
+
 /** Aplica los corrimientos confirmados (id → fechas nuevas) a una secuencia; lo demás queda igual. */
 export const aplicarCorrimientos = <T extends Tramo>(secuencia: T[], confirmados: Record<string, { inicio: string; fin: string }> | undefined): T[] =>
   confirmados ? secuencia.map((t) => (confirmados[t.id] && !t.fija ? { ...t, inicio: confirmados[t.id].inicio, fin: confirmados[t.id].fin } : t)) : secuencia;

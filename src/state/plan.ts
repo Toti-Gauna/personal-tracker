@@ -463,6 +463,16 @@ export function setMercado(patch: { ofertas?: number; pct?: Record<string, numbe
 export function confirmarCorrimiento(cs: { id: string; nuevoInicio: string; nuevoFin: string }[], hoy: string) {
   update((p) => ({ ...p, corrimientos: { ...(p.corrimientos ?? {}), ...Object.fromEntries(cs.map((c) => [c.id, { inicio: c.nuevoInicio, fin: c.nuevoFin, confirmado: hoy }])) } }));
 }
+/** Vuelve los corrimientos a como estaban (deshacer de empezar de nuevo): lo único que cambia son las fechas. */
+export function restaurarCorrimientos(antes: PlanState['corrimientos']) {
+  update((p) => ({ ...p, corrimientos: antes }));
+}
+/** Vuelve todo a las fechas del plan: saca todos los corrimientos confirmados. Devuelve los que había, para deshacer. */
+export function volverTodoAlPlan(): PlanState['corrimientos'] {
+  const antes = getState().plan.corrimientos;
+  update((p) => ({ ...p, corrimientos: {} }));
+  return antes;
+}
 /** Volver a las fechas del plan para esos bloques. */
 export function deshacerCorrimiento(ids: string[]) {
   update((p) => ({ ...p, corrimientos: Object.fromEntries(Object.entries(p.corrimientos ?? {}).filter(([id]) => !ids.includes(id))) }));

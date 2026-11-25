@@ -2,7 +2,7 @@
  * Trazo 2.0 · una ventana de matemática (#/metas/ventana/<id>): sus hitos con el rango de días, el tema y los capítulos del
  * libro que cubren; se tildan de a uno y la ventana no se cierra con hitos sin tildar.
  */
-import { claveHito } from '../../data/periodos-plan';
+import { claveHito, llevarDeBloque } from '../../data/periodos-plan';
 import { PLAN_EXT } from '../../data/plan-extendido';
 import { marcarHito } from '../../state/plan';
 import { useStore } from '../../state/store';
@@ -28,7 +28,10 @@ const INFO = (
 
 export function VentanaV2({ id, hoy }: { id: string; hoy: string }) {
   const hitos = useStore((s) => s.plan.hitos);
+  const corrimientos = useStore((s) => s.plan.corrimientos);
   const b = PLAN_EXT.bloques.find((x) => x.id === id);
+  // Si la ventana se corrió, sus fechas y las de sus hitos van con ella.
+  const ll = llevarDeBloque(corrimientos, id);
   if (!b?.hitos?.length) {
     return (
       <Marco titulo="Ventana" volver={{ href: '#/metas', nombre: 'Plan' }}>
@@ -44,7 +47,7 @@ export function VentanaV2({ id, hoy }: { id: string; hoy: string }) {
     <Marco className="pt" titulo={b.nombre} info={INFO} volver={{ href: `#/metas/proyecto/${id}`, nombre: 'Ventana' }}>
       <Portada id={id} tipo="ventana" area="var(--a-economia)">
         <span className="t-rotulo">Matemática</span>
-        <div className="pt-hero-fila">{cerrada ? <Estado estado="hecho" /> : null}<span className="t-dato">{b.fechas ? `${fp(b.fechas.inicio)} – ${fp(b.fechas.fin)}` : ''}</span></div>
+        <div className="pt-hero-fila">{cerrada ? <Estado estado="hecho" /> : null}<span className="t-dato">{b.fechas ? `${fp(ll(b.fechas.inicio))} – ${fp(ll(b.fechas.fin))}` : ''}</span></div>
       </Portada>
       <Grupo titulo="Hitos" extremo={<span className="t-rotulo">{hechasDe(hechos, b.hitos.length)}</span>}>
         <Lista
@@ -63,7 +66,7 @@ export function VentanaV2({ id, hoy }: { id: string; hoy: string }) {
         <ul className="capa-1 pt-revs">
           {b.hitos.map((h) => (
             <li key={h.tema}>
-              <span className="t-rotulo">{h.tema} · {diaMes(h.inicio)} al {diaMes(h.fin)}</span>
+              <span className="t-rotulo">{h.tema} · {diaMes(ll(h.inicio))} al {diaMes(ll(h.fin))}</span>
               <span className="t-cuerpo">{h.hito}</span>
               {h.capitulos && <span className="t-nota">{LIBRO[h.capitulos.actividad] ?? h.capitulos.actividad}, capítulos {h.capitulos.desde} a {h.capitulos.hasta}{h.capitulosAConfirmar ? ' (a confirmar)' : ''}</span>}
             </li>
