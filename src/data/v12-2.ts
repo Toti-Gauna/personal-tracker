@@ -5,6 +5,7 @@
  */
 import planRaw from '../../data/plan-extendido.json';
 import raw from '../../data/v12-2.json';
+import { addDays } from './time';
 
 export type Pista = 'principal' | 'secundaria' | 'comercial';
 
@@ -132,7 +133,26 @@ export interface Herramienta {
   versiones: VersionHerramienta[];
 }
 
-export const V122 = raw as unknown as DatosV122;
+/**
+ * Lo que el JSON no guarda porque se arma solo (pesa menos en el arranque): la línea de una versión si es igual a sus entregables unidos,
+ * y el build y la venta de cada slot (días 1 a 7 de build, del 8 en adelante de venta; un slot de 7 días o menos es solo build).
+ */
+type Guardado = Omit<DatosV122, 'secundarias' | 'comerciales' | 'detalle'> & {
+  detalle: Record<string, Omit<DetalleProyecto, 'versiones'> & { versiones: (Omit<VersionDetalle, 'linea'> & { linea?: string })[] }>;
+  secundarias: (Omit<Secundaria, 'versiones'> & { versiones: (Omit<VersionSecundaria, 'linea'> & { linea?: string })[] })[];
+  comerciales: Omit<Comercial, 'build' | 'venta'>[];
+};
+const normalizar = (r: Guardado): DatosV122 => ({
+  ...r,
+  detalle: Object.fromEntries(Object.entries(r.detalle).map(([id, d]) => [id, { ...d, versiones: d.versiones.map((v) => ({ ...v, linea: v.linea ?? v.entregables.join(', ') })) }])),
+  secundarias: r.secundarias.map((s) => ({ ...s, versiones: s.versiones.map((v) => ({ ...v, linea: v.linea ?? v.entregables.join(', ') })) })),
+  comerciales: r.comerciales.map((c) => {
+    const finBuild = addDays(c.inicio, 6);
+    const corto = c.fin <= finBuild;
+    return { ...c, build: corto ? { inicio: c.inicio, fin: c.fin } : { inicio: c.inicio, fin: finBuild }, venta: corto ? null : { inicio: addDays(c.inicio, 7), fin: c.fin } };
+  }),
+});
+export const V122 = normalizar(raw as unknown as Guardado);
 export const detalleDe = (id: string): DetalleProyecto | undefined => V122.detalle[id];
 export const secundaria = (id: string) => V122.secundarias.find((s) => s.id === id);
 export const comercial = (id: string) => V122.comerciales.find((c) => c.id === id);

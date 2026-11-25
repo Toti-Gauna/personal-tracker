@@ -186,6 +186,29 @@ describe('v12.4 · absorbedores: 3 días como mínimo y los descansos no se usan
 });
 
 describe('v12.4 · slots comerciales: build los días 1 a 7, venta del día 8 en adelante', () => {
+  it('el §6 del doc: las fechas de cada slot, su build y su venta coinciden con los datos (que los derivan: días 1 a 7 y del 8 en adelante)', () => {
+    const seccion6 = DOC.slice(DOC.indexOf('## 6. COMMERCIAL SLOTS'), DOC.indexOf('## 7. Reminders'));
+    const filas = seccion6.split('\n').flatMap((l) => {
+      const m = /^- #(\d+) · (.+)$/.exec(l);
+      if (!m) return [];
+      const t = m[2].split(' · ').map((x) => x.trim());
+      const dosFases = t.find((x) => /^build \d/.test(x));
+      const sell = t.find((x) => /^sell \d/.test(x));
+      const yf = rango(`${t[0]}`)!;
+      // "sell 21 Jan" (un solo día) no es un rango: la fecha va sola.
+      const rangoODia = (x: string) => rango(`${x} ${yf.fin.slice(0, 4)}`) ?? (() => { const d = /^(\d{1,2}) ([A-Z][a-z]{2})$/.exec(x); return d ? { inicio: iso(Number(yf.fin.slice(0, 4)), MES[d[2]], Number(d[1])), fin: iso(Number(yf.fin.slice(0, 4)), MES[d[2]], Number(d[1])) } : null; })();
+      return [{ n: Number(m[1]), slot: yf, build: dosFases ? rangoODia(dosFases.slice(6)) : null, sell: sell ? rangoODia(sell.slice(5).replace(/\s*\(.*\)$/, '')) : null }];
+    });
+    expect(filas).toHaveLength(23);
+    for (const f of filas) {
+      const c = V122.comerciales.find((x) => x.n === f.n)!;
+      expect({ inicio: c.inicio, fin: c.fin }, `#${f.n}`).toEqual(f.slot);
+      // "build only" (sin rango): todo el slot es build.
+      expect(c.build, `#${f.n} build`).toEqual(f.build ?? f.slot);
+      expect(c.venta, `#${f.n} venta`).toEqual(f.sell);
+    }
+  });
+
   it('los 23 slots: build de 7 días, venta el resto; los de 7 días o menos, solo build', () => {
     expect(V122.comerciales).toHaveLength(23);
     for (const c of V122.comerciales) {

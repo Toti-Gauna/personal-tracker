@@ -12,7 +12,6 @@
      "inicio": "2026-11-21",
      "fin": "2026-11-25",
      "deadline": "2026-12-01",
-     "linea": "ingesta, detector P10/P50/P90 con validación espacial, mapa con pozos, mapa de calor y concesiones, asistente con citas y abstención, 20 evals, deploy y README",
      "entregables": [
       "ingesta",
       "detector P10/P50/P90 con validación espacial",
@@ -42,7 +41,6 @@
      "inicio": "2026-12-01",
      "fin": "2026-12-05",
      "deadline": "2026-12-22",
-     "linea": "notification-service, voice-gateway, medición de uso y cuotas, sistema de diseño con Storybook",
      "entregables": [
       "notification-service",
       "voice-gateway",
@@ -86,7 +84,6 @@
      "id": "1.0",
      "inicio": "2026-12-28",
      "fin": "2026-12-30",
-     "linea": "FHIR con Synthea, motor con 8–10 reglas, explicación con citas, panel con línea de tiempo, deploy en Azure",
      "entregables": [
       "FHIR con Synthea",
       "motor con 8–10 reglas",
@@ -99,7 +96,6 @@
      "id": "1.1",
      "inicio": "2026-12-31",
      "fin": "2027-01-02",
-     "linea": "conciliación, HL7 a FHIR, evals, feedback médico, auditoría, SMART on FHIR, desidentificador en Rust, frontend",
      "entregables": [
       "conciliación",
       "HL7 a FHIR",
@@ -115,7 +111,6 @@
      "id": "2.0",
      "inicio": "2027-01-03",
      "fin": "2027-01-05",
-     "linea": "avisos por WhatsApp y email, llamada, escriba por voz, monitoreo en Wokwi, escáner de cajas",
      "entregables": [
       "avisos por WhatsApp y email",
       "llamada",
@@ -128,7 +123,6 @@
      "id": "3.0",
      "inicio": "2027-01-06",
      "fin": "2027-01-08",
-     "linea": "100 mil pacientes, 1 M de mensajes, blue-green, retención, oxímetro real, Scale report",
      "entregables": [
       "100 mil pacientes",
       "1 M de mensajes",
@@ -160,7 +154,6 @@
      "id": "1.0",
      "inicio": "2027-03-13",
      "fin": "2027-03-15",
-     "linea": "ingesta, modelo de rinde con predicción conforme, mapa por departamento, deploy",
      "entregables": [
       "ingesta",
       "modelo de rinde con predicción conforme",
@@ -172,7 +165,6 @@
      "id": "1.1",
      "inicio": "2027-03-16",
      "fin": "2027-03-19",
-     "linea": "margen P10–P90, simulador, riesgo climático, backoffice, MLflow y Dagster, frontend",
      "entregables": [
       "margen P10–P90",
       "simulador",
@@ -186,7 +178,6 @@
      "id": "2.0",
      "inicio": "2027-03-20",
      "fin": "2027-03-22",
-     "linea": "WhatsApp con audio, email, línea telefónica, foto de cobertura, GPS, AR",
      "entregables": [
       "WhatsApp con audio",
       "email",
@@ -200,7 +191,6 @@
      "id": "3.0",
      "inicio": "2027-03-23",
      "fin": "2027-03-25",
-     "linea": "recálculo masivo, backfills, estación y humedad de suelo reales, Scale report",
      "entregables": [
       "recálculo masivo",
       "backfills",
@@ -230,7 +220,6 @@
      "id": "1.0",
      "inicio": "2027-04-14",
      "fin": "2027-04-18",
-     "linea": "SGP4, satélites argentinos, planificador de pasadas",
      "entregables": [
       "SGP4",
       "satélites argentinos",
@@ -241,7 +230,6 @@
      "id": "1.1",
      "inicio": "2027-04-19",
      "fin": "2027-04-22",
-     "linea": "decodificador CCSDS en WebAssembly con benchmark, calculadora de enlace, copiloto, frontend",
      "entregables": [
       "decodificador CCSDS en WebAssembly con benchmark",
       "calculadora de enlace",
@@ -253,7 +241,6 @@
      "id": "2.0",
      "inicio": "2027-04-23",
      "fin": "2027-04-26",
-     "linea": "AR, alertas por WhatsApp, voz, rotor en Wokwi",
      "entregables": [
       "AR",
       "alertas por WhatsApp",
@@ -265,7 +252,6 @@
      "id": "3.0",
      "inicio": "2027-04-27",
      "fin": "2027-05-01",
-     "linea": "estación real en SatNOGS, rotor real, 10 mil websockets, backpressure, Scale report",
      "entregables": [
       "estación real en SatNOGS",
       "rotor real",
@@ -296,7 +282,6 @@
     {
      "id": "1.0",
      "base": true,
-     "linea": "mapa 3D, Trazo como caso, validador, shell con Module Federation",
      "entregables": [
       "mapa 3D",
       "Trazo como caso",
@@ -319,7 +304,6 @@
      "id": "2.1",
      "inicio": "2027-05-19",
      "fin": "2027-05-21",
-     "linea": "voz, CV en AR, email y WhatsApp, métricas en vivo, plantilla open source, CDN, prueba de pico viral",
      "entregables": [
       "voz",
       "CV en AR",
@@ -353,7 +337,6 @@
      "id": "1.0",
      "inicio": "2027-05-22",
      "fin": "2027-05-25",
-     "linea": "gemelo con SCADA simulado por Modbus, niveles en vivo, tiempo del x% al y%",
      "entregables": [
       "gemelo con SCADA simulado por Modbus",
       "niveles en vivo",
@@ -364,7 +347,6 @@
      "id": "1.1",
      "inicio": "2027-05-26",
      "fin": "2027-05-28",
-     "linea": "detector de ataques, pérdidas en ductos, reglas ATT&CK, despacho, frontend",
      "entregables": [
       "detector de ataques",
       "pérdidas en ductos",
@@ -377,7 +359,6 @@
      "id": "2.0",
      "inicio": "2027-05-29",
      "fin": "2027-06-01",
-     "linea": "WhatsApp con botones, llamada, email, copiloto, AR, NFC",
      "entregables": [
       "WhatsApp con botones",
       "llamada",
@@ -391,7 +372,6 @@
      "id": "3.0",
      "inicio": "2027-06-02",
      "fin": "2027-06-04",
-     "linea": "tanque real por RS485, 10 mil lecturas por segundo, tormenta de alarmas, Kubernetes endurecido, Scale report",
      "entregables": [
       "tanque real por RS485",
       "10 mil lecturas por segundo",
@@ -422,7 +402,6 @@
      "id": "1.0",
      "inicio": "2027-08-06",
      "fin": "2027-08-09",
-     "linea": "datos sintéticos, modelo PyTorch, inspección por foto, caída sintético→real",
      "entregables": [
       "datos sintéticos",
       "modelo PyTorch",
@@ -434,7 +413,6 @@
      "id": "1.1",
      "inicio": "2027-08-10",
      "fin": "2027-08-12",
-     "linea": "orden de trabajo, RAG de manuales, cascada con Claude visión, aprendizaje activo, autograd, frontend",
      "entregables": [
       "orden de trabajo",
       "RAG de manuales",
@@ -448,7 +426,6 @@
      "id": "2.0",
      "inicio": "2027-08-13",
      "fin": "2027-08-15",
-     "linea": "daños en 3D, AR, dron simulado, dictado, email con PDF, WhatsApp",
      "entregables": [
       "daños en 3D",
       "AR",
@@ -462,7 +439,6 @@
      "id": "3.0",
      "inicio": "2027-08-16",
      "fin": "2027-08-19",
-     "linea": "GPU con autoescalado, batching, escalado a cero, costo por imagen, Scale report",
      "entregables": [
       "GPU con autoescalado",
       "batching",
@@ -499,7 +475,6 @@
      "id": "1.0",
      "inicio": "2027-08-23",
      "fin": "2027-08-24",
-     "linea": "Sentinel-2, índices, mapa de estrés",
      "entregables": [
       "Sentinel-2",
       "índices",
@@ -510,7 +485,6 @@
      "id": "1.1",
      "inicio": "2027-08-25",
      "fin": "2027-08-27",
-     "linea": "dosis variable, pérdida en USD, PCA y SVD, frontend",
      "entregables": [
       "dosis variable",
       "pérdida en USD",
@@ -522,7 +496,6 @@
      "id": "2.0",
      "inicio": "2027-08-28",
      "fin": "2027-08-30",
-     "linea": "WhatsApp con imagen, email con la prescripción, llamada, recorrida offline, fertilizadora en Wokwi",
      "entregables": [
       "WhatsApp con imagen",
       "email con la prescripción",
@@ -535,7 +508,6 @@
      "id": "3.0",
      "inicio": "2027-08-31",
      "fin": "2027-09-01",
-     "linea": "puertas de calidad, sombra y canary, rollback, drift, reentrenamiento con aprobación",
      "entregables": [
       "puertas de calidad",
       "sombra y canary",
@@ -565,7 +537,6 @@
      "id": "1.0",
      "inicio": "2027-09-22",
      "fin": "2027-09-23",
-     "linea": "ataques contra PetrIA y VitalIA, informe con OWASP LLM Top 10",
      "entregables": [
       "ataques contra PetrIA y VitalIA",
       "informe con OWASP LLM Top 10"
@@ -575,7 +546,6 @@
      "id": "1.1",
      "inicio": "2027-09-24",
      "fin": "2027-09-25",
-     "linea": "\"Escaneá tu chatbot\", GitHub Action y comparativa",
      "entregables": [
       "\"Escaneá tu chatbot\"",
       "GitHub Action y comparativa"
@@ -585,7 +555,6 @@
      "id": "2.0",
      "inicio": "2027-09-26",
      "fin": "2027-09-28",
-     "linea": "voz, cartel y audio, email, WhatsApp",
      "entregables": [
       "voz",
       "cartel y audio",
@@ -597,7 +566,6 @@
      "id": "3.0",
      "inicio": "2027-09-29",
      "fin": "2027-09-30",
-     "linea": "guardián con LoRA y adaptadores por cliente, colas justas, protección contra abuso, Scale report",
      "entregables": [
       "guardián con LoRA y adaptadores por cliente",
       "colas justas",
@@ -628,7 +596,6 @@
      "id": "1.0",
      "inicio": "2027-10-01",
      "fin": "2027-10-03",
-     "linea": "modelo cuantizado con ONNX, app offline",
      "entregables": [
       "modelo cuantizado con ONNX",
       "app offline"
@@ -638,7 +605,6 @@
      "id": "1.1",
      "inicio": "2027-10-04",
      "fin": "2027-10-06",
-     "linea": "walkaround guiado, modelo chico, presupuesto de latencia, frontend",
      "entregables": [
       "walkaround guiado",
       "modelo chico",
@@ -650,7 +616,6 @@
      "id": "2.0",
      "inicio": "2027-10-07",
      "fin": "2027-10-10",
-     "linea": "AR, voz offline, sincronización con AeroScan",
      "entregables": [
       "AR",
       "voz offline",
@@ -661,7 +626,6 @@
      "id": "3.0",
      "inicio": "2027-10-11",
      "fin": "2027-10-13",
-     "linea": "OTA firmada, 1.000 dispositivos, ESP32-CAM vs celular, batería y latencia medidas",
      "entregables": [
       "OTA firmada",
       "1.000 dispositivos",
@@ -691,7 +655,6 @@
      "id": "1.0",
      "inicio": "2027-10-14",
      "fin": "2027-10-17",
-     "linea": "autoencoders sobre telemetría de la NASA, triage explicado",
      "entregables": [
       "autoencoders sobre telemetría de la NASA",
       "triage explicado"
@@ -701,7 +664,6 @@
      "id": "1.1",
      "inicio": "2027-10-18",
      "fin": "2027-10-20",
-     "linea": "centro de control, status page, Kafka, saga y outbox",
      "entregables": [
       "centro de control",
       "status page",
@@ -713,7 +675,6 @@
      "id": "2.0",
      "inicio": "2027-10-21",
      "fin": "2027-10-23",
-     "linea": "agente SRE, Jarvis con Face ID, Slack, WhatsApp, llamada por SLO, postmortem por email",
      "entregables": [
       "agente SRE",
       "Jarvis con Face ID",
@@ -727,7 +688,6 @@
      "id": "3.0",
      "inicio": "2027-10-24",
      "fin": "2027-10-27",
-     "linea": "chaos, caída de una nube con failover, flota de 1.000 dispositivos, FinOps y plan de capacidad",
      "entregables": [
       "chaos",
       "caída de una nube con failover",
@@ -757,7 +717,6 @@
      "id": "1.0",
      "inicio": "2027-11-10",
      "fin": "2027-11-11",
-     "linea": "Vault y cifrado de sobre",
      "entregables": [
       "Vault y cifrado de sobre"
      ]
@@ -766,7 +725,6 @@
      "id": "1.1",
      "inicio": "2027-11-12",
      "fin": "2027-11-13",
-     "linea": "rotación automática y credenciales efímeras",
      "entregables": [
       "rotación automática y credenciales efímeras"
      ]
@@ -775,7 +733,6 @@
      "id": "2.0",
      "inicio": "2027-11-14",
      "fin": "2027-11-16",
-     "linea": "GitHub App, aprobación por WhatsApp, celular como llave, llave física, SoftHSM",
      "entregables": [
       "GitHub App",
       "aprobación por WhatsApp",
@@ -788,7 +745,6 @@
      "id": "3.0",
      "inicio": "2027-11-17",
      "fin": "2027-11-18",
-     "linea": "rotación masiva sin cortes, SPIFFE, mTLS, comparativa",
      "entregables": [
       "rotación masiva sin cortes",
       "SPIFFE",
@@ -816,7 +772,6 @@
      "id": "1.0",
      "inicio": "2027-11-19",
      "fin": "2027-11-21",
-     "linea": "STRIDE y pentest de PetrIA, informe CVSS",
      "entregables": [
       "STRIDE y pentest de PetrIA",
       "informe CVSS"
@@ -826,7 +781,6 @@
      "id": "1.1",
      "inicio": "2027-11-22",
      "fin": "2027-11-24",
-     "linea": "pentest de IA y del ESP32, reprueba en el CI",
      "entregables": [
       "pentest de IA y del ESP32",
       "reprueba en el CI"
@@ -836,7 +790,6 @@
      "id": "2.0",
      "inicio": "2027-11-25",
      "fin": "2027-11-26",
-     "linea": "bot de PR, agente asistente, email semanal, Slack",
      "entregables": [
       "bot de PR",
       "agente asistente",
@@ -848,7 +801,6 @@
      "id": "3.0",
      "inicio": "2027-11-27",
      "fin": "2027-11-29",
-     "linea": "muchos repos sin frenar el CI, caza de CVE",
      "entregables": [
       "muchos repos sin frenar el CI",
       "caza de CVE"
@@ -874,7 +826,6 @@
      "id": "1.0",
      "inicio": "2027-11-30",
      "fin": "2027-12-02",
-     "linea": "OpenSearch, osquery y reglas Sigma sobre el colector de PetrIA Guard",
      "entregables": [
       "OpenSearch",
       "osquery y reglas Sigma sobre el colector de PetrIA Guard"
@@ -884,7 +835,6 @@
      "id": "1.1",
      "inicio": "2027-12-03",
      "fin": "2027-12-05",
-     "linea": "agente investigador evaluado, purple team, tiempos medidos",
      "entregables": [
       "agente investigador evaluado",
       "purple team",
@@ -895,7 +845,6 @@
      "id": "2.0",
      "inicio": "2027-12-06",
      "fin": "2027-12-09",
-     "linea": "SOC con un comando, llamada, WhatsApp, email, RFID en Wokwi",
      "entregables": [
       "SOC con un comando",
       "llamada",
@@ -908,7 +857,6 @@
      "id": "3.0",
      "inicio": "2027-12-10",
      "fin": "2027-12-12",
-     "linea": "millones de eventos, costo de retención, RFID real, comparativa",
      "entregables": [
       "millones de eventos",
       "costo de retención",
@@ -937,7 +885,6 @@
      "id": "1.0",
      "inicio": "2028-01-31",
      "fin": "2028-02-02",
-     "linea": "backtester en Rust con costos y deslizamiento",
      "entregables": [
       "backtester en Rust con costos y deslizamiento"
      ]
@@ -946,7 +893,6 @@
      "id": "1.1",
      "inicio": "2028-02-03",
      "fin": "2028-02-05",
-     "linea": "walk-forward, registro con hash, Sharpe deflactado, benchmark",
      "entregables": [
       "walk-forward",
       "registro con hash",
@@ -958,7 +904,6 @@
      "id": "2.0",
      "inicio": "2028-02-06",
      "fin": "2028-02-09",
-     "linea": "\"¿Tu estrategia es suerte?\" y asistente",
      "entregables": [
       "\"¿Tu estrategia es suerte?\" y asistente"
      ]
@@ -967,7 +912,6 @@
      "id": "3.0",
      "inicio": "2028-02-10",
      "fin": "2028-02-12",
-     "linea": "backtests en paralelo e informes por email",
      "entregables": [
       "backtests en paralelo e informes por email"
      ]
@@ -992,7 +936,6 @@
      "id": "1.0",
      "inicio": "2028-02-13",
      "fin": "2028-02-15",
-     "linea": "un paper replicado",
      "entregables": [
       "un paper replicado"
      ]
@@ -1001,7 +944,6 @@
      "id": "1.1",
      "inicio": "2028-02-16",
      "fin": "2028-02-18",
-     "linea": "agente que extrae la estrategia y 3 papers replicados",
      "entregables": [
       "agente que extrae la estrategia y 3 papers replicados"
      ]
@@ -1011,7 +953,6 @@
      "inicio": "2028-02-19",
      "fin": "2028-02-20",
      "partida": true,
-     "linea": "página pública, newsletter y WhatsApp",
      "entregables": [
       "página pública",
       "newsletter y WhatsApp"
@@ -1021,7 +962,6 @@
      "id": "3.0",
      "inicio": "2028-02-21",
      "fin": "2028-02-23",
-     "linea": "lotes en paralelo y porcentaje replicado",
      "entregables": [
       "lotes en paralelo y porcentaje replicado"
      ]
@@ -1045,7 +985,6 @@
      "id": "1.0",
      "inicio": "2028-03-07",
      "fin": "2028-03-09",
-     "linea": "Black-Scholes, binomial y Monte Carlo contra QuantLib",
      "entregables": [
       "Black-Scholes",
       "binomial y Monte Carlo contra QuantLib"
@@ -1055,7 +994,6 @@
      "id": "1.1",
      "inicio": "2028-03-10",
      "fin": "2028-03-12",
-     "linea": "griegas, estrés y calculadora argentina",
      "entregables": [
       "griegas",
       "estrés y calculadora argentina"
@@ -1065,7 +1003,6 @@
      "id": "2.0",
      "inicio": "2028-03-13",
      "fin": "2028-03-16",
-     "linea": "superficie en AR, email matinal y podcast",
      "entregables": [
       "superficie en AR",
       "email matinal y podcast"
@@ -1075,7 +1012,6 @@
      "id": "3.0",
      "inicio": "2028-03-17",
      "fin": "2028-03-19",
-     "linea": "API con SLO y benchmark",
      "entregables": [
       "API con SLO y benchmark"
      ]
@@ -1101,7 +1037,6 @@
      "id": "1.0",
      "inicio": "2028-03-20",
      "fin": "2028-03-22",
-     "linea": "matching por precio y tiempo",
      "entregables": [
       "matching por precio y tiempo"
      ]
@@ -1110,7 +1045,6 @@
      "id": "1.1",
      "inicio": "2028-03-23",
      "fin": "2028-03-25",
-     "linea": "market maker, FIX y costos de transacción",
      "entregables": [
       "market maker",
       "FIX y costos de transacción"
@@ -1120,7 +1054,6 @@
      "id": "2.0",
      "inicio": "2028-03-26",
      "fin": "2028-03-27",
-     "linea": "simulador en formato juego",
      "entregables": [
       "simulador en formato juego"
      ]
@@ -1129,7 +1062,6 @@
      "id": "3.0",
      "inicio": "2028-03-28",
      "fin": "2028-03-30",
-     "linea": "p99 bajo carga, replay y fuzzing",
      "entregables": [
       "p99 bajo carga",
       "replay y fuzzing"
@@ -1154,7 +1086,6 @@
      "id": "1.0",
      "inicio": "2028-04-18",
      "fin": "2028-04-21",
-     "linea": "de señales a órdenes en paper trading",
      "entregables": [
       "de señales a órdenes en paper trading"
      ]
@@ -1163,7 +1094,6 @@
      "id": "1.1",
      "inicio": "2028-04-22",
      "fin": "2028-04-25",
-     "linea": "riesgo previo, kill-switch y conciliación",
      "entregables": [
       "riesgo previo",
       "kill-switch y conciliación"
@@ -1173,7 +1103,6 @@
      "id": "2.0",
      "inicio": "2028-04-26",
      "fin": "2028-04-28",
-     "linea": "WhatsApp, Face ID, email diario y tablero público",
      "entregables": [
       "WhatsApp",
       "Face ID",
@@ -1184,7 +1113,6 @@
      "id": "3.0",
      "inicio": "2028-04-29",
      "fin": "2028-05-02",
-     "linea": "una sola ejecución por orden, conciliación ante fallas, Kafka y meses en vivo",
      "entregables": [
       "una sola ejecución por orden",
       "conciliación ante fallas",
@@ -1211,7 +1139,6 @@
      "id": "1.0",
      "inicio": "2028-05-03",
      "fin": "2028-05-05",
-     "linea": "ingesta en ClickHouse con control de calidad",
      "entregables": [
       "ingesta en ClickHouse con control de calidad"
      ]
@@ -1220,7 +1147,6 @@
      "id": "1.1",
      "inicio": "2028-05-06",
      "fin": "2028-05-08",
-     "linea": "MEP y CCL en vivo, y MCP",
      "entregables": [
       "MEP y CCL en vivo",
       "y MCP"
@@ -1230,7 +1156,6 @@
      "id": "2.0",
      "inicio": "2028-05-09",
      "fin": "2028-05-11",
-     "linea": "WhatsApp, voz y LED en Wokwi",
      "entregables": [
       "WhatsApp",
       "voz y LED en Wokwi"
@@ -1240,7 +1165,6 @@
      "id": "3.0",
      "inicio": "2028-05-12",
      "fin": "2028-05-14",
-     "linea": "ticks masivos, replay, SLA y LED real",
      "entregables": [
       "ticks masivos",
       "replay",
@@ -1268,7 +1192,6 @@
      "id": "1.0",
      "inicio": "2028-06-19",
      "fin": "2028-06-23",
-     "linea": "6-DOF validado",
      "entregables": [
       "6-DOF validado"
      ]
@@ -1277,7 +1200,6 @@
      "id": "1.1",
      "inicio": "2028-06-24",
      "fin": "2028-06-28",
-     "linea": "simulador web contra OpenRocket",
      "entregables": [
       "simulador web contra OpenRocket"
      ]
@@ -1286,7 +1208,6 @@
      "id": "2.0",
      "inicio": "2028-06-29",
      "fin": "2028-07-02",
-     "linea": "Monte Carlo, VR, voz y computadora de vuelo en Wokwi",
      "entregables": [
       "Monte Carlo",
       "VR",
@@ -1297,7 +1218,6 @@
      "id": "3.0",
      "inicio": "2028-07-03",
      "fin": "2028-07-07",
-     "linea": "un millón de corridas, modelo sustituto y HIL real",
      "entregables": [
       "un millón de corridas",
       "modelo sustituto y HIL real"
@@ -1324,7 +1244,6 @@
      "id": "1.0",
      "inicio": "2028-07-17",
      "fin": "2028-07-20",
-     "linea": "solver 1D contra CalculiX",
      "entregables": [
       "solver 1D contra CalculiX"
      ]
@@ -1333,7 +1252,6 @@
      "id": "1.1",
      "inicio": "2028-07-21",
      "fin": "2028-07-25",
-     "linea": "2D, convergencia y margen",
      "entregables": [
       "2D",
       "convergencia y margen"
@@ -1343,7 +1261,6 @@
      "id": "2.0",
      "inicio": "2028-07-26",
      "fin": "2028-07-30",
-     "linea": "calculadora en el navegador",
      "entregables": [
       "calculadora en el navegador"
      ]
@@ -1352,7 +1269,6 @@
      "id": "3.0",
      "inicio": "2028-07-31",
      "fin": "2028-08-03",
-     "linea": "experimento real y usuarios en universidades",
      "entregables": [
       "experimento real y usuarios en universidades"
      ]
@@ -1377,7 +1293,6 @@
      "id": "1.0",
      "inicio": "2028-08-16",
      "fin": "2028-08-19",
-     "linea": "método de paneles",
      "entregables": [
       "método de paneles"
      ]
@@ -1386,7 +1301,6 @@
      "id": "1.1",
      "inicio": "2028-08-20",
      "fin": "2028-08-23",
-     "linea": "vortex lattice, Euler 2D y comparación",
      "entregables": [
       "vortex lattice",
       "Euler 2D y comparación"
@@ -1396,7 +1310,6 @@
      "id": "2.0",
      "inicio": "2028-08-24",
      "fin": "2028-08-26",
-     "linea": "optimizador y AR",
      "entregables": [
       "optimizador y AR"
      ]
@@ -1405,7 +1318,6 @@
      "id": "3.0",
      "inicio": "2028-08-27",
      "fin": "2028-08-30",
-     "linea": "lote y modelo sustituto",
      "entregables": [
       "lote y modelo sustituto"
      ]
@@ -1430,7 +1342,6 @@
      "id": "1.0",
      "inicio": "2028-09-13",
      "fin": "2028-09-17",
-     "linea": "PID, LQR y Kalman en PX4 SITL",
      "entregables": [
       "PID",
       "LQR y Kalman en PX4 SITL"
@@ -1440,7 +1351,6 @@
      "id": "1.1",
      "inicio": "2028-09-18",
      "fin": "2028-09-22",
-     "linea": "banco de fallas, modos seguros y ajuste automático",
      "entregables": [
       "banco de fallas",
       "modos seguros y ajuste automático"
@@ -1450,7 +1360,6 @@
      "id": "2.0",
      "inicio": "2028-09-23",
      "fin": "2028-09-26",
-     "linea": "estación de tierra por voz y el celular como sensor",
      "entregables": [
       "estación de tierra por voz y el celular como sensor"
      ]
@@ -1459,7 +1368,6 @@
      "id": "3.0",
      "inicio": "2028-09-27",
      "fin": "2028-10-01",
-     "linea": "dron real y RL con escudo vs LQR",
      "entregables": [
       "dron real y RL con escudo vs LQR"
      ]
@@ -1484,7 +1392,6 @@
      "id": "1.0",
      "inicio": "2028-10-27",
      "fin": "2028-10-30",
-     "linea": "propagador y ventanas de comunicación",
      "entregables": [
       "propagador y ventanas de comunicación"
      ]
@@ -1493,7 +1400,6 @@
      "id": "1.1",
      "inicio": "2028-10-31",
      "fin": "2028-11-03",
-     "linea": "screening del catálogo completo",
      "entregables": [
       "screening del catálogo completo"
      ]
@@ -1502,7 +1408,6 @@
      "id": "2.0",
      "inicio": "2028-11-04",
      "fin": "2028-11-07",
-     "linea": "WhatsApp, newsletter y AR",
      "entregables": [
       "WhatsApp",
       "newsletter y AR"
@@ -1512,7 +1417,6 @@
      "id": "3.0",
      "inicio": "2028-11-08",
      "fin": "2028-11-11",
-     "linea": "servicio diario y reingresos sobre Argentina",
      "entregables": [
       "servicio diario y reingresos sobre Argentina"
      ]
@@ -1537,7 +1441,6 @@
      "id": "1.0",
      "inicio": "2028-11-12",
      "fin": "2028-11-14",
-     "linea": "primer PR aceptado",
      "entregables": [
       "primer PR aceptado"
      ]
@@ -1546,7 +1449,6 @@
      "id": "2.0",
      "inicio": "2028-11-15",
      "fin": "2028-11-18",
-     "linea": "PR de funcionalidad en un segundo proyecto",
      "entregables": [
       "PR de funcionalidad en un segundo proyecto"
      ]
@@ -1555,7 +1457,6 @@
      "id": "3.0",
      "inicio": "2028-11-19",
      "fin": "2028-11-21",
-     "linea": "contribución de peso",
      "entregables": [
       "contribución de peso"
      ]
@@ -1575,7 +1476,6 @@
      "id": "1.0",
      "inicio": "2028-11-22",
      "fin": "2028-11-26",
-     "linea": "gemelo digital del cubesat",
      "entregables": [
       "gemelo digital del cubesat"
      ]
@@ -1584,7 +1484,6 @@
      "id": "1.1",
      "inicio": "2028-11-27",
      "fin": "2028-12-01",
-     "linea": "sala de control en VR conectada a Antena Ops",
      "entregables": [
       "sala de control en VR conectada a Antena Ops"
      ]
@@ -1593,7 +1492,6 @@
      "id": "2.0",
      "inicio": "2028-12-02",
      "fin": "2028-12-06",
-     "linea": "\"Houston\" por voz",
      "entregables": [
       "\"Houston\" por voz"
      ]
@@ -1602,7 +1500,6 @@
      "id": "3.0",
      "inicio": "2028-12-07",
      "fin": "2028-12-11",
-     "linea": "HIL real, comandos firmados y caso de seguridad",
      "entregables": [
       "HIL real",
       "comandos firmados y caso de seguridad"
@@ -2343,7 +2240,6 @@
      "id": "1.0",
      "inicio": "2027-02-18",
      "fin": "2027-02-24",
-     "linea": "catalog, hybrid search, cart, checkout",
      "entregables": [
       "catalog",
       "hybrid search",
@@ -2355,7 +2251,6 @@
      "id": "2.0",
      "inicio": "2027-02-25",
      "fin": "2027-03-03",
-     "linea": "recommendations, shopping agent that never pays without confirmation",
      "entregables": [
       "recommendations",
       "shopping agent that never pays without confirmation"
@@ -2365,7 +2260,6 @@
      "id": "3.0",
      "inicio": "2027-03-04",
      "fin": "2027-03-17",
-     "linea": "simulated Black Friday, caching, search evals",
      "entregables": [
       "simulated Black Friday",
       "caching",
@@ -2404,7 +2298,6 @@
      "id": "1.0",
      "inicio": "2027-03-18",
      "fin": "2027-03-24",
-     "linea": "charges, double-entry ledger, idempotency",
      "entregables": [
       "charges",
       "double-entry ledger",
@@ -2420,7 +2313,6 @@
      "id": "2.0",
      "inicio": "2027-03-25",
      "fin": "2027-03-31",
-     "linea": "signed webhooks, refunds, disputes, ML anti-fraud",
      "entregables": [
       "signed webhooks",
       "refunds",
@@ -2437,7 +2329,6 @@
      "id": "3.0",
      "inicio": "2027-04-01",
      "fin": "2027-04-14",
-     "linea": "reconciliation, chaos, USDC testnet",
      "entregables": [
       "reconciliation",
       "chaos",
@@ -2479,7 +2370,6 @@
      "id": "1.0",
      "inicio": "2027-04-15",
      "fin": "2027-04-21",
-     "linea": "request, dispatch, live tracking",
      "entregables": [
       "request",
       "dispatch",
@@ -2490,7 +2380,6 @@
      "id": "2.0",
      "inicio": "2027-04-22",
      "fin": "2027-04-28",
-     "linea": "surge pricing, ML ETA",
      "entregables": [
       "surge pricing",
       "ML ETA"
@@ -2500,7 +2389,6 @@
      "id": "3.0",
      "inicio": "2027-04-29",
      "fin": "2027-05-12",
-     "linea": "10k simulated drivers, p99, network failures",
      "entregables": [
       "10k simulated drivers",
       "p99",
@@ -2540,7 +2428,6 @@
      "id": "1.0",
      "inicio": "2027-05-13",
      "fin": "2027-05-19",
-     "linea": "block editor, live collaboration, presence",
      "entregables": [
       "block editor",
       "live collaboration",
@@ -2551,7 +2438,6 @@
      "id": "2.0",
      "inicio": "2027-05-20",
      "fin": "2027-05-26",
-     "linea": "offline, permissions, writing agent",
      "entregables": [
       "offline",
       "permissions",
@@ -2562,7 +2448,6 @@
      "id": "3.0",
      "inicio": "2027-05-27",
      "fin": "2027-06-09",
-     "linea": "RAG with permissions, 100 concurrent editors",
      "entregables": [
       "RAG with permissions",
       "100 concurrent editors"
@@ -2602,7 +2487,6 @@
      "id": "1.0",
      "inicio": "2027-06-10",
      "fin": "2027-06-16",
-     "linea": "catalog, HLS streaming, playlists",
      "entregables": [
       "catalog",
       "HLS streaming",
@@ -2613,7 +2497,6 @@
      "id": "2.0",
      "inicio": "2027-06-17",
      "fin": "2027-06-23",
-     "linea": "audio-embedding recommendations, generated radio",
      "entregables": [
       "audio-embedding recommendations",
       "generated radio"
@@ -2623,7 +2506,6 @@
      "id": "3.0",
      "inicio": "2027-06-24",
      "fin": "2027-07-07",
-     "linea": "podcast summaries with voice, offline evals",
      "entregables": [
       "podcast summaries with voice",
       "offline evals"
@@ -2657,7 +2539,6 @@
      "id": "1.0",
      "inicio": "2027-07-08",
      "fin": "2027-07-14",
-     "linea": "read repo, plan, edit, diff",
      "entregables": [
       "read repo",
       "plan",
@@ -2669,7 +2550,6 @@
      "id": "2.0",
      "inicio": "2027-07-15",
      "fin": "2027-07-21",
-     "linea": "sandboxed tests, automatic PR",
      "entregables": [
       "sandboxed tests",
       "automatic PR"
@@ -2679,7 +2559,6 @@
      "id": "3.0",
      "inicio": "2027-07-22",
      "fin": "2027-08-04",
-     "linea": "SWE-bench-lite evals with success rate, MCP",
      "entregables": [
       "SWE-bench-lite evals with success rate",
       "MCP"
@@ -2718,14 +2597,6 @@
    "ventana": "Cert V1 + English E#1",
    "marca": "Aquasol and water parks",
    "sector": "Aquasol and water parks",
-   "build": {
-    "inicio": "2026-12-13",
-    "fin": "2026-12-19"
-   },
-   "venta": {
-    "inicio": "2026-12-20",
-    "fin": "2026-12-27"
-   },
    "queSeHace": "New premium web, 3D park, live lines and weather (simulated), demo tickets, AR",
    "wow": "Fly over the park",
    "reusa": "PetrIA Three.js; first project generated with Alawys"
@@ -2738,14 +2609,6 @@
    "ventana": "Cert V2 + English E#2",
    "marca": "Cinemacenter",
    "sector": "Cinemacenter",
-   "build": {
-    "inicio": "2027-01-09",
-    "fin": "2027-01-15"
-   },
-   "venta": {
-    "inicio": "2027-01-16",
-    "fin": "2027-01-27"
-   },
    "queSeHace": "Listings, 3D seat picker, Claude recommender",
    "wow": "See the screen from your seat",
    "reusa": "PetrIA agent"
@@ -2758,14 +2621,6 @@
    "ventana": "Math W1",
    "marca": "miboletería",
    "sector": "miboletería",
-   "build": {
-    "inicio": "2027-01-28",
-    "fin": "2027-02-03"
-   },
-   "venta": {
-    "inicio": "2027-02-04",
-    "fin": "2027-02-21"
-   },
    "queSeHace": "Ticketing with 3D stadium, virtual queue, alerts",
    "wow": "Queue survives a simulated spike (no real LLM)",
    "reusa": "PetrIA queues (RabbitMQ)"
@@ -2778,14 +2633,6 @@
    "ventana": "Cert V3 + English E#3",
    "marca": "McDonald's",
    "sector": "McDonald's",
-   "build": {
-    "inicio": "2027-02-22",
-    "fin": "2027-02-28"
-   },
-   "venta": {
-    "inicio": "2027-03-01",
-    "fin": "2027-03-12"
-   },
    "queSeHace": "Voice ordering, 3D menu, Lucero-style games",
    "wow": "Build the combo by talking",
    "reusa": "PetrIA voice-gateway"
@@ -2798,14 +2645,6 @@
    "ventana": "Cert V4 + English E#4 + Cambridge C1",
    "marca": "Supermarkets",
    "sector": "Supermarkets",
-   "build": {
-    "inicio": "2027-03-26",
-    "fin": "2027-04-01"
-   },
-   "venta": {
-    "inicio": "2027-04-02",
-    "fin": "2027-04-13"
-   },
    "queSeHace": "Smart list, recipes from what you have, simulated-price comparator",
    "wow": "Fridge photo → list",
    "reusa": "PetrIA daily-report vision"
@@ -2818,14 +2657,6 @@
    "ventana": "Cert V5 + Job search E#5",
    "marca": "SportClub and gyms",
    "sector": "SportClub and gyms",
-   "build": {
-    "inicio": "2027-05-02",
-    "fin": "2027-05-08"
-   },
-   "venta": {
-    "inicio": "2027-05-09",
-    "fin": "2027-05-15"
-   },
    "queSeHace": "Member app, classes, AI coach, occupancy per branch (simulated)",
    "wow": "Which branch is empty now",
    "reusa": "Antena realtime"
@@ -2838,14 +2669,6 @@
    "ventana": "Cert V6",
    "marca": "Car dealerships",
    "sector": "Car dealerships",
-   "build": {
-    "inicio": "2027-06-05",
-    "fin": "2027-06-11"
-   },
-   "venta": {
-    "inicio": "2027-06-12",
-    "fin": "2027-06-16"
-   },
    "queSeHace": "3D configurator, test-drive agent, financing simulator",
    "wow": "Spin the car and change its color",
    "reusa": "JulIA R3F"
@@ -2858,14 +2681,6 @@
    "ventana": "Cert V7",
    "marca": "Balnearios",
    "sector": "Balnearios",
-   "build": {
-    "inicio": "2027-06-17",
-    "fin": "2027-06-23"
-   },
-   "venta": {
-    "inicio": "2027-06-24",
-    "fin": "2027-06-26"
-   },
    "queSeHace": "Tent booking on a 3D beach map, weather and tides",
    "wow": "Pick your tent on the map",
    "reusa": "Aquasol map"
@@ -2878,14 +2693,6 @@
    "ventana": "Cert V8 + Job search E#6",
    "marca": "Theaters / season",
    "sector": "Theaters / season",
-   "build": {
-    "inicio": "2027-06-27",
-    "fin": "2027-07-03"
-   },
-   "venta": {
-    "inicio": "2027-07-04",
-    "fin": "2027-07-11"
-   },
    "queSeHace": "Season listings, 3D seats, play recommender",
    "wow": "Walk the room before buying",
    "reusa": "@alawys/seat-picker"
@@ -2898,14 +2705,6 @@
    "ventana": "Math W2",
    "marca": "Pharmacies",
    "sector": "Pharmacies",
-   "build": {
-    "inicio": "2027-07-12",
-    "fin": "2027-07-18"
-   },
-   "venta": {
-    "inicio": "2027-07-19",
-    "fin": "2027-08-05"
-   },
    "queSeHace": "Stock per branch (simulated), reminders, assistant that never diagnoses",
    "wow": "Nearest branch with the medicine",
    "reusa": "VitalIA rules"
@@ -2918,14 +2717,6 @@
    "ventana": "Job search short + Math W3",
    "marca": "Airbnb v2",
    "sector": "Airbnb v2",
-   "build": {
-    "inicio": "2027-09-02",
-    "fin": "2027-09-08"
-   },
-   "venta": {
-    "inicio": "2027-09-09",
-    "fin": "2027-09-21"
-   },
    "queSeHace": "Stays with 3D/AR tour, booking agent",
    "wow": "Stand in the living room before booking",
    "reusa": "Roofy AR"
@@ -2938,11 +2729,6 @@
    "ventana": "Job search short + Consolidation",
    "marca": "Football clubs",
    "sector": "Football clubs",
-   "build": {
-    "inicio": "2027-10-28",
-    "fin": "2027-11-03"
-   },
-   "venta": null,
    "queSeHace": "Member app, digital card, 3D stadium, clips, no real crests",
    "wow": "Sunday goal already vertical",
    "reusa": "Clip Studio, seat-picker"
@@ -2955,11 +2741,6 @@
    "ventana": "Math W4",
    "marca": "Hotels and tourism",
    "sector": "Hotels and tourism",
-   "build": {
-    "inicio": "2027-11-04",
-    "fin": "2027-11-09"
-   },
-   "venta": null,
    "queSeHace": "Landing, 3D tour, multilingual concierge",
    "wow": "Ask the hotel in your language",
    "reusa": "Airbnb v2"
@@ -2972,14 +2753,6 @@
    "ventana": "Job search E#7 + Stage close",
    "marca": "Restaurants and breweries",
    "sector": "Restaurants and breweries",
-   "build": {
-    "inicio": "2028-01-14",
-    "fin": "2028-01-20"
-   },
-   "venta": {
-    "inicio": "2028-01-21",
-    "fin": "2028-01-21"
-   },
    "queSeHace": "3D menu, QR + voice ordering, booking agent",
    "wow": "Order the pint by talking",
    "reusa": "@alawys/voice-agent"
@@ -2992,14 +2765,6 @@
    "ventana": "Math WQ1",
    "marca": null,
    "sector": "Universities and institutes",
-   "build": {
-    "inicio": "2028-01-22",
-    "fin": "2028-01-28"
-   },
-   "venta": {
-    "inicio": "2028-01-29",
-    "fin": "2028-01-30"
-   },
    "queSeHace": "Campus 3D, guided enrollment, careers/scholarships assistant",
    "wow": "\"Which career fits me?\" → a plan",
    "reusa": "JulIA, Constelación RAG"
@@ -3012,14 +2777,6 @@
    "ventana": "Math WQ2",
    "marca": null,
    "sector": "Schools",
-   "build": {
-    "inicio": "2028-02-24",
-    "fin": "2028-03-01"
-   },
-   "venta": {
-    "inicio": "2028-03-02",
-    "fin": "2028-03-06"
-   },
    "queSeHace": "Family app: notices, fees, report cards, parent assistant on WhatsApp",
    "wow": "\"Does my kid have homework tomorrow?\"",
    "reusa": "@alawys/notify, JulIA"
@@ -3032,14 +2789,6 @@
    "ventana": "Cert CKS + Job search E#8 + Math WQ3",
    "marca": null,
    "sector": "Insurance",
-   "build": {
-    "inicio": "2028-03-31",
-    "fin": "2028-04-06"
-   },
-   "venta": {
-    "inicio": "2028-04-07",
-    "fin": "2028-04-17"
-   },
    "queSeHace": "1-minute quote, claim with damage photos",
    "wow": "Photos of the crash → estimate",
    "reusa": "AeroScan vision, Stripe v2 ledger",
@@ -3055,14 +2804,6 @@
    "ventana": "Cert AWS Security Specialty + Job search E#9 + Stage close",
    "marca": null,
    "sector": "Fuel stations",
-   "build": {
-    "inicio": "2028-05-15",
-    "fin": "2028-05-21"
-   },
-   "venta": {
-    "inicio": "2028-05-22",
-    "fin": "2028-05-31"
-   },
    "queSeHace": "Loyalty app, pay at the pump, price map, store",
    "wow": "Pay without leaving the car",
    "reusa": "Stripe v2 payments, PetrIA map"
@@ -3075,14 +2816,6 @@
    "ventana": "Math WA1",
    "marca": null,
    "sector": "Fashion retail",
-   "build": {
-    "inicio": "2028-06-01",
-    "fin": "2028-06-07"
-   },
-   "venta": {
-    "inicio": "2028-06-08",
-    "fin": "2028-06-18"
-   },
    "queSeHace": "AR try-on, size from a photo, style agent",
    "wow": "See the jacket on you before buying",
    "reusa": "Roofy AR, Amazon v2"
@@ -3095,14 +2828,6 @@
    "ventana": "Math WA2",
    "marca": null,
    "sector": "Airlines and travel",
-   "build": {
-    "inicio": "2028-07-08",
-    "fin": "2028-07-14"
-   },
-   "venta": {
-    "inicio": "2028-07-15",
-    "fin": "2028-07-16"
-   },
    "queSeHace": "Check-in, AR baggage, agent that rebooks cancelled flights",
    "wow": "\"Your flight was cancelled: 3 options\"",
    "reusa": "PetrIA voice, AR"
@@ -3115,14 +2840,6 @@
    "ventana": "Math WA3",
    "marca": null,
    "sector": "Wineries",
-   "build": {
-    "inicio": "2028-08-04",
-    "fin": "2028-08-10"
-   },
-   "venta": {
-    "inicio": "2028-08-11",
-    "fin": "2028-08-15"
-   },
    "queSeHace": "3D vineyard tour, AI pairing, store and wine club",
    "wow": "\"BBQ and 15k pesos\" → a basket",
    "reusa": "Amazon v2, tour3d"
@@ -3135,14 +2852,6 @@
    "ventana": "Job search short + Math WA4",
    "marca": null,
    "sector": "Logistics and delivery",
-   "build": {
-    "inicio": "2028-08-31",
-    "fin": "2028-09-06"
-   },
-   "venta": {
-    "inicio": "2028-09-07",
-    "fin": "2028-09-12"
-   },
    "queSeHace": "Live tracking, reschedule delivery, route optimization",
    "wow": "The parcel moving on the map with real ETA",
    "reusa": "Uber v2 dispatch"
@@ -3155,14 +2864,6 @@
    "ventana": "Cert AWS SA Professional + Job search E#10 + Math WA5",
    "marca": null,
    "sector": "Private clinics",
-   "build": {
-    "inicio": "2028-10-02",
-    "fin": "2028-10-08"
-   },
-   "venta": {
-    "inicio": "2028-10-09",
-    "fin": "2028-10-26"
-   },
    "queSeHace": "Online booking, reminders, triage that never diagnoses and refers; no real clinical data",
    "wow": "Book in 30 s on WhatsApp",
    "reusa": "VitalIA rules, @alawys/notify",
@@ -3196,51 +2897,6 @@
    "id": "v124-2026-12-13b",
    "fecha": "2026-12-13",
    "texto": "Re-check the plan with real data (3 weeks in): delay, capacity and the estimated end."
-  },
-  {
-   "id": "v124-2026-12-16",
-   "fecha": "2026-12-16",
-   "texto": "Secondary handover: JulIA → HandyX. Check JulIA reached v3.0 or log what's left."
-  },
-  {
-   "id": "v124-2027-01-06",
-   "fecha": "2027-01-06",
-   "texto": "Secondary handover: HandyX → Clip Studio. Check HandyX reached v3.0 or log what's left."
-  },
-  {
-   "id": "v124-2027-01-27",
-   "fecha": "2027-01-27",
-   "texto": "Secondary handover: Clip Studio → Roofy. Check Clip Studio reached v3.0 or log what's left."
-  },
-  {
-   "id": "v124-2027-02-17",
-   "fecha": "2027-02-17",
-   "texto": "Secondary handover: Roofy → Amazon v2. Check Roofy reached v3.0 or log what's left."
-  },
-  {
-   "id": "v124-2027-03-17",
-   "fecha": "2027-03-17",
-   "texto": "Secondary handover: Amazon v2 → Stripe v2. Check Amazon v2 reached v3.0 or log what's left."
-  },
-  {
-   "id": "v124-2027-04-14",
-   "fecha": "2027-04-14",
-   "texto": "Secondary handover: Stripe v2 → Uber v2. Check Stripe v2 reached v3.0 or log what's left."
-  },
-  {
-   "id": "v124-2027-05-12",
-   "fecha": "2027-05-12",
-   "texto": "Secondary handover: Uber v2 → Notion v2. Check Uber v2 reached v3.0 or log what's left."
-  },
-  {
-   "id": "v124-2027-06-09",
-   "fecha": "2027-06-09",
-   "texto": "Secondary handover: Notion v2 → Spotify v2. Check Notion v2 reached v3.0 or log what's left."
-  },
-  {
-   "id": "v124-2027-07-07",
-   "fecha": "2027-07-07",
-   "texto": "Secondary handover: Spotify v2 → Cursor v2. Check Spotify v2 reached v3.0 or log what's left."
   },
   {
    "id": "v124-2027-07-28",

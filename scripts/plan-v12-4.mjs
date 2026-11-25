@@ -128,8 +128,8 @@ for (const b of PE.bloques) {
   const e = nuevo.get(b.id);
   if (e.horas != null) b.horas = e.horas;
   b.fechas = { ...n };
-  // El doc v12.4 es ahora el roadmap: lo que estima el roadmap y lo que dice Trazo coinciden (la diferencia parte en cero).
-  if (b.roadmap) b.roadmap = { ...n };
+  // El doc v12.4 es ahora el roadmap: lo que estima el roadmap y lo que dice Trazo coinciden (la diferencia parte en cero); ver más abajo.
+  delete b.roadmap;
   // Certificaciones: el examen y el día por día, en proporción.
   for (const c of b.certs ?? []) {
     c.examen = llevar(c.examen, v, n);
@@ -280,7 +280,10 @@ V.secundarias = NUEVAS.map((n) => {
   const p = previas.get(n.id);
   const versiones = n.v.map(([id, inicio, fin, revisionForeground, linea]) => {
     const pv = p?.versiones.find((x) => x.id === id);
-    return { id, inicio, fin, linea: pv?.linea ?? linea ?? '', entregables: pv?.entregables ?? (linea ? linea.split(/,\s*/) : []), ...(revisionForeground.length ? { revisionForeground } : {}) };
+    const ln = pv?.linea ?? linea ?? '';
+    const entregables = pv?.entregables ?? (linea ? linea.split(/,\s*/) : []);
+    // La línea que es igual a los entregables unidos no se guarda: la app la arma (pesa menos en el arranque).
+    return { id, inicio, fin, ...(ln === entregables.join(', ') ? {} : { linea: ln }), entregables, ...(revisionForeground.length ? { revisionForeground } : {}) };
   });
   return {
     id: n.id, nombre: n.nombre, inicio: n.v[0][1], fin: n.v[2][2], versiones,
@@ -311,11 +314,15 @@ for (const linea of secSlots.split('\n')) {
   const sector = t[iSell + 1];
   const campo = (k) => { const x = t.find((y) => y.startsWith(`${k}:`)); return x ? mayus(x.slice(k.length + 1).trim()) : null; };
   const prev = previosC.get(n);
+  // Build y venta se derivan (días 1 a 7 de build, del 8 en adelante de venta; hasta 7 días, solo build): el doc tiene que coincidir.
+  const derB = r.fin <= suma(r.inicio, 6) ? { ...r } : { inicio: r.inicio, fin: suma(r.inicio, 6) };
+  const derV = r.fin <= suma(r.inicio, 6) ? null : { inicio: suma(r.inicio, 7), fin: r.fin };
+  if (JSON.stringify(derB) !== JSON.stringify(build) || JSON.stringify(derV) !== JSON.stringify(venta)) throw new Error(`slot #${n}: build y venta del doc no son los 7 días y el resto`);
   const rev2 = t.find((x) => x.startsWith('foreground review:'));
   V.comerciales.push({
     n, id: `com-${n}`, inicio: r.inicio, fin: r.fin, ventana: host.replace(/^./, (c) => c.toUpperCase()),
     marca: n <= 14 ? (prev?.marca ?? sector) : null, sector,
-    build, venta, queSeHace: campo('builds'), wow: campo('wow'), reusa: campo('reuses'),
+    queSeHace: campo('builds'), wow: campo('wow'), reusa: campo('reuses'),
     ...(rev2 ? { revisionForeground: rev2.slice(18).split(',').map((s) => s.trim()).map((s) => (s === 'personal data' ? 'datos personales' : s)) } : {}),
   });
 }
@@ -338,18 +345,21 @@ const DESDE = { 'showcase-kit': 'Aquasol', captions: 'JulIA', 'seat-picker': 'Ci
 for (const [id, desde] of Object.entries(DESDE)) V.herramientas.find((h) => h.id === id).desde = desde;
 
 // §7: los recordatorios de fondo (los de cada slot, 7 y 14 días antes, los arma la app).
-const hand = [['2026-12-16', 'JulIA → HandyX', 'JulIA'], ['2027-01-06', 'HandyX → Clip Studio', 'HandyX'], ['2027-01-27', 'Clip Studio → Roofy', 'Clip Studio'], ['2027-02-17', 'Roofy → Amazon v2', 'Roofy'], ['2027-03-17', 'Amazon v2 → Stripe v2', 'Amazon v2'], ['2027-04-14', 'Stripe v2 → Uber v2', 'Stripe v2'], ['2027-05-12', 'Uber v2 → Notion v2', 'Uber v2'], ['2027-06-09', 'Notion v2 → Spotify v2', 'Notion v2'], ['2027-07-07', 'Spotify v2 → Cursor v2', 'Spotify v2']];
+// Los relevos de las apps secundarias (el último día de cada una) los arma la app desde sus fechas.
 V.recordatorios = [
   { id: 'v124-2026-11-26', fecha: '2026-11-26', texto: 'Start JulIA v1.0 in the background (separate repo).' },
   { id: 'v124-2026-12-03', fecha: '2026-12-03', texto: 'Prepare the Aquasol brief for slot #1 (starts 13 Dec).' },
   { id: 'v124-2026-12-05', fecha: '2026-12-05', texto: 'The PC arrives: start Alawys v0.1 (1 h/day from PetrIA until 11 Dec).' },
   { id: 'v124-2026-12-13a', fecha: '2026-12-13', texto: 'Three weeks of JulIA: is 1 h/day of review enough?' },
   { id: 'v124-2026-12-13b', fecha: '2026-12-13', texto: 'Re-check the plan with real data (3 weeks in): delay, capacity and the estimated end.' },
-  ...hand.map(([fecha, par, de]) => ({ id: `v124-${fecha}`, fecha, texto: `Secondary handover: ${par}. Check ${de} reached v3.0 or log what's left.` })),
   { id: 'v124-2027-07-28', fecha: '2027-07-28', texto: 'Decide whether to open a new secondary after 4 Aug (pick from "Ver a futuro").' },
   { id: 'v124-2027-08-04', fecha: '2027-08-04', texto: 'Cursor v2 is done: the secondary track is free.' },
 ];
 
+// El doc v12.4 es el roadmap: lo que estima el roadmap y lo que dicen las fechas son lo mismo, y no se guarda dos veces (la app lo arma).
+for (const b of PE.bloques) if (b.roadmap && b.fechas && b.roadmap.inicio === b.fechas.inicio && b.roadmap.fin === b.fechas.fin) delete b.roadmap;
+// La línea de una versión que es igual a sus entregables unidos no se guarda: la app la arma.
+for (const d of Object.values(V.detalle)) for (const v of d.versiones ?? []) if (v.linea !== undefined && v.entregables && v.linea === v.entregables.join(', ')) delete v.linea;
 guardar('data/plan-extendido.json', PE);
 guardar('data/proyectos-v7.json', PV7);
 guardar('data/v12-2.json', V);

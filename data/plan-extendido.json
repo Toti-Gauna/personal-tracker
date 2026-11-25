@@ -376,10 +376,6 @@
      "motivo": "Roadmap v7 (stack)"
     }
    ],
-   "roadmap": {
-    "inicio": "2026-11-16",
-    "fin": "2026-11-18"
-   },
    "fechas": {
     "inicio": "2026-11-16",
     "fin": "2026-11-18"
@@ -398,10 +394,6 @@
    "extraPlataforma": 0,
    "extraArquitectura": 0,
    "fechas": {
-    "inicio": "2026-11-19",
-    "fin": "2026-11-20"
-   },
-   "roadmap": {
     "inicio": "2026-11-19",
     "fin": "2026-11-20"
    },
@@ -620,10 +612,6 @@
      "motivo": "Roadmap v7 (stack)"
     }
    ],
-   "roadmap": {
-    "inicio": "2026-11-21",
-    "fin": "2026-12-12"
-   },
    "fechas": {
     "inicio": "2026-11-21",
     "fin": "2026-12-12"
@@ -941,10 +929,6 @@
     "inicio": "2026-12-13",
     "fin": "2026-12-18"
    },
-   "roadmap": {
-    "inicio": "2026-12-13",
-    "fin": "2026-12-18"
-   },
    "fase": "F1",
    "horas": 42,
    "certs": [
@@ -1018,10 +1002,6 @@
    "extraPlataforma": 0,
    "extraArquitectura": 0,
    "fechas": {
-    "inicio": "2026-12-19",
-    "fin": "2026-12-27"
-   },
-   "roadmap": {
     "inicio": "2026-12-19",
     "fin": "2026-12-27"
    },
@@ -1198,10 +1178,6 @@
      "motivo": "Roadmap v7 (stack)"
     }
    ],
-   "roadmap": {
-    "inicio": "2026-12-28",
-    "fin": "2027-01-08"
-   },
    "fechas": {
     "inicio": "2026-12-28",
     "fin": "2027-01-08"
@@ -1222,10 +1198,6 @@
    "extraPlataforma": 0,
    "extraArquitectura": 0,
    "fechas": {
-    "inicio": "2027-01-09",
-    "fin": "2027-01-18"
-   },
-   "roadmap": {
     "inicio": "2027-01-09",
     "fin": "2027-01-18"
    },
@@ -1319,10 +1291,6 @@
     "inicio": "2027-01-19",
     "fin": "2027-01-27"
    },
-   "roadmap": {
-    "inicio": "2027-01-19",
-    "fin": "2027-01-27"
-   },
    "fase": "F1",
    "horas": 72,
    "ingles": {
@@ -1394,10 +1362,6 @@
      "Calcular media, varianza, desvío, percentiles y cuantiles de un conjunto de datos",
      "Resolver triángulos y usar funciones trigonométricas básicas"
     ]
-   },
-   "roadmap": {
-    "inicio": "2027-01-28",
-    "fin": "2027-02-21"
    },
    "fechas": {
     "inicio": "2027-01-28",
@@ -1473,10 +1437,6 @@
    "extraPlataforma": 0,
    "extraArquitectura": 0,
    "fechas": {
-    "inicio": "2027-02-22",
-    "fin": "2027-03-03"
-   },
-   "roadmap": {
     "inicio": "2027-02-22",
     "fin": "2027-03-03"
    },
@@ -1568,10 +1528,6 @@
    "extraPlataforma": 0,
    "extraArquitectura": 0,
    "fechas": {
-    "inicio": "2027-03-04",
-    "fin": "2027-03-12"
-   },
-   "roadmap": {
     "inicio": "2027-03-04",
     "fin": "2027-03-12"
    },
@@ -1709,10 +1665,6 @@
      "motivo": "Roadmap v7 (stack)"
     }
    ],
-   "roadmap": {
-    "inicio": "2027-03-13",
-    "fin": "2027-03-25"
-   },
    "fechas": {
     "inicio": "2027-03-13",
     "fin": "2027-03-25"
@@ -1733,10 +1685,6 @@
    "extraPlataforma": 0,
    "extraArquitectura": 0,
    "fechas": {
-    "inicio": "2027-03-26",
-    "fin": "2027-04-04"
-   },
-   "roadmap": {
     "inicio": "2027-03-26",
     "fin": "2027-04-04"
    },
@@ -1838,10 +1786,6 @@
     "inicio": "2027-04-05",
     "fin": "2027-04-13"
    },
-   "roadmap": {
-    "inicio": "2027-04-05",
-    "fin": "2027-04-13"
-   },
    "fase": "F2",
    "horas": 72,
    "ingles": {
@@ -1932,10 +1876,6 @@
      "ambiente": "Cloud"
     }
    ],
-   "roadmap": {
-    "inicio": "2027-04-14",
-    "fin": "2027-05-01"
-   },
    "historial": [
     {
      "fecha": "2026-11-20",
@@ -1968,10 +1908,6 @@
    "extraPlataforma": 0,
    "extraArquitectura": 0,
    "fechas": {
-    "inicio": "2027-05-02",
-    "fin": "2027-05-09"
-   },
-   "roadmap": {
     "inicio": "2027-05-02",
     "fin": "2027-05-09"
    },
@@ -2055,10 +1991,6 @@
     "inicio": "2027-05-10",
     "fin": "2027-05-15"
    },
-   "roadmap": {
-    "inicio": "2027-05-10",
-    "fin": "2027-05-15"
-   },
    "fase": "F3",
    "horas": 42,
    "busqueda": {
@@ -2077,10 +2009,6 @@
    "extra": 0,
    "extraPlataforma": 0,
    "extraArquitectura": 0,
-   "roadmap": {
-    "inicio": "2027-05-16",
-    "fin": "2027-05-21"
-   },
    "ficha": {
     "rubro": "portfolio",
     "perfil": "Sr Full-stack → AI Engineer (RAG multifuente y agentes)",
@@ -2321,10 +2249,6 @@
      "motivo": "Roadmap v7 (stack)"
     }
    ],
-   "roadmap": {
-    "inicio": "2027-05-22",
-    "fin": "2027-06-04"
-   },
    "fechas": {
     "inicio": "2027-05-22",
     "fin": "2027-06-04"
@@ -2348,10 +2272,6 @@
    "extraPlataforma": 0,
    "extraArquitectura": 0,
    "fechas": {
-    "inicio": "2027-06-05",
-    "fin": "2027-06-16"
-   },
-   "roadmap": {
     "inicio": "2027-06-05",
     "fin": "2027-06-16"
    },
@@ -2467,10 +2387,6 @@
     "inicio": "2027-06-17",
     "fin": "2027-06-26"
    },
-   "roadmap": {
-    "inicio": "2027-06-17",
-    "fin": "2027-06-26"
-   },
    "fase": "F4",
    "horas": 82,
    "certs": [
@@ -2556,10 +2472,6 @@
    "extraPlataforma": 0,
    "extraArquitectura": 0,
    "fechas": {
-    "inicio": "2027-06-27",
-    "fin": "2027-07-06"
-   },
-   "roadmap": {
     "inicio": "2027-06-27",
     "fin": "2027-07-06"
    },
@@ -2650,10 +2562,6 @@
     "inicio": "2027-07-07",
     "fin": "2027-07-11"
    },
-   "roadmap": {
-    "inicio": "2027-07-07",
-    "fin": "2027-07-11"
-   },
    "fase": "F4",
    "horas": 41,
    "busqueda": {
@@ -2710,10 +2618,6 @@
      "Operar vectores y matrices: producto punto, producto de matrices y transpuesta",
      "Explicar el gradiente como la dirección de máximo crecimiento"
     ]
-   },
-   "roadmap": {
-    "inicio": "2027-07-12",
-    "fin": "2027-08-05"
    },
    "fechas": {
     "inicio": "2027-07-12",
@@ -2873,10 +2777,6 @@
      "ambiente": "Cloud"
     }
    ],
-   "roadmap": {
-    "inicio": "2027-08-06",
-    "fin": "2027-08-19"
-   },
    "historial": [
     {
      "fecha": "2026-11-20",
@@ -2932,10 +2832,6 @@
      "opcional": true
     }
    ],
-   "roadmap": {
-    "inicio": "2027-08-20",
-    "fin": "2027-08-22"
-   },
    "fechas": {
     "inicio": "2027-08-20",
     "fin": "2027-08-22"
@@ -3012,10 +2908,6 @@
      "ambiente": "Cloud"
     }
    ],
-   "roadmap": {
-    "inicio": "2027-08-23",
-    "fin": "2027-09-01"
-   },
    "historial": [
     {
      "fecha": "2026-11-20",
@@ -3048,10 +2940,6 @@
    "extraPlataforma": 0,
    "extraArquitectura": 0,
    "fechas": {
-    "inicio": "2027-09-02",
-    "fin": "2027-09-05"
-   },
-   "roadmap": {
     "inicio": "2027-09-02",
     "fin": "2027-09-05"
    },
@@ -3114,10 +3002,6 @@
      "Resolver una EDO de primer orden y simularla con Euler o RK2",
      "Plantear una optimización con restricciones y resolverla con descenso de gradiente"
     ]
-   },
-   "roadmap": {
-    "inicio": "2027-09-06",
-    "fin": "2027-09-21"
    },
    "fechas": {
     "inicio": "2027-09-06",
@@ -3272,10 +3156,6 @@
      "motivo": "Roadmap v7 (stack)"
     }
    ],
-   "roadmap": {
-    "inicio": "2027-09-22",
-    "fin": "2027-09-30"
-   },
    "fechas": {
     "inicio": "2027-09-22",
     "fin": "2027-09-30"
@@ -3333,10 +3213,6 @@
      "ambiente": "Cloud"
     }
    ],
-   "roadmap": {
-    "inicio": "2027-10-01",
-    "fin": "2027-10-13"
-   },
    "historial": [
     {
      "fecha": "2026-11-20",
@@ -3429,10 +3305,6 @@
      "ambiente": "Cloud"
     }
    ],
-   "roadmap": {
-    "inicio": "2027-10-14",
-    "fin": "2027-10-27"
-   },
    "historial": [
     {
      "fecha": "2026-11-20",
@@ -3474,10 +3346,6 @@
     "inicio": "2027-10-28",
     "fin": "2027-10-31"
    },
-   "roadmap": {
-    "inicio": "2027-10-28",
-    "fin": "2027-10-31"
-   },
    "fase": "F6",
    "horas": 31,
    "busqueda": {
@@ -3496,10 +3364,6 @@
    "extra": 0,
    "extraPlataforma": 0,
    "extraArquitectura": 0,
-   "roadmap": {
-    "inicio": "2027-11-01",
-    "fin": "2027-11-03"
-   },
    "fechas": {
     "inicio": "2027-11-01",
     "fin": "2027-11-03"
@@ -3545,10 +3409,6 @@
      "Explicar RSA y Diffie-Hellman con un ejemplo hecho a mano",
      "Contar combinaciones y permutaciones en problemas de seguridad"
     ]
-   },
-   "roadmap": {
-    "inicio": "2027-11-04",
-    "fin": "2027-11-09"
    },
    "fechas": {
     "inicio": "2027-11-04",
@@ -3656,10 +3516,6 @@
      "ambiente": "Cloud"
     }
    ],
-   "roadmap": {
-    "inicio": "2027-11-10",
-    "fin": "2027-11-18"
-   },
    "historial": [
     {
      "fecha": "2026-11-20",
@@ -3738,10 +3594,6 @@
      "ambiente": "Cloud"
     }
    ],
-   "roadmap": {
-    "inicio": "2027-11-19",
-    "fin": "2027-11-29"
-   },
    "historial": [
     {
      "fecha": "2026-11-20",
@@ -3807,10 +3659,6 @@
      "ambiente": "Infra"
     }
    ],
-   "roadmap": {
-    "inicio": "2027-11-30",
-    "fin": "2027-12-12"
-   },
    "historial": [
     {
      "fecha": "2026-11-20",
@@ -3841,10 +3689,6 @@
    "extraPlataforma": 0,
    "extraArquitectura": 0,
    "fechas": {
-    "inicio": "2027-12-13",
-    "fin": "2028-01-13"
-   },
-   "roadmap": {
     "inicio": "2027-12-13",
     "fin": "2028-01-13"
    },
@@ -3904,10 +3748,6 @@
     "inicio": "2028-01-14",
     "fin": "2028-01-18"
    },
-   "roadmap": {
-    "inicio": "2028-01-14",
-    "fin": "2028-01-18"
-   },
    "fase": "F7",
    "horas": 42,
    "busqueda": {
@@ -3926,10 +3766,6 @@
    "extra": 0,
    "extraPlataforma": 0,
    "extraArquitectura": 0,
-   "roadmap": {
-    "inicio": "2028-01-19",
-    "fin": "2028-01-21"
-   },
    "fechas": {
     "inicio": "2028-01-19",
     "fin": "2028-01-21"
@@ -3973,10 +3809,6 @@
      "Ajustar un modelo ARIMA a una serie y validarlo fuera de muestra",
      "Armar una cartera de mínima varianza con dos o más activos"
     ]
-   },
-   "roadmap": {
-    "inicio": "2028-01-22",
-    "fin": "2028-01-30"
    },
    "fechas": {
     "inicio": "2028-01-22",
@@ -4082,10 +3914,6 @@
      "ambiente": "Cloud"
     }
    ],
-   "roadmap": {
-    "inicio": "2028-01-31",
-    "fin": "2028-02-12"
-   },
    "historial": [
     {
      "fecha": "2026-11-20",
@@ -4145,10 +3973,6 @@
      "ambiente": "IA por API"
     }
    ],
-   "roadmap": {
-    "inicio": "2028-02-13",
-    "fin": "2028-02-23"
-   },
    "historial": [
     {
      "fecha": "2026-11-20",
@@ -4213,10 +4037,6 @@
      "Calcular las griegas (delta, gamma y vega) y explicar qué cubren",
      "Simular precios con Monte Carlo y comparar contra la fórmula cerrada"
     ]
-   },
-   "roadmap": {
-    "inicio": "2028-02-24",
-    "fin": "2028-03-06"
    },
    "fechas": {
     "inicio": "2028-02-24",
@@ -4317,10 +4137,6 @@
      "ambiente": "Backend"
     }
    ],
-   "roadmap": {
-    "inicio": "2028-03-07",
-    "fin": "2028-03-19"
-   },
    "historial": [
     {
      "fecha": "2026-11-20",
@@ -4376,10 +4192,6 @@
      "ambiente": "Backend"
     }
    ],
-   "roadmap": {
-    "inicio": "2028-03-20",
-    "fin": "2028-03-30"
-   },
    "historial": [
     {
      "fecha": "2026-11-20",
@@ -4410,10 +4222,6 @@
    "extraPlataforma": 0,
    "extraArquitectura": 0,
    "fechas": {
-    "inicio": "2028-03-31",
-    "fin": "2028-04-06"
-   },
-   "roadmap": {
     "inicio": "2028-03-31",
     "fin": "2028-04-06"
    },
@@ -4479,10 +4287,6 @@
     "inicio": "2028-04-07",
     "fin": "2028-04-11"
    },
-   "roadmap": {
-    "inicio": "2028-04-07",
-    "fin": "2028-04-11"
-   },
    "fase": "F8",
    "horas": 41,
    "busqueda": {
@@ -4527,10 +4331,6 @@
      "Optimizar una cartera con restricciones con un solver",
      "Validar un modelo de ML financiero con validación cruzada purgada"
     ]
-   },
-   "roadmap": {
-    "inicio": "2028-04-12",
-    "fin": "2028-04-17"
    },
    "fechas": {
     "inicio": "2028-04-12",
@@ -4618,10 +4418,6 @@
      "ambiente": "Infra"
     }
    ],
-   "roadmap": {
-    "inicio": "2028-04-18",
-    "fin": "2028-05-02"
-   },
    "historial": [
     {
      "fecha": "2026-11-20",
@@ -4677,10 +4473,6 @@
      "ambiente": "IA por API"
     }
    ],
-   "roadmap": {
-    "inicio": "2028-05-03",
-    "fin": "2028-05-14"
-   },
    "historial": [
     {
      "fecha": "2026-11-20",
@@ -4711,10 +4503,6 @@
    "extraPlataforma": 0,
    "extraArquitectura": 0,
    "fechas": {
-    "inicio": "2028-05-15",
-    "fin": "2028-05-23"
-   },
-   "roadmap": {
     "inicio": "2028-05-15",
     "fin": "2028-05-23"
    },
@@ -4787,10 +4575,6 @@
     "inicio": "2028-05-24",
     "fin": "2028-05-28"
    },
-   "roadmap": {
-    "inicio": "2028-05-24",
-    "fin": "2028-05-28"
-   },
    "fase": "F9",
    "horas": 42,
    "busqueda": {
@@ -4809,10 +4593,6 @@
    "extra": 0,
    "extraPlataforma": 0,
    "extraArquitectura": 0,
-   "roadmap": {
-    "inicio": "2028-05-29",
-    "fin": "2028-05-31"
-   },
    "fechas": {
     "inicio": "2028-05-29",
     "fin": "2028-05-31"
@@ -4861,10 +4641,6 @@
      "Aplicar conservación de energía y de momento",
      "Resolver EDOs de segundo orden (oscilador amortiguado) a mano y numéricamente"
     ]
-   },
-   "roadmap": {
-    "inicio": "2028-06-01",
-    "fin": "2028-06-18"
    },
    "fechas": {
     "inicio": "2028-06-01",
@@ -4959,10 +4735,6 @@
      "ambiente": "Cloud"
     }
    ],
-   "roadmap": {
-    "inicio": "2028-06-19",
-    "fin": "2028-07-07"
-   },
    "historial": [
     {
      "fecha": "2026-11-20",
@@ -5025,10 +4797,6 @@
      "Calcular tensiones y deformaciones en barras y vigas simples",
      "Resolver sistemas lineales grandes con factorización LU y explicar el condicionamiento"
     ]
-   },
-   "roadmap": {
-    "inicio": "2028-07-08",
-    "fin": "2028-07-16"
    },
    "fechas": {
     "inicio": "2028-07-08",
@@ -5108,10 +4876,6 @@
      "ambiente": "Frontend"
     }
    ],
-   "roadmap": {
-    "inicio": "2028-07-17",
-    "fin": "2028-08-03"
-   },
    "historial": [
     {
      "fecha": "2026-11-20",
@@ -5171,10 +4935,6 @@
      "Explicar sustentación y resistencia con los coeficientes de un perfil",
      "Resolver la ecuación del calor en 1D con diferencias finitas"
     ]
-   },
-   "roadmap": {
-    "inicio": "2028-08-04",
-    "fin": "2028-08-15"
    },
    "fechas": {
     "inicio": "2028-08-04",
@@ -5246,10 +5006,6 @@
      "ambiente": "Backend"
     }
    ],
-   "roadmap": {
-    "inicio": "2028-08-16",
-    "fin": "2028-08-30"
-   },
    "historial": [
     {
      "fecha": "2026-11-20",
@@ -5280,10 +5036,6 @@
    "extraPlataforma": 0,
    "extraArquitectura": 0,
    "fechas": {
-    "inicio": "2028-08-31",
-    "fin": "2028-09-03"
-   },
-   "roadmap": {
     "inicio": "2028-08-31",
     "fin": "2028-09-03"
    },
@@ -5334,10 +5086,6 @@
      "Diseñar un PID y ajustar su respuesta al escalón",
      "Implementar un filtro de Kalman para estimar posición y velocidad"
     ]
-   },
-   "roadmap": {
-    "inicio": "2028-09-04",
-    "fin": "2028-09-12"
    },
    "fechas": {
     "inicio": "2028-09-04",
@@ -5417,10 +5165,6 @@
      "ambiente": "Backend"
     }
    ],
-   "roadmap": {
-    "inicio": "2028-09-13",
-    "fin": "2028-10-01"
-   },
    "historial": [
     {
      "fecha": "2026-11-20",
@@ -5451,10 +5195,6 @@
    "extraPlataforma": 0,
    "extraArquitectura": 0,
    "fechas": {
-    "inicio": "2028-10-02",
-    "fin": "2028-10-15"
-   },
-   "roadmap": {
     "inicio": "2028-10-02",
     "fin": "2028-10-15"
    },
@@ -5513,10 +5253,6 @@
     "inicio": "2028-10-16",
     "fin": "2028-10-20"
    },
-   "roadmap": {
-    "inicio": "2028-10-16",
-    "fin": "2028-10-20"
-   },
    "fase": "F11",
    "horas": 40,
    "busqueda": {
@@ -5565,10 +5301,6 @@
      "Calcular el delta-v de una transferencia de Hohmann",
      "Aplicar la ecuación del cohete de Tsiolkovsky a una misión simple"
     ]
-   },
-   "roadmap": {
-    "inicio": "2028-10-21",
-    "fin": "2028-10-26"
    },
    "fechas": {
     "inicio": "2028-10-21",
@@ -5647,10 +5379,6 @@
      "ambiente": "DB"
     }
    ],
-   "roadmap": {
-    "inicio": "2028-10-27",
-    "fin": "2028-11-11"
-   },
    "historial": [
     {
      "fecha": "2026-11-20",
@@ -5693,10 +5421,6 @@
     "perfil": "Systems Engineer"
    },
    "tecnologias": [],
-   "roadmap": {
-    "inicio": "2028-11-12",
-    "fin": "2028-11-21"
-   },
    "historial": [
     {
      "fecha": "2026-11-20",
@@ -5755,10 +5479,6 @@
      "ambiente": "Frontend"
     }
    ],
-   "roadmap": {
-    "inicio": "2028-11-22",
-    "fin": "2028-12-11"
-   },
    "historial": [
     {
      "fecha": "2026-11-20",
@@ -5788,10 +5508,6 @@
    "extra": 0,
    "extraPlataforma": 0,
    "extraArquitectura": 0,
-   "roadmap": {
-    "inicio": "2028-12-12",
-    "fin": "2028-12-14"
-   },
    "fechas": {
     "inicio": "2028-12-12",
     "fin": "2028-12-14"

@@ -214,7 +214,9 @@ export interface RecordatorioFondo { id: string; fecha: string; texto: string; h
 export function recordatoriosFondo(plan: Plan, hoy: string): RecordatorioFondo[] {
   const hecho = (id: string) => !!plan.hitos?.[`v12:recordatorio:${id}`]?.hecho;
   const out: RecordatorioFondo[] = [];
-  for (const r of V122.recordatorios) if (r.fecha <= hoy && !hecho(r.id) && hoy <= addDays(r.fecha, 14)) out.push({ ...r });
+  // Los relevos de las apps secundarias: el último día de cada una, revisar que llegó a la v3.0 o anotar lo que falta (los arma la app).
+  const relevos = V122.secundarias.slice(0, -1).map((a, i) => ({ id: `v124-relevo-${a.id}`, fecha: a.fin, texto: `Secondary handover: ${a.nombre} → ${V122.secundarias[i + 1].nombre}. Check ${a.nombre} reached v3.0 or log what's left.` }));
+  for (const r of [...V122.recordatorios, ...relevos]) if (r.fecha <= hoy && !hecho(r.id) && hoy <= addDays(r.fecha, 14)) out.push({ ...r });
   for (const c of V122.comerciales) {
     if (c.inicio <= hoy) continue;
     const marca = c.marca ?? plan.fondo?.[c.id]?.marca;

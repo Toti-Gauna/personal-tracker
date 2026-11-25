@@ -414,6 +414,8 @@ export function validarTecnologias(bloques: BloqueExt[], pos: Map<string, number
 }
 
 const doc = raw as unknown as PlanExtendido;
+// v12.4: el doc es el roadmap, así que lo que estima el roadmap y lo que dicen las fechas son lo mismo y el JSON no lo guarda dos veces.
+for (const b of doc.bloques) if (b.fechas && !b.roadmap) b.roadmap = { ...b.fechas };
 const problemas = validar(doc);
 if (problemas.length) console.error('data/plan-extendido.json tiene problemas:\n' + problemas.join('\n'));
 
