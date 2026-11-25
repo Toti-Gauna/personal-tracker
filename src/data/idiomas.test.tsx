@@ -95,9 +95,9 @@ describe('integración con el plan T+18', () => {
     register('Toti', 'Abi', T0);
     startDay('completo', '04:00', '2026-11-17');
     const b = getState().days['2026-11-17'].blocks.find((x) => x.key === 'ingles')!;
-    // v12.1: 16:40 a 16:55, dentro del cierre de las 15:45.
+    // v12.4: 14:40 a 14:55, dentro del cierre de 13:45 a 16:00.
     expect(tituloDeBloque(b, '2026-11-17')).toBe('2-min English + learning.md');
-    expect(b).toMatchObject({ start: '16:40', min: 15 });
+    expect(b).toMatchObject({ start: '14:40', min: 15 });
     expect(getState().days['2026-11-17'].blocks.find((x) => x.key === 'ingles-hablado')).toBeUndefined();
     expect(b.tasks.map((t) => t.t)).toEqual(['Explicar en inglés en 2 minutos lo que hiciste', 'Anotar en learning.md']);
     // La fase del roadmap sigue disponible en Estudio · Idiomas.

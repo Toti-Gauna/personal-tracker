@@ -13,8 +13,8 @@ const fechas = (c: ReturnType<typeof cal>) => Object.fromEntries(c.map((b) => [b
 const SIN_TRABAJO = '2126-10-23'; // v12.1: sin fecha de trabajo nuevo, el corte queda a 100 años
 
 describe('v12.4 · calendario con fechas explícitas y capacidad de 10/11 h de foco menos lo de fondo', () => {
-  it('horas por semana de cada rutina: 60,2 de proyecto en la del plan y 29 con trabajo (archivada)', () => {
-    expect(horasPorSemana('busqueda-intensiva')).toBeCloseTo(60.17, 2);
+  it('horas por semana de cada rutina: 46,2 de proyecto en la del plan con las dos horas de fondo (60,2 sin ellas) y 29 con trabajo (archivada)', () => {
+    expect(horasPorSemana('busqueda-intensiva')).toBeCloseTo(46.17, 2);
     expect(horasPorSemana('con-trabajo')).toBe(29);
   });
 
@@ -31,12 +31,12 @@ describe('v12.4 · calendario con fechas explícitas y capacidad de 10/11 h de f
     expect(horasDelDia('2027-12-21', { ...cfg, pausas: false })).toBe(0);
     expect(horasDelDia('2027-12-27', cfg)).toBe(10); // en el PNPT no corre nada de fondo
     expect(horasDelDia('2028-12-21', cfg)).toBe(10);
-    // Sin horas por día (calendario viejo): la semana de arranque a 3,5 h y la rutina del plan (8,7 h de lunes a viernes y 8,4 el fin de semana).
+    // Sin horas por día (calendario viejo): la semana de arranque a 3,5 h y la rutina del plan (6,7 h de lunes a viernes y 6,4 el fin de semana, con las dos horas de fondo aparte).
     const viejo = { ...cfg, antesTrabajo: null, aniosPausa: undefined };
     expect(horasDelDia('2026-11-18', viejo)).toBe(3.5);
-    expect(horasDelDia('2026-11-25', viejo)).toBeCloseTo(8.67, 2);
-    expect(horasDelDia('2026-11-28', viejo)).toBeCloseTo(8.42, 2);
-    expect(horasDelDia('2026-11-29', viejo)).toBeCloseTo(8.42, 2);
+    expect(horasDelDia('2026-11-25', viejo)).toBeCloseTo(6.67, 2);
+    expect(horasDelDia('2026-11-28', viejo)).toBeCloseTo(6.42, 2);
+    expect(horasDelDia('2026-11-29', viejo)).toBeCloseTo(6.42, 2);
   });
 
   it('cada bloque cae en su fecha del plan: P0 del 16 al 18 nov, PetrIA v0 (archivada) 19–20 nov, PetrIA 193,5 h del 21 nov al 12 dic', () => {

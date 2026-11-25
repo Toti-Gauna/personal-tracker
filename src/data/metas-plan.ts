@@ -4,6 +4,7 @@
  * los cambia o los borra. Nada se carga 18 meses antes: todo se calcula al abrir el período.
  */
 import { HORAS_ANTES_TRABAJO, HORAS_FINDE, HORAS_LV, horasPorSemana } from './capacidad';
+import { fondoParaRutina } from './pistas-dia';
 import { PLAN_EXT } from './plan-extendido';
 import { horasPropiasDia } from './rutinas-propias';
 import { ajustarDia, domingoDe, planRoutine, type DayType } from './routines';
@@ -211,6 +212,8 @@ export function horasRutinaDia(fecha: string, t0 = T0_PLAN): Partial<Record<Rama
   const t: DayType = iso <= 5 ? 'busqueda-intensiva' : iso === 6 ? 'busqueda-intensiva-finde' : domingoDe('busqueda-intensiva-finde');
   const act = tramoActivo(fecha, t0);
   const dia = ajustarDia(planRoutine(t, 'completo'), {
+    // v12.4: la hora de cada pista de fondo sin nada activo vuelve al bloque 2 de la principal (y en una pausa fija, las dos).
+    fondo: fondoParaRutina(fecha),
     ...(act.tipo === 'ventana' ? { ventana: act.id } : { activo: { id: act.id, tipo: act.tipo, nombre: act.nombre } }),
     ...(iso === 2 || iso === 4 ? { postDelDia: true } : {}),
   });

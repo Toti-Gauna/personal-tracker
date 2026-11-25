@@ -34,6 +34,7 @@ import type { StudyState } from '../data/study-types';
 import { emptyEstudioRuta, type EstudioRutaState } from '../data/study-roadmap';
 import { emptyClipping, migrarClipping, type ClippingState } from '../data/clipping-state';
 import type { Block, DayLog, FocusEntry, FocusState, Preset, RoutineId, Settings } from '../data/types';
+import { esDiaLibre, fondoParaRutina } from '../data/pistas-dia';
 
 export interface State {
   settings: Settings | null;
@@ -261,7 +262,8 @@ export function startDay(routine: RoutineId, wake: string, date = dateKey()) {
     // Las metas que empujan la ruta llevan su etiqueta (ref y part) desde que empieza el día.
     const refs = refsForDay(s.ruta, date);
     const cfg = planSettings(s.settings);
-    const dayType = routineFor(date, { ...cfg, inicioTrabajo: inicioTrabajo(s.settings) });
+    // v12.4: un día libre fijo (la pausa de fin de año de 2027 y los dos descansos) es un día libre: ni foco ni fondo.
+    const dayType = esDiaLibre(date) ? 'libre' : routineFor(date, { ...cfg, inicioTrabajo: inicioTrabajo(s.settings) });
     const t0 = s.settings?.startDate;
     const puerta = puertaBloqueando(date, s.plan, t0) ?? undefined;
     const ventana = ventanaW(date, t0).ahora?.id ?? puerta;
@@ -277,7 +279,10 @@ export function startDay(routine: RoutineId, wake: string, date = dateKey()) {
     const sprint = sprintActivo(s.plan, date);
     // v12.1: el bloque activo da sentido a los bloques 1 y 2; martes y jueves, el post.
     const activo = tramoActivo(date, t0);
+    const fondoPlan = Object.entries(s.plan.fondo ?? {});
     const v12 = {
+      // v12.4: la hora de cada pista de fondo (la secundaria y la comercial) o, sin nada activo, devuelta al bloque 2.
+      fondo: fondoParaRutina(date, Object.fromEntries(fondoPlan.map(([id, e]) => [id, e.pausado])), Object.fromEntries(fondoPlan.map(([id, e]) => [id, e.marca]))),
       ...(activo ? { activo: { id: activo.id, tipo: activo.tipo, nombre: activo.nombre } } : {}),
       ...(isoDay(date) === 2 || isoDay(date) === 4 ? { postDelDia: true, postTema: temaDelPost(s.study, date) } : {}),
     };

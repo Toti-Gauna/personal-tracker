@@ -4,6 +4,7 @@
  * pista no tiene nada activo, su hora vuelve a la principal. En la ventana del PNPT y en cada día libre fijo no corre ninguna.
  * Hoja de módulos: la usan la capacidad (`capacidad.ts`) y lo de fondo (`fondo.ts`). Puro.
  */
+import type { Ajustes } from './routines';
 import { DIAS_LIBRES, EXTRAS_FOCO, PAUSAS_FONDO, V122, type Comercial, type Secundaria } from './v12-2';
 
 export type PistaFondo = 'secundaria' | 'comercial';
@@ -41,4 +42,24 @@ export function pistasActivas(fecha: string, pausadas: readonly PistaFondo[] = [
 export function horasDeFondo(fecha: string, pausadas: readonly PistaFondo[] = []): number {
   const extras = esDiaLibre(fecha) ? 0 : EXTRAS_FOCO.filter((x) => x.inicio <= fecha && fecha <= x.fin).reduce((s, x) => s + x.horas, 0);
   return pistasActivas(fecha, pausadas).length + extras;
+}
+
+/** La fase de un slot comercial un día: los primeros 7 días son de build; del día 8 en adelante, de venta (los de 7 días o menos, solo build). */
+export const faseComercial = (c: Comercial, fecha: string): 'build' | 'venta' => (c.venta && c.venta.inicio <= fecha && fecha <= c.venta.fin ? 'venta' : 'build');
+/** El nombre de un slot comercial: la marca, el rubro si todavía no hay marca o "a definir". */
+export const nombreSlot = (c: Pick<Comercial, 'n' | 'marca' | 'sector'>, elegida?: string) => `#${c.n} ${c.marca ?? elegida ?? c.sector ?? 'a definir'}`;
+
+/**
+ * v12.4 · lo que corre de fondo ese día, en la forma que pide la rutina del día (`Ajustes.fondo`). Lo pausado a mano (el uso de Claude)
+ * se ve como sin nada activo: su hora vuelve a la principal. `pausados` son ids de apps y slots pausados desde esa fecha.
+ */
+export function fondoParaRutina(fecha: string, pausados: Record<string, string | undefined> = {}, elegidas: Record<string, string | undefined> = {}): NonNullable<Ajustes['fondo']> {
+  const f = fondoEn(fecha);
+  const activo = (id: string) => !(pausados[id] && pausados[id]! <= fecha);
+  const app = f.secundaria.find((x) => activo(x.app.id));
+  const slot = f.comercial && activo(f.comercial.id) ? f.comercial : null;
+  return {
+    secundaria: app ? { nombre: `${app.app.nombre} v${app.version}` } : false,
+    comercial: slot ? { nombre: nombreSlot(slot, elegidas[slot.id]), fase: faseComercial(slot, fecha) } : false,
+  };
 }

@@ -56,8 +56,9 @@ describe('puertas de matemática', () => {
     expect(puertaBloqueando('2027-03-15', getState().plan, T0)).toBe('W1');
     startDay('completo', '04:30', '2027-03-15');
     const prog = getState().days['2027-03-15'].blocks.filter((b) => /^prog/.test(b.key));
-    // Sin trabajo nuevo en v12.4, el lunes tiene los dos bloques de deep focus y el PR review: los tres pasan a matemática.
-    expect(prog.map((b) => b.key)).toEqual(['prog', 'prog-tarde', 'prog-review']);
+    // Sin trabajo nuevo en v12.4, el lunes tiene los dos bloques de deep focus, el PR review y la hora de las 17:00 (no hay slot comercial
+    // activo y esa hora vuelve a la principal): los cuatro pasan a matemática. La de las 16:00 es de la secundaria (Stripe v2).
+    expect(prog.map((b) => b.key)).toEqual(['prog', 'prog-tarde', 'prog-review', 'prog-fondo-com']);
     for (const b of prog) expect(b).toMatchObject({ rama: 'matematica', title: 'Matemática pura · puerta W1' });
   });
 

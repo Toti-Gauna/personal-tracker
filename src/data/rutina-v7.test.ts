@@ -11,22 +11,24 @@ const dia = (d: string) => { startDay('completo', '04:00', d); return bloques(d)
 beforeEach(() => { resetState(); register('Toti', 'Abi', '2026-11-16'); });
 
 describe('v12.1 · rutina de lunes a viernes (10 h) y horas extra', () => {
-  it('lunes a viernes: proyecto 4:30–8:30 y 12:00–15:45, revisión del proyecto, el cierre de hábitos y el post de martes y jueves', () => {
+  it('lunes a viernes (v12.4): proyecto 4:30–8:30 y 12:00–13:45, el cierre de hábitos de 13:45 a 16:00, las dos horas de fondo hasta las 18:00 y el post de martes y jueves', () => {
     const b = dia('2026-11-18');
     expect(b.map((x) => [x.key, x.start])).toEqual([
-      ['rutina', '04:00'], ['prog', '04:30'], ['abi', '08:30'], ['trabajo', '10:00'], ['prog-tarde', '12:00'], ['prog-review', '15:45'],
-      ['ingles', '16:40'], ['recall', '16:55'], ['anki', '17:15'], ['busqueda', '17:30'], ['leer', '17:45'], ['entreno', '18:00'], ['cierre', '20:00'], ['sueno', '21:00'],
+      ['rutina', '04:00'], ['prog', '04:30'], ['abi', '08:30'], ['trabajo', '10:00'], ['prog-tarde', '12:00'], ['prog-review', '13:45'],
+      ['ingles', '14:40'], ['recall', '14:55'], ['anki', '15:15'], ['busqueda', '15:30'], ['leer', '15:45'],
+      // El 18 nov todavía no corre nada de fondo (JulIA arranca el 26): las dos horas vuelven al bloque 2 de la principal.
+      ['prog-fondo-sec', '16:00'], ['prog-fondo-com', '17:00'], ['entreno', '18:00'], ['cierre', '20:00'], ['sueno', '21:00'],
     ]);
     // Anthropic Academy quedó en el roadmap v7 archivado: no hay bloque.
     expect(b.some((x) => x.key === 'academy' || x.key === 'prog-academy')).toBe(false);
     // Martes y jueves: los últimos 30 min de la tarde son el post del día.
     const jue = dia('2026-11-19');
-    expect(jue.find((x) => x.key === 'prog-tarde')).toMatchObject({ start: '12:00', min: 195 });
-    expect(jue.find((x) => x.key === 'post')).toMatchObject({ start: '15:15', min: 30, rama: 'trabajo' });
+    expect(jue.find((x) => x.key === 'prog-tarde')).toMatchObject({ start: '12:00', min: 75 });
+    expect(jue.find((x) => x.key === 'post')).toMatchObject({ start: '13:15', min: 30, rama: 'trabajo' });
   });
 
-  it('la rutina da 60,2 h por semana de proyecto; sin trabajo nuevo no hay meta de horas extra de PetrIA', () => {
-    expect(horasRutinaIntensiva()).toEqual({ semana: 60.2, meta: 0, falta: 0 });
+  it('la rutina da 46,2 h por semana de proyecto con las dos pistas de fondo activas (60,2 sin ellas); sin trabajo nuevo no hay meta de horas extra de PetrIA', () => {
+    expect(horasRutinaIntensiva()).toEqual({ semana: 46.2, meta: 0, falta: 0 });
     // Lo que se puede pasar a proyecto: nunca sueño, entreno, Abi, trabajo ni la rutina.
     const ids = convertiblesIntensiva().map((c) => c.id);
     expect(ids).toEqual(expect.arrayContaining(['ingles', 'busqueda', 'leer', 'cierre']));
@@ -34,15 +36,15 @@ describe('v12.1 · rutina de lunes a viernes (10 h) y horas extra', () => {
     for (const h of ['recall', 'anki', 'post', 'demo', 'revision']) expect(ids).not.toContain(h);
     for (const no of ['sueno', 'entreno', 'abi', 'trabajo', 'rutina', 'prog']) expect(ids).not.toContain(no);
     expect(convertiblesIntensiva().find((c) => c.id === 'ingles')).toMatchObject({ minSemana: 105, dias: 'L a V, sábado, domingo' });
-    expect(horasRutinaIntensiva(['ingles'])).toEqual({ semana: 61.9, meta: 0, falta: 0 });
+    expect(horasRutinaIntensiva(['ingles'])).toEqual({ semana: 47.9, meta: 0, falta: 0 });
     // Aunque se pida, el entreno no se convierte.
-    expect(horasRutinaIntensiva(['entreno'])).toEqual({ semana: 60.2, meta: 0, falta: 0 });
+    expect(horasRutinaIntensiva(['entreno'])).toEqual({ semana: 46.2, meta: 0, falta: 0 });
   });
 
   it('las horas extra elegidas pasan a proyecto; sin fecha de trabajo nuevo, rigen todo el plan', () => {
     setPlanSettings({ extraProyecto: ['ingles'] });
     const b = dia('2026-11-18');
-    expect(b.find((x) => x.key === 'prog-extra-ingles')).toMatchObject({ start: '16:40', min: 15, rama: 'programacion' });
+    expect(b.find((x) => x.key === 'prog-extra-ingles')).toMatchObject({ start: '14:40', min: 15, rama: 'programacion' });
     expect(b.some((x) => x.key === 'ingles')).toBe(false);
     expect(dia('2027-06-02').some((x) => x.key === 'prog-extra-ingles')).toBe(true);
   });

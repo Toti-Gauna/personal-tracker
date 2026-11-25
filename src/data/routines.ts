@@ -337,13 +337,19 @@ export interface Ajustes {
   postDelDia?: boolean;
   /** v12.1: el tema del post (la tesis de paper más reciente). */
   postTema?: string | null;
+  /**
+   * v12.4: lo que corre de fondo ese día. Cada pista usa su hora (entre semana 16:00–17:00 la secundaria y 17:00–18:00 la comercial; el
+   * fin de semana 11:30–12:30 y 12:30–13:30). Una pista con algo activo nombra su bloque; sin nada activo, su hora vuelve al bloque 2 de
+   * la principal. Sin este ajuste, los dos bloques quedan con su nombre de fábrica.
+   */
+  fondo?: { secundaria?: { nombre: string } | false; comercial?: { nombre: string; fase: 'build' | 'venta' } | false };
 }
 
 /** Ola 31 (v7): la preparación de la certificación 1 (Anthropic Academy, 30 min por día) va hasta el 22 dic 2026; después, esa media hora es proyecto. */
 export const ACADEMY_HASTA = '2026-12-22';
 
 /** Ola 31 · los bloques que pueden pasar a ser horas extra de proyecto (los que no son sueño, entreno, Abi, trabajo, matemática ni proyecto). */
-export const NO_CONVERTIBLES = new Set(['rutina', 'sueno', 'entreno', 'abi', 'trabajo', 'math', 'math-tarde', 'pausa', 'recall', 'anki', 'post', 'demo', 'revision']);
+export const NO_CONVERTIBLES = new Set(['fondo-sec', 'fondo-com', 'rutina', 'sueno', 'entreno', 'abi', 'trabajo', 'math', 'math-tarde', 'pausa', 'recall', 'anki', 'post', 'demo', 'revision']);
 export const esConvertible = (b: Pick<RoutineBlock, 'id' | 'rama' | 'kind'>) => !NO_CONVERTIBLES.has(b.id) && b.rama !== 'programacion' && b.rama !== 'salud';
 
 /** Horario del trabajo nuevo (editable en Ajustes). De fábrica, de 10:00 a 16:00. */
@@ -391,9 +397,26 @@ export function ajustarTrabajo(plan: PlannedRoutineBlock[], h: HorarioTrabajo): 
   return { plan: out, tarde: { sinMatematica, entrenoMin } };
 }
 
+/** v12.4 · un bloque de fondo con su nombre (si hay algo activo) o, si no, devuelto como hora del bloque 2 de la principal. */
+function ajustarFondo(p: PlannedRoutineBlock, f: NonNullable<Ajustes['fondo']>): PlannedRoutineBlock {
+  const id = p.block.id;
+  if (id !== 'fondo-sec' && id !== 'fondo-com') return p;
+  const x = id === 'fondo-sec' ? f.secundaria : f.comercial;
+  if (!x) {
+    const quien = id === 'fondo-sec' ? 'la secundaria' : 'lo comercial';
+    return { ...p, block: { ...p.block, id: `prog-${id}`, label: `Bloque 2 · +1 h (${quien} no tiene nada activo)`, short: 'el bloque 2', area: 'ing', rama: 'programacion', focus: true, tasks: ['Lo del plan del día'] } };
+  }
+  if (id === 'fondo-sec') return { ...p, block: { ...p.block, label: `Secundaria · ${x.nombre}`, short: x.nombre, tasks: [`Revisar ${x.nombre}: lo que construyó Claude Code`, 'Arreglar lo que haga falta'] } };
+  const c = x as { nombre: string; fase: 'build' | 'venta' };
+  return { ...p, block: { ...p.block, label: `Comercial · ${c.nombre} · ${c.fase === 'venta' ? 'venta' : 'build'}`, short: c.nombre,
+    tasks: c.fase === 'venta' ? [`Pitch a la marca y a 10 negocios parecidos (${c.nombre})`, 'Anotar cada lead: nombre, fecha, canal y estado'] : [`Revisar lo que construyó Claude Code en ${c.nombre}`, 'Arreglar y pulir el showcase'] } };
+}
+
 /** Aplica la ventana W, la puerta y la práctica de la entrevista de mañana al día ya armado. */
 export function ajustarDia(plan: PlannedRoutineBlock[], a: Ajustes): PlannedRoutineBlock[] {
   let out = plan;
+  // v12.4: las dos horas de fondo. Antes que lo demás, para que la hora devuelta sea del bloque 2 y siga sus reglas (ventana, cert, etc.).
+  if (a.fondo) out = out.map((p) => ajustarFondo(p, a.fondo!));
   if (a.puerta) {
     out = out.map((p) => (p.block.rama === 'programacion'
       ? { ...p, block: { ...p.block, label: `Matemática pura · puerta ${a.puerta}`, short: 'matemática', rama: 'matematica', tasks: [`Tema de ${a.puerta} hasta dominarlo`, `Test de ${a.puerta} (85 % o más)`] } }
@@ -407,7 +430,7 @@ export function ajustarDia(plan: PlannedRoutineBlock[], a: Ajustes): PlannedRout
   if (a.activo) {
     const n = a.activo.nombre;
     const bloque1 = (p: PlannedRoutineBlock) => p.block.id === 'prog';
-    const bloque2 = (p: PlannedRoutineBlock) => p.block.id === 'prog-tarde' || p.block.id === 'prog-2';
+    const bloque2 = (p: PlannedRoutineBlock) => p.block.id === 'prog-tarde' || p.block.id === 'prog-2' || p.block.id.startsWith('prog-fondo-');
     const cambia = (p: PlannedRoutineBlock, label: string, rama: RamaOMain, tasks: string[]) => ({ ...p, block: { ...p.block, label, rama, tasks } });
     if (a.activo.tipo === 'cert') out = out.map((p) => (bloque1(p) ? cambia(p, `Bloque 1 · simulacros · ${n}`, 'programacion', ['Simulacros y repaso del plan del día']) : bloque2(p) ? cambia(p, `Bloque 2 · ${n}`, 'programacion', ['Lo del plan de estudio de hoy']) : p));
     else if (a.activo.tipo === 'ingles') out = out.map((p) => (bloque1(p) ? cambia(p, 'Bloque 1 · libro de inglés', 'ingles', ['Capítulo del día: estudiar, test y tesis']) : bloque2(p) ? cambia(p, 'Bloque 2 · libro + entrevistas + búsqueda', 'ingles', ['Libro', 'Entrevistas simuladas', 'Búsqueda laboral']) : p));
