@@ -266,7 +266,7 @@ The first hero screen. It answers the three questions above the fold in 59 words
 | **Tu día** | ring of goals done, "2 de 14 Metas", and the day's improvement counting up |
 | **El día** | the timeline: one row per goal on a rail, the node is a progress ring that becomes the yellow tick when done, the running one has its time highlighted; if the time falls in a gap, a "now" marker sits there. A row shows only the duration (steps appear when half-way); read aloud it says everything |
 | Goal sheet | tap any row: steps (tick, edit in place, delete with undo, add), **Dar por hecho** with a note, **Cambiar horario** (24 h, push or shorten what follows; says why when it can't), **Saltear hoy / Volver a hoy**, **Quitar de hoy** for goals added today (asks first) |
-| **Plan** | three rows instead of a text box: what is active now, what is due today (opens a list) and the next deadline; background work as chips |
+| **Plan** | three rows instead of a text box: what is active now, what is due today (opens a list) and the next deadline; with the principal track more than 7 days behind, a first row says how many days, the new estimated end and what to pause first (commercial, then secondary). "En el fondo" chips: the active app and version, the slot and its phase (build or sell) and today's review hours |
 | Bell | every alert in one sheet (cross-branch alerts, exams to book, hardware and paperwork, background reminders), each with "Ver" and its action |
 | **Hábitos** | each habit is a goal of the routine: a real button marks it (ticks that goal's steps, with undo), the week as labelled dots, and "Racha: n" |
 | **Esta semana** | the weekly counters with a progress bar and a named "+1" |
@@ -334,7 +334,7 @@ by branches (`#/metas/mapa`) stays as it was, linked from the hub ("El mapa por 
   Matemática, Inglés y búsqueda, Cierres y descansos) plus the two background tracks; lane names stay in view while
   you scroll sideways.
 - A bar fills with the work done, turns yellow when finished, gets an outline while it runs and a red underline when
-  overdue. Hatched bands are fixed pauses. The glowing yellow line is today.
+  overdue. Hatched bands are fixed pauses and the three fixed days off (20–26 Dec 2027, 31 Dec 2027–6 Jan 2028, 9–15 Jun 2028). A diamond on the Proyectos lane is an open source tool on the day it comes out (it opens Open source). The glowing yellow line is today.
 - Zoom: Todo · Año · Trimestre · Mes, pinch with two fingers, or Ctrl + wheel (from the whole plan down to two weeks).
   The day under your fingers stays put; the buttons zoom around today when it is on screen. "Hoy" scrolls back to it.
 - It opens on a quarter with today a quarter in from the left. Below: hours done of planned for the blocks already started.
@@ -398,18 +398,19 @@ book chapters) lives below; the window closes only with every milestone ticked (
 **De fondo** (`#/metas/fondo`): what runs now (current secondary app and showcase), the two tracks as numbers, the Imán of what
 is about to launch (as small rings), open source and clipping (still 1.0).
 - *Pista secundaria*: one card per app with its own cover, status, dates and Imán. "Ver a futuro" is a sheet.
-- *Pista comercial*: five states as chips with counts; the slots in that state, four at a time ("Ver los 23").
+- *Pista comercial*: five states as chips with counts; the slots in that state, four at a time ("Ver los 23"); the row shows the phase of the slot running today (build or sell).
 - *Item* (`fondo/<id>`): cover with the Imán ring as a link; the app's versions as steps (primary-focus review and publish in
-  the sheet); a showcase's state, security checklist (a sheet) and leads; repo, demo and launch version. Fields save on leaving the field
+  the sheet); a showcase's state, security checklist (a sheet) and leads (with their channel; a sell phase aims at 11), then its build and sell dates and the
+  "regional or big brand" answer; repo, demo and launch version. Fields save on leaving the field
   (and when the sheet closes with the field still focused), so a comma-separated list is not split while you type.
 - **Imán** (`iman/<id>`): **8-segment ring** that lights up with each point (animated in), and the 8 points as rows; each opens
   its sheet with what to load. Same gate as 1.0: the launch is not marked published without the 8.
-- **Open source** (`open-source`): one **package card** per tool (name, package and registry, latest published version, downloads);
+- **Open source** (`open-source`): one **package card** per tool (name, package and registry, latest published version, downloads, where it comes from, its date and who needs it; ten at a time, "Ver las N" for the rest);
   the sheet has the versions with their extraction checklist, publishing, link, downloads and Thursday's post.
 
 Budgets (words above the fold, 60 max; height in screens, 4 max): block 60 (2.1 screens), certification block 50, window
 block 58, certification 40, window 57, De fondo 58, secondary track 39, commercial track 53, item 51, showcase 58, Imán 57,
-open source 44 (3.98 screens: 22 package cards, the closest to the limit).
+open source 44 (ten package cards and a button; the full list used to be the closest to the 4-screen limit).
 
 ## 18. Estudio (`src/v2/estudio/`, batch 2.5)
 
