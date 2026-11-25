@@ -1,7 +1,7 @@
 import { puertaBloqueando } from '../data/puertas';
 import { planPropio, setRutinasPropias } from '../data/rutinas-propias';
 import { rutinaParaFecha } from '../data/motor-rutinas';
-import { migrarPlanV12, migrarStudyV12 } from './migrar-v12';
+import { migrarPlanV12, migrarPlanV124, migrarStudyV12 } from './migrar-v12';
 import { papersDelDia, temaDelPost, tesisDePaper } from '../data/papers';
 import { T0_PLAN } from '../data/plan';
 import { INICIO_TRABAJO_DIAS } from '../data/capacidad';
@@ -34,6 +34,8 @@ import type { StudyState } from '../data/study-types';
 import { emptyEstudioRuta, type EstudioRutaState } from '../data/study-roadmap';
 import { emptyClipping, migrarClipping, type ClippingState } from '../data/clipping-state';
 import type { Block, DayLog, FocusEntry, FocusState, Preset, RoutineId, Settings } from '../data/types';
+import { sincronizarRevision } from '../data/fondo';
+import { esDiaLibre, fondoParaRutina } from '../data/pistas-dia';
 
 export interface State {
   settings: Settings | null;
@@ -87,7 +89,7 @@ export function migrate(parsed: any): State {
   let settings = parsed.settings ?? null;
   if (settings && settings.plan?.modo === undefined) ({ settings, plan } = aplicarIntensiva(settings, plan, settings.startDate || T0_PLAN));
   // v12.1: aditiva (certs de la v7 a sus ids nuevos, papers y el mazo de LLM); no borra nada.
-  plan = migrarPlanV12(plan);
+  plan = migrarPlanV124(migrarPlanV12(plan), dateKey());
   const studyV12 = settings ? migrarStudyV12(study, dateKey()) : study;
   return { ...empty(), ...parsed, settings, study: studyV12, train, ruta, plan, estudioRuta: { ...emptyEstudioRuta(), ...(parsed.estudioRuta ?? {}) }, idiomas: { enlaces: {}, ...(parsed.idiomas ?? {}) }, clipping: migrarClipping(parsed.clipping), profile: migrarPerfil({ seals: {}, seen: Object.keys(parsed.profile?.seals ?? {}), ...(parsed.profile ?? {}) }), goals: migrateGoals(goals ?? seedGoals(parsed.settings?.startDate ?? dateKey())) };
 }
@@ -261,7 +263,8 @@ export function startDay(routine: RoutineId, wake: string, date = dateKey()) {
     // Las metas que empujan la ruta llevan su etiqueta (ref y part) desde que empieza el día.
     const refs = refsForDay(s.ruta, date);
     const cfg = planSettings(s.settings);
-    const dayType = routineFor(date, { ...cfg, inicioTrabajo: inicioTrabajo(s.settings) });
+    // v12.4: un día libre fijo (la pausa de fin de año de 2027 y los dos descansos) es un día libre: ni foco ni fondo.
+    const dayType = esDiaLibre(date) ? 'libre' : routineFor(date, { ...cfg, inicioTrabajo: inicioTrabajo(s.settings) });
     const t0 = s.settings?.startDate;
     const puerta = puertaBloqueando(date, s.plan, t0) ?? undefined;
     const ventana = ventanaW(date, t0).ahora?.id ?? puerta;
@@ -277,7 +280,10 @@ export function startDay(routine: RoutineId, wake: string, date = dateKey()) {
     const sprint = sprintActivo(s.plan, date);
     // v12.1: el bloque activo da sentido a los bloques 1 y 2; martes y jueves, el post.
     const activo = tramoActivo(date, t0);
+    const fondoPlan = Object.entries(s.plan.fondo ?? {});
     const v12 = {
+      // v12.4: la hora de cada pista de fondo (la secundaria y la comercial) o, sin nada activo, devuelta al bloque 2.
+      fondo: fondoParaRutina(date, Object.fromEntries(fondoPlan.map(([id, e]) => [id, e.pausado])), Object.fromEntries(fondoPlan.map(([id, e]) => [id, e.marca]))),
       ...(activo ? { activo: { id: activo.id, tipo: activo.tipo, nombre: activo.nombre } } : {}),
       ...(isoDay(date) === 2 || isoDay(date) === 4 ? { postDelDia: true, postTema: temaDelPost(s.study, date) } : {}),
     };
@@ -339,7 +345,13 @@ export function entrevistaCerca(p: PlanState, date: string): { rol: string; empr
 export const semanaPlan = (date: string) => semanaDelPlan(date, state.settings?.startDate);
 
 export function updateDay(date: string, fn: (d: DayLog) => DayLog) {
-  setState((s) => (s.days[date] ? { ...s, days: { ...s.days, [date]: fn(s.days[date]) } } : s));
+  setState((s) => {
+    if (!s.days[date]) return s;
+    const day = fn(s.days[date]);
+    // v12.4: tildar la hora de la secundaria o de la comercial anota 60 min de revisión a esa pista (editables después).
+    const revisionFondo = sincronizarRevision(s.plan.revisionFondo, day);
+    return { ...s, days: { ...s.days, [date]: day }, ...(revisionFondo !== s.plan.revisionFondo ? { plan: { ...s.plan, revisionFondo } } : {}) };
+  });
 }
 
 function updateBlock(date: string, key: string, fn: (b: Block) => Block) {

@@ -46,7 +46,7 @@ export function AnilloIman({ ok, tamano = 168, grosor = 10, nombre, decorativo }
 /** El nombre de lo que lleva el Imán: una app secundaria, un showcase o un proyecto principal. */
 export function nombreDeItem(id: string, marcaGuardada?: string) {
   const sec = secundaria(id), com = comercial(id);
-  return sec?.nombre ?? (com ? `#${com.n} · ${com.marca ?? marcaGuardada ?? 'A definir'}` : PLAN_EXT.bloques.find((b) => b.id === id)?.nombre ?? id);
+  return sec?.nombre ?? (com ? `#${com.n} · ${com.marca ?? marcaGuardada ?? com.sector ?? 'A definir'}` : PLAN_EXT.bloques.find((b) => b.id === id)?.nombre ?? id);
 }
 
 export function ImanV2({ id, hoy }: { id: string; hoy: string }) {

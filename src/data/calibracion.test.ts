@@ -55,20 +55,20 @@ describe('ola 33 · calibración con PetrIA 1.0 y 1.1 (las horas de los demás l
   });
   it('proyectar y escenarios (v12.1): una proyección en días hábiles sobre el plan fechado; el calendario no se mueve', () => {
     const base = proyectar(1);
-    expect(base).toMatchObject({ deltaDias: 0, fin: '2028-10-27', horas: 6482.5 }); // v12.2: PetrIA 193,5 h y VitalIA 104 h
+    expect(base).toMatchObject({ deltaDias: 0, fin: '2028-12-14', horas: 6480.5 }); // v12.4: PetrIA 193,5 h y VitalIA 102 h; el plan termina el 14 dic 2028
     const lento = proyectar(1.15);
     expect(lento.horas).toBeGreaterThan(base.horas);
     expect(lento.fin > base.fin).toBe(true);
-    expect(lento.deltaDias).toBe(56); // los proyectos son unos 2/3 del plan: +15 % en ellos son 8 semanas
+    expect(lento.deltaDias).toBe(57); // los proyectos son unos 2/3 del plan: +15 % en ellos son 8 semanas
     const e = escenarios();
     expect(e.map((x) => [x.id, x.factor])).toEqual([['rapido', 0.85], ['en-plan', 1], ['lento', 1.15]]);
     expect(e[0].fin < e[1].fin && e[1].fin < e[2].fin).toBe(true);
     // Lo ya cerrado no se estira: con P1 y P2 cerrados el escenario lento cambia menos.
     expect(proyectar(1.15, undefined, ['P1', 'P2']).deltaDias).toBeLessThan(lento.deltaDias);
     // Con PetrIA cerrada: más rápido termina antes, más lento después (y +10 % corre el fin 34 días).
-    expect(escenarios(undefined, ['P1']).map((x) => x.fin)).toEqual(['2028-09-07', '2028-10-27', '2028-12-19']);
+    expect(escenarios(undefined, ['P1']).map((x) => x.fin)).toEqual(['2028-10-23', '2028-12-14', '2029-02-06']);
     expect(diasPorDiezPorCiento(undefined, ['P1'])).toBe(34);
-    // Proyectar no toca el calendario real: sigue terminando el 27 oct 2028.
-    expect(calendarioVivo().reduce((m, b) => (b.fin > m ? b.fin : m), '')).toBe('2028-10-27');
+    // Proyectar no toca el calendario real: sigue terminando el 14 dic 2028.
+    expect(calendarioVivo().reduce((m, b) => (b.fin > m ? b.fin : m), '')).toBe('2028-12-14');
   });
 });

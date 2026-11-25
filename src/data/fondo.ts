@@ -5,17 +5,33 @@
  */
 import { HORAS_FINDE, HORAS_LV } from './capacidad';
 import type { Periodo } from './periodos';
+import { blockDone } from './mejora';
+import { fondoEn, type FondoActivo, type PistaFondo } from './pistas-dia';
 import { claveHito } from './periodos-plan';
 import type { PlanState } from './plan-state';
+import type { DayLog } from './types';
 import { ROUTINES_FILE, blockMin } from './routines';
 import { addDays, toMin } from './time';
-import { PAUSAS_FONDO, V122, type AreaForeground, type Comercial, type Secundaria } from './v12-2';
+import { PAUSAS_FONDO, V122, type AreaForeground, type Comercial } from './v12-2';
+
+export { fondoEn, type FondoActivo };
 
 export type EstadoComercial = 'planned' | 'building' | 'review' | 'published' | 'pitched';
 export const ESTADOS_COMERCIAL: EstadoComercial[] = ['planned', 'building', 'review', 'published', 'pitched'];
 export const ESTADO_COMERCIAL_TXT: Record<EstadoComercial, string> = { planned: 'planificado', building: 'en construcción', review: 'en revisión', published: 'publicado', pitched: 'ofrecido' };
 
-export interface Lead { id: string; nombre: string; contactado: string; estado: 'contactado' | 'respondió' | 'reunión' | 'propuesta' | 'ganado' | 'perdido' }
+/** v12.4 · por dónde se contactó a un lead. */
+export const CANALES_LEAD = ['email', 'WhatsApp', 'LinkedIn', 'Instagram', 'llamada', 'en persona'] as const;
+export type CanalLead = (typeof CANALES_LEAD)[number];
+/** v12.4 · la venta de un slot: el pitch a la marca y a 10 negocios parecidos (11 leads), cada uno con nombre, fecha, canal y estado. */
+export const META_LEADS = 11;
+export interface Lead { id: string; nombre: string; /** La fecha en que se lo contactó. */ contactado: string; /** v12.4: el canal. Los leads viejos no lo tienen. */ canal?: CanalLead; estado: 'contactado' | 'respondió' | 'reunión' | 'propuesta' | 'ganado' | 'perdido' }
+
+/** v12.4 · la pregunta que se hace 14 días antes de cada slot y cuya respuesta se guarda. */
+export const PERFILES_MARCA = [
+  { id: 'regional', etiqueta: 'Regional', nota: 'para conseguir clientes' },
+  { id: 'grande', etiqueta: 'Grande', nota: 'para hacer ruido' },
+] as const;
 
 /** Lo que se guarda de cada ítem de fondo (y de los principales, para el Imán y el lanzamiento). */
 export interface EstadoItem {
@@ -28,6 +44,8 @@ export interface EstadoItem {
   versiones?: Record<string, { publicada?: string; foreground?: string }>;
   /** Comercial "TO DEFINE": la marca elegida. */
   marca?: string;
+  /** v12.4: la respuesta a "¿marca regional para clientes o marca grande para ruido?" de ese slot. */
+  perfilMarca?: 'regional' | 'grande';
   leads?: Lead[];
   /** Pausado a mano (por el uso de Claude), con la fecha. */
   pausado?: string;
@@ -37,7 +55,36 @@ export interface EstadoItem {
   descargas?: number;
 }
 
-export interface EntradaRevision { id: string; fecha: string; inicio?: string; min: number; item: string; tipo: 'walkthrough' | 'diseño' | 'comercial' | 'otro'; nota?: string }
+export interface EntradaRevision {
+  id: string; fecha: string; inicio?: string; min: number; item: string; tipo: 'walkthrough' | 'diseño' | 'comercial' | 'otro'; nota?: string;
+  /** v12.4: la hora de fondo del día que la anotó sola al tildarse (los minutos se editan después). */
+  bloque?: 'fondo-sec' | 'fondo-com';
+}
+
+/** v12.4 (respuesta 2) · tildar una hora de fondo anota 60 min de revisión a esa pista. */
+export const MIN_HORA_FONDO = 60;
+const TIPO_BLOQUE_FONDO = { 'fondo-sec': 'walkthrough', 'fondo-com': 'comercial' } as const;
+
+/**
+ * Las entradas de revisión de un día según sus horas de fondo: al tildar la hora de la secundaria o la comercial se anotan 60 min a
+ * esa pista (a la app o al slot que corre ese día); al destildarla, se saca la entrada si sus minutos siguen en 60 (si los editaste,
+ * se queda). Devuelve el mismo arreglo si nada cambia.
+ */
+export function sincronizarRevision(log: EntradaRevision[] | undefined, dia: Pick<DayLog, 'date' | 'blocks'>): EntradaRevision[] | undefined {
+  const base = log ?? [];
+  let out = base;
+  const f = fondoEn(dia.date);
+  for (const b of dia.blocks) {
+    const tipo = TIPO_BLOQUE_FONDO[b.key as keyof typeof TIPO_BLOQUE_FONDO];
+    if (!tipo) continue;
+    const id = `rev-${dia.date}-${b.key}`;
+    const item = b.key === 'fondo-sec' ? f.secundaria[0]?.app.id : f.comercial?.id;
+    const existe = out.find((x) => x.id === id);
+    if (blockDone(b) && item && !existe) out = [...out, { id, fecha: dia.date, min: MIN_HORA_FONDO, item, tipo, bloque: b.key as 'fondo-sec' | 'fondo-com', nota: 'La hora de fondo del día' }];
+    else if (!blockDone(b) && existe && existe.min === MIN_HORA_FONDO) out = out.filter((x) => x.id !== id);
+  }
+  return out === base ? log : out;
+}
 
 type Plan = Pick<PlanState, 'hitos'> & { fondo?: Record<string, EstadoItem>; corrimientos?: PlanState['corrimientos'] };
 /** Las fechas de un período de fondo con el corrimiento confirmado, si lo hay. */
@@ -75,7 +122,7 @@ export function periodosComerciales(plan: Plan): Periodo[] {
     const e = plan.fondo?.[c.id];
     const marca = c.marca ?? e?.marca ?? null;
     return {
-      id: c.id, nombre: `#${c.n} · ${marca ?? 'A definir'}`, nivel: 'bloque' as const, ...fechas(plan, c.id, c), track: 'comercial' as const, pausas: pausasDe(plan, c.id),
+      id: c.id, nombre: `#${c.n} · ${marca ?? c.sector ?? 'A definir'}`, nivel: 'bloque' as const, ...fechas(plan, c.id, c), track: 'comercial' as const, pausas: pausasDe(plan, c.id),
       progreso: AVANCE_ESTADO[e?.estado ?? 'planned'],
       ...(entregablesComercial(c).length ? { checklist: entregablesComercial(c).map((texto, i) => ({ clave: claveHito.entregable(c.id, '1.0', i), texto, hecho: !!plan.hitos?.[claveHito.entregable(c.id, '1.0', i)]?.hecho })) } : {}),
     };
@@ -84,26 +131,9 @@ export function periodosComerciales(plan: Plan): Periodo[] {
 
 /** Lo de fondo que se corre con su ventana cuando se corre el plan: los slots comerciales y las versiones de las apps secundarias. */
 export const itemsDeFondo = () => [
-  ...V122.comerciales.map((c) => ({ id: c.id, nombre: `#${c.n} ${c.marca ?? 'a definir'}`, inicio: c.inicio, fin: c.fin })),
+  ...V122.comerciales.map((c) => ({ id: c.id, nombre: `#${c.n} ${c.marca ?? c.sector ?? 'a definir'}`, inicio: c.inicio, fin: c.fin })),
   ...V122.secundarias.flatMap((a) => a.versiones.map((v) => ({ id: `${a.id}:v${v.id}`, nombre: `${a.nombre} v${v.id}`, inicio: v.inicio, fin: v.fin }))),
 ];
-
-export interface FondoActivo {
-  secundaria: { app: Secundaria; version: string }[];
-  comercial: Comercial | null;
-  pausa: (typeof PAUSAS_FONDO)[number] | null;
-}
-
-/** Qué corre de fondo una fecha (en una pausa fija, nada: se ve la pausa). */
-export function fondoEn(fecha: string): FondoActivo {
-  const pausa = PAUSAS_FONDO.find((p) => p.inicio <= fecha && fecha <= p.fin) ?? null;
-  if (pausa) return { secundaria: [], comercial: null, pausa };
-  return {
-    secundaria: V122.secundarias.flatMap((app) => app.versiones.filter((v) => v.inicio <= fecha && fecha <= v.fin).map((v) => ({ app, version: v.id }))),
-    comercial: V122.comerciales.find((c) => c.inicio <= fecha && fecha <= c.fin) ?? null,
-    pausa: null,
-  };
-}
 
 /** Dos períodos de fondo del mismo tipo se pisan (fuera del relevo de las secundarias, que se solapan a propósito unos días). */
 export function solapes<T extends { id: string; inicio: string; fin: string }>(xs: T[], toleranciaDias = 0): [string, string][] {
@@ -117,7 +147,7 @@ export function solapes<T extends { id: string; inicio: string; fin: string }>(x
   return out;
 }
 
-/** v12.2 · la capacidad de una semana: 10 h × 5 + 11 h × 2 = 72 h, todo de foco. Lo de fondo no suma acá. */
+/** v12.2 · el foco bruto de una semana: 10 h × 5 + 11 h × 2 = 72 h. v12.4: lo de fondo sale de esas horas (ver `capacidadSemana`). */
 export const CAPACIDAD_SEMANA = (HORAS_LV ?? 10) * 5 + (HORAS_FINDE ?? 11) * 2;
 
 /** El tiempo de revisión de fondo de una semana (aparte de las 72 h): total y por tipo. */
@@ -128,11 +158,20 @@ export function revisionSemana(log: EntradaRevision[] | undefined, lunes: string
   return { min: xs.reduce((s, x) => s + x.min, 0), walkthrough: por('walkthrough'), diseno: por('diseño'), comercial: por('comercial'), otro: por('otro') };
 }
 
-/** La meta de revisión de la semana: 1 h de walkthrough por cada app secundaria activa esa semana. */
-export function metaRevisionSemana(lunes: string) {
+/**
+ * La meta de revisión de la semana (v12.4, respuesta 3): 1 h por cada día en que la pista está activa. Con la secundaria activa los 7
+ * días son 7 h; con un slot comercial activo, otras 7 h. Un día libre fijo o una pista pausada a mano no suman.
+ */
+export function metaRevisionSemana(lunes: string, pausadas: readonly PistaFondo[] = []) {
   const apps = new Set<string>();
-  for (let i = 0; i < 7; i++) for (const s of fondoEn(addDays(lunes, i)).secundaria) apps.add(s.app.id);
-  return { walkthroughMin: apps.size * 60, apps: [...apps] };
+  let diasSecundaria = 0;
+  let diasComercial = 0;
+  for (let i = 0; i < 7; i++) {
+    const f = fondoEn(addDays(lunes, i));
+    if (f.secundaria.length && !pausadas.includes('secundaria')) { diasSecundaria++; for (const s of f.secundaria) apps.add(s.app.id); }
+    if (f.comercial && !pausadas.includes('comercial')) diasComercial++;
+  }
+  return { walkthroughMin: diasSecundaria * 60, comercialMin: diasComercial * 60, diasSecundaria, diasComercial, apps: [...apps] };
 }
 
 /**
@@ -161,7 +200,7 @@ export function faltaForeground(areas: AreaForeground[] | undefined, hecha: stri
 export function sugerenciaPausas(usoPct: number | undefined, umbral = 85, activo: Pick<FondoActivo, 'secundaria' | 'comercial'>): { pista: 'comercial' | 'secundaria'; id: string; nombre: string }[] {
   if (usoPct == null || usoPct < umbral) return [];
   return [
-    ...(activo.comercial ? [{ pista: 'comercial' as const, id: activo.comercial.id, nombre: `#${activo.comercial.n} · ${activo.comercial.marca ?? 'A definir'}` }] : []),
+    ...(activo.comercial ? [{ pista: 'comercial' as const, id: activo.comercial.id, nombre: `#${activo.comercial.n} · ${activo.comercial.marca ?? activo.comercial.sector ?? 'A definir'}` }] : []),
     ...activo.secundaria.map((s) => ({ pista: 'secundaria' as const, id: s.app.id, nombre: `${s.app.nombre} v${s.version}` })),
   ];
 }
@@ -175,12 +214,16 @@ export interface RecordatorioFondo { id: string; fecha: string; texto: string; h
 export function recordatoriosFondo(plan: Plan, hoy: string): RecordatorioFondo[] {
   const hecho = (id: string) => !!plan.hitos?.[`v12:recordatorio:${id}`]?.hecho;
   const out: RecordatorioFondo[] = [];
-  for (const r of V122.recordatorios) if (r.fecha <= hoy && !hecho(r.id) && hoy <= addDays(r.fecha, 14)) out.push({ ...r });
+  // Los relevos de las apps secundarias: el último día de cada una, revisar que llegó a la v3.0 o anotar lo que falta (los arma la app).
+  const relevos = V122.secundarias.slice(0, -1).map((a, i) => ({ id: `v124-relevo-${a.id}`, fecha: a.fin, texto: `Secondary handover: ${a.nombre} → ${V122.secundarias[i + 1].nombre}. Check ${a.nombre} reached v3.0 or log what's left.` }));
+  for (const r of [...V122.recordatorios, ...relevos]) if (r.fecha <= hoy && !hecho(r.id) && hoy <= addDays(r.fecha, 14)) out.push({ ...r });
   for (const c of V122.comerciales) {
     if (c.inicio <= hoy) continue;
     const marca = c.marca ?? plan.fondo?.[c.id]?.marca;
-    if (!marca && addDays(c.inicio, -14) <= hoy && !hecho(`marca-${c.id}`)) out.push({ id: `marca-${c.id}`, fecha: addDays(c.inicio, -14), texto: `Elegí la marca del slot comercial #${c.n} (arranca el ${c.inicio})`, href: `#/metas/pista/comercial` });
-    if (addDays(c.inicio, -7) <= hoy && !hecho(`brief-${c.id}`)) out.push({ id: `brief-${c.id}`, fecha: addDays(c.inicio, -7), texto: `Prepará el brief del slot #${c.n}${marca ? ` (${marca})` : ''}: gancho, momento wow y qué reusa`, href: `#/metas/fondo/${c.id}` });
+    // v12.4: 14 días antes de cada slot se pregunta qué marca; la respuesta (regional o grande) queda guardada en `perfilMarca`.
+    if (addDays(c.inicio, -14) <= hoy && !plan.fondo?.[c.id]?.perfilMarca && !hecho(`marca-${c.id}`)) out.push({ id: `marca-${c.id}`, fecha: addDays(c.inicio, -14), texto: `Slot #${c.n}${marca ? ` (${marca})` : ''} arranca el ${c.inicio}: ¿marca regional para clientes o marca grande para ruido?`, href: `#/metas/fondo/${c.id}` });
+    // El brief va 7 días antes de cada slot; el del #1 es el recordatorio del 3 dic (no hay uno automático).
+    if (c.n !== 1 && addDays(c.inicio, -7) <= hoy && !hecho(`brief-${c.id}`)) out.push({ id: `brief-${c.id}`, fecha: addDays(c.inicio, -7), texto: `Prepará el brief del slot #${c.n}${marca ? ` (${marca})` : ''}: gancho, momento wow y qué reusa`, href: `#/metas/fondo/${c.id}` });
   }
   return out;
 }

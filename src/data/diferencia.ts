@@ -108,11 +108,14 @@ export function chequeosRoadmap(plan: PlanExtendido, capacidad: (fecha: string, 
     let dias = 0;
     for (let d = b.roadmap!.inicio; d <= b.roadmap!.fin; d = addDays(d, 1)) {
       if (esPausa(d)) continue;
-      cap += capacidad(d, b.tipo);
-      dias++;
+      const c = capacidad(d, b.tipo);
+      cap += c;
+      if (c > 0) dias++; // un día libre fijo no es un día del bloque
     }
     const desvio = (cap - b.horas) / b.horas;
     if (Math.abs(desvio) <= UMBRAL_HORAS_ROADMAP) continue;
+    // Un bloque ocupa días enteros: lo que sobra del último día no es un desvío (termina el día en que se juntan sus horas).
+    if (cap > b.horas && cap - b.horas <= capacidad(b.roadmap!.fin, b.tipo) + 1e-9) continue;
     out.push({
       id: `horas-${b.id}`, tipo: 'horas',
       texto: desvio > 0

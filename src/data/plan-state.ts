@@ -129,6 +129,13 @@ export interface PlanState {
   certVerificada?: Record<string, string>;
   /** v12.1: corrimientos que confirmaste para bloques atrasados (id → fechas nuevas y cuándo lo confirmaste). Nunca automáticos. */
   corrimientos?: Record<string, { inicio: string; fin: string; confirmado: string }>;
+  /** v12.4: la versión del plan con la que se migró este estado (la migración corre una sola vez). */
+  versionPlan?: string;
+  /**
+   * v12.4: los corrimientos que había confirmado antes del plan nuevo (sus fechas eran del plan viejo): se limpian y se guardan acá
+   * para poder deshacerlo. `aviso` es la fecha en que se mostró el aviso con "Deshacer".
+   */
+  respaldoV124?: { corrimientos: Record<string, { inicio: string; fin: string; confirmado: string }>; fecha: string; aviso?: string };
   /** Ola 34: tus rutinas del día (generadas, adaptadas o copiadas de una plantilla) y a qué días se aplican. */
   rutinasPropias?: import('./motor-rutinas').RutinaPropia[];
   asignacionesRutina?: import('./motor-rutinas').AsignacionRutina[];

@@ -33,16 +33,20 @@ describe('metas generadas desde el plan', () => {
     // v12.1 (respuesta 7): la meta de Handyx del mes 1 no sale, Handyx está en pausa.
     expect(nov.filter((m) => m.origen === 'plan').map((m) => m.texto)).toEqual(PLAN.etapaActual.mes.metas.filter((m) => m.rama !== 'handyx').map((m) => m.texto));
     const dic = metasMesGeneradas('2026-12-14', T0);
-    // v12.1: PetrIA se entrega el 9 de diciembre y VitalIA el 30: las dos cierran en diciembre, con la Cert window 1.
+    // v12.4: PetrIA se entrega el 12 de diciembre, con la Cert window 1 (examen el 18); VitalIA cierra el 8 de enero.
     expect(dic.find((m) => m.clave === 'casillas:P1')?.texto).toBe('PetrIA con los 12 puntos del estándar');
-    expect(dic.find((m) => m.clave === 'casillas:P2')?.texto).toBe('VitalIA con los 12 puntos del estándar');
+    expect(dic.find((m) => m.clave === 'casillas:P2')).toBeUndefined();
     expect(dic.find((m) => m.id === 'm-cert-CW1')?.texto).toBe('Cert window 1 aprobada');
-    expect(metasMesGeneradas('2027-01-10', T0).find((m) => /^casillas/.test(m.clave ?? ''))).toBeUndefined();
+    const ene = metasMesGeneradas('2027-01-10', T0);
+    expect(ene.find((m) => m.clave === 'casillas:P2')?.texto).toBe('VitalIA con los 12 puntos del estándar');
+    expect(ene.find((m) => m.id === 'm-cert-CW2')?.texto).toBe('Cert window 2 aprobada');
+    // Febrero no cierra ningún proyecto: no hay puntos del estándar.
+    expect(metasMesGeneradas('2027-02-10', T0).find((m) => /^casillas/.test(m.clave ?? ''))).toBeUndefined();
     expect(dic.find((m) => m.clave === 'postulaciones')?.meta).toBe(155);
     expect(dic.filter((m) => m.origen === 'chequeo').map((m) => m.texto)).toEqual(['Registro de laboratorios de seguridad', 'Medidas del mes']);
-    // El calendario por semanas termina en T+18 (21 nov 2027): después no hay metas generadas.
-    expect(metasMesGeneradas('2027-11-01', T0).length).toBeGreaterThan(0);
-    expect(metasMesGeneradas('2027-12-01', T0)).toEqual([]);
+    // El calendario por semanas termina en T+18 (21 ene 2028): después no hay metas generadas.
+    expect(metasMesGeneradas('2028-01-10', T0).length).toBeGreaterThan(0);
+    expect(metasMesGeneradas('2028-02-01', T0)).toEqual([]);
   });
 
   it('los simulacros de Cambridge C1 entran como chequeo durante la preparación (semanas 20 a 46), no después', () => {
@@ -61,20 +65,20 @@ describe('metas generadas desde el plan', () => {
     expect(oct.some((m) => /^m-idioma-/.test(m.id))).toBe(false);
   });
 
-  it('lo que cierra en diciembre y enero (v12.1): PetrIA, la Cert window 1, la entrevista, VitalIA (sin pausa en 2026), la Cert window 2, T+2 y W1', () => {
+  it('lo que cierra en diciembre y enero (v12.4): PetrIA, la entrevista, la Cert window 1, VitalIA (sin pausa en 2026), T+2, la Cert window 2 y W1', () => {
     const c = cierraEnMes('2026-12-01', [{ fecha: '2026-12-17', rol: 'AI Engineer' }], T0);
     expect(c.map((x) => [x.fecha, x.rama, x.texto])).toEqual([
-      ['2026-12-09', 'programacion', 'PetrIA entregado y examen de programación'],
-      ['2026-12-13', 'programacion', 'Examen de Cert window 1'],
+      ['2026-12-12', 'programacion', 'PetrIA entregado y examen de programación'],
       ['2026-12-17', 'trabajo', 'Entrevista · AI Engineer'],
-      ['2026-12-30', 'programacion', 'VitalIA entregado y examen de programación'],
+      ['2026-12-18', 'programacion', 'Examen de Cert window 1'],
     ]);
     const e = cierraEnMes('2027-01-01', [], T0);
-    expect(e.map((x) => [x.fecha, x.rama, x.texto]).slice(0, 2)).toEqual([['2027-01-07', 'programacion', 'Examen de Cert window 2'], ['2027-01-11', 'main', 'T+2 · Remoto de USD 3.000 a 5.000']]);
-    expect(e[2]).toMatchObject({ fecha: '2027-01-15', rama: 'matematica' });
+    expect(e.map((x) => [x.fecha, x.rama, x.texto]).slice(0, 3)).toEqual([['2027-01-08', 'programacion', 'VitalIA entregado y examen de programación'], ['2027-01-11', 'main', 'T+2 · Remoto de USD 3.000 a 5.000'], ['2027-01-18', 'programacion', 'Examen de Cert window 2']]);
+    expect(e[3]).toMatchObject({ fecha: '2027-01-28', rama: 'matematica' });
     expect(e.some((x) => x.rama === null)).toBe(false);
-    // Noviembre 2027 cierra con PNPT y T+18; la pausa del 20–26 dic 2027 queda fuera del calendario por semanas (termina en T+18).
-    expect(cierraEnMes('2027-11-01', [], T0).map((x) => x.texto)).toContain('Examen de PNPT');
+    // Enero 2028 cierra con el examen del PNPT y T+18; la pausa del 20–26 dic 2027 cae adentro del PNPT.
+    expect(cierraEnMes('2028-01-01', [], T0).map((x) => x.texto)).toContain('Examen de PNPT');
+    expect(cierraEnMes('2028-01-01', [], T0).map((x) => x.texto).some((t) => /^T\+18/.test(t))).toBe(true);
   });
 
   it('los contadores suman lo de la semana; las horas también salen de las sesiones de foco', () => {
@@ -99,15 +103,16 @@ describe('proyecto', () => {
 const LETRA_PAUSA = '—';
 
 describe('bimestre y año', () => {
-  it('B1 tiene 9 semanas de calendario (v12.1): PetrIA, Cert windows 1 y 2, English E#1 y E#2 y VitalIA; hay 6 bimestres, el último de 8', () => {
+  it('B1 tiene 9 semanas de calendario (v12.4): PetrIA, Cert windows 1 y 2, English E#1 y VitalIA; hay 7 bimestres, el último de 8', () => {
     const b1 = semanasDelBimestre(1, T0);
     // La semana es del tramo que tiene el jueves: el jueves 19 nov es de PetrIA v0 (archivada), así que la semana 1 lleva su letra.
-    expect(b1.semanas.map((s) => s.letra)).toEqual(['P1V0', 'P1', 'P1', 'C', 'E1', 'P2', 'C', 'C', 'E2']);
-    expect(b1.leyenda).toEqual(['P1V0 PetrIA v0 (archived)', 'P1 PetrIA', 'C Cert window 1', 'E1 English E#1', 'P2 VitalIA', 'C Cert window 2', 'E2 English E#2']);
+    expect(b1.semanas.map((s) => s.letra)).toEqual(['P1V0', 'P1', 'P1', 'P1', 'C', 'E1', 'P2', 'P2', 'C']);
+    expect(b1.leyenda).toEqual(['P1V0 PetrIA v0 (archived)', 'P1 PetrIA', 'C Cert window 1', 'E1 English E#1', 'P2 VitalIA', 'C Cert window 2']);
     expect(b1.fin).toBe('2027-01-17');
     expect(semanasDelBimestre(5, T0).semanas).toHaveLength(9);
-    expect(semanasDelBimestre(6, T0).semanas).toHaveLength(8);
-    // Sin pausa dentro del calendario por semanas: la de fin de año (20–26 dic 2027) cae después de T+18.
+    expect(semanasDelBimestre(6, T0).semanas).toHaveLength(9);
+    expect(semanasDelBimestre(7, T0).semanas).toHaveLength(8);
+    // La pausa de fin de año (20–26 dic 2027) parte al PNPT: su semana lleva la letra de la pausa en el B7.
     expect([1, 2, 3, 4, 5, 6].some((n) => semanasDelBimestre(n, T0).semanas.some((s) => s.letra === LETRA_PAUSA))).toBe(false);
   });
 

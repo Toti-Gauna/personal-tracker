@@ -186,7 +186,7 @@ describe('Página de un bloque', () => {
 
   it('las metas del bloque se arman, se tildan, tienen submetas y se borran (con confirmación)', async () => {
     abrir('proyecto/P1');
-    fireEvent.click(fila(/Agregar la primera meta/));
+    fireEvent.click(fila(/Agregar una meta/));
     escribir('Qué querés lograr', 'Terminar el MVP');
     fireEvent.click(within(dialogo()).getByRole('button', { name: 'Agregar y cerrar' }));
     expect(plan().metasBloque?.P1?.[0].texto).toBe('Terminar el MVP');
@@ -205,7 +205,7 @@ describe('Página de un bloque', () => {
     abrir('proyecto/CW1');
     const ex = screen.getByRole('link', { name: /Claude Certified Architect/ });
     expect(ex.getAttribute('href')).toBe('#/metas/cert/claude-architect');
-    expect(ex.textContent).toContain('en 19 d');
+    expect(ex.textContent).toContain('en 23 d'); // del 23 nov al examen del 16 dic
     expect(fila(/Horas y fechas/)).toBeTruthy();
     expect(screen.queryByRole('button', { name: /Estándar de alto valor/ })).toBeNull();
   });
@@ -235,11 +235,11 @@ describe('Certificación 2.0', () => {
   const ID = 'claude-architect';
   it('arriba, la fecha del examen con la cuenta regresiva; el título es corto y el nombre entero va abajo', () => {
     const c = certV12(ID)!;
-    expect(estadoCert(c, plan(), HOY).diasAlExamen).toBe(19);
+    expect(estadoCert(c, plan(), HOY).diasAlExamen).toBe(23); // 23 nov → 16 dic
     abrir(`cert/${ID}`);
     expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent('Claude Certified Architect');
     expect(screen.getByText('Claude Certified Architect – Foundations')).toBeTruthy();
-    expect(screen.getByText(/^Examen · 12 dic$/i)).toBeTruthy();
+    expect(screen.getByText(/^Examen · 16 dic$/i)).toBeTruthy();
     expect(screen.getByRole('link', { name: /Cert window 1/ }).getAttribute('href')).toBe('#/metas/proyecto/CW1');
   });
 
@@ -260,7 +260,7 @@ describe('Certificación 2.0', () => {
   it('reservar el examen lo deja como fecha fija; se deshace', () => {
     abrir(`cert/${ID}`);
     fireEvent.click(screen.getByRole('button', { name: 'Reservé para esa fecha' }));
-    expect(plan().reservas?.[ID]?.examen).toBe('2026-12-12');
+    expect(plan().reservas?.[ID]?.examen).toBe('2026-12-16');
     expect(screen.getByText('Reservado')).toBeTruthy();
     fireEvent.click(screen.getByRole('button', { name: 'Deshacer' }));
     expect(plan().reservas?.[ID]).toBeUndefined();
@@ -304,7 +304,8 @@ describe('De fondo 2.0', () => {
     expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent('De fondo');
     expect(screen.getByRole('link', { name: 'Pista secundaria' }).getAttribute('href')).toBe('#/metas/pista/secundaria');
     expect(screen.getByRole('link', { name: 'Pista comercial' }).getAttribute('href')).toBe('#/metas/pista/comercial');
-    expect(screen.getAllByRole('link', { name: /HandyX/ })[0].getAttribute('href')).toBe('#/metas/fondo/handyx');
+    // La primera app secundaria del plan v12.4 es JulIA (26 nov – 16 dic); HandyX viene después.
+    expect(screen.getAllByRole('link', { name: /JulIA/ })[0].getAttribute('href')).toBe('#/metas/fondo/julia');
     expect(screen.getAllByRole('link', { name: /0 de 8 puntos/ }).length).toBeGreaterThanOrEqual(2);
     expect(screen.getByRole('link', { name: /Open source/ }).getAttribute('href')).toBe('#/metas/open-source');
     expect(screen.getByRole('link', { name: /Clipping/ }).getAttribute('href')).toBe('#/metas/clipping');
@@ -312,8 +313,9 @@ describe('De fondo 2.0', () => {
 
   it('la pista secundaria: una tarjeta por app, cada una con su portada; la comercial, un pipeline por estado', () => {
     const { container, unmount } = abrir('pista/secundaria');
-    expect(screen.getAllByRole('link', { name: /^(HandyX|JulIA|Clip Studio|Roofy) / })).toHaveLength(4);
-    expect(container.querySelectorAll('.pt-app .pt-portada')).toHaveLength(4);
+    // Las 10 apps secundarias del plan v12.4 (§5): cuatro semanales y seis "v2" pesadas.
+    expect(screen.getAllByRole('link', { name: /^(JulIA|HandyX|Clip Studio|Roofy|Amazon v2|Stripe v2|Uber v2|Notion v2|Spotify v2|Cursor v2) / })).toHaveLength(10);
+    expect(container.querySelectorAll('.pt-app .pt-portada')).toHaveLength(10);
     unmount();
     abrir('pista/comercial');
     expect(screen.getByRole('button', { name: 'planificado · 23', pressed: true })).toBeTruthy();
@@ -348,6 +350,32 @@ describe('De fondo 2.0', () => {
     escribir('Nuevo lead', 'Acme');
     fireEvent.click(screen.getByRole('button', { name: 'Sumar lead' }));
     expect(plan().fondo?.['com-1']?.leads?.[0]).toMatchObject({ nombre: 'Acme', estado: 'contactado', contactado: HOY });
+  });
+
+  it('v12.4: un slot muestra su build (días 1 a 7) y su venta (del día 8), guarda la marca elegida y el canal de cada lead', () => {
+    abrir('fondo/com-1');
+    expect(screen.getByRole('button', { name: 'Regional' })).toBeTruthy();
+    expect(screen.getByRole('heading', { name: 'Fases y marca' })).toBeTruthy();
+    expect(screen.getByText('Días 1 a 7')).toBeTruthy();
+    expect(screen.getByText('Del día 8: la marca y 10 negocios parecidos')).toBeTruthy();
+    expect(screen.getByText('13 – 19 dic')).toBeTruthy();
+    expect(screen.getByText('20 – 27 dic')).toBeTruthy();
+    fireEvent.click(screen.getByRole('button', { name: /^Regional/ }));
+    expect(plan().fondo?.['com-1']?.perfilMarca).toBe('regional');
+    fireEvent.click(screen.getByRole('button', { name: /^Regional/ }));
+    expect(plan().fondo?.['com-1']?.perfilMarca).toBeUndefined();
+    escribir('Nuevo lead', 'Aqua Park Norte');
+    fireEvent.click(screen.getByRole('button', { name: /Canal/ }));
+    fireEvent.click(screen.getByRole('radio', { name: 'WhatsApp' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Sumar lead' }));
+    expect(plan().fondo?.['com-1']?.leads?.[0]).toMatchObject({ nombre: 'Aqua Park Norte', canal: 'WhatsApp' });
+    expect(screen.getByText(/1 de 11/)).toBeTruthy();
+  });
+
+  it('v12.4: un slot de 7 días o menos es solo build, y los slots sin marca se nombran por su rubro', () => {
+    abrir('fondo/com-12');
+    expect(screen.getByText('Hasta 7 días: solo build')).toBeTruthy();
+    expect(screen.queryByText(/Del día 8/)).toBeNull();
   });
 
   it('un ítem que no existe lo dice', () => {
@@ -399,10 +427,15 @@ describe('Imán 2.0', () => {
 describe('Open source 2.0', () => {
   it('una tarjeta de paquete por herramienta, con su versión y registro', () => {
     abrir('open-source');
-    // Cada tarjeta se llama por lo que muestra: el nombre, el tipo, el paquete, la versión y el registro.
+    // Se ven 10 y el resto se abre con un botón (la página no pasa de 4 pantallas).
+    expect(document.querySelectorAll('button.pt-paquete')).toHaveLength(10);
+    fireEvent.click(screen.getByRole('button', { name: `Ver las ${HERRAMIENTAS.length}` }));
     const tarjetas = document.querySelectorAll('button.pt-paquete');
     expect(tarjetas).toHaveLength(HERRAMIENTAS.length);
-    expect(screen.getByRole('button', { name: /^Alawys Producto propio .* Sin publicar npm$/ }).textContent).toContain('npm');
+    // Cada tarjeta se llama por lo que muestra: el nombre, el tipo, el paquete, la versión, el registro, de dónde sale y cuándo.
+    expect(screen.getByRole('button', { name: /^Alawys Producto propio .* Sin publicar npm PetrIA · 11 dic/ }).textContent).toContain('npm');
+    // Una extraída dice quién la necesita (todavía nadie).
+    expect(within(document.body).getAllByText(/necesita: nadie todavía/).length).toBeGreaterThan(0);
     expect(screen.getByText('Presets de Alawys')).toBeTruthy();
   });
 

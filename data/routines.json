@@ -622,7 +622,7 @@
      "label": "Bloque 2 · deep focus",
      "short": "el bloque 2",
      "start": "12:00",
-     "end": "15:45",
+     "end": "13:45",
      "area": "ing",
      "kind": "fixed",
      "focus": true,
@@ -635,8 +635,8 @@
      "id": "prog-review",
      "label": "PR review",
      "short": "pr review",
-     "start": "15:45",
-     "end": "16:40",
+     "start": "13:45",
+     "end": "14:40",
      "area": "ing",
      "kind": "fixed",
      "focus": true,
@@ -649,8 +649,8 @@
      "id": "ingles",
      "label": "2-min English + learning.md",
      "short": "2-min english + learning.md",
-     "start": "16:40",
-     "end": "16:55",
+     "start": "14:40",
+     "end": "14:55",
      "area": "ing",
      "kind": "fixed",
      "focus": true,
@@ -664,8 +664,8 @@
      "id": "recall",
      "label": "Trazo recall (incl. 20 LLM concepts)",
      "short": "trazo recall (incl. 20 llm concepts)",
-     "start": "16:55",
-     "end": "17:15",
+     "start": "14:55",
+     "end": "15:15",
      "area": "rutina",
      "kind": "fixed",
      "focus": true,
@@ -680,8 +680,8 @@
      "id": "anki",
      "label": "Anki",
      "short": "anki",
-     "start": "17:15",
-     "end": "17:30",
+     "start": "15:15",
+     "end": "15:30",
      "area": "ing",
      "kind": "fixed",
      "focus": true,
@@ -694,8 +694,8 @@
      "id": "busqueda",
      "label": "Posts / applications",
      "short": "posts / applications",
-     "start": "17:30",
-     "end": "17:45",
+     "start": "15:30",
+     "end": "15:45",
      "area": "rutina",
      "kind": "fixed",
      "focus": true,
@@ -708,14 +708,44 @@
      "id": "leer",
      "label": "Read tomorrow's lesson",
      "short": "read tomorrow's lesson",
-     "start": "17:45",
-     "end": "18:00",
+     "start": "15:45",
+     "end": "16:00",
      "area": "rutina",
      "kind": "fixed",
      "focus": true,
      "rama": "main",
      "tasks": [
       "Leer la lección de mañana"
+     ]
+    },
+    {
+     "id": "fondo-sec",
+     "label": "Secundaria · revisión",
+     "short": "la secundaria",
+     "start": "16:00",
+     "end": "17:00",
+     "area": "ing",
+     "kind": "fixed",
+     "focus": true,
+     "rama": "main",
+     "tasks": [
+      "Revisar lo que construyó Claude Code en la app secundaria",
+      "Arreglar lo que haga falta"
+     ]
+    },
+    {
+     "id": "fondo-com",
+     "label": "Comercial · build o venta",
+     "short": "el slot comercial",
+     "start": "17:00",
+     "end": "18:00",
+     "area": "ing",
+     "kind": "fixed",
+     "focus": true,
+     "rama": "main",
+     "tasks": [
+      "Revisar lo que construyó Claude Code en el slot comercial",
+      "Arreglar o salir a vender, según la fase"
      ]
     },
     {
@@ -825,13 +855,43 @@
      "label": "Bloque 2 · deep focus",
      "short": "el bloque 2",
      "start": "10:00",
-     "end": "13:30",
+     "end": "11:30",
      "area": "ing",
      "kind": "fixed",
      "focus": true,
      "rama": "programacion",
      "tasks": [
       "Construir: el lote o el capítulo del día"
+     ]
+    },
+    {
+     "id": "fondo-sec",
+     "label": "Secundaria · revisión",
+     "short": "la secundaria",
+     "start": "11:30",
+     "end": "12:30",
+     "area": "ing",
+     "kind": "fixed",
+     "focus": true,
+     "rama": "main",
+     "tasks": [
+      "Revisar lo que construyó Claude Code en la app secundaria",
+      "Arreglar lo que haga falta"
+     ]
+    },
+    {
+     "id": "fondo-com",
+     "label": "Comercial · build o venta",
+     "short": "el slot comercial",
+     "start": "12:30",
+     "end": "13:30",
+     "area": "ing",
+     "kind": "fixed",
+     "focus": true,
+     "rama": "main",
+     "tasks": [
+      "Revisar lo que construyó Claude Code en el slot comercial",
+      "Arreglar o salir a vender, según la fase"
      ]
     },
     {
@@ -1157,13 +1217,43 @@
      "label": "Bloque 2 · deep focus",
      "short": "el bloque 2",
      "start": "10:00",
-     "end": "13:30",
+     "end": "11:30",
      "area": "ing",
      "kind": "fixed",
      "focus": true,
      "rama": "programacion",
      "tasks": [
       "Construir: el lote o el capítulo del día"
+     ]
+    },
+    {
+     "id": "fondo-sec",
+     "label": "Secundaria · revisión",
+     "short": "la secundaria",
+     "start": "11:30",
+     "end": "12:30",
+     "area": "ing",
+     "kind": "fixed",
+     "focus": true,
+     "rama": "main",
+     "tasks": [
+      "Revisar lo que construyó Claude Code en la app secundaria",
+      "Arreglar lo que haga falta"
+     ]
+    },
+    {
+     "id": "fondo-com",
+     "label": "Comercial · build o venta",
+     "short": "el slot comercial",
+     "start": "12:30",
+     "end": "13:30",
+     "area": "ing",
+     "kind": "fixed",
+     "focus": true,
+     "rama": "main",
+     "tasks": [
+      "Revisar lo que construyó Claude Code en el slot comercial",
+      "Arreglar o salir a vender, según la fase"
      ]
     },
     {

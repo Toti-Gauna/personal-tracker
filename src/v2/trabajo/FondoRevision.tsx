@@ -4,15 +4,18 @@
  * marca de los slots a definir). Mismos datos y mismas funciones que `ui/RevisionFondo` de la 1.0; cada cosa abre su hoja.
  */
 import { useState } from 'react';
-import { fondoEn, metaRevisionSemana, revisionSemana, sugerenciaPausas, type EntradaRevision } from '../../data/fondo';
+import { atrasoPrincipal } from '../../data/atraso';
+import { PERFILES_MARCA, fondoEn, metaRevisionSemana, revisionSemana, sugerenciaPausas, type EntradaRevision } from '../../data/fondo';
 import { tramoActivo } from '../../data/plan';
 import { addDays } from '../../data/time';
 import { V122 } from '../../data/v12-2';
-import { anotarRevision, borrarRevision, pausarItem, setItem, setUmbralClaude, setUsoClaude } from '../../state/fondo';
+import { anotarRevision, borrarRevision, editarRevision, pausarItem, setItem, setUmbralClaude, setUsoClaude } from '../../state/fondo';
 import { getState, useStore } from '../../state/store';
+import { usePeriodos } from '../../ui/usePeriodos';
+import { textoAtraso } from '../hoy/planHoy';
 import { aviso } from '../kit/capas';
-import { Boton, CampoHora, Contador, Interruptor, Segmentado, Selector } from '../kit/controles';
-import { Dato } from '../kit/superficies';
+import { Boton, CampoHora, Chip, Contador, Interruptor, Segmentado, Selector } from '../kit/controles';
+import { Dato, Fila } from '../kit/superficies';
 import { Grupo } from '../marco/Marco';
 import { CampoAlSalir, FilaHoja } from '../proyecto/piezas';
 import { dm, n1 } from './comun';
@@ -74,11 +77,11 @@ function Tiempo({ hoy, lunes }: { hoy: string; lunes: string }) {
   return (
     <div className="pt-campo-hoja">
       <div className="tr-datos">
-        <Dato valor={`${horas(rev.walkthrough)} de ${horas(meta.walkthroughMin)}`} unidad="h" etiqueta="Walkthrough" />
+        <Dato valor={`${horas(rev.walkthrough)} de ${horas(meta.walkthroughMin)}`} unidad="h" etiqueta="Secundaria" />
+        <Dato valor={`${horas(rev.comercial)} de ${horas(meta.comercialMin)}`} unidad="h" etiqueta="Comercial" />
         <Dato valor={horas(rev.diseno)} unidad="h" etiqueta="Diseño" />
-        <Dato valor={horas(rev.comercial)} unidad="h" etiqueta="Comercial" />
       </div>
-      <p className="t-nota">Son {horas(rev.min)} h esta semana. No suman a las 72 h de foco.</p>
+      <p className="t-nota">Son {horas(rev.min)} h esta semana. La meta es 1 h por día con la pista activa, y sale de las 72 h de foco. Al tildar la hora de fondo del día se anotan 60 min; podés corregirlos.</p>
       {items.length > 0 ? (
         <>
           <Selector etiqueta="Ítem de fondo" valor={f.item} opciones={items.map((x) => ({ valor: x.id, etiqueta: x.nombre }))} onCambio={(v) => setF({ ...f, item: v })} />
@@ -93,7 +96,8 @@ function Tiempo({ hoy, lunes }: { hoy: string; lunes: string }) {
         <ul className="capa-1 pt-revs">
           {semana.map((x) => (
             <li key={x.id} className="tr-corrida">
-              <span className="tr-corrida-texto"><span className="t-rotulo">{dm(x.fecha)} · {x.tipo}{x.inicio ? ` · desde ${x.inicio}` : ''}</span><span className="t-cuerpo">{x.item} · {x.min} min</span></span>
+              <span className="tr-corrida-texto"><span className="t-rotulo">{dm(x.fecha)} · {x.tipo}{x.inicio ? ` · desde ${x.inicio}` : ''}{x.bloque ? ' · de la hora de fondo' : ''}</span><span className="t-cuerpo">{x.item} · {x.min} min</span></span>
+              <Contador etiqueta={`Minutos de ${x.item} del ${dm(x.fecha)}`} valor={x.min} min={0} max={600} paso={5} unidad="min" onCambio={(v) => editarRevision(x.id, v)} />
               <Boton tamano="s" variante="fantasma" icono="borrar" etiqueta={`Borrar ${x.item} del ${dm(x.fecha)}`} soloIcono onClick={() => borrar(x)} />
             </li>
           ))}
@@ -103,25 +107,30 @@ function Tiempo({ hoy, lunes }: { hoy: string; lunes: string }) {
   );
 }
 
-/** Lo que se elige en una fecha: la próxima app secundaria (29 ago a 19 sep 2027) y la marca de los slots que arrancan en 14 días. */
+/** Lo que se elige en una fecha: la próxima app secundaria (28 jul a 18 ago 2027) y la marca de los slots que arrancan en 14 días. */
 function Elegir({ hoy }: { hoy: string }) {
   const plan = useStore((s) => s.plan);
-  const elegir = hoy >= '2027-08-29' && hoy <= '2027-09-19';
-  const marcas = V122.comerciales.filter((c) => !c.marca && c.inicio > hoy && addDays(c.inicio, -14) <= hoy);
+  const elegir = hoy >= '2027-07-28' && hoy <= '2027-08-18';
+  // v12.4: 14 días antes de cada slot se pregunta si la marca es regional (para clientes) o grande (para ruido).
+  const marcas = V122.comerciales.filter((c) => c.inicio > hoy && addDays(c.inicio, -14) <= hoy);
   const actual = plan.fondo?.['secundaria-siguiente']?.marca ?? '';
   return (
     <>
       {elegir && (
-        <FilaHoja icono="estrella" titulo="Próxima secundaria" nota="La pista queda libre desde el 7 sep 2027" valor={actual || 'Sin elegir'} tituloHoja="Elegí la próxima secundaria">
+        <FilaHoja icono="estrella" titulo="Próxima secundaria"  nota="La pista queda libre desde el 5 ago 2027" valor={actual || 'Sin elegir'} tituloHoja="Elegí la próxima secundaria">
           <div className="pt-campo-hoja">
             <Selector etiqueta="Próxima app secundaria" valor={actual} placeholder="Sin elegir" opciones={[{ valor: '', etiqueta: 'Sin elegir' }, ...V122.backlog.map((b) => ({ valor: b.nombre, etiqueta: `${b.nombre}${b.destacado ? ' ⭐' : ''}` }))]} onCambio={(v) => setItem('secundaria-siguiente', { marca: v || undefined })} />
           </div>
         </FilaHoja>
       )}
       {marcas.map((c) => (
-        <FilaHoja key={c.id} icono="paquete" titulo={`Marca del slot #${c.n}`} nota={`Arranca el ${dm(c.inicio)} · ${c.ventana}`} valor={plan.fondo?.[c.id]?.marca ?? 'A definir'} tituloHoja={`Elegí la marca del slot #${c.n}`}>
+        <FilaHoja key={c.id} icono="paquete" titulo={`Marca del slot #${c.n}`} nota={`Arranca el ${dm(c.inicio)} · ${c.ventana}`} valor={plan.fondo?.[c.id]?.perfilMarca ? PERFILES_MARCA.find((p) => p.id === plan.fondo![c.id].perfilMarca)!.etiqueta : 'Sin responder'} tituloHoja={`Elegí la marca del slot #${c.n}`}>
           <div className="pt-campo-hoja">
-            <CampoAlSalir etiqueta={`Marca del slot ${c.n}`} valor={plan.fondo?.[c.id]?.marca ?? ''} guardar={(v) => setItem(c.id, { marca: v || undefined })} />
+            <p className="t-cuerpo">¿Una marca regional para conseguir clientes o una marca grande para hacer ruido?</p>
+            <div className="pt-etapas" role="group" aria-label={`Tipo de marca del slot ${c.n}`}>
+              {PERFILES_MARCA.map((p) => <Chip key={p.id} activo={plan.fondo?.[c.id]?.perfilMarca === p.id} onCambio={() => setItem(c.id, { perfilMarca: p.id })}>{p.etiqueta} · {p.nota}</Chip>)}
+            </div>
+            {!c.marca && <CampoAlSalir etiqueta={`Marca del slot ${c.n}${c.sector ? ` (${c.sector})` : ''}`} valor={plan.fondo?.[c.id]?.marca ?? ''} guardar={(v) => setItem(c.id, { marca: v || undefined })} />}
           </div>
         </FilaHoja>
       ))}
@@ -135,13 +144,19 @@ export function GrupoFondo({ hoy, lunes }: { hoy: string; lunes: string }) {
   const umbral = plan.umbralClaude ?? 85;
   const rev = revisionSemana(plan.revisionFondo, lunes);
   const meta = metaRevisionSemana(lunes);
+  // v12.4: el atraso acumulado de la principal; más de 7 días avisa con el nuevo fin estimado y qué pausar primero.
+  const { arbol, cal } = usePeriodos(hoy);
+  const atraso = atrasoPrincipal(arbol, cal, plan, hoy);
   return (
     <Grupo titulo="De fondo y Claude">
       <div className="capa-1 s-lista">
+        {atraso.excede
+          ? <Fila icono="alerta" titulo={textoAtraso(atraso).titulo} nota={textoAtraso(atraso).texto} href="#/metas/periodos" />
+          : <Fila icono="tilde" titulo="Principal" nota={atraso.dias > 0 ? `${atraso.dias} ${atraso.dias === 1 ? 'día' : 'días'} de atraso: todavía no pasa de 7` : 'Al día con el plan'} valor={`Fin ${dm(atraso.finEstimado)}`} />}
         <FilaHoja icono="ritmo" titulo="Uso de Claude" nota={uso != null && uso >= umbral ? 'Pasó el umbral' : `Umbral ${umbral} %`} valor={uso != null ? `${n1(uso)} %` : 'Sin cargar'} tituloHoja="Uso de Claude">
           <Claude hoy={hoy} lunes={lunes} />
         </FilaHoja>
-        <FilaHoja icono="ojo" titulo="Tiempo de revisión" nota="Walkthrough · aparte de las 72 h de foco" valor={`${horas(rev.walkthrough)} de ${horas(meta.walkthroughMin)} h`} tituloHoja="Revisión de lo de fondo">
+        <FilaHoja icono="ojo" titulo="Tiempo de revisión" nota="1 h por día activo de cada pista · sale de las 72 h de foco" valor={`${horas(rev.walkthrough + rev.comercial)} de ${horas(meta.walkthroughMin + meta.comercialMin)} h`} tituloHoja="Revisión de lo de fondo">
           <Tiempo hoy={hoy} lunes={lunes} />
         </FilaHoja>
         <Elegir hoy={hoy} />

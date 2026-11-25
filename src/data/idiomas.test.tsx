@@ -78,9 +78,11 @@ describe('data/idiomas.json · el roadmap maestro v3', () => {
 
 describe('integración con el plan T+18', () => {
   it('la rama de idiomas del plan lee las fases del año de inglés (sin "modo entrevista" ni "45 min por día")', () => {
-    // v12.1: el calendario por semanas termina en T+18 (semana 53), así que solo entra el año de inglés.
-    expect(PLAN.ingles.fases.map((f) => f.id)).toEqual(['a1-mwm', 'a1-pronunciacion', 'a1-gramatica', 'a1-cambridge', 'a1-examen', 'a1-consolidacion']);
-    expect(PLAN.ingles.fases[5].hasta).toBe(53);
+    // v12.4: el calendario por semanas termina en T+18 = fin de la etapa 2 (21 ene 2028, semana 62): entra el año de inglés completo
+    // (la consolidación llega a la semana 58, el 26 dic 2027) y las 4 primeras semanas del segundo (Made Simple, semanas 59 a 62).
+    expect(PLAN.ingles.fases.map((f) => f.id)).toEqual(['a1-mwm', 'a1-pronunciacion', 'a1-gramatica', 'a1-cambridge', 'a1-examen', 'a1-consolidacion', 'a2-made-simple']);
+    expect(PLAN.ingles.fases[5].hasta).toBe(58);
+    expect(PLAN.ingles.fases[6]).toMatchObject({ desde: 59, hasta: 62 });
     expect(JSON.stringify(PLAN.ingles.fases)).not.toMatch(/entrevista|45 min/i);
     expect(PLAN.metasBimestre.ingles[0]).toBe('Measure What Matters y Pronunciación');
     expect(PLAN.hitos.find((h) => h.id === 'T+18')!.titulo).not.toMatch(/examen C1/);
@@ -93,9 +95,9 @@ describe('integración con el plan T+18', () => {
     register('Toti', 'Abi', T0);
     startDay('completo', '04:00', '2026-11-17');
     const b = getState().days['2026-11-17'].blocks.find((x) => x.key === 'ingles')!;
-    // v12.1: 16:40 a 16:55, dentro del cierre de las 15:45.
+    // v12.4: 14:40 a 14:55, dentro del cierre de 13:45 a 16:00.
     expect(tituloDeBloque(b, '2026-11-17')).toBe('2-min English + learning.md');
-    expect(b).toMatchObject({ start: '16:40', min: 15 });
+    expect(b).toMatchObject({ start: '14:40', min: 15 });
     expect(getState().days['2026-11-17'].blocks.find((x) => x.key === 'ingles-hablado')).toBeUndefined();
     expect(b.tasks.map((t) => t.t)).toEqual(['Explicar en inglés en 2 minutos lo que hiciste', 'Anotar en learning.md']);
     // La fase del roadmap sigue disponible en Estudio · Idiomas.

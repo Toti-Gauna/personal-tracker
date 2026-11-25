@@ -31,6 +31,20 @@ export function migrarPlanV12(plan: PlanState): PlanState {
   return hitos === plan.hitos ? plan : { ...plan, hitos };
 }
 
+/**
+ * v12.4 · el plan nuevo trae todas las fechas re-armadas desde el 21 nov 2026: los corrimientos confirmados con el plan anterior ya no
+ * tienen sentido y se limpian, pero se guardan en `respaldoV124` para deshacerlo. No toca los exámenes reservados, las horas, lo tildado,
+ * las notas, los leads ni los posts. Una sola vez (`versionPlan`).
+ */
+export function migrarPlanV124(plan: PlanState, hoy: string): PlanState {
+  if (plan.versionPlan === 'v12.4') return plan;
+  const cs = plan.corrimientos ?? {};
+  if (!Object.keys(cs).length) return { ...plan, versionPlan: 'v12.4' };
+  const { corrimientos: _c, ...resto } = plan;
+  void _c;
+  return { ...resto, versionPlan: 'v12.4', respaldoV124: { corrimientos: cs, fecha: hoy } } as PlanState;
+}
+
 export function migrarStudyV12(st: StudyState, hoy: string): StudyState {
   // v12.2: los papers van en el Block 1 (estaban en "leer"); si faltan, se suman.
   const conPapers = st.activities.some((a) => a.id === PAPERS_ID) ? st.activities : [...st.activities, actividadPapers()];

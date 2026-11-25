@@ -12,6 +12,11 @@ import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const RAIZ = join(dirname(fileURLToPath(import.meta.url)), '..');
+// v12.4: desde el plan v12.4 los datos salen de scripts/plan-v12-4.mjs (docs/prompts/plan-v12.4.md); este generador ya no corre.
+if (JSON.parse(readFileSync(join(RAIZ, 'data/v12-2.json'), 'utf8')).plan === 'v12.4') {
+  console.log('Los datos ya son v12.4: este script (v12.2) no se vuelve a correr.');
+  process.exit(0);
+}
 const MD = readFileSync(join(RAIZ, 'docs/prompts/plan-v12.2.md'), 'utf8');
 const PLAN = JSON.parse(readFileSync(join(RAIZ, 'data/plan-extendido.json'), 'utf8'));
 const PV7 = JSON.parse(readFileSync(join(RAIZ, 'data/proyectos-v7.json'), 'utf8'));

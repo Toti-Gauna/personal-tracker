@@ -193,7 +193,7 @@ describe('Libro 2.0', () => {
 
   it('las metas del libro son las de siempre (bloque libro:<id>)', () => {
     abrir();
-    fireEvent.click(screen.getByRole('button', { name: /^Agregar la primera meta/ }));
+    fireEvent.click(screen.getByRole('button', { name: /^Agregar una meta/ }));
     fireEvent.change(within(dialogo()).getByRole('textbox'), { target: { value: 'Leer con lápiz' } });
     fireEvent.click(within(dialogo()).getByRole('button', { name: 'Agregar y cerrar' }));
     expect(getState().plan.metasBloque!['libro:mwm'].map((m) => m.texto)).toEqual(['Leer con lápiz']);
@@ -285,7 +285,7 @@ describe('Programación 2.0', () => {
     render(<>{<ProgV2 {...props('#/estudio/prog/P0/metas')} />}{global}</>);
     expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent('Metas');
     expect(screen.getByText(/En P0 se arman las metas/)).toBeTruthy();
-    fireEvent.click(screen.getByRole('button', { name: /^Agregar la primera meta/ }));
+    fireEvent.click(screen.getByRole('button', { name: /^Agregar una meta/ }));
     fireEvent.change(within(dialogo()).getByRole('textbox'), { target: { value: 'Trazo publicado' } });
     fireEvent.click(within(dialogo()).getByRole('button', { name: 'Agregar y cerrar' }));
     expect(getState().plan.metasBloque!.P0.map((m) => m.texto)).toEqual(['Trazo publicado']);

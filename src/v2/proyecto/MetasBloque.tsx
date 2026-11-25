@@ -36,7 +36,7 @@ export function MetasDelBloque({ bloque, hoy, titulo = 'Metas del bloque' }: { b
     <Grupo titulo={titulo} extremo={metas.length ? <span className="t-rotulo">{av.hechas} de {av.total}</span> : undefined}>
       <div className="capa-1 pt-check">
         {metas.map((m) => <MetaFila key={m.id} m={m} bloque={bloque} hoy={hoy} onOpciones={() => setElegida(m.id)} />)}
-        <Fila icono="mas" titulo={metas.length ? 'Agregar una meta' : 'Agregar la primera meta'} onClick={() => setNueva(true)} />
+        <Fila icono="mas" titulo="Agregar una meta" onClick={() => setNueva(true)} />
       </div>
       <div className="pt-acciones">
         <Boton tamano="s" variante="fantasma" icono="importar" href="#/importar">Importar JSON</Boton>

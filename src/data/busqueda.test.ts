@@ -19,18 +19,19 @@ describe('búsqueda intensiva', () => {
     expect(enPausa(getState().plan, 'ventas', '2026-11-20')).toBe(true);
   });
 
-  it('las tres rutinas del modo intensivo (v12.1): lunes a viernes, sábado y domingo, con el cierre de 15:45 (13:30 el fin de semana)', () => {
-    expect(metasOf('busqueda-intensiva').map((b) => b.start)).toEqual(['04:00', '04:30', '08:30', '10:00', '12:00', '15:45', '16:40', '16:55', '17:15', '17:30', '17:45', '18:00', '20:00', '21:00']);
-    expect(metasOf('busqueda-intensiva-finde').map((b) => b.id)).toEqual(['rutina', 'prog', 'abi', 'prog-2', 'prog-review', 'ingles', 'recall', 'anki', 'busqueda', 'leer', 'demo', 'cierre', 'sueno']);
-    expect(metasOf('busqueda-intensiva-domingo').map((b) => b.id)).toEqual(['rutina', 'prog', 'abi', 'prog-2', 'prog-review', 'ingles', 'recall', 'anki', 'busqueda', 'leer', 'revision', 'cierre', 'sueno']);
+  it('las tres rutinas del modo intensivo (v12.1): lunes a viernes, sábado y domingo, con el cierre de 13:45 a 16:00 (13:30 el fin de semana) y las dos horas de fondo', () => {
+    expect(metasOf('busqueda-intensiva').map((b) => b.start)).toEqual(['04:00', '04:30', '08:30', '10:00', '12:00', '13:45', '14:40', '14:55', '15:15', '15:30', '15:45', '16:00', '17:00', '18:00', '20:00', '21:00']);
+    expect(metasOf('busqueda-intensiva-finde').map((b) => b.id)).toEqual(['rutina', 'prog', 'abi', 'prog-2', 'fondo-sec', 'fondo-com', 'prog-review', 'ingles', 'recall', 'anki', 'busqueda', 'leer', 'demo', 'cierre', 'sueno']);
+    expect(metasOf('busqueda-intensiva-domingo').map((b) => b.id)).toEqual(['rutina', 'prog', 'abi', 'prog-2', 'fondo-sec', 'fondo-com', 'prog-review', 'ingles', 'recall', 'anki', 'busqueda', 'leer', 'revision', 'cierre', 'sueno']);
     const horas = (rama: string) => {
       const m = (t: 'busqueda-intensiva' | 'busqueda-intensiva-finde' | 'busqueda-intensiva-domingo') => planRoutine(t, 'completo').filter((p) => p.block.rama === rama || (rama === 'clipping' && p.block.id === 'clipping')).reduce((s, p) => s + p.min, 0);
       return (m('busqueda-intensiva') * 5 + m('busqueda-intensiva-finde') + m('busqueda-intensiva-domingo')) / 60;
     };
     // v12.1: la matemática diaria (m1–m4) está archivada; queda Anki 15 min por día (las ventanas W1–W4 van por el calendario).
     expect(horas('matematica')).toBe(1.75);
-    // Bloque 1 (4 h) + bloque 2 (3:45) + PR review (55 min) de lunes a viernes; 4 h + 3:30 + 55 min el fin de semana.
-    expect(horas('programacion')).toBeCloseTo(60.17, 2);
+    // v12.4: bloque 1 (4 h) + bloque 2 (1:45) + PR review (55 min) de lunes a viernes; 4 h + 1:30 + 55 min el fin de semana. Las dos horas
+    // por día de fondo (la secundaria y la comercial) son de la rutina de cada día: sin nada activo, vuelven al bloque 2 (60,2 h por semana).
+    expect(horas('programacion')).toBeCloseTo(46.17, 2);
     expect(horas('ingles')).toBe(1.75);
     // Posts / applications (15 min por día) y la demo + simulada del sábado (1:15).
     expect(horas('trabajo')).toBe(3);
@@ -48,12 +49,12 @@ describe('búsqueda intensiva', () => {
     startDay('completo', '04:30', '2026-11-21');
     const d = getState().days['2026-11-21'];
     expect(d.dayType).toBe('busqueda-intensiva-finde');
-    expect(d.blocks.map((b) => b.key)).toEqual(['rutina', 'prog', 'abi', 'prog-2', 'prog-review', 'ingles', 'recall', 'anki', 'busqueda', 'leer', 'demo', 'cierre', 'sueno']);
+    expect(d.blocks.map((b) => b.key)).toEqual(['rutina', 'prog', 'abi', 'prog-2', 'prog-fondo-sec', 'prog-fondo-com', 'prog-review', 'ingles', 'recall', 'anki', 'busqueda', 'leer', 'demo', 'cierre', 'sueno']);
     expect(d.blocks.find((b) => b.key === 'demo')!.title).toBe('Weekly demo + mock interview');
     startDay('completo', '04:30', '2026-11-22');
     const dom = getState().days['2026-11-22'];
     expect(dom.dayType).toBe('busqueda-intensiva-domingo');
-    expect(dom.blocks.map((b) => b.key)).toEqual(['rutina', 'prog', 'abi', 'prog-2', 'prog-review', 'ingles', 'recall', 'anki', 'busqueda', 'leer', 'revision', 'cierre', 'sueno']);
+    expect(dom.blocks.map((b) => b.key)).toEqual(['rutina', 'prog', 'abi', 'prog-2', 'prog-fondo-sec', 'prog-fondo-com', 'prog-review', 'ingles', 'recall', 'anki', 'busqueda', 'leer', 'revision', 'cierre', 'sueno']);
     expect(dom.blocks.find((b) => b.key === 'prog-2')!.title).toBe('Bloque 2 · deep focus');
     expect(dom.blocks.find((b) => b.key === 'revision')!.title).toBe('Weekly review');
   });
@@ -67,8 +68,8 @@ describe('búsqueda intensiva', () => {
     const busq = b.find((x) => x.key === 'busqueda')!;
     expect(busq.min).toBe(15);
     expect(busq.tasks.map((t) => t.t).slice(0, 2)).toEqual(['Practicar la entrevista de mañana de AI Engineer en Acme con el pitch armado', 'Practicarla en inglés']);
-    // Con la entrevista en 48 h, el último bloque de programación pasa a preparación.
-    expect(b.find((x) => x.key === 'prog-tarde')!.title).toMatch(/Preparación de la entrevista/);
+    // Con la entrevista en 48 h, el último bloque de programación (la hora de las 17:00 que vuelve a la principal) pasa a preparación.
+    expect(b.find((x) => x.key === 'prog-fondo-com')!.title).toMatch(/Preparación de la entrevista/);
     expect(b.find((x) => x.key === 'prog')!.title).not.toMatch(/Preparación/);
     // Con 3 días de anticipación todavía no se practica: es solo el aviso.
     startDay('completo', '04:30', '2026-11-17');
@@ -110,9 +111,9 @@ describe('pausas en metas, cortes y avisos', () => {
     const { metasSemanaGeneradas, metasMesGeneradas } = await import('./metas-plan');
     const s = metasSemanaGeneradas('2026-11-23', '2026-11-16', { intensiva: true, pausa });
     expect(s.some((m) => m.rama === 'handyx')).toBe(false);
-    // v12.1: las horas de la semana salen de la rutina con el bloque activo: de las 72 (10 h × 5 + 11 × 2), 59 son de PetrIA;
-    // el resto es inglés, búsqueda, Anki y recall, cada uno con su meta.
-    expect(s.find((m) => m.clave === 'horas-prog')).toMatchObject({ meta: 59, texto: 'Horas de programación', nota: 'lo que da la rutina esta semana, con el bloque activo de cada día' });
+    // v12.4: las horas de la semana salen de la rutina con el bloque activo: de las 72 (10 h × 5 + 11 × 2) salen 4 h de JulIA (26 a 29 nov)
+    // y quedan 68 de foco principal, de las que 55 son de PetrIA; el resto es inglés, búsqueda, Anki y recall, cada uno con su meta.
+    expect(s.find((m) => m.clave === 'horas-prog')).toMatchObject({ meta: 55, texto: 'Horas de programación', nota: 'lo que da la rutina esta semana, con el bloque activo de cada día' });
     expect(s.find((m) => m.clave === 'horas-mate')?.meta).toBe(2);
     expect(s.find((m) => m.clave === 'horas-ingles')?.meta).toBe(2);
     expect(s.find((m) => m.clave === 'postulaciones')?.meta).toBe(25);
@@ -163,7 +164,7 @@ describe('sprint e impacto', () => {
   it('horas por semana de la intensiva y el lanzamiento de Handyx según cuándo entre el trabajo', async () => {
     const { horasSemana, escenariosHandyx } = await import('./sprint');
     expect(horasSemana('con-trabajo', 'con-trabajo-finde')).toMatchObject({ Programación: 29, Matemática: 14, Inglés: 6.5 });
-    expect(horasSemana('busqueda-intensiva', 'busqueda-intensiva-finde')).toMatchObject({ Programación: 60.2, Matemática: 1.8, Inglés: 1.8, Búsqueda: 3, Clipping: 0, Entrenamiento: 10, Handyx: 0 });
+    expect(horasSemana('busqueda-intensiva', 'busqueda-intensiva-finde')).toMatchObject({ Programación: 46.2, Matemática: 1.8, Inglés: 1.8, Búsqueda: 3, Clipping: 0, Entrenamiento: 10, Handyx: 0 });
     expect(escenariosHandyx('2026-11-16', '2026-11-16').map((e) => e.lanza)).toEqual(['2027-03-14', '2027-04-11', '2027-05-09']);
   });
 });

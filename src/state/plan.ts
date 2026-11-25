@@ -473,6 +473,14 @@ export function volverTodoAlPlan(): PlanState['corrimientos'] {
   update((p) => ({ ...p, corrimientos: {} }));
   return antes;
 }
+/** v12.4 · deshace la limpieza de la migración: vuelven los corrimientos que tenías confirmados con el plan anterior. */
+export function restaurarRespaldoV124() {
+  update((p) => (p.respaldoV124 ? { ...p, corrimientos: { ...p.respaldoV124.corrimientos }, respaldoV124: undefined } : p));
+}
+/** v12.4 · anota que el aviso de la migración ya se mostró (el respaldo se queda). */
+export function avisoRespaldoV124Visto(hoy: string) {
+  update((p) => (p.respaldoV124 ? { ...p, respaldoV124: { ...p.respaldoV124, aviso: hoy } } : p));
+}
 /** Volver a las fechas del plan para esos bloques. */
 export function deshacerCorrimiento(ids: string[]) {
   update((p) => ({ ...p, corrimientos: Object.fromEntries(Object.entries(p.corrimientos ?? {}).filter(([id]) => !ids.includes(id))) }));

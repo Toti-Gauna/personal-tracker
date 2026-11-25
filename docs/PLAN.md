@@ -1452,6 +1452,52 @@ Migración: los papers pasan del bloque "leer" al Block 1.
 
 ---
 
+## 6 vicies. Plan v12.4: capacidad con lo de fondo, 10 apps secundarias y 23 slots
+
+Fuente: `docs/prompts/plan-v12.4.md` (el prompt y las respuestas del 25 nov; reemplaza todas las adendas posteriores a v12.2).
+`scripts/plan-v12-4.mjs` lee su §4 y vuelve a fechar los 69 bloques de primer plano (21 nov 2026 a 14 dic 2028), las etapas, las
+fases, el PNPT partido, los planes por día de las certificaciones y los hitos de matemática (repartidos en proporción dentro de la
+ventana nueva), y reescribe las apps secundarias (§5), los slots comerciales (§6), las herramientas (§3) y los recordatorios (§7).
+Corre una sola vez (los generadores v12.1 y v12.2 ya no corren sobre estos datos).
+
+**Capacidad por día** (`src/data/capacidad.ts`, `src/data/pistas-dia.ts`): 10 h de foco entre semana y 11 el fin de semana. Lo de
+fondo sale de esas horas: 1 h por día con una app secundaria activa y 1 h con un slot comercial activo (si una pista no tiene nada
+activo, su hora vuelve a la principal). La principal queda en 8 y 9 h con las dos, 9 y 10 con una, 10 y 11 con ninguna. Del 5 al 11
+dic 2026 1 h por día de PetrIA va a Alawys v0.1. **Días libres fijos** (`plan.capacidad.fijas`): 20–26 dic 2027, 31 dic 2027–6 ene
+2028 y 9–15 jun 2028: ni foco ni fondo, siempre. En la ventana del PNPT (13 dic 2027–13 ene 2028) tampoco corre nada de fondo.
+Con esa capacidad y las horas de cada bloque se reproduce el fin de 64 de los 69 bloques (el PNPT se armó a mano y los absorbedores
+miden días); lo verifica `src/data/plan-v12-4.test.ts`, que lee el §4 del doc.
+
+**Sin colchón**: la Consolidación, los cierres de etapa y el cierre final miden 3 días (el mínimo), así que ninguno absorbe: un
+atraso corre todo lo que sigue, salta los días libres y mueve el fin. 14 dic 2028 es una estimación, no una fecha límite.
+**Alerta de atraso** (`src/data/atraso.ts`): cuando el atraso acumulado de la principal pasa de 7 días, Hoy (la tarjeta Plan y la
+campana) y la revisión del domingo dicen cuántos días, el nuevo fin estimado y qué pausar primero (lo comercial, después lo
+secundario; cada una devuelve su hora). Solo sugiere. A las tres semanas (13 dic 2026) hay un recordatorio para revisar el plan con
+datos reales.
+
+**Rutina del día**: entre semana, la principal de 12:00 a 13:45, el cierre de 13:45 a 16:00, la secundaria de 16:00 a 17:00 y la
+comercial de 17:00 a 18:00; el fin de semana, la principal de 10:00 a 11:30, la secundaria de 11:30 a 12:30, la comercial de 12:30 a
+13:30 y después el cierre. Cada hora lleva el nombre de la app y su versión, o del slot y su fase; sin nada activo es una hora más del
+bloque 2. Tildar la hora de fondo anota 60 min de revisión a esa pista (se editan después, por ejemplo a 40); la meta semanal es 1 h
+por día activo de cada pista y sale de las 72 h.
+
+**Apps secundarias** (10, una por vez del 26 nov 2026 al 4 ago 2027: JulIA, HandyX, Clip Studio, Roofy y seis "v2" pesadas de 4
+semanas) y **slots comerciales** (23): los días 1 a 7 son build y del día 8 en adelante venta (el pitch a la marca y a 10 negocios
+parecidos, cada uno un lead con nombre, fecha, canal y estado); un slot de 7 días o menos es solo build. El #19 pausa su venta en el
+descanso del 9 al 15 jun 2028. Del #15 al #23 se muestra el rubro hasta que elegís la marca. 14 días antes de cada slot se pregunta
+"¿marca regional para clientes o marca grande para ruido?" (queda guardado) y 7 días antes va el brief (menos el del #1, que es el
+del 3 dic).
+
+**Open source**: Alawys v0.1 (5–11 dic 2026, con la PC nueva), v0.2 (28 dic, preset vitalia), v1.0 (lanzamiento el 8 ene 2027, con
+el Imán), v1.x y v2.0; y las herramientas de cada proyecto (bkt, showcase-kit, captions, seat-picker, voice-agent, tour3d…). Las
+extraídas salen al terminar de construir el slot o app de origen y no se publican sin "la necesita".
+
+**Migración del estado**: una sola vez limpia los corrimientos confirmados (eran fechas del plan anterior) y los guarda en
+`plan.respaldoV124`; un aviso al abrir la app ofrece "Deshacer". No toca exámenes reservados, horas, lo tildado, notas, leads ni posts.
+
+**Presupuestos**: la carga inicial pesa 289,3 KB gzip (tope 290). Para entrar, el JSON no guarda lo que se arma solo: la línea de cada
+versión si es igual a sus entregables, el build y la venta de cada slot, las fechas del roadmap y los relevos de las apps.
+
 ## 6 novodecies. Trazo 2.0: una sola interfaz nueva
 
 Toda la app se rehízo sobre un lenguaje de diseño propio ("Instrumento": tokens, ocho tamaños de texto, estados con ícono y palabra,
@@ -1676,3 +1722,10 @@ accesibilidad y la revisión final) y el plan de tandas en [`docs/prompts/plan-u
 
 - Herramientas open source: Alawys versionada en todo el plan y 21 más (propias, extraídas con "la necesita" y una interna), con fechas del origen.
 - VitalIA en 104 h; "0.1 · Arranque" con el preset de Alawys en cada proyecto desde VitalIA; página Open source.
+
+**2026-11-25 · plan v12.4 · capacidad con lo de fondo, 10 apps y 23 slots**
+
+- Todas las fechas de primer plano vuelven a salir del doc (21 nov 2026 a 14 dic 2028, sin colchón); los descansos son días libres fijos.
+- La hora de cada pista de fondo sale de las horas de foco; la rutina del día las pone en su lugar; tildarlas anota 60 min de revisión.
+- 10 apps secundarias, slots con build y venta, leads con canal, la pregunta de la marca y las herramientas open source de cada proyecto.
+- Alerta cuando el atraso de la principal pasa de 7 días; migración que limpia los corrimientos con respaldo y "Deshacer".

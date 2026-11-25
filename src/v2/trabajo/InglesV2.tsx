@@ -79,7 +79,7 @@ export default function InglesV2({ day, today }: PropsV2) {
       <Grupo titulo="Fases">
         <div className="capa-1 s-lista">
           {fases.map((x) => (
-            <Fila key={x.id} area={AREA.ingles} titulo={x.nombre} extremo={x.id === f.id ? <span className="tr-aqui">Ahora</span> : <span className="t-dato tr-desde">desde {dm(inicioDe(x, t0))}</span>} />
+            <Fila key={x.id} area={AREA.ingles} titulo={x.nombre} extremo={x.id === f.id ? <span className="tr-aqui">Ahora</span> : <span className="t-dato tr-desde">{dm(inicioDe(x, t0))}</span>} />
           ))}
           <Fila icono="idioma" titulo="El roadmap de idiomas y libros" href="#/estudio/idiomas" />
         </div>

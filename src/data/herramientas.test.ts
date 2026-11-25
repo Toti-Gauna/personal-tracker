@@ -22,13 +22,15 @@ describe('§14 · herramientas open source', () => {
     expect(herramientasDe('P0B').map(({ h }) => h.id)).toEqual(['alawys', 'ask-widget']);
   });
 
-  it('las fechas salen del origen: Alawys v0.1 el 21 dic y v1.0 el 30; v2.0 todo Constelación; mcp-ar v2 en el cierre de Ticker; captions en Clip Studio v2.0', () => {
-    expect(fechasVersion(v('alawys', '0.1'))).toEqual({ inicio: '2026-12-21', fin: '2026-12-21' });
-    expect(fechasVersion(v('alawys', '1.0'))).toEqual({ inicio: '2026-12-30', fin: '2026-12-30' });
-    expect(fechasVersion(v('alawys', '2.0'))).toEqual({ inicio: '2027-04-13', fin: '2027-04-17' });
-    expect(fechasVersion(v('mcp-ar', 'v2'))).toEqual({ inicio: '2028-03-20', fin: '2028-03-22' });
-    expect(fechasVersion(v('captions', '1.0'))).toEqual({ inicio: '2027-05-06', fin: '2027-05-27' });
-    expect(fechasVersion(v('seat-picker', '1.0'))).toEqual({ inicio: '2027-01-15', fin: '2027-02-03' });
+  it('las fechas salen del origen: Alawys v0.1 el 5–11 dic y v1.0 el 6–8 ene (cierre de VitalIA); v2.0 todo Constelación; mcp-ar v2 en el cierre de Ticker; captions en Clip Studio v2.0', () => {
+    expect(fechasVersion(v('alawys', '1.0'))).toEqual({ inicio: '2027-01-06', fin: '2027-01-08' }); // v12.4: la 3.0 de VitalIA, 6–8 ene 2027
+    expect(fechasVersion(v('alawys', '2.0'))).toEqual({ inicio: '2027-05-16', fin: '2027-05-21' }); // Constelación 2.0 + 2.1, 16–21 may 2027
+    expect(fechasVersion(v('mcp-ar', 'v2'))).toEqual({ inicio: '2028-05-12', fin: '2028-05-14' }); // la 3.0 de Ticker
+    expect(fechasVersion(v('captions', '1.0'))).toEqual({ inicio: '2027-01-14', fin: '2027-01-20' }); // Clip Studio v2.0
+    // Pendiente en el motor: fechasVersion ignora `hasta` (Alawys v0.1 se arma del 5 al 11 dic con la PC nueva) y, para un slot comercial, devuelve
+    // todo el slot (28 ene–21 feb) en vez de la fase de build: el doc (§3) fecha seat-picker el 3 feb 2027, el fin del build del slot #3 (28 ene–3 feb).
+    expect(fechasVersion(v('alawys', '0.1'))).toEqual({ inicio: '2026-12-05', fin: '2026-12-11' });
+    expect(fechasVersion(v('seat-picker', '1.0'))).toEqual({ inicio: '2027-01-28', fin: '2027-02-03' });
   });
 
   it('gates: la extraída no se publica sin "la necesita"; las dos de lanzamiento piden el Imán; la interna nunca', () => {

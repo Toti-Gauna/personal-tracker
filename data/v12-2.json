@@ -1,7 +1,7 @@
 {
  "version": 1,
- "plan": "v12.2",
- "fuente": "docs/prompts/plan-v12.2.md",
+ "plan": "v12.4",
+ "fuente": "docs/prompts/plan-v12.4.md",
  "detalle": {
   "P1": {
    "horas": 193.5,
@@ -12,7 +12,6 @@
      "inicio": "2026-11-21",
      "fin": "2026-11-25",
      "deadline": "2026-12-01",
-     "linea": "ingesta, detector P10/P50/P90 con validación espacial, mapa con pozos, mapa de calor y concesiones, asistente con citas y abstención, 20 evals, deploy y README",
      "entregables": [
       "ingesta",
       "detector P10/P50/P90 con validación espacial",
@@ -40,9 +39,8 @@
     {
      "id": "2.0",
      "inicio": "2026-12-01",
-     "fin": "2026-12-04",
+     "fin": "2026-12-05",
      "deadline": "2026-12-22",
-     "linea": "notification-service, voice-gateway, medición de uso y cuotas, sistema de diseño con Storybook",
      "entregables": [
       "notification-service",
       "voice-gateway",
@@ -52,8 +50,8 @@
     },
     {
      "id": "3.0",
-     "inicio": "2026-12-05",
-     "fin": "2026-12-09",
+     "inicio": "2026-12-06",
+     "fin": "2026-12-12",
      "deadline": "2027-01-05",
      "linea": "Escala y operación: load-lab completo, caos, simulacro de backups, feature flags, Scale report; Nube: ingesta en AWS; Capa física: AR Quick Look, celular escáner, boca de pozo en Wokwi y GPS",
      "entregables": [
@@ -78,15 +76,14 @@
    "pesoEntrevistas": "muy alto"
   },
   "P2": {
-   "notaAlcance": "batch 0.1 = Alawys v0.1 + scaffold VitalIA with it (§14: 100 → 104 h)",
-   "horas": 104,
+   "notaAlcance": "batch 0.1 = Alawys v0.2 (preset vitalia, .NET) + scaffold VitalIA with it (v12.4: 104 → 102 h; Alawys v0.1 is built in the background in PetrIA, 5–11 Dec)",
+   "horas": 102,
    "horasLim": 125,
    "versiones": [
     {
      "id": "1.0",
-     "inicio": "2026-12-21",
-     "fin": "2026-12-22",
-     "linea": "FHIR con Synthea, motor con 8–10 reglas, explicación con citas, panel con línea de tiempo, deploy en Azure",
+     "inicio": "2026-12-28",
+     "fin": "2026-12-30",
      "entregables": [
       "FHIR con Synthea",
       "motor con 8–10 reglas",
@@ -97,9 +94,8 @@
     },
     {
      "id": "1.1",
-     "inicio": "2026-12-23",
-     "fin": "2026-12-25",
-     "linea": "conciliación, HL7 a FHIR, evals, feedback médico, auditoría, SMART on FHIR, desidentificador en Rust, frontend",
+     "inicio": "2026-12-31",
+     "fin": "2027-01-02",
      "entregables": [
       "conciliación",
       "HL7 a FHIR",
@@ -113,9 +109,8 @@
     },
     {
      "id": "2.0",
-     "inicio": "2026-12-26",
-     "fin": "2026-12-28",
-     "linea": "avisos por WhatsApp y email, llamada, escriba por voz, monitoreo en Wokwi, escáner de cajas",
+     "inicio": "2027-01-03",
+     "fin": "2027-01-05",
      "entregables": [
       "avisos por WhatsApp y email",
       "llamada",
@@ -126,9 +121,8 @@
     },
     {
      "id": "3.0",
-     "inicio": "2026-12-29",
-     "fin": "2026-12-30",
-     "linea": "100 mil pacientes, 1 M de mensajes, blue-green, retención, oxímetro real, Scale report",
+     "inicio": "2027-01-06",
+     "fin": "2027-01-08",
      "entregables": [
       "100 mil pacientes",
       "1 M de mensajes",
@@ -158,9 +152,8 @@
    "versiones": [
     {
      "id": "1.0",
-     "inicio": "2027-02-19",
-     "fin": "2027-02-21",
-     "linea": "ingesta, modelo de rinde con predicción conforme, mapa por departamento, deploy",
+     "inicio": "2027-03-13",
+     "fin": "2027-03-15",
      "entregables": [
       "ingesta",
       "modelo de rinde con predicción conforme",
@@ -170,9 +163,8 @@
     },
     {
      "id": "1.1",
-     "inicio": "2027-02-22",
-     "fin": "2027-02-24",
-     "linea": "margen P10–P90, simulador, riesgo climático, backoffice, MLflow y Dagster, frontend",
+     "inicio": "2027-03-16",
+     "fin": "2027-03-19",
      "entregables": [
       "margen P10–P90",
       "simulador",
@@ -184,9 +176,8 @@
     },
     {
      "id": "2.0",
-     "inicio": "2027-02-25",
-     "fin": "2027-02-27",
-     "linea": "WhatsApp con audio, email, línea telefónica, foto de cobertura, GPS, AR",
+     "inicio": "2027-03-20",
+     "fin": "2027-03-22",
      "entregables": [
       "WhatsApp con audio",
       "email",
@@ -198,9 +189,8 @@
     },
     {
      "id": "3.0",
-     "inicio": "2027-02-28",
-     "fin": "2027-03-02",
-     "linea": "recálculo masivo, backfills, estación y humedad de suelo reales, Scale report",
+     "inicio": "2027-03-23",
+     "fin": "2027-03-25",
      "entregables": [
       "recálculo masivo",
       "backfills",
@@ -228,9 +218,8 @@
    "versiones": [
     {
      "id": "1.0",
-     "inicio": "2027-03-18",
-     "fin": "2027-03-21",
-     "linea": "SGP4, satélites argentinos, planificador de pasadas",
+     "inicio": "2027-04-14",
+     "fin": "2027-04-18",
      "entregables": [
       "SGP4",
       "satélites argentinos",
@@ -239,9 +228,8 @@
     },
     {
      "id": "1.1",
-     "inicio": "2027-03-22",
-     "fin": "2027-03-25",
-     "linea": "decodificador CCSDS en WebAssembly con benchmark, calculadora de enlace, copiloto, frontend",
+     "inicio": "2027-04-19",
+     "fin": "2027-04-22",
      "entregables": [
       "decodificador CCSDS en WebAssembly con benchmark",
       "calculadora de enlace",
@@ -251,9 +239,8 @@
     },
     {
      "id": "2.0",
-     "inicio": "2027-03-26",
-     "fin": "2027-03-29",
-     "linea": "AR, alertas por WhatsApp, voz, rotor en Wokwi",
+     "inicio": "2027-04-23",
+     "fin": "2027-04-26",
      "entregables": [
       "AR",
       "alertas por WhatsApp",
@@ -263,9 +250,8 @@
     },
     {
      "id": "3.0",
-     "inicio": "2027-03-30",
-     "fin": "2027-04-02",
-     "linea": "estación real en SatNOGS, rotor real, 10 mil websockets, backpressure, Scale report",
+     "inicio": "2027-04-27",
+     "fin": "2027-05-01",
      "entregables": [
       "estación real en SatNOGS",
       "rotor real",
@@ -296,7 +282,6 @@
     {
      "id": "1.0",
      "base": true,
-     "linea": "mapa 3D, Trazo como caso, validador, shell con Module Federation",
      "entregables": [
       "mapa 3D",
       "Trazo como caso",
@@ -306,8 +291,8 @@
     },
     {
      "id": "2.0",
-     "inicio": "2027-04-13",
-     "fin": "2027-04-14",
+     "inicio": "2027-05-16",
+     "fin": "2027-05-18",
      "linea": "RAG con citas y evals sobre READMEs, ADRs, código y `learning.md`; modo reclutador; MCP público",
      "entregables": [
       "RAG con citas y evals sobre READMEs, ADRs, código y `learning.md`",
@@ -317,9 +302,8 @@
     },
     {
      "id": "2.1",
-     "inicio": "2027-04-15",
-     "fin": "2027-04-17",
-     "linea": "voz, CV en AR, email y WhatsApp, métricas en vivo, plantilla open source, CDN, prueba de pico viral",
+     "inicio": "2027-05-19",
+     "fin": "2027-05-21",
      "entregables": [
       "voz",
       "CV en AR",
@@ -351,9 +335,8 @@
    "versiones": [
     {
      "id": "1.0",
-     "inicio": "2027-04-18",
-     "fin": "2027-04-20",
-     "linea": "gemelo con SCADA simulado por Modbus, niveles en vivo, tiempo del x% al y%",
+     "inicio": "2027-05-22",
+     "fin": "2027-05-25",
      "entregables": [
       "gemelo con SCADA simulado por Modbus",
       "niveles en vivo",
@@ -362,9 +345,8 @@
     },
     {
      "id": "1.1",
-     "inicio": "2027-04-21",
-     "fin": "2027-04-23",
-     "linea": "detector de ataques, pérdidas en ductos, reglas ATT&CK, despacho, frontend",
+     "inicio": "2027-05-26",
+     "fin": "2027-05-28",
      "entregables": [
       "detector de ataques",
       "pérdidas en ductos",
@@ -375,9 +357,8 @@
     },
     {
      "id": "2.0",
-     "inicio": "2027-04-24",
-     "fin": "2027-04-27",
-     "linea": "WhatsApp con botones, llamada, email, copiloto, AR, NFC",
+     "inicio": "2027-05-29",
+     "fin": "2027-06-01",
      "entregables": [
       "WhatsApp con botones",
       "llamada",
@@ -389,9 +370,8 @@
     },
     {
      "id": "3.0",
-     "inicio": "2027-04-28",
-     "fin": "2027-04-30",
-     "linea": "tanque real por RS485, 10 mil lecturas por segundo, tormenta de alarmas, Kubernetes endurecido, Scale report",
+     "inicio": "2027-06-02",
+     "fin": "2027-06-04",
      "entregables": [
       "tanque real por RS485",
       "10 mil lecturas por segundo",
@@ -420,9 +400,8 @@
    "versiones": [
     {
      "id": "1.0",
-     "inicio": "2027-06-19",
-     "fin": "2027-06-22",
-     "linea": "datos sintéticos, modelo PyTorch, inspección por foto, caída sintético→real",
+     "inicio": "2027-08-06",
+     "fin": "2027-08-09",
      "entregables": [
       "datos sintéticos",
       "modelo PyTorch",
@@ -432,9 +411,8 @@
     },
     {
      "id": "1.1",
-     "inicio": "2027-06-23",
-     "fin": "2027-06-25",
-     "linea": "orden de trabajo, RAG de manuales, cascada con Claude visión, aprendizaje activo, autograd, frontend",
+     "inicio": "2027-08-10",
+     "fin": "2027-08-12",
      "entregables": [
       "orden de trabajo",
       "RAG de manuales",
@@ -446,9 +424,8 @@
     },
     {
      "id": "2.0",
-     "inicio": "2027-06-26",
-     "fin": "2027-06-28",
-     "linea": "daños en 3D, AR, dron simulado, dictado, email con PDF, WhatsApp",
+     "inicio": "2027-08-13",
+     "fin": "2027-08-15",
      "entregables": [
       "daños en 3D",
       "AR",
@@ -460,9 +437,8 @@
     },
     {
      "id": "3.0",
-     "inicio": "2027-06-29",
-     "fin": "2027-07-02",
-     "linea": "GPU con autoescalado, batching, escalado a cero, costo por imagen, Scale report",
+     "inicio": "2027-08-16",
+     "fin": "2027-08-19",
      "entregables": [
       "GPU con autoescalado",
       "batching",
@@ -497,9 +473,8 @@
    "versiones": [
     {
      "id": "1.0",
-     "inicio": "2027-07-06",
-     "fin": "2027-07-07",
-     "linea": "Sentinel-2, índices, mapa de estrés",
+     "inicio": "2027-08-23",
+     "fin": "2027-08-24",
      "entregables": [
       "Sentinel-2",
       "índices",
@@ -508,9 +483,8 @@
     },
     {
      "id": "1.1",
-     "inicio": "2027-07-08",
-     "fin": "2027-07-10",
-     "linea": "dosis variable, pérdida en USD, PCA y SVD, frontend",
+     "inicio": "2027-08-25",
+     "fin": "2027-08-27",
      "entregables": [
       "dosis variable",
       "pérdida en USD",
@@ -520,9 +494,8 @@
     },
     {
      "id": "2.0",
-     "inicio": "2027-07-11",
-     "fin": "2027-07-13",
-     "linea": "WhatsApp con imagen, email con la prescripción, llamada, recorrida offline, fertilizadora en Wokwi",
+     "inicio": "2027-08-28",
+     "fin": "2027-08-30",
      "entregables": [
       "WhatsApp con imagen",
       "email con la prescripción",
@@ -533,9 +506,8 @@
     },
     {
      "id": "3.0",
-     "inicio": "2027-07-14",
-     "fin": "2027-07-15",
-     "linea": "puertas de calidad, sombra y canary, rollback, drift, reentrenamiento con aprobación",
+     "inicio": "2027-08-31",
+     "fin": "2027-09-01",
      "entregables": [
       "puertas de calidad",
       "sombra y canary",
@@ -563,9 +535,8 @@
    "versiones": [
     {
      "id": "1.0",
-     "inicio": "2027-08-02",
-     "fin": "2027-08-03",
-     "linea": "ataques contra PetrIA y VitalIA, informe con OWASP LLM Top 10",
+     "inicio": "2027-09-22",
+     "fin": "2027-09-23",
      "entregables": [
       "ataques contra PetrIA y VitalIA",
       "informe con OWASP LLM Top 10"
@@ -573,9 +544,8 @@
     },
     {
      "id": "1.1",
-     "inicio": "2027-08-04",
-     "fin": "2027-08-05",
-     "linea": "\"Escaneá tu chatbot\", GitHub Action y comparativa",
+     "inicio": "2027-09-24",
+     "fin": "2027-09-25",
      "entregables": [
       "\"Escaneá tu chatbot\"",
       "GitHub Action y comparativa"
@@ -583,9 +553,8 @@
     },
     {
      "id": "2.0",
-     "inicio": "2027-08-06",
-     "fin": "2027-08-08",
-     "linea": "voz, cartel y audio, email, WhatsApp",
+     "inicio": "2027-09-26",
+     "fin": "2027-09-28",
      "entregables": [
       "voz",
       "cartel y audio",
@@ -595,9 +564,8 @@
     },
     {
      "id": "3.0",
-     "inicio": "2027-08-09",
-     "fin": "2027-08-10",
-     "linea": "guardián con LoRA y adaptadores por cliente, colas justas, protección contra abuso, Scale report",
+     "inicio": "2027-09-29",
+     "fin": "2027-09-30",
      "entregables": [
       "guardián con LoRA y adaptadores por cliente",
       "colas justas",
@@ -626,9 +594,8 @@
    "versiones": [
     {
      "id": "1.0",
-     "inicio": "2027-08-11",
-     "fin": "2027-08-13",
-     "linea": "modelo cuantizado con ONNX, app offline",
+     "inicio": "2027-10-01",
+     "fin": "2027-10-03",
      "entregables": [
       "modelo cuantizado con ONNX",
       "app offline"
@@ -636,9 +603,8 @@
     },
     {
      "id": "1.1",
-     "inicio": "2027-08-14",
-     "fin": "2027-08-16",
-     "linea": "walkaround guiado, modelo chico, presupuesto de latencia, frontend",
+     "inicio": "2027-10-04",
+     "fin": "2027-10-06",
      "entregables": [
       "walkaround guiado",
       "modelo chico",
@@ -648,9 +614,8 @@
     },
     {
      "id": "2.0",
-     "inicio": "2027-08-17",
-     "fin": "2027-08-20",
-     "linea": "AR, voz offline, sincronización con AeroScan",
+     "inicio": "2027-10-07",
+     "fin": "2027-10-10",
      "entregables": [
       "AR",
       "voz offline",
@@ -659,9 +624,8 @@
     },
     {
      "id": "3.0",
-     "inicio": "2027-08-21",
-     "fin": "2027-08-23",
-     "linea": "OTA firmada, 1.000 dispositivos, ESP32-CAM vs celular, batería y latencia medidas",
+     "inicio": "2027-10-11",
+     "fin": "2027-10-13",
      "entregables": [
       "OTA firmada",
       "1.000 dispositivos",
@@ -689,9 +653,8 @@
    "versiones": [
     {
      "id": "1.0",
-     "inicio": "2027-08-24",
-     "fin": "2027-08-27",
-     "linea": "autoencoders sobre telemetría de la NASA, triage explicado",
+     "inicio": "2027-10-14",
+     "fin": "2027-10-17",
      "entregables": [
       "autoencoders sobre telemetría de la NASA",
       "triage explicado"
@@ -699,9 +662,8 @@
     },
     {
      "id": "1.1",
-     "inicio": "2027-08-28",
-     "fin": "2027-08-30",
-     "linea": "centro de control, status page, Kafka, saga y outbox",
+     "inicio": "2027-10-18",
+     "fin": "2027-10-20",
      "entregables": [
       "centro de control",
       "status page",
@@ -711,9 +673,8 @@
     },
     {
      "id": "2.0",
-     "inicio": "2027-08-31",
-     "fin": "2027-09-02",
-     "linea": "agente SRE, Jarvis con Face ID, Slack, WhatsApp, llamada por SLO, postmortem por email",
+     "inicio": "2027-10-21",
+     "fin": "2027-10-23",
      "entregables": [
       "agente SRE",
       "Jarvis con Face ID",
@@ -725,9 +686,8 @@
     },
     {
      "id": "3.0",
-     "inicio": "2027-09-03",
-     "fin": "2027-09-06",
-     "linea": "chaos, caída de una nube con failover, flota de 1.000 dispositivos, FinOps y plan de capacidad",
+     "inicio": "2027-10-24",
+     "fin": "2027-10-27",
      "entregables": [
       "chaos",
       "caída de una nube con failover",
@@ -755,27 +715,24 @@
    "versiones": [
     {
      "id": "1.0",
-     "inicio": "2027-09-25",
-     "fin": "2027-09-26",
-     "linea": "Vault y cifrado de sobre",
+     "inicio": "2027-11-10",
+     "fin": "2027-11-11",
      "entregables": [
       "Vault y cifrado de sobre"
      ]
     },
     {
      "id": "1.1",
-     "inicio": "2027-09-27",
-     "fin": "2027-09-28",
-     "linea": "rotación automática y credenciales efímeras",
+     "inicio": "2027-11-12",
+     "fin": "2027-11-13",
      "entregables": [
       "rotación automática y credenciales efímeras"
      ]
     },
     {
      "id": "2.0",
-     "inicio": "2027-09-29",
-     "fin": "2027-10-01",
-     "linea": "GitHub App, aprobación por WhatsApp, celular como llave, llave física, SoftHSM",
+     "inicio": "2027-11-14",
+     "fin": "2027-11-16",
      "entregables": [
       "GitHub App",
       "aprobación por WhatsApp",
@@ -786,9 +743,8 @@
     },
     {
      "id": "3.0",
-     "inicio": "2027-10-02",
-     "fin": "2027-10-03",
-     "linea": "rotación masiva sin cortes, SPIFFE, mTLS, comparativa",
+     "inicio": "2027-11-17",
+     "fin": "2027-11-18",
      "entregables": [
       "rotación masiva sin cortes",
       "SPIFFE",
@@ -814,9 +770,8 @@
    "versiones": [
     {
      "id": "1.0",
-     "inicio": "2027-10-04",
-     "fin": "2027-10-06",
-     "linea": "STRIDE y pentest de PetrIA, informe CVSS",
+     "inicio": "2027-11-19",
+     "fin": "2027-11-21",
      "entregables": [
       "STRIDE y pentest de PetrIA",
       "informe CVSS"
@@ -824,9 +779,8 @@
     },
     {
      "id": "1.1",
-     "inicio": "2027-10-07",
-     "fin": "2027-10-09",
-     "linea": "pentest de IA y del ESP32, reprueba en el CI",
+     "inicio": "2027-11-22",
+     "fin": "2027-11-24",
      "entregables": [
       "pentest de IA y del ESP32",
       "reprueba en el CI"
@@ -834,9 +788,8 @@
     },
     {
      "id": "2.0",
-     "inicio": "2027-10-10",
-     "fin": "2027-10-11",
-     "linea": "bot de PR, agente asistente, email semanal, Slack",
+     "inicio": "2027-11-25",
+     "fin": "2027-11-26",
      "entregables": [
       "bot de PR",
       "agente asistente",
@@ -846,9 +799,8 @@
     },
     {
      "id": "3.0",
-     "inicio": "2027-10-12",
-     "fin": "2027-10-14",
-     "linea": "muchos repos sin frenar el CI, caza de CVE",
+     "inicio": "2027-11-27",
+     "fin": "2027-11-29",
      "entregables": [
       "muchos repos sin frenar el CI",
       "caza de CVE"
@@ -872,9 +824,8 @@
    "versiones": [
     {
      "id": "1.0",
-     "inicio": "2027-10-15",
-     "fin": "2027-10-17",
-     "linea": "OpenSearch, osquery y reglas Sigma sobre el colector de PetrIA Guard",
+     "inicio": "2027-11-30",
+     "fin": "2027-12-02",
      "entregables": [
       "OpenSearch",
       "osquery y reglas Sigma sobre el colector de PetrIA Guard"
@@ -882,9 +833,8 @@
     },
     {
      "id": "1.1",
-     "inicio": "2027-10-18",
-     "fin": "2027-10-20",
-     "linea": "agente investigador evaluado, purple team, tiempos medidos",
+     "inicio": "2027-12-03",
+     "fin": "2027-12-05",
      "entregables": [
       "agente investigador evaluado",
       "purple team",
@@ -893,9 +843,8 @@
     },
     {
      "id": "2.0",
-     "inicio": "2027-10-21",
-     "fin": "2027-10-24",
-     "linea": "SOC con un comando, llamada, WhatsApp, email, RFID en Wokwi",
+     "inicio": "2027-12-06",
+     "fin": "2027-12-09",
      "entregables": [
       "SOC con un comando",
       "llamada",
@@ -906,9 +855,8 @@
     },
     {
      "id": "3.0",
-     "inicio": "2027-10-25",
-     "fin": "2027-10-27",
-     "linea": "millones de eventos, costo de retención, RFID real, comparativa",
+     "inicio": "2027-12-10",
+     "fin": "2027-12-12",
      "entregables": [
       "millones de eventos",
       "costo de retención",
@@ -935,18 +883,16 @@
    "versiones": [
     {
      "id": "1.0",
-     "inicio": "2027-11-30",
-     "fin": "2027-12-02",
-     "linea": "backtester en Rust con costos y deslizamiento",
+     "inicio": "2028-01-31",
+     "fin": "2028-02-02",
      "entregables": [
       "backtester en Rust con costos y deslizamiento"
      ]
     },
     {
      "id": "1.1",
-     "inicio": "2027-12-03",
-     "fin": "2027-12-05",
-     "linea": "walk-forward, registro con hash, Sharpe deflactado, benchmark",
+     "inicio": "2028-02-03",
+     "fin": "2028-02-05",
      "entregables": [
       "walk-forward",
       "registro con hash",
@@ -956,18 +902,16 @@
     },
     {
      "id": "2.0",
-     "inicio": "2027-12-06",
-     "fin": "2027-12-09",
-     "linea": "\"¿Tu estrategia es suerte?\" y asistente",
+     "inicio": "2028-02-06",
+     "fin": "2028-02-09",
      "entregables": [
       "\"¿Tu estrategia es suerte?\" y asistente"
      ]
     },
     {
      "id": "3.0",
-     "inicio": "2027-12-10",
-     "fin": "2027-12-12",
-     "linea": "backtests en paralelo e informes por email",
+     "inicio": "2028-02-10",
+     "fin": "2028-02-12",
      "entregables": [
       "backtests en paralelo e informes por email"
      ]
@@ -990,28 +934,25 @@
    "versiones": [
     {
      "id": "1.0",
-     "inicio": "2027-12-13",
-     "fin": "2027-12-15",
-     "linea": "un paper replicado",
+     "inicio": "2028-02-13",
+     "fin": "2028-02-15",
      "entregables": [
       "un paper replicado"
      ]
     },
     {
      "id": "1.1",
-     "inicio": "2027-12-16",
-     "fin": "2027-12-18",
-     "linea": "agente que extrae la estrategia y 3 papers replicados",
+     "inicio": "2028-02-16",
+     "fin": "2028-02-18",
      "entregables": [
       "agente que extrae la estrategia y 3 papers replicados"
      ]
     },
     {
      "id": "2.0",
-     "inicio": "2027-12-19",
-     "fin": "2027-12-27",
+     "inicio": "2028-02-19",
+     "fin": "2028-02-20",
      "partida": true,
-     "linea": "página pública, newsletter y WhatsApp",
      "entregables": [
       "página pública",
       "newsletter y WhatsApp"
@@ -1019,9 +960,8 @@
     },
     {
      "id": "3.0",
-     "inicio": "2027-12-28",
-     "fin": "2027-12-30",
-     "linea": "lotes en paralelo y porcentaje replicado",
+     "inicio": "2028-02-21",
+     "fin": "2028-02-23",
      "entregables": [
       "lotes en paralelo y porcentaje replicado"
      ]
@@ -1043,9 +983,8 @@
    "versiones": [
     {
      "id": "1.0",
-     "inicio": "2028-01-17",
-     "fin": "2028-01-19",
-     "linea": "Black-Scholes, binomial y Monte Carlo contra QuantLib",
+     "inicio": "2028-03-07",
+     "fin": "2028-03-09",
      "entregables": [
       "Black-Scholes",
       "binomial y Monte Carlo contra QuantLib"
@@ -1053,9 +992,8 @@
     },
     {
      "id": "1.1",
-     "inicio": "2028-01-20",
-     "fin": "2028-01-22",
-     "linea": "griegas, estrés y calculadora argentina",
+     "inicio": "2028-03-10",
+     "fin": "2028-03-12",
      "entregables": [
       "griegas",
       "estrés y calculadora argentina"
@@ -1063,9 +1001,8 @@
     },
     {
      "id": "2.0",
-     "inicio": "2028-01-23",
-     "fin": "2028-01-26",
-     "linea": "superficie en AR, email matinal y podcast",
+     "inicio": "2028-03-13",
+     "fin": "2028-03-16",
      "entregables": [
       "superficie en AR",
       "email matinal y podcast"
@@ -1073,9 +1010,8 @@
     },
     {
      "id": "3.0",
-     "inicio": "2028-01-27",
-     "fin": "2028-01-29",
-     "linea": "API con SLO y benchmark",
+     "inicio": "2028-03-17",
+     "fin": "2028-03-19",
      "entregables": [
       "API con SLO y benchmark"
      ]
@@ -1099,18 +1035,16 @@
    "versiones": [
     {
      "id": "1.0",
-     "inicio": "2028-01-30",
-     "fin": "2028-02-01",
-     "linea": "matching por precio y tiempo",
+     "inicio": "2028-03-20",
+     "fin": "2028-03-22",
      "entregables": [
       "matching por precio y tiempo"
      ]
     },
     {
      "id": "1.1",
-     "inicio": "2028-02-02",
-     "fin": "2028-02-04",
-     "linea": "market maker, FIX y costos de transacción",
+     "inicio": "2028-03-23",
+     "fin": "2028-03-25",
      "entregables": [
       "market maker",
       "FIX y costos de transacción"
@@ -1118,18 +1052,16 @@
     },
     {
      "id": "2.0",
-     "inicio": "2028-02-05",
-     "fin": "2028-02-06",
-     "linea": "simulador en formato juego",
+     "inicio": "2028-03-26",
+     "fin": "2028-03-27",
      "entregables": [
       "simulador en formato juego"
      ]
     },
     {
      "id": "3.0",
-     "inicio": "2028-02-07",
-     "fin": "2028-02-09",
-     "linea": "p99 bajo carga, replay y fuzzing",
+     "inicio": "2028-03-28",
+     "fin": "2028-03-30",
      "entregables": [
       "p99 bajo carga",
       "replay y fuzzing"
@@ -1152,18 +1084,16 @@
    "versiones": [
     {
      "id": "1.0",
-     "inicio": "2028-02-25",
-     "fin": "2028-02-28",
-     "linea": "de señales a órdenes en paper trading",
+     "inicio": "2028-04-18",
+     "fin": "2028-04-21",
      "entregables": [
       "de señales a órdenes en paper trading"
      ]
     },
     {
      "id": "1.1",
-     "inicio": "2028-02-29",
-     "fin": "2028-03-03",
-     "linea": "riesgo previo, kill-switch y conciliación",
+     "inicio": "2028-04-22",
+     "fin": "2028-04-25",
      "entregables": [
       "riesgo previo",
       "kill-switch y conciliación"
@@ -1171,9 +1101,8 @@
     },
     {
      "id": "2.0",
-     "inicio": "2028-03-04",
-     "fin": "2028-03-06",
-     "linea": "WhatsApp, Face ID, email diario y tablero público",
+     "inicio": "2028-04-26",
+     "fin": "2028-04-28",
      "entregables": [
       "WhatsApp",
       "Face ID",
@@ -1182,9 +1111,8 @@
     },
     {
      "id": "3.0",
-     "inicio": "2028-03-07",
-     "fin": "2028-03-10",
-     "linea": "una sola ejecución por orden, conciliación ante fallas, Kafka y meses en vivo",
+     "inicio": "2028-04-29",
+     "fin": "2028-05-02",
      "entregables": [
       "una sola ejecución por orden",
       "conciliación ante fallas",
@@ -1209,18 +1137,16 @@
    "versiones": [
     {
      "id": "1.0",
-     "inicio": "2028-03-11",
-     "fin": "2028-03-13",
-     "linea": "ingesta en ClickHouse con control de calidad",
+     "inicio": "2028-05-03",
+     "fin": "2028-05-05",
      "entregables": [
       "ingesta en ClickHouse con control de calidad"
      ]
     },
     {
      "id": "1.1",
-     "inicio": "2028-03-14",
-     "fin": "2028-03-16",
-     "linea": "MEP y CCL en vivo, y MCP",
+     "inicio": "2028-05-06",
+     "fin": "2028-05-08",
      "entregables": [
       "MEP y CCL en vivo",
       "y MCP"
@@ -1228,9 +1154,8 @@
     },
     {
      "id": "2.0",
-     "inicio": "2028-03-17",
-     "fin": "2028-03-19",
-     "linea": "WhatsApp, voz y LED en Wokwi",
+     "inicio": "2028-05-09",
+     "fin": "2028-05-11",
      "entregables": [
       "WhatsApp",
       "voz y LED en Wokwi"
@@ -1238,9 +1163,8 @@
     },
     {
      "id": "3.0",
-     "inicio": "2028-03-20",
-     "fin": "2028-03-22",
-     "linea": "ticks masivos, replay, SLA y LED real",
+     "inicio": "2028-05-12",
+     "fin": "2028-05-14",
      "entregables": [
       "ticks masivos",
       "replay",
@@ -1266,27 +1190,24 @@
    "versiones": [
     {
      "id": "1.0",
-     "inicio": "2028-04-26",
-     "fin": "2028-04-29",
-     "linea": "6-DOF validado",
+     "inicio": "2028-06-19",
+     "fin": "2028-06-23",
      "entregables": [
       "6-DOF validado"
      ]
     },
     {
      "id": "1.1",
-     "inicio": "2028-04-30",
-     "fin": "2028-05-04",
-     "linea": "simulador web contra OpenRocket",
+     "inicio": "2028-06-24",
+     "fin": "2028-06-28",
      "entregables": [
       "simulador web contra OpenRocket"
      ]
     },
     {
      "id": "2.0",
-     "inicio": "2028-05-05",
-     "fin": "2028-05-09",
-     "linea": "Monte Carlo, VR, voz y computadora de vuelo en Wokwi",
+     "inicio": "2028-06-29",
+     "fin": "2028-07-02",
      "entregables": [
       "Monte Carlo",
       "VR",
@@ -1295,9 +1216,8 @@
     },
     {
      "id": "3.0",
-     "inicio": "2028-05-10",
-     "fin": "2028-05-13",
-     "linea": "un millón de corridas, modelo sustituto y HIL real",
+     "inicio": "2028-07-03",
+     "fin": "2028-07-07",
      "entregables": [
       "un millón de corridas",
       "modelo sustituto y HIL real"
@@ -1322,18 +1242,16 @@
    "versiones": [
     {
      "id": "1.0",
-     "inicio": "2028-05-22",
-     "fin": "2028-05-25",
-     "linea": "solver 1D contra CalculiX",
+     "inicio": "2028-07-17",
+     "fin": "2028-07-20",
      "entregables": [
       "solver 1D contra CalculiX"
      ]
     },
     {
      "id": "1.1",
-     "inicio": "2028-05-26",
-     "fin": "2028-05-30",
-     "linea": "2D, convergencia y margen",
+     "inicio": "2028-07-21",
+     "fin": "2028-07-25",
      "entregables": [
       "2D",
       "convergencia y margen"
@@ -1341,18 +1259,16 @@
     },
     {
      "id": "2.0",
-     "inicio": "2028-05-31",
-     "fin": "2028-06-04",
-     "linea": "calculadora en el navegador",
+     "inicio": "2028-07-26",
+     "fin": "2028-07-30",
      "entregables": [
       "calculadora en el navegador"
      ]
     },
     {
      "id": "3.0",
-     "inicio": "2028-06-05",
-     "fin": "2028-06-08",
-     "linea": "experimento real y usuarios en universidades",
+     "inicio": "2028-07-31",
+     "fin": "2028-08-03",
      "entregables": [
       "experimento real y usuarios en universidades"
      ]
@@ -1375,18 +1291,16 @@
    "versiones": [
     {
      "id": "1.0",
-     "inicio": "2028-06-26",
-     "fin": "2028-06-29",
-     "linea": "método de paneles",
+     "inicio": "2028-08-16",
+     "fin": "2028-08-19",
      "entregables": [
       "método de paneles"
      ]
     },
     {
      "id": "1.1",
-     "inicio": "2028-06-30",
-     "fin": "2028-07-03",
-     "linea": "vortex lattice, Euler 2D y comparación",
+     "inicio": "2028-08-20",
+     "fin": "2028-08-23",
      "entregables": [
       "vortex lattice",
       "Euler 2D y comparación"
@@ -1394,18 +1308,16 @@
     },
     {
      "id": "2.0",
-     "inicio": "2028-07-04",
-     "fin": "2028-07-06",
-     "linea": "optimizador y AR",
+     "inicio": "2028-08-24",
+     "fin": "2028-08-26",
      "entregables": [
       "optimizador y AR"
      ]
     },
     {
      "id": "3.0",
-     "inicio": "2028-07-07",
-     "fin": "2028-07-10",
-     "linea": "lote y modelo sustituto",
+     "inicio": "2028-08-27",
+     "fin": "2028-08-30",
      "entregables": [
       "lote y modelo sustituto"
      ]
@@ -1428,9 +1340,8 @@
    "versiones": [
     {
      "id": "1.0",
-     "inicio": "2028-07-22",
-     "fin": "2028-07-26",
-     "linea": "PID, LQR y Kalman en PX4 SITL",
+     "inicio": "2028-09-13",
+     "fin": "2028-09-17",
      "entregables": [
       "PID",
       "LQR y Kalman en PX4 SITL"
@@ -1438,9 +1349,8 @@
     },
     {
      "id": "1.1",
-     "inicio": "2028-07-27",
-     "fin": "2028-07-31",
-     "linea": "banco de fallas, modos seguros y ajuste automático",
+     "inicio": "2028-09-18",
+     "fin": "2028-09-22",
      "entregables": [
       "banco de fallas",
       "modos seguros y ajuste automático"
@@ -1448,18 +1358,16 @@
     },
     {
      "id": "2.0",
-     "inicio": "2028-08-01",
-     "fin": "2028-08-04",
-     "linea": "estación de tierra por voz y el celular como sensor",
+     "inicio": "2028-09-23",
+     "fin": "2028-09-26",
      "entregables": [
       "estación de tierra por voz y el celular como sensor"
      ]
     },
     {
      "id": "3.0",
-     "inicio": "2028-08-05",
-     "fin": "2028-08-09",
-     "linea": "dron real y RL con escudo vs LQR",
+     "inicio": "2028-09-27",
+     "fin": "2028-10-01",
      "entregables": [
       "dron real y RL con escudo vs LQR"
      ]
@@ -1482,27 +1390,24 @@
    "versiones": [
     {
      "id": "1.0",
-     "inicio": "2028-08-31",
-     "fin": "2028-09-03",
-     "linea": "propagador y ventanas de comunicación",
+     "inicio": "2028-10-27",
+     "fin": "2028-10-30",
      "entregables": [
       "propagador y ventanas de comunicación"
      ]
     },
     {
      "id": "1.1",
-     "inicio": "2028-09-04",
-     "fin": "2028-09-07",
-     "linea": "screening del catálogo completo",
+     "inicio": "2028-10-31",
+     "fin": "2028-11-03",
      "entregables": [
       "screening del catálogo completo"
      ]
     },
     {
      "id": "2.0",
-     "inicio": "2028-09-08",
-     "fin": "2028-09-11",
-     "linea": "WhatsApp, newsletter y AR",
+     "inicio": "2028-11-04",
+     "fin": "2028-11-07",
      "entregables": [
       "WhatsApp",
       "newsletter y AR"
@@ -1510,9 +1415,8 @@
     },
     {
      "id": "3.0",
-     "inicio": "2028-09-12",
-     "fin": "2028-09-15",
-     "linea": "servicio diario y reingresos sobre Argentina",
+     "inicio": "2028-11-08",
+     "fin": "2028-11-11",
      "entregables": [
       "servicio diario y reingresos sobre Argentina"
      ]
@@ -1535,27 +1439,24 @@
    "versiones": [
     {
      "id": "1.0",
-     "inicio": "2028-09-16",
-     "fin": "2028-09-18",
-     "linea": "primer PR aceptado",
+     "inicio": "2028-11-12",
+     "fin": "2028-11-14",
      "entregables": [
       "primer PR aceptado"
      ]
     },
     {
      "id": "2.0",
-     "inicio": "2028-09-19",
-     "fin": "2028-09-22",
-     "linea": "PR de funcionalidad en un segundo proyecto",
+     "inicio": "2028-11-15",
+     "fin": "2028-11-18",
      "entregables": [
       "PR de funcionalidad en un segundo proyecto"
      ]
     },
     {
      "id": "3.0",
-     "inicio": "2028-09-23",
-     "fin": "2028-09-25",
-     "linea": "contribución de peso",
+     "inicio": "2028-11-19",
+     "fin": "2028-11-21",
      "entregables": [
       "contribución de peso"
      ]
@@ -1573,36 +1474,32 @@
    "versiones": [
     {
      "id": "1.0",
-     "inicio": "2028-09-26",
-     "fin": "2028-09-30",
-     "linea": "gemelo digital del cubesat",
+     "inicio": "2028-11-22",
+     "fin": "2028-11-26",
      "entregables": [
       "gemelo digital del cubesat"
      ]
     },
     {
      "id": "1.1",
-     "inicio": "2028-10-01",
-     "fin": "2028-10-05",
-     "linea": "sala de control en VR conectada a Antena Ops",
+     "inicio": "2028-11-27",
+     "fin": "2028-12-01",
      "entregables": [
       "sala de control en VR conectada a Antena Ops"
      ]
     },
     {
      "id": "2.0",
-     "inicio": "2028-10-06",
-     "fin": "2028-10-10",
-     "linea": "\"Houston\" por voz",
+     "inicio": "2028-12-02",
+     "fin": "2028-12-06",
      "entregables": [
       "\"Houston\" por voz"
      ]
     },
     {
      "id": "3.0",
-     "inicio": "2028-10-11",
-     "fin": "2028-10-15",
-     "linea": "HIL real, comandos firmados y caso de seguridad",
+     "inicio": "2028-12-07",
+     "fin": "2028-12-11",
      "entregables": [
       "HIL real",
       "comandos firmados y caso de seguridad"
@@ -1626,8 +1523,8 @@
   "P1": {
    "secundaria": [
     {
-     "app": "HandyX",
-     "version": "1.0"
+     "app": "JulIA",
+     "version": "1.0–3.0"
     }
    ],
    "comercial": null
@@ -1635,30 +1532,36 @@
   "CW1": {
    "secundaria": [
     {
+     "app": "JulIA",
+     "version": "3.0"
+    },
+    {
      "app": "HandyX",
      "version": "1.0"
     }
    ],
-   "comercial": 1
+   "comercial": 1,
+   "faseComercial": "build"
   },
   "E1": {
    "secundaria": [
     {
      "app": "HandyX",
-     "version": "1.0"
-    },
-    {
-     "app": "HandyX",
-     "version": "2.0"
+     "version": "1.0–2.0"
     }
    ],
-   "comercial": 1
+   "comercial": 1,
+   "faseComercial": "build + sell"
   },
   "P2": {
    "secundaria": [
     {
      "app": "HandyX",
-     "version": "2.0"
+     "version": "2.0–3.0"
+    },
+    {
+     "app": "Clip Studio",
+     "version": "1.0"
     }
    ],
    "comercial": null
@@ -1666,61 +1569,66 @@
   "CW2": {
    "secundaria": [
     {
-     "app": "HandyX",
-     "version": "2.0"
+     "app": "Clip Studio",
+     "version": "1.0–2.0"
     }
    ],
-   "comercial": 2
+   "comercial": 2,
+   "faseComercial": "build + sell"
   },
   "E2": {
    "secundaria": [
     {
-     "app": "HandyX",
-     "version": "2.0"
-    },
-    {
-     "app": "HandyX",
-     "version": "3.0"
+     "app": "Clip Studio",
+     "version": "2.0–3.0"
     }
    ],
-   "comercial": 2
+   "comercial": 2,
+   "faseComercial": "sell"
   },
   "W1": {
    "secundaria": [
     {
-     "app": "HandyX",
-     "version": "3.0"
+     "app": "Roofy",
+     "version": "1.0–3.0"
+    },
+    {
+     "app": "Amazon v2",
+     "version": "1.0"
     }
    ],
-   "comercial": 3
+   "comercial": 3,
+   "faseComercial": "build + sell"
   },
   "CW3": {
    "secundaria": [
     {
-     "app": "JulIA",
-     "version": "1.0"
+     "app": "Amazon v2",
+     "version": "1.0–2.0"
     }
    ],
-   "comercial": 4
+   "comercial": 4,
+   "faseComercial": "build + sell"
   },
   "E3": {
    "secundaria": [
     {
-     "app": "JulIA",
-     "version": "1.0"
+     "app": "Amazon v2",
+     "version": "3.0"
     }
    ],
-   "comercial": 4
+   "comercial": 4,
+   "faseComercial": "sell"
   },
   "P3": {
    "secundaria": [
     {
-     "app": "JulIA",
-     "version": "1.0"
+     "app": "Amazon v2",
+     "version": "3.0"
     },
     {
-     "app": "JulIA",
-     "version": "2.0"
+     "app": "Stripe v2",
+     "version": "1.0–2.0"
     }
    ],
    "comercial": null
@@ -1728,30 +1636,32 @@
   "CW4": {
    "secundaria": [
     {
-     "app": "JulIA",
-     "version": "2.0"
+     "app": "Stripe v2",
+     "version": "2.0–3.0"
     }
    ],
-   "comercial": 5
+   "comercial": 5,
+   "faseComercial": "build + sell"
   },
   "E4": {
    "secundaria": [
     {
-     "app": "JulIA",
-     "version": "2.0"
+     "app": "Stripe v2",
+     "version": "3.0"
     }
    ],
-   "comercial": 5
+   "comercial": 5,
+   "faseComercial": "sell"
   },
   "P4": {
    "secundaria": [
     {
-     "app": "JulIA",
-     "version": "2.0"
+     "app": "Stripe v2",
+     "version": "3.0"
     },
     {
-     "app": "JulIA",
-     "version": "3.0"
+     "app": "Uber v2",
+     "version": "1.0–3.0"
     }
    ],
    "comercial": null
@@ -1759,30 +1669,32 @@
   "CW5": {
    "secundaria": [
     {
-     "app": "JulIA",
+     "app": "Uber v2",
      "version": "3.0"
     }
    ],
-   "comercial": 6
+   "comercial": 6,
+   "faseComercial": "build + sell"
   },
   "J5": {
    "secundaria": [
     {
-     "app": "JulIA",
+     "app": "Uber v2",
      "version": "3.0"
+    },
+    {
+     "app": "Notion v2",
+     "version": "1.0"
     }
    ],
-   "comercial": 6
+   "comercial": 6,
+   "faseComercial": "sell"
   },
   "P0B": {
    "secundaria": [
     {
-     "app": "JulIA",
-     "version": "3.0"
-    },
-    {
-     "app": "Clip Studio",
-     "version": "1.0"
+     "app": "Notion v2",
+     "version": "1.0–2.0"
     }
    ],
    "comercial": null
@@ -1790,8 +1702,8 @@
   "P5": {
    "secundaria": [
     {
-     "app": "Clip Studio",
-     "version": "1.0"
+     "app": "Notion v2",
+     "version": "2.0–3.0"
     }
    ],
    "comercial": null
@@ -1799,139 +1711,109 @@
   "CW6": {
    "secundaria": [
     {
-     "app": "Clip Studio",
-     "version": "1.0"
+     "app": "Notion v2",
+     "version": "3.0"
     },
     {
-     "app": "Clip Studio",
-     "version": "2.0"
+     "app": "Spotify v2",
+     "version": "1.0"
     }
    ],
-   "comercial": 7
+   "comercial": 7,
+   "faseComercial": "build + sell"
   },
   "CW7": {
    "secundaria": [
     {
-     "app": "Clip Studio",
-     "version": "2.0"
+     "app": "Spotify v2",
+     "version": "2.0–3.0"
     }
    ],
-   "comercial": 8
+   "comercial": 8,
+   "faseComercial": "build + sell"
   },
   "CW8": {
    "secundaria": [
     {
-     "app": "Clip Studio",
-     "version": "2.0"
+     "app": "Spotify v2",
+     "version": "3.0"
     }
    ],
-   "comercial": 9
+   "comercial": 9,
+   "faseComercial": "build + sell"
   },
   "J6": {
    "secundaria": [
     {
-     "app": "Clip Studio",
-     "version": "2.0"
+     "app": "Spotify v2",
+     "version": "3.0"
     },
     {
-     "app": "Clip Studio",
-     "version": "3.0"
+     "app": "Cursor v2",
+     "version": "1.0"
     }
    ],
-   "comercial": 9
+   "comercial": 9,
+   "faseComercial": "sell"
   },
   "W2": {
    "secundaria": [
     {
-     "app": "Clip Studio",
-     "version": "3.0"
+     "app": "Cursor v2",
+     "version": "1.0–3.0"
     }
    ],
-   "comercial": 10
+   "comercial": 10,
+   "faseComercial": "build + sell"
   },
   "P6": {
-   "secundaria": [
-    {
-     "app": "Roofy",
-     "version": "1.0"
-    }
-   ],
+   "secundaria": "libre",
    "comercial": null
   },
   "SUM": {
-   "secundaria": [
-    {
-     "app": "Roofy",
-     "version": "1.0"
-    }
-   ],
+   "secundaria": "libre",
    "comercial": null
   },
   "P7": {
-   "secundaria": [
-    {
-     "app": "Roofy",
-     "version": "1.0"
-    }
-   ],
+   "secundaria": "libre",
    "comercial": null
   },
   "JP5": {
-   "secundaria": [
-    {
-     "app": "Roofy",
-     "version": "2.0"
-    }
-   ],
-   "comercial": 11
+   "secundaria": "libre",
+   "comercial": 11,
+   "faseComercial": "build"
   },
   "W3": {
-   "secundaria": [
-    {
-     "app": "Roofy",
-     "version": "2.0"
-    }
-   ],
-   "comercial": 11
+   "secundaria": "libre",
+   "comercial": 11,
+   "faseComercial": "build + sell"
   },
   "P8": {
-   "secundaria": [
-    {
-     "app": "Roofy",
-     "version": "2.0"
-    }
-   ],
+   "secundaria": "libre",
    "comercial": null
   },
   "P9": {
-   "secundaria": [
-    {
-     "app": "Roofy",
-     "version": "3.0"
-    }
-   ],
+   "secundaria": "libre",
    "comercial": null
   },
   "P10": {
-   "secundaria": [
-    {
-     "app": "Roofy",
-     "version": "3.0"
-    }
-   ],
+   "secundaria": "libre",
    "comercial": null
   },
   "JP6": {
    "secundaria": "libre",
-   "comercial": 12
+   "comercial": 12,
+   "faseComercial": "build"
   },
   "COL": {
    "secundaria": "libre",
-   "comercial": 12
+   "comercial": 12,
+   "faseComercial": "build"
   },
   "W4": {
    "secundaria": "libre",
-   "comercial": 13
+   "comercial": 13,
+   "faseComercial": "build"
   },
   "S1": {
    "secundaria": "libre",
@@ -1950,15 +1832,18 @@
   },
   "J7": {
    "secundaria": "libre",
-   "comercial": 14
+   "comercial": 14,
+   "faseComercial": "build"
   },
   "CIE2": {
    "secundaria": "libre",
-   "comercial": 14
+   "comercial": 14,
+   "faseComercial": "build + sell"
   },
   "WQ1": {
    "secundaria": "libre",
-   "comercial": 15
+   "comercial": 15,
+   "faseComercial": "build + sell"
   },
   "Q1": {
    "secundaria": "libre",
@@ -1970,7 +1855,8 @@
   },
   "WQ2": {
    "secundaria": "libre",
-   "comercial": 16
+   "comercial": 16,
+   "faseComercial": "build + sell"
   },
   "Q3": {
    "secundaria": "libre",
@@ -1982,15 +1868,18 @@
   },
   "CW10": {
    "secundaria": "libre",
-   "comercial": 17
+   "comercial": 17,
+   "faseComercial": "build"
   },
   "J8": {
    "secundaria": "libre",
-   "comercial": 17
+   "comercial": 17,
+   "faseComercial": "sell"
   },
   "WQ3": {
    "secundaria": "libre",
-   "comercial": 17
+   "comercial": 17,
+   "faseComercial": "sell"
   },
   "Q5": {
    "secundaria": "libre",
@@ -2002,19 +1891,23 @@
   },
   "CW11": {
    "secundaria": "libre",
-   "comercial": 18
+   "comercial": 18,
+   "faseComercial": "build + sell"
   },
   "J9": {
    "secundaria": "libre",
-   "comercial": 18
+   "comercial": 18,
+   "faseComercial": "sell"
   },
   "CIE3": {
    "secundaria": "libre",
-   "comercial": 18
+   "comercial": 18,
+   "faseComercial": "sell"
   },
   "WA1": {
    "secundaria": "libre",
-   "comercial": 19
+   "comercial": 19,
+   "faseComercial": "build + sell"
   },
   "A1": {
    "secundaria": "libre",
@@ -2022,7 +1915,8 @@
   },
   "WA2": {
    "secundaria": "libre",
-   "comercial": 20
+   "comercial": 20,
+   "faseComercial": "build + sell"
   },
   "A2": {
    "secundaria": "libre",
@@ -2030,7 +1924,8 @@
   },
   "WA3": {
    "secundaria": "libre",
-   "comercial": 21
+   "comercial": 21,
+   "faseComercial": "build + sell"
   },
   "A3": {
    "secundaria": "libre",
@@ -2038,11 +1933,13 @@
   },
   "JP10": {
    "secundaria": "libre",
-   "comercial": 22
+   "comercial": 22,
+   "faseComercial": "build"
   },
   "WA4": {
    "secundaria": "libre",
-   "comercial": 22
+   "comercial": 22,
+   "faseComercial": "build + sell"
   },
   "A4": {
    "secundaria": "libre",
@@ -2050,15 +1947,18 @@
   },
   "CW12": {
    "secundaria": "libre",
-   "comercial": 23
+   "comercial": 23,
+   "faseComercial": "build + sell"
   },
   "J10": {
    "secundaria": "libre",
-   "comercial": 23
+   "comercial": 23,
+   "faseComercial": "sell"
   },
   "WA5": {
    "secundaria": "libre",
-   "comercial": 23
+   "comercial": 23,
+   "faseComercial": "sell"
   },
   "A5": {
    "secundaria": "libre",
@@ -2079,82 +1979,15 @@
  },
  "secundarias": [
   {
-   "id": "handyx",
-   "nombre": "HandyX",
+   "id": "julia",
+   "nombre": "JulIA",
    "inicio": "2026-11-26",
-   "fin": "2027-02-03",
+   "fin": "2026-12-16",
    "versiones": [
     {
      "id": "1.0",
      "inicio": "2026-11-26",
-     "fin": "2026-12-17",
-     "linea": "web + app, pro onboarding, request, chat, Mercado Pago escrow (sandbox).",
-     "entregables": [
-      "web + app",
-      "pro onboarding",
-      "request",
-      "chat",
-      "Mercado Pago escrow (sandbox)"
-     ],
-     "revisionForeground": [
-      "dinero"
-     ]
-    },
-    {
-     "id": "2.0",
-     "inicio": "2026-12-18",
-     "fin": "2027-01-12",
-     "linea": "Claude vision diagnosis + quote, voice agent (ElevenLabs + Twilio), scheduling tools.",
-     "entregables": [
-      "Claude vision diagnosis + quote",
-      "voice agent (ElevenLabs + Twilio)",
-      "scheduling tools"
-     ]
-    },
-    {
-     "id": "3.0",
-     "inicio": "2027-01-13",
-     "fin": "2027-02-03",
-     "linea": "LightGBM learning-to-rank, .NET payments service, USDC payouts on testnet, security hardening.",
-     "entregables": [
-      "LightGBM learning-to-rank",
-      ".NET payments service",
-      "USDC payouts on testnet",
-      "security hardening"
-     ],
-     "revisionForeground": [
-      "dinero",
-      "seguridad",
-      "smart contracts"
-     ]
-    }
-   ],
-   "descripcion": "on-demand marketplace for trades: request by photo or voice, AI quote, match with the professional, protected payment.",
-   "valor": "sellable as an on-demand app.",
-   "diferencial": "photo diagnosis, voice agent that says it's AI, own ranking, escrow.",
-   "rol": "AI Full-stack / Mobile + Backend for marketplaces",
-   "peso": "very high",
-   "empresas": [
-    "Uber",
-    "PedidosYa",
-    "Rappi"
-   ],
-   "stack": {
-    "dev": "Turborepo, Docker compose (Postgres + Redis), Mercado Pago sandbox, Twilio test mode.",
-    "staging": "Neon branch, NestJS on Render, Expo internal build.",
-    "prod": "Next.js (Vercel), Expo, NestJS + Drizzle + BullMQ, .NET payments service on Azure, Neon."
-   }
-  },
-  {
-   "id": "julia",
-   "nombre": "JulIA",
-   "inicio": "2027-02-04",
-   "fin": "2027-04-17",
-   "versiones": [
-    {
-     "id": "1.0",
-     "inicio": "2027-02-04",
-     "fin": "2027-02-28",
+     "fin": "2026-12-02",
      "linea": "courses, Remotion video lessons, Claude tutor over course content.",
      "entregables": [
       "courses",
@@ -2164,8 +1997,8 @@
     },
     {
      "id": "2.0",
-     "inicio": "2027-03-01",
-     "fin": "2027-03-25",
+     "inicio": "2026-12-03",
+     "fin": "2026-12-09",
      "linea": "3D trade simulations (R3F), BKT, FSRS reviews.",
      "entregables": [
       "3D trade simulations (R3F)",
@@ -2178,8 +2011,8 @@
     },
     {
      "id": "3.0",
-     "inicio": "2027-03-26",
-     "fin": "2027-04-17",
+     "inicio": "2026-12-10",
+     "fin": "2026-12-16",
      "linea": "neural vs BKT with a measured metric, EAS certificates, B2B panel.",
      "entregables": [
       "neural vs BKT with a measured metric",
@@ -2208,15 +2041,83 @@
    }
   },
   {
-   "id": "clip-studio",
-   "nombre": "Clip Studio",
-   "inicio": "2027-04-13",
-   "fin": "2027-06-18",
+   "id": "handyx",
+   "nombre": "HandyX",
+   "inicio": "2026-12-17",
+   "fin": "2027-01-06",
    "versiones": [
     {
      "id": "1.0",
-     "inicio": "2027-04-13",
-     "fin": "2027-05-05",
+     "inicio": "2026-12-17",
+     "fin": "2026-12-23",
+     "linea": "web + app, pro onboarding, request, chat, Mercado Pago escrow (sandbox).",
+     "entregables": [
+      "web + app",
+      "pro onboarding",
+      "request",
+      "chat",
+      "Mercado Pago escrow (sandbox)"
+     ],
+     "revisionForeground": [
+      "dinero"
+     ]
+    },
+    {
+     "id": "2.0",
+     "inicio": "2026-12-24",
+     "fin": "2026-12-30",
+     "linea": "Claude vision diagnosis + quote, voice agent (ElevenLabs + Twilio), scheduling tools.",
+     "entregables": [
+      "Claude vision diagnosis + quote",
+      "voice agent (ElevenLabs + Twilio)",
+      "scheduling tools"
+     ]
+    },
+    {
+     "id": "3.0",
+     "inicio": "2026-12-31",
+     "fin": "2027-01-06",
+     "linea": "LightGBM learning-to-rank, .NET payments service, USDC payouts on testnet, security hardening.",
+     "entregables": [
+      "LightGBM learning-to-rank",
+      ".NET payments service",
+      "USDC payouts on testnet",
+      "security hardening"
+     ],
+     "revisionForeground": [
+      "dinero",
+      "seguridad",
+      "smart contracts"
+     ]
+    }
+   ],
+   "descripcion": "on-demand marketplace for trades: request by photo or voice, AI quote, match with the professional, protected payment.",
+   "valor": "sellable as an on-demand app.",
+   "diferencial": "photo diagnosis, voice agent that says it's AI, own ranking, escrow.",
+   "rol": "AI Full-stack / Mobile + Backend for marketplaces",
+   "peso": "very high",
+   "empresas": [
+    "Uber",
+    "PedidosYa",
+    "Rappi"
+   ],
+   "stack": {
+    "dev": "Turborepo, Docker compose (Postgres + Redis), Mercado Pago sandbox, Twilio test mode.",
+    "staging": "Neon branch, NestJS on Render, Expo internal build.",
+    "prod": "Next.js (Vercel), Expo, NestJS + Drizzle + BullMQ, .NET payments service on Azure, Neon."
+   },
+   "conAlawys": true
+  },
+  {
+   "id": "clip-studio",
+   "nombre": "Clip Studio",
+   "inicio": "2027-01-07",
+   "fin": "2027-01-27",
+   "versiones": [
+    {
+     "id": "1.0",
+     "inicio": "2027-01-07",
+     "fin": "2027-01-13",
      "linea": "ingest, Whisper, highlights by transcript and audio, vertical cuts with FFmpeg.",
      "entregables": [
       "ingest",
@@ -2227,8 +2128,8 @@
     },
     {
      "id": "2.0",
-     "inicio": "2027-05-06",
-     "fin": "2027-05-27",
+     "inicio": "2027-01-14",
+     "fin": "2027-01-20",
      "linea": "auto-reframe, animated captions (Remotion, reused from JulIA), Claude hooks and titles, chat peaks.",
      "entregables": [
       "auto-reframe",
@@ -2240,8 +2141,8 @@
     },
     {
      "id": "3.0",
-     "inicio": "2027-05-28",
-     "fin": "2027-06-18",
+     "inicio": "2027-01-21",
+     "fin": "2027-01-27",
      "linea": "retention model (reuses HandyX ranking), trends by niche, scheduling via official APIs.",
      "entregables": [
       "retention model (reuses HandyX ranking)",
@@ -2267,18 +2168,19 @@
     "dev": "local FFmpeg + Whisper, Docker compose.",
     "staging": "on-demand GPU, test S3 bucket.",
     "prod": "NestJS, GPU workers, FFmpeg, Whisper, Remotion, S3 + CloudFront, official publishing APIs."
-   }
+   },
+   "conAlawys": true
   },
   {
    "id": "roofy",
    "nombre": "Roofy",
-   "inicio": "2027-06-19",
-   "fin": "2027-09-06",
+   "inicio": "2027-01-28",
+   "fin": "2027-02-17",
    "versiones": [
     {
      "id": "1.0",
-     "inicio": "2027-06-19",
-     "fin": "2027-07-15",
+     "inicio": "2027-01-28",
+     "fin": "2027-02-03",
      "linea": "listings + 3D tour.",
      "entregables": [
       "listings + 3D tour"
@@ -2286,8 +2188,8 @@
     },
     {
      "id": "2.0",
-     "inicio": "2027-07-16",
-     "fin": "2027-08-10",
+     "inicio": "2027-02-04",
+     "fin": "2027-02-10",
      "linea": "WebXR AR + visit-booking agent (base for the Airbnb v2 showcase).",
      "entregables": [
       "WebXR AR + visit-booking agent (base for the Airbnb v2 showcase)"
@@ -2298,8 +2200,8 @@
     },
     {
      "id": "3.0",
-     "inicio": "2027-08-11",
-     "fin": "2027-09-06",
+     "inicio": "2027-02-11",
+     "fin": "2027-02-17",
      "linea": "plans for agencies, metrics panel, security hardening.",
      "entregables": [
       "plans for agencies",
@@ -2325,28 +2227,388 @@
     "dev": "Docker compose, test 3D models.",
     "staging": "Neon branch, Render.",
     "prod": "Next.js + Three.js/R3F, WebXR, NestJS, Claude agent with calendar tools."
-   }
+   },
+   "conAlawys": true
+  },
+  {
+   "id": "amazon-v2",
+   "nombre": "Amazon v2",
+   "inicio": "2027-02-18",
+   "fin": "2027-03-17",
+   "versiones": [
+    {
+     "id": "1.0",
+     "inicio": "2027-02-18",
+     "fin": "2027-02-24",
+     "entregables": [
+      "catalog",
+      "hybrid search",
+      "cart",
+      "checkout"
+     ]
+    },
+    {
+     "id": "2.0",
+     "inicio": "2027-02-25",
+     "fin": "2027-03-03",
+     "entregables": [
+      "recommendations",
+      "shopping agent that never pays without confirmation"
+     ]
+    },
+    {
+     "id": "3.0",
+     "inicio": "2027-03-04",
+     "fin": "2027-03-17",
+     "entregables": [
+      "simulated Black Friday",
+      "caching",
+      "search evals"
+     ],
+     "revisionForeground": [
+      "dinero",
+      "datos personales"
+     ]
+    }
+   ],
+   "descripcion": "A marketplace-scale shop: catalog, hybrid search, cart and checkout, recommendations and a shopping agent.",
+   "valor": "",
+   "diferencial": "",
+   "rol": "",
+   "peso": "",
+   "empresas": [
+    "Amazon",
+    "Mercado Libre",
+    "Shopify"
+   ],
+   "stack": {
+    "dev": "Next.js, NestJS per domain, Postgres FTS + pgvector, Redis, LightGBM, Claude agent",
+    "staging": "",
+    "prod": ""
+   },
+   "conAlawys": true
+  },
+  {
+   "id": "stripe-v2",
+   "nombre": "Stripe v2",
+   "inicio": "2027-03-18",
+   "fin": "2027-04-14",
+   "versiones": [
+    {
+     "id": "1.0",
+     "inicio": "2027-03-18",
+     "fin": "2027-03-24",
+     "entregables": [
+      "charges",
+      "double-entry ledger",
+      "idempotency"
+     ],
+     "revisionForeground": [
+      "dinero",
+      "seguridad",
+      "smart contracts"
+     ]
+    },
+    {
+     "id": "2.0",
+     "inicio": "2027-03-25",
+     "fin": "2027-03-31",
+     "entregables": [
+      "signed webhooks",
+      "refunds",
+      "disputes",
+      "ML anti-fraud"
+     ],
+     "revisionForeground": [
+      "dinero",
+      "seguridad",
+      "smart contracts"
+     ]
+    },
+    {
+     "id": "3.0",
+     "inicio": "2027-04-01",
+     "fin": "2027-04-14",
+     "entregables": [
+      "reconciliation",
+      "chaos",
+      "USDC testnet"
+     ],
+     "revisionForeground": [
+      "dinero",
+      "seguridad",
+      "smart contracts"
+     ]
+    }
+   ],
+   "descripcion": "A payments platform: ledger, webhooks, refunds, disputes and anti-fraud. Crypto only on testnet.",
+   "valor": "",
+   "diferencial": "",
+   "rol": "",
+   "peso": "",
+   "empresas": [
+    "Stripe",
+    "Mercado Pago",
+    "Ualá",
+    "Nubank",
+    "dLocal"
+   ],
+   "stack": {
+    "dev": ".NET (reuse HandyX) or Go, append-only Postgres, HMAC, LightGBM + rules",
+    "staging": "",
+    "prod": ""
+   },
+   "conAlawys": true
+  },
+  {
+   "id": "uber-v2",
+   "nombre": "Uber v2",
+   "inicio": "2027-04-15",
+   "fin": "2027-05-12",
+   "versiones": [
+    {
+     "id": "1.0",
+     "inicio": "2027-04-15",
+     "fin": "2027-04-21",
+     "entregables": [
+      "request",
+      "dispatch",
+      "live tracking"
+     ]
+    },
+    {
+     "id": "2.0",
+     "inicio": "2027-04-22",
+     "fin": "2027-04-28",
+     "entregables": [
+      "surge pricing",
+      "ML ETA"
+     ]
+    },
+    {
+     "id": "3.0",
+     "inicio": "2027-04-29",
+     "fin": "2027-05-12",
+     "entregables": [
+      "10k simulated drivers",
+      "p99",
+      "network failures"
+     ],
+     "revisionForeground": [
+      "datos personales"
+     ]
+    }
+   ],
+   "descripcion": "Realtime mobility: ride requests, dispatch, live tracking, surge pricing and ETAs at simulated scale.",
+   "valor": "",
+   "diferencial": "",
+   "rol": "",
+   "peso": "",
+   "empresas": [
+    "Uber",
+    "Cabify",
+    "DiDi",
+    "Rappi",
+    "PedidosYa"
+   ],
+   "stack": {
+    "dev": "Go or Rust, Redis geo, websockets, H3, Kafka, MapLibre, Expo",
+    "staging": "",
+    "prod": ""
+   },
+   "conAlawys": true
+  },
+  {
+   "id": "notion-v2",
+   "nombre": "Notion v2",
+   "inicio": "2027-05-13",
+   "fin": "2027-06-09",
+   "versiones": [
+    {
+     "id": "1.0",
+     "inicio": "2027-05-13",
+     "fin": "2027-05-19",
+     "entregables": [
+      "block editor",
+      "live collaboration",
+      "presence"
+     ]
+    },
+    {
+     "id": "2.0",
+     "inicio": "2027-05-20",
+     "fin": "2027-05-26",
+     "entregables": [
+      "offline",
+      "permissions",
+      "writing agent"
+     ]
+    },
+    {
+     "id": "3.0",
+     "inicio": "2027-05-27",
+     "fin": "2027-06-09",
+     "entregables": [
+      "RAG with permissions",
+      "100 concurrent editors"
+     ],
+     "revisionForeground": [
+      "datos personales",
+      "seguridad"
+     ]
+    }
+   ],
+   "descripcion": "A collaborative workspace: block editor, live collaboration, offline, permissions and a writing agent.",
+   "valor": "",
+   "diferencial": "",
+   "rol": "",
+   "peso": "",
+   "empresas": [
+    "Notion",
+    "Linear",
+    "Figma",
+    "Atlassian",
+    "Canva"
+   ],
+   "stack": {
+    "dev": "Next.js, Yjs, websockets, Redis pub/sub, Postgres + pgvector",
+    "staging": "",
+    "prod": ""
+   },
+   "conAlawys": true
+  },
+  {
+   "id": "spotify-v2",
+   "nombre": "Spotify v2",
+   "inicio": "2027-06-10",
+   "fin": "2027-07-07",
+   "versiones": [
+    {
+     "id": "1.0",
+     "inicio": "2027-06-10",
+     "fin": "2027-06-16",
+     "entregables": [
+      "catalog",
+      "HLS streaming",
+      "playlists"
+     ]
+    },
+    {
+     "id": "2.0",
+     "inicio": "2027-06-17",
+     "fin": "2027-06-23",
+     "entregables": [
+      "audio-embedding recommendations",
+      "generated radio"
+     ]
+    },
+    {
+     "id": "3.0",
+     "inicio": "2027-06-24",
+     "fin": "2027-07-07",
+     "entregables": [
+      "podcast summaries with voice",
+      "offline evals"
+     ]
+    }
+   ],
+   "descripcion": "A music and podcast streamer. Rule: only open-licence or permitted audio.",
+   "valor": "",
+   "diferencial": "",
+   "rol": "",
+   "peso": "",
+   "empresas": [
+    "Spotify",
+    "Deezer",
+    "SoundCloud"
+   ],
+   "stack": {
+    "dev": "",
+    "staging": "",
+    "prod": ""
+   },
+   "conAlawys": true
+  },
+  {
+   "id": "cursor-v2",
+   "nombre": "Cursor v2",
+   "inicio": "2027-07-08",
+   "fin": "2027-08-04",
+   "versiones": [
+    {
+     "id": "1.0",
+     "inicio": "2027-07-08",
+     "fin": "2027-07-14",
+     "entregables": [
+      "read repo",
+      "plan",
+      "edit",
+      "diff"
+     ]
+    },
+    {
+     "id": "2.0",
+     "inicio": "2027-07-15",
+     "fin": "2027-07-21",
+     "entregables": [
+      "sandboxed tests",
+      "automatic PR"
+     ]
+    },
+    {
+     "id": "3.0",
+     "inicio": "2027-07-22",
+     "fin": "2027-08-04",
+     "entregables": [
+      "SWE-bench-lite evals with success rate",
+      "MCP"
+     ],
+     "revisionForeground": [
+      "seguridad"
+     ]
+    }
+   ],
+   "descripcion": "A coding agent: reads a repo, plans, edits, runs sandboxed tests and opens a PR. Isolated execution, no secrets.",
+   "valor": "",
+   "diferencial": "",
+   "rol": "",
+   "peso": "",
+   "empresas": [
+    "Anthropic",
+    "Cursor",
+    "GitHub",
+    "Vercel",
+    "Replit"
+   ],
+   "stack": {
+    "dev": "TypeScript CLI + web, Claude tools + MCP, no-network containers, @alawys/evals-action",
+    "staging": "",
+    "prod": ""
+   },
+   "conAlawys": true
   }
  ],
  "comerciales": [
   {
    "n": 1,
    "id": "com-1",
-   "inicio": "2026-12-10",
-   "fin": "2026-12-20",
+   "inicio": "2026-12-13",
+   "fin": "2026-12-27",
    "ventana": "Cert V1 + English E#1",
    "marca": "Aquasol and water parks",
+   "sector": "Aquasol and water parks",
    "queSeHace": "New premium web, 3D park, live lines and weather (simulated), demo tickets, AR",
    "wow": "Fly over the park",
-   "reusa": "PetrIA Three.js"
+   "reusa": "PetrIA Three.js; first project generated with Alawys"
   },
   {
    "n": 2,
    "id": "com-2",
-   "inicio": "2026-12-31",
-   "fin": "2027-01-14",
+   "inicio": "2027-01-09",
+   "fin": "2027-01-27",
    "ventana": "Cert V2 + English E#2",
    "marca": "Cinemacenter",
+   "sector": "Cinemacenter",
    "queSeHace": "Listings, 3D seat picker, Claude recommender",
    "wow": "See the screen from your seat",
    "reusa": "PetrIA agent"
@@ -2354,54 +2616,59 @@
   {
    "n": 3,
    "id": "com-3",
-   "inicio": "2027-01-15",
-   "fin": "2027-02-03",
+   "inicio": "2027-01-28",
+   "fin": "2027-02-21",
    "ventana": "Math W1",
    "marca": "miboletería",
-   "queSeHace": "Ticketing with 3D stadium map, virtual queue, alerts",
+   "sector": "miboletería",
+   "queSeHace": "Ticketing with 3D stadium, virtual queue, alerts",
    "wow": "Queue survives a simulated spike (no real LLM)",
-   "reusa": "HandyX BullMQ"
+   "reusa": "PetrIA queues (RabbitMQ)"
   },
   {
    "n": 4,
    "id": "com-4",
-   "inicio": "2027-02-04",
-   "fin": "2027-02-18",
+   "inicio": "2027-02-22",
+   "fin": "2027-03-12",
    "ventana": "Cert V3 + English E#3",
    "marca": "McDonald's",
+   "sector": "McDonald's",
    "queSeHace": "Voice ordering, 3D menu, Lucero-style games",
    "wow": "Build the combo by talking",
-   "reusa": "HandyX voice"
+   "reusa": "PetrIA voice-gateway"
   },
   {
    "n": 5,
    "id": "com-5",
-   "inicio": "2027-03-03",
-   "fin": "2027-03-17",
-   "ventana": "Cert V4 + English E#4",
+   "inicio": "2027-03-26",
+   "fin": "2027-04-13",
+   "ventana": "Cert V4 + English E#4 + Cambridge C1",
    "marca": "Supermarkets",
-   "queSeHace": "Smart list with Claude, recipes from what you have, comparator with simulated prices",
+   "sector": "Supermarkets",
+   "queSeHace": "Smart list, recipes from what you have, simulated-price comparator",
    "wow": "Fridge photo → list",
-   "reusa": "HandyX vision"
+   "reusa": "PetrIA daily-report vision"
   },
   {
    "n": 6,
    "id": "com-6",
-   "inicio": "2027-04-03",
-   "fin": "2027-04-12",
+   "inicio": "2027-05-02",
+   "fin": "2027-05-15",
    "ventana": "Cert V5 + Job search E#5",
    "marca": "SportClub and gyms",
-   "queSeHace": "Member app, class booking, AI routine coach, occupancy per branch (simulated)",
-   "wow": "See which branch is empty now",
+   "sector": "SportClub and gyms",
+   "queSeHace": "Member app, classes, AI coach, occupancy per branch (simulated)",
+   "wow": "Which branch is empty now",
    "reusa": "Antena realtime"
   },
   {
    "n": 7,
    "id": "com-7",
-   "inicio": "2027-05-01",
-   "fin": "2027-05-09",
+   "inicio": "2027-06-05",
+   "fin": "2027-06-16",
    "ventana": "Cert V6",
    "marca": "Car dealerships",
+   "sector": "Car dealerships",
    "queSeHace": "3D configurator, test-drive agent, financing simulator",
    "wow": "Spin the car and change its color",
    "reusa": "JulIA R3F"
@@ -2409,210 +2676,237 @@
   {
    "n": 8,
    "id": "com-8",
-   "inicio": "2027-05-10",
-   "fin": "2027-05-17",
+   "inicio": "2027-06-17",
+   "fin": "2027-06-26",
    "ventana": "Cert V7",
    "marca": "Balnearios",
-   "queSeHace": "Tent booking on a 3D beach map, weather and tides, season payment",
+   "sector": "Balnearios",
+   "queSeHace": "Tent booking on a 3D beach map, weather and tides",
    "wow": "Pick your tent on the map",
    "reusa": "Aquasol map"
   },
   {
    "n": 9,
    "id": "com-9",
-   "inicio": "2027-05-18",
-   "fin": "2027-05-29",
+   "inicio": "2027-06-27",
+   "fin": "2027-07-11",
    "ventana": "Cert V8 + Job search E#6",
    "marca": "Theaters / season",
-   "queSeHace": "Season listings, 3D seats, play-recommending agent",
+   "sector": "Theaters / season",
+   "queSeHace": "Season listings, 3D seats, play recommender",
    "wow": "Walk the room before buying",
-   "reusa": "Cinemacenter seats"
+   "reusa": "@alawys/seat-picker"
   },
   {
    "n": 10,
    "id": "com-10",
-   "inicio": "2027-05-30",
-   "fin": "2027-06-18",
+   "inicio": "2027-07-12",
+   "fin": "2027-08-05",
    "ventana": "Math W2",
    "marca": "Pharmacies",
-   "queSeHace": "Stock per branch (simulated), reminders, assistant that never diagnoses and refers",
-   "wow": "Find the medicine at the nearest branch",
+   "sector": "Pharmacies",
+   "queSeHace": "Stock per branch (simulated), reminders, assistant that never diagnoses",
+   "wow": "Nearest branch with the medicine",
    "reusa": "VitalIA rules"
   },
   {
    "n": 11,
    "id": "com-11",
-   "inicio": "2027-07-16",
-   "fin": "2027-08-01",
-   "ventana": "Job search + Math W3",
+   "inicio": "2027-09-02",
+   "fin": "2027-09-21",
+   "ventana": "Job search short + Math W3",
    "marca": "Airbnb v2",
+   "sector": "Airbnb v2",
    "queSeHace": "Stays with 3D/AR tour, booking agent",
    "wow": "Stand in the living room before booking",
-   "reusa": "Roofy v2 AR"
+   "reusa": "Roofy AR"
   },
   {
    "n": 12,
    "id": "com-12",
-   "inicio": "2027-09-07",
-   "fin": "2027-09-19",
-   "ventana": "Job search + Consolidation",
+   "inicio": "2027-10-28",
+   "fin": "2027-11-03",
+   "ventana": "Job search short + Consolidation",
    "marca": "Football clubs",
+   "sector": "Football clubs",
    "queSeHace": "Member app, digital card, 3D stadium, clips, no real crests",
-   "wow": "Sunday's goal already cut vertical",
-   "reusa": "Clip Studio"
+   "wow": "Sunday goal already vertical",
+   "reusa": "Clip Studio, seat-picker"
   },
   {
    "n": 13,
    "id": "com-13",
-   "inicio": "2027-09-20",
-   "fin": "2027-09-24",
+   "inicio": "2027-11-04",
+   "fin": "2027-11-09",
    "ventana": "Math W4",
    "marca": "Hotels and tourism",
-   "queSeHace": "Landing, 3D tour, multilingual AI concierge",
+   "sector": "Hotels and tourism",
+   "queSeHace": "Landing, 3D tour, multilingual concierge",
    "wow": "Ask the hotel in your language",
    "reusa": "Airbnb v2"
   },
   {
    "n": 14,
    "id": "com-14",
-   "inicio": "2027-11-12",
-   "fin": "2027-11-21",
-   "ventana": "Job search E#7 + stage close",
+   "inicio": "2028-01-14",
+   "fin": "2028-01-21",
+   "ventana": "Job search E#7 + Stage close",
    "marca": "Restaurants and breweries",
+   "sector": "Restaurants and breweries",
    "queSeHace": "3D menu, QR + voice ordering, booking agent",
    "wow": "Order the pint by talking",
-   "reusa": "McDonald's voice"
+   "reusa": "@alawys/voice-agent"
   },
   {
    "n": 15,
    "id": "com-15",
-   "inicio": "2027-11-22",
-   "fin": "2027-11-29",
+   "inicio": "2028-01-22",
+   "fin": "2028-01-30",
    "ventana": "Math WQ1",
    "marca": null,
-   "queSeHace": null,
-   "wow": null,
-   "reusa": null
+   "sector": "Universities and institutes",
+   "queSeHace": "Campus 3D, guided enrollment, careers/scholarships assistant",
+   "wow": "\"Which career fits me?\" → a plan",
+   "reusa": "JulIA, Constelación RAG"
   },
   {
    "n": 16,
    "id": "com-16",
-   "inicio": "2028-01-07",
-   "fin": "2028-01-16",
+   "inicio": "2028-02-24",
+   "fin": "2028-03-06",
    "ventana": "Math WQ2",
    "marca": null,
-   "queSeHace": null,
-   "wow": null,
-   "reusa": null
+   "sector": "Schools",
+   "queSeHace": "Family app: notices, fees, report cards, parent assistant on WhatsApp",
+   "wow": "\"Does my kid have homework tomorrow?\"",
+   "reusa": "@alawys/notify, JulIA"
   },
   {
    "n": 17,
    "id": "com-17",
-   "inicio": "2028-02-10",
-   "fin": "2028-02-24",
-   "ventana": "CKS + Job search E#8 + Math WQ3",
+   "inicio": "2028-03-31",
+   "fin": "2028-04-17",
+   "ventana": "Cert CKS + Job search E#8 + Math WQ3",
    "marca": null,
-   "queSeHace": null,
-   "wow": null,
-   "reusa": null
+   "sector": "Insurance",
+   "queSeHace": "1-minute quote, claim with damage photos",
+   "wow": "Photos of the crash → estimate",
+   "reusa": "AeroScan vision, Stripe v2 ledger",
+   "revisionForeground": [
+    "datos personales"
+   ]
   },
   {
    "n": 18,
    "id": "com-18",
-   "inicio": "2028-03-23",
-   "fin": "2028-04-15",
-   "ventana": "AWS Security + Job search E#9 + stage close",
+   "inicio": "2028-05-15",
+   "fin": "2028-05-31",
+   "ventana": "Cert AWS Security Specialty + Job search E#9 + Stage close",
    "marca": null,
-   "queSeHace": null,
-   "wow": null,
-   "reusa": null
+   "sector": "Fuel stations",
+   "queSeHace": "Loyalty app, pay at the pump, price map, store",
+   "wow": "Pay without leaving the car",
+   "reusa": "Stripe v2 payments, PetrIA map"
   },
   {
    "n": 19,
    "id": "com-19",
-   "inicio": "2028-04-16",
-   "fin": "2028-04-25",
+   "inicio": "2028-06-01",
+   "fin": "2028-06-18",
    "ventana": "Math WA1",
    "marca": null,
-   "queSeHace": null,
-   "wow": null,
-   "reusa": null
+   "sector": "Fashion retail",
+   "queSeHace": "AR try-on, size from a photo, style agent",
+   "wow": "See the jacket on you before buying",
+   "reusa": "Roofy AR, Amazon v2"
   },
   {
    "n": 20,
    "id": "com-20",
-   "inicio": "2028-05-14",
-   "fin": "2028-05-21",
+   "inicio": "2028-07-08",
+   "fin": "2028-07-16",
    "ventana": "Math WA2",
    "marca": null,
-   "queSeHace": null,
-   "wow": null,
-   "reusa": null
+   "sector": "Airlines and travel",
+   "queSeHace": "Check-in, AR baggage, agent that rebooks cancelled flights",
+   "wow": "\"Your flight was cancelled: 3 options\"",
+   "reusa": "PetrIA voice, AR"
   },
   {
    "n": 21,
    "id": "com-21",
-   "inicio": "2028-06-16",
-   "fin": "2028-06-25",
+   "inicio": "2028-08-04",
+   "fin": "2028-08-15",
    "ventana": "Math WA3",
    "marca": null,
-   "queSeHace": null,
-   "wow": null,
-   "reusa": null
+   "sector": "Wineries",
+   "queSeHace": "3D vineyard tour, AI pairing, store and wine club",
+   "wow": "\"BBQ and 15k pesos\" → a basket",
+   "reusa": "Amazon v2, tour3d"
   },
   {
    "n": 22,
    "id": "com-22",
-   "inicio": "2028-07-11",
-   "fin": "2028-07-21",
-   "ventana": "Job search + Math WA4",
+   "inicio": "2028-08-31",
+   "fin": "2028-09-12",
+   "ventana": "Job search short + Math WA4",
    "marca": null,
-   "queSeHace": null,
-   "wow": null,
-   "reusa": null
+   "sector": "Logistics and delivery",
+   "queSeHace": "Live tracking, reschedule delivery, route optimization",
+   "wow": "The parcel moving on the map with real ETA",
+   "reusa": "Uber v2 dispatch"
   },
   {
    "n": 23,
    "id": "com-23",
-   "inicio": "2028-08-10",
-   "fin": "2028-08-30",
-   "ventana": "SA Pro + Job search E#10 + Math WA5",
+   "inicio": "2028-10-02",
+   "fin": "2028-10-26",
+   "ventana": "Cert AWS SA Professional + Job search E#10 + Math WA5",
    "marca": null,
-   "queSeHace": null,
-   "wow": null,
-   "reusa": null
+   "sector": "Private clinics",
+   "queSeHace": "Online booking, reminders, triage that never diagnoses and refers; no real clinical data",
+   "wow": "Book in 30 s on WhatsApp",
+   "reusa": "VitalIA rules, @alawys/notify",
+   "revisionForeground": [
+    "datos personales"
+   ]
   }
  ],
  "recordatorios": [
   {
-   "id": "v122-2026-11-26",
+   "id": "v124-2026-11-26",
    "fecha": "2026-11-26",
-   "texto": "Start HandyX v1.0 in the background (separate repo)."
+   "texto": "Start JulIA v1.0 in the background (separate repo)."
   },
   {
-   "id": "v122-2026-12-03",
+   "id": "v124-2026-12-03",
    "fecha": "2026-12-03",
-   "texto": "Prepare the Aquasol brief for slot #1 (starts 10 Dec)."
+   "texto": "Prepare the Aquasol brief for slot #1 (starts 13 Dec)."
   },
   {
-   "id": "v122-2027-02-01",
-   "fecha": "2027-02-01",
-   "texto": "Secondary handover: HandyX → JulIA. Check HandyX reached v3.0 or log what's left."
+   "id": "v124-2026-12-05",
+   "fecha": "2026-12-05",
+   "texto": "The PC arrives: start Alawys v0.1 (1 h/day from PetrIA until 11 Dec)."
   },
   {
-   "id": "v122-2027-04-10",
-   "fecha": "2027-04-10",
-   "texto": "Secondary handover: JulIA → Clip Studio. Check JulIA reached v3.0 or log what's left."
+   "id": "v124-2026-12-13a",
+   "fecha": "2026-12-13",
+   "texto": "Three weeks of JulIA: is 1 h/day of review enough?"
   },
   {
-   "id": "v122-2027-06-15",
-   "fecha": "2027-06-15",
-   "texto": "Secondary handover: Clip Studio → Roofy. Check Clip Studio reached v3.0 or log what's left."
+   "id": "v124-2026-12-13b",
+   "fecha": "2026-12-13",
+   "texto": "Re-check the plan with real data (3 weeks in): delay, capacity and the estimated end."
   },
   {
-   "id": "v122-2027-08-29",
-   "fecha": "2027-08-29",
-   "texto": "Pick the next secondary from \"Ver a futuro\"."
+   "id": "v124-2027-07-28",
+   "fecha": "2027-07-28",
+   "texto": "Decide whether to open a new secondary after 4 Aug (pick from \"Ver a futuro\")."
+  },
+  {
+   "id": "v124-2027-08-04",
+   "fecha": "2027-08-04",
+   "texto": "Cursor v2 is done: the secondary track is free."
   }
  ],
  "backlog": [
@@ -2651,19 +2945,26 @@
    "versiones": [
     {
      "id": "0.1",
+     "origen": "P1",
+     "donde": "fecha",
+     "fecha": "2026-12-05",
+     "hasta": "2026-12-11",
+     "linea": "modo interactivo + flags; presets web-next, mern, petria (del repo de PetrIA); pack de agentes (CLAUDE.md + subagentes); Docker compose; CI; .env.example validado; hook de gitleaks. Se arma en segundo plano con la PC nueva: 1 h por día que sale de PetrIA."
+    },
+    {
+     "id": "0.2",
      "origen": "P2",
      "donde": "fecha",
-     "fecha": "2026-12-21",
-     "linea": "modo interactivo + flags; presets web-next, mern, petria (del repo de PetrIA), vitalia (.NET); pack de agentes (CLAUDE.md + subagentes); Docker compose; CI; .env.example validado; hook de gitleaks. Generar VitalIA con Alawys y anotar la métrica."
+     "fecha": "2026-12-28",
+     "linea": "preset vitalia (.NET + Azure). Generar VitalIA con Alawys y anotar la métrica: tokens y minutos por scaffold, Claude contra Alawys (medido en Aquasol, HandyX y VitalIA)."
     },
     {
      "id": "1.0",
      "origen": "P2",
-     "donde": "fecha",
-     "fecha": "2026-12-30",
-     "linea": "npm publish, README, demo de 60 s",
+     "donde": "cierre",
      "lanzamiento": true,
-     "post": "2026-12-31"
+     "linea": "npm publish, README, demo de 60 s",
+     "post": "2027-01-14"
     },
     {
      "id": "1.x",
@@ -2768,7 +3069,8 @@
      "linea": "WhatsApp → llamada → email de respaldo",
      "id": "1.0"
     }
-   ]
+   ],
+   "desde": "PetrIA"
   },
   {
    "id": "llm-router",
@@ -2783,7 +3085,8 @@
      "linea": "cascada, caché semántica y tope de costo",
      "id": "1.0"
     }
-   ]
+   ],
+   "desde": "PetrIA"
   },
   {
    "id": "evals-action",
@@ -2798,7 +3101,8 @@
      "linea": "evals en el CI como GitHub Action",
      "id": "1.0"
     }
-   ]
+   ],
+   "desde": "PetrIA"
   },
   {
    "id": "chatbot-scan",
@@ -2828,7 +3132,8 @@
      "linea": "costos y cuotas",
      "id": "1.0"
     }
-   ]
+   ],
+   "desde": "PetrIA"
   },
   {
    "id": "agent-creds",
@@ -2933,7 +3238,8 @@
      "linea": "kit de showcase premium",
      "id": "1.0"
     }
-   ]
+   ],
+   "desde": "Aquasol"
   },
   {
    "id": "seat-picker",
@@ -2948,7 +3254,8 @@
      "linea": "selector de butacas 3D",
      "id": "1.0"
     }
-   ]
+   ],
+   "desde": "Cinemacenter"
   },
   {
    "id": "voice-agent",
@@ -2963,7 +3270,8 @@
      "linea": "agente de voz para pedidos",
      "id": "1.0"
     }
-   ]
+   ],
+   "desde": "PetrIA voice-gateway"
   },
   {
    "id": "bkt",
@@ -2995,7 +3303,8 @@
      "id": "1.0",
      "version": "2.0"
     }
-   ]
+   ],
+   "desde": "JulIA"
   },
   {
    "id": "tour3d",
@@ -3005,13 +3314,13 @@
    "kind": "extracted",
    "versiones": [
     {
-     "origen": "roofy",
+     "origen": "com-11",
      "donde": "cierre",
      "linea": "tour 3D y AR",
-     "id": "1.0",
-     "version": "2.0"
+     "id": "1.0"
     }
-   ]
+   ],
+   "desde": "Roofy"
   },
   {
    "id": "mp-escrow",

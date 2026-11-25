@@ -143,8 +143,8 @@ export function accionDe(id: string): AccionPeriodo | null {
 /** El bloque al que pertenece un período (para sugerir correr lo que sigue). */
 export const bloqueDe = (id: string) => id.split(':')[0];
 
-/** v12.2 · los tipos de bloque que absorben atrasos: consolidación, cierres de etapa, descansos y el cierre final. */
-export const ABSORBEN = new Set(['colchon', 'cierre', 'descanso']);
+/** v12.4 · los tipos de bloque que absorben atrasos: consolidación, cierres de etapa y cierre final (en ese orden). Los descansos ya no son bloques: son días libres fijos y no se usan nunca. */
+export const ABSORBEN = new Set(['colchon', 'cierre']);
 
 /**
  * La secuencia para sugerir corrimientos: los bloques del plan en orden (sin P0, P1V0 ni la pausa fija), con los absorbedores

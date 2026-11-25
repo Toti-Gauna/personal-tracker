@@ -4,7 +4,8 @@
  * app, el estado y la seguridad del showcase, los leads.
  */
 import { useState } from 'react';
-import { ESTADOS_COMERCIAL, ESTADO_COMERCIAL_TXT, faltaForeground, lanzamientoDe, periodosSecundarias, type EstadoComercial, type Lead } from '../../data/fondo';
+import { CANALES_LEAD, ESTADOS_COMERCIAL, ESTADO_COMERCIAL_TXT, META_LEADS, PERFILES_MARCA, faltaForeground, lanzamientoDe, periodosSecundarias, type CanalLead, type EstadoComercial, type Lead } from '../../data/fondo';
+import { faseComercial } from '../../data/pistas-dia';
 import { herramientasDe } from '../../data/herramientas';
 import { REGLAS_EXTRA, SEGURIDAD, puedePublicar, puntosIman } from '../../data/iman';
 import { medir, type EstadoPeriodo } from '../../data/periodos';
@@ -62,7 +63,7 @@ export function FondoItemV2({ id, hoy }: { id: string; hoy: string }) {
   return (
     <Marco className="pt" titulo={nombre} info={INFO} volver={volver}>
       <Portada id={id} area={area}>
-        <span className="t-rotulo">{sec ? 'App secundaria' : com ? marca ?? 'Marca a definir' : 'Lanzamiento'}</span>
+        <span className="t-rotulo">{sec ? 'App secundaria' : com ? marca ?? com.sector ?? 'Marca a definir' : 'Lanzamiento'}</span>
         <div className="pt-hero-fila">
           {inicio && <span className="t-dato">{rango(inicio, fin, hoy)}</span>}
           <a className="pt-iman-enlace" href={`#/metas/iman/${id}`} aria-label={`Imán ${ok.filter(Boolean).length}/8: ${ok.filter(Boolean).length} de 8 puntos`}><AnilloIman ok={ok} tamano={40} grosor={4} decorativo /><span className="t-dato">Imán {ok.filter(Boolean).length}/8</span><Icono nombre="siguiente" lado={14} /></a>
@@ -160,6 +161,8 @@ function Comercial({ id, hoy }: { id: string; hoy: string }) {
   const estado = e.estado ?? 'planned';
   const g = puedePublicar({ version: '1.0', lanzamiento: '1.0', iman: plan.iman?.[id], comercial: true, seguridad: seg });
   const [lead, setLead] = useState('');
+  const [canal, setCanal] = useState<CanalLead>('email');
+  const fase = faseComercial(c, hoy);
   const texto = `${c.queSeHace ?? ''} ${c.wow ?? ''}`.toLowerCase();
   const cambiar = (x: EstadoComercial) => { if ((x === 'published' || x === 'pitched') && !g.ok) return; setItem(id, { estado: x }); };
   return (
@@ -178,12 +181,12 @@ function Comercial({ id, hoy }: { id: string; hoy: string }) {
           {/clip/.test(texto) && <p className="t-nota pt-pie">{REGLAS_EXTRA.clip}</p>}
         </FilaHoja>
       </div>
-      <Grupo titulo="Leads freelance" extremo={<span className="t-rotulo">{e.leads?.length ?? 0}</span>}>
+      <Grupo titulo="Leads freelance" extremo={<span className="t-rotulo">{e.leads?.length ?? 0}{c.venta ? ` de ${META_LEADS}` : ''}</span>}>
         {(e.leads ?? []).length > 0 && (
           <div className="capa-1 pt-campos">
             {e.leads!.map((l) => (
               <div key={l.id} className="pt-lead">
-                <div><b className="t-encabezado">{l.nombre}</b><span className="t-nota"> · {fp(l.contactado)}</span></div>
+                <div><b className="t-encabezado">{l.nombre}</b><span className="t-nota"> · {fp(l.contactado)}{l.canal ? ` · ${l.canal}` : ''}</span></div>
                 <Selector etiqueta={`Estado de ${l.nombre}`} valor={l.estado} opciones={LEADS.map((s) => ({ valor: s, etiqueta: s }))} onCambio={(v) => estadoLead(id, l.id, v as Lead['estado'])} />
               </div>
             ))}
@@ -191,8 +194,21 @@ function Comercial({ id, hoy }: { id: string; hoy: string }) {
         )}
         <div className="pt-campo-hoja">
           <CampoTexto etiqueta="Nuevo lead" valor={lead} onCambio={setLead} placeholder="Nombre o empresa" />
-          <Boton variante="secundario" icono="mas" deshabilitado={!lead.trim()} onClick={() => { agregarLead(id, { nombre: lead.trim(), contactado: hoy, estado: 'contactado' }); setLead(''); }}>Sumar lead</Boton>
+          <Selector etiqueta="Canal" valor={canal} opciones={CANALES_LEAD.map((x) => ({ valor: x, etiqueta: x }))} onCambio={setCanal} />
+          <Boton variante="secundario" icono="mas" deshabilitado={!lead.trim()} onClick={() => { agregarLead(id, { nombre: lead.trim(), contactado: hoy, canal, estado: 'contactado' }); setLead(''); }}>Sumar lead</Boton>
         </div>
+      </Grupo>
+      <Grupo titulo="Fases y marca">
+        <div className="capa-1 s-lista">
+          <Fila icono="codigo" titulo="Build" nota="Días 1 a 7" valor={rango(c.build.inicio, c.build.fin, hoy)} />
+          {c.venta
+            ? <Fila icono="cohete" titulo="Venta" nota="Del día 8: la marca y 10 negocios parecidos" valor={rango(c.venta.inicio, c.venta.fin, hoy)} />
+            : <Fila icono="cohete" titulo="Venta" nota="Hasta 7 días: solo build" />}
+        </div>
+        <div className="pt-etapas" role="group" aria-label="¿Qué marca?">
+          {PERFILES_MARCA.map((p) => <Chip key={p.id} activo={e.perfilMarca === p.id} onCambio={() => setItem(id, { perfilMarca: e.perfilMarca === p.id ? undefined : p.id })}>{p.etiqueta}</Chip>)}
+        </div>
+        <p className="t-nota">{e.perfilMarca ? 'Guardado para este slot.' : 'Tipo de marca: regional para clientes o grande para ruido.'}</p>
       </Grupo>
     </>
   );

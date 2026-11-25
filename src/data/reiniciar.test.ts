@@ -97,23 +97,27 @@ describe('Empezar de nuevo · el plan real, empezando hoy (25 nov)', () => {
     const malos = despues.filter((p) => p.estado === 'atrasado' || p.estado === 'vencido').map((p) => `${p.id} ${p.estado}`);
     expect(malos).toEqual([]);
     const p1 = despues.find((p) => p.id === 'P1')!;
-    expect([p1.inicio, p1.fin]).toEqual(['2026-11-25', '2026-12-13']);
+    // v12.4: PetrIA son 22 días (21 nov–12 dic): empezando el 25 nov, termina el 16 dic.
+    expect([p1.inicio, p1.fin]).toEqual(['2026-11-25', '2026-12-16']);
     // Sus versiones y lotes van con él.
     expect(despues.find((p) => p.id === 'P1:v1.0')!.inicio).toBe('2026-11-25');
-    expect(despues.find((p) => p.id === 'P1:v3.0')!.fin).toBe('2026-12-13');
+    expect(despues.find((p) => p.id === 'P1:v3.0')!.fin).toBe('2026-12-16');
   });
 
-  it('el corrimiento se frena en la consolidación: las etapas y lo que viene después conservan sus fechas', () => {
+  it('v12.4, sin colchón: la Consolidación y los cierres ya miden 3 días, así que no absorben; el corrimiento sigue y el fin del plan se corre', () => {
     const { arbol, cs } = calcular();
-    const col = cs.find((c) => c.absorbe);
-    expect(col?.id).toBe('COL');
-    expect(col!.nuevoFin).toBe(col!.fin);
+    const absorbentes = cs.filter((c) => c.absorbe);
+    expect(absorbentes.map((c) => c.id)).toEqual(['COL', 'CIE2', 'CIE3', 'CIE4']);
+    // Cada uno queda en su mínimo de 3 días y conserva su largo; ninguno se achica ni se salta.
+    for (const c of absorbentes) expect(Math.round((Date.parse(c.nuevoFin) - Date.parse(c.nuevoInicio)) / 864e5) + 1, c.id).toBe(3);
+    expect(cs.at(-1)).toMatchObject({ id: 'CIE4', fin: '2028-12-14' });
+    expect(cs.at(-1)!.nuevoFin > '2028-12-14').toBe(true); // 14 dic 2028 es una estimación: sin buffer, el atraso llega al final
     confirmarCorrimiento(cs, HOY);
     const despues = recorrer(usar().arbol);
     for (const id of ['W4', 'S1', 'CIE2', 'Q1', 'A7']) {
       const a = recorrer(arbol).find((p) => p.id === id)!;
       const d = despues.find((p) => p.id === id)!;
-      expect([d.inicio, d.fin], id).toEqual([a.inicio, a.fin]);
+      expect(d.inicio > a.inicio && d.fin > a.fin, id).toBe(true);
     }
   });
 
@@ -129,11 +133,11 @@ describe('Empezar de nuevo · el plan real, empezando hoy (25 nov)', () => {
     expect(delta(c.examen, e.examen)).toBe(corrida); // el examen del plan se corre con la ventana
     expect(e.cert.plan.map((p) => delta(c.plan[0].fecha, p.fecha))).toEqual(c.plan.map((p) => delta(c.plan[0].fecha, p.fecha) + corrida));
     // Un examen reservado es fijo: no se mueve.
-    const reservado = estadoCert(c, { ...plan, reservas: { [c.id]: { examen: '2026-12-13', reservado: '2026-11-25' } as never } }, HOY);
-    expect(reservado.examen).toBe('2026-12-13');
-    // Los hitos de una ventana de matemática.
-    expect(llevarDeBloque(plan.corrimientos, 'W1')('2027-01-15')).toBe(plan.corrimientos!.W1.inicio); // el primer día de la ventana va a su nuevo primer día
-    expect(llevarDeBloque(undefined, 'W1')('2027-01-15')).toBe('2027-01-15'); // sin corrimiento, queda como dice el plan
+    const reservado = estadoCert(c, { ...plan, reservas: { [c.id]: { examen: '2026-12-17', reservado: '2026-11-25' } as never } }, HOY);
+    expect(reservado.examen).toBe('2026-12-17');
+    // Los hitos de una ventana de matemática (v12.4: Math W1 empieza el 28 ene 2027).
+    expect(llevarDeBloque(plan.corrimientos, 'W1')('2027-01-28')).toBe(plan.corrimientos!.W1.inicio); // el primer día de la ventana va a su nuevo primer día
+    expect(llevarDeBloque(undefined, 'W1')('2027-01-28')).toBe('2027-01-28'); // sin corrimiento, queda como dice el plan
   });
 
   it('lo hecho queda: marcar un lote antes de empezar de nuevo lo deja marcado, y deshacer vuelve las fechas', () => {

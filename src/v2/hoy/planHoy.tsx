@@ -3,10 +3,12 @@
  * vence y el próximo límite), lo de fondo como chips, y los avisos juntos en una hoja que se abre desde la campana.
  */
 import { useState } from 'react';
+import { atrasoPrincipal } from '../../data/atraso';
 import { recordatoriosActivos } from '../../data/certs-v12';
 import { alertasCompras } from '../../data/compras';
 import { ESTADO_COMERCIAL_TXT, fondoEn, metaRevisionSemana, recordatoriosFondo, revisionSemana } from '../../data/fondo';
 import { activoAhora, proximaFechaLimite, vencenHoy, type PeriodoMedido } from '../../data/periodos';
+import { faseComercial, pistasActivas } from '../../data/pistas-dia';
 import { addDays, daysBetween } from '../../data/time';
 import type { DayLog } from '../../data/types';
 import { marcarHito } from '../../state/plan';
@@ -26,18 +28,30 @@ export interface AvisoHoy { id: string; titulo: string; texto?: string; href?: s
 const corto = (p: PeriodoMedido) => (p.nivel === 'fase' ? `Fase ${p.id.slice(1)}` : p.nivel === 'version' ? `v${p.id.split(':v')[1]}` : p.nivel === 'lote' ? `Lote ${p.id.split(':lote:')[1]}` : p.nivel === 'hito' ? `Hito ${p.id.split(':hito:')[1]}` : p.nombre);
 const horas = (min: number) => String(Math.round((min / 60) * 10) / 10).replace('.', ',');
 
+/** v12.4 · el aviso del atraso acumulado: cuánto, el nuevo fin estimado y qué pausar primero (lo comercial) y después (lo secundario). */
+export function textoAtraso(a: ReturnType<typeof atrasoPrincipal>) {
+  const com = a.sugerencias.find((x) => x.pista === 'comercial');
+  const pausar = a.sugerencias.length
+    ? ` Pausá primero lo comercial${com ? ` (devuelve 1 h por día: unos ${com.diasRecuperados} días hasta el final)` : ''} y, si no alcanza, lo secundario.`
+    : '';
+  return { titulo: `Vas ${a.dias} días atrasado`, texto: `La principal termina el ${fp(a.finEstimado)} en vez del ${fp(a.finPlan)}.${pausar}` };
+}
+
 /** Todo lo del plan que le importa a hoy, ya ordenado para dibujar. */
 export function usePlanHoy(day: DayLog) {
   const hoy = day.date;
   const plan = useStore((s) => s.plan);
-  const { arbol } = usePeriodos(hoy);
+  const { arbol, cal } = usePeriodos(hoy);
   const ramas = useAvisosRamas(hoy, day);
   const cadena = activoAhora(arbol, hoy).filter((p) => p.nivel !== 'etapa');
   const vence = vencenHoy(arbol, hoy).filter((p) => p.nivel !== 'etapa' && p.nivel !== 'fase');
   const prox = proximaFechaLimite(arbol, hoy, ['bloque', 'version', 'cert']);
   const fondo = fondoEn(hoy);
   const lunes = addDays(hoy, -((new Date(`${hoy}T12:00:00`).getDay() + 6) % 7));
-  const revision = { min: revisionSemana(plan.revisionFondo, lunes).min, meta: metaRevisionSemana(lunes).walkthroughMin };
+  const revision = { min: revisionSemana(plan.revisionFondo, lunes).min, meta: metaRevisionSemana(lunes).walkthroughMin + metaRevisionSemana(lunes).comercialMin };
+  // v12.4: la revisión de hoy (1 h por pista activa) y el atraso acumulado de la principal (alerta a partir de más de 7 días).
+  const hoyRev = { min: (plan.revisionFondo ?? []).filter((x) => x.fecha === hoy).reduce((s, x) => s + x.min, 0), meta: pistasActivas(hoy).length * 60 };
+  const atraso = atrasoPrincipal(arbol, cal, plan, hoy);
   const pasarAConTrabajo = async () => {
     if (!(await confirmar({ titulo: '¿Pasar a la rutina con trabajo?', texto: 'De lunes a viernes, desde el próximo día que empieces.', accion: 'Pasar' }))) return;
     ramas.aplicarRutinaConTrabajo();
@@ -51,10 +65,11 @@ export function usePlanHoy(day: DayLog) {
       accion: a.certs?.length ? undefined : { etiqueta: 'Ya reservé', run: () => marcarHito(`v12:recordatorio:${a.id}`, hoy) },
     })),
     ...alertasCompras(plan, hoy).map((c) => ({ id: `compra-${c.id}`, titulo: c.titulo, texto: c.texto, href: c.href })),
+    ...(atraso.excede ? [{ id: 'atraso-principal', titulo: textoAtraso(atraso).titulo, texto: textoAtraso(atraso).texto, href: '#/metas/periodos' }] : []),
     ...recordatoriosFondo(plan, hoy).map((a) => ({ id: `fondo-${a.id}`, titulo: a.texto, href: a.href, accion: { etiqueta: 'Listo', run: () => marcarHito(`v12:recordatorio:${a.id}`, hoy) } })),
   ];
-  const comercial = fondo.comercial ? { ...fondo.comercial, marcaVisible: fondo.comercial.marca ?? plan.fondo?.[fondo.comercial.id]?.marca ?? 'a definir', estado: ESTADO_COMERCIAL_TXT[plan.fondo?.[fondo.comercial.id]?.estado ?? 'planned'] } : null;
-  return { hoy, cadena, vence, prox, fondo, comercial, revision, avisos };
+  const comercial = fondo.comercial ? { ...fondo.comercial, marcaVisible: fondo.comercial.marca ?? plan.fondo?.[fondo.comercial.id]?.marca ?? fondo.comercial.sector ?? 'a definir', estado: ESTADO_COMERCIAL_TXT[plan.fondo?.[fondo.comercial.id]?.estado ?? 'planned'] } : null;
+  return { hoy, cadena, vence, prox, fondo, comercial, revision, hoyRev, atraso, avisos };
 }
 
 type PlanHoyDatos = ReturnType<typeof usePlanHoy>;
@@ -68,6 +83,7 @@ export function PlanHoy({ p, bimestre }: { p: PlanHoyDatos; bimestre?: string })
   return (
     <Grupo titulo="Plan" extremo={bimestre ? <span className="t-rotulo">{bimestre}</span> : undefined}>
       <div className="capa-1 s-lista">
+        {p.atraso.excede && <Fila icono="alerta" titulo={textoAtraso(p.atraso).titulo} nota={textoAtraso(p.atraso).texto} href="#/metas/periodos" />}
         {activo
           ? <Fila icono="plan" titulo={activo.nombre} nota={p.cadena.slice(0, -1).map(corto).join(' › ') || 'Activo ahora'} href={hrefPeriodo(activo.id)} />
           : <Fila icono="plan" titulo="Sin período activo hoy" nota="Ver el plan" href="#/metas/periodos" />}
@@ -75,11 +91,12 @@ export function PlanHoy({ p, bimestre }: { p: PlanHoyDatos; bimestre?: string })
         {p.prox && <Fila icono="calendario" titulo={p.prox.periodo.nombre} nota={`Próximo límite · ${fp(p.prox.fecha)}`} valor={dias === 1 ? '1 día' : `${dias} días`} href={hrefPeriodo(p.prox.periodo.id)} />}
       </div>
       {hayFondo && (
-        <div className="hy-fondo" aria-label="De fondo">
-          <span className="t-rotulo">De fondo</span>
+        <div className="hy-fondo" aria-label="En el fondo">
+          <span className="t-rotulo">En el fondo</span>
           {p.fondo.pausa && <span className="hy-chip"><Icono nombre="pausa" lado={16} />En pausa · {p.fondo.pausa.nombre}</span>}
           {p.fondo.secundaria.map((x) => <a key={x.app.id + x.version} className="hy-chip" href={`#/metas/fondo/${x.app.id}`}><Icono nombre="fondo" lado={16} />{x.app.nombre} v{x.version}</a>)}
-          {p.comercial && <a className="hy-chip" href={`#/metas/fondo/${p.comercial.id}`}><Icono nombre="cohete" lado={16} />#{p.comercial.n} {p.comercial.marcaVisible}</a>}
+          {p.comercial && <a className="hy-chip" href={`#/metas/fondo/${p.comercial.id}`}><Icono nombre="cohete" lado={16} />#{p.comercial.n} {p.comercial.marcaVisible} · {faseComercial(p.fondo.comercial!, p.hoy) === 'venta' ? 'venta' : 'build'}</a>}
+          {p.hoyRev.meta > 0 && <a className="hy-chip" href="#/metas/pista/secundaria"><Icono nombre="ojo" lado={16} />Revisión de hoy {horas(p.hoyRev.min)} de {horas(p.hoyRev.meta)} h</a>}
           {p.revision.meta > 0 && <a className="hy-chip" href="#/metas/pista/secundaria"><Icono nombre="ojo" lado={16} />Revisión {horas(p.revision.min)} de {horas(p.revision.meta)} h</a>}
         </div>
       )}

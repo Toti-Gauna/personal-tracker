@@ -11,7 +11,7 @@ describe('ola 27 · rutinas v3', () => {
   beforeEach(() => { resetState(); register('Toti', 'Abi', '2026-11-16'); });
 
   it('horas por semana de cada rutina (v12.1: 10 h de lunes a viernes y 11 h el fin de semana; con trabajo, la archivada)', () => {
-    expect(horasSemana('busqueda-intensiva', 'busqueda-intensiva-finde')).toMatchObject({ Programación: 60.2, Búsqueda: 3, Entrenamiento: 10, Handyx: 0, Clipping: 0 });
+    expect(horasSemana('busqueda-intensiva', 'busqueda-intensiva-finde')).toMatchObject({ Programación: 46.2, Búsqueda: 3, Entrenamiento: 10, Handyx: 0, Clipping: 0 });
     expect(horasSemana('con-trabajo', 'con-trabajo-finde')).toMatchObject({ Programación: 29, Matemática: 14, Inglés: 6.5 });
   });
 
@@ -77,8 +77,9 @@ describe('ola 27 · rutinas v3', () => {
   it('con una entrevista en 48 h, el último bloque de programación pasa a preparación', () => {
     getState().plan.entrevistas.push({ id: 'e', fecha: '2026-11-20', rol: 'AI Engineer', empresa: 'Acme', modalidad: 'remoto', prep: {} });
     const dia = (d: string) => { startDay('completo', '04:00', d); return getState().days[d].blocks; };
-    expect(dia('2026-11-18').find((b) => b.key === 'prog-tarde')!.title).toMatch(/^Preparación de la entrevista/);
-    expect(dia('2026-11-17').find((b) => b.key === 'prog-tarde')!.title).not.toMatch(/Preparación/);
+    // El último bloque de proyecto del día es la hora de las 17:00 (el 18 nov no corre nada de fondo: vuelve a la principal).
+    expect(dia('2026-11-18').find((b) => b.key === 'prog-fondo-com')!.title).toMatch(/^Preparación de la entrevista/);
+    expect(dia('2026-11-17').find((b) => b.key === 'prog-fondo-com')!.title).not.toMatch(/Preparación/);
     expect(buildBlocks(planDay('2026-11-18', 'completo', undefined, 'busqueda-intensiva')).length).toBeGreaterThan(5);
   });
 });
@@ -93,9 +94,9 @@ describe('ola 27 · control, alertas y deuda de matemática', () => {
     expect(diaIntensivo('2026-11-30', c)).toBe(10);
     expect(diaIntensivo('2026-12-10', c)).toBe(20);
     expect(diaIntensivo('2027-01-04', c)).toBe(0);
-    // Nada registrado: 0 % de lo planificado (9 días: 5 de lunes a viernes a 10 h y 4 de fin de semana a 11 h).
+    // Nada registrado: 0 % de lo planificado (9 días de foco: 10 h entre semana y 11 el fin de semana, menos la hora de JulIA desde el 26 nov).
     const h = controlHoras('2026-11-30', {}, c)!;
-    expect(h).toMatchObject({ dia: 10, reales: 0, debajo: true, planificadas: 94 });
+    expect(h).toMatchObject({ dia: 10, reales: 0, debajo: true, planificadas: 90 });
     const a = alertaHorasIntensivo('2026-11-30', {}, c)!;
     expect(a.titulo).toMatch(/Día 10 del modo intensivo: 0 %/);
     expect(ordenDeRecortes()).toEqual([]);

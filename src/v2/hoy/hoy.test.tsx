@@ -47,7 +47,7 @@ describe('Hoy 2.0 · lo que decide la pantalla', () => {
   it('las salteadas no cuentan para "ahora" ni para el resumen', () => {
     act(() => saltear(HOY, 'prog', true));
     expect(ahoraDe(dia(), a('05:00'))).toMatchObject({ tipo: 'proximo', bloque: { key: 'abi' } });
-    expect(resumenDia(dia())).toMatchObject({ metas: 13, hechas: 0, pasos: 24 });
+    expect(resumenDia(dia())).toMatchObject({ metas: 15, hechas: 0, pasos: 26 });
   });
 
   it('la línea: una fila por meta con su estado, y la marca de "ahora" solo si la hora cae en un hueco', () => {
@@ -95,15 +95,15 @@ describe('Hoy 2.0 · la pantalla', () => {
     expect(within(heroe).getByRole('img', { name: 'Tiempo de Abi + correr: 67 %' })).toHaveTextContent('30 min');
     expect(within(heroe).getByRole('button', { name: /Trabajo actual/ })).toHaveTextContent('Después');
     const dia0 = screen.getByRole('region', { name: 'Tu día' });
-    expect(within(dia0).getByText('0 de 14')).toBeInTheDocument();
+    expect(within(dia0).getByText('0 de 16')).toBeInTheDocument();
     expect(within(dia0).getByText('Metas')).toBeInTheDocument();
     expect(contarPalabras(screen.getByRole('heading', { level: 1 }).textContent!.trim())).toBeLessThanOrEqual(PRESUPUESTO.titulo);
   });
 
-  it('la línea del día: las 14 metas como filas que se leen enteras, con la hora, el estado y los pasos con su rótulo', () => {
+  it('la línea del día: las 16 metas como filas (con las dos horas de fondo del día) que se leen enteras, con la hora, el estado y los pasos con su rótulo', () => {
     hoy('09:30');
     const linea = within(screen.getByRole('region', { name: 'El día' }));
-    expect(linea.getAllByRole('listitem')).toHaveLength(14);
+    expect(linea.getAllByRole('listitem')).toHaveLength(16);
     expect(linea.getByRole('button', { name: /^08:30, Abi \+ correr\. 1 h 30 \(ahora, 2 pasos\)$/ })).toBeInTheDocument();
     expect(linea.getByRole('button', { name: /^04:00, .*\. 30 min \(sin hacer, 2 pasos\)$/ })).toBeInTheDocument();
   });
@@ -113,9 +113,9 @@ describe('Hoy 2.0 · la pantalla', () => {
     const heroe = () => screen.getByRole('region', { name: /Ahora|Lo próximo/ });
     for (const c of within(heroe()).getAllByRole('checkbox')) { fireEvent.click(c); otra(); }
     expect(bloque('abi').tasks.every((t) => t.done)).toBe(true);
-    expect(screen.getAllByRole('status').map((x) => x.textContent).join(' ')).toMatch(/Meta 3 cumplida · \+0,071 %/);
+    expect(screen.getAllByRole('status').map((x) => x.textContent).join(' ')).toMatch(/Meta 3 cumplida · \+0,063 %/);
     expect(within(heroe()).getByText('Lo próximo · 10:00')).toBeInTheDocument();
-    expect(within(screen.getByRole('region', { name: 'Tu día' })).getByText('1 de 14')).toBeInTheDocument();
+    expect(within(screen.getByRole('region', { name: 'Tu día' })).getByText('1 de 16')).toBeInTheDocument();
   });
 
   it('el botón del héroe lleva al foco de esa meta', () => {
@@ -162,10 +162,10 @@ describe('Hoy 2.0 · la pantalla', () => {
 
   it('cambiar el horario: si lo que sigue pasa de la hora de dormir lo dice, y acortando se guarda', () => {
     const { otra } = hoy('09:30');
-    fireEvent.click(screen.getByRole('button', { name: /^16:55, Trazo recall/ }));
+    fireEvent.click(screen.getByRole('button', { name: /^14:55, Trazo recall/ }));
     fireEvent.click(within(screen.getByRole('dialog')).getByRole('button', { name: /Cambiar horario/ }));
     const vista = () => screen.getByRole('dialog', { name: 'Cambiar horario' });
-    expect(within(vista()).getByRole('textbox', { name: 'Empieza: hora' })).toHaveValue('16');
+    expect(within(vista()).getByRole('textbox', { name: 'Empieza: hora' })).toHaveValue('14');
     fireEvent.click(within(vista()).getByRole('button', { name: 'Sumar 5' }));
     fireEvent.click(within(vista()).getByRole('button', { name: 'Guardar' }));
     expect(within(vista()).getByRole('alert')).toHaveTextContent(/pasan de dormir/);
@@ -184,7 +184,7 @@ describe('Hoy 2.0 · la pantalla', () => {
     fireEvent.click(within(screen.getByRole('dialog')).getByRole('button', { name: /Saltear hoy/ }));
     otra();
     expect(bloque('trabajo').salteado).toBe(true);
-    expect(within(screen.getByRole('region', { name: 'Tu día' })).getByText('0 de 13')).toBeInTheDocument();
+    expect(within(screen.getByRole('region', { name: 'Tu día' })).getByText('0 de 15')).toBeInTheDocument();
     fireEvent.click(within(screen.getByRole('dialog')).getByRole('button', { name: 'Volver a hoy' }));
     expect(bloque('trabajo').salteado).toBeFalsy();
   });
@@ -202,7 +202,7 @@ describe('Hoy 2.0 · la pantalla', () => {
     otra();
     fireEvent.click(within(screen.getByRole('dialog', { name: 'Meta para hoy' })).getByRole('button', { name: 'Sumar a hoy' }));
     expect(dia().blocks.filter((b) => b.propia).map((b) => b.title)).toEqual(['Reunión con el cliente']);
-    expect(dia().blocks).toHaveLength(15);
+    expect(dia().blocks).toHaveLength(17);
   });
 
   it('el plan en tres filas y los avisos juntos en la campana', () => {
@@ -221,7 +221,7 @@ describe('Hoy 2.0 · la pantalla', () => {
     const { otra } = hoy('09:30');
     const habitos = () => within(screen.getByRole('region', { name: 'Hábitos' }));
     expect(habitos().getAllByRole('listitem')).toHaveLength(5);
-    expect(habitos().getByText('Hoy · 17:15 · Racha: 0')).toBeInTheDocument();
+    expect(habitos().getByText('Hoy · 15:15 · Racha: 0')).toBeInTheDocument();
     expect(habitos().queryByRole('button', { name: 'Marcar hecho: LinkedIn post' })).toBeNull(); // hoy no toca
     fireEvent.click(habitos().getByRole('button', { name: 'Marcar hecho: Trazo recall' }));
     otra();

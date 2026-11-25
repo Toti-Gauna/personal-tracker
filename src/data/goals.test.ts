@@ -33,10 +33,10 @@ describe('períodos', () => {
     expect(bimesterAt('2028-05-15').n).toBe(9);
     // Ola 8: el bimestre de la app es el del plan T+18 (9 semanas desde T0) con su nombre sugerido.
     expect(bimester('2026-11-16', '2026-12-14')).toMatchObject({ n: 1, week: 5, weeks: 9, name: 'El despegue' });
-    expect(bimester('2026-11-16', '2027-01-18')).toMatchObject({ n: 2, week: 1, name: 'Cert window 3 y AgrIA' });
-    // v12.1: el calendario por semanas cierra en T+18 (21 nov 2027) con 6 bimestres; el B6 tiene 8 semanas y después queda en la última.
-    expect(bimester('2026-11-16', '2027-09-30')).toMatchObject({ n: 6, week: 1, weeks: 8, name: 'Bóveda y Asedio' });
-    expect(bimester('2026-11-16', '2028-05-14')).toMatchObject({ n: 6, week: 8, weeks: 8 });
+    expect(bimester('2026-11-16', '2027-01-18')).toMatchObject({ n: 2, week: 1, name: 'Cert window 2 y Cert window 3' });
+    // v12.4: el calendario por semanas cierra en T+18 (21 ene 2028) con 7 bimestres; el B7 tiene 8 semanas y después queda en el último.
+    expect(bimester('2026-11-16', '2027-09-30')).toMatchObject({ n: 6, week: 1, weeks: 9, name: 'AdversarIA y AeroScan Edge' });
+    expect(bimester('2026-11-16', '2028-05-14')).toMatchObject({ n: 7, week: 8, weeks: 8 });
     expect(bimester('2026-11-16', '2026-12-14', { 1: 'El salto' }).name).toBe('El salto');
   });
 });

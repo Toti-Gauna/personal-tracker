@@ -32,18 +32,18 @@ describe('avisos entre ramas', () => {
   });
 
   it('proyecto que cierra en 14 días o menos con el estándar sin marcar → programacion → trabajo', () => {
-    // v12.1: PetrIA (P1) se entrega el miércoles 9 de diciembre.
+    // v12.4: PetrIA (P1) se entrega el sábado 12 de diciembre.
     const a = avisosEntreRamas('2026-12-05', emptyPlan(), cfg).find((x) => x.de === 'programacion')!;
-    expect(a).toMatchObject({ a: 'trabajo', titulo: 'PetrIA se entrega el miércoles 9', href: '#/metas/proyecto/P1' });
+    expect(a).toMatchObject({ a: 'trabajo', titulo: 'PetrIA se entrega el sábado 12', href: '#/metas/proyecto/P1' });
     const listo = { ...emptyPlan(), proyectos: { P1: { estandar: Object.fromEntries(PLAN.programacion.estandar.map((c) => [c.id, true])), tiempo: { nucleo: 0, producto: 0, lanzamiento: 0 }, revisiones: [] } } };
     expect(avisosEntreRamas('2026-12-05', listo, cfg).some((x) => x.de === 'programacion')).toBe(false);
     expect(avisosEntreRamas('2026-11-24', emptyPlan(), cfg).some((x) => x.de === 'programacion')).toBe(false);
   });
 
   it('ventana W que empieza en 7 días o menos → matematica → programacion', () => {
-    // v12.1: W1 empieza el viernes 15 de enero.
-    expect(avisosEntreRamas('2027-01-08', emptyPlan(), cfg).find((x) => x.de === 'matematica' && x.id.startsWith('w-'))).toMatchObject({ a: 'programacion', titulo: 'La ventana W1 empieza el viernes 15' });
-    expect(avisosEntreRamas('2027-01-07', emptyPlan(), cfg).some((x) => x.de === 'matematica' && x.id.startsWith('w-'))).toBe(false);
+    // v12.4: W1 empieza el jueves 28 de enero.
+    expect(avisosEntreRamas('2027-01-21', emptyPlan(), cfg).find((x) => x.de === 'matematica' && x.id.startsWith('w-'))).toMatchObject({ a: 'programacion', titulo: 'La ventana W1 empieza el jueves 28' });
+    expect(avisosEntreRamas('2027-01-20', emptyPlan(), cfg).some((x) => x.de === 'matematica' && x.id.startsWith('w-'))).toBe(false);
   });
 
   it('el inicio del trabajo es una fecha: ya no hay aviso de T+2 que pida cambiar de rutina', () => {
