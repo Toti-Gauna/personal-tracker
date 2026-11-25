@@ -5,11 +5,14 @@
  */
 import { HORAS_FINDE, HORAS_LV } from './capacidad';
 import type { Periodo } from './periodos';
+import { fondoEn, type FondoActivo, type PistaFondo } from './pistas-dia';
 import { claveHito } from './periodos-plan';
 import type { PlanState } from './plan-state';
 import { ROUTINES_FILE, blockMin } from './routines';
 import { addDays, toMin } from './time';
-import { PAUSAS_FONDO, V122, type AreaForeground, type Comercial, type Secundaria } from './v12-2';
+import { PAUSAS_FONDO, V122, type AreaForeground, type Comercial } from './v12-2';
+
+export { fondoEn, type FondoActivo };
 
 export type EstadoComercial = 'planned' | 'building' | 'review' | 'published' | 'pitched';
 export const ESTADOS_COMERCIAL: EstadoComercial[] = ['planned', 'building', 'review', 'published', 'pitched'];
@@ -28,6 +31,8 @@ export interface EstadoItem {
   versiones?: Record<string, { publicada?: string; foreground?: string }>;
   /** Comercial "TO DEFINE": la marca elegida. */
   marca?: string;
+  /** v12.4: la respuesta a "¿marca regional para clientes o marca grande para ruido?" de ese slot. */
+  perfilMarca?: 'regional' | 'grande';
   leads?: Lead[];
   /** Pausado a mano (por el uso de Claude), con la fecha. */
   pausado?: string;
@@ -88,23 +93,6 @@ export const itemsDeFondo = () => [
   ...V122.secundarias.flatMap((a) => a.versiones.map((v) => ({ id: `${a.id}:v${v.id}`, nombre: `${a.nombre} v${v.id}`, inicio: v.inicio, fin: v.fin }))),
 ];
 
-export interface FondoActivo {
-  secundaria: { app: Secundaria; version: string }[];
-  comercial: Comercial | null;
-  pausa: (typeof PAUSAS_FONDO)[number] | null;
-}
-
-/** Qué corre de fondo una fecha (en una pausa fija, nada: se ve la pausa). */
-export function fondoEn(fecha: string): FondoActivo {
-  const pausa = PAUSAS_FONDO.find((p) => p.inicio <= fecha && fecha <= p.fin) ?? null;
-  if (pausa) return { secundaria: [], comercial: null, pausa };
-  return {
-    secundaria: V122.secundarias.flatMap((app) => app.versiones.filter((v) => v.inicio <= fecha && fecha <= v.fin).map((v) => ({ app, version: v.id }))),
-    comercial: V122.comerciales.find((c) => c.inicio <= fecha && fecha <= c.fin) ?? null,
-    pausa: null,
-  };
-}
-
 /** Dos períodos de fondo del mismo tipo se pisan (fuera del relevo de las secundarias, que se solapan a propósito unos días). */
 export function solapes<T extends { id: string; inicio: string; fin: string }>(xs: T[], toleranciaDias = 0): [string, string][] {
   const out: [string, string][] = [];
@@ -117,7 +105,7 @@ export function solapes<T extends { id: string; inicio: string; fin: string }>(x
   return out;
 }
 
-/** v12.2 · la capacidad de una semana: 10 h × 5 + 11 h × 2 = 72 h, todo de foco. Lo de fondo no suma acá. */
+/** v12.2 · el foco bruto de una semana: 10 h × 5 + 11 h × 2 = 72 h. v12.4: lo de fondo sale de esas horas (ver `capacidadSemana`). */
 export const CAPACIDAD_SEMANA = (HORAS_LV ?? 10) * 5 + (HORAS_FINDE ?? 11) * 2;
 
 /** El tiempo de revisión de fondo de una semana (aparte de las 72 h): total y por tipo. */
@@ -128,11 +116,20 @@ export function revisionSemana(log: EntradaRevision[] | undefined, lunes: string
   return { min: xs.reduce((s, x) => s + x.min, 0), walkthrough: por('walkthrough'), diseno: por('diseño'), comercial: por('comercial'), otro: por('otro') };
 }
 
-/** La meta de revisión de la semana: 1 h de walkthrough por cada app secundaria activa esa semana. */
-export function metaRevisionSemana(lunes: string) {
+/**
+ * La meta de revisión de la semana (v12.4, respuesta 3): 1 h por cada día en que la pista está activa. Con la secundaria activa los 7
+ * días son 7 h; con un slot comercial activo, otras 7 h. Un día libre fijo o una pista pausada a mano no suman.
+ */
+export function metaRevisionSemana(lunes: string, pausadas: readonly PistaFondo[] = []) {
   const apps = new Set<string>();
-  for (let i = 0; i < 7; i++) for (const s of fondoEn(addDays(lunes, i)).secundaria) apps.add(s.app.id);
-  return { walkthroughMin: apps.size * 60, apps: [...apps] };
+  let diasSecundaria = 0;
+  let diasComercial = 0;
+  for (let i = 0; i < 7; i++) {
+    const f = fondoEn(addDays(lunes, i));
+    if (f.secundaria.length && !pausadas.includes('secundaria')) { diasSecundaria++; for (const s of f.secundaria) apps.add(s.app.id); }
+    if (f.comercial && !pausadas.includes('comercial')) diasComercial++;
+  }
+  return { walkthroughMin: diasSecundaria * 60, comercialMin: diasComercial * 60, diasSecundaria, diasComercial, apps: [...apps] };
 }
 
 /**
@@ -179,8 +176,10 @@ export function recordatoriosFondo(plan: Plan, hoy: string): RecordatorioFondo[]
   for (const c of V122.comerciales) {
     if (c.inicio <= hoy) continue;
     const marca = c.marca ?? plan.fondo?.[c.id]?.marca;
-    if (!marca && addDays(c.inicio, -14) <= hoy && !hecho(`marca-${c.id}`)) out.push({ id: `marca-${c.id}`, fecha: addDays(c.inicio, -14), texto: `Elegí la marca del slot comercial #${c.n} (arranca el ${c.inicio})`, href: `#/metas/pista/comercial` });
-    if (addDays(c.inicio, -7) <= hoy && !hecho(`brief-${c.id}`)) out.push({ id: `brief-${c.id}`, fecha: addDays(c.inicio, -7), texto: `Prepará el brief del slot #${c.n}${marca ? ` (${marca})` : ''}: gancho, momento wow y qué reusa`, href: `#/metas/fondo/${c.id}` });
+    // v12.4: 14 días antes de cada slot se pregunta qué marca; la respuesta (regional o grande) queda guardada en `perfilMarca`.
+    if (addDays(c.inicio, -14) <= hoy && !plan.fondo?.[c.id]?.perfilMarca && !hecho(`marca-${c.id}`)) out.push({ id: `marca-${c.id}`, fecha: addDays(c.inicio, -14), texto: `Slot #${c.n}${marca ? ` (${marca})` : ''} arranca el ${c.inicio}: ¿marca regional para clientes o marca grande para ruido?`, href: `#/metas/fondo/${c.id}` });
+    // El brief va 7 días antes de cada slot; el del #1 es el recordatorio del 3 dic (no hay uno automático).
+    if (c.n !== 1 && addDays(c.inicio, -7) <= hoy && !hecho(`brief-${c.id}`)) out.push({ id: `brief-${c.id}`, fecha: addDays(c.inicio, -7), texto: `Prepará el brief del slot #${c.n}${marca ? ` (${marca})` : ''}: gancho, momento wow y qué reusa`, href: `#/metas/fondo/${c.id}` });
   }
   return out;
 }

@@ -268,8 +268,10 @@ export interface CapacidadPlan {
   /** v12.1: horas por día de lunes a viernes y el fin de semana (10 y 11). */
   lv?: number;
   finde?: number;
-  /** v12.1: fechas que nunca se mueven (la pausa del 20 al 26 dic 2027). */
+  /** v12.1: fechas que nunca se mueven. v12.4: los días libres fijos (la pausa del 20 al 26 dic 2027 y los dos descansos). */
   fijas?: { inicio: string; fin: string; nombre: string }[];
+  /** v12.4: horas por día que salen de un bloque principal para otra cosa (Alawys v0.1: 1 h por día de PetrIA, 5 a 11 dic 2026). */
+  extras?: { inicio: string; fin: string; horas: number; bloque: string; nombre: string }[];
 }
 
 // ——— validación ———

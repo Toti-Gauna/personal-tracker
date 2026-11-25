@@ -26,9 +26,12 @@ export function nombreOrigen(id: string | null): string {
   return PLAN_EXT.bloques.find((b) => b.id === id)?.nombre ?? V122.secundarias.find((s) => s.id === id)?.nombre ?? (() => { const c = V122.comerciales.find((x) => x.id === id); return c ? `#${c.n} ${c.marca ?? 'a definir'}` : id; })();
 }
 
-/** Las fechas de una versión: el día dado; el bloque entero; o el cierre del origen (su última versión o la indicada). */
+/**
+ * Las fechas de una versión: el día dado (o hasta `hasta`: Alawys v0.1 se arma del 5 al 11 dic); el bloque entero; o el cierre del origen
+ * (su última versión o la indicada; en un slot comercial, la fase de build: la herramienta sale al terminar de construir).
+ */
 export function fechasVersion(v: VersionHerramienta): { inicio: string; fin: string } | null {
-  if (v.donde === 'fecha' && v.fecha) return { inicio: v.fecha, fin: v.fecha };
+  if (v.donde === 'fecha' && v.fecha) return { inicio: v.fecha, fin: v.hasta ?? v.fecha };
   if (!v.origen) return null;
   const b = PLAN_EXT.bloques.find((x) => x.id === v.origen);
   if (b?.fechas) {
@@ -40,7 +43,7 @@ export function fechasVersion(v: VersionHerramienta): { inicio: string; fin: str
   const s = V122.secundarias.find((x) => x.id === v.origen);
   if (s) { const x = s.versiones.find((y) => y.id === (v.version ?? s.versiones[s.versiones.length - 1].id))!; return { inicio: x.inicio, fin: x.fin }; }
   const c = V122.comerciales.find((x) => x.id === v.origen);
-  return c ? { inicio: c.inicio, fin: c.fin } : null;
+  return c ? { ...(c.build ?? { inicio: c.inicio, fin: c.fin }) } : null;
 }
 
 /** Las herramientas que nacen (o crecen) en un ítem. */
@@ -67,7 +70,7 @@ export function puedePublicarHerramienta(h: Herramienta, v: VersionHerramienta, 
 }
 
 /** Los proyectos principales con "0.1 · Arranque" (de VitalIA en adelante): el texto y si ya sumaron su preset a Alawys. */
-export const PRIMER_ARRANQUE = '2026-12-21';
+export const PRIMER_ARRANQUE = '2026-12-28';
 export const textoArranque = (id: string) => (id === 'P2' ? 'Alawys v0.1 + scaffold VitalIA with it' : '0.1 · Arranque');
 export const conArranque = () => PLAN_EXT.bloques.filter((b) => b.tipo === 'proyecto' && !b.archivado && b.fechas && b.fechas.inicio >= PRIMER_ARRANQUE);
 export function presetsAlawys(plan: Pick<Plan, 'hitos'>) {
