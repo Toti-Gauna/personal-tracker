@@ -1,6 +1,6 @@
 {
  "version": 1,
- "plan": "v12.1",
+ "plan": "v12.4",
  "t0": "2026-11-16",
  "archivado": "data/archivo/roadmap-v7/ (roadmap v7, archived 20 Nov 2026)",
  "pausados": [
@@ -14,7 +14,7 @@
    "nombre": "Núcleo",
    "perfil": "Senior ML + DevSecOps + Cloud",
    "inicio": "2026-11-21",
-   "fin": "2027-09-19",
+   "fin": "2027-11-03",
    "semanasBase": 47,
    "semanasExtra": 0,
    "semanasPlataforma": 0,
@@ -24,8 +24,8 @@
    "n": 2,
    "nombre": "Ciberseguridad",
    "perfil": "Security Engineer",
-   "inicio": "2027-09-20",
-   "fin": "2027-11-21",
+   "inicio": "2027-11-04",
+   "fin": "2028-01-21",
    "semanasBase": 10,
    "semanasExtra": 0,
    "semanasPlataforma": 0,
@@ -35,9 +35,9 @@
    "n": 3,
    "nombre": "Quant",
    "perfil": "Quant Trading Engineer",
-   "inicio": "2027-11-22",
-   "fin": "2028-04-15",
-   "semanasBase": 23,
+   "inicio": "2028-01-22",
+   "fin": "2028-05-31",
+   "semanasBase": 22,
    "semanasExtra": 0,
    "semanasPlataforma": 0,
    "semanasArquitectura": 0
@@ -46,9 +46,9 @@
    "n": 4,
    "nombre": "Aeroespacial",
    "perfil": "GNC / Mission Software Engineer",
-   "inicio": "2028-04-16",
-   "fin": "2028-10-27",
-   "semanasBase": 29,
+   "inicio": "2028-06-01",
+   "fin": "2028-12-14",
+   "semanasBase": 28,
    "semanasExtra": 0,
    "semanasPlataforma": 0,
    "semanasArquitectura": 0
@@ -60,7 +60,7 @@
    "etapa": 1,
    "nombre": "AI Full-stack Engineer",
    "inicio": "2026-11-21",
-   "fin": "2027-01-14",
+   "fin": "2027-01-27",
    "salida": [
     "PetrIA in production (4 versions)",
     "VitalIA in production (4 versions)",
@@ -86,8 +86,8 @@
    "id": "F2",
    "etapa": 1,
    "nombre": "ML Engineer",
-   "inicio": "2027-01-15",
-   "fin": "2027-03-17",
+   "inicio": "2027-01-28",
+   "fin": "2027-04-13",
    "salida": [
     "Base math done (W1 milestones)",
     "AWS MLA passed",
@@ -110,8 +110,8 @@
    "id": "F3",
    "etapa": 1,
    "nombre": "Systems / Realtime",
-   "inicio": "2027-03-18",
-   "fin": "2027-04-17",
+   "inicio": "2027-04-14",
+   "fin": "2027-05-21",
    "salida": [
     "Antena live",
     "Constelación 2.1 live",
@@ -130,8 +130,8 @@
    "id": "F4",
    "etapa": 1,
    "nombre": "DevSecOps / Platform",
-   "inicio": "2027-04-18",
-   "fin": "2027-05-29",
+   "inicio": "2027-05-22",
+   "fin": "2027-07-11",
    "salida": [
     "All 16 initial certs passed"
    ],
@@ -150,8 +150,8 @@
    "id": "F5",
    "etapa": 1,
    "nombre": "Computer Vision / MLOps",
-   "inicio": "2027-05-30",
-   "fin": "2027-07-18",
+   "inicio": "2027-07-12",
+   "fin": "2027-09-05",
    "salida": [
     "W2 milestones done",
     "AeroScan live",
@@ -169,8 +169,8 @@
    "id": "F6",
    "etapa": 1,
    "nombre": "AI Security + Edge + SRE",
-   "inicio": "2027-07-19",
-   "fin": "2027-09-19",
+   "inicio": "2027-09-06",
+   "fin": "2027-11-03",
    "salida": [
     "W3 milestones done (incl. mini-GPT)",
     "AdversarIA live",
@@ -190,8 +190,8 @@
    "id": "F7",
    "etapa": 2,
    "nombre": "Security Engineer",
-   "inicio": "2027-09-20",
-   "fin": "2027-11-21",
+   "inicio": "2027-11-04",
+   "fin": "2028-01-21",
    "salida": [
     "W4 milestones done",
     "Bóveda live",
@@ -211,8 +211,8 @@
    "id": "F8",
    "etapa": 3,
    "nombre": "Quant Developer",
-   "inicio": "2027-11-22",
-   "fin": "2028-02-19",
+   "inicio": "2028-01-22",
+   "fin": "2028-04-11",
    "salida": [
     "WQ1 milestones done",
     "WQ2 milestones done",
@@ -235,8 +235,8 @@
    "id": "F9",
    "etapa": 3,
    "nombre": "Quant Trading Engineer",
-   "inicio": "2028-02-20",
-   "fin": "2028-04-15",
+   "inicio": "2028-04-12",
+   "fin": "2028-05-31",
    "salida": [
     "WQ3 milestones done",
     "Comando live",
@@ -254,8 +254,8 @@
    "id": "F10",
    "etapa": 4,
    "nombre": "Simulation / CAE",
-   "inicio": "2028-04-16",
-   "fin": "2028-07-13",
+   "inicio": "2028-06-01",
+   "fin": "2028-09-03",
    "salida": [
     "WA1 milestones done",
     "WA2 milestones done",
@@ -275,8 +275,8 @@
    "id": "F11",
    "etapa": 4,
    "nombre": "GNC / Mission Software",
-   "inicio": "2028-07-14",
-   "fin": "2028-10-27",
+   "inicio": "2028-09-04",
+   "fin": "2028-12-14",
    "salida": [
     "WA4 milestones done",
     "WA5 milestones done",
@@ -622,11 +622,11 @@
    ],
    "roadmap": {
     "inicio": "2026-11-21",
-    "fin": "2026-12-09"
+    "fin": "2026-12-12"
    },
    "fechas": {
     "inicio": "2026-11-21",
-    "fin": "2026-12-09"
+    "fin": "2026-12-12"
    },
    "fase": "F1",
    "horas": 193.5,
@@ -832,7 +832,7 @@
      "ola0": false,
      "nombre": "notification-service",
      "horas": 8,
-     "estimado": "2026-11-30",
+     "estimado": "2026-12-01",
      "deadline": "2026-12-14",
      "modelo": "Opus high"
     },
@@ -862,7 +862,7 @@
      "ola0": false,
      "nombre": "Usage & quotas",
      "horas": 6,
-     "estimado": "2026-12-03",
+     "estimado": "2026-12-04",
      "deadline": "2026-12-20",
      "modelo": "Sonnet high"
     },
@@ -872,7 +872,7 @@
      "ola0": false,
      "nombre": "Design system + 2.0 release",
      "horas": 7,
-     "estimado": "2026-12-04",
+     "estimado": "2026-12-05",
      "deadline": "2026-12-22",
      "modelo": "Fable high"
     },
@@ -882,7 +882,7 @@
      "ola0": false,
      "nombre": "load-lab",
      "horas": 14,
-     "estimado": "2026-12-05",
+     "estimado": "2026-12-06",
      "deadline": "2026-12-25",
      "modelo": "Opus high"
     },
@@ -892,7 +892,7 @@
      "ola0": false,
      "nombre": "Operations",
      "horas": 12,
-     "estimado": "2026-12-06",
+     "estimado": "2026-12-08",
      "deadline": "2026-12-28",
      "modelo": "Opus high"
     },
@@ -902,7 +902,7 @@
      "ola0": false,
      "nombre": "Ingest on AWS",
      "horas": 10,
-     "estimado": "2026-12-07",
+     "estimado": "2026-12-09",
      "deadline": "2026-12-30",
      "modelo": "Opus high"
     },
@@ -912,7 +912,7 @@
      "ola0": false,
      "nombre": "Physical layer",
      "horas": 14,
-     "estimado": "2026-12-08",
+     "estimado": "2026-12-11",
      "deadline": "2027-01-03",
      "modelo": "Fable high"
     },
@@ -922,7 +922,7 @@
      "ola0": false,
      "nombre": "Scale report + 3.0 release",
      "horas": 8,
-     "estimado": "2026-12-09",
+     "estimado": "2026-12-12",
      "deadline": "2027-01-05",
      "modelo": "Sonnet medium"
     }
@@ -938,12 +938,12 @@
    "extraPlataforma": 0,
    "extraArquitectura": 0,
    "fechas": {
-    "inicio": "2026-12-10",
-    "fin": "2026-12-13"
+    "inicio": "2026-12-13",
+    "fin": "2026-12-18"
    },
    "roadmap": {
-    "inicio": "2026-12-10",
-    "fin": "2026-12-13"
+    "inicio": "2026-12-13",
+    "fin": "2026-12-18"
    },
    "fase": "F1",
    "horas": 42,
@@ -959,19 +959,19 @@
      ],
      "plan": [
       {
-       "fecha": "2026-12-10",
+       "fecha": "2026-12-13",
        "texto": "Guide + domains"
       },
       {
-       "fecha": "2026-12-11",
+       "fecha": "2026-12-15",
        "texto": "Weak spots + mock"
       },
       {
-       "fecha": "2026-12-12",
+       "fecha": "2026-12-16",
        "texto": "Mock 2 (AM) + exam"
       }
      ],
-     "examen": "2026-12-12",
+     "examen": "2026-12-16",
      "listo": 85,
      "fallback": "Exam in the week of 8 Jan 2027",
      "reserva": "2026-11-21",
@@ -989,15 +989,15 @@
      ],
      "plan": [
       {
-       "fecha": "2026-12-12",
+       "fecha": "2026-12-16",
        "texto": "Path (PM)"
       },
       {
-       "fecha": "2026-12-13",
+       "fecha": "2026-12-18",
        "texto": "Mock + exam"
       }
      ],
-     "examen": "2026-12-13",
+     "examen": "2026-12-18",
      "listo": 85,
      "fallback": "Exam in the week of 8 Jan 2027",
      "reserva": "2026-11-21",
@@ -1018,12 +1018,12 @@
    "extraPlataforma": 0,
    "extraArquitectura": 0,
    "fechas": {
-    "inicio": "2026-12-14",
-    "fin": "2026-12-20"
+    "inicio": "2026-12-19",
+    "fin": "2026-12-27"
    },
    "roadmap": {
-    "inicio": "2026-12-14",
-    "fin": "2026-12-20"
+    "inicio": "2026-12-19",
+    "fin": "2026-12-27"
    },
    "fase": "F1",
    "horas": 72,
@@ -1199,15 +1199,15 @@
     }
    ],
    "roadmap": {
-    "inicio": "2026-12-21",
-    "fin": "2026-12-30"
+    "inicio": "2026-12-28",
+    "fin": "2027-01-08"
    },
    "fechas": {
-    "inicio": "2026-12-21",
-    "fin": "2026-12-30"
+    "inicio": "2026-12-28",
+    "fin": "2027-01-08"
    },
    "fase": "F1",
-   "horas": 104,
+   "horas": 102,
    "horasLim": 125,
    "rol": "AI Engineer, health (.NET, Azure)",
    "entrevista": "very high"
@@ -1222,12 +1222,12 @@
    "extraPlataforma": 0,
    "extraArquitectura": 0,
    "fechas": {
-    "inicio": "2026-12-31",
-    "fin": "2027-01-07"
+    "inicio": "2027-01-09",
+    "fin": "2027-01-18"
    },
    "roadmap": {
-    "inicio": "2026-12-31",
-    "fin": "2027-01-07"
+    "inicio": "2027-01-09",
+    "fin": "2027-01-18"
    },
    "fase": "F1",
    "horas": 82,
@@ -1243,33 +1243,33 @@
      ],
      "plan": [
       {
-       "fecha": "2026-12-31",
+       "fecha": "2027-01-09",
        "texto": "Path"
       },
       {
-       "fecha": "2027-01-01",
+       "fecha": "2027-01-10",
        "texto": "Path"
       },
       {
-       "fecha": "2027-01-02",
+       "fecha": "2027-01-12",
        "texto": "Path"
       },
       {
-       "fecha": "2027-01-03",
+       "fecha": "2027-01-13",
        "texto": "Labs"
       },
       {
-       "fecha": "2027-01-04",
+       "fecha": "2027-01-14",
        "texto": "2 practice assessments"
       },
       {
-       "fecha": "2027-01-05",
+       "fecha": "2027-01-15",
        "texto": "Exam"
       }
      ],
-     "examen": "2027-01-05",
+     "examen": "2027-01-15",
      "listo": 85,
-     "reserva": "2026-12-20",
+     "reserva": "2026-12-26",
      "renovacion": {
       "anos": 1,
       "nota": "usual validity (to verify)"
@@ -1286,19 +1286,19 @@
      ],
      "plan": [
       {
-       "fecha": "2027-01-06",
+       "fecha": "2027-01-17",
        "texto": "Guide + course"
       },
       {
-       "fecha": "2027-01-07",
+       "fecha": "2027-01-18",
        "texto": "Mocks + exam"
       }
      ],
-     "examen": "2027-01-07",
+     "examen": "2027-01-18",
      "listo": 85,
      "opcional": true,
      "fallback": "If mocks < 85%, move to the end of Phase 3",
-     "reserva": "2026-12-20",
+     "reserva": "2026-12-26",
      "renovacion": {
       "anos": 2,
       "nota": "usual validity (to verify)"
@@ -1316,12 +1316,12 @@
    "extraPlataforma": 0,
    "extraArquitectura": 0,
    "fechas": {
-    "inicio": "2027-01-08",
-    "fin": "2027-01-14"
+    "inicio": "2027-01-19",
+    "fin": "2027-01-27"
    },
    "roadmap": {
-    "inicio": "2027-01-08",
-    "fin": "2027-01-14"
+    "inicio": "2027-01-19",
+    "fin": "2027-01-27"
    },
    "fase": "F1",
    "horas": 72,
@@ -1396,12 +1396,12 @@
     ]
    },
    "roadmap": {
-    "inicio": "2027-01-15",
-    "fin": "2027-02-03"
+    "inicio": "2027-01-28",
+    "fin": "2027-02-21"
    },
    "fechas": {
-    "inicio": "2027-01-15",
-    "fin": "2027-02-03"
+    "inicio": "2027-01-28",
+    "fin": "2027-02-21"
    },
    "fase": "F2",
    "horas": 206,
@@ -1411,8 +1411,8 @@
       1,
       4
      ],
-     "inicio": "2027-01-15",
-     "fin": "2027-01-18",
+     "inicio": "2027-01-28",
+     "fin": "2027-02-01",
      "tema": "Arithmetic",
      "hito": "50 mixed exercises, no errors",
      "capitulos": {
@@ -1426,8 +1426,8 @@
       5,
       10
      ],
-     "inicio": "2027-01-19",
-     "fin": "2027-01-24",
+     "inicio": "2027-02-02",
+     "fin": "2027-02-09",
      "tema": "Algebra (equations, systems, functions, exp & log)",
      "hito": "3×3 system and graphs by hand",
      "capitulos": {
@@ -1441,8 +1441,8 @@
       11,
       13
      ],
-     "inicio": "2027-01-25",
-     "fin": "2027-01-27",
+     "inicio": "2027-02-10",
+     "fin": "2027-02-12",
      "tema": "Trigonometry + base analytic geometry",
      "hito": "Line equation, sin/cos without calculator",
      "capitulosAConfirmar": true
@@ -1452,8 +1452,8 @@
       14,
       20
      ],
-     "inicio": "2027-01-28",
-     "fin": "2027-02-03",
+     "inicio": "2027-02-13",
+     "fin": "2027-02-21",
      "tema": "Probability & statistics",
      "hito": "Regression by hand, explain a confidence interval",
      "capitulosAConfirmar": true
@@ -1473,12 +1473,12 @@
    "extraPlataforma": 0,
    "extraArquitectura": 0,
    "fechas": {
-    "inicio": "2027-02-04",
-    "fin": "2027-02-11"
+    "inicio": "2027-02-22",
+    "fin": "2027-03-03"
    },
    "roadmap": {
-    "inicio": "2027-02-04",
-    "fin": "2027-02-11"
+    "inicio": "2027-02-22",
+    "fin": "2027-03-03"
    },
    "fase": "F2",
    "horas": 82,
@@ -1494,35 +1494,35 @@
      ],
      "plan": [
       {
-       "fecha": "2027-02-04",
+       "fecha": "2027-02-22",
        "texto": "Course"
       },
       {
-       "fecha": "2027-02-05",
+       "fecha": "2027-02-23",
        "texto": "Course"
       },
       {
-       "fecha": "2027-02-06",
+       "fecha": "2027-02-25",
        "texto": "Course"
       },
       {
-       "fecha": "2027-02-07",
+       "fecha": "2027-02-26",
        "texto": "SageMaker labs"
       },
       {
-       "fecha": "2027-02-08",
+       "fecha": "2027-02-27",
        "texto": "Mocks"
       },
       {
-       "fecha": "2027-02-09",
+       "fecha": "2027-02-28",
        "texto": "Mocks (3 in total)"
       },
       {
-       "fecha": "2027-02-10",
+       "fecha": "2027-03-02",
        "texto": "Exam"
       }
      ],
-     "examen": "2027-02-10",
+     "examen": "2027-03-02",
      "listo": 80,
      "costo": "US$ 150 según la mayoría de las fuentes; una dice 300",
      "costoVerificado": false,
@@ -1541,15 +1541,15 @@
      ],
      "plan": [
       {
-       "fecha": "2027-02-10",
+       "fecha": "2027-03-02",
        "texto": "Path (PM)"
       },
       {
-       "fecha": "2027-02-11",
+       "fecha": "2027-03-03",
        "texto": "Mock + exam"
       }
      ],
-     "examen": "2027-02-11",
+     "examen": "2027-03-03",
      "listo": 85,
      "renovacion": {
       "anos": 3,
@@ -1568,12 +1568,12 @@
    "extraPlataforma": 0,
    "extraArquitectura": 0,
    "fechas": {
-    "inicio": "2027-02-12",
-    "fin": "2027-02-18"
+    "inicio": "2027-03-04",
+    "fin": "2027-03-12"
    },
    "roadmap": {
-    "inicio": "2027-02-12",
-    "fin": "2027-02-18"
+    "inicio": "2027-03-04",
+    "fin": "2027-03-12"
    },
    "fase": "F2",
    "horas": 72,
@@ -1710,12 +1710,12 @@
     }
    ],
    "roadmap": {
-    "inicio": "2027-02-19",
-    "fin": "2027-03-02"
+    "inicio": "2027-03-13",
+    "fin": "2027-03-25"
    },
    "fechas": {
-    "inicio": "2027-02-19",
-    "fin": "2027-03-02"
+    "inicio": "2027-03-13",
+    "fin": "2027-03-25"
    },
    "fase": "F2",
    "horas": 115,
@@ -1733,12 +1733,12 @@
    "extraPlataforma": 0,
    "extraArquitectura": 0,
    "fechas": {
-    "inicio": "2027-03-03",
-    "fin": "2027-03-10"
+    "inicio": "2027-03-26",
+    "fin": "2027-04-04"
    },
    "roadmap": {
-    "inicio": "2027-03-03",
-    "fin": "2027-03-10"
+    "inicio": "2027-03-26",
+    "fin": "2027-04-04"
    },
    "fase": "F2",
    "horas": 82,
@@ -1753,39 +1753,39 @@
      ],
      "plan": [
       {
-       "fecha": "2027-03-03",
+       "fecha": "2027-03-26",
        "texto": "Course"
       },
       {
-       "fecha": "2027-03-04",
+       "fecha": "2027-03-27",
        "texto": "Course"
       },
       {
-       "fecha": "2027-03-05",
+       "fecha": "2027-03-29",
        "texto": "Course"
       },
       {
-       "fecha": "2027-03-06",
+       "fecha": "2027-03-30",
        "texto": "AWS Network Lab (mini-project)"
       },
       {
-       "fecha": "2027-03-07",
+       "fecha": "2027-03-31",
        "texto": "Mocks"
       },
       {
-       "fecha": "2027-03-08",
+       "fecha": "2027-04-01",
        "texto": "Mocks (3 in total)"
       },
       {
-       "fecha": "2027-03-09",
+       "fecha": "2027-04-03",
        "texto": "Exam"
       }
      ],
-     "examen": "2027-03-09",
+     "examen": "2027-04-03",
      "listo": 80,
      "miniProyecto": {
       "nombre": "AWS Network Lab",
-      "fecha": "2027-03-06",
+      "fecha": "2027-03-30",
       "texto": "Terraform VPC, 2 public + 2 private subnets in 2 AZs, internet gateway, NAT (create, test and destroy the same day: it costs money), security group vs NACL with one deliberately blocked connection test, VPC gateway endpoint to S3 + bucket policy restricted to that endpoint",
       "entregables": [
        "Repo",
@@ -1808,15 +1808,15 @@
      ],
      "plan": [
       {
-       "fecha": "2027-03-09",
+       "fecha": "2027-04-03",
        "texto": "PromQL and alerts (PM)"
       },
       {
-       "fecha": "2027-03-10",
+       "fecha": "2027-04-04",
        "texto": "Mock + exam"
       }
      ],
-     "examen": "2027-03-10",
+     "examen": "2027-04-04",
      "listo": 85,
      "renovacion": {
       "anos": 2,
@@ -1835,12 +1835,12 @@
    "extraPlataforma": 0,
    "extraArquitectura": 0,
    "fechas": {
-    "inicio": "2027-03-11",
-    "fin": "2027-03-17"
+    "inicio": "2027-04-05",
+    "fin": "2027-04-13"
    },
    "roadmap": {
-    "inicio": "2027-03-11",
-    "fin": "2027-03-17"
+    "inicio": "2027-04-05",
+    "fin": "2027-04-13"
    },
    "fase": "F2",
    "horas": 72,
@@ -1862,11 +1862,11 @@
     "examen": {
      "nombre": "Cambridge C1 Advanced",
      "semana": [
-      "2027-03-11",
-      "2027-03-17"
+      "2027-04-05",
+      "2027-04-13"
      ],
      "nota": "If the exam date is later, take it then without moving the plan",
-     "reserva": "2027-01-14"
+     "reserva": "2027-01-25"
     }
    }
   },
@@ -1933,8 +1933,8 @@
     }
    ],
    "roadmap": {
-    "inicio": "2027-03-18",
-    "fin": "2027-04-02"
+    "inicio": "2027-04-14",
+    "fin": "2027-05-01"
    },
    "historial": [
     {
@@ -1949,8 +1949,8 @@
     }
    ],
    "fechas": {
-    "inicio": "2027-03-18",
-    "fin": "2027-04-02"
+    "inicio": "2027-04-14",
+    "fin": "2027-05-01"
    },
    "fase": "F3",
    "horas": 160,
@@ -1968,12 +1968,12 @@
    "extraPlataforma": 0,
    "extraArquitectura": 0,
    "fechas": {
-    "inicio": "2027-04-03",
-    "fin": "2027-04-08"
+    "inicio": "2027-05-02",
+    "fin": "2027-05-09"
    },
    "roadmap": {
-    "inicio": "2027-04-03",
-    "fin": "2027-04-08"
+    "inicio": "2027-05-02",
+    "fin": "2027-05-09"
    },
    "fase": "F3",
    "horas": 62,
@@ -1988,23 +1988,23 @@
      ],
      "plan": [
       {
-       "fecha": "2027-04-03",
+       "fecha": "2027-05-02",
        "texto": "Course"
       },
       {
-       "fecha": "2027-04-04",
+       "fecha": "2027-05-03",
        "texto": "Course"
       },
       {
-       "fecha": "2027-04-05",
+       "fecha": "2027-05-05",
        "texto": "Two mocks"
       },
       {
-       "fecha": "2027-04-06",
+       "fecha": "2027-05-06",
        "texto": "Exam"
       }
      ],
-     "examen": "2027-04-06",
+     "examen": "2027-05-06",
      "listo": 80,
      "renovacion": {
       "anos": 3,
@@ -2021,19 +2021,19 @@
      ],
      "plan": [
       {
-       "fecha": "2027-04-06",
+       "fecha": "2027-05-06",
        "texto": "Practice on Antena and Network Lab Terraform (PM)"
       },
       {
-       "fecha": "2027-04-07",
+       "fecha": "2027-05-08",
        "texto": "Practice"
       },
       {
-       "fecha": "2027-04-08",
+       "fecha": "2027-05-09",
        "texto": "Mock + exam"
       }
      ],
-     "examen": "2027-04-08",
+     "examen": "2027-05-09",
      "listo": 85,
      "renovacion": {
       "anos": 2,
@@ -2052,12 +2052,12 @@
    "extraPlataforma": 0,
    "extraArquitectura": 0,
    "fechas": {
-    "inicio": "2027-04-09",
-    "fin": "2027-04-12"
+    "inicio": "2027-05-10",
+    "fin": "2027-05-15"
    },
    "roadmap": {
-    "inicio": "2027-04-09",
-    "fin": "2027-04-12"
+    "inicio": "2027-05-10",
+    "fin": "2027-05-15"
    },
    "fase": "F3",
    "horas": 42,
@@ -2078,8 +2078,8 @@
    "extraPlataforma": 0,
    "extraArquitectura": 0,
    "roadmap": {
-    "inicio": "2027-04-13",
-    "fin": "2027-04-17"
+    "inicio": "2027-05-16",
+    "fin": "2027-05-21"
    },
    "ficha": {
     "rubro": "portfolio",
@@ -2180,8 +2180,8 @@
     }
    ],
    "fechas": {
-    "inicio": "2027-04-13",
-    "fin": "2027-04-17"
+    "inicio": "2027-05-16",
+    "fin": "2027-05-21"
    },
    "fase": "F3",
    "horas": 50,
@@ -2322,12 +2322,12 @@
     }
    ],
    "roadmap": {
-    "inicio": "2027-04-18",
-    "fin": "2027-04-30"
+    "inicio": "2027-05-22",
+    "fin": "2027-06-04"
    },
    "fechas": {
-    "inicio": "2027-04-18",
-    "fin": "2027-04-30"
+    "inicio": "2027-05-22",
+    "fin": "2027-06-04"
    },
    "fase": "F4",
    "horas": 130,
@@ -2348,12 +2348,12 @@
    "extraPlataforma": 0,
    "extraArquitectura": 0,
    "fechas": {
-    "inicio": "2027-05-01",
-    "fin": "2027-05-09"
+    "inicio": "2027-06-05",
+    "fin": "2027-06-16"
    },
    "roadmap": {
-    "inicio": "2027-05-01",
-    "fin": "2027-05-09"
+    "inicio": "2027-06-05",
+    "fin": "2027-06-16"
    },
    "fase": "F4",
    "horas": 94,
@@ -2368,39 +2368,39 @@
      ],
      "plan": [
       {
-       "fecha": "2027-05-01",
+       "fecha": "2027-06-05",
        "texto": "Videos + notes"
       },
       {
-       "fecha": "2027-05-02",
+       "fecha": "2027-06-06",
        "texto": "Videos + notes"
       },
       {
-       "fecha": "2027-05-03",
+       "fecha": "2027-06-08",
        "texto": "Videos + notes"
       },
       {
-       "fecha": "2027-05-04",
+       "fecha": "2027-06-09",
        "texto": "Videos + notes"
       },
       {
-       "fecha": "2027-05-05",
+       "fecha": "2027-06-11",
        "texto": "Performance-based questions"
       },
       {
-       "fecha": "2027-05-06",
+       "fecha": "2027-06-12",
        "texto": "Mocks"
       },
       {
-       "fecha": "2027-05-07",
+       "fecha": "2027-06-13",
        "texto": "Mocks (3 in total)"
       },
       {
-       "fecha": "2027-05-08",
+       "fecha": "2027-06-15",
        "texto": "Exam"
       }
      ],
-     "examen": "2027-05-08",
+     "examen": "2027-06-15",
      "listo": 85,
      "costo": "US$ 439 (579 con reintento)",
      "costoVerificado": true,
@@ -2437,15 +2437,15 @@
      ],
      "plan": [
       {
-       "fecha": "2027-05-08",
+       "fecha": "2027-06-15",
        "texto": "Path (PM)"
       },
       {
-       "fecha": "2027-05-09",
+       "fecha": "2027-06-16",
        "texto": "Mock + exam"
       }
      ],
-     "examen": "2027-05-09",
+     "examen": "2027-06-16",
      "listo": 85,
      "renovacion": {
       "anos": 3,
@@ -2464,12 +2464,12 @@
    "extraPlataforma": 0,
    "extraArquitectura": 0,
    "fechas": {
-    "inicio": "2027-05-10",
-    "fin": "2027-05-17"
+    "inicio": "2027-06-17",
+    "fin": "2027-06-26"
    },
    "roadmap": {
-    "inicio": "2027-05-10",
-    "fin": "2027-05-17"
+    "inicio": "2027-06-17",
+    "fin": "2027-06-26"
    },
    "fase": "F4",
    "horas": 82,
@@ -2484,35 +2484,35 @@
      ],
      "plan": [
       {
-       "fecha": "2027-05-10",
+       "fecha": "2027-06-17",
        "texto": "Course + labs"
       },
       {
-       "fecha": "2027-05-11",
+       "fecha": "2027-06-18",
        "texto": "Course + labs"
       },
       {
-       "fecha": "2027-05-12",
+       "fecha": "2027-06-20",
        "texto": "Course + labs"
       },
       {
-       "fecha": "2027-05-13",
+       "fecha": "2027-06-21",
        "texto": "Troubleshooting"
       },
       {
-       "fecha": "2027-05-14",
+       "fecha": "2027-06-22",
        "texto": "killer.sh #1"
       },
       {
-       "fecha": "2027-05-15",
+       "fecha": "2027-06-23",
        "texto": "Review + killer.sh #2"
       },
       {
-       "fecha": "2027-05-16",
+       "fecha": "2027-06-25",
        "texto": "Exam"
       }
      ],
-     "examen": "2027-05-16",
+     "examen": "2027-06-25",
      "listo": 85,
      "renovacion": {
       "anos": 2,
@@ -2529,15 +2529,15 @@
      ],
      "plan": [
       {
-       "fecha": "2027-05-16",
+       "fecha": "2027-06-25",
        "texto": "Docs (PM)"
       },
       {
-       "fecha": "2027-05-17",
+       "fecha": "2027-06-26",
        "texto": "Mock + exam"
       }
      ],
-     "examen": "2027-05-17",
+     "examen": "2027-06-26",
      "listo": 85,
      "renovacion": {
       "anos": 2,
@@ -2556,12 +2556,12 @@
    "extraPlataforma": 0,
    "extraArquitectura": 0,
    "fechas": {
-    "inicio": "2027-05-18",
-    "fin": "2027-05-25"
+    "inicio": "2027-06-27",
+    "fin": "2027-07-06"
    },
    "roadmap": {
-    "inicio": "2027-05-18",
-    "fin": "2027-05-25"
+    "inicio": "2027-06-27",
+    "fin": "2027-07-06"
    },
    "fase": "F4",
    "horas": 82,
@@ -2577,35 +2577,35 @@
      ],
      "plan": [
       {
-       "fecha": "2027-05-18",
+       "fecha": "2027-06-27",
        "texto": "Prep"
       },
       {
-       "fecha": "2027-05-19",
+       "fecha": "2027-06-28",
        "texto": "Prep"
       },
       {
-       "fecha": "2027-05-20",
+       "fecha": "2027-06-30",
        "texto": "Prep"
       },
       {
-       "fecha": "2027-05-21",
+       "fecha": "2027-07-01",
        "texto": "Bedrock labs"
       },
       {
-       "fecha": "2027-05-22",
+       "fecha": "2027-07-02",
        "texto": "Mocks"
       },
       {
-       "fecha": "2027-05-23",
+       "fecha": "2027-07-03",
        "texto": "Mocks"
       },
       {
-       "fecha": "2027-05-24",
+       "fecha": "2027-07-05",
        "texto": "Exam"
       }
      ],
-     "examen": "2027-05-24",
+     "examen": "2027-07-05",
      "listo": 80,
      "renovacion": {
       "anos": 3,
@@ -2621,15 +2621,15 @@
      ],
      "plan": [
       {
-       "fecha": "2027-05-24",
+       "fecha": "2027-07-05",
        "texto": "Guide (PM)"
       },
       {
-       "fecha": "2027-05-25",
+       "fecha": "2027-07-06",
        "texto": "Mock + exam"
       }
      ],
-     "examen": "2027-05-25",
+     "examen": "2027-07-06",
      "listo": 85,
      "renovacion": {
       "nota": "validity to verify"
@@ -2647,12 +2647,12 @@
    "extraPlataforma": 0,
    "extraArquitectura": 0,
    "fechas": {
-    "inicio": "2027-05-26",
-    "fin": "2027-05-29"
+    "inicio": "2027-07-07",
+    "fin": "2027-07-11"
    },
    "roadmap": {
-    "inicio": "2027-05-26",
-    "fin": "2027-05-29"
+    "inicio": "2027-07-07",
+    "fin": "2027-07-11"
    },
    "fase": "F4",
    "horas": 41,
@@ -2712,12 +2712,12 @@
     ]
    },
    "roadmap": {
-    "inicio": "2027-05-30",
-    "fin": "2027-06-18"
+    "inicio": "2027-07-12",
+    "fin": "2027-08-05"
    },
    "fechas": {
-    "inicio": "2027-05-30",
-    "fin": "2027-06-18"
+    "inicio": "2027-07-12",
+    "fin": "2027-08-05"
    },
    "fase": "F5",
    "horas": 205,
@@ -2737,8 +2737,8 @@
       1,
       5
      ],
-     "inicio": "2027-05-30",
-     "fin": "2027-06-03",
+     "inicio": "2027-07-12",
+     "fin": "2027-07-17",
      "tema": "Conamat Differential calculus",
      "hito": "Differentiate compositions, optimize by hand",
      "capitulosAConfirmar": true
@@ -2748,8 +2748,8 @@
       6,
       9
      ],
-     "inicio": "2027-06-04",
-     "fin": "2027-06-07",
+     "inicio": "2027-07-18",
+     "fin": "2027-07-22",
      "tema": "Conamat Integral calculus",
      "hito": "Areas, integral as accumulation",
      "capitulosAConfirmar": true
@@ -2759,8 +2759,8 @@
       10,
       13
      ],
-     "inicio": "2027-06-08",
-     "fin": "2027-06-11",
+     "inicio": "2027-07-23",
+     "fin": "2027-07-27",
      "tema": "MML ch. 2 (linear algebra)",
      "hito": "Invert matrices by hand"
     },
@@ -2769,8 +2769,8 @@
       14,
       17
      ],
-     "inicio": "2027-06-12",
-     "fin": "2027-06-15",
+     "inicio": "2027-07-28",
+     "fin": "2027-08-01",
      "tema": "MML ch. 4 + ch. 10 (SVD, PCA)",
      "hito": "PCA by hand on 5 points"
     },
@@ -2779,8 +2779,8 @@
       18,
       20
      ],
-     "inicio": "2027-06-16",
-     "fin": "2027-06-18",
+     "inicio": "2027-08-02",
+     "fin": "2027-08-05",
      "tema": "MML ch. 5 + ch. 7 (backprop, optimization)",
      "hito": "Backprop by hand for a 2-layer net"
     }
@@ -2874,8 +2874,8 @@
     }
    ],
    "roadmap": {
-    "inicio": "2027-06-19",
-    "fin": "2027-07-02"
+    "inicio": "2027-08-06",
+    "fin": "2027-08-19"
    },
    "historial": [
     {
@@ -2890,8 +2890,8 @@
     }
    ],
    "fechas": {
-    "inicio": "2027-06-19",
-    "fin": "2027-07-02"
+    "inicio": "2027-08-06",
+    "fin": "2027-08-19"
    },
    "fase": "F5",
    "horas": 135,
@@ -2933,12 +2933,12 @@
     }
    ],
    "roadmap": {
-    "inicio": "2027-07-03",
-    "fin": "2027-07-05"
+    "inicio": "2027-08-20",
+    "fin": "2027-08-22"
    },
    "fechas": {
-    "inicio": "2027-07-03",
-    "fin": "2027-07-05"
+    "inicio": "2027-08-20",
+    "fin": "2027-08-22"
    },
    "fase": "F5",
    "horas": 25
@@ -3013,8 +3013,8 @@
     }
    ],
    "roadmap": {
-    "inicio": "2027-07-06",
-    "fin": "2027-07-15"
+    "inicio": "2027-08-23",
+    "fin": "2027-09-01"
    },
    "historial": [
     {
@@ -3029,8 +3029,8 @@
     }
    ],
    "fechas": {
-    "inicio": "2027-07-06",
-    "fin": "2027-07-15"
+    "inicio": "2027-08-23",
+    "fin": "2027-09-01"
    },
    "fase": "F5",
    "horas": 100,
@@ -3048,12 +3048,12 @@
    "extraPlataforma": 0,
    "extraArquitectura": 0,
    "fechas": {
-    "inicio": "2027-07-16",
-    "fin": "2027-07-18"
+    "inicio": "2027-09-02",
+    "fin": "2027-09-05"
    },
    "roadmap": {
-    "inicio": "2027-07-16",
-    "fin": "2027-07-18"
+    "inicio": "2027-09-02",
+    "fin": "2027-09-05"
    },
    "fase": "F5",
    "horas": 32,
@@ -3116,12 +3116,12 @@
     ]
    },
    "roadmap": {
-    "inicio": "2027-07-19",
-    "fin": "2027-08-01"
+    "inicio": "2027-09-06",
+    "fin": "2027-09-21"
    },
    "fechas": {
-    "inicio": "2027-07-19",
-    "fin": "2027-08-01"
+    "inicio": "2027-09-06",
+    "fin": "2027-09-21"
    },
    "fase": "F6",
    "horas": 144,
@@ -3131,8 +3131,8 @@
       1,
       5
      ],
-     "inicio": "2027-07-19",
-     "fin": "2027-07-23",
+     "inicio": "2027-09-06",
+     "fin": "2027-09-11",
      "tema": "Blitzstein & Hwang ch. 1–7",
      "hito": "Bayes, joint distributions"
     },
@@ -3141,8 +3141,8 @@
       6,
       7
      ],
-     "inicio": "2027-07-24",
-     "fin": "2027-07-25",
+     "inicio": "2027-09-12",
+     "fin": "2027-09-13",
      "tema": "MML ch. 6",
      "hito": "Multivariate Gaussian"
     },
@@ -3151,8 +3151,8 @@
       8,
       10
      ],
-     "inicio": "2027-07-26",
-     "fin": "2027-07-28",
+     "inicio": "2027-09-14",
+     "fin": "2027-09-17",
      "tema": "MacKay ch. 2",
      "hito": "Entropy, KL and cross-entropy by hand"
     },
@@ -3161,8 +3161,8 @@
       11,
       12
      ],
-     "inicio": "2027-07-29",
-     "fin": "2027-07-30",
+     "inicio": "2027-09-18",
+     "fin": "2027-09-19",
      "tema": "Strang: SVD + low rank",
      "hito": "Why LoRA works"
     },
@@ -3171,8 +3171,8 @@
       13,
       14
      ],
-     "inicio": "2027-07-31",
-     "fin": "2027-08-01",
+     "inicio": "2027-09-20",
+     "fin": "2027-09-21",
      "tema": "Transformers from the inside: mini-GPT by hand (Karpathy, \"Let's build GPT\")",
      "hito": "Train it on a small text and explain attention with my own diagram"
     }
@@ -3273,12 +3273,12 @@
     }
    ],
    "roadmap": {
-    "inicio": "2027-08-02",
-    "fin": "2027-08-10"
+    "inicio": "2027-09-22",
+    "fin": "2027-09-30"
    },
    "fechas": {
-    "inicio": "2027-08-02",
-    "fin": "2027-08-10"
+    "inicio": "2027-09-22",
+    "fin": "2027-09-30"
    },
    "fase": "F6",
    "horas": 85,
@@ -3334,8 +3334,8 @@
     }
    ],
    "roadmap": {
-    "inicio": "2027-08-11",
-    "fin": "2027-08-23"
+    "inicio": "2027-10-01",
+    "fin": "2027-10-13"
    },
    "historial": [
     {
@@ -3350,8 +3350,8 @@
     }
    ],
    "fechas": {
-    "inicio": "2027-08-11",
-    "fin": "2027-08-23"
+    "inicio": "2027-10-01",
+    "fin": "2027-10-13"
    },
    "fase": "F6",
    "horas": 125,
@@ -3430,8 +3430,8 @@
     }
    ],
    "roadmap": {
-    "inicio": "2027-08-24",
-    "fin": "2027-09-06"
+    "inicio": "2027-10-14",
+    "fin": "2027-10-27"
    },
    "historial": [
     {
@@ -3446,8 +3446,8 @@
     }
    ],
    "fechas": {
-    "inicio": "2027-08-24",
-    "fin": "2027-09-06"
+    "inicio": "2027-10-14",
+    "fin": "2027-10-27"
    },
    "fase": "F6",
    "horas": 135,
@@ -3471,12 +3471,12 @@
    "extraPlataforma": 0,
    "extraArquitectura": 0,
    "fechas": {
-    "inicio": "2027-09-07",
-    "fin": "2027-09-09"
+    "inicio": "2027-10-28",
+    "fin": "2027-10-31"
    },
    "roadmap": {
-    "inicio": "2027-09-07",
-    "fin": "2027-09-09"
+    "inicio": "2027-10-28",
+    "fin": "2027-10-31"
    },
    "fase": "F6",
    "horas": 31,
@@ -3497,12 +3497,12 @@
    "extraPlataforma": 0,
    "extraArquitectura": 0,
    "roadmap": {
-    "inicio": "2027-09-10",
-    "fin": "2027-09-19"
+    "inicio": "2027-11-01",
+    "fin": "2027-11-03"
    },
    "fechas": {
-    "inicio": "2027-09-10",
-    "fin": "2027-09-19"
+    "inicio": "2027-11-01",
+    "fin": "2027-11-03"
    },
    "fase": "F6"
   },
@@ -3547,12 +3547,12 @@
     ]
    },
    "roadmap": {
-    "inicio": "2027-09-20",
-    "fin": "2027-09-24"
+    "inicio": "2027-11-04",
+    "fin": "2027-11-09"
    },
    "fechas": {
-    "inicio": "2027-09-20",
-    "fin": "2027-09-24"
+    "inicio": "2027-11-04",
+    "fin": "2027-11-09"
    },
    "fase": "F7",
    "horas": 50,
@@ -3562,8 +3562,8 @@
       1,
       3
      ],
-     "inicio": "2027-09-20",
-     "fin": "2027-09-22",
+     "inicio": "2027-11-04",
+     "fin": "2027-11-07",
      "tema": "Silverman: divisibility, gcd, congruences, Fermat, Euler, RSA",
      "hito": "Toy RSA by hand"
     },
@@ -3572,8 +3572,8 @@
       4,
       5
      ],
-     "inicio": "2027-09-23",
-     "fin": "2027-09-24",
+     "inicio": "2027-11-08",
+     "fin": "2027-11-09",
      "tema": "Aumasson: randomness, block ciphers, AEAD, hashing, key exchange",
      "hito": "Explain AES-GCM and nonce reuse"
     }
@@ -3657,8 +3657,8 @@
     }
    ],
    "roadmap": {
-    "inicio": "2027-09-25",
-    "fin": "2027-10-03"
+    "inicio": "2027-11-10",
+    "fin": "2027-11-18"
    },
    "historial": [
     {
@@ -3673,8 +3673,8 @@
     }
    ],
    "fechas": {
-    "inicio": "2027-09-25",
-    "fin": "2027-10-03"
+    "inicio": "2027-11-10",
+    "fin": "2027-11-18"
    },
    "fase": "F7",
    "horas": 85,
@@ -3739,8 +3739,8 @@
     }
    ],
    "roadmap": {
-    "inicio": "2027-10-04",
-    "fin": "2027-10-14"
+    "inicio": "2027-11-19",
+    "fin": "2027-11-29"
    },
    "historial": [
     {
@@ -3755,8 +3755,8 @@
     }
    ],
    "fechas": {
-    "inicio": "2027-10-04",
-    "fin": "2027-10-14"
+    "inicio": "2027-11-19",
+    "fin": "2027-11-29"
    },
    "fase": "F7",
    "horas": 105,
@@ -3808,8 +3808,8 @@
     }
    ],
    "roadmap": {
-    "inicio": "2027-10-15",
-    "fin": "2027-10-27"
+    "inicio": "2027-11-30",
+    "fin": "2027-12-12"
    },
    "historial": [
     {
@@ -3824,8 +3824,8 @@
     }
    ],
    "fechas": {
-    "inicio": "2027-10-15",
-    "fin": "2027-10-27"
+    "inicio": "2027-11-30",
+    "fin": "2027-12-12"
    },
    "fase": "F7",
    "horas": 125,
@@ -3841,12 +3841,12 @@
    "extraPlataforma": 0,
    "extraArquitectura": 0,
    "fechas": {
-    "inicio": "2027-10-28",
-    "fin": "2027-11-11"
+    "inicio": "2027-12-13",
+    "fin": "2028-01-13"
    },
    "roadmap": {
-    "inicio": "2027-10-28",
-    "fin": "2027-11-11"
+    "inicio": "2027-12-13",
+    "fin": "2028-01-13"
    },
    "fase": "F7",
    "horas": 154,
@@ -3861,27 +3861,27 @@
      ],
      "plan": [
       {
-       "fecha": "2027-10-28",
-       "texto": "AD/OSINT intensive + lab (through 3 Nov, lab twice)"
+       "fecha": "2027-12-13",
+       "texto": "AD/OSINT intensive + lab (study 13–19 Dec and 27–30 Dec, lab twice)"
       },
       {
-       "fecha": "2027-11-04",
-       "texto": "Practical exam (through 8 Nov)"
+       "fecha": "2028-01-07",
+       "texto": "Practical exam (7–11 Jan, 5 days in a row)"
       },
       {
-       "fecha": "2027-11-09",
+       "fecha": "2028-01-12",
        "texto": "Report"
       },
       {
-       "fecha": "2027-11-10",
+       "fecha": "2028-01-13",
        "texto": "Report"
       },
       {
-       "fecha": "2027-11-11",
+       "fecha": "2028-01-13",
        "texto": "Debrief in English"
       }
      ],
-     "examen": "2027-11-11",
+     "examen": "2028-01-07",
      "listo": "AD lab end-to-end without guide",
      "costo": "US$ 499",
      "costoVerificado": true,
@@ -3901,12 +3901,12 @@
    "extraPlataforma": 0,
    "extraArquitectura": 0,
    "fechas": {
-    "inicio": "2027-11-12",
-    "fin": "2027-11-15"
+    "inicio": "2028-01-14",
+    "fin": "2028-01-18"
    },
    "roadmap": {
-    "inicio": "2027-11-12",
-    "fin": "2027-11-15"
+    "inicio": "2028-01-14",
+    "fin": "2028-01-18"
    },
    "fase": "F7",
    "horas": 42,
@@ -3927,12 +3927,12 @@
    "extraPlataforma": 0,
    "extraArquitectura": 0,
    "roadmap": {
-    "inicio": "2027-11-16",
-    "fin": "2027-11-21"
+    "inicio": "2028-01-19",
+    "fin": "2028-01-21"
    },
    "fechas": {
-    "inicio": "2027-11-16",
-    "fin": "2027-11-21"
+    "inicio": "2028-01-19",
+    "fin": "2028-01-21"
    },
    "fase": "F7"
   },
@@ -3975,12 +3975,12 @@
     ]
    },
    "roadmap": {
-    "inicio": "2027-11-22",
-    "fin": "2027-11-29"
+    "inicio": "2028-01-22",
+    "fin": "2028-01-30"
    },
    "fechas": {
-    "inicio": "2027-11-22",
-    "fin": "2027-11-29"
+    "inicio": "2028-01-22",
+    "fin": "2028-01-30"
    },
    "fase": "F8",
    "horas": 82,
@@ -3990,8 +3990,8 @@
       1,
       2
      ],
-     "inicio": "2027-11-22",
-     "fin": "2027-11-23",
+     "inicio": "2028-01-22",
+     "fin": "2028-01-23",
      "tema": "Blitzstein: Markov chains, random walks",
      "hito": "(to confirm)",
      "hitoAConfirmar": true
@@ -4001,8 +4001,8 @@
       3,
       6
      ],
-     "inicio": "2027-11-24",
-     "fin": "2027-11-27",
+     "inicio": "2028-01-24",
+     "fin": "2028-01-28",
      "tema": "Hyndman: decomposition, autocorrelation, ARIMA, time-series CV",
      "hito": "(to confirm)",
      "hitoAConfirmar": true
@@ -4012,8 +4012,8 @@
       7,
       8
      ],
-     "inicio": "2027-11-28",
-     "fin": "2027-11-29",
+     "inicio": "2028-01-29",
+     "fin": "2028-01-30",
      "tema": "López de Prado: backtest overfitting, deflated Sharpe",
      "hito": "(to confirm)",
      "hitoAConfirmar": true
@@ -4083,8 +4083,8 @@
     }
    ],
    "roadmap": {
-    "inicio": "2027-11-30",
-    "fin": "2027-12-12"
+    "inicio": "2028-01-31",
+    "fin": "2028-02-12"
    },
    "historial": [
     {
@@ -4099,8 +4099,8 @@
     }
    ],
    "fechas": {
-    "inicio": "2027-11-30",
-    "fin": "2027-12-12"
+    "inicio": "2028-01-31",
+    "fin": "2028-02-12"
    },
    "fase": "F8",
    "horas": 125,
@@ -4146,8 +4146,8 @@
     }
    ],
    "roadmap": {
-    "inicio": "2027-12-13",
-    "fin": "2027-12-30"
+    "inicio": "2028-02-13",
+    "fin": "2028-02-23"
    },
    "historial": [
     {
@@ -4162,31 +4162,12 @@
     }
    ],
    "fechas": {
-    "inicio": "2027-12-13",
-    "fin": "2027-12-30"
+    "inicio": "2028-02-13",
+    "fin": "2028-02-23"
    },
    "fase": "F8",
    "horas": 105,
    "horasLim": 130
-  },
-  {
-   "id": "DES3",
-   "etapa": 3,
-   "tipo": "descanso",
-   "nombre": "Rest",
-   "base": 1,
-   "extra": 0,
-   "extraPlataforma": 0,
-   "extraArquitectura": 0,
-   "roadmap": {
-    "inicio": "2027-12-31",
-    "fin": "2028-01-06"
-   },
-   "fechas": {
-    "inicio": "2027-12-31",
-    "fin": "2028-01-06"
-   },
-   "fase": "F8"
   },
   {
    "id": "WQ2",
@@ -4234,12 +4215,12 @@
     ]
    },
    "roadmap": {
-    "inicio": "2028-01-07",
-    "fin": "2028-01-16"
+    "inicio": "2028-02-24",
+    "fin": "2028-03-06"
    },
    "fechas": {
-    "inicio": "2028-01-07",
-    "fin": "2028-01-16"
+    "inicio": "2028-02-24",
+    "fin": "2028-03-06"
    },
    "fase": "F8",
    "horas": 104,
@@ -4249,8 +4230,8 @@
       1,
       3
      ],
-     "inicio": "2028-01-07",
-     "fin": "2028-01-09",
+     "inicio": "2028-02-24",
+     "fin": "2028-02-27",
      "tema": "Shreve I (binomial)",
      "hito": "(to confirm)",
      "hitoAConfirmar": true
@@ -4260,8 +4241,8 @@
       4,
       7
      ],
-     "inicio": "2028-01-10",
-     "fin": "2028-01-13",
+     "inicio": "2028-02-28",
+     "fin": "2028-03-03",
      "tema": "Shreve II ch. 3–5 (Brownian motion, Itô, Black-Scholes)",
      "hito": "(to confirm)",
      "hitoAConfirmar": true
@@ -4271,8 +4252,8 @@
       8,
       10
      ],
-     "inicio": "2028-01-14",
-     "fin": "2028-01-16",
+     "inicio": "2028-03-04",
+     "fin": "2028-03-06",
      "tema": "Hull (BS, Greeks, implied vol, Monte Carlo)",
      "hito": "(to confirm)",
      "hitoAConfirmar": true
@@ -4337,8 +4318,8 @@
     }
    ],
    "roadmap": {
-    "inicio": "2028-01-17",
-    "fin": "2028-01-29"
+    "inicio": "2028-03-07",
+    "fin": "2028-03-19"
    },
    "historial": [
     {
@@ -4353,8 +4334,8 @@
     }
    ],
    "fechas": {
-    "inicio": "2028-01-17",
-    "fin": "2028-01-29"
+    "inicio": "2028-03-07",
+    "fin": "2028-03-19"
    },
    "fase": "F8",
    "horas": 130,
@@ -4396,8 +4377,8 @@
     }
    ],
    "roadmap": {
-    "inicio": "2028-01-30",
-    "fin": "2028-02-09"
+    "inicio": "2028-03-20",
+    "fin": "2028-03-30"
    },
    "historial": [
     {
@@ -4412,8 +4393,8 @@
     }
    ],
    "fechas": {
-    "inicio": "2028-01-30",
-    "fin": "2028-02-09"
+    "inicio": "2028-03-20",
+    "fin": "2028-03-30"
    },
    "fase": "F8",
    "horas": 105,
@@ -4429,12 +4410,12 @@
    "extraPlataforma": 0,
    "extraArquitectura": 0,
    "fechas": {
-    "inicio": "2028-02-10",
-    "fin": "2028-02-15"
+    "inicio": "2028-03-31",
+    "fin": "2028-04-06"
    },
    "roadmap": {
-    "inicio": "2028-02-10",
-    "fin": "2028-02-15"
+    "inicio": "2028-03-31",
+    "fin": "2028-04-06"
    },
    "fase": "F8",
    "horas": 62,
@@ -4449,31 +4430,31 @@
      ],
      "plan": [
       {
-       "fecha": "2028-02-10",
+       "fecha": "2028-03-31",
        "texto": "Course + labs"
       },
       {
-       "fecha": "2028-02-11",
+       "fecha": "2028-04-01",
        "texto": "Course + labs"
       },
       {
-       "fecha": "2028-02-12",
+       "fecha": "2028-04-02",
        "texto": "Course + labs"
       },
       {
-       "fecha": "2028-02-13",
+       "fecha": "2028-04-04",
        "texto": "killer.sh #1"
       },
       {
-       "fecha": "2028-02-14",
+       "fecha": "2028-04-05",
        "texto": "Review + killer.sh #2"
       },
       {
-       "fecha": "2028-02-15",
+       "fecha": "2028-04-06",
        "texto": "Exam"
       }
      ],
-     "examen": "2028-02-15",
+     "examen": "2028-04-06",
      "listo": 85,
      "requiere": "cka",
      "costo": "US$ 445",
@@ -4495,12 +4476,12 @@
    "extraPlataforma": 0,
    "extraArquitectura": 0,
    "fechas": {
-    "inicio": "2028-02-16",
-    "fin": "2028-02-19"
+    "inicio": "2028-04-07",
+    "fin": "2028-04-11"
    },
    "roadmap": {
-    "inicio": "2028-02-16",
-    "fin": "2028-02-19"
+    "inicio": "2028-04-07",
+    "fin": "2028-04-11"
    },
    "fase": "F8",
    "horas": 41,
@@ -4548,12 +4529,12 @@
     ]
    },
    "roadmap": {
-    "inicio": "2028-02-20",
-    "fin": "2028-02-24"
+    "inicio": "2028-04-12",
+    "fin": "2028-04-17"
    },
    "fechas": {
-    "inicio": "2028-02-20",
-    "fin": "2028-02-24"
+    "inicio": "2028-04-12",
+    "fin": "2028-04-17"
    },
    "fase": "F9",
    "horas": 51,
@@ -4563,8 +4544,8 @@
       1,
       2
      ],
-     "inicio": "2028-02-20",
-     "fin": "2028-02-21",
+     "inicio": "2028-04-12",
+     "fin": "2028-04-14",
      "tema": "Boyd & Vandenberghe: convexity, QP",
      "hito": "(to confirm)",
      "hitoAConfirmar": true
@@ -4574,8 +4555,8 @@
       3,
       5
      ],
-     "inicio": "2028-02-22",
-     "fin": "2028-02-24",
+     "inicio": "2028-04-15",
+     "fin": "2028-04-17",
      "tema": "Cornuéjols & Tütüncü: Markowitz, efficient frontier",
      "hito": "(to confirm)",
      "hitoAConfirmar": true
@@ -4638,8 +4619,8 @@
     }
    ],
    "roadmap": {
-    "inicio": "2028-02-25",
-    "fin": "2028-03-10"
+    "inicio": "2028-04-18",
+    "fin": "2028-05-02"
    },
    "historial": [
     {
@@ -4654,8 +4635,8 @@
     }
    ],
    "fechas": {
-    "inicio": "2028-02-25",
-    "fin": "2028-03-10"
+    "inicio": "2028-04-18",
+    "fin": "2028-05-02"
    },
    "fase": "F9",
    "horas": 150,
@@ -4697,8 +4678,8 @@
     }
    ],
    "roadmap": {
-    "inicio": "2028-03-11",
-    "fin": "2028-03-22"
+    "inicio": "2028-05-03",
+    "fin": "2028-05-14"
    },
    "historial": [
     {
@@ -4713,8 +4694,8 @@
     }
    ],
    "fechas": {
-    "inicio": "2028-03-11",
-    "fin": "2028-03-22"
+    "inicio": "2028-05-03",
+    "fin": "2028-05-14"
    },
    "fase": "F9",
    "horas": 120,
@@ -4730,12 +4711,12 @@
    "extraPlataforma": 0,
    "extraArquitectura": 0,
    "fechas": {
-    "inicio": "2028-03-23",
-    "fin": "2028-03-30"
+    "inicio": "2028-05-15",
+    "fin": "2028-05-23"
    },
    "roadmap": {
-    "inicio": "2028-03-23",
-    "fin": "2028-03-30"
+    "inicio": "2028-05-15",
+    "fin": "2028-05-23"
    },
    "fase": "F9",
    "horas": 82,
@@ -4750,39 +4731,39 @@
      ],
      "plan": [
       {
-       "fecha": "2028-03-23",
+       "fecha": "2028-05-15",
        "texto": "Course"
       },
       {
-       "fecha": "2028-03-24",
+       "fecha": "2028-05-16",
        "texto": "Course"
       },
       {
-       "fecha": "2028-03-25",
+       "fecha": "2028-05-17",
        "texto": "Course"
       },
       {
-       "fecha": "2028-03-26",
+       "fecha": "2028-05-18",
        "texto": "KMS / GuardDuty / Security Hub labs"
       },
       {
-       "fecha": "2028-03-27",
+       "fecha": "2028-05-20",
        "texto": "Mocks"
       },
       {
-       "fecha": "2028-03-28",
+       "fecha": "2028-05-21",
        "texto": "Mocks"
       },
       {
-       "fecha": "2028-03-29",
+       "fecha": "2028-05-22",
        "texto": "Review"
       },
       {
-       "fecha": "2028-03-30",
+       "fecha": "2028-05-23",
        "texto": "Exam"
       }
      ],
-     "examen": "2028-03-30",
+     "examen": "2028-05-23",
      "listo": 80,
      "costo": "US$ 300",
      "costoVerificado": true,
@@ -4803,12 +4784,12 @@
    "extraPlataforma": 0,
    "extraArquitectura": 0,
    "fechas": {
-    "inicio": "2028-03-31",
-    "fin": "2028-04-03"
+    "inicio": "2028-05-24",
+    "fin": "2028-05-28"
    },
    "roadmap": {
-    "inicio": "2028-03-31",
-    "fin": "2028-04-03"
+    "inicio": "2028-05-24",
+    "fin": "2028-05-28"
    },
    "fase": "F9",
    "horas": 42,
@@ -4829,12 +4810,12 @@
    "extraPlataforma": 0,
    "extraArquitectura": 0,
    "roadmap": {
-    "inicio": "2028-04-04",
-    "fin": "2028-04-15"
+    "inicio": "2028-05-29",
+    "fin": "2028-05-31"
    },
    "fechas": {
-    "inicio": "2028-04-04",
-    "fin": "2028-04-15"
+    "inicio": "2028-05-29",
+    "fin": "2028-05-31"
    },
    "fase": "F9"
   },
@@ -4882,12 +4863,12 @@
     ]
    },
    "roadmap": {
-    "inicio": "2028-04-16",
-    "fin": "2028-04-25"
+    "inicio": "2028-06-01",
+    "fin": "2028-06-18"
    },
    "fechas": {
-    "inicio": "2028-04-16",
-    "fin": "2028-04-25"
+    "inicio": "2028-06-01",
+    "fin": "2028-06-18"
    },
    "fase": "F10",
    "horas": 103,
@@ -4897,8 +4878,8 @@
       1,
       4
      ],
-     "inicio": "2028-04-16",
-     "fin": "2028-04-19",
+     "inicio": "2028-06-01",
+     "fin": "2028-06-04",
      "tema": "ODEs 1st/2nd order",
      "hito": "(to confirm)",
      "hitoAConfirmar": true
@@ -4908,8 +4889,8 @@
       5,
       7
      ],
-     "inicio": "2028-04-20",
-     "fin": "2028-04-22",
+     "inicio": "2028-06-05",
+     "fin": "2028-06-08",
      "tema": "Systems + numerical methods (Euler, RK4)",
      "hito": "(to confirm)",
      "hitoAConfirmar": true
@@ -4919,8 +4900,8 @@
       8,
       10
      ],
-     "inicio": "2028-04-23",
-     "fin": "2028-04-25",
+     "inicio": "2028-06-16",
+     "fin": "2028-06-18",
      "tema": "Rigid body: Euler angles, quaternions (Diebel)",
      "hito": "(to confirm)",
      "hitoAConfirmar": true
@@ -4979,8 +4960,8 @@
     }
    ],
    "roadmap": {
-    "inicio": "2028-04-26",
-    "fin": "2028-05-13"
+    "inicio": "2028-06-19",
+    "fin": "2028-07-07"
    },
    "historial": [
     {
@@ -4995,8 +4976,8 @@
     }
    ],
    "fechas": {
-    "inicio": "2028-04-26",
-    "fin": "2028-05-13"
+    "inicio": "2028-06-19",
+    "fin": "2028-07-07"
    },
    "fase": "F10",
    "horas": 185,
@@ -5046,12 +5027,12 @@
     ]
    },
    "roadmap": {
-    "inicio": "2028-05-14",
-    "fin": "2028-05-21"
+    "inicio": "2028-07-08",
+    "fin": "2028-07-16"
    },
    "fechas": {
-    "inicio": "2028-05-14",
-    "fin": "2028-05-21"
+    "inicio": "2028-07-08",
+    "fin": "2028-07-16"
    },
    "fase": "F10",
    "horas": 83,
@@ -5061,8 +5042,8 @@
       1,
       2
      ],
-     "inicio": "2028-05-14",
-     "fin": "2028-05-15",
+     "inicio": "2028-07-08",
+     "fin": "2028-07-09",
      "tema": "PDE intro (heat, wave, Laplace)",
      "hito": "(to confirm)",
      "hitoAConfirmar": true
@@ -5072,8 +5053,8 @@
       3,
       8
      ],
-     "inicio": "2028-05-16",
-     "fin": "2028-05-21",
+     "inicio": "2028-07-10",
+     "fin": "2028-07-16",
      "tema": "Logan: finite elements",
      "hito": "(to confirm)",
      "hitoAConfirmar": true
@@ -5128,8 +5109,8 @@
     }
    ],
    "roadmap": {
-    "inicio": "2028-05-22",
-    "fin": "2028-06-08"
+    "inicio": "2028-07-17",
+    "fin": "2028-08-03"
    },
    "historial": [
     {
@@ -5144,31 +5125,12 @@
     }
    ],
    "fechas": {
-    "inicio": "2028-05-22",
-    "fin": "2028-06-08"
+    "inicio": "2028-07-17",
+    "fin": "2028-08-03"
    },
    "fase": "F10",
    "horas": 175,
    "horasLim": 185
-  },
-  {
-   "id": "DES4",
-   "etapa": 4,
-   "tipo": "descanso",
-   "nombre": "Rest",
-   "base": 1,
-   "extra": 0,
-   "extraPlataforma": 0,
-   "extraArquitectura": 0,
-   "roadmap": {
-    "inicio": "2028-06-09",
-    "fin": "2028-06-15"
-   },
-   "fechas": {
-    "inicio": "2028-06-09",
-    "fin": "2028-06-15"
-   },
-   "fase": "F10"
   },
   {
    "id": "WA3",
@@ -5211,12 +5173,12 @@
     ]
    },
    "roadmap": {
-    "inicio": "2028-06-16",
-    "fin": "2028-06-25"
+    "inicio": "2028-08-04",
+    "fin": "2028-08-15"
    },
    "fechas": {
-    "inicio": "2028-06-16",
-    "fin": "2028-06-25"
+    "inicio": "2028-08-04",
+    "fin": "2028-08-15"
    },
    "fase": "F10",
    "horas": 104,
@@ -5226,8 +5188,8 @@
       1,
       6
      ],
-     "inicio": "2028-06-16",
-     "fin": "2028-06-21",
+     "inicio": "2028-08-04",
+     "fin": "2028-08-10",
      "tema": "Anderson ch. 1–5",
      "hito": "(to confirm)",
      "hitoAConfirmar": true
@@ -5237,8 +5199,8 @@
       7,
       10
      ],
-     "inicio": "2028-06-22",
-     "fin": "2028-06-25",
+     "inicio": "2028-08-11",
+     "fin": "2028-08-15",
      "tema": "LeVeque (intro, Euler equations)",
      "hito": "(to confirm)",
      "hitoAConfirmar": true
@@ -5285,8 +5247,8 @@
     }
    ],
    "roadmap": {
-    "inicio": "2028-06-26",
-    "fin": "2028-07-10"
+    "inicio": "2028-08-16",
+    "fin": "2028-08-30"
    },
    "historial": [
     {
@@ -5301,8 +5263,8 @@
     }
    ],
    "fechas": {
-    "inicio": "2028-06-26",
-    "fin": "2028-07-10"
+    "inicio": "2028-08-16",
+    "fin": "2028-08-30"
    },
    "fase": "F10",
    "horas": 145,
@@ -5318,12 +5280,12 @@
    "extraPlataforma": 0,
    "extraArquitectura": 0,
    "fechas": {
-    "inicio": "2028-07-11",
-    "fin": "2028-07-13"
+    "inicio": "2028-08-31",
+    "fin": "2028-09-03"
    },
    "roadmap": {
-    "inicio": "2028-07-11",
-    "fin": "2028-07-13"
+    "inicio": "2028-08-31",
+    "fin": "2028-09-03"
    },
    "fase": "F10",
    "horas": 30,
@@ -5374,12 +5336,12 @@
     ]
    },
    "roadmap": {
-    "inicio": "2028-07-14",
-    "fin": "2028-07-21"
+    "inicio": "2028-09-04",
+    "fin": "2028-09-12"
    },
    "fechas": {
-    "inicio": "2028-07-14",
-    "fin": "2028-07-21"
+    "inicio": "2028-09-04",
+    "fin": "2028-09-12"
    },
    "fase": "F11",
    "horas": 82,
@@ -5389,8 +5351,8 @@
       1,
       5
      ],
-     "inicio": "2028-07-14",
-     "fin": "2028-07-18",
+     "inicio": "2028-09-04",
+     "fin": "2028-09-09",
      "tema": "Åström & Murray (PID, state feedback, LQR)",
      "hito": "(to confirm)",
      "hitoAConfirmar": true
@@ -5400,8 +5362,8 @@
       6,
       8
      ],
-     "inicio": "2028-07-19",
-     "fin": "2028-07-21",
+     "inicio": "2028-09-10",
+     "fin": "2028-09-12",
      "tema": "Labbe: Kalman filters",
      "hito": "(to confirm)",
      "hitoAConfirmar": true
@@ -5456,8 +5418,8 @@
     }
    ],
    "roadmap": {
-    "inicio": "2028-07-22",
-    "fin": "2028-08-09"
+    "inicio": "2028-09-13",
+    "fin": "2028-10-01"
    },
    "historial": [
     {
@@ -5472,8 +5434,8 @@
     }
    ],
    "fechas": {
-    "inicio": "2028-07-22",
-    "fin": "2028-08-09"
+    "inicio": "2028-09-13",
+    "fin": "2028-10-01"
    },
    "fase": "F11",
    "horas": 190,
@@ -5489,12 +5451,12 @@
    "extraPlataforma": 0,
    "extraArquitectura": 0,
    "fechas": {
-    "inicio": "2028-08-10",
-    "fin": "2028-08-21"
+    "inicio": "2028-10-02",
+    "fin": "2028-10-15"
    },
    "roadmap": {
-    "inicio": "2028-08-10",
-    "fin": "2028-08-21"
+    "inicio": "2028-10-02",
+    "fin": "2028-10-15"
    },
    "fase": "F11",
    "horas": 124,
@@ -5509,27 +5471,27 @@
      ],
      "plan": [
       {
-       "fecha": "2028-08-10",
+       "fecha": "2028-10-02",
        "texto": "Course (through 15 Aug)"
       },
       {
-       "fecha": "2028-08-16",
+       "fecha": "2028-10-09",
        "texto": "Multi-account and network scenarios"
       },
       {
-       "fecha": "2028-08-17",
+       "fecha": "2028-10-10",
        "texto": "Scenarios"
       },
       {
-       "fecha": "2028-08-18",
+       "fecha": "2028-10-11",
        "texto": "Four timed mocks (through 20 Aug)"
       },
       {
-       "fecha": "2028-08-21",
+       "fecha": "2028-10-15",
        "texto": "Exam"
       }
      ],
-     "examen": "2028-08-21",
+     "examen": "2028-10-15",
      "listo": 80,
      "renovacion": {
       "anos": 3,
@@ -5548,12 +5510,12 @@
    "extraPlataforma": 0,
    "extraArquitectura": 0,
    "fechas": {
-    "inicio": "2028-08-22",
-    "fin": "2028-08-25"
+    "inicio": "2028-10-16",
+    "fin": "2028-10-20"
    },
    "roadmap": {
-    "inicio": "2028-08-22",
-    "fin": "2028-08-25"
+    "inicio": "2028-10-16",
+    "fin": "2028-10-20"
    },
    "fase": "F11",
    "horas": 40,
@@ -5605,12 +5567,12 @@
     ]
    },
    "roadmap": {
-    "inicio": "2028-08-26",
-    "fin": "2028-08-30"
+    "inicio": "2028-10-21",
+    "fin": "2028-10-26"
    },
    "fechas": {
-    "inicio": "2028-08-26",
-    "fin": "2028-08-30"
+    "inicio": "2028-10-21",
+    "fin": "2028-10-26"
    },
    "fase": "F11",
    "horas": 52,
@@ -5620,8 +5582,8 @@
       1,
       3
      ],
-     "inicio": "2028-08-26",
-     "fin": "2028-08-28",
+     "inicio": "2028-10-21",
+     "fin": "2028-10-24",
      "tema": "Curtis: two-body, orbital elements",
      "hito": "(to confirm)",
      "hitoAConfirmar": true
@@ -5631,8 +5593,8 @@
       4,
       5
      ],
-     "inicio": "2028-08-29",
-     "fin": "2028-08-30",
+     "inicio": "2028-10-25",
+     "fin": "2028-10-26",
      "tema": "Perturbations J2, maneuvers (Vallado as SGP4 reference)",
      "hito": "(to confirm)",
      "hitoAConfirmar": true
@@ -5686,8 +5648,8 @@
     }
    ],
    "roadmap": {
-    "inicio": "2028-08-31",
-    "fin": "2028-09-15"
+    "inicio": "2028-10-27",
+    "fin": "2028-11-11"
    },
    "historial": [
     {
@@ -5702,8 +5664,8 @@
     }
    ],
    "fechas": {
-    "inicio": "2028-08-31",
-    "fin": "2028-09-15"
+    "inicio": "2028-10-27",
+    "fin": "2028-11-11"
    },
    "fase": "F11",
    "horas": 155,
@@ -5732,8 +5694,8 @@
    },
    "tecnologias": [],
    "roadmap": {
-    "inicio": "2028-09-16",
-    "fin": "2028-09-25"
+    "inicio": "2028-11-12",
+    "fin": "2028-11-21"
    },
    "historial": [
     {
@@ -5743,8 +5705,8 @@
     }
    ],
    "fechas": {
-    "inicio": "2028-09-16",
-    "fin": "2028-09-25"
+    "inicio": "2028-11-12",
+    "fin": "2028-11-21"
    },
    "fase": "F11",
    "horas": 100,
@@ -5794,8 +5756,8 @@
     }
    ],
    "roadmap": {
-    "inicio": "2028-09-26",
-    "fin": "2028-10-15"
+    "inicio": "2028-11-22",
+    "fin": "2028-12-11"
    },
    "historial": [
     {
@@ -5810,8 +5772,8 @@
     }
    ],
    "fechas": {
-    "inicio": "2028-09-26",
-    "fin": "2028-10-15"
+    "inicio": "2028-11-22",
+    "fin": "2028-12-11"
    },
    "fase": "F11",
    "horas": 200,
@@ -5827,12 +5789,12 @@
    "extraPlataforma": 0,
    "extraArquitectura": 0,
    "roadmap": {
-    "inicio": "2028-10-16",
-    "fin": "2028-10-27"
+    "inicio": "2028-12-12",
+    "fin": "2028-12-14"
    },
    "fechas": {
-    "inicio": "2028-10-16",
-    "fin": "2028-10-27"
+    "inicio": "2028-12-12",
+    "fin": "2028-12-14"
    },
    "fase": "F11"
   }
@@ -5936,6 +5898,25 @@
     "inicio": "2027-12-20",
     "fin": "2027-12-26",
     "nombre": "Pause"
+   },
+   {
+    "inicio": "2027-12-31",
+    "fin": "2028-01-06",
+    "nombre": "Rest"
+   },
+   {
+    "inicio": "2028-06-09",
+    "fin": "2028-06-15",
+    "nombre": "Rest"
+   }
+  ],
+  "extras": [
+   {
+    "inicio": "2026-12-05",
+    "fin": "2026-12-11",
+    "horas": 1,
+    "bloque": "P1",
+    "nombre": "Alawys v0.1"
    }
   ]
  },
@@ -5981,7 +5962,7 @@
  "recordatorios": [
   {
    "id": "reserva-claude-gh",
-   "texto": "Book Claude Architect + GitHub Foundations exams",
+   "texto": "Book Claude Architect + GitHub Foundations exams for 13–18 Dec (keep any booking you already made)",
    "fecha": "2026-11-21",
    "certs": [
     "claude-architect",
@@ -5990,8 +5971,8 @@
   },
   {
    "id": "reserva-ai103-databricks",
-   "texto": "Book Azure AI-103 + Databricks GenAI exams",
-   "fecha": "2026-12-20",
+   "texto": "Book Azure AI-103 + Databricks GenAI exams (before 26 Dec)",
+   "fecha": "2026-12-26",
    "certs": [
     "ai-103",
     "databricks-genai"
@@ -5999,13 +5980,13 @@
   },
   {
    "id": "reserva-cambridge",
-   "texto": "Book Cambridge C1 Advanced (week of 11–17 Mar 2027)",
-   "fecha": "2027-01-14"
+   "texto": "Book Cambridge C1 Advanced (exam week 5–13 Apr 2027, before 25 Jan)",
+   "fecha": "2027-01-25"
   },
   {
    "id": "reserva-cw3",
    "texto": "Book AWS MLA + GitHub Actions exams",
-   "fecha": "2026-12-21",
+   "fecha": "2026-12-28",
    "certs": [
     "aws-mla",
     "gh-actions"
@@ -6015,7 +5996,7 @@
   {
    "id": "reserva-cw4",
    "texto": "Book AWS SAA + Prometheus exams",
-   "fecha": "2027-02-19",
+   "fecha": "2027-03-13",
    "certs": [
     "aws-saa",
     "prometheus"
@@ -6025,7 +6006,7 @@
   {
    "id": "reserva-cw5",
    "texto": "Book AWS Developer + Terraform exams",
-   "fecha": "2027-03-18",
+   "fecha": "2027-04-14",
    "certs": [
     "aws-dva",
     "terraform"
@@ -6035,7 +6016,7 @@
   {
    "id": "reserva-cw678",
    "texto": "Book Security+, GHAS, CKA, OpenTelemetry, AWS GenAI Pro and Claude Developer exams",
-   "fecha": "2027-04-18",
+   "fecha": "2027-05-22",
    "certs": [
     "secplus",
     "ghas",
@@ -6048,8 +6029,8 @@
   },
   {
    "id": "reserva-pnpt",
-   "texto": "Book the PNPT exam",
-   "fecha": "2027-10-15",
+   "texto": "Book the PNPT 5-day practical exam window for 7–11 Jan 2028",
+   "fecha": "2027-11-30",
    "certs": [
     "pnpt"
    ],
@@ -6058,7 +6039,7 @@
   {
    "id": "reserva-cks",
    "texto": "Book the CKS exam (requires an active CKA)",
-   "fecha": "2028-01-30",
+   "fecha": "2028-03-20",
    "certs": [
     "cks"
    ],
@@ -6067,7 +6048,7 @@
   {
    "id": "reserva-scs",
    "texto": "Book the AWS Security Specialty exam",
-   "fecha": "2028-03-11",
+   "fecha": "2028-05-03",
    "certs": [
     "aws-scs"
    ],
@@ -6076,7 +6057,7 @@
   {
    "id": "reserva-sap",
    "texto": "Book the AWS SA Professional exam",
-   "fecha": "2028-07-22",
+   "fecha": "2028-09-13",
    "certs": [
     "aws-sap"
    ],

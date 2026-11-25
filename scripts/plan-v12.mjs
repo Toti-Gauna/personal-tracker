@@ -12,6 +12,11 @@ import { fileURLToPath } from 'node:url';
 
 const RAIZ = join(dirname(fileURLToPath(import.meta.url)), '..');
 const leer = (p) => JSON.parse(readFileSync(join(RAIZ, p), 'utf8'));
+// v12.4: los datos ya salen de scripts/plan-v12-4.mjs; correr este generador (v12.1) los pisaría con las fechas viejas.
+if (leer('data/plan-extendido.json').plan === 'v12.4') {
+  console.log('Los datos ya son v12.4: este script (v12.1) no se vuelve a correr.');
+  process.exit(0);
+}
 const V7 = leer('data/archivo/roadmap-v7/plan-extendido.json');
 const PV7 = leer('data/archivo/roadmap-v7/proyectos-v7.json');
 const HOY = '2026-11-21';
