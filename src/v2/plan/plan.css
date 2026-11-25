@@ -102,6 +102,10 @@ a.tp-fila-link:active { background: var(--capa-2); }
 .ln-carril { margin-top: var(--sp-2); }
 .ln-carril-nombre { position: sticky; left: 12px; display: inline-flex; align-items: center; gap: 6px; height: 18px; padding: 0; font: 500 var(--t-11)/1 var(--font-mono); letter-spacing: 0.06em; text-transform: uppercase; color: var(--texto-2); white-space: nowrap; }
 .ln-pista { position: relative; height: 32px; }
+/* v12.4: las herramientas open source, una marca por versión sobre el carril de proyectos. */
+.ln-herramientas { position: relative; height: 14px; }
+.ln-herr { position: absolute; top: 2px; width: 9px; height: 9px; margin-left: -4.5px; transform: rotate(45deg); background: var(--a-ing); box-shadow: 0 0 0 1.5px var(--capa-1); border-radius: 2px; }
+.ln-herr:focus-visible { outline: 2px solid var(--texto); outline-offset: 2px; }
 .ln-barra { position: absolute; top: 0; height: 32px; display: flex; align-items: center; overflow: hidden; border-radius: 6px; background: color-mix(in oklab, var(--area) 26%, var(--capa-2)); color: var(--texto); text-align: left; transition: filter var(--dur-1), transform var(--dur-1) var(--curva-salida); }
 /* La parte hecha al 45 %: con más área, el nombre de 11 px en --texto no llegaba a 4,5:1 (matemática quedaba en 3,6). */
 .ln-barra i { position: absolute; inset: 0 auto 0 0; background: color-mix(in oklab, var(--area) 45%, var(--capa-2)); }

@@ -6,6 +6,9 @@
 import { useEffect } from 'react';
 import { avisarVersionNueva } from '../../lib/actualizacion';
 import type { Seccion } from '../../lib/routes';
+import { dateKey } from '../../data/time';
+import { avisoRespaldoV124Visto, restaurarRespaldoV124 } from '../../state/plan';
+import { useStore } from '../../state/store';
 import { marcarPesoPreguntado } from '../../state/train';
 import { cerrarHojas, useHojaAbierta } from '../../ui/checkins';
 import { HojaCorridaV2 } from '../entreno/HojaCorridaV2';
@@ -32,6 +35,20 @@ function Checkins() {
   return <HojaCorridaV2 abierta={a?.tipo === 'corrida'} date={a?.tipo === 'corrida' ? a.date : null} />;
 }
 
+/** v12.4: el plan nuevo limpió los corrimientos confirmados con el anterior: se avisa una vez, con "Deshacer" (el respaldo queda guardado). */
+function AvisoPlanNuevo() {
+  const respaldo = useStore((s) => s.plan.respaldoV124);
+  useEffect(() => {
+    if (!respaldo || respaldo.aviso) return;
+    avisoRespaldoV124Visto(dateKey());
+    aviso({
+      titulo: 'Plan v12.4: fechas nuevas', sub: `Se limpiaron ${Object.keys(respaldo.corrimientos).length} corrimientos que habías confirmado; lo hecho no se tocó.`, tono: 'info',
+      deshacer: () => { restaurarRespaldoV124(); aviso({ titulo: 'Corrimientos de antes devueltos', tono: 'hecho' }); }, duracion: 20_000,
+    });
+  }, [respaldo]);
+  return null;
+}
+
 interface Props {
   activa: Seccion | 'avance';
   pendientes: number;
@@ -51,6 +68,7 @@ export default function GlobalV2({ activa, pendientes, conBarra, conMini }: Prop
       {conMini && <MiniFoco />}
       <CapasV2 />
       <Checkins />
+      <AvisoPlanNuevo />
       <EstadoEstudioV2 />
     </>
   );

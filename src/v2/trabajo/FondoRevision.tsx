@@ -4,15 +4,18 @@
  * marca de los slots a definir). Mismos datos y mismas funciones que `ui/RevisionFondo` de la 1.0; cada cosa abre su hoja.
  */
 import { useState } from 'react';
+import { atrasoPrincipal } from '../../data/atraso';
 import { PERFILES_MARCA, fondoEn, metaRevisionSemana, revisionSemana, sugerenciaPausas, type EntradaRevision } from '../../data/fondo';
 import { tramoActivo } from '../../data/plan';
 import { addDays } from '../../data/time';
 import { V122 } from '../../data/v12-2';
 import { anotarRevision, borrarRevision, editarRevision, pausarItem, setItem, setUmbralClaude, setUsoClaude } from '../../state/fondo';
 import { getState, useStore } from '../../state/store';
+import { usePeriodos } from '../../ui/usePeriodos';
+import { textoAtraso } from '../hoy/planHoy';
 import { aviso } from '../kit/capas';
 import { Boton, CampoHora, Chip, Contador, Interruptor, Segmentado, Selector } from '../kit/controles';
-import { Dato } from '../kit/superficies';
+import { Dato, Fila } from '../kit/superficies';
 import { Grupo } from '../marco/Marco';
 import { CampoAlSalir, FilaHoja } from '../proyecto/piezas';
 import { dm, n1 } from './comun';
@@ -141,9 +144,15 @@ export function GrupoFondo({ hoy, lunes }: { hoy: string; lunes: string }) {
   const umbral = plan.umbralClaude ?? 85;
   const rev = revisionSemana(plan.revisionFondo, lunes);
   const meta = metaRevisionSemana(lunes);
+  // v12.4: el atraso acumulado de la principal; más de 7 días avisa con el nuevo fin estimado y qué pausar primero.
+  const { arbol, cal } = usePeriodos(hoy);
+  const atraso = atrasoPrincipal(arbol, cal, plan, hoy);
   return (
     <Grupo titulo="De fondo y Claude">
       <div className="capa-1 s-lista">
+        {atraso.excede
+          ? <Fila icono="alerta" titulo={textoAtraso(atraso).titulo} nota={textoAtraso(atraso).texto} href="#/metas/periodos" />
+          : <Fila icono="tilde" titulo="Principal" nota={atraso.dias > 0 ? `${atraso.dias} ${atraso.dias === 1 ? 'día' : 'días'} de atraso: todavía no pasa de 7` : 'Al día con el plan'} valor={`Fin ${dm(atraso.finEstimado)}`} />}
         <FilaHoja icono="ritmo" titulo="Uso de Claude" nota={uso != null && uso >= umbral ? 'Pasó el umbral' : `Umbral ${umbral} %`} valor={uso != null ? `${n1(uso)} %` : 'Sin cargar'} tituloHoja="Uso de Claude">
           <Claude hoy={hoy} lunes={lunes} />
         </FilaHoja>

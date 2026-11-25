@@ -352,6 +352,30 @@ describe('De fondo 2.0', () => {
     expect(plan().fondo?.['com-1']?.leads?.[0]).toMatchObject({ nombre: 'Acme', estado: 'contactado', contactado: HOY });
   });
 
+  it('v12.4: un slot muestra su build (días 1 a 7) y su venta (del día 8), guarda la marca elegida y el canal de cada lead', () => {
+    abrir('fondo/com-1');
+    const fases = within(screen.getByRole('heading', { name: 'Fases' }).closest('section') ?? document.body);
+    expect(fases.getByText(/Build/)).toBeTruthy();
+    expect(screen.getByText(/Días 1 a 7 · 13 – 19 dic/)).toBeTruthy();
+    expect(screen.getByText(/Del día 8 · 20 – 27 dic · pitch a la marca y a 10 negocios parecidos/)).toBeTruthy();
+    fireEvent.click(screen.getByRole('button', { name: /^Marca regional/ }));
+    expect(plan().fondo?.['com-1']?.perfilMarca).toBe('regional');
+    fireEvent.click(screen.getByRole('button', { name: /^Marca regional/ }));
+    expect(plan().fondo?.['com-1']?.perfilMarca).toBeUndefined();
+    escribir('Nuevo lead', 'Aqua Park Norte');
+    fireEvent.click(screen.getByRole('button', { name: /Canal/ }));
+    fireEvent.click(screen.getByRole('radio', { name: 'WhatsApp' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Sumar lead' }));
+    expect(plan().fondo?.['com-1']?.leads?.[0]).toMatchObject({ nombre: 'Aqua Park Norte', canal: 'WhatsApp' });
+    expect(screen.getByText(/1 de 11/)).toBeTruthy();
+  });
+
+  it('v12.4: un slot de 7 días o menos es solo build, y los slots sin marca se nombran por su rubro', () => {
+    abrir('fondo/com-12');
+    expect(screen.getByText(/Un slot de 7 días o menos es solo build/)).toBeTruthy();
+    expect(screen.queryByText(/pitch a la marca y a 10 negocios/)).toBeNull();
+  });
+
   it('un ítem que no existe lo dice', () => {
     abrir('fondo/no-existe');
     expect(screen.getByText('No hay un ítem con ese nombre')).toBeTruthy();

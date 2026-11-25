@@ -5,6 +5,7 @@
  */
 import { useEffect, useLayoutEffect, useMemo, useRef, useState, type CSSProperties } from 'react';
 import { periodosComerciales, periodosSecundarias } from '../../data/fondo';
+import { HERRAMIENTAS, fechasVersion } from '../../data/herramientas';
 import { medir, type PeriodoMedido } from '../../data/periodos';
 import { PLAN_EXT } from '../../data/plan-extendido';
 import { PAUSAS_FONDO } from '../../data/v12-2';
@@ -47,6 +48,12 @@ function rotuloTramo(p: PeriodoMedido, ancho: number) {
   if (ancho >= prefijo.length * 6.6 + 12) return prefijo;
   return ancho >= 18 ? prefijo.replace(/^\D+/, '') : '';
 }
+
+/** v12.4 · las herramientas open source como marcas sobre el carril de proyectos: una por versión, el día en que sale (el cierre de su origen). */
+const MARCAS_HERRAMIENTAS = HERRAMIENTAS.flatMap((h) => h.versiones.filter((v) => v.donde !== 'recurrente').flatMap((v) => {
+  const f = fechasVersion(v);
+  return f ? [{ id: `${h.id}:${v.id}`, nombre: `${h.nombre} ${/^\d/.test(v.id) ? `v${v.id}` : v.id}`, fecha: f.fin }] : [];
+}));
 
 export function LineaV2({ hoy }: { hoy: string }) {
   const { arbol } = usePeriodos(hoy);
@@ -190,6 +197,11 @@ export function LineaV2({ hoy }: { hoy: string }) {
           {lanes.map((c) => (
             <div key={c.id} className="ln-carril" role="group" aria-label={c.nombre} style={{ ['--area' as string]: c.area }}>
               <span className="ln-carril-nombre"><i className="area-punto" />{c.nombre}</span>
+              {c.id === 'proyectos' && (
+                <div className="ln-herramientas" role="group" aria-label="Herramientas open source">
+                  {MARCAS_HERRAMIENTAS.map((m) => <a key={m.id} className="ln-herr" href="#/metas/open-source" style={{ left: xDe(escala, m.fecha) + escala.ppd / 2 }} aria-label={`${m.nombre}, ${fecha(m.fecha)}`} title={`${m.nombre} · ${fecha(m.fecha)}`} />)}
+                </div>
+              )}
               <div className="ln-pista">
                 {c.fondo && PAUSAS_FONDO.filter((x) => !pausas.some((f) => f.inicio === x.inicio)).map((x) => <i key={x.id} className="ln-pausa" aria-hidden="true" style={{ left: xDe(escala, x.inicio), width: anchoDe(escala, x.inicio, x.fin) }} />)}
                 {c.barras.map(barra)}

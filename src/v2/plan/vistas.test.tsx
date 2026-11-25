@@ -121,6 +121,20 @@ describe('Línea 2.0 · la pantalla', () => {
     expect(screen.getByRole('button', { name: /^PetrIA, 21 nov – 12 dic/ }).className).toContain('ahora');
   });
 
+  it('v12.4: los 3 días libres fijos van rayados y las herramientas open source son marcas en el carril de proyectos', () => {
+    const { container } = abrir('#/metas/linea');
+    // Pausa del 20–26 dic 2027 y los dos descansos (31 dic–6 ene y 9–15 jun 2028), sobre el fondo de la línea.
+    expect(container.querySelectorAll('.ln-fondo .ln-pausa')).toHaveLength(3);
+    const herramientas = within(screen.getByRole('group', { name: 'Herramientas open source' })).getAllByRole('link');
+    expect(herramientas.length).toBeGreaterThanOrEqual(20);
+    expect(herramientas.every((a) => a.getAttribute('href') === '#/metas/open-source')).toBe(true);
+    expect(within(screen.getByRole('group', { name: 'Herramientas open source' })).getByRole('link', { name: /^Alawys v0\.1, 11 dic/ })).toBeTruthy();
+    expect(within(screen.getByRole('group', { name: 'Herramientas open source' })).getByRole('link', { name: /^Alawys v1\.0, 8 ene/ })).toBeTruthy();
+    // Las dos pistas de fondo tienen su carril.
+    expect(screen.getByRole('group', { name: 'Secundaria · de fondo' })).toBeTruthy();
+    expect(screen.getByRole('group', { name: 'Comercial · de fondo' })).toBeTruthy();
+  });
+
   it('los botones de zoom cambian el ancho del lienzo y marcan cuál está puesto', () => {
     const { container } = abrir('#/metas/linea');
     const lienzo = () => parseFloat((container.querySelector('.ln-lienzo') as HTMLElement).style.width);

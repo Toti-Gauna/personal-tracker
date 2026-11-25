@@ -1,7 +1,7 @@
 import { puertaBloqueando } from '../data/puertas';
 import { planPropio, setRutinasPropias } from '../data/rutinas-propias';
 import { rutinaParaFecha } from '../data/motor-rutinas';
-import { migrarPlanV12, migrarStudyV12 } from './migrar-v12';
+import { migrarPlanV12, migrarPlanV124, migrarStudyV12 } from './migrar-v12';
 import { papersDelDia, temaDelPost, tesisDePaper } from '../data/papers';
 import { T0_PLAN } from '../data/plan';
 import { INICIO_TRABAJO_DIAS } from '../data/capacidad';
@@ -89,7 +89,7 @@ export function migrate(parsed: any): State {
   let settings = parsed.settings ?? null;
   if (settings && settings.plan?.modo === undefined) ({ settings, plan } = aplicarIntensiva(settings, plan, settings.startDate || T0_PLAN));
   // v12.1: aditiva (certs de la v7 a sus ids nuevos, papers y el mazo de LLM); no borra nada.
-  plan = migrarPlanV12(plan);
+  plan = migrarPlanV124(migrarPlanV12(plan), dateKey());
   const studyV12 = settings ? migrarStudyV12(study, dateKey()) : study;
   return { ...empty(), ...parsed, settings, study: studyV12, train, ruta, plan, estudioRuta: { ...emptyEstudioRuta(), ...(parsed.estudioRuta ?? {}) }, idiomas: { enlaces: {}, ...(parsed.idiomas ?? {}) }, clipping: migrarClipping(parsed.clipping), profile: migrarPerfil({ seals: {}, seen: Object.keys(parsed.profile?.seals ?? {}), ...(parsed.profile ?? {}) }), goals: migrateGoals(goals ?? seedGoals(parsed.settings?.startDate ?? dateKey())) };
 }

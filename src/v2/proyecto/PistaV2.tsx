@@ -86,7 +86,7 @@ function Comerciales({ hoy }: { hoy: string }) {
             {(todos ? xs : xs.slice(0, 4)).map((c) => {
               const marca = c.marca ?? plan.fondo?.[c.id]?.marca;
               const l = plan.fondo?.[c.id]?.leads?.length ?? 0;
-              return <Fila key={c.id} icono="paquete" titulo={`#${c.n} · ${marca ?? c.sector ?? 'A definir'}`} nota={`${rango(c.inicio, c.fin, hoy)}${plan.fondo?.[c.id]?.pausado ? ' · en pausa' : ''}`} valor={l ? `${l} leads` : undefined} href={`#/metas/fondo/${c.id}`} />;
+              return <Fila key={c.id} icono="paquete" titulo={`#${c.n} · ${marca ?? c.sector ?? 'A definir'}`} nota={`Build ${rango(c.build?.inicio ?? c.inicio, c.build?.fin ?? c.fin, hoy)}${c.venta ? ` · Venta ${rango(c.venta.inicio, c.venta.fin, hoy)}` : ''}${plan.fondo?.[c.id]?.pausado ? ' · en pausa' : ''}`} valor={l ? `${l} leads` : undefined} href={`#/metas/fondo/${c.id}`} />;
             })}
           </div>
         )}
