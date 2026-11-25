@@ -29,8 +29,8 @@ export interface Lead { id: string; nombre: string; /** La fecha en que se lo co
 
 /** v12.4 · la pregunta que se hace 14 días antes de cada slot y cuya respuesta se guarda. */
 export const PERFILES_MARCA = [
-  { id: 'regional', etiqueta: 'Marca regional', nota: 'para conseguir clientes' },
-  { id: 'grande', etiqueta: 'Marca grande', nota: 'para hacer ruido' },
+  { id: 'regional', etiqueta: 'Regional', nota: 'para conseguir clientes' },
+  { id: 'grande', etiqueta: 'Grande', nota: 'para hacer ruido' },
 ] as const;
 
 /** Lo que se guarda de cada ítem de fondo (y de los principales, para el Imán y el lanzamiento). */

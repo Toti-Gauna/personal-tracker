@@ -186,7 +186,7 @@ describe('Página de un bloque', () => {
 
   it('las metas del bloque se arman, se tildan, tienen submetas y se borran (con confirmación)', async () => {
     abrir('proyecto/P1');
-    fireEvent.click(fila(/Agregar la primera meta/));
+    fireEvent.click(fila(/Agregar una meta/));
     escribir('Qué querés lograr', 'Terminar el MVP');
     fireEvent.click(within(dialogo()).getByRole('button', { name: 'Agregar y cerrar' }));
     expect(plan().metasBloque?.P1?.[0].texto).toBe('Terminar el MVP');
@@ -354,13 +354,15 @@ describe('De fondo 2.0', () => {
 
   it('v12.4: un slot muestra su build (días 1 a 7) y su venta (del día 8), guarda la marca elegida y el canal de cada lead', () => {
     abrir('fondo/com-1');
-    const fases = within(screen.getByRole('heading', { name: 'Fases' }).closest('section') ?? document.body);
-    expect(fases.getByText(/Build/)).toBeTruthy();
-    expect(screen.getByText(/Días 1 a 7 · 13 – 19 dic/)).toBeTruthy();
-    expect(screen.getByText(/Del día 8 · 20 – 27 dic · pitch a la marca y a 10 negocios parecidos/)).toBeTruthy();
-    fireEvent.click(screen.getByRole('button', { name: /^Marca regional/ }));
+    expect(screen.getByRole('button', { name: 'Regional' })).toBeTruthy();
+    expect(screen.getByRole('heading', { name: 'Fases y marca' })).toBeTruthy();
+    expect(screen.getByText('Días 1 a 7')).toBeTruthy();
+    expect(screen.getByText('Del día 8: la marca y 10 negocios parecidos')).toBeTruthy();
+    expect(screen.getByText('13 – 19 dic')).toBeTruthy();
+    expect(screen.getByText('20 – 27 dic')).toBeTruthy();
+    fireEvent.click(screen.getByRole('button', { name: /^Regional/ }));
     expect(plan().fondo?.['com-1']?.perfilMarca).toBe('regional');
-    fireEvent.click(screen.getByRole('button', { name: /^Marca regional/ }));
+    fireEvent.click(screen.getByRole('button', { name: /^Regional/ }));
     expect(plan().fondo?.['com-1']?.perfilMarca).toBeUndefined();
     escribir('Nuevo lead', 'Aqua Park Norte');
     fireEvent.click(screen.getByRole('button', { name: /Canal/ }));
@@ -372,8 +374,8 @@ describe('De fondo 2.0', () => {
 
   it('v12.4: un slot de 7 días o menos es solo build, y los slots sin marca se nombran por su rubro', () => {
     abrir('fondo/com-12');
-    expect(screen.getByText(/Un slot de 7 días o menos es solo build/)).toBeTruthy();
-    expect(screen.queryByText(/pitch a la marca y a 10 negocios/)).toBeNull();
+    expect(screen.getByText('Hasta 7 días: solo build')).toBeTruthy();
+    expect(screen.queryByText(/Del día 8/)).toBeNull();
   });
 
   it('un ítem que no existe lo dice', () => {
@@ -425,10 +427,15 @@ describe('Imán 2.0', () => {
 describe('Open source 2.0', () => {
   it('una tarjeta de paquete por herramienta, con su versión y registro', () => {
     abrir('open-source');
-    // Cada tarjeta se llama por lo que muestra: el nombre, el tipo, el paquete, la versión y el registro.
+    // Se ven 10 y el resto se abre con un botón (la página no pasa de 4 pantallas).
+    expect(document.querySelectorAll('button.pt-paquete')).toHaveLength(10);
+    fireEvent.click(screen.getByRole('button', { name: `Ver las ${HERRAMIENTAS.length}` }));
     const tarjetas = document.querySelectorAll('button.pt-paquete');
     expect(tarjetas).toHaveLength(HERRAMIENTAS.length);
-    expect(screen.getByRole('button', { name: /^Alawys Producto propio .* Sin publicar npm$/ }).textContent).toContain('npm');
+    // Cada tarjeta se llama por lo que muestra: el nombre, el tipo, el paquete, la versión, el registro, de dónde sale y cuándo.
+    expect(screen.getByRole('button', { name: /^Alawys Producto propio .* Sin publicar npm PetrIA · 11 dic/ }).textContent).toContain('npm');
+    // Una extraída dice quién la necesita (todavía nadie).
+    expect(within(document.body).getAllByText(/necesita: nadie todavía/).length).toBeGreaterThan(0);
     expect(screen.getByText('Presets de Alawys')).toBeTruthy();
   });
 

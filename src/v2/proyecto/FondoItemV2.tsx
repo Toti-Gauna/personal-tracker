@@ -167,18 +167,6 @@ function Comercial({ id, hoy }: { id: string; hoy: string }) {
   const cambiar = (x: EstadoComercial) => { if ((x === 'published' || x === 'pitched') && !g.ok) return; setItem(id, { estado: x }); };
   return (
     <>
-      <Grupo titulo="Fases">
-        <div className="capa-1 s-lista">
-          <Fila icono="codigo" titulo="Build" nota={`Días 1 a 7 · ${rango(c.build?.inicio ?? c.inicio, c.build?.fin ?? c.fin, hoy)}`} valor={c.venta ? (fase === 'build' && hoy >= c.inicio && hoy <= c.fin ? 'ahora' : undefined) : 'solo build'} />
-          {c.venta
-            ? <Fila icono="cohete" titulo="Venta" nota={`Del día 8 · ${rango(c.venta.inicio, c.venta.fin, hoy)} · pitch a la marca y a 10 negocios parecidos`} valor={fase === 'venta' && hoy >= c.venta.inicio && hoy <= c.venta.fin ? 'ahora' : undefined} />
-            : <Fila icono="cohete" titulo="Venta" nota="Un slot de 7 días o menos es solo build: no hay venta." />}
-        </div>
-        <div className="pt-etapas" role="group" aria-label="¿Qué marca?">
-          {PERFILES_MARCA.map((p) => <Chip key={p.id} activo={e.perfilMarca === p.id} onCambio={() => setItem(id, { perfilMarca: e.perfilMarca === p.id ? undefined : p.id })}>{p.etiqueta} · {p.nota}</Chip>)}
-        </div>
-        <p className="t-nota">{e.perfilMarca ? 'Guardado: lo vas a ver en la marca de este slot.' : '14 días antes del slot, Trazo pregunta: ¿marca regional para clientes o marca grande para ruido?'}</p>
-      </Grupo>
       <Grupo titulo="Estado">
         <div className="pt-etapas" role="group" aria-label="Estado del showcase">
           {ESTADOS_COMERCIAL.map((x) => <Chip key={x} activo={estado === x} onCambio={() => cambiar(x)}>{ESTADO_COMERCIAL_TXT[x]}</Chip>)}
@@ -209,6 +197,18 @@ function Comercial({ id, hoy }: { id: string; hoy: string }) {
           <Selector etiqueta="Canal" valor={canal} opciones={CANALES_LEAD.map((x) => ({ valor: x, etiqueta: x }))} onCambio={setCanal} />
           <Boton variante="secundario" icono="mas" deshabilitado={!lead.trim()} onClick={() => { agregarLead(id, { nombre: lead.trim(), contactado: hoy, canal, estado: 'contactado' }); setLead(''); }}>Sumar lead</Boton>
         </div>
+      </Grupo>
+      <Grupo titulo="Fases y marca">
+        <div className="capa-1 s-lista">
+          <Fila icono="codigo" titulo="Build" nota="Días 1 a 7" valor={rango(c.build.inicio, c.build.fin, hoy)} />
+          {c.venta
+            ? <Fila icono="cohete" titulo="Venta" nota="Del día 8: la marca y 10 negocios parecidos" valor={rango(c.venta.inicio, c.venta.fin, hoy)} />
+            : <Fila icono="cohete" titulo="Venta" nota="Hasta 7 días: solo build" />}
+        </div>
+        <div className="pt-etapas" role="group" aria-label="¿Qué marca?">
+          {PERFILES_MARCA.map((p) => <Chip key={p.id} activo={e.perfilMarca === p.id} onCambio={() => setItem(id, { perfilMarca: e.perfilMarca === p.id ? undefined : p.id })}>{p.etiqueta}</Chip>)}
+        </div>
+        <p className="t-nota">{e.perfilMarca ? 'Guardado para este slot.' : 'Tipo de marca: regional para clientes o grande para ruido.'}</p>
       </Grupo>
     </>
   );

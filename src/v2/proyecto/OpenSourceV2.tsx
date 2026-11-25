@@ -41,6 +41,7 @@ const INFO = (
 export function OpenSourceV2({ hoy }: { hoy: string }) {
   const plan = useStore((s) => s.plan);
   const [elegida, setElegida] = useState<string | null>(null);
+  const [todas, setTodas] = useState(false);
   const publicadas = HERRAMIENTAS.filter((h) => Object.values(plan.fondo?.[h.id]?.versiones ?? {}).some((v) => v.publicada));
   const resto = HERRAMIENTAS.filter((h) => !publicadas.includes(h));
   const ps = presetsAlawys(plan);
@@ -53,7 +54,8 @@ export function OpenSourceV2({ hoy }: { hoy: string }) {
       </div>
       {publicadas.length > 0 && <Grupo titulo="Publicadas"><div className="pt-paquetes">{publicadas.map((x) => <Paquete key={x.id} h={x} onElegir={() => setElegida(x.id)} />)}</div></Grupo>}
       <Grupo titulo={publicadas.length ? 'En el plan' : 'Todas'}>
-        <div className="pt-paquetes">{resto.map((x) => <Paquete key={x.id} h={x} onElegir={() => setElegida(x.id)} />)}</div>
+        <div className="pt-paquetes">{(todas ? resto : resto.slice(0, 10)).map((x) => <Paquete key={x.id} h={x} onElegir={() => setElegida(x.id)} />)}</div>
+        {resto.length > 10 && <div className="pt-acciones"><Boton tamano="s" variante="fantasma" icono={todas ? 'arriba' : 'abajo'} onClick={() => setTodas(!todas)}>{todas ? 'Ver menos' : `Ver las ${resto.length}`}</Boton></div>}
       </Grupo>
       <HojaHerramienta h={h ?? null} hoy={hoy} onCerrar={() => setElegida(null)} />
     </Marco>
@@ -69,11 +71,11 @@ function Paquete({ h, onElegir }: { h: Herramienta; onElegir: () => void }) {
     <button type="button" className="capa-1 pt-paquete" onClick={onElegir}>
       <span className="pt-paquete-cab"><Icono nombre="paquete" lado={20} /><b className="t-encabezado">{h.nombre}</b>{' '}<span className="t-rotulo">{KIND[h.kind]}</span></span>{' '}
       <span className="t-dato pt-paquete-nombre">{h.paquete}</span>{' '}
-      <span className="t-nota">{h.desde ? `Sale de ${h.desde} · ` : ''}{nombreOrigen(h.versiones[0].origen)}{fecha ? ` · ${fp(fecha.fin)}` : ''}{h.kind === 'extracted' ? ` · la necesita: ${necesita ?? 'ninguno todavía'}` : ''}</span>{' '}
       <span className="pt-paquete-pie">
         <span className={`pt-version-pill${ultima ? ' on' : ''}`}>{ultima ? <><Icono nombre="tilde" lado={14} />v{ultima.id}</> : 'Sin publicar'}</span>{' '}
         <span className="t-nota">{h.registro}{e?.descargas != null ? ` · ${e.descargas} descargas` : ''}</span>
-      </span>
+      </span>{' '}
+      <span className="t-nota">{h.desde ?? nombreOrigen(h.versiones[0].origen)}{fecha ? ` · ${fp(fecha.fin)}` : ''}{h.kind === 'extracted' ? ` · necesita: ${necesita ?? 'nadie todavía'}` : ''}</span>
     </button>
   );
 }

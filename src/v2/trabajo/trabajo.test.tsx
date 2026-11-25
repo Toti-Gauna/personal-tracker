@@ -351,7 +351,7 @@ describe('P0 y el proyecto en curso 2.0', () => {
 
   it('las metas de P0 se arman, se tildan y se borran igual que antes: mismos datos, misma forma', async () => {
     mostrar(<ProyectoCursoV2 {...props('#/metas/proyecto/P0')} />);
-    fireEvent.click(screen.getByRole('button', { name: 'Agregar la primera meta' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Agregar una meta' }));
     escribir('Qué querés lograr', 'Subir el mapa 3D');
     fireEvent.click(within(dialogo()).getByRole('button', { name: 'Agregar y cerrar' }));
     const metas = plan().metasBloque?.P0 ?? [];
