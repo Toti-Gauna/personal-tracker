@@ -13,19 +13,21 @@ import { renderHook } from '@testing-library/react';
 import { usePeriodos } from '../../ui/usePeriodos';
 import { activoAhora } from '../../data/periodos';
 
-const HOY = '2026-11-23'; // lunes; PetrIA (P1) corre del 21 nov al 9 dic, límite 5 ene
+const HOY = '2026-11-23'; // lunes; PetrIA (P1) corre del 21 nov al 12 dic (v12.4), límite 5 ene
+// Miércoles 25 nov: con el trabajo en 0, PetrIA (22 días) va atrasado desde el 24 (el lunes 23 lleva 9 % del tiempo: dentro del 10 % de tolerancia).
+const ATRASADO = '2026-11-25';
 const plan = () => getState().plan;
-const Pantalla = ({ hash }: { hash: string }) => (
-  <><PlanV2 ruta={leerRuta(hash)} day={getState().days[HOY]} today={HOY} /><GlobalV2 activa="metas" pendientes={0} conBarra={false} conMini={false} /></>
+const Pantalla = ({ hash, hoy = HOY }: { hash: string; hoy?: string }) => (
+  <><PlanV2 ruta={leerRuta(hash)} day={getState().days[HOY]} today={hoy} /><GlobalV2 activa="metas" pendientes={0} conBarra={false} conMini={false} /></>
 );
-function abrir(hash: string) {
-  const r = render(<Pantalla hash={hash} />);
-  return { ...r, otra: () => r.rerender(<Pantalla hash={hash} />) };
+function abrir(hash: string, hoy?: string) {
+  const r = render(<Pantalla hash={hash} hoy={hoy} />);
+  return { ...r, otra: () => r.rerender(<Pantalla hash={hash} hoy={hoy} />) };
 }
 const arbol = () => renderHook(() => usePeriodos(HOY)).result.current.arbol;
 
 /** Un período de prueba con lo mínimo. */
-const per = (x: Partial<PeriodoMedido>): PeriodoMedido => ({ id: 'X', nombre: 'X', nivel: 'bloque', inicio: '2026-11-21', fin: '2026-12-09', tiempo: 0.1, trabajo: 0, estado: 'en-plan', marcas: { hoy: 0.1 }, ...x });
+const per = (x: Partial<PeriodoMedido>): PeriodoMedido => ({ id: 'X', nombre: 'X', nivel: 'bloque', inicio: '2026-11-21', fin: '2026-12-12', tiempo: 0.1, trabajo: 0, estado: 'en-plan', marcas: { hoy: 0.1 }, ...x });
 
 beforeEach(() => { localStorage.clear(); resetState(); register('Toti', 'Abi', HOY); startDay('completo', '04:00', HOY); location.hash = ''; });
 afterEach(() => { act(() => limpiarCapas()); });
@@ -35,10 +37,10 @@ describe('Plan 2.0 · las frases y los datos', () => {
     expect(frase(per({ estado: 'hecho', trabajo: 1 }), HOY)).toBe('Hecho.');
     expect(frase(per({ estado: 'proximo', inicio: '2026-12-10' }), HOY)).toBe('Empieza el 10 dic (en 17 días).');
     expect(frase(per({ estado: 'proximo', inicio: '2026-11-24' }), HOY)).toBe('Empieza el 24 nov (mañana).');
-    expect(frase(per({ estado: 'en-plan' }), HOY)).toBe('Vas en plan: termina el 9 dic.');
-    expect(frase(per({ estado: 'adelantado' }), HOY)).toBe('Vas adelantado: termina el 9 dic o antes.');
-    // Atrasado: al ritmo del plan, lo que falta (todo) por los 19 días, desde hoy.
-    expect(frase(per({ estado: 'atrasado', tiempo: 0.105, trabajo: 0 }), HOY)).toBe('Vas 2 días atrás: termina el 11 dic.');
+    expect(frase(per({ estado: 'en-plan' }), HOY)).toBe('Vas en plan: termina el 12 dic.');
+    expect(frase(per({ estado: 'adelantado' }), HOY)).toBe('Vas adelantado: termina el 12 dic o antes.');
+    // Atrasado: al ritmo del plan, lo que falta (todo) por los 22 días, desde hoy.
+    expect(frase(per({ estado: 'atrasado', tiempo: 0.105, trabajo: 0 }), HOY)).toBe('Vas 2 días atrás: termina el 14 dic.');
     expect(frase(per({ estado: 'atrasado', fin: '2026-11-20', deadline: '2027-01-05' }), HOY)).toBe('Pasó el estimado (20 nov). El límite es el 5 ene 2027.');
     expect(frase(per({ estado: 'vencido', fin: '2026-11-20' }), HOY)).toBe('Venció el 20 nov.');
     expect(frase(per({ estado: 'pausado', pausas: [{ inicio: '2026-11-20', fin: '2026-11-30' }] }), HOY)).toBe('En pausa hasta el 30 nov.');
@@ -50,7 +52,7 @@ describe('Plan 2.0 · las frases y los datos', () => {
       { etiqueta: 'Límite', valor: '5 ene 2027' }, { etiqueta: 'Horas', valor: '12,3 de 193,5 h' },
     ]);
     expect(datosDe(per({ fin: '2026-11-25' }), HOY)).toEqual([{ etiqueta: 'Quedan', valor: '3 días' }]);
-    expect([rango('2026-11-21', '2026-11-25', HOY), rango('2026-11-21', '2026-12-09', HOY), rango('2026-12-31', '2027-01-07', HOY)]).toEqual(['21 – 25 nov', '21 nov – 9 dic', '31 dic – 7 ene 2027']);
+    expect([rango('2026-11-21', '2026-11-25', HOY), rango('2026-11-21', '2026-12-12', HOY), rango('2026-12-31', '2027-01-07', HOY)]).toEqual(['21 – 25 nov', '21 nov – 12 dic', '31 dic – 7 ene 2027']);
     expect(partesNombre({ nombre: 'Fase 1 · AI Full-stack Engineer', nivel: 'fase' })).toEqual({ titulo: 'AI Full-stack Engineer', prefijo: 'Fase 1' });
     expect(partesNombre({ nombre: 'Lote 1.3 · Features & baseline', nivel: 'lote' })).toEqual({ titulo: 'Features & baseline', prefijo: 'Lote 1.3' });
     expect(partesNombre({ nombre: 'Programación · PetrIA', nivel: 'bloque' })).toEqual({ titulo: 'Programación · PetrIA', prefijo: 'Bloque' });
@@ -101,7 +103,8 @@ describe('Plan 2.0 · el centro', () => {
   it('arriba el bloque que corre, y por dónde vas adentro', () => {
     abrir('#/metas');
     expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent('Plan');
-    expect(screen.getByText('Semana 1 de 52')).toBeInTheDocument();
+    // 61 semanas: del lunes 23 nov 2026 (el día que arranca Toti) al cierre de la etapa 2 (21 ene 2028 = T+18).
+    expect(screen.getByText('Semana 1 de 61')).toBeInTheDocument();
     // El héroe es el primero; "PetrIA" también aparece en la semana, día por día.
     // El link se llama como el bloque y se estira sobre la tarjeta; lo demás se lee aparte.
     const heroe = screen.getAllByRole('link', { name: 'PetrIA' })[0];
@@ -120,10 +123,17 @@ describe('Plan 2.0 · el centro', () => {
     expect(viene().getAllByRole('listitem')).toHaveLength(7);
     fireEvent.click(viene().getByRole('radio', { name: 'Año' }));
     expect(viene().getAllByRole('link').map((a) => a.textContent)).toEqual(expect.arrayContaining([expect.stringContaining('Fase 1')]));
+    // De hoy al 22 nov 2027 corren 7 fases (F1 a F7): una más que el tope de la lista, el resto se abre con "Ver 1 más".
+    expect(viene().getAllByRole('link')).toHaveLength(6);
+    fireEvent.click(viene().getByRole('button', { name: 'Ver 1 más' }));
+    expect(viene().getAllByRole('link')).toHaveLength(7);
     fireEvent.click(viene().getByRole('radio', { name: 'Bimestre' }));
     expect(viene().getByRole('link', { name: /^Cert window 1/ })).toBeInTheDocument();
     fireEvent.click(viene().getByRole('radio', { name: 'Mes' }));
-    expect(viene().getByRole('button', { name: /^Ver \d+ más$/ })).toBeInTheDocument();
+    // El mes trae las 4 versiones de PetrIA (hasta el 12 dic) y los 2 exámenes de la Cert window 1 (13–18 dic): justo el tope, sin "Ver más".
+    expect(viene().getAllByRole('link')).toHaveLength(6);
+    expect(viene().getByRole('link', { name: /^GitHub Foundations/ })).toBeInTheDocument();
+    expect(viene().queryByRole('button', { name: /^Ver \d+ más$/ })).toBeNull();
   });
 
   it('las 4 etapas, lo de fondo, tus metas y lo demás del plan, a un toque', () => {
@@ -146,17 +156,18 @@ describe('Plan 2.0 · un período', () => {
   });
 
   it('atrasado: sugiere correr lo que sigue; confirmar guarda las fechas y "Deshacer" las vuelve', () => {
-    const { otra } = abrir('#/metas/periodos/P1');
+    // Al cuarto día de 22 sin nada cargado: 25 nov (el lunes 23 todavía es "en plan", dentro del 10 % de tolerancia).
+    const { otra } = abrir('#/metas/periodos/P1', ATRASADO);
     fireEvent.click(screen.getByRole('button', { name: /^Correr lo que sigue \d+ cambios$/ }));
     const sug = within(screen.getByRole('dialog', { name: 'Correr lo que sigue' }));
-    expect(sug.getByText(/A este ritmo, PetrIA termina el 11 dic \(2 días más\)\./)).toBeInTheDocument();
+    expect(sug.getByText(/A este ritmo, PetrIA termina el 16 dic \(4 días más\)\./)).toBeInTheDocument();
     const cambios = sug.getAllByRole('checkbox');
     expect(cambios.length).toBeGreaterThan(1);
     fireEvent.click(cambios[1]); // dejar uno afuera
     const boton = sug.getByRole('button', { name: /^Confirmar \d+ cambios?$/ });
     fireEvent.click(boton);
     otra();
-    expect(plan().corrimientos?.P1).toMatchObject({ fin: '2026-12-11', confirmado: HOY });
+    expect(plan().corrimientos?.P1).toMatchObject({ fin: '2026-12-16', confirmado: ATRASADO });
     fireEvent.click(screen.getByRole('button', { name: 'Deshacer' }));
     expect(plan().corrimientos?.P1).toBeUndefined();
   });
@@ -186,7 +197,7 @@ describe('Plan 2.0 · un período', () => {
   it('una fase: lo que la cierra se tilda, y muestra con qué salís al mercado', () => {
     const { otra } = abrir('#/metas/periodos/F1');
     expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent('AI Full-stack Engineer');
-    expect(screen.getByText(/^Fase 1 · 21 nov – 14 ene 2027$/)).toBeInTheDocument();
+    expect(screen.getByText(/^Fase 1 · 21 nov – 27 ene 2027$/)).toBeInTheDocument();
     const cierre = within(screen.getByRole('region', { name: 'Para cerrarla' }));
     expect(cierre.getAllByRole('checkbox')).toHaveLength(5);
     fireEvent.click(cierre.getAllByRole('checkbox')[2]);
@@ -199,15 +210,17 @@ describe('Plan 2.0 · un período', () => {
     const { unmount } = abrir('#/metas/periodos/F1');
     const sec = within(screen.getByRole('region', { name: /^Apps secundarias/ }));
     expect(sec.getByRole('link', { name: /^handyx|^HandyX/i })).toHaveAttribute('href', '#/metas/fondo/handyx');
-    // Solo lo que se pisa con la fase (21 nov – 14 ene): JulIA arranca recién el 4 de febrero.
-    expect(sec.queryByText(/JulIA/)).toBeNull();
+    // Solo lo que se pisa con la fase (21 nov 2026 – 27 ene 2027): JulIA (26 nov – 16 dic), HandyX y Clip Studio; Roofy arranca el 28 de enero.
+    expect(sec.getAllByRole('link').map((a) => a.getAttribute('href'))).toEqual(['#/metas/fondo/julia', '#/metas/fondo/handyx', '#/metas/fondo/clip-studio']);
+    expect(sec.queryByText(/Roofy/)).toBeNull();
     const com = within(screen.getByRole('region', { name: /^Slots comerciales/ }));
     expect(com.getAllByRole('link').map((a) => a.getAttribute('href'))).toEqual(['#/metas/fondo/com-1', '#/metas/fondo/com-2']);
     expect(com.getByText(/#1 · Aquasol and water parks/)).toBeInTheDocument();
-    // La etapa 1 lo junta todo: las cuatro apps y los primeros slots.
+    // La etapa 1 lo junta todo (21 nov 2026 – 3 nov 2027): las diez apps secundarias (la última, Cursor v2, termina el 4 ago 2027) y los primeros 12 slots.
     unmount();
     abrir('#/metas/periodos/etapa-1');
-    expect(within(screen.getByRole('region', { name: /^Apps secundarias/ })).getAllByRole('link')).toHaveLength(4);
+    expect(within(screen.getByRole('region', { name: /^Apps secundarias/ })).getAllByRole('link')).toHaveLength(10);
+    expect(within(screen.getByRole('region', { name: /^Slots comerciales/ })).getAllByRole('link')).toHaveLength(12);
   });
 
   it('una fase sin nada de fondo no muestra esos grupos', () => {
@@ -224,7 +237,7 @@ describe('Plan 2.0 · un período', () => {
     expect(hoja.getByText(/pasa a/)).toBeInTheDocument();
     expect(hoja.queryByRole('button', { name: /Volver todo a las fechas del plan/ })).toBeNull(); // todavía no hay corrimientos
     fireEvent.click(hoja.getByRole('button', { name: 'Empezar el 23 nov' }));
-    expect(plan().corrimientos?.P1).toMatchObject({ inicio: HOY, fin: '2026-12-11' }); // sus 19 días, desde hoy
+    expect(plan().corrimientos?.P1).toMatchObject({ inicio: HOY, fin: '2026-12-14' }); // sus 22 días, desde hoy
     expect(screen.getByText('Plan empezado de nuevo')).toBeInTheDocument();
     fireEvent.click(screen.getAllByRole('button', { name: 'Deshacer' }).pop()!);
     expect(plan().corrimientos?.P1).toBeUndefined();

@@ -96,7 +96,7 @@ describe('ola 24 · migración y calendario vivo', () => {
     // La v7 no tiene semanas extra: lo apagado no cambia nada, pero se conserva.
     expect(plan.TRAMOS.find((t) => t.id === 'P1')).toMatchObject({ extra: 0, plataforma: 0, meta: 3, horas: 193.5 });
     const conPausa = plan.SEMANAS;
-    // v12.1: la pausa del 20 al 26 dic 2027 es fecha fija y cae después de las etapas 1 y 2: apagarla no cambia las semanas.
+    // v12.4: la pausa del 20 al 26 dic 2027 es uno de los tres días libres fijos y cae adentro de PNPT (fechas explícitas): apagarla no cambia las semanas.
     // Apagar la plataforma de P3 la saca solo de P3 (y se guarda).
     setPausaFinDeAnio(false);
     expect(plan.SEMANAS).toBe(conPausa);
@@ -107,6 +107,7 @@ describe('ola 24 · migración y calendario vivo', () => {
     setState((x) => x);
     resetState();
     expect([SEMANAS, TRAMOS.length]).toBeTruthy();
-    expect(plan.SEMANAS).toBe(53);
+    // T+18 es el fin de la etapa 2 (21 ene 2028): 62 semanas desde el lunes 16 nov 2026.
+    expect(plan.SEMANAS).toBe(62);
   });
 });

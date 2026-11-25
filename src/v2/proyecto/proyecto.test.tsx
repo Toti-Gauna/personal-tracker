@@ -205,7 +205,7 @@ describe('Página de un bloque', () => {
     abrir('proyecto/CW1');
     const ex = screen.getByRole('link', { name: /Claude Certified Architect/ });
     expect(ex.getAttribute('href')).toBe('#/metas/cert/claude-architect');
-    expect(ex.textContent).toContain('en 19 d');
+    expect(ex.textContent).toContain('en 23 d'); // del 23 nov al examen del 16 dic
     expect(fila(/Horas y fechas/)).toBeTruthy();
     expect(screen.queryByRole('button', { name: /Estándar de alto valor/ })).toBeNull();
   });
@@ -235,11 +235,11 @@ describe('Certificación 2.0', () => {
   const ID = 'claude-architect';
   it('arriba, la fecha del examen con la cuenta regresiva; el título es corto y el nombre entero va abajo', () => {
     const c = certV12(ID)!;
-    expect(estadoCert(c, plan(), HOY).diasAlExamen).toBe(19);
+    expect(estadoCert(c, plan(), HOY).diasAlExamen).toBe(23); // 23 nov → 16 dic
     abrir(`cert/${ID}`);
     expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent('Claude Certified Architect');
     expect(screen.getByText('Claude Certified Architect – Foundations')).toBeTruthy();
-    expect(screen.getByText(/^Examen · 12 dic$/i)).toBeTruthy();
+    expect(screen.getByText(/^Examen · 16 dic$/i)).toBeTruthy();
     expect(screen.getByRole('link', { name: /Cert window 1/ }).getAttribute('href')).toBe('#/metas/proyecto/CW1');
   });
 
@@ -260,7 +260,7 @@ describe('Certificación 2.0', () => {
   it('reservar el examen lo deja como fecha fija; se deshace', () => {
     abrir(`cert/${ID}`);
     fireEvent.click(screen.getByRole('button', { name: 'Reservé para esa fecha' }));
-    expect(plan().reservas?.[ID]?.examen).toBe('2026-12-12');
+    expect(plan().reservas?.[ID]?.examen).toBe('2026-12-16');
     expect(screen.getByText('Reservado')).toBeTruthy();
     fireEvent.click(screen.getByRole('button', { name: 'Deshacer' }));
     expect(plan().reservas?.[ID]).toBeUndefined();
@@ -304,7 +304,8 @@ describe('De fondo 2.0', () => {
     expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent('De fondo');
     expect(screen.getByRole('link', { name: 'Pista secundaria' }).getAttribute('href')).toBe('#/metas/pista/secundaria');
     expect(screen.getByRole('link', { name: 'Pista comercial' }).getAttribute('href')).toBe('#/metas/pista/comercial');
-    expect(screen.getAllByRole('link', { name: /HandyX/ })[0].getAttribute('href')).toBe('#/metas/fondo/handyx');
+    // La primera app secundaria del plan v12.4 es JulIA (26 nov – 16 dic); HandyX viene después.
+    expect(screen.getAllByRole('link', { name: /JulIA/ })[0].getAttribute('href')).toBe('#/metas/fondo/julia');
     expect(screen.getAllByRole('link', { name: /0 de 8 puntos/ }).length).toBeGreaterThanOrEqual(2);
     expect(screen.getByRole('link', { name: /Open source/ }).getAttribute('href')).toBe('#/metas/open-source');
     expect(screen.getByRole('link', { name: /Clipping/ }).getAttribute('href')).toBe('#/metas/clipping');
@@ -312,8 +313,9 @@ describe('De fondo 2.0', () => {
 
   it('la pista secundaria: una tarjeta por app, cada una con su portada; la comercial, un pipeline por estado', () => {
     const { container, unmount } = abrir('pista/secundaria');
-    expect(screen.getAllByRole('link', { name: /^(HandyX|JulIA|Clip Studio|Roofy) / })).toHaveLength(4);
-    expect(container.querySelectorAll('.pt-app .pt-portada')).toHaveLength(4);
+    // Las 10 apps secundarias del plan v12.4 (§5): cuatro semanales y seis "v2" pesadas.
+    expect(screen.getAllByRole('link', { name: /^(JulIA|HandyX|Clip Studio|Roofy|Amazon v2|Stripe v2|Uber v2|Notion v2|Spotify v2|Cursor v2) / })).toHaveLength(10);
+    expect(container.querySelectorAll('.pt-app .pt-portada')).toHaveLength(10);
     unmount();
     abrir('pista/comercial');
     expect(screen.getByRole('button', { name: 'planificado · 23', pressed: true })).toBeTruthy();

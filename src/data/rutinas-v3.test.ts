@@ -93,9 +93,9 @@ describe('ola 27 · control, alertas y deuda de matemática', () => {
     expect(diaIntensivo('2026-11-30', c)).toBe(10);
     expect(diaIntensivo('2026-12-10', c)).toBe(20);
     expect(diaIntensivo('2027-01-04', c)).toBe(0);
-    // Nada registrado: 0 % de lo planificado (9 días: 5 de lunes a viernes a 10 h y 4 de fin de semana a 11 h).
+    // Nada registrado: 0 % de lo planificado (9 días de foco: 10 h entre semana y 11 el fin de semana, menos la hora de JulIA desde el 26 nov).
     const h = controlHoras('2026-11-30', {}, c)!;
-    expect(h).toMatchObject({ dia: 10, reales: 0, debajo: true, planificadas: 94 });
+    expect(h).toMatchObject({ dia: 10, reales: 0, debajo: true, planificadas: 90 });
     const a = alertaHorasIntensivo('2026-11-30', {}, c)!;
     expect(a.titulo).toMatch(/Día 10 del modo intensivo: 0 %/);
     expect(ordenDeRecortes()).toEqual([]);

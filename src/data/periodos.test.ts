@@ -136,8 +136,11 @@ describe('v12.1 · el plan como períodos', () => {
   it('PetrIA: estimado al fin del bloque, fecha límite de la 3.0; publicar la 1.0 suma por sus horas (v12.2)', () => {
     const a = arbolPlan(cal, { plan });
     const p1 = [...recorrer(a)].find((p) => p.id === 'P1')!;
-    expect(p1).toMatchObject({ inicio: '2026-11-21', fin: '2026-12-09', deadline: '2027-01-05', horasPlan: 193.5 });
+    // v12.4: PetrIA 21 nov–12 dic 2026; las fechas límite no cambian (3.0: 5 ene 2027).
+    expect(p1).toMatchObject({ inicio: '2026-11-21', fin: '2026-12-12', deadline: '2027-01-05', horasPlan: 193.5 });
     expect(p1.hijos!.map((v) => v.id)).toEqual(['P1:v1.0', 'P1:v1.1', 'P1:v2.0', 'P1:v3.0']);
+    // v12.4: versiones 1.0 21–25 nov · 1.1 26–30 nov · 2.0 1–5 dic · 3.0 6–12 dic; fechas límite sin cambios (1 dic, 12 dic, 22 dic, 5 ene).
+    expect(p1.hijos!.map((v) => [v.inicio, v.fin, v.deadline])).toEqual([['2026-11-21', '2026-11-25', '2026-12-01'], ['2026-11-26', '2026-11-30', '2026-12-12'], ['2026-12-01', '2026-12-05', '2026-12-22'], ['2026-12-06', '2026-12-12', '2027-01-05']]);
     const pub = arbolPlan(cal, { plan: { hitos: {}, versiones: { P1: { '1.0': { publicada: '2026-11-25' } } } } });
     const m = medir([...recorrer(pub)].find((p) => p.id === 'P1')!, '2026-11-26');
     // v12.2: por horas planificadas: 47 de 193,5.

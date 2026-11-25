@@ -6,17 +6,18 @@ import { emptyStudy } from './study-catalog';
 describe('mapa en ramas', () => {
   it('arriba T+18, abajo T+0 y HEAD en hoy; lo que viene después de HEAD es futuro', () => {
     const f = filasMapa('2026-12-01', 'mes', emptyPlan(), emptyStudy());
-    // v12.1: T+18 es el cierre de la etapa 2, el 21 nov 2027.
-    expect(f[0]).toMatchObject({ hito: 'T+18', fecha: '2027-11-21' });
+    // v12.4: T+18 es el cierre de la etapa 2: la semana que termina el 23 ene 2028 (el cierre es el 21 ene).
+    expect(f[0]).toMatchObject({ hito: 'T+18', fecha: '2028-01-23' });
     expect(f[f.length - 1]).toMatchObject({ hito: 'T+0', fecha: '2026-11-16' });
     const head = f.findIndex((x) => x.tipo === 'head');
     expect(f[head].texto).toBe('PetrIA · semana 2 de 3');
     expect(f.slice(1, head).every((x) => x.futuro || x.tipo === 'gap')).toBe(true);
     expect(f.slice(head + 1).every((x) => !x.futuro)).toBe(true);
-    // Un día de English E#1, HEAD dice el nombre del bloque.
-    expect(filasMapa('2026-12-14', 'mes', emptyPlan(), emptyStudy()).find((x) => x.tipo === 'head')!.texto).toBe('English E#1');
-    // La entrega de PetrIA es el 9 dic.
-    expect(filasMapa('2026-12-14', 'todo', emptyPlan(), emptyStudy()).find((x) => x.id === 'fin-P1')?.fecha).toBe('2026-12-09');
+    // Un día de English E#1 (19–27 dic), HEAD dice el nombre del bloque; en la Cert window 1, también la semana.
+    expect(filasMapa('2026-12-19', 'mes', emptyPlan(), emptyStudy()).find((x) => x.tipo === 'head')!.texto).toBe('English E#1');
+    expect(filasMapa('2026-12-14', 'mes', emptyPlan(), emptyStudy()).find((x) => x.tipo === 'head')!.texto).toBe('Cert window 1 · semana 1 de 1');
+    // La entrega de PetrIA es el 12 dic.
+    expect(filasMapa('2026-12-14', 'todo', emptyPlan(), emptyStudy()).find((x) => x.id === 'fin-P1')?.fecha).toBe('2026-12-12');
     expect(filasMapa('2026-12-14', 'mes', emptyPlan(), emptyStudy()).some((x) => x.hito === 'T+2')).toBe(true);
     // Ordenadas de la más nueva a la más vieja.
     const fechas = f.filter((x) => x.tipo !== 'gap').map((x) => x.fecha);
@@ -40,21 +41,22 @@ describe('mapa · hitos y stand-by (Ola 8b)', () => {
     setClippingActivo(true);
     const f = filasMapa('2026-11-15', 'trimestre', emptyPlan(), emptyStudy(), '2026-11-16');
     const h = f.filter((x) => x.hitoId);
-    // v12.1: PetrIA cierra el 9 dic, VitalIA el 30 dic, W1 el 3 feb y AgrIA arranca el 19 feb (todo en el primer trimestre);
-    // AgrIA cierra el 2 mar y queda en el segundo. Los hitos de idiomas (plan de 6 años archivado) y de clipping (pausado) se conservan en el mapa.
-    expect(h).toHaveLength(33);
+    // v12.4: PetrIA cierra el 12 dic, VitalIA el 8 ene y W1 el 21 feb (todo en el primer trimestre); AgrIA arranca el 13 mar y queda en el segundo. Los hitos de idiomas (plan de 6 años archivado) y de clipping (pausado) se conservan en el mapa.
+    expect(h).toHaveLength(32);
     expect(HITOS).toHaveLength(45);
     expect(h.filter((x) => x.rama === 'ingles').map((x) => x.hitoId)).toEqual(['ingles-83', 'ingles-41']);
     const fechas = h.map((x) => x.fecha);
     expect([...fechas].sort().reverse()).toEqual(fechas);
     expect(h[h.length - 1]).toMatchObject({ fecha: '2026-11-16', rama: 'main', hito: 'T+0' });
-    expect(h.find((x) => x.hitoId === 'programacion-62')).toMatchObject({ fecha: '2026-12-30', rama: 'programacion', hitoTipo: 'grande' }); // VitalIA
-    expect(h.find((x) => x.hitoId === 'programacion-34')).toMatchObject({ fecha: '2026-12-09' }); // PetrIA
+    expect(h.find((x) => x.hitoId === 'programacion-62')).toMatchObject({ fecha: '2027-01-08', rama: 'programacion', hitoTipo: 'grande' }); // VitalIA
+    expect(h.find((x) => x.hitoId === 'programacion-34')).toMatchObject({ fecha: '2026-12-12' }); // PetrIA
     expect(h.find((x) => x.hitoId === 'programacion-13')).toMatchObject({ fecha: '2026-11-18' }); // P0 v1
-    expect(h.find((x) => x.hitoId === 'programacion-77')).toMatchObject({ fecha: '2027-02-19', rama: 'programacion', desde: 'matematica' });
-    expect(h.find((x) => x.hitoId === 'matematica-76')).toMatchObject({ fecha: '2027-02-03' });
+    expect(h.find((x) => x.hitoId === 'matematica-76')).toMatchObject({ fecha: '2027-02-21' }); // W1 cierra
+    // AgrIA arranca el 13 mar: ya no cae en el primer trimestre.
+    expect(h.some((x) => x.hitoId === 'programacion-77')).toBe(false);
     const t2 = filasMapa('2027-03-01', 'trimestre', emptyPlan(), emptyStudy(), '2026-11-16').filter((x) => x.hitoId);
-    expect(t2.find((x) => x.hitoId === 'programacion-97')).toMatchObject({ fecha: '2027-03-02', hitoTipo: 'grande' });
+    expect(t2.find((x) => x.hitoId === 'programacion-77')).toMatchObject({ fecha: '2027-03-13', rama: 'programacion', desde: 'matematica' });
+    expect(t2.find((x) => x.hitoId === 'programacion-97')).toMatchObject({ fecha: '2027-03-25', hitoTipo: 'grande' });
     expect(h.filter((x) => x.rama === 'clipping').map((x) => x.hitoId).reverse()).toEqual(['clip-gta6', 'clip-usd-150', 'clip-dashboard-v1', 'clip-usd-350', 'clip-retainer-1', 'clip-usd-700']);
     expect(h.filter((x) => x.hitoTipo === 'grande')).toHaveLength(10);
     expect(f[0].hito).toBe('T+18');

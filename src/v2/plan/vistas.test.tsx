@@ -14,7 +14,7 @@ import { RADIO_0, caminoPlano, constelacion, puntoEn, reparto, tramo } from './c
 import { acotar, anchoDe, carriles, diaEn, empezados, escalaDe, limitesPpd, marcasEje, ppdDe, scrollAlEscalar, tipoDe, xDe, zoomCercano } from './linea-datos';
 import PlanV2 from './PlanV2';
 
-const HOY = '2026-11-23'; // lunes; PetrIA (P1) corre del 21 nov al 9 dic
+const HOY = '2026-11-23'; // lunes; PetrIA (P1) corre del 21 nov al 12 dic (v12.4)
 const Pantalla = ({ hash, hoy = HOY }: { hash: string; hoy?: string }) => (
   <><PlanV2 ruta={leerRuta(hash)} day={getState().days[HOY]} today={hoy} /><GlobalV2 activa="metas" pendientes={0} conBarra={false} conMini={false} /></>
 );
@@ -58,7 +58,7 @@ describe('Línea 2.0 · los datos', () => {
   it('un carril por tipo de bloque, en orden, y los dos de fondo al final', () => {
     const c = carriles(arbol(), fondo());
     expect(c.map((x) => x.id)).toEqual(['proyectos', 'certs', 'mate', 'idioma', 'cierres', 'secundaria', 'comercial']);
-    expect(c.slice(0, 5).reduce((n, x) => n + x.barras.length, 0)).toBe(71); // cada bloque, en un solo carril
+    expect(c.slice(0, 5).reduce((n, x) => n + x.barras.length, 0)).toBe(69); // cada bloque, en un solo carril (v12.4: 69, sin los descansos)
     expect(c[0].barras[0].id).toBe('P1');
     expect(c[2].barras.every((b) => tipoDe(b.id) === 'ventana')).toBe(true);
     expect(c.filter((x) => x.fondo).map((x) => x.id)).toEqual(['secundaria', 'comercial']);
@@ -66,26 +66,26 @@ describe('Línea 2.0 · los datos', () => {
   });
 
   it('la escala lleva de fechas a píxeles y vuelve', () => {
-    const e = escalaDe('2026-11-21', '2028-10-27', 4);
-    expect(e.dias).toBe(707);
+    const e = escalaDe('2026-11-21', '2028-12-14', 4); // del primer día del plan al último (14 dic 2028)
+    expect(e.dias).toBe(755);
     expect(xDe(e, '2026-11-21')).toBe(0);
     expect(xDe(e, '2026-11-23')).toBe(8);
-    expect(anchoDe(e, '2026-11-21', '2026-12-09')).toBe(19 * 4);
+    expect(anchoDe(e, '2026-11-21', '2026-12-12')).toBe(22 * 4);
     expect(diaEn(e, 9)).toBe('2026-11-23');
     expect(diaEn(e, -50)).toBe('2026-11-21');
-    expect(diaEn(e, 1e9)).toBe('2028-10-27');
+    expect(diaEn(e, 1e9)).toBe('2028-12-14');
   });
 
   it('los zooms con nombre, sus límites y el más cercano a una escala', () => {
-    expect(ppdDe('todo', 350, 707)).toBeCloseTo(350 / 707);
-    expect(ppdDe('anio', 365, 707)).toBe(1);
-    expect(ppdDe('mes', 300, 707)).toBe(10);
-    const l = limitesPpd(350, 707);
+    expect(ppdDe('todo', 350, 755)).toBeCloseTo(350 / 755);
+    expect(ppdDe('anio', 365, 755)).toBe(1);
+    expect(ppdDe('mes', 300, 755)).toBe(10);
+    const l = limitesPpd(350, 755);
     expect(acotar(0.01, l)).toBe(l.min);
     expect(acotar(999, l)).toBe(25); // dos semanas, como mucho
-    expect(zoomCercano(ppdDe('trimestre', 350, 707), 350, 707)).toBe('trimestre');
-    expect(zoomCercano(ppdDe('mes', 350, 707) * 1.2, 350, 707)).toBe('mes');
-    expect(zoomCercano(l.min, 350, 707)).toBe('todo');
+    expect(zoomCercano(ppdDe('trimestre', 350, 755), 350, 755)).toBe('trimestre');
+    expect(zoomCercano(ppdDe('mes', 350, 755) * 1.2, 350, 755)).toBe('mes');
+    expect(zoomCercano(l.min, 350, 755)).toBe('todo');
   });
 
   it('al acercar, el día bajo el dedo no se mueve', () => {
@@ -99,13 +99,14 @@ describe('Línea 2.0 · los datos', () => {
     const cerca = marcasEje(escalaDe('2026-11-21', '2027-03-10', 4));
     expect(cerca.map((m) => m.texto)).toEqual(['dic', 'ene 27', 'feb', 'mar']);
     expect(cerca.filter((m) => m.fuerte).map((m) => m.fecha)).toEqual(['2027-01-01']);
-    const lejos = marcasEje(escalaDe('2026-11-21', '2028-10-27', 0.5));
+    const lejos = marcasEje(escalaDe('2026-11-21', '2028-12-14', 0.5));
     expect(lejos.map((m) => m.texto)).toEqual(['ene 27', 'abr', 'jul', 'oct', 'ene 28', 'abr', 'jul', 'oct']);
   });
 
   it('las horas: los bloques que ya empezaron, el más nuevo primero', () => {
     expect(empezados(arbol(), HOY).map((p) => p.id)).toEqual(['P1']);
-    expect(empezados(arbol('2026-12-15'), '2026-12-15').map((p) => p.id)).toEqual(['E1', 'CW1', 'P1']);
+    // El 21 dic ya corren las horas de inglés (E1, 19–27 dic), después de la Cert window 1 (13–18 dic) y de PetrIA (hasta el 12 dic).
+    expect(empezados(arbol('2026-12-21'), '2026-12-21').map((p) => p.id)).toEqual(['E1', 'CW1', 'P1']);
   });
 });
 
@@ -117,7 +118,7 @@ describe('Línea 2.0 · la pantalla', () => {
     for (const n of ['Proyectos', 'Certificaciones', 'Matemática']) expect(screen.getByRole('group', { name: n })).toBeTruthy();
     expect(container.querySelector('.ln-hoy')).toBeTruthy();
     expect(container.querySelectorAll('.ln-barra.ahora')).toHaveLength(1);
-    expect(screen.getByRole('button', { name: /^PetrIA, 21 nov – 9 dic/ }).className).toContain('ahora');
+    expect(screen.getByRole('button', { name: /^PetrIA, 21 nov – 12 dic/ }).className).toContain('ahora');
   });
 
   it('los botones de zoom cambian el ancho del lienzo y marcan cuál está puesto', () => {
@@ -136,7 +137,7 @@ describe('Línea 2.0 · la pantalla', () => {
     abrir('#/metas/linea');
     fireEvent.click(screen.getByRole('button', { name: /^PetrIA, / }));
     const hoja = screen.getByRole('dialog', { name: 'PetrIA' });
-    expect(within(hoja).getByText(/^Vas 2 días atrás: termina el 11 dic\.$/)).toBeTruthy(); // nada cargado al tercer día
+    expect(within(hoja).getByText(/^Vas en plan: termina el 12 dic\.$/)).toBeTruthy(); // nada cargado al tercer día de 22: 9 % del tiempo, dentro del 10 % de tolerancia
     expect(within(hoja).getByRole('link', { name: 'Abrir' }).getAttribute('href')).toBe('#/metas/periodos/P1');
   });
 
@@ -160,7 +161,7 @@ describe('Mapa 2.0 · la espiral', () => {
     expect(c.total).toBe(11);
     expect(c.vueltas.map((v) => v.corto)).toEqual(['F1', 'F2', 'F3', 'F4', 'F5', 'F6', 'F7', 'F8', 'F9', 'F10', 'F11']);
     expect(c.vueltas.map((v) => v.etapa)).toEqual([0, 0, 0, 0, 0, 0, 1, 2, 2, 3, 3]);
-    expect(c.estrellas).toHaveLength(71);
+    expect(c.estrellas).toHaveLength(69); // los 69 bloques del plan v12.4
     // Cada estrella cae dentro de la vuelta de su fase, y nunca antes que la anterior.
     for (const e of c.estrellas) { expect(e.t).toBeGreaterThan(e.fase); expect(e.t).toBeLessThan(e.fase + 1); expect(e.desde).toBeLessThan(e.t); expect(e.hasta).toBeGreaterThan(e.t); }
     c.estrellas.slice(1).forEach((e, i) => { expect(e.t).toBeGreaterThan(c.estrellas[i].t); expect(e.desde).toBeCloseTo(c.estrellas[i].hasta, 3); });
@@ -211,8 +212,9 @@ describe('Mapa 2.0 · la espiral', () => {
   });
 
   it('un bloque hecho cuenta como hecho', () => {
-    act(() => marcarHito('v12:E1', '2026-12-18'));
-    const c = constelacion(arbol('2026-12-22'), '2026-12-22');
+    // English E#1 corre del 19 al 27 dic; VitalIA (P2) arranca el 28.
+    act(() => marcarHito('v12:E1', '2026-12-27'));
+    const c = constelacion(arbol('2026-12-29'), '2026-12-29');
     expect(c.hechas).toBe(1);
     expect(c.estrellas.find((e) => e.id === 'E1')!.estado).toBe('hecho');
     expect(c.ahora?.id).toBe('P2');
@@ -220,15 +222,15 @@ describe('Mapa 2.0 · la espiral', () => {
 });
 
 describe('Mapa 2.0 · la pantalla (sin WebGL: el mapa plano)', () => {
-  it('dibuja las 71 estrellas, hoy y las fases, sin lienzo ni botones de vista', () => {
+  it('dibuja las 69 estrellas, hoy y las fases, sin lienzo ni botones de vista', () => {
     const { container } = abrir('#/metas/constelacion');
-    expect(container.querySelectorAll('.cs-estrella')).toHaveLength(71);
+    expect(container.querySelectorAll('.cs-estrella')).toHaveLength(69);
     expect(container.querySelectorAll('.cs-estrella.ahora')).toHaveLength(1);
     expect(container.querySelector('.cs-hoy')).toBeTruthy();
     expect(container.querySelectorAll('.cs-cinta path.pasado')).toHaveLength(1); // lo que ya pasó de PetrIA
     expect(container.querySelector('canvas')).toBeNull();
     expect(screen.queryByRole('button', { name: 'Todo' })).toBeNull();
-    expect(screen.getByRole('group', { name: /^Mapa del plan: 71 bloques en 11 fases, 0 hechos\. Ahora: PetrIA\./ })).toBeTruthy();
+    expect(screen.getByRole('group', { name: /^Mapa del plan: 69 bloques en 11 fases, 0 hechos\. Ahora: PetrIA\./ })).toBeTruthy();
   });
 
   it('tocar una estrella abre la hoja del bloque', () => {
@@ -244,12 +246,12 @@ describe('Mapa 2.0 · la pantalla (sin WebGL: el mapa plano)', () => {
     expect(fases).toHaveLength(11);
     expect(fases[0].getAttribute('href')).toBe('#/metas/periodos/F1');
     expect(screen.getByText('Bloques hechos')).toBeTruthy();
-    expect(screen.getByText('Llegada · 27 oct')).toBeTruthy();
+    expect(screen.getByText('Llegada · 14 dic')).toBeTruthy(); // el fin estimado del plan: 14 dic 2028
   });
 
   it('lo hecho se pinta como hecho y se cuenta', () => {
-    act(() => marcarHito('v12:E1', '2026-12-18'));
-    const { container } = abrir('#/metas/constelacion', '2026-12-22');
+    act(() => marcarHito('v12:E1', '2026-12-27'));
+    const { container } = abrir('#/metas/constelacion', '2026-12-29');
     expect(container.querySelectorAll('.cs-estrella.hecho')).toHaveLength(1);
     expect(screen.getByRole('group', { name: /1 hechos\. Ahora: VitalIA\./ })).toBeTruthy();
   });
